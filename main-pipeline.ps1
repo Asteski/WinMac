@@ -1,32 +1,32 @@
 ## Winget
 
 # get latest download url
-$URL = "https://api.github.com/repos/microsoft/winget-cli/releases/latest"
-$URL = (Invoke-WebRequest -Uri $URL).Content | ConvertFrom-Json |
-        Select-Object -ExpandProperty "assets" |
-        Where-Object "browser_download_url" -Match '.msixbundle' |
-        Select-Object -ExpandProperty "browser_download_url"
-$LicenseFileURL = 'https://github.com/microsoft/winget-cli/releases/download/v1.7.10661/9ea36fa38dd3449c94cc839961888850_License1.xml'
+# $URL = "https://api.github.com/repos/microsoft/winget-cli/releases/latest"
+# $URL = (Invoke-WebRequest -Uri $URL).Content | ConvertFrom-Json |
+#         Select-Object -ExpandProperty "assets" |
+#         Where-Object "browser_download_url" -Match '.msixbundle' |
+#         Select-Object -ExpandProperty "browser_download_url"
+# $LicenseFileURL = 'https://github.com/microsoft/winget-cli/releases/download/v1.7.10661/9ea36fa38dd3449c94cc839961888850_License1.xml'
 
 # download
-Invoke-WebRequest -Uri $URL -OutFile "Setup.msix" -UseBasicParsing
-Invoke-WebRequest -Uri $LicenseFileURL -OutFile  'license.xml' 
+# Invoke-WebRequest -Uri $URL -OutFile "Setup.msix" -UseBasicParsing
+# Invoke-WebRequest -Uri $LicenseFileURL -OutFile  'license.xml' 
 
 # install
-#Add-AppxPackage -Path "Setup.msix" -LicensePath .\license.xml
-Add-AppxProvisionedPackage -PackagePath "Setup.msix" -LicensePath 'license.xml' -online 
+# #Add-AppxPackage -Path "Setup.msix" -LicensePath .\license.xml
+# Add-AppxProvisionedPackage -PackagePath "Setup.msix" -LicensePath 'license.xml' -online 
 
 # delete file
-Remove-Item "Setup.msix"
+# Remove-Item "Setup.msix"
 
 # apps list
 
 $list = @(
-    "Microsoft.PowerShell", ## PowerShell Core
-    "9NRWMJP3717K", ## Python
-    "BotProductions.IconViewer",
+    "Microsoft.PowerShell", ## PowerShell Core # interactive
+    "9NRWMJP3717K", ## Python # interactive
+    "BotProductions.IconViewer", # interactive
     "Brave.Brave",
-    "CPUID.CPU-Z",
+    "CPUID.CPU-Z", # interactive
     "Git.Git",
     "Helm.Helm",
     "Irfanview.IrfanView",
@@ -47,7 +47,7 @@ $list = @(
 # install apps
 
 foreach ($app in $list) {
-    winget install --id $app
+    winget install --id $app --force
 }
 
 ## PowerToys
