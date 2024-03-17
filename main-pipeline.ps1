@@ -1,10 +1,26 @@
-Write-Host "------------ WinMac Deployment ------------"
 Write-Host @"
-Welcome to WinMac Deployment Script version 0.0.1
+------------------------ WinMac Deployment ------------------------
+
+Welcome to WinMac Deployment!
+
+Author: Adam Kamienski
+GitHub: Asteski
+Version: 0.0.1
 
 This is Work in Progress. Please do not use it yet.
 
 "@
+
+Write-Host "Checking for Windows Package Manager (WinGet)"
+$progressPreference = 'silentlyContinue'
+Write-Information "Downloading WinGet and its dependencies..."
+$wingetUrl = "[1](https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle)"
+$installPath = "$env:TEMP\winget.msixbundle"
+Invoke-WebRequest -Uri $wingetUrl -OutFile $installPath
+Write-Information "Installing WinGet..."
+Add-AppxPackage -Path $installPath
+Remove-Item -Path $installPath
+Write-Information "WinGet installation completed."
 
 $list = @(
     # "Microsoft.PowerShell", ## PowerShell Core # interactive
@@ -37,7 +53,7 @@ foreach ($app in $list) {
     #winget install --id $app --silent --force
     Write-Host
 }
-Write-Host "Installing Packages - Done"
+Write-Host "Installing Packages completed."
 
 ## PowerToys
 
@@ -160,31 +176,24 @@ Set-ItemProperty -Path $cachePath -Name "IdealHeight.7" -Value 0x00000000
 Set-ItemProperty -Path $cachePath -Name "OrbWidth.144" -Value 0x00000030
 Set-ItemProperty -Path $cachePath -Name "OrbHeight.144" -Value 0x0000002e
 
-Write-Host "Configuring StartAllBack - Done"
+Write-Host "Configuring StartAllBack completed."
 Write-Host "Restarting Explorer"
 Stop-Process -Name explorer -Force -Wait
 Start-Process -Name explorer
-Write-Host "------------ WinMac Deployment - Done ------------"
+Write-Host @"
+Adding WinMac function to PowerShell profile. Function will be appended to PowerShell profile file.
 
-<# Winget
-get latest download url
-$URL = "https://api.github.com/repos/microsoft/winget-cli/releases/latest"
-$URL = (Invoke-WebRequest -Uri $URL).Content | ConvertFrom-Json |
-        Select-Object -ExpandProperty "assets" |
-        Where-Object "browser_download_url" -Match '.msixbundle' |
-        Select-Object -ExpandProperty "browser_download_url"
-$LicenseFileURL = 'https://github.com/microsoft/winget-cli/releases/download/v1.7.10661/9ea36fa38dd3449c94cc839961888850_License1.xml'
+Call it in PowerShell to get the version of WinMac using 'winmac' command.
 
-download
-Invoke-WebRequest -Uri $URL -OutFile "Setup.msix" -UseBasicParsing
-Invoke-WebRequest -Uri $LicenseFileURL -OutFile  'license.xml' 
+"@ -ForegroundColor Yellow
+$func = Get-Content -Path "$pwd\func.ps1" -Raw
+Add-Content -Path $PROFILE.AllUsersCurrentHost -Value `n$func
+Write-Host @"
+------------------------ WinMac Deployment completed. ------------------------
 
-install
-#Add-AppxPackage -Path "Setup.msix" -LicensePath .\license.xml
-Add-AppxProvisionedPackage -PackagePath "Setup.msix" -LicensePath 'license.xml' -online 
+Enjoy and support work in progress by giving feedback and contributing to the project.
 
-delete file
-Remove-Item "Setup.msix"
-#>
+This is Work in Progress. Use it on your own responsibility.
 
+"@ -ForegroundColor Red
 # EOF
