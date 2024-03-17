@@ -40,7 +40,6 @@ $list = @(
     "Microsoft.PowerShell",
     "JanDeDobbeleer.OhMyPosh",
     "Git.Git",
-    "Microsoft.WindowsTerminal",
     'Microsoft.PowerToys',
     'Voidtools.Everything',
     'lin-ycv.EverythingPowerToys',
@@ -48,7 +47,6 @@ $list = @(
 )
 
 Write-Host "Installing Packages" -ForegroundColor Yellow
-WriteHost
 
 foreach ($app in $list) {
     Write-Host "Installing $app" -ForegroundColor Black
