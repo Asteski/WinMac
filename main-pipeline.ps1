@@ -23,7 +23,6 @@ Remove-Item -Path $installPath
 Write-Information "WinGet installation completed."
 
 $list = @(
-    # "Microsoft.PowerShell", ## PowerShell Core # interactive
     # "9NRWMJP3717K", ## Python # interactive
     # "BotProductions.IconViewer", # interactive
     # "Brave.Brave",
@@ -37,21 +36,21 @@ $list = @(
     # "Python.Launcher",
     # "Kuberentes.Minikube",
     # "7zip.7zip",
-    # "Git.Git",
+    "Microsoft.PowerShell",
+    "JanDeDobbeleer.OhMyPosh",
+    "Git.Git",
+    "Microsoft.WindowsTerminal",
     'Microsoft.PowerToys',
     'Voidtools.Everything',
     'lin-ycv.EverythingPowerToys',
-    'StartIsBack.StartAllBack',
-    'JanDeDobbeleer.OhMyPosh'
+    'StartIsBack.StartAllBack'
 )
 
 Write-Host "Installing Packages"
 
 foreach ($app in $list) {
     Write-Host "Installing $app"
-    Write-Host
-    #winget install --id $app --silent --force
-    Write-Host
+    winget install --id $app --silent --force
 }
 Write-Host "Installing Packages completed."
 
