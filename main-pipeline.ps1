@@ -37,11 +37,11 @@ $list = @(
     # "Kuberentes.Minikube",
     # "7zip.7zip",
     # "Git.Git",
-    "Microsoft.PowerToys",
-    "Voidtools.Everything",
-    "lin-ycv.EverythingPowerToys",
-    "StartIsBack.StartAllBack",
-    "JanDeDobbeleer.OhMyPosh"
+    'Microsoft.PowerToys',
+    'Voidtools.Everything',
+    'lin-ycv.EverythingPowerToys',
+    'StartIsBack.StartAllBack',
+    'JanDeDobbeleer.OhMyPosh'
 )
 
 # install apps
@@ -54,13 +54,21 @@ foreach ($app in $list) {
 
 $powerToysAppData = $env:LOCALAPPDATA + '\Microsoft\PowerToys'
 $winget = 'https://github.com/bostrot/PowerToysRunPluginWinget/releases/download/v1.2.3/winget-powertoys-1.2.3.zip'
-$prockill = https://github.com/8LWXpg/PowerToysRun-ProcessKiller/releases/download/v1.0.1/ProcessKiller-v1.0.1-x64.zip
-Invoke-WebRequest -uri "" -Method "GET"  -Outfile (-join($messageID,".zip")) 
+$prockill = 'https://github.com/8LWXpg/PowerToysRun-ProcessKiller/releases/download/v1.0.1/ProcessKiller-v1.0.1-x64.zip'
 
-Copy-item $pwd -Destination $PowerToysAppData -Force -Recurse -Verbose
-Copy-item $pwd -Destination $PowerToysAppData -Force -Recurse -Verbose
+Invoke-WebRequest -uri $winget -Method "GET"  -Outfile 'winget.zip'
+Invoke-WebRequest -uri $prockill -Method "GET"  -Outfile 'prockill.zip'
+
+Expand-Archive 'winget.zip' -DestinationPath $pwd\winget -Force
+Expand-Archive 'prockill.zip' -DestinationPath $pwd\prockill -Force
+Copy-item $pwd\winget -Destination $powerToysAppData -Recurse -Force
+Copy-item $pwd -Destination $powerToysAppData -Recurse -Force
+
+Get-ChildItem * -Include *.zip -Recurse | Remove-Item
+Remove-Item -Recurse -Force winget
+Remove-Item -Recurse -Force prockill
 
 ## StartAllBack
 
-$RegistryFile = $pwd + '\StartAllBack\StartAllBack.reg'
+$registryFile = $pwd + '\StartAllBack\StartAllBack.reg'
 Start-Process -FilePath 'regedit.exe' -ArgumentList "/s $RegistryFile" -Wait
