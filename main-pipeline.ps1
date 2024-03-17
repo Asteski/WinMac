@@ -47,26 +47,27 @@ $list = @(
 # install apps
 
 foreach ($app in $list) {
-    winget install --id $app --force
+    winget install --id $app --silent --force
 }
 
 ## PowerToys
 
-$powerToysAppData = $env:LOCALAPPDATA + '\Microsoft\PowerToys'
+$plugins = $env:LOCALAPPDATA + '\Microsoft\PowerToys\PowerToys Run\Plugins'
 $winget = 'https://github.com/bostrot/PowerToysRunPluginWinget/releases/download/v1.2.3/winget-powertoys-1.2.3.zip'
 $prockill = 'https://github.com/8LWXpg/PowerToysRun-ProcessKiller/releases/download/v1.0.1/ProcessKiller-v1.0.1-x64.zip'
 
 Invoke-WebRequest -uri $winget -Method "GET"  -Outfile 'winget.zip'
 Invoke-WebRequest -uri $prockill -Method "GET"  -Outfile 'prockill.zip'
 
-Expand-Archive 'winget.zip' -DestinationPath $pwd\winget -Force
-Expand-Archive 'prockill.zip' -DestinationPath $pwd\prockill -Force
-Copy-item $pwd\winget -Destination $powerToysAppData -Recurse -Force
-Copy-item $pwd -Destination $powerToysAppData -Recurse -Force
+Expand-Archive 'winget.zip' -DestinationPath $pwd\Winget -Force
+Expand-Archive 'prockill.zip' -DestinationPath $pwd -Force
+
+Copy-item $pwd\Winget -Destination $plugins -Recurse -Force
+Copy-item $pwd\ProcessKiller -Destination $plugins -Recurse -Force
 
 Get-ChildItem * -Include *.zip -Recurse | Remove-Item
-Remove-Item -Recurse -Force winget
-Remove-Item -Recurse -Force prockill
+Remove-Item -Recurse -Force Winget
+Remove-Item -Recurse -Force ProcessKiller
 
 ## StartAllBack
 
