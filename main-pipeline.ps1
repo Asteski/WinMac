@@ -31,12 +31,12 @@ $list = @(
     "Helm.Helm",
     "Irfanview.IrfanView",
     "JanDeDobbeleer.OhMyPosh",
-    "Logitech.OptionsPlus",
-    "Microsoft.AzureCLI",
+    "Logitech.OptionsPlus", # interactive
+    "Microsoft.AzureCLI", # interactive
     "Microsoft.VisualStudioCode",
     "Microsoft.Winget.Source_8wekyb3d8bbwe",
     "Neovim.Neovim",
-    "PowerToys.Microsoft",
+    "Microsoft.PowerToys",
     "Python.Launcher",
     "StartIsBack.StartAllBack",
     "UKuberentes.Minikube",
