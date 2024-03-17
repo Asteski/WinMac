@@ -6,7 +6,7 @@ Welcome to WinMac Deployment!
 
 Author: Adam Kamienski
 GitHub: Asteski
-Version: 0.0.1
+Version: 0.0.2
 
 This is Work in Progress.
 
@@ -208,7 +208,7 @@ Add-Content -Path $PROFILE.AllUsersCurrentHost -Value `n$func
 Write-Host @"
 ------------------------ WinMac Deployment completed. ------------------------
 
-Enjoy and support work in progress by giving feedback and contributing to the project.
+Enjoy and support work in progress by giving feedback and contributing to the project!
 
 "@ -ForegroundColor DarkBlue
 Write-Host @"
