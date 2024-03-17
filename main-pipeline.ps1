@@ -52,18 +52,15 @@ foreach ($app in $list) {
 
 ## PowerToys
 
-# %LOCALAPPDATA%\Microsoft\PowerToys
-# clipboardmgmt 'https://github.com/CoreyHayward/PowerToys-Run-ClipboardManager/releases/download/v0.2.0/ClipboardManager-0.2.0-x64.zip'
-# prockill https://github.com/8LWXpg/PowerToysRun-ProcessKiller/releases/download/v1.0.1/ProcessKiller-v1.0.1-x64.zip
-# winget https://github.com/bostrot/PowerToysRunPluginWinget/releases/download/v1.2.3/winget-powertoys-1.2.3.zip
+$powerToysAppData = $env:LOCALAPPDATA + '\Microsoft\PowerToys'
+$winget = 'https://github.com/bostrot/PowerToysRunPluginWinget/releases/download/v1.2.3/winget-powertoys-1.2.3.zip'
+$prockill = https://github.com/8LWXpg/PowerToysRun-ProcessKiller/releases/download/v1.0.1/ProcessKiller-v1.0.1-x64.zip
+Invoke-WebRequest -uri "" -Method "GET"  -Outfile (-join($messageID,".zip")) 
+
+Copy-item $pwd -Destination $PowerToysAppData -Force -Recurse -Verbose
+Copy-item $pwd -Destination $PowerToysAppData -Force -Recurse -Verbose
 
 ## StartAllBack
 
-# ...
-
-## Context Menu
-
-# Remove the Edit in Notepad from context menu
-# Remove-Item -Path "Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{CA6CC9F1-867A-481E-951E-A28C5E4F01EA}" -Confirm:$false -Force
-
-
+$RegistryFile = $pwd + '\StartAllBack\StartAllBack.reg'
+Start-Process -FilePath 'regedit.exe' -ArgumentList "/s $RegistryFile" -Wait
