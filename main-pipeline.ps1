@@ -14,7 +14,7 @@ This is Work in Progress.
 Write-Host "Checking for Windows Package Manager (WinGet)"
 $progressPreference = 'silentlyContinue'
 Write-Information "Downloading WinGet and its dependencies..."
-$wingetUrl = "[1](https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle)"
+$wingetUrl = "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
 $installPath = "$env:TEMP\winget.msixbundle"
 Invoke-WebRequest -Uri $wingetUrl -OutFile $installPath
 Write-Information "Installing WinGet..."
