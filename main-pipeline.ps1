@@ -12,16 +12,16 @@ This is Work in Progress.
 
 "@ -ForegroundColor DarkCyan
 
-Write-Host "Checking for Windows Package Manager (WinGet)" -ForegroundColor Yellow
-$progressPreference = 'silentlyContinue'
-Write-Information "Downloading WinGet and its dependencies..." -ForegroundColor Black
-$wingetUrl = "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
-$installPath = "$env:TEMP\winget.msixbundle"
-Invoke-WebRequest -Uri $wingetUrl -OutFile $installPath
-Write-Information "Installing WinGet..." -ForegroundColor Black
-Add-AppxPackage -Path $installPath
-Remove-Item -Path $installPath
-Write-Information "WinGet installation completed." -ForegroundColor Green
+# Write-Host "Checking for Windows Package Manager (WinGet)" -ForegroundColor Yellow
+# $progressPreference = 'silentlyContinue'
+# Write-Information "Downloading WinGet and its dependencies..." -ForegroundColor Black
+# $wingetUrl = "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
+# $installPath = "$env:TEMP\winget.msixbundle"
+# Invoke-WebRequest -Uri $wingetUrl -OutFile $installPath
+# Write-Information "Installing WinGet..." -ForegroundColor Black
+# Add-AppxPackage -Path $installPath
+# Remove-Item -Path $installPath
+# Write-Information "WinGet installation completed." -ForegroundColor Green
 
 $list = @(
     # "9NRWMJP3717K", ## Python # interactive
@@ -201,7 +201,7 @@ Adding WinMac function to PowerShell profile. Function will be appended to Power
 Call it in PowerShell to get the version of WinMac using 'winmac' command.
 
 "@ -ForegroundColor Yellow
-$func = Get-Content -Path "$pwd\func.ps1" -Raw
+$func = Get-Content -Path "$pwd\Utilities\func.ps1" -Raw
 Add-Content -Path $PROFILE.AllUsersCurrentHost -Value `n$func
 Write-Host @"
 ------------------------ WinMac Deployment completed. ------------------------
