@@ -1,4 +1,5 @@
 Write-Host @"
+
 ------------------------ WinMac Deployment ------------------------
 
 Welcome to WinMac Deployment!
@@ -9,18 +10,18 @@ Version: 0.0.1
 
 This is Work in Progress.
 
-"@
+"@ -ForegroundColor DarkCyan
 
-# Write-Host "Checking for Windows Package Manager (WinGet)"
-# $progressPreference = 'silentlyContinue'
-# Write-Information "Downloading WinGet and its dependencies..."
-# $wingetUrl = "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
-# $installPath = "$env:TEMP\winget.msixbundle"
-# Invoke-WebRequest -Uri $wingetUrl -OutFile $installPath
-# Write-Information "Installing WinGet..."
-# Add-AppxPackage -Path $installPath
-# Remove-Item -Path $installPath
-# Write-Information "WinGet installation completed."
+Write-Host "Checking for Windows Package Manager (WinGet)" -ForegroundColor Yellow
+$progressPreference = 'silentlyContinue'
+Write-Information "Downloading WinGet and its dependencies..." -ForegroundColor Black
+$wingetUrl = "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
+$installPath = "$env:TEMP\winget.msixbundle"
+Invoke-WebRequest -Uri $wingetUrl -OutFile $installPath
+Write-Information "Installing WinGet..." -ForegroundColor Black
+Add-AppxPackage -Path $installPath
+Remove-Item -Path $installPath
+Write-Information "WinGet installation completed." -ForegroundColor Green
 
 $list = @(
     # "9NRWMJP3717K", ## Python # interactive
@@ -46,15 +47,26 @@ $list = @(
     'StartIsBack.StartAllBack'
 )
 
-Write-Host "Installing Packages"
+Write-Host "Installing Packages" -ForegroundColor Yellow
+WriteHost
 
 foreach ($app in $list) {
-    Write-Host "Installing $app"
+    Write-Host "Installing $app" -ForegroundColor Black
     winget install --id $app --silent --force
+    Write-Host "Installed $app" -ForegroundColor Black
 }
-Write-Host "Installing Packages completed."
+Write-Host @"
+
+Installing Packages completed.
+
+"@ -ForegroundColor Green
 
 ## PowerToys
+
+Write-Host @"
+Configuring PowerToys.
+
+"@  -ForegroundColor Yellow
 
 $plugins = $env:LOCALAPPDATA + '\Microsoft\PowerToys\PowerToys Run\Plugins'
 $winget = 'https://github.com/bostrot/PowerToysRunPluginWinget/releases/download/v1.2.3/winget-powertoys-1.2.3.zip'
@@ -72,6 +84,11 @@ Copy-item $pwd\ProcessKiller -Destination $plugins -Recurse -Force
 Get-ChildItem * -Include *.zip -Recurse | Remove-Item
 Remove-Item -Recurse -Force Winget
 Remove-Item -Recurse -Force ProcessKiller
+
+Write-Host @"
+Installing Packages completed.
+
+"@ -ForegroundColor Green
 
 ## StartAllBack
 
@@ -180,11 +197,12 @@ Write-Host "Restarting Explorer" -ForegroundColor Yellow
 Stop-Process -Name explorer -Force -Wait
 Start-Process -Name explorer
 Write-Host @"
+
 Adding WinMac function to PowerShell profile. Function will be appended to PowerShell profile file.
 
 Call it in PowerShell to get the version of WinMac using 'winmac' command.
 
-"@ -ForegroundColor Green
+"@ -ForegroundColor Yellow
 $func = Get-Content -Path "$pwd\func.ps1" -Raw
 Add-Content -Path $PROFILE.AllUsersCurrentHost -Value `n$func
 Write-Host @"
@@ -192,9 +210,9 @@ Write-Host @"
 
 Enjoy and support work in progress by giving feedback and contributing to the project.
 
-"@ -ForegroundColor Green
+"@ -ForegroundColor DarkBlue
 Write-Host @"
 This is Work in Progress. Use it on your own responsibility.
 
-"@ -ForegroundColor Red
+"@ -ForegroundColor Magenta
 # EOF
