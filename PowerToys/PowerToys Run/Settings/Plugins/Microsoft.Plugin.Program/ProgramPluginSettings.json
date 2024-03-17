@@ -1,0 +1,26 @@
+{
+  "LastIndexTime": "2024-03-17T00:00:00+01:00",
+  "ProgramSources": [],
+  "DisabledProgramSources": [],
+  "ProgramSuffixes": [
+    "bat",
+    "appref-ms",
+    "exe",
+    "lnk",
+    "url"
+  ],
+  "RunCommandSuffixes": [
+    "bat",
+    "appref-ms",
+    "exe",
+    "lnk",
+    "url",
+    "cpl",
+    "msc"
+  ],
+  "EnableStartMenuSource": true,
+  "EnableDesktopSource": true,
+  "EnableRegistrySource": true,
+  "EnablePathEnvironmentVariableSource": true,
+  "MinScoreThreshold": 0.75
+}

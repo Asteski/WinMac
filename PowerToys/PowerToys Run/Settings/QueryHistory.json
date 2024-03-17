@@ -1,0 +1,1208 @@
+{
+  "Items": [
+    {
+      "Query": "theme",
+      "ExecutedDateTime": "2024-03-07T15:35:48.6996631+01:00"
+    },
+    {
+      "Query": "power",
+      "ExecutedDateTime": "2024-03-07T16:19:37.3311675+01:00"
+    },
+    {
+      "Query": "\u003E\u003E",
+      "ExecutedDateTime": "2024-03-07T16:20:35.5601061+01:00"
+    },
+    {
+      "Query": "ser",
+      "ExecutedDateTime": "2024-03-07T16:23:06.0832408+01:00"
+    },
+    {
+      "Query": "startal",
+      "ExecutedDateTime": "2024-03-07T16:24:19.197304+01:00"
+    },
+    {
+      "Query": "cpu",
+      "ExecutedDateTime": "2024-03-07T16:28:15.9458615+01:00"
+    },
+    {
+      "Query": "update",
+      "ExecutedDateTime": "2024-03-07T16:28:47.2338128+01:00"
+    },
+    {
+      "Query": "\u003Ewinget upgrade",
+      "ExecutedDateTime": "2024-03-07T16:33:38.0024415+01:00"
+    },
+    {
+      "Query": "AUTO",
+      "ExecutedDateTime": "2024-03-07T18:49:04.970643+01:00"
+    },
+    {
+      "Query": ".",
+      "ExecutedDateTime": "2024-03-07T18:57:34.4708401+01:00"
+    },
+    {
+      "Query": "\u003Ecode",
+      "ExecutedDateTime": "2024-03-07T19:04:18.171633+01:00"
+    },
+    {
+      "Query": "\u003Ecode $profile",
+      "ExecutedDateTime": "2024-03-07T19:11:12.9258915+01:00"
+    },
+    {
+      "Query": "\u003Ewinget install JanDeDobbeleer.OhMyPosh -s winget",
+      "ExecutedDateTime": "2024-03-07T19:33:40.5386693+01:00"
+    },
+    {
+      "Query": "\u003E$env:Path \u002B= \u0022;C:\\Users\\user\\AppData\\Local\\Programs\\oh-my-posh\\bin\u0022",
+      "ExecutedDateTime": "2024-03-07T19:34:13.3904754+01:00"
+    },
+    {
+      "Query": "\u003Eget-poshthemes",
+      "ExecutedDateTime": "2024-03-07T19:54:12.4692655+01:00"
+    },
+    {
+      "Query": "term",
+      "ExecutedDateTime": "2024-03-07T20:34:25.1837692+01:00"
+    },
+    {
+      "Query": "pwsh",
+      "ExecutedDateTime": "2024-03-07T20:34:32.1146678+01:00"
+    },
+    {
+      "Query": ".",
+      "ExecutedDateTime": "2024-03-07T21:02:51.9389955+01:00"
+    },
+    {
+      "Query": "\u003Eonedrive stop",
+      "ExecutedDateTime": "2024-03-07T21:51:07.7004829+01:00"
+    },
+    {
+      "Query": ".",
+      "ExecutedDateTime": "2024-03-07T21:51:56.6586704+01:00"
+    },
+    {
+      "Query": "\u003Ewinget upgrade",
+      "ExecutedDateTime": "2024-03-07T21:56:38.1636914+01:00"
+    },
+    {
+      "Query": "\u003Ewinget show code",
+      "ExecutedDateTime": "2024-03-07T21:58:12.659847+01:00"
+    },
+    {
+      "Query": ".",
+      "ExecutedDateTime": "2024-03-07T22:03:07.2471604+01:00"
+    },
+    {
+      "Query": "\u003Eone stop",
+      "ExecutedDateTime": "2024-03-07T22:20:05.8392008+01:00"
+    },
+    {
+      "Query": "pwsh",
+      "ExecutedDateTime": "2024-03-07T22:41:18.1714905+01:00"
+    },
+    {
+      "Query": "hy",
+      "ExecutedDateTime": "2024-03-07T22:47:38.4322071+01:00"
+    },
+    {
+      "Query": "hyper",
+      "ExecutedDateTime": "2024-03-07T22:55:23.6305884+01:00"
+    },
+    {
+      "Query": ".",
+      "ExecutedDateTime": "2024-03-07T23:07:34.8819902+01:00"
+    },
+    {
+      "Query": "startall",
+      "ExecutedDateTime": "2024-03-07T23:16:34.3713469+01:00"
+    },
+    {
+      "Query": "\u003Ewinget install \u0027adobe reader\u0027",
+      "ExecutedDateTime": "2024-03-07T23:18:05.5655106+01:00"
+    },
+    {
+      "Query": "power",
+      "ExecutedDateTime": "2024-03-07T23:28:26.0254109+01:00"
+    },
+    {
+      "Query": "\u003Enano $profile",
+      "ExecutedDateTime": "2024-03-07T23:33:01.5445766+01:00"
+    },
+    {
+      "Query": "Ubuntu",
+      "ExecutedDateTime": "2024-03-07T23:37:09.8590622+01:00"
+    },
+    {
+      "Query": "ubun",
+      "ExecutedDateTime": "2024-03-07T23:37:24.3597081+01:00"
+    },
+    {
+      "Query": ".",
+      "ExecutedDateTime": "2024-03-07T23:39:24.8410791+01:00"
+    },
+    {
+      "Query": "\u003Ecode $profile",
+      "ExecutedDateTime": "2024-03-08T00:27:55.7426096+01:00"
+    },
+    {
+      "Query": "regedit",
+      "ExecutedDateTime": "2024-03-08T00:41:14.2639675+01:00"
+    },
+    {
+      "Query": "powert",
+      "ExecutedDateTime": "2024-03-08T00:41:26.2627654+01:00"
+    },
+    {
+      "Query": "\u003Ewinget search fluentregedit",
+      "ExecutedDateTime": "2024-03-08T00:43:16.7072031+01:00"
+    },
+    {
+      "Query": "starta",
+      "ExecutedDateTime": "2024-03-08T00:47:19.9961371+01:00"
+    },
+    {
+      "Query": "\u003Ewinget install files",
+      "ExecutedDateTime": "2024-03-08T00:51:15.5236554+01:00"
+    },
+    {
+      "Query": "\u003Epy bing.py",
+      "ExecutedDateTime": "2024-03-08T12:33:51.0396765+01:00"
+    },
+    {
+      "Query": "\u003E",
+      "ExecutedDateTime": "2024-03-08T12:45:07.8140439+01:00"
+    },
+    {
+      "Query": "\u003E code bing.by",
+      "ExecutedDateTime": "2024-03-08T14:51:23.8149416+01:00"
+    },
+    {
+      "Query": "\u003Ecode bing.py",
+      "ExecutedDateTime": "2024-03-08T14:51:34.8701159+01:00"
+    },
+    {
+      "Query": "cpu",
+      "ExecutedDateTime": "2024-03-08T23:43:04.8392667+01:00"
+    },
+    {
+      "Query": ".",
+      "ExecutedDateTime": "2024-03-08T23:55:56.5885719+01:00"
+    },
+    {
+      "Query": "\u003Ecode bing.py",
+      "ExecutedDateTime": "2024-03-09T00:29:49.147523+01:00"
+    },
+    {
+      "Query": "power",
+      "ExecutedDateTime": "2024-03-09T00:34:40.7114367+01:00"
+    },
+    {
+      "Query": "powert",
+      "ExecutedDateTime": "2024-03-09T00:34:45.0409433+01:00"
+    },
+    {
+      "Query": "\u003Ecode",
+      "ExecutedDateTime": "2024-03-09T01:46:53.9916445+01:00"
+    },
+    {
+      "Query": "starta",
+      "ExecutedDateTime": "2024-03-09T02:28:18.5879621+01:00"
+    },
+    {
+      "Query": "powert",
+      "ExecutedDateTime": "2024-03-09T02:28:45.0576433+01:00"
+    },
+    {
+      "Query": "starta",
+      "ExecutedDateTime": "2024-03-09T02:45:12.6044167+01:00"
+    },
+    {
+      "Query": "control",
+      "ExecutedDateTime": "2024-03-09T02:45:40.0520539+01:00"
+    },
+    {
+      "Query": "startall",
+      "ExecutedDateTime": "2024-03-09T02:46:28.5468961+01:00"
+    },
+    {
+      "Query": "\u003Ereg add \u0022HKCU\\Software\\Classes\\CLSID\\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\\InprocServer32\u0022 /f /ve",
+      "ExecutedDateTime": "2024-03-09T02:59:22.0301622+01:00"
+    },
+    {
+      "Query": "regedit",
+      "ExecutedDateTime": "2024-03-09T03:02:57.9018706+01:00"
+    },
+    {
+      "Query": "power",
+      "ExecutedDateTime": "2024-03-09T03:05:46.8690571+01:00"
+    },
+    {
+      "Query": "manager",
+      "ExecutedDateTime": "2024-03-09T03:10:23.49529+01:00"
+    },
+    {
+      "Query": "gped",
+      "ExecutedDateTime": "2024-03-09T03:20:56.6967542+01:00"
+    },
+    {
+      "Query": "paint",
+      "ExecutedDateTime": "2024-03-09T12:32:37.9541932+01:00"
+    },
+    {
+      "Query": "regedit",
+      "ExecutedDateTime": "2024-03-09T12:41:39.2197383+01:00"
+    },
+    {
+      "Query": "regedt",
+      "ExecutedDateTime": "2024-03-09T12:51:02.6508164+01:00"
+    },
+    {
+      "Query": "\\\\c:\\users\\Administrator\\AppData\\Roaming\\Microsoft\\Windows\\SendTo",
+      "ExecutedDateTime": "2024-03-09T12:55:35.3665716+01:00"
+    },
+    {
+      "Query": "regex",
+      "ExecutedDateTime": "2024-03-09T12:59:14.0141372+01:00"
+    },
+    {
+      "Query": "\u003Eshell:sendTo",
+      "ExecutedDateTime": "2024-03-09T12:59:51.1115689+01:00"
+    },
+    {
+      "Query": "\u003ERemove-Item \u0022Registry::HKEY_CLASSES_ROOT\\PackagedCom\\Package\\Microsoft.OneDriveSync*\\*\u0022 -Confirm:$false -Force -Recurse",
+      "ExecutedDateTime": "2024-03-09T13:06:43.8208363+01:00"
+    },
+    {
+      "Query": "store",
+      "ExecutedDateTime": "2024-03-09T13:29:23.4791931+01:00"
+    },
+    {
+      "Query": ". Dev",
+      "ExecutedDateTime": "2024-03-09T16:57:06.2994552+01:00"
+    },
+    {
+      "Query": ".",
+      "ExecutedDateTime": "2024-03-09T19:15:08.6931023+01:00"
+    },
+    {
+      "Query": "bittorre",
+      "ExecutedDateTime": "2024-03-09T22:50:16.6553794+01:00"
+    },
+    {
+      "Query": "app",
+      "ExecutedDateTime": "2024-03-09T22:52:14.9931785+01:00"
+    },
+    {
+      "Query": "\u003Ewinget install bittorrent",
+      "ExecutedDateTime": "2024-03-09T22:52:56.6437543+01:00"
+    },
+    {
+      "Query": "\\videos",
+      "ExecutedDateTime": "2024-03-09T23:09:33.0076926+01:00"
+    },
+    {
+      "Query": "%LOCALAPPDATA%\\Microsoft\\PowerToys\\RunPlugins",
+      "ExecutedDateTime": "2024-03-10T00:28:32.2511895+01:00"
+    },
+    {
+      "Query": "powert",
+      "ExecutedDateTime": "2024-03-10T00:36:11.9152951+01:00"
+    },
+    {
+      "Query": "kill brave",
+      "ExecutedDateTime": "2024-03-10T00:36:56.1722686+01:00"
+    },
+    {
+      "Query": "winget Everything",
+      "ExecutedDateTime": "2024-03-10T00:37:52.7013315+01:00"
+    },
+    {
+      "Query": "C:\\Users\\Administrator\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs",
+      "ExecutedDateTime": "2024-03-10T00:38:39.4250758+01:00"
+    },
+    {
+      "Query": "powert",
+      "ExecutedDateTime": "2024-03-10T00:38:53.0365101+01:00"
+    },
+    {
+      "Query": "\u003Ewinget uninstall everythinmg",
+      "ExecutedDateTime": "2024-03-10T00:39:45.9977947+01:00"
+    },
+    {
+      "Query": "bebop",
+      "ExecutedDateTime": "2024-03-10T00:45:07.7450704+01:00"
+    },
+    {
+      "Query": "kill brave",
+      "ExecutedDateTime": "2024-03-10T00:49:15.6162789+01:00"
+    },
+    {
+      "Query": "\u003Evi $profile",
+      "ExecutedDateTime": "2024-03-10T00:49:25.7747063+01:00"
+    },
+    {
+      "Query": "C:\\users\\administrator\\OneDrive\\Utilities\\MajorGeeks Windows Tweaks\\Miscellaneous\\Recent Documents in WordPad - Clear ALL",
+      "ExecutedDateTime": "2024-03-10T10:32:47.465021+01:00"
+    },
+    {
+      "Query": "taskbar",
+      "ExecutedDateTime": "2024-03-10T11:35:53.0455713+01:00"
+    },
+    {
+      "Query": "//boot.dev",
+      "ExecutedDateTime": "2024-03-10T12:31:21.428441+01:00"
+    },
+    {
+      "Query": "py bing.py",
+      "ExecutedDateTime": "2024-03-10T12:59:51.2927767+01:00"
+    },
+    {
+      "Query": "\u003Epy bing.py",
+      "ExecutedDateTime": "2024-03-10T13:00:01.0568536+01:00"
+    },
+    {
+      "Query": "python",
+      "ExecutedDateTime": "2024-03-10T13:46:39.177384+01:00"
+    },
+    {
+      "Query": "power",
+      "ExecutedDateTime": "2024-03-10T13:46:50.4320931+01:00"
+    },
+    {
+      "Query": "powert",
+      "ExecutedDateTime": "2024-03-10T13:49:10.1032327+01:00"
+    },
+    {
+      "Query": "C:\\Users",
+      "ExecutedDateTime": "2024-03-10T13:50:51.0695366+01:00"
+    },
+    {
+      "Query": "kill bra",
+      "ExecutedDateTime": "2024-03-10T13:51:32.6639163+01:00"
+    },
+    {
+      "Query": "\u003Eipconfig /all",
+      "ExecutedDateTime": "2024-03-10T13:52:07.0133729+01:00"
+    },
+    {
+      "Query": "//allegro.pl",
+      "ExecutedDateTime": "2024-03-10T13:52:27.0706206+01:00"
+    },
+    {
+      "Query": "//wpl.pl",
+      "ExecutedDateTime": "2024-03-10T13:52:34.8476266+01:00"
+    },
+    {
+      "Query": "\u003E\u003E",
+      "ExecutedDateTime": "2024-03-10T13:53:23.5306186+01:00"
+    },
+    {
+      "Query": "winget lis",
+      "ExecutedDateTime": "2024-03-10T13:53:37.751075+01:00"
+    },
+    {
+      "Query": "\u003Ewinget list",
+      "ExecutedDateTime": "2024-03-10T13:54:10.6226612+01:00"
+    },
+    {
+      "Query": "startall",
+      "ExecutedDateTime": "2024-03-10T13:55:11.5730365+01:00"
+    },
+    {
+      "Query": ".",
+      "ExecutedDateTime": "2024-03-10T13:59:40.270579+01:00"
+    },
+    {
+      "Query": "auto",
+      "ExecutedDateTime": "2024-03-10T14:00:27.0055312+01:00"
+    },
+    {
+      "Query": "regedit",
+      "ExecutedDateTime": "2024-03-10T14:01:59.3240471+01:00"
+    },
+    {
+      "Query": "the",
+      "ExecutedDateTime": "2024-03-10T14:21:20.1110164+01:00"
+    },
+    {
+      "Query": "//https://photos.onedrive.com/moments/OnThisDay/MXxzPTIwMjMtMDMtMTBUMDA6MDA6MDBaJmU9MjAyMy0wMy0xMFQyMzo1OTo1OS45OTlaJnJ0PTEm?cid=3A19A68FDEEE57B6\u0026count=14\u0026title=On\u002Bthis\u002Bday\u0026subtitle=March\u002B10\u0026startDate=2023-03-10T00%3a00%3a00Z\u0026endDate=2023-03-10T23%3a59%3a59.999Z\u0026locale=en-us\u0026msa=kamienski.adam@gmail.com\u0026sc=2",
+      "ExecutedDateTime": "2024-03-10T14:29:39.9965505+01:00"
+    },
+    {
+      "Query": ".",
+      "ExecutedDateTime": "2024-03-10T15:58:58.6276154+01:00"
+    },
+    {
+      "Query": "photos",
+      "ExecutedDateTime": "2024-03-10T16:03:50.4708292+01:00"
+    },
+    {
+      "Query": "theme",
+      "ExecutedDateTime": "2024-03-10T16:12:31.1394323+01:00"
+    },
+    {
+      "Query": "auto",
+      "ExecutedDateTime": "2024-03-10T18:01:04.2455591+01:00"
+    },
+    {
+      "Query": "gefor",
+      "ExecutedDateTime": "2024-03-10T23:02:18.8537332+01:00"
+    },
+    {
+      "Query": "kill brave",
+      "ExecutedDateTime": "2024-03-11T04:09:49.4914568+01:00"
+    },
+    {
+      "Query": "\u003Epy bing.py",
+      "ExecutedDateTime": "2024-03-11T11:32:54.8067337+01:00"
+    },
+    {
+      "Query": "winget gimp",
+      "ExecutedDateTime": "2024-03-11T15:21:36.4045702+01:00"
+    },
+    {
+      "Query": "\u003Ecode $profile",
+      "ExecutedDateTime": "2024-03-11T15:29:34.106364+01:00"
+    },
+    {
+      "Query": "\u003Ecode bing.py",
+      "ExecutedDateTime": "2024-03-11T15:29:51.8547801+01:00"
+    },
+    {
+      "Query": "powert",
+      "ExecutedDateTime": "2024-03-11T15:31:28.2388738+01:00"
+    },
+    {
+      "Query": "th",
+      "ExecutedDateTime": "2024-03-12T12:28:00.7968482+01:00"
+    },
+    {
+      "Query": "\u003Epy bing.py",
+      "ExecutedDateTime": "2024-03-12T14:11:58.0272092+01:00"
+    },
+    {
+      "Query": "system",
+      "ExecutedDateTime": "2024-03-12T19:24:34.619816+01:00"
+    },
+    {
+      "Query": "powert",
+      "ExecutedDateTime": "2024-03-13T09:36:33.9842582+01:00"
+    },
+    {
+      "Query": "startall",
+      "ExecutedDateTime": "2024-03-13T09:38:32.3460997+01:00"
+    },
+    {
+      "Query": "\u003Epy bing.py",
+      "ExecutedDateTime": "2024-03-13T10:05:27.3630367+01:00"
+    },
+    {
+      "Query": "gefo",
+      "ExecutedDateTime": "2024-03-13T10:23:54.6508494+01:00"
+    },
+    {
+      "Query": "powe",
+      "ExecutedDateTime": "2024-03-13T10:58:43.8689858+01:00"
+    },
+    {
+      "Query": "startall",
+      "ExecutedDateTime": "2024-03-13T13:08:39.8793137+01:00"
+    },
+    {
+      "Query": "theme",
+      "ExecutedDateTime": "2024-03-13T13:11:14.8426454+01:00"
+    },
+    {
+      "Query": "paint",
+      "ExecutedDateTime": "2024-03-13T13:11:21.5935203+01:00"
+    },
+    {
+      "Query": "\u003Eget-computerinfo",
+      "ExecutedDateTime": "2024-03-13T13:12:20.4588611+01:00"
+    },
+    {
+      "Query": "powert",
+      "ExecutedDateTime": "2024-03-13T13:25:22.9021046+01:00"
+    },
+    {
+      "Query": "touch",
+      "ExecutedDateTime": "2024-03-13T14:14:59.4012885+01:00"
+    },
+    {
+      "Query": "cmd",
+      "ExecutedDateTime": "2024-03-13T15:29:50.0367378+01:00"
+    },
+    {
+      "Query": "irfan",
+      "ExecutedDateTime": "2024-03-13T17:27:35.6076125+01:00"
+    },
+    {
+      "Query": "tree",
+      "ExecutedDateTime": "2024-03-13T17:58:10.286571+01:00"
+    },
+    {
+      "Query": "start",
+      "ExecutedDateTime": "2024-03-13T18:08:56.3646096+01:00"
+    },
+    {
+      "Query": "time",
+      "ExecutedDateTime": "2024-03-13T20:22:09.1395087+01:00"
+    },
+    {
+      "Query": ".p",
+      "ExecutedDateTime": "2024-03-13T23:11:03.7850801+01:00"
+    },
+    {
+      "Query": "\u003E winget upgrad",
+      "ExecutedDateTime": "2024-03-14T00:10:46.2868262+01:00"
+    },
+    {
+      "Query": "\u003Ewinget upgrad",
+      "ExecutedDateTime": "2024-03-14T00:11:13.6276679+01:00"
+    },
+    {
+      "Query": ".",
+      "ExecutedDateTime": "2024-03-14T00:18:12.2920628+01:00"
+    },
+    {
+      "Query": "audio",
+      "ExecutedDateTime": "2024-03-14T09:45:22.0313556+01:00"
+    },
+    {
+      "Query": "sound",
+      "ExecutedDateTime": "2024-03-14T09:45:34.5898955+01:00"
+    },
+    {
+      "Query": "control",
+      "ExecutedDateTime": "2024-03-14T09:46:20.4851771+01:00"
+    },
+    {
+      "Query": "sound",
+      "ExecutedDateTime": "2024-03-14T09:47:18.7853587+01:00"
+    },
+    {
+      "Query": "\u003Epy bing.py",
+      "ExecutedDateTime": "2024-03-14T09:52:13.3708249+01:00"
+    },
+    {
+      "Query": "\u003Epy bing",
+      "ExecutedDateTime": "2024-03-14T09:59:58.153687+01:00"
+    },
+    {
+      "Query": "ubu",
+      "ExecutedDateTime": "2024-03-14T10:40:17.1535164+01:00"
+    },
+    {
+      "Query": "ubun",
+      "ExecutedDateTime": "2024-03-14T10:40:41.9830114+01:00"
+    },
+    {
+      "Query": "chro",
+      "ExecutedDateTime": "2024-03-14T12:31:26.2276592+01:00"
+    },
+    {
+      "Query": "store",
+      "ExecutedDateTime": "2024-03-14T13:00:35.1120224+01:00"
+    },
+    {
+      "Query": "defau",
+      "ExecutedDateTime": "2024-03-14T13:06:22.2884138+01:00"
+    },
+    {
+      "Query": "mouse",
+      "ExecutedDateTime": "2024-03-14T17:45:52.0255236+01:00"
+    },
+    {
+      "Query": "perso",
+      "ExecutedDateTime": "2024-03-14T17:46:18.8761416+01:00"
+    },
+    {
+      "Query": ".",
+      "ExecutedDateTime": "2024-03-14T17:59:43.8956949+01:00"
+    },
+    {
+      "Query": "multitaskin",
+      "ExecutedDateTime": "2024-03-14T18:06:41.7959102+01:00"
+    },
+    {
+      "Query": "multi",
+      "ExecutedDateTime": "2024-03-14T18:08:21.8308724+01:00"
+    },
+    {
+      "Query": "startall",
+      "ExecutedDateTime": "2024-03-14T18:09:48.060119+01:00"
+    },
+    {
+      "Query": "touchpa",
+      "ExecutedDateTime": "2024-03-14T18:10:33.5801276+01:00"
+    },
+    {
+      "Query": "touchpad",
+      "ExecutedDateTime": "2024-03-14T18:16:09.0630289+01:00"
+    },
+    {
+      "Query": "multi",
+      "ExecutedDateTime": "2024-03-14T18:17:44.5603492+01:00"
+    },
+    {
+      "Query": "auto dark",
+      "ExecutedDateTime": "2024-03-14T22:20:49.2801798+01:00"
+    },
+    {
+      "Query": "xbox",
+      "ExecutedDateTime": "2024-03-14T22:27:30.4588554+01:00"
+    },
+    {
+      "Query": "update",
+      "ExecutedDateTime": "2024-03-14T22:50:01.5409468+01:00"
+    },
+    {
+      "Query": "winget python",
+      "ExecutedDateTime": "2024-03-14T23:21:15.7481185+01:00"
+    },
+    {
+      "Query": "%USERPROFILE%",
+      "ExecutedDateTime": "2024-03-15T00:14:59.6233225+01:00"
+    },
+    {
+      "Query": "%USERPROFILE%\\.wslconfig",
+      "ExecutedDateTime": "2024-03-15T00:15:49.9156374+01:00"
+    },
+    {
+      "Query": "hyper",
+      "ExecutedDateTime": "2024-03-15T00:23:40.4848711+01:00"
+    },
+    {
+      "Query": "\u003Epy bing.py",
+      "ExecutedDateTime": "2024-03-15T08:33:06.6681205+01:00"
+    },
+    {
+      "Query": "\u003Ebi",
+      "ExecutedDateTime": "2024-03-15T08:47:21.8794919+01:00"
+    },
+    {
+      "Query": "py /OneDrive/Scripts/Bing.py",
+      "ExecutedDateTime": "2024-03-15T09:49:10.8264964+01:00"
+    },
+    {
+      "Query": "\u003Epy \\OneDrive\\Scripts\\Bing.py",
+      "ExecutedDateTime": "2024-03-15T09:49:36.0332401+01:00"
+    },
+    {
+      "Query": "powert",
+      "ExecutedDateTime": "2024-03-15T13:18:39.5480432+01:00"
+    },
+    {
+      "Query": "?Microsoft.VSC",
+      "ExecutedDateTime": "2024-03-15T13:18:58.0367806+01:00"
+    },
+    {
+      "Query": ".",
+      "ExecutedDateTime": "2024-03-15T13:19:59.8189091+01:00"
+    },
+    {
+      "Query": "\u003Ewinget list",
+      "ExecutedDateTime": "2024-03-15T14:53:26.7835791+01:00"
+    },
+    {
+      "Query": "note",
+      "ExecutedDateTime": "2024-03-15T14:58:21.4778065+01:00"
+    },
+    {
+      "Query": "fire",
+      "ExecutedDateTime": "2024-03-15T15:10:33.7619167+01:00"
+    },
+    {
+      "Query": "powert",
+      "ExecutedDateTime": "2024-03-15T23:11:11.8824403+01:00"
+    },
+    {
+      "Query": "starta",
+      "ExecutedDateTime": "2024-03-15T23:12:23.0593386+01:00"
+    },
+    {
+      "Query": "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs",
+      "ExecutedDateTime": "2024-03-16T00:10:22.9087856+01:00"
+    },
+    {
+      "Query": "?traffic",
+      "ExecutedDateTime": "2024-03-16T00:10:43.1793005+01:00"
+    },
+    {
+      "Query": "hy",
+      "ExecutedDateTime": "2024-03-16T00:11:58.3901051+01:00"
+    },
+    {
+      "Query": "restart",
+      "ExecutedDateTime": "2024-03-16T00:13:57.4141844+01:00"
+    },
+    {
+      "Query": "startall",
+      "ExecutedDateTime": "2024-03-16T00:20:36.4167561+01:00"
+    },
+    {
+      "Query": "traffic",
+      "ExecutedDateTime": "2024-03-16T00:40:27.875798+01:00"
+    },
+    {
+      "Query": "startall",
+      "ExecutedDateTime": "2024-03-16T00:47:10.2557336+01:00"
+    },
+    {
+      "Query": "?bing.py",
+      "ExecutedDateTime": "2024-03-16T00:48:10.9874063+01:00"
+    },
+    {
+      "Query": "traffic",
+      "ExecutedDateTime": "2024-03-16T00:51:54.1585141+01:00"
+    },
+    {
+      "Query": "environ",
+      "ExecutedDateTime": "2024-03-16T00:53:40.426811+01:00"
+    },
+    {
+      "Query": "env",
+      "ExecutedDateTime": "2024-03-16T00:53:49.5133655+01:00"
+    },
+    {
+      "Query": "\u003Ebing.py",
+      "ExecutedDateTime": "2024-03-16T00:55:50.4308826+01:00"
+    },
+    {
+      "Query": "\u003Epy bing.py",
+      "ExecutedDateTime": "2024-03-16T00:56:02.590338+01:00"
+    },
+    {
+      "Query": "env",
+      "ExecutedDateTime": "2024-03-16T00:56:19.2242076+01:00"
+    },
+    {
+      "Query": "\u003E",
+      "ExecutedDateTime": "2024-03-16T00:57:05.3565109+01:00"
+    },
+    {
+      "Query": "\u003E$py py bing.py",
+      "ExecutedDateTime": "2024-03-16T00:57:19.8651285+01:00"
+    },
+    {
+      "Query": "pwsh",
+      "ExecutedDateTime": "2024-03-16T00:57:33.1577459+01:00"
+    },
+    {
+      "Query": "\u003Ecode $profile",
+      "ExecutedDateTime": "2024-03-16T00:59:18.1819375+01:00"
+    },
+    {
+      "Query": "\u003E\u0026 py $bing",
+      "ExecutedDateTime": "2024-03-16T01:07:05.2399731+01:00"
+    },
+    {
+      "Query": "\u003Ecode $profile",
+      "ExecutedDateTime": "2024-03-16T01:08:04.5195072+01:00"
+    },
+    {
+      "Query": "?bing.py",
+      "ExecutedDateTime": "2024-03-16T01:08:18.4208531+01:00"
+    },
+    {
+      "Query": "bash",
+      "ExecutedDateTime": "2024-03-16T02:09:21.3152395+01:00"
+    },
+    {
+      "Query": "ubuntu",
+      "ExecutedDateTime": "2024-03-16T02:09:34.6963227+01:00"
+    },
+    {
+      "Query": "neovim",
+      "ExecutedDateTime": "2024-03-16T02:18:41.7719295+01:00"
+    },
+    {
+      "Query": "neo",
+      "ExecutedDateTime": "2024-03-16T02:18:47.2628734+01:00"
+    },
+    {
+      "Query": "neovim",
+      "ExecutedDateTime": "2024-03-16T02:26:28.4618673+01:00"
+    },
+    {
+      "Query": "winget neovim",
+      "ExecutedDateTime": "2024-03-16T02:49:00.3002899+01:00"
+    },
+    {
+      "Query": "neov",
+      "ExecutedDateTime": "2024-03-16T02:57:08.0851371+01:00"
+    },
+    {
+      "Query": "neovim",
+      "ExecutedDateTime": "2024-03-16T03:00:55.5342229+01:00"
+    },
+    {
+      "Query": "neo",
+      "ExecutedDateTime": "2024-03-16T03:14:19.3191388+01:00"
+    },
+    {
+      "Query": "nvim",
+      "ExecutedDateTime": "2024-03-16T03:29:45.1798345+01:00"
+    },
+    {
+      "Query": "ubunt",
+      "ExecutedDateTime": "2024-03-16T03:30:06.0595693+01:00"
+    },
+    {
+      "Query": "nvim",
+      "ExecutedDateTime": "2024-03-16T03:31:22.8869363+01:00"
+    },
+    {
+      "Query": "neovim",
+      "ExecutedDateTime": "2024-03-16T03:31:35.0680741+01:00"
+    },
+    {
+      "Query": "vim",
+      "ExecutedDateTime": "2024-03-16T03:41:50.5287772+01:00"
+    },
+    {
+      "Query": "keyboar",
+      "ExecutedDateTime": "2024-03-16T03:46:31.1511504+01:00"
+    },
+    {
+      "Query": "vim",
+      "ExecutedDateTime": "2024-03-16T03:47:34.1171107+01:00"
+    },
+    {
+      "Query": "wt -w _quake",
+      "ExecutedDateTime": "2024-03-16T03:49:06.4294528+01:00"
+    },
+    {
+      "Query": "nvim",
+      "ExecutedDateTime": "2024-03-16T03:50:01.5101581+01:00"
+    },
+    {
+      "Query": "vim",
+      "ExecutedDateTime": "2024-03-16T03:51:09.6289936+01:00"
+    },
+    {
+      "Query": "nvim",
+      "ExecutedDateTime": "2024-03-16T03:54:26.3831838+01:00"
+    },
+    {
+      "Query": "wt -w _quake",
+      "ExecutedDateTime": "2024-03-16T04:01:09.438618+01:00"
+    },
+    {
+      "Query": "\u003Ewt --help",
+      "ExecutedDateTime": "2024-03-16T04:01:32.0219449+01:00"
+    },
+    {
+      "Query": "nvim",
+      "ExecutedDateTime": "2024-03-16T04:06:01.0988781+01:00"
+    },
+    {
+      "Query": "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs",
+      "ExecutedDateTime": "2024-03-16T04:07:31.7732969+01:00"
+    },
+    {
+      "Query": "nvim",
+      "ExecutedDateTime": "2024-03-16T04:08:14.1764165+01:00"
+    },
+    {
+      "Query": "neo",
+      "ExecutedDateTime": "2024-03-16T04:08:18.3937693+01:00"
+    },
+    {
+      "Query": "note",
+      "ExecutedDateTime": "2024-03-16T04:12:06.3127311+01:00"
+    },
+    {
+      "Query": "neo",
+      "ExecutedDateTime": "2024-03-16T04:12:29.7016003+01:00"
+    },
+    {
+      "Query": "task",
+      "ExecutedDateTime": "2024-03-16T04:13:17.2522428+01:00"
+    },
+    {
+      "Query": "neo",
+      "ExecutedDateTime": "2024-03-16T04:14:07.3412024+01:00"
+    },
+    {
+      "Query": "control",
+      "ExecutedDateTime": "2024-03-16T04:15:13.3773141+01:00"
+    },
+    {
+      "Query": "neo",
+      "ExecutedDateTime": "2024-03-16T04:15:17.4993798+01:00"
+    },
+    {
+      "Query": "tas",
+      "ExecutedDateTime": "2024-03-16T04:20:15.7070624+01:00"
+    },
+    {
+      "Query": "\u003E\u0026 py $bing",
+      "ExecutedDateTime": "2024-03-16T13:16:42.985448+01:00"
+    },
+    {
+      "Query": "vim",
+      "ExecutedDateTime": "2024-03-16T13:17:02.6237806+01:00"
+    },
+    {
+      "Query": "\u003EStart-Process \u0022PowerShell.exe\u0022",
+      "ExecutedDateTime": "2024-03-16T13:18:45.1662866+01:00"
+    },
+    {
+      "Query": "cmd",
+      "ExecutedDateTime": "2024-03-16T13:20:22.6090212+01:00"
+    },
+    {
+      "Query": "neo",
+      "ExecutedDateTime": "2024-03-16T13:25:24.2111131+01:00"
+    },
+    {
+      "Query": "C:\\",
+      "ExecutedDateTime": "2024-03-16T13:34:59.2672985+01:00"
+    },
+    {
+      "Query": "ne",
+      "ExecutedDateTime": "2024-03-16T13:36:08.2762546+01:00"
+    },
+    {
+      "Query": "neo",
+      "ExecutedDateTime": "2024-03-16T13:41:15.3386035+01:00"
+    },
+    {
+      "Query": ".",
+      "ExecutedDateTime": "2024-03-16T13:45:17.1709475+01:00"
+    },
+    {
+      "Query": "?userChrome",
+      "ExecutedDateTime": "2024-03-16T14:28:39.6850294+01:00"
+    },
+    {
+      "Query": "?userChrome.css",
+      "ExecutedDateTime": "2024-03-16T14:28:50.4645141+01:00"
+    },
+    {
+      "Query": "chrome",
+      "ExecutedDateTime": "2024-03-16T14:47:45.3052095+01:00"
+    },
+    {
+      "Query": "\u003Ewinget uninstall chrome",
+      "ExecutedDateTime": "2024-03-16T14:48:38.2395665+01:00"
+    },
+    {
+      "Query": "pwsh",
+      "ExecutedDateTime": "2024-03-16T14:49:27.3974838+01:00"
+    },
+    {
+      "Query": "ubun",
+      "ExecutedDateTime": "2024-03-16T14:50:06.2047337+01:00"
+    },
+    {
+      "Query": "shut",
+      "ExecutedDateTime": "2024-03-16T15:07:13.3650587+01:00"
+    },
+    {
+      "Query": "pwsh",
+      "ExecutedDateTime": "2024-03-16T15:24:44.0287351+01:00"
+    },
+    {
+      "Query": "powert",
+      "ExecutedDateTime": "2024-03-16T15:30:42.9452873+01:00"
+    },
+    {
+      "Query": "snip",
+      "ExecutedDateTime": "2024-03-16T15:33:38.8757096+01:00"
+    },
+    {
+      "Query": "C:\\Users\\Administrator\\AppData\\Roaming\\Microsoft\\Internet Explorer\\Quick Launch\\User Pinned\\TaskBar",
+      "ExecutedDateTime": "2024-03-16T15:40:21.27559+01:00"
+    },
+    {
+      "Query": "pwsh",
+      "ExecutedDateTime": "2024-03-16T15:54:09.0105027+01:00"
+    },
+    {
+      "Query": "\u003Ewinget search docker",
+      "ExecutedDateTime": "2024-03-16T15:55:56.3798892+01:00"
+    },
+    {
+      "Query": "pwsh",
+      "ExecutedDateTime": "2024-03-16T16:00:27.9243249+01:00"
+    },
+    {
+      "Query": "xbox",
+      "ExecutedDateTime": "2024-03-16T18:46:37.0473879+01:00"
+    },
+    {
+      "Query": "pwsh",
+      "ExecutedDateTime": "2024-03-16T18:56:13.67987+01:00"
+    },
+    {
+      "Query": "/savonapizza.pl",
+      "ExecutedDateTime": "2024-03-16T19:33:35.7224006+01:00"
+    },
+    {
+      "Query": "power",
+      "ExecutedDateTime": "2024-03-16T19:33:43.2227411+01:00"
+    },
+    {
+      "Query": "default",
+      "ExecutedDateTime": "2024-03-16T19:34:25.3432676+01:00"
+    },
+    {
+      "Query": "//savonapizza.pl",
+      "ExecutedDateTime": "2024-03-16T19:35:41.0131901+01:00"
+    },
+    {
+      "Query": "nvim",
+      "ExecutedDateTime": "2024-03-16T19:52:53.9585442+01:00"
+    },
+    {
+      "Query": "neo",
+      "ExecutedDateTime": "2024-03-16T19:53:09.4303175+01:00"
+    },
+    {
+      "Query": "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs",
+      "ExecutedDateTime": "2024-03-16T19:58:30.4485843+01:00"
+    },
+    {
+      "Query": "neovim",
+      "ExecutedDateTime": "2024-03-16T20:03:00.5535648+01:00"
+    },
+    {
+      "Query": "vim",
+      "ExecutedDateTime": "2024-03-16T20:05:05.0309202+01:00"
+    },
+    {
+      "Query": ".",
+      "ExecutedDateTime": "2024-03-16T20:28:06.3596681+01:00"
+    },
+    {
+      "Query": "powert",
+      "ExecutedDateTime": "2024-03-16T21:10:59.9363104+01:00"
+    },
+    {
+      "Query": "powertoy",
+      "ExecutedDateTime": "2024-03-16T21:19:22.6633862+01:00"
+    },
+    {
+      "Query": "shut",
+      "ExecutedDateTime": "2024-03-16T21:27:42.0407622+01:00"
+    },
+    {
+      "Query": "/change w11 locked background",
+      "ExecutedDateTime": "2024-03-16T22:07:29.096075+01:00"
+    },
+    {
+      "Query": "/ change w11 locked background",
+      "ExecutedDateTime": "2024-03-16T22:08:18.3742469+01:00"
+    },
+    {
+      "Query": "ubuntu",
+      "ExecutedDateTime": "2024-03-16T22:10:22.9082779+01:00"
+    },
+    {
+      "Query": "remote",
+      "ExecutedDateTime": "2024-03-16T22:25:52.5877856+01:00"
+    },
+    {
+      "Query": "neo",
+      "ExecutedDateTime": "2024-03-16T22:26:48.3536713+01:00"
+    },
+    {
+      "Query": "linu",
+      "ExecutedDateTime": "2024-03-16T22:29:30.7376195+01:00"
+    },
+    {
+      "Query": "remote",
+      "ExecutedDateTime": "2024-03-16T22:37:58.8029975+01:00"
+    },
+    {
+      "Query": "?utilities",
+      "ExecutedDateTime": "2024-03-16T22:44:47.1073472+01:00"
+    },
+    {
+      "Query": "?tweaker",
+      "ExecutedDateTime": "2024-03-16T22:47:10.1208954+01:00"
+    },
+    {
+      "Query": "C:\\Users\\Administrator\\appdata",
+      "ExecutedDateTime": "2024-03-16T22:48:06.1316079+01:00"
+    },
+    {
+      "Query": "ubun",
+      "ExecutedDateTime": "2024-03-16T23:11:12.7557384+01:00"
+    },
+    {
+      "Query": "remote",
+      "ExecutedDateTime": "2024-03-16T23:11:40.2002775+01:00"
+    },
+    {
+      "Query": "neo",
+      "ExecutedDateTime": "2024-03-16T23:33:02.525643+01:00"
+    },
+    {
+      "Query": "ubun",
+      "ExecutedDateTime": "2024-03-16T23:38:00.3278162+01:00"
+    },
+    {
+      "Query": "neo",
+      "ExecutedDateTime": "2024-03-17T00:29:28.315446+01:00"
+    },
+    {
+      "Query": "\u003E\u0026 py $bing",
+      "ExecutedDateTime": "2024-03-17T00:32:10.4248928+01:00"
+    },
+    {
+      "Query": "\u003E\u0026 py",
+      "ExecutedDateTime": "2024-03-17T00:32:27.9942762+01:00"
+    },
+    {
+      "Query": "paint",
+      "ExecutedDateTime": "2024-03-17T00:39:26.7869035+01:00"
+    },
+    {
+      "Query": "neo",
+      "ExecutedDateTime": "2024-03-17T00:41:00.1421599+01:00"
+    },
+    {
+      "Query": "onecomm",
+      "ExecutedDateTime": "2024-03-17T00:42:36.7016343+01:00"
+    },
+    {
+      "Query": "ubun",
+      "ExecutedDateTime": "2024-03-17T00:46:04.5542299+01:00"
+    },
+    {
+      "Query": "\u003Eipconfig /all",
+      "ExecutedDateTime": "2024-03-17T00:49:29.5159108+01:00"
+    },
+    {
+      "Query": "neo",
+      "ExecutedDateTime": "2024-03-17T00:49:34.6045464+01:00"
+    },
+    {
+      "Query": "store",
+      "ExecutedDateTime": "2024-03-17T01:06:36.5712634+01:00"
+    },
+    {
+      "Query": "snip",
+      "ExecutedDateTime": "2024-03-17T01:10:29.6500425+01:00"
+    },
+    {
+      "Query": "pictur",
+      "ExecutedDateTime": "2024-03-17T01:10:37.7835454+01:00"
+    },
+    {
+      "Query": "neo",
+      "ExecutedDateTime": "2024-03-17T01:20:29.7442083+01:00"
+    },
+    {
+      "Query": ".",
+      "ExecutedDateTime": "2024-03-17T01:57:37.4743961+01:00"
+    },
+    {
+      "Query": "neo",
+      "ExecutedDateTime": "2024-03-17T01:59:00.5243503+01:00"
+    }
+  ]
+}

@@ -22,26 +22,26 @@
 # apps list
 
 $list = @(
-    "Microsoft.PowerShell", ## PowerShell Core # interactive
-    "9NRWMJP3717K", ## Python # interactive
-    "BotProductions.IconViewer", # interactive
-    "Brave.Brave",
-    "CPUID.CPU-Z", # interactive
+    # "Microsoft.PowerShell", ## PowerShell Core # interactive
+    # "9NRWMJP3717K", ## Python # interactive
+    # "BotProductions.IconViewer", # interactive
+    # "Brave.Brave",
+    # "CPUID.CPU-Z", # interactive
+    # "Helm.Helm",
+    # "Irfanview.IrfanView",
+    # "Logitech.OptionsPlus", # interactive
+    # "Microsoft.AzureCLI", # interactive
+    # "Microsoft.VisualStudioCode",
+    # "Neovim.Neovim",
+    # "Python.Launcher",
+    # "Kuberentes.Minikube",
+    # "7zip.7zip",
     "Git.Git",
-    "Helm.Helm",
-    "Irfanview.IrfanView",
-    "JanDeDobbeleer.OhMyPosh",
-    "Logitech.OptionsPlus", # interactive
-    "Microsoft.AzureCLI", # interactive
-    "Microsoft.VisualStudioCode",
-    "Microsoft.Winget.Source_8wekyb3d8bbwe",
-    "Neovim.Neovim",
     "Microsoft.PowerToys",
-    "Python.Launcher",
-    "StartIsBack.StartAllBack",
-    "UKuberentes.Minikube",
     "Voidtools.Everything",
-    "7zip.7zip"
+    "lin-ycv.EverythingPowerToys",
+    "StartIsBack.StartAllBack",
+    "JanDeDobbeleer.OhMyPosh"
 )
 
 # install apps
@@ -53,6 +53,9 @@ foreach ($app in $list) {
 ## PowerToys
 
 # %LOCALAPPDATA%\Microsoft\PowerToys
+# clipboardmgmt 'https://github.com/CoreyHayward/PowerToys-Run-ClipboardManager/releases/download/v0.2.0/ClipboardManager-0.2.0-x64.zip'
+# prockill https://github.com/8LWXpg/PowerToysRun-ProcessKiller/releases/download/v1.0.1/ProcessKiller-v1.0.1-x64.zip
+# winget https://github.com/bostrot/PowerToysRunPluginWinget/releases/download/v1.2.3/winget-powertoys-1.2.3.zip
 
 ## StartAllBack
 

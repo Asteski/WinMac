@@ -1,0 +1,46 @@
+{
+  "layout-templates": [
+    {
+      "type": "blank",
+      "show-spacing": false,
+      "spacing": 0,
+      "zone-count": 0,
+      "sensitivity-radius": 0
+    },
+    {
+      "type": "focus",
+      "show-spacing": false,
+      "spacing": 0,
+      "zone-count": 3,
+      "sensitivity-radius": 20
+    },
+    {
+      "type": "columns",
+      "show-spacing": true,
+      "spacing": 16,
+      "zone-count": 3,
+      "sensitivity-radius": 20
+    },
+    {
+      "type": "rows",
+      "show-spacing": true,
+      "spacing": 16,
+      "zone-count": 3,
+      "sensitivity-radius": 20
+    },
+    {
+      "type": "grid",
+      "show-spacing": true,
+      "spacing": 16,
+      "zone-count": 3,
+      "sensitivity-radius": 20
+    },
+    {
+      "type": "priority-grid",
+      "show-spacing": true,
+      "spacing": 16,
+      "zone-count": 3,
+      "sensitivity-radius": 20
+    }
+  ]
+}

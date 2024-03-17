@@ -1,0 +1,116 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "Community.PowerToys.Run.Plugin.EdgeFavorite/0.3.0": {
+        "dependencies": {
+          "StyleCop.Analyzers": "1.2.0-beta.556",
+          "PowerToys.Common.UI": "0.76.0.0",
+          "PowerToys.ManagedCommon": "0.76.0.0",
+          "PowerToys.Settings.UI.Lib": "0.76.0.0",
+          "Wox.Infrastructure": "0.76.0.0",
+          "Wox.Plugin": "0.76.0.0"
+        },
+        "runtime": {
+          "Community.PowerToys.Run.Plugin.EdgeFavorite.dll": {}
+        }
+      },
+      "StyleCop.Analyzers/1.2.0-beta.556": {
+        "dependencies": {
+          "StyleCop.Analyzers.Unstable": "1.2.0.556"
+        }
+      },
+      "StyleCop.Analyzers.Unstable/1.2.0.556": {},
+      "PowerToys.Common.UI/0.76.0.0": {
+        "runtime": {
+          "PowerToys.Common.UI.dll": {
+            "assemblyVersion": "0.76.0.0",
+            "fileVersion": "0.76.0.0"
+          }
+        }
+      },
+      "PowerToys.ManagedCommon/0.76.0.0": {
+        "runtime": {
+          "PowerToys.ManagedCommon.dll": {
+            "assemblyVersion": "0.76.0.0",
+            "fileVersion": "0.76.0.0"
+          }
+        }
+      },
+      "PowerToys.Settings.UI.Lib/0.76.0.0": {
+        "runtime": {
+          "PowerToys.Settings.UI.Lib.dll": {
+            "assemblyVersion": "0.76.0.0",
+            "fileVersion": "0.76.0.0"
+          }
+        }
+      },
+      "Wox.Infrastructure/0.76.0.0": {
+        "runtime": {
+          "Wox.Infrastructure.dll": {
+            "assemblyVersion": "0.76.0.0",
+            "fileVersion": "0.76.0.0"
+          }
+        }
+      },
+      "Wox.Plugin/0.76.0.0": {
+        "runtime": {
+          "Wox.Plugin.dll": {
+            "assemblyVersion": "0.76.0.0",
+            "fileVersion": "0.76.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Community.PowerToys.Run.Plugin.EdgeFavorite/0.3.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "StyleCop.Analyzers/1.2.0-beta.556": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-llRPgmA1fhC0I0QyFLEcjvtM2239QzKr/tcnbsjArLMJxJlu0AA5G7Fft0OI30pHF3MW63Gf4aSSsjc5m82J1Q==",
+      "path": "stylecop.analyzers/1.2.0-beta.556",
+      "hashPath": "stylecop.analyzers.1.2.0-beta.556.nupkg.sha512"
+    },
+    "StyleCop.Analyzers.Unstable/1.2.0.556": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-zvn9Mqs/ox/83cpYPignI8hJEM2A93s2HkHs8HYMOAQW0PkampyoErAiIyKxgTLqbbad29HX/shv/6LGSjPJNQ==",
+      "path": "stylecop.analyzers.unstable/1.2.0.556",
+      "hashPath": "stylecop.analyzers.unstable.1.2.0.556.nupkg.sha512"
+    },
+    "PowerToys.Common.UI/0.76.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "PowerToys.ManagedCommon/0.76.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "PowerToys.Settings.UI.Lib/0.76.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Wox.Infrastructure/0.76.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Wox.Plugin/0.76.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "custom-layouts": [
+    {
+      "uuid": "{D17F75C5-D2DF-4514-B8F6-0579C8097F23}",
+      "name": "Middle",
+      "type": "grid",
+      "info": {
+        "rows": 1,
+        "columns": 3,
+        "rows-percentage": [
+          10000
+        ],
+        "columns-percentage": [
+          1337,
+          7168,
+          1495
+        ],
+        "cell-child-map": [
+          [
+            0,
+            1,
+            2
+          ]
+        ],
+        "show-spacing": false,
+        "spacing": 16,
+        "sensitivity-radius": 0
+      }
+    },
+    {
+      "uuid": "{A9D75055-7073-4348-8207-91837B24CCDF}",
+      "name": "Double",
+      "type": "grid",
+      "info": {
+        "rows": 1,
+        "columns": 2,
+        "rows-percentage": [
+          10000
+        ],
+        "columns-percentage": [
+          5000,
+          5000
+        ],
+        "cell-child-map": [
+          [
+            0,
+            1
+          ]
+        ],
+        "show-spacing": false,
+        "spacing": 78,
+        "sensitivity-radius": 70
+      }
+    },
+    {
+      "uuid": "{9FC55FBE-2C6E-4315-8E15-8D94ED746DED}",
+      "name": "Multiple",
+      "type": "canvas",
+      "info": {
+        "ref-width": 1536,
+        "ref-height": 834,
+        "zones": [
+          {
+            "X": 0,
+            "Y": 0,
+            "width": 768,
+            "height": 834
+          },
+          {
+            "X": 768,
+            "Y": 0,
+            "width": 768,
+            "height": 834
+          },
+          {
+            "X": 147,
+            "Y": 41,
+            "width": 1209,
+            "height": 772
+          },
+          {
+            "X": 356,
+            "Y": 167,
+            "width": 825,
+            "height": 380
+          }
+        ],
+        "sensitivity-radius": 20
+      }
+    }
+  ]
+}
