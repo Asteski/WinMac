@@ -22,6 +22,7 @@ Remove-Item "Setup.msix"
 # apps list
 
 $list = @(
+    "Microsoft.PowerShell", ## PowerShell Core
     "9NRWMJP3717K", ## Python
     "BotProductions.IconViewer",
     "Brave.Brave",
