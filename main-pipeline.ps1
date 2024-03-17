@@ -36,7 +36,7 @@ $list = @(
     # "Python.Launcher",
     # "Kuberentes.Minikube",
     # "7zip.7zip",
-    "Git.Git",
+    # "Git.Git",
     "Microsoft.PowerToys",
     "Voidtools.Everything",
     "lin-ycv.EverythingPowerToys",
