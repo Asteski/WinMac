@@ -1,25 +1,10 @@
-## Winget
+Write-Host "------------ WinMac Deployment ------------"
+Write-Host @"
+Welcome to WinMac Deployment Script version 0.0.1
 
-# get latest download url
-# $URL = "https://api.github.com/repos/microsoft/winget-cli/releases/latest"
-# $URL = (Invoke-WebRequest -Uri $URL).Content | ConvertFrom-Json |
-#         Select-Object -ExpandProperty "assets" |
-#         Where-Object "browser_download_url" -Match '.msixbundle' |
-#         Select-Object -ExpandProperty "browser_download_url"
-# $LicenseFileURL = 'https://github.com/microsoft/winget-cli/releases/download/v1.7.10661/9ea36fa38dd3449c94cc839961888850_License1.xml'
+This is Work in Progress. Please do not use it yet.
 
-# download
-# Invoke-WebRequest -Uri $URL -OutFile "Setup.msix" -UseBasicParsing
-# Invoke-WebRequest -Uri $LicenseFileURL -OutFile  'license.xml' 
-
-# install
-# #Add-AppxPackage -Path "Setup.msix" -LicensePath .\license.xml
-# Add-AppxProvisionedPackage -PackagePath "Setup.msix" -LicensePath 'license.xml' -online 
-
-# delete file
-# Remove-Item "Setup.msix"
-
-# apps list
+"@
 
 $list = @(
     # "Microsoft.PowerShell", ## PowerShell Core # interactive
@@ -44,11 +29,15 @@ $list = @(
     'JanDeDobbeleer.OhMyPosh'
 )
 
-# install apps
+Write-Host "Installing Packages"
 
 foreach ($app in $list) {
-    winget install --id $app --silent --force
+    Write-Host "Installing $app"
+    Write-Host
+    #winget install --id $app --silent --force
+    Write-Host
 }
+Write-Host "Installing Packages - Done"
 
 ## PowerToys
 
@@ -56,8 +45,8 @@ $plugins = $env:LOCALAPPDATA + '\Microsoft\PowerToys\PowerToys Run\Plugins'
 $winget = 'https://github.com/bostrot/PowerToysRunPluginWinget/releases/download/v1.2.3/winget-powertoys-1.2.3.zip'
 $prockill = 'https://github.com/8LWXpg/PowerToysRun-ProcessKiller/releases/download/v1.0.1/ProcessKiller-v1.0.1-x64.zip'
 
-Invoke-WebRequest -uri $winget -Method "GET"  -Outfile 'winget.zip'
-Invoke-WebRequest -uri $prockill -Method "GET"  -Outfile 'prockill.zip'
+Invoke-WebRequest -uri $winget -Method "GET" -Outfile 'winget.zip'
+Invoke-WebRequest -uri $prockill -Method "GET" -Outfile 'prockill.zip'
 
 Expand-Archive 'winget.zip' -DestinationPath $pwd\Winget -Force
 Expand-Archive 'prockill.zip' -DestinationPath $pwd -Force
@@ -71,10 +60,10 @@ Remove-Item -Recurse -Force ProcessKiller
 
 ## StartAllBack
 
-# $registryFile = $pwd + '\StartAllBack\StartAllBack.reg'
-# Start-Process -FilePath 'regedit.exe' -ArgumentList "/s $RegistryFile" -Wait
+Write-Host "Configuring StartAllBack"
 
 $registryPath = "HKCU:\Software\StartIsBack"
+$cachePath = "HKCU:\Software\StartIsBack\Cache"
 
 Set-ItemProperty -Path $registryPath -Name "WinBuild" -Value 0x5867
 Set-ItemProperty -Path $registryPath -Name "WinLangID" -Value 0x0409
@@ -97,7 +86,7 @@ Set-ItemProperty -Path $registryPath -Name "WinkeyFunction" -Value 0
 Set-ItemProperty -Path $registryPath -Name "TaskbarJumpList" -Value 1
 Set-ItemProperty -Path $registryPath -Name "TaskbarOneSegment" -Value 0
 Set-ItemProperty -Path $registryPath -Name "TaskbarCenterIcons" -Value 1
-Set-ItemProperty -Path $registryPath -Name "TaskbarTranslucentEffect" -Value 1
+Set-ItemProperty -Path $registryPath -Name "TaskbarTranslucentEffect" -Value 0
 Set-ItemProperty -Path $registryPath -Name "SysTrayActionCenter" -Value 0
 Set-ItemProperty -Path $registryPath -Name "TaskbarLargerIcons" -Value 0
 Set-ItemProperty -Path $registryPath -Name "UndeadControlPanel" -Value 1
@@ -159,3 +148,43 @@ Set-ItemProperty -Path $registryPath -Name "Start_MinMFU" -Value 14
 Set-ItemProperty -Path $registryPath -Name "SysTrayCopilotIcon" -Value 1
 Set-ItemProperty -Path $registryPath -Name "MultiColumnFlyout" -Value 0
 Set-ItemProperty -Path $registryPath -Name "Start_LargeMFUIcons" -Value 0
+
+Set-ItemProperty -Path $cachePath -Name "OrbWidth.120" -Value 0x00000027
+Set-ItemProperty -Path $cachePath -Name "OrbHeight.120" -Value 0x00000026
+Set-ItemProperty -Path $cachePath -Name "IdealHeight.6" -Value 0x00000000
+Set-ItemProperty -Path $cachePath -Name "IdealHeight.9" -Value 0x00010007
+Set-ItemProperty -Path $cachePath -Name "IdealWidth.9" -Value "OneDrive"
+Set-ItemProperty -Path $cachePath -Name "OrbWidth.96" -Value 0x00000020
+Set-ItemProperty -Path $cachePath -Name "OrbHeight.96" -Value 0x0000001e
+Set-ItemProperty -Path $cachePath -Name "IdealHeight.7" -Value 0x00000000
+Set-ItemProperty -Path $cachePath -Name "OrbWidth.144" -Value 0x00000030
+Set-ItemProperty -Path $cachePath -Name "OrbHeight.144" -Value 0x0000002e
+
+Write-Host "Configuring StartAllBack - Done"
+Write-Host "Restarting Explorer"
+Stop-Process -Name explorer -Force -Wait
+Start-Process -Name explorer
+Write-Host "------------ WinMac Deployment - Done ------------"
+
+<# Winget
+get latest download url
+$URL = "https://api.github.com/repos/microsoft/winget-cli/releases/latest"
+$URL = (Invoke-WebRequest -Uri $URL).Content | ConvertFrom-Json |
+        Select-Object -ExpandProperty "assets" |
+        Where-Object "browser_download_url" -Match '.msixbundle' |
+        Select-Object -ExpandProperty "browser_download_url"
+$LicenseFileURL = 'https://github.com/microsoft/winget-cli/releases/download/v1.7.10661/9ea36fa38dd3449c94cc839961888850_License1.xml'
+
+download
+Invoke-WebRequest -Uri $URL -OutFile "Setup.msix" -UseBasicParsing
+Invoke-WebRequest -Uri $LicenseFileURL -OutFile  'license.xml' 
+
+install
+#Add-AppxPackage -Path "Setup.msix" -LicensePath .\license.xml
+Add-AppxProvisionedPackage -PackagePath "Setup.msix" -LicensePath 'license.xml' -online 
+
+delete file
+Remove-Item "Setup.msix"
+#>
+
+# EOF
