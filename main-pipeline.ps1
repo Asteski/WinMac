@@ -7,7 +7,7 @@ Author: Adam Kamienski
 GitHub: Asteski
 Version: 0.0.1
 
-This is Work in Progress. Please do not use it yet.
+This is Work in Progress.
 
 "@
 
@@ -75,7 +75,7 @@ Remove-Item -Recurse -Force ProcessKiller
 
 ## StartAllBack
 
-Write-Host "Configuring StartAllBack"
+Write-Host "Configuring StartAllBack" -ForegroundColor Yellow
 
 $registryPath = "HKCU:\Software\StartIsBack"
 $cachePath = "HKCU:\Software\StartIsBack\Cache"
@@ -175,8 +175,8 @@ Set-ItemProperty -Path $cachePath -Name "IdealHeight.7" -Value 0x00000000
 Set-ItemProperty -Path $cachePath -Name "OrbWidth.144" -Value 0x00000030
 Set-ItemProperty -Path $cachePath -Name "OrbHeight.144" -Value 0x0000002e
 
-Write-Host "Configuring StartAllBack completed."
-Write-Host "Restarting Explorer"
+Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
+Write-Host "Restarting Explorer" -ForegroundColor Yellow
 Stop-Process -Name explorer -Force -Wait
 Start-Process -Name explorer
 Write-Host @"
@@ -184,7 +184,7 @@ Adding WinMac function to PowerShell profile. Function will be appended to Power
 
 Call it in PowerShell to get the version of WinMac using 'winmac' command.
 
-"@ -ForegroundColor Yellow
+"@ -ForegroundColor Green
 $func = Get-Content -Path "$pwd\func.ps1" -Raw
 Add-Content -Path $PROFILE.AllUsersCurrentHost -Value `n$func
 Write-Host @"
@@ -192,6 +192,8 @@ Write-Host @"
 
 Enjoy and support work in progress by giving feedback and contributing to the project.
 
+"@ -ForegroundColor Green
+Write-Host @"
 This is Work in Progress. Use it on your own responsibility.
 
 "@ -ForegroundColor Red
