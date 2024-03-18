@@ -201,7 +201,13 @@ Adding WinMac function to PowerShell profile. Function will be appended to Power
 Call it in PowerShell to get the version of WinMac using 'winmac' command.
 
 "@ -ForegroundColor Yellow
-$func = Get-Content -Path "$pwd\Utilities\func.ps1" -Raw
+$funcFilePath = "$pwd\Utilities\func.ps1"
+$func = Get-Content -Path $funcFilePath -Raw
+
+if (-not (Test-Path -Path $profile)) {
+    New-Item -Path $profile -ItemType File
+}
+
 Add-Content -Path $profile -Value `n$func
 Write-Host @"
 ------------------------ WinMac Deployment completed. ------------------------
