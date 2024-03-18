@@ -10,7 +10,7 @@ Version: 0.0.2
 
 This is Work in Progress.
 
-"@ -ForegroundColor DarkCyan
+"@ -ForegroundColor Cyan
 
 # Write-Host "Checking for Windows Package Manager (WinGet)" -ForegroundColor Yellow
 # $progressPreference = 'silentlyContinue'
@@ -202,7 +202,7 @@ Write-Host @"
 
 Enjoy and support work in progress by giving feedback and contributing to the project!
 
-"@ -ForegroundColor DarkBlue
+"@ -ForegroundColor Cyan
 Write-Host @"
 This is Work in Progress. Use it on your own responsibility.
 
