@@ -82,7 +82,7 @@ Write-Host "Installing Packages completed." -ForegroundColor Green
 # Remove-Item -Recurse -Force Winget
 # Remove-Item -Recurse -Force ProcessKiller
 # Get-ChildItem * -Include *.zip -Recurse | Remove-Item -Force
-
+# Stop-Process -Name "Explorer" -Force
 # Write-Host "Configuring PowerToys completed." -ForegroundColor Green
 
 ## StartAllBack
