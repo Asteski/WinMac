@@ -57,7 +57,7 @@ Write-Host "Installing Packages completed." -ForegroundColor Green
 
 ## PowerToys
 
-Write-Host "Configuring PowerToys." -ForegroundColor Yellow
+Write-Host "Configuring PowerToys..." -ForegroundColor Yellow
 
 $plugins = $env:LOCALAPPDATA + '\Microsoft\PowerToys\PowerToys Run\Plugins'
 $winget = 'https://github.com/bostrot/PowerToysRunPluginWinget/releases/download/v1.2.3/winget-powertoys-1.2.3.zip'
@@ -79,7 +79,7 @@ Write-Host "Installing Packages completed." -ForegroundColor Green
 
 ## StartAllBack
 
-Write-Host "Configuring StartAllBack" -ForegroundColor Yellow
+Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
 
 $registryPath = "HKCU:\Software\StartIsBack"
 $cachePath = "HKCU:\Software\StartIsBack\Cache"
@@ -204,7 +204,7 @@ Call it in PowerShell to get the version of WinMac using 'winmac' command.
 # Add-Content -Path $profile -Value `n$funcContent
 
 Write-Host @"
------------------------- WinMac Deployment completed. ------------------------
+------------------------ WinMac Deployment completed ------------------------
 
 Enjoy and support work in progress by giving feedback and contributing to the project!
 
