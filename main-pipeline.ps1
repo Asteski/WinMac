@@ -42,8 +42,7 @@ $list = @(
     # "JanDeDobbeleer.OhMyPosh",
     # 'Microsoft.PowerToys',
     # 'Voidtools.Everything',
-    # 'lin-ycv.EverythingPowerToys',
-    'StartIsBack.StartAllBack'
+    # 'lin-ycv.EverythingPowerToys'
 )
 
 Write-Host @"
@@ -51,7 +50,7 @@ Installing Packages:
 
 "@ -ForegroundColor Yellow
 
-# foreach ($app in $list) {winget install --id $app --no-upgrade --silent}
+foreach ($app in $list) {Winget Install --id $app --no-upgrade --silent}
 
 Write-Host "Installing Packages completed." -ForegroundColor Green
 
@@ -91,14 +90,14 @@ Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
 
 $exPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\"
 $sabPath = "HKCU:\Software\StartIsBack"
-# $cachePath = "HKCU:\Software\StartIsBack\Cache"
 
 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarGlomLevel -Value 1
 Set-ItemProperty -Path $exPath\StuckRects3 -Name "Settings" -Value ([byte[]]@(1,0,0,0,0,0,0,0,1,0,0,0,3,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,64,18,0,0,0,0,0,0,4,0,0,0,10,0,0,0,01,00,00,00))
 Set-ItemProperty -Path $exPath\Advanced -Name "TaskbarSmallIcons" -Value 1
 Set-ItemProperty -Path $exPath\Advanced -Name "TaskbarSi" -Value 0
+Set-ItemProperty -Path $exPath\Advanced -Name "TaskbarAl" -Value 0
 
-foreach ($app in $list) {winget install --id $app --no-upgrade --silent}
+Winget Install --id StartIsBack --no-upgrade --silent
 
 Set-ItemProperty -Path $sabPath -Name "WinBuild" -Value 0x5867
 Set-ItemProperty -Path $sabPath -Name "WinLangID" -Value 0x0409
