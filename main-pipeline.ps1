@@ -37,9 +37,9 @@ $list = @(
     # "Python.Launcher",
     # "Kuberentes.Minikube",
     # "7zip.7zip",
+    # "Git.Git",
     "Microsoft.PowerShell",
-    "JanDeDobbeleer.OhMyPosh",%APPDATA%\Everything\Everything.ini
-    "Git.Git",
+    "JanDeDobbeleer.OhMyPosh",
     # 'Microsoft.PowerToys',
     # 'Voidtools.Everything',
     # 'lin-ycv.EverythingPowerToys',
