@@ -63,18 +63,17 @@ $plugins = $env:LOCALAPPDATA + '\Microsoft\PowerToys\PowerToys Run\Plugins'
 $winget = 'https://github.com/bostrot/PowerToysRunPluginWinget/releases/download/v1.2.3/winget-powertoys-1.2.3.zip'
 $prockill = 'https://github.com/8LWXpg/PowerToysRun-ProcessKiller/releases/download/v1.0.1/ProcessKiller-v1.0.1-x64.zip'
 
+Get-Process -Name PowerToys* | Stop-Process -Force
 Invoke-WebRequest -uri $winget -Method "GET" -Outfile 'winget.zip'
-Invoke-WebRequest -uri $prockill -Method "GET" -Outfile 'prockill.zip'
-
 Expand-Archive 'winget.zip' -DestinationPath $pwd\Winget -Force
-Expand-Archive 'prockill.zip' -DestinationPath $pwd -Force
-
 Copy-item $pwd\Winget -Destination $plugins -Recurse -Force
-Copy-item $pwd\ProcessKiller -Destination $plugins -Recurse -Force
-
-Get-ChildItem * -Include *.zip -Recurse | Remove-Item
+# Invoke-WebRequest -uri $prockill -Method "GET" -Outfile 'prockill.zip'
+# Expand-Archive 'prockill.zip' -DestinationPath $pwd -Force
+# Copy-item $pwd\ProcessKiller -Destination $plugins -Recurse -Force
 Remove-Item -Recurse -Force Winget
-Remove-Item -Recurse -Force ProcessKiller
+# Remove-Item -Recurse -Force ProcessKiller
+Get-ChildItem * -Include *.zip -Recurse | Remove-Item -Force
+Start-Process PowerToys
 
 Write-Host "Installing Packages completed." -ForegroundColor Green
 
