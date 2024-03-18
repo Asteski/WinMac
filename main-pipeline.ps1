@@ -46,7 +46,10 @@ $list = @(
     'StartIsBack.StartAllBack'
 )
 
-Write-Host "Installing Packages" -ForegroundColor Yellow
+Write-Host @"
+Installing Packages:
+
+"@ -ForegroundColor Yellow
 
 foreach ($app in $list) {winget install --id $app --no-upgrade --silent}
 
