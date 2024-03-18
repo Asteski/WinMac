@@ -97,28 +97,24 @@ Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
 
 taskkill /f /im explorer.exe
 
-$exPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\"
+$explorerPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\"
 $sabPath = "HKCU:\Software\StartIsBack"
 
-Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarGlomLevel -Value 1
-Set-ItemProperty -Path $exPath\StuckRects3 -Name "Settings" -Value ([byte[]]@(1,0,0,0,0,0,0,0,1,0,0,0,3,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,64,18,0,0,0,0,0,0,4,0,0,0,10,0,0,0,01,00,00,00))
-Set-ItemProperty -Path $exPath\Advanced -Name "TaskbarSmallIcons" -Value 1
-Set-ItemProperty -Path $exPath\Advanced -Name "TaskbarSi" -Value 0
-Set-ItemProperty -Path $exPath\Advanced -Name "TaskbarAl" -Value 0
-Set-ItemProperty -Path $exPath\Advanced -Name "UseCompactMode" -Value 1
+Set-ItemProperty -Path $explorerPath\Advanced -Name TaskbarGlomLevel -Value 1
+Set-ItemProperty -Path $explorerPath\Advanced -Name "TaskbarSmallIcons" -Value 1
+Set-ItemProperty -Path $explorerPath\Advanced -Name "TaskbarSi" -Value 0
+Set-ItemProperty -Path $explorerPath\Advanced -Name "TaskbarAl" -Value 0
+Set-ItemProperty -Path $explorerPath\Advanced -Name "UseCompactMode" -Value 1
+Set-ItemProperty -Path $explorerPath\StuckRects3 -Name "Settings" -Value ([byte[]](0x30,0x00,0x00,0x00,0xfe,0xff,0xff,0xff,0x7a,0xf4,0x00,0x00,0x01,0x00,0x00,0x00,0x3c,0x00,0x00,0x00,0x3c,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xfc,0x03,0x00,0x00,0x80,0x07,0x00,0x00,0x38,0x04,0x00,0x00,0x78,0x00,0x00,0x00,0x01,0x00,0x00,0x00))
 
-Winget Install --id "StartIsBack.StartAllBack" --silent --no-upgrade
+winget install --id "StartIsBack.StartAllBack" --silent --no-upgrade
 
-Set-ItemProperty -Path $sabPath -Name "WinBuild" -Value 0x5867
-Set-ItemProperty -Path $sabPath -Name "WinLangID" -Value 0x0409
 Set-ItemProperty -Path $sabPath -Name "ModernIconsColorized" -Value 0
 Set-ItemProperty -Path $sabPath -Name "SettingsVersion" -Value 5
 Set-ItemProperty -Path $sabPath -Name "WelcomeShown" -Value 3
 Set-ItemProperty -Path $sabPath -Name "UpdateCheck" -Value ([byte[]](0x44, 0xCE, 0xBE, 0x05, 0x25, 0x77, 0xDA, 0x01))
-Set-ItemProperty -Path $sabPath -Name "FrameStyle" -Value 2
-Set-ItemProperty -Path $sabPath -Name "OrbBitmap" -Value ""
-Set-ItemProperty -Path $sabPath -Name "AlterStyle" -Value ""
-Set-ItemProperty -Path $sabPath -Name "TaskbarStyle" -Value ""
+Set-ItemProperty -Path $sabPath -Name "FrameStyle" -Value 1
+Set-ItemProperty -Path $sabPath -Name "AlterStyle" -Value "Plain8.msstyles"
 Set-ItemProperty -Path $sabPath -Name "SysTrayStyle" -Value 1
 Set-ItemProperty -Path $sabPath -Name "BottomDetails" -Value 0
 Set-ItemProperty -Path $sabPath -Name "RestyleIcons" -Value 1
@@ -130,12 +126,12 @@ Set-ItemProperty -Path $sabPath -Name "WinkeyFunction" -Value 0
 Set-ItemProperty -Path $sabPath -Name "TaskbarJumpList" -Value 1
 Set-ItemProperty -Path $sabPath -Name "TaskbarOneSegment" -Value 0
 Set-ItemProperty -Path $sabPath -Name "TaskbarCenterIcons" -Value 1
-Set-ItemProperty -Path $sabPath -Name "TaskbarTranslucentEffect" -Value 0
+Set-ItemProperty -Path $sabPath -Name "TaskbarTranslucentEffect" -Value 1
 Set-ItemProperty -Path $sabPath -Name "SysTrayActionCenter" -Value 0
 Set-ItemProperty -Path $sabPath -Name "TaskbarLargerIcons" -Value 0
 Set-ItemProperty -Path $sabPath -Name "UndeadControlPanel" -Value 1
 Set-ItemProperty -Path $sabPath -Name "LegacyTaskbar" -Value 1
-Set-ItemProperty -Path $sabPath -Name "TaskbarSpacierIcons" -Value -1
+Set-ItemProperty -Path $sabPath -Name "TaskbarSpacierIcons" -Value 1
 Set-ItemProperty -Path $sabPath -Name "SysTrayNetwork" -Value 1
 Set-ItemProperty -Path $sabPath -Name "SysTrayClockFormat" -Value 3
 Set-ItemProperty -Path $sabPath -Name "TaskbarControlCenter" -Value 1
@@ -157,8 +153,8 @@ Set-ItemProperty -Path $sabPath -Name "Start_ShowMyMusic" -Value 0
 Set-ItemProperty -Path $sabPath -Name "Start_ShowVideos" -Value 1
 Set-ItemProperty -Path $sabPath -Name "Start_ShowDownloads" -Value 1
 Set-ItemProperty -Path $sabPath -Name "Start_ShowSkyDrive" -Value 1
-Set-ItemProperty -Path $sabPath -Name "StartMenuFavorites" -Value 0
-Set-ItemProperty -Path $sabPath -Name "Start_ShowRecentDocs" -Value 0
+Set-ItemProperty -Path $sabPath -Name "StartMenuFavorites" -Value 2
+Set-ItemProperty -Path $sabPath -Name "Start_ShowRecentDocs" -Value 2
 Set-ItemProperty -Path $sabPath -Name "Start_ShowNetPlaces" -Value 0
 Set-ItemProperty -Path $sabPath -Name "Start_ShowNetConn" -Value 0
 Set-ItemProperty -Path $sabPath -Name "Start_ShowMyComputer" -Value 1
@@ -174,6 +170,72 @@ Set-ItemProperty -Path $sabPath -Name "Start_MinMFU" -Value 14
 Set-ItemProperty -Path $sabPath -Name "SysTrayCopilotIcon" -Value 1
 Set-ItemProperty -Path $sabPath -Name "MultiColumnFlyout" -Value 0
 Set-ItemProperty -Path $sabPath -Name "Start_LargeMFUIcons" -Value 0
+Set-ItemProperty -Path $sabPath -Name "SysTrayLocation" -Value 0
+Set-ItemProperty -Path $sabPath -Name "SysTraySpacierIcons" -Value 1
+
+# Set-ItemProperty -Path $sabPath -Name "ModernIconsColorized" -Value 0
+# Set-ItemProperty -Path $sabPath -Name "SettingsVersion" -Value 5
+# Set-ItemProperty -Path $sabPath -Name "WelcomeShown" -Value 3
+# Set-ItemProperty -Path $sabPath -Name "UpdateCheck" -Value ([byte[]](0x44, 0xCE, 0xBE, 0x05, 0x25, 0x77, 0xDA, 0x01))
+# Set-ItemProperty -Path $sabPath -Name "FrameStyle" -Value 2
+# Set-ItemProperty -Path $sabPath -Name "OrbBitmap" -Value ""
+# Set-ItemProperty -Path $sabPath -Name "AlterStyle" -Value ""
+# Set-ItemProperty -Path $sabPath -Name "TaskbarStyle" -Value ""
+# Set-ItemProperty -Path $sabPath -Name "SysTrayStyle" -Value 1
+# Set-ItemProperty -Path $sabPath -Name "BottomDetails" -Value 0
+# Set-ItemProperty -Path $sabPath -Name "RestyleIcons" -Value 1
+# Set-ItemProperty -Path $sabPath -Name "NavBarGlass" -Value 1
+# Set-ItemProperty -Path $sabPath -Name "OldSearch" -Value 1
+# Set-ItemProperty -Path $sabPath -Name "NoXAMLMenus" -Value 1
+# Set-ItemProperty -Path $sabPath -Name "RestyleControls" -Value 0
+# Set-ItemProperty -Path $sabPath -Name "WinkeyFunction" -Value 0
+# Set-ItemProperty -Path $sabPath -Name "TaskbarJumpList" -Value 1
+# Set-ItemProperty -Path $sabPath -Name "TaskbarOneSegment" -Value 0
+# Set-ItemProperty -Path $sabPath -Name "TaskbarCenterIcons" -Value 1
+# Set-ItemProperty -Path $sabPath -Name "TaskbarTranslucentEffect" -Value 0
+# Set-ItemProperty -Path $sabPath -Name "SysTrayActionCenter" -Value 0
+# Set-ItemProperty -Path $sabPath -Name "TaskbarLargerIcons" -Value 0
+# Set-ItemProperty -Path $sabPath -Name "UndeadControlPanel" -Value 1
+# Set-ItemProperty -Path $sabPath -Name "LegacyTaskbar" -Value 1
+# Set-ItemProperty -Path $sabPath -Name "TaskbarSpacierIcons" -Value 1
+# Set-ItemProperty -Path $sabPath -Name "SysTrayNetwork" -Value 1
+# Set-ItemProperty -Path $sabPath -Name "SysTrayClockFormat" -Value 3
+# Set-ItemProperty -Path $sabPath -Name "TaskbarControlCenter" -Value 1
+# Set-ItemProperty -Path $sabPath -Name "SysTrayVolume" -Value 1
+# Set-ItemProperty -Path $sabPath -Name "SysTrayPower" -Value 1
+# Set-ItemProperty -Path $sabPath -Name "Start_LargeAllAppsIcons" -Value 0
+# Set-ItemProperty -Path $sabPath -Name "AllProgramsFlyout" -Value 1
+# Set-ItemProperty -Path $sabPath -Name "StartMetroAppsFolder" -Value 1
+# Set-ItemProperty -Path $sabPath -Name "Start_SortOverride" -Value 0
+# Set-ItemProperty -Path $sabPath -Name "Start_NotifyNewApps" -Value 1
+# Set-ItemProperty -Path $sabPath -Name "Start_AutoCascade" -Value 0
+# Set-ItemProperty -Path $sabPath -Name "Start_AskCortana" -Value 0
+# Set-ItemProperty -Path $sabPath -Name "HideUserFrame" -Value 1
+# Set-ItemProperty -Path $sabPath -Name "Start_RightPaneIcons" -Value 0
+# Set-ItemProperty -Path $sabPath -Name "Start_ShowUser" -Value 1
+# Set-ItemProperty -Path $sabPath -Name "Start_ShowMyDocs" -Value 1
+# Set-ItemProperty -Path $sabPath -Name "Start_ShowMyPics" -Value 1
+# Set-ItemProperty -Path $sabPath -Name "Start_ShowMyMusic" -Value 0
+# Set-ItemProperty -Path $sabPath -Name "Start_ShowVideos" -Value 1
+# Set-ItemProperty -Path $sabPath -Name "Start_ShowDownloads" -Value 1
+# Set-ItemProperty -Path $sabPath -Name "Start_ShowSkyDrive" -Value 1
+# Set-ItemProperty -Path $sabPath -Name "StartMenuFavorites" -Value 0
+# Set-ItemProperty -Path $sabPath -Name "Start_ShowRecentDocs" -Value 0
+# Set-ItemProperty -Path $sabPath -Name "Start_ShowNetPlaces" -Value 0
+# Set-ItemProperty -Path $sabPath -Name "Start_ShowNetConn" -Value 0
+# Set-ItemProperty -Path $sabPath -Name "Start_ShowMyComputer" -Value 1
+# Set-ItemProperty -Path $sabPath -Name "Start_ShowControlPanel" -Value 0
+# Set-ItemProperty -Path $sabPath -Name "Start_ShowPCSettings" -Value 0
+# Set-ItemProperty -Path $sabPath -Name "Start_AdminToolsRoot" -Value 0
+# Set-ItemProperty -Path $sabPath -Name "Start_ShowPrinters" -Value 0
+# Set-ItemProperty -Path $sabPath -Name "Start_ShowSetProgramAccessAndDefaults" -Value 0
+# Set-ItemProperty -Path $sabPath -Name "Start_ShowTerminal" -Value 0
+# Set-ItemProperty -Path $sabPath -Name "Start_ShowCommandPrompt" -Value 0
+# Set-ItemProperty -Path $sabPath -Name "Start_ShowRun" -Value 0
+# Set-ItemProperty -Path $sabPath -Name "Start_MinMFU" -Value 14
+# Set-ItemProperty -Path $sabPath -Name "SysTrayCopilotIcon" -Value 1
+# Set-ItemProperty -Path $sabPath -Name "MultiColumnFlyout" -Value 0
+# Set-ItemProperty -Path $sabPath -Name "Start_LargeMFUIcons" -Value 0
 
 start explorer.exe
 
