@@ -69,7 +69,11 @@ Copy-item $pwd\Winget -Destination $plugins -Recurse -Force
 # Invoke-WebRequest -uri $prockill -Method "GET" -Outfile 'prockill.zip'
 # Expand-Archive 'prockill.zip' -DestinationPath $pwd -Force
 # Copy-item $pwd\ProcessKiller -Destination $plugins -Recurse -Force
-Get-Process -Name PowerToys* | Stop-Process -Force
+$PowerToysProc = Get-Process -Name PowerToys*
+ForEach ($proc in $PowerToysProc) {
+    $proc.WaitForExit(10000)
+    $proc.Kill()
+}
 Remove-Item -Recurse -Force Winget
 # Remove-Item -Recurse -Force ProcessKiller
 Get-ChildItem * -Include *.zip -Recurse | Remove-Item -Force
