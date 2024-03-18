@@ -1,3 +1,4 @@
+clear
 Write-Host @"
 
 ------------------------ WinMac Deployment ------------------------
@@ -74,7 +75,7 @@ ForEach ($proc in $PowerToysProc) {
     $proc.WaitForExit(10000)
     $proc.Kill()
 }
-Start-Process -Name PowerToys
+Start-Process -Name PowerToys.Runner
 Remove-Item -Recurse -Force Winget
 # Remove-Item -Recurse -Force ProcessKiller
 Get-ChildItem * -Include *.zip -Recurse | Remove-Item -Force
