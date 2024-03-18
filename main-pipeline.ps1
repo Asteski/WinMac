@@ -189,14 +189,15 @@ Call it in PowerShell to get the version of WinMac using 'winmac' command.
 
 "@ -ForegroundColor Yellow
 
-$funcFilePath = "$pwd\Utilities\func.ps1"
-$func = Get-Content -Path $funcFilePath -Raw
+$funcPath = "$pwd\Utilities\func.ps1"
+$funcContent = Get-Content -Path $funcFilePath -Raw
+$profilePath = Split-Path -Path $profile -Parent
 
 if (-not (Test-Path -Path $profile)) {
-    New-Item -Path $profile -ItemType File
+    New-Item -Path $profilePath -Name 'Microsoft.PowerShell_profile.ps1' -ItemType File
 }
 
-Add-Content -Path $profile -Value `n$func
+Add-Content -Path $profile -Value `n$funcContent
 Write-Host @"
 ------------------------ WinMac Deployment completed. ------------------------
 
