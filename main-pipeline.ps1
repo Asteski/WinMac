@@ -76,8 +76,7 @@ ForEach ($proc in $PowerToysProc) {
 }
 $powerToysPath = $env:LOCALAPPDATA + '\PowerToys\PowerToys.exe'
 
-## show_tray_icon=0 ## FIXME: modify in program files ever.ini file 
-(Get-Content -Path "C:\Program Files\Everything\Everything.ini").Add('show_tray_icon=1') | Set-Content -Path "C:\Program Files\Everything\Everything.ini"
+Add-Content -Path "C:\Program Files\Everything\Everything.ini" -Value "show_tray_icon=1"
 Start-Process -FilePath "C:\Program Files\Everything\Everything.exe"
 Start-Process -FilePath $powerToysPath
 Remove-Item -Recurse -Force Winget
@@ -188,16 +187,8 @@ Set-ItemProperty -Path $cachePath -Name "IdealHeight.7" -Value 0x00000000
 Set-ItemProperty -Path $cachePath -Name "OrbWidth.144" -Value 0x00000030
 Set-ItemProperty -Path $cachePath -Name "OrbHeight.144" -Value 0x0000002e
 
-Stop-Process -Name "explorer" -Force
+Stop-Process -Name "Explorer" -Force
 Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
-Sleep 5
-Write-Host @"
-
-Adding WinMac function to PowerShell profile. Function will be appended to PowerShell profile file.
-
-Call it in PowerShell to get the version of WinMac using 'winmac' command.
-
-"@ -ForegroundColor Yellow
 
 ## FIXME: Define ps subfolder in the project and use it to copy the function to the profile
 #
@@ -217,9 +208,9 @@ Write-Host @"
 
 Enjoy and support work in progress by giving feedback and contributing to the project!
 
-"@ -ForegroundColor Cyan
-Write-Host @"
-This is Work in Progress. Use it on your own responsibility.
+WinMac function have been added to PowerShell profile. 
+Use 'winmac' command to get the version of WinMac.
 
-"@ -ForegroundColor Magenta
+"@ -ForegroundColor Cyan
+Write-Host "This is Work in Progress. Use on your own responsibility." -ForegroundColor Magenta
 # EOF
