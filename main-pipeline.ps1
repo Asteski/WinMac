@@ -75,7 +75,10 @@ ForEach ($proc in $PowerToysProc) {
     $proc.Kill()
 }
 $powerToysPath = $env:LOCALAPPDATA + '\PowerToys\PowerToys.exe'
-Start-Process -FilePath "C:\Program Files\Everything\Everything.exe" -ArgumentList '-install-service'
+
+## show_tray_icon=0 ## FIXME: modify ever.ini file 
+(Get-Content -Path $Env:APPDATA\Everything\Everything.ini).Replace('show_tray_icon=1', 'show_tray_icon=0') | Set-Content -Path $Env:APPDATA\Everything\Everything.ini
+Start-Process -FilePath "C:\Program Files\Everything\Everything.exe"
 Start-Process -FilePath $powerToysPath
 Remove-Item -Recurse -Force Winget
 Remove-Item -Recurse -Force ProcessKiller
