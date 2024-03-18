@@ -64,10 +64,10 @@ $winget = 'https://github.com/bostrot/PowerToysRunPluginWinget/releases/download
 $prockill = 'https://github.com/8LWXpg/PowerToysRun-ProcessKiller/releases/download/v1.0.1/ProcessKiller-v1.0.1-x64.zip'
 Get-Process -Name PowerToys* | Stop-Process -Force
 Invoke-WebRequest -uri $winget -Method "GET" -Outfile 'winget.zip'
-Expand-Archive 'winget.zip' -DestinationPath $pwd\Winget -Force  ## FIXME nie kopiuje jak trzeba
-Copy-item $pwd\Winget -Destination $plugins -Recurse -Force
 Invoke-WebRequest -uri $prockill -Method "GET" -Outfile 'prockill.zip'
+Expand-Archive 'winget.zip' -DestinationPath $pwd\Winget -Force
 Expand-Archive 'prockill.zip' -DestinationPath $pwd -Force
+Copy-item $pwd\Winget -Destination $plugins -Recurse -Force
 Copy-item $pwd\ProcessKiller -Destination $plugins -Recurse -Force
 $PowerToysProc = Get-Process -Name PowerToys*
 ForEach ($proc in $PowerToysProc) {
