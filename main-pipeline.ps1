@@ -76,8 +76,8 @@ ForEach ($proc in $PowerToysProc) {
 }
 $powerToysPath = $env:LOCALAPPDATA + '\PowerToys\PowerToys.exe'
 
-## show_tray_icon=0 ## FIXME: modify ever.ini file 
-(Get-Content -Path $Env:APPDATA\Everything\Everything.ini).Replace('show_tray_icon=1', 'show_tray_icon=0') | Set-Content -Path $Env:APPDATA\Everything\Everything.ini
+## show_tray_icon=0 ## FIXME: modify in program files ever.ini file 
+(Get-Content -Path "C:\Program Files\Everything\Everything.ini").Add('show_tray_icon=1') | Set-Content -Path "C:\Program Files\Everything\Everything.ini"
 Start-Process -FilePath "C:\Program Files\Everything\Everything.exe"
 Start-Process -FilePath $powerToysPath
 Remove-Item -Recurse -Force Winget
