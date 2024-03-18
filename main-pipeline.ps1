@@ -12,16 +12,16 @@ This is Work in Progress.
 
 "@ -ForegroundColor Cyan
 
-Write-Host "Checking for Windows Package Manager (WinGet)" -ForegroundColor Yellow
-$progressPreference = 'silentlyContinue'
-Write-Information "Downloading WinGet and its dependencies..."
-$wingetUrl = "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
-$installPath = "$env:TEMP\winget.msixbundle"
-Invoke-WebRequest -Uri $wingetUrl -OutFile $installPath
-Write-Information "Installing WinGet..."
-Add-AppxPackage -Path $installPath
-Remove-Item -Path $installPath
-Write-Information "WinGet installation completed."
+# Write-Host "Checking for Windows Package Manager (WinGet)" -ForegroundColor Yellow
+# $progressPreference = 'silentlyContinue'
+# Write-Information "Downloading WinGet and its dependencies..."
+# $wingetUrl = "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
+# $installPath = "$env:TEMP\winget.msixbundle"
+# Invoke-WebRequest -Uri $wingetUrl -OutFile $installPath
+# Write-Information "Installing WinGet..."
+# Add-AppxPackage -Path $installPath
+# Remove-Item -Path $installPath
+# Write-Information "WinGet installation completed."
 
 $list = @(
     # "9NRWMJP3717K", ## Python # interactive
@@ -38,11 +38,11 @@ $list = @(
     # "Kuberentes.Minikube",
     # "7zip.7zip",
     "Microsoft.PowerShell",
-    "JanDeDobbeleer.OhMyPosh",
+    "JanDeDobbeleer.OhMyPosh",%APPDATA%\Everything\Everything.ini
     "Git.Git",
-    'Microsoft.PowerToys',
-    'Voidtools.Everything',
-    'lin-ycv.EverythingPowerToys',
+    # 'Microsoft.PowerToys',
+    # 'Voidtools.Everything',
+    # 'lin-ycv.EverythingPowerToys',
     'StartIsBack.StartAllBack'
 )
 
@@ -57,33 +57,33 @@ Write-Host "Installing Packages completed." -ForegroundColor Green
 
 ## PowerToys
 
-Write-Host "Configuring PowerToys..." -ForegroundColor Yellow
+# Write-Host "Configuring PowerToys..." -ForegroundColor Yellow
 
-$plugins = $env:LOCALAPPDATA + '\Microsoft\PowerToys\'
-$winget = 'https://github.com/bostrot/PowerToysRunPluginWinget/releases/download/v1.2.3/winget-powertoys-1.2.3.zip'
-$prockill = 'https://github.com/8LWXpg/PowerToysRun-ProcessKiller/releases/download/v1.0.1/ProcessKiller-v1.0.1-x64.zip'
-Get-Process -Name PowerToys* | Stop-Process -Force
-Invoke-WebRequest -uri $winget -Method "GET" -Outfile 'winget.zip'
-Invoke-WebRequest -uri $prockill -Method "GET" -Outfile 'prockill.zip'
-Expand-Archive 'winget.zip' -DestinationPath $pwd\Winget -Force
-Expand-Archive 'prockill.zip' -DestinationPath $pwd -Force
-Copy-item $pwd\Winget -Destination $plugins -Recurse -Force
-Copy-item $pwd\ProcessKiller -Destination $plugins -Recurse -Force
-$PowerToysProc = Get-Process -Name PowerToys*
-ForEach ($proc in $PowerToysProc) {
-    $proc.WaitForExit(10000)
-    $proc.Kill()
-}
-$powerToysPath = $env:LOCALAPPDATA + '\PowerToys\PowerToys.exe'
+# $plugins = $env:LOCALAPPDATA + '\Microsoft\PowerToys\'
+# $winget = 'https://github.com/bostrot/PowerToysRunPluginWinget/releases/download/v1.2.3/winget-powertoys-1.2.3.zip'
+# $prockill = 'https://github.com/8LWXpg/PowerToysRun-ProcessKiller/releases/download/v1.0.1/ProcessKiller-v1.0.1-x64.zip'
+# Get-Process -Name PowerToys* | Stop-Process -Force
+# Invoke-WebRequest -uri $winget -Method "GET" -Outfile 'winget.zip'
+# Invoke-WebRequest -uri $prockill -Method "GET" -Outfile 'prockill.zip'
+# Expand-Archive 'winget.zip' -DestinationPath $pwd\Winget -Force
+# Expand-Archive 'prockill.zip' -DestinationPath $pwd -Force
+# Copy-item $pwd\Winget -Destination $plugins -Recurse -Force
+# Copy-item $pwd\ProcessKiller -Destination $plugins -Recurse -Force
+# $PowerToysProc = Get-Process -Name PowerToys*
+# ForEach ($proc in $PowerToysProc) {
+#     $proc.WaitForExit(10000)
+#     $proc.Kill()
+# }
+# $powerToysPath = $env:LOCALAPPDATA + '\PowerToys\PowerToys.exe'
 
-Add-Content -Path "C:\Program Files\Everything\Everything.ini" -Value "show_tray_icon=1"
-Start-Process -FilePath "C:\Program Files\Everything\Everything.exe"
-Start-Process -FilePath $powerToysPath
-Remove-Item -Recurse -Force Winget
-Remove-Item -Recurse -Force ProcessKiller
-Get-ChildItem * -Include *.zip -Recurse | Remove-Item -Force
+# Add-Content -Path "C:\Program Files\Everything\Everything.ini" -Value "show_tray_icon=0"
+# Start-Process -FilePath "C:\Program Files\Everything\Everything.exe"
+# Start-Process -FilePath $powerToysPath
+# Remove-Item -Recurse -Force Winget
+# Remove-Item -Recurse -Force ProcessKiller
+# Get-ChildItem * -Include *.zip -Recurse | Remove-Item -Force
 
-Write-Host "Installing Packages completed." -ForegroundColor Green
+Write-Host "Configuring PowerToys completed." -ForegroundColor Green
 
 ## StartAllBack
 
