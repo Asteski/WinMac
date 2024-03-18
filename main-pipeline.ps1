@@ -59,16 +59,16 @@ Write-Host "Installing Packages completed." -ForegroundColor Green
 
 Write-Host "Configuring PowerToys..." -ForegroundColor Yellow
 
-$plugins = $env:LOCALAPPDATA + '\Microsoft\PowerToys\PowerToys Run\Plugins'
+$plugins = $env:LOCALAPPDATA + '\Microsoft\PowerToys\'
 $winget = 'https://github.com/bostrot/PowerToysRunPluginWinget/releases/download/v1.2.3/winget-powertoys-1.2.3.zip'
 $prockill = 'https://github.com/8LWXpg/PowerToysRun-ProcessKiller/releases/download/v1.0.1/ProcessKiller-v1.0.1-x64.zip'
 Get-Process -Name PowerToys* | Stop-Process -Force
 Invoke-WebRequest -uri $winget -Method "GET" -Outfile 'winget.zip'
-Expand-Archive 'winget.zip' -DestinationPath $pwd\Winget -Force
+Expand-Archive 'winget.zip' -DestinationPath $pwd\Winget -Force  ## FIXME nie kopiuje jak trzeba
 Copy-item $pwd\Winget -Destination $plugins -Recurse -Force
-# Invoke-WebRequest -uri $prockill -Method "GET" -Outfile 'prockill.zip'
-# Expand-Archive 'prockill.zip' -DestinationPath $pwd -Force
-# Copy-item $pwd\ProcessKiller -Destination $plugins -Recurse -Force
+Invoke-WebRequest -uri $prockill -Method "GET" -Outfile 'prockill.zip'
+Expand-Archive 'prockill.zip' -DestinationPath $pwd -Force
+Copy-item $pwd\ProcessKiller -Destination $plugins -Recurse -Force
 $PowerToysProc = Get-Process -Name PowerToys*
 ForEach ($proc in $PowerToysProc) {
     $proc.WaitForExit(10000)
