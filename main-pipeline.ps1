@@ -191,14 +191,18 @@ Call it in PowerShell to get the version of WinMac using 'winmac' command.
 
 "@ -ForegroundColor Yellow
 
-$funcPath = "$pwd\Utilities\func.ps1"
-$funcContent = Get-Content -Path $funcPath -Raw
-$filePath = Split-Path -Path $profile -Parent
-$profilePath = Split-Path -Path $filePath -Parent
-if (-not (Test-Path -Path $profile)){
-    New-Item -Path $profilePath -Name "PowerShell" -ItemType Directory
-    New-Item -Path $filePath -Name "Microsoft.PowerShell_profile.ps1" -ItemType File}
-Add-Content -Path $profile -Value `n$funcContent
+## FIXME: Define ps subfolder in the project and use it to copy the function to the profile
+#
+# $funcPath = "$pwd\Utilities\func.ps1"
+# $funcContent = Get-Content -Path $funcPath -Raw
+# $filePath = Split-Path -Path $profile -Parent
+# $profilePath = Split-Path -Path $filePath -Parent
+# $fileName = Split-Path -Path $profile -Leaf
+# if (-not (Test-Path -Path $profile)){
+#     New-Item -Path $profilePath -Name 'WindowsPowershell' -ItemType Directory
+#     New-Item -Path $filePath -Name $fileName -ItemType File
+# }
+# Add-Content -Path $profile -Value `n$funcContent
 
 Write-Host @"
 ------------------------ WinMac Deployment completed. ------------------------
