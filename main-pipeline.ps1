@@ -42,7 +42,8 @@ $list = @(
     # "JanDeDobbeleer.OhMyPosh",
     # 'Microsoft.PowerToys',
     # 'Voidtools.Everything',
-    # 'lin-ycv.EverythingPowerToys'
+    # 'lin-ycv.EverythingPowerToys',
+
 )
 
 Write-Host @"
@@ -50,7 +51,7 @@ Installing Packages:
 
 "@ -ForegroundColor Yellow
 
-foreach ($app in $list) {Winget Install --id $app --no-upgrade --silent}
+foreach ($app in $list) {winget install --id $app --no-upgrade --silent}
 
 Write-Host "Installing Packages completed." -ForegroundColor Green
 
@@ -97,7 +98,7 @@ Set-ItemProperty -Path $exPath\Advanced -Name "TaskbarSmallIcons" -Value 1
 Set-ItemProperty -Path $exPath\Advanced -Name "TaskbarSi" -Value 0
 Set-ItemProperty -Path $exPath\Advanced -Name "TaskbarAl" -Value 0
 
-Winget Install --id StartIsBack --no-upgrade --silent
+Winget Install --id "StartIsBack.StartAllBack" --silent --no-upgrade
 
 Set-ItemProperty -Path $sabPath -Name "WinBuild" -Value 0x5867
 Set-ItemProperty -Path $sabPath -Name "WinLangID" -Value 0x0409
