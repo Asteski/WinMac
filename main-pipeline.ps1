@@ -74,6 +74,7 @@ ForEach ($proc in $PowerToysProc) {
     $proc.WaitForExit(10000)
     $proc.Kill()
 }
+Start-Process -Name PowerToys
 Remove-Item -Recurse -Force Winget
 # Remove-Item -Recurse -Force ProcessKiller
 Get-ChildItem * -Include *.zip -Recurse | Remove-Item -Force
