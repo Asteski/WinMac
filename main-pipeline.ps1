@@ -12,16 +12,16 @@ This is Work in Progress.
 
 "@ -ForegroundColor Cyan
 
-# Write-Host "Checking for Windows Package Manager (WinGet)" -ForegroundColor Yellow
-# $progressPreference = 'silentlyContinue'
-# Write-Information "Downloading WinGet and its dependencies..."
-# $wingetUrl = "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
-# $installPath = "$env:TEMP\winget.msixbundle"
-# Invoke-WebRequest -Uri $wingetUrl -OutFile $installPath
-# Write-Information "Installing WinGet..."
-# Add-AppxPackage -Path $installPath
-# Remove-Item -Path $installPath
-# Write-Information "WinGet installation completed."
+Write-Host "Checking for Windows Package Manager (WinGet)" -ForegroundColor Yellow
+$progressPreference = 'silentlyContinue'
+Write-Information "Downloading WinGet and its dependencies..."
+$wingetUrl = "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
+$installPath = "$env:TEMP\winget.msixbundle"
+Invoke-WebRequest -Uri $wingetUrl -OutFile $installPath
+Write-Information "Installing WinGet..."
+Add-AppxPackage -Path $installPath
+Remove-Item -Path $installPath
+Write-Information "WinGet installation completed."
 
 $list = @(
     # "9NRWMJP3717K", ## Python # interactive
@@ -37,7 +37,7 @@ $list = @(
     # "Python.Launcher",
     # "Kuberentes.Minikube",
     # "7zip.7zip",
-    # "Git.Git",
+    "Git.Git",
     # "Microsoft.PowerShell",
     # "JanDeDobbeleer.OhMyPosh",
     # 'Microsoft.PowerToys',
