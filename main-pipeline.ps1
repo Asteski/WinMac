@@ -50,7 +50,7 @@ Write-Host "Installing Packages" -ForegroundColor Yellow
 
 foreach ($app in $list) {
     Write-Host "Installing $app" -ForegroundColor Black
-    winget install --id $app --no-upgrade --silent --force
+    winget install --id $app --no-upgrade --silent
     Write-Host "Installed $app" -ForegroundColor Black
 }
 Write-Host @"
