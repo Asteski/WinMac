@@ -62,7 +62,6 @@ Write-Host "Configuring PowerToys..." -ForegroundColor Yellow
 $plugins = $env:LOCALAPPDATA + '\Microsoft\PowerToys\PowerToys Run\Plugins'
 $winget = 'https://github.com/bostrot/PowerToysRunPluginWinget/releases/download/v1.2.3/winget-powertoys-1.2.3.zip'
 $prockill = 'https://github.com/8LWXpg/PowerToysRun-ProcessKiller/releases/download/v1.0.1/ProcessKiller-v1.0.1-x64.zip'
-
 Get-Process -Name PowerToys* | Stop-Process -Force
 Invoke-WebRequest -uri $winget -Method "GET" -Outfile 'winget.zip'
 Expand-Archive 'winget.zip' -DestinationPath $pwd\Winget -Force
@@ -70,10 +69,10 @@ Copy-item $pwd\Winget -Destination $plugins -Recurse -Force
 # Invoke-WebRequest -uri $prockill -Method "GET" -Outfile 'prockill.zip'
 # Expand-Archive 'prockill.zip' -DestinationPath $pwd -Force
 # Copy-item $pwd\ProcessKiller -Destination $plugins -Recurse -Force
+Get-Process -Name PowerToys* | Stop-Process -Force
 Remove-Item -Recurse -Force Winget
 # Remove-Item -Recurse -Force ProcessKiller
 Get-ChildItem * -Include *.zip -Recurse | Remove-Item -Force
-Start-Process PowerToys
 
 Write-Host "Installing Packages completed." -ForegroundColor Green
 
@@ -168,16 +167,16 @@ Set-ItemProperty -Path $registryPath -Name "SysTrayCopilotIcon" -Value 1
 Set-ItemProperty -Path $registryPath -Name "MultiColumnFlyout" -Value 0
 Set-ItemProperty -Path $registryPath -Name "Start_LargeMFUIcons" -Value 0
 
-# Set-ItemProperty -Path $cachePath -Name "OrbWidth.120" -Value 0x00000027
-# Set-ItemProperty -Path $cachePath -Name "OrbHeight.120" -Value 0x00000026
-# Set-ItemProperty -Path $cachePath -Name "IdealHeight.6" -Value 0x00000000
-# Set-ItemProperty -Path $cachePath -Name "IdealHeight.9" -Value 0x00010007
-# Set-ItemProperty -Path $cachePath -Name "IdealWidth.9" -Value "OneDrive"
-# Set-ItemProperty -Path $cachePath -Name "OrbWidth.96" -Value 0x00000020
-# Set-ItemProperty -Path $cachePath -Name "OrbHeight.96" -Value 0x0000001e
-# Set-ItemProperty -Path $cachePath -Name "IdealHeight.7" -Value 0x00000000
-# Set-ItemProperty -Path $cachePath -Name "OrbWidth.144" -Value 0x00000030
-# Set-ItemProperty -Path $cachePath -Name "OrbHeight.144" -Value 0x0000002e
+Set-ItemProperty -Path $cachePath -Name "OrbWidth.120" -Value 0x00000027
+Set-ItemProperty -Path $cachePath -Name "OrbHeight.120" -Value 0x00000026
+Set-ItemProperty -Path $cachePath -Name "IdealHeight.6" -Value 0x00000000
+Set-ItemProperty -Path $cachePath -Name "IdealHeight.9" -Value 0x00010007
+Set-ItemProperty -Path $cachePath -Name "IdealWidth.9" -Value "OneDrive"
+Set-ItemProperty -Path $cachePath -Name "OrbWidth.96" -Value 0x00000020
+Set-ItemProperty -Path $cachePath -Name "OrbHeight.96" -Value 0x0000001e
+Set-ItemProperty -Path $cachePath -Name "IdealHeight.7" -Value 0x00000000
+Set-ItemProperty -Path $cachePath -Name "OrbWidth.144" -Value 0x00000030
+Set-ItemProperty -Path $cachePath -Name "OrbHeight.144" -Value 0x0000002e
 
 Stop-Process -Name "explorer" -Force
 Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
