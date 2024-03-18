@@ -12,16 +12,16 @@ This is Work in Progress.
 
 "@ -ForegroundColor Cyan
 
-# Write-Host "Checking for Windows Package Manager (WinGet)" -ForegroundColor Yellow
-# $progressPreference = 'silentlyContinue'
-# Write-Information "Downloading WinGet and its dependencies..." -ForegroundColor Black
-# $wingetUrl = "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
-# $installPath = "$env:TEMP\winget.msixbundle"
-# Invoke-WebRequest -Uri $wingetUrl -OutFile $installPath
-# Write-Information "Installing WinGet..." -ForegroundColor Black
-# Add-AppxPackage -Path $installPath
-# Remove-Item -Path $installPath
-# Write-Information "WinGet installation completed." -ForegroundColor Green
+Write-Host "Checking for Windows Package Manager (WinGet)" -ForegroundColor Yellow
+$progressPreference = 'silentlyContinue'
+Write-Information "Downloading WinGet and its dependencies..." -ForegroundColor Black
+$wingetUrl = "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
+$installPath = "$env:TEMP\winget.msixbundle"
+Invoke-WebRequest -Uri $wingetUrl -OutFile $installPath
+Write-Information "Installing WinGet..." -ForegroundColor Black
+Add-AppxPackage -Path $installPath
+Remove-Item -Path $installPath
+Write-Information "WinGet installation completed." -ForegroundColor Green
 
 $list = @(
     # "9NRWMJP3717K", ## Python # interactive
@@ -77,7 +77,7 @@ ForEach ($proc in $PowerToysProc) {
 $powerToysPath = $env:LOCALAPPDATA + '\PowerToys\PowerToys.exe'
 Start-Process -FilePath $powerToysPath
 Remove-Item -Recurse -Force Winget
-# Remove-Item -Recurse -Force ProcessKiller
+Remove-Item -Recurse -Force ProcessKiller
 Get-ChildItem * -Include *.zip -Recurse | Remove-Item -Force
 
 Write-Host "Installing Packages completed." -ForegroundColor Green
