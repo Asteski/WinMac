@@ -75,6 +75,7 @@ ForEach ($proc in $PowerToysProc) {
     $proc.Kill()
 }
 $powerToysPath = $env:LOCALAPPDATA + '\PowerToys\PowerToys.exe'
+Start-Process -FilePath "C:\Program Files\Everything\Everything.exe" -ArgumentList '-install-service'
 Start-Process -FilePath $powerToysPath
 Remove-Item -Recurse -Force Winget
 Remove-Item -Recurse -Force ProcessKiller
