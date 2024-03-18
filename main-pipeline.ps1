@@ -192,8 +192,8 @@ Set-ItemProperty -Path $cachePath -Name "OrbHeight.144" -Value 0x0000002e
 
 Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
 Write-Host "Restarting Explorer" -ForegroundColor Yellow
-Stop-Process --Name explorer
-Start-Process --Name explorer
+Stop-Process --Name "explorer" --Forces
+Start-Process --Name "explorer"
 Write-Host @"
 
 Adding WinMac function to PowerShell profile. Function will be appended to PowerShell profile file.
@@ -202,7 +202,7 @@ Call it in PowerShell to get the version of WinMac using 'winmac' command.
 
 "@ -ForegroundColor Yellow
 $func = Get-Content -Path "$pwd\Utilities\func.ps1" -Raw
-Add-Content -Path $PROFILE.AllUsersCurrentHost -Value `n$func
+Add-Content -Path $profile -Value `n$func
 Write-Host @"
 ------------------------ WinMac Deployment completed. ------------------------
 
