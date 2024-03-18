@@ -74,7 +74,8 @@ ForEach ($proc in $PowerToysProc) {
     $proc.WaitForExit(10000)
     $proc.Kill()
 }
-Start-Process -FilePath PowerToys.Runner.exe
+$powerToysPath = $env:LOCALAPPDATA + '\PowerToys.exe'
+Start-Process -FilePath $powerToysPath
 Remove-Item -Recurse -Force Winget
 # Remove-Item -Recurse -Force ProcessKiller
 Get-ChildItem * -Include *.zip -Recurse | Remove-Item -Force
