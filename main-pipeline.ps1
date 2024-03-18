@@ -48,23 +48,13 @@ $list = @(
 
 Write-Host "Installing Packages" -ForegroundColor Yellow
 
-foreach ($app in $list) {
-    Write-Host "Installing $app" -ForegroundColor Black
-    winget install --id $app --no-upgrade --silent
-    Write-Host "Installed $app" -ForegroundColor Black
-}
-Write-Host @"
+foreach ($app in $list) {winget install --id $app --no-upgrade --silent}
 
-Installing Packages completed.
-
-"@ -ForegroundColor Green
+Write-Host "Installing Packages completed." -ForegroundColor Green
 
 ## PowerToys
 
-Write-Host @"
-Configuring PowerToys.
-
-"@  -ForegroundColor Yellow
+Write-Host "Configuring PowerToys." -ForegroundColor Yellow
 
 $plugins = $env:LOCALAPPDATA + '\Microsoft\PowerToys\PowerToys Run\Plugins'
 $winget = 'https://github.com/bostrot/PowerToysRunPluginWinget/releases/download/v1.2.3/winget-powertoys-1.2.3.zip'
@@ -83,10 +73,7 @@ Get-ChildItem * -Include *.zip -Recurse | Remove-Item
 Remove-Item -Recurse -Force Winget
 Remove-Item -Recurse -Force ProcessKiller
 
-Write-Host @"
-Installing Packages completed.
-
-"@ -ForegroundColor Green
+Write-Host "Installing Packages completed." -ForegroundColor Green
 
 ## StartAllBack
 
@@ -192,8 +179,8 @@ Set-ItemProperty -Path $cachePath -Name "OrbHeight.144" -Value 0x0000002e
 
 Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
 Write-Host "Restarting Explorer" -ForegroundColor Yellow
-Stop-Process --Name "explorer" --Forces
-Start-Process --Name "explorer"
+Stop-Process -Name "explorer" -Force
+Start-Process -Name "explorer"
 Write-Host @"
 
 Adding WinMac function to PowerShell profile. Function will be appended to PowerShell profile file.
@@ -201,6 +188,7 @@ Adding WinMac function to PowerShell profile. Function will be appended to Power
 Call it in PowerShell to get the version of WinMac using 'winmac' command.
 
 "@ -ForegroundColor Yellow
+
 $funcFilePath = "$pwd\Utilities\func.ps1"
 $func = Get-Content -Path $funcFilePath -Raw
 
