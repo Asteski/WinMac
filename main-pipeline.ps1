@@ -91,11 +91,11 @@ Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
 
 $exPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\"
 $sabPath = "HKCU:\Software\StartIsBack"
-$cachePath = "HKCU:\Software\StartIsBack\Cache"
+# $cachePath = "HKCU:\Software\StartIsBack\Cache"
 
 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarGlomLevel -Value 1
 Set-ItemProperty -Path $exPath\StuckRects3 -Name "Settings" -Value ([byte[]]@(1,0,0,0,0,0,0,0,1,0,0,0,3,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,64,18,0,0,0,0,0,0,4,0,0,0,10,0,0,0,01,00,00,00))
-Set-ItemProperty -Path $exPath\Advanced -Name "TaskbarSi" -Value 0
+Set-ItemProperty -Path $exPath\Advanced -Name "TaskbarSmallIcons" -Value 0
 Set-ItemProperty -Path $sabPath -Name "WinBuild" -Value 0x5867
 Set-ItemProperty -Path $sabPath -Name "WinLangID" -Value 0x0409
 Set-ItemProperty -Path $sabPath -Name "ModernIconsColorized" -Value 0
@@ -128,24 +128,6 @@ Set-ItemProperty -Path $sabPath -Name "SysTrayClockFormat" -Value 3
 Set-ItemProperty -Path $sabPath -Name "TaskbarControlCenter" -Value 1
 Set-ItemProperty -Path $sabPath -Name "SysTrayVolume" -Value 1
 Set-ItemProperty -Path $sabPath -Name "SysTrayPower" -Value 1
-Set-ItemProperty -Path $sabPath -Name "CustomColors" -Value @{
-    "ColorA" = "FFFFFFFF"
-    "ColorB" = "FFFFFFFF"
-    "ColorC" = "FFFFFFFF"
-    "ColorD" = "FFFFFFFF"
-    "ColorE" = "FFFFFFFF"
-    "ColorF" = "FFFFFFFF"
-    "ColorG" = "FFFFFFFF"
-    "ColorH" = "FFFFFFFF"
-    "ColorI" = "FFFFFFFF"
-    "ColorJ" = "FFFFFFFF"
-    "ColorK" = "FFFFFFFF"
-    "ColorL" = "FFFFFFFF"
-    "ColorM" = "FFFFFFFF"
-    "ColorN" = "FFFFFFFF"
-    "ColorO" = "FFFFFFFF"
-    "ColorP" = "FFFFFFFF"
-}
 Set-ItemProperty -Path $sabPath -Name "Start_LargeAllAppsIcons" -Value 0
 Set-ItemProperty -Path $sabPath -Name "AllProgramsFlyout" -Value 1
 Set-ItemProperty -Path $sabPath -Name "StartMetroAppsFolder" -Value 1
@@ -180,16 +162,16 @@ Set-ItemProperty -Path $sabPath -Name "SysTrayCopilotIcon" -Value 1
 Set-ItemProperty -Path $sabPath -Name "MultiColumnFlyout" -Value 0
 Set-ItemProperty -Path $sabPath -Name "Start_LargeMFUIcons" -Value 0
 
-Set-ItemProperty -Path $cachePath -Name "OrbWidth.120" -Value 0x00000027
-Set-ItemProperty -Path $cachePath -Name "OrbHeight.120" -Value 0x00000026
-Set-ItemProperty -Path $cachePath -Name "IdealHeight.6" -Value 0x00000000
-Set-ItemProperty -Path $cachePath -Name "IdealHeight.9" -Value 0x00010007
-Set-ItemProperty -Path $cachePath -Name "IdealWidth.9" -Value "OneDrive"
-Set-ItemProperty -Path $cachePath -Name "OrbWidth.96" -Value 0x00000020
-Set-ItemProperty -Path $cachePath -Name "OrbHeight.96" -Value 0x0000001e
-Set-ItemProperty -Path $cachePath -Name "IdealHeight.7" -Value 0x00000000
-Set-ItemProperty -Path $cachePath -Name "OrbWidth.144" -Value 0x00000030
-Set-ItemProperty -Path $cachePath -Name "OrbHeight.144" -Value 0x0000002e
+# Set-ItemProperty -Path $cachePath -Name "OrbWidth.120" -Value 0x00000027
+# Set-ItemProperty -Path $cachePath -Name "OrbHeight.120" -Value 0x00000026
+# Set-ItemProperty -Path $cachePath -Name "IdealHeight.6" -Value 0x00000000
+# Set-ItemProperty -Path $cachePath -Name "IdealHeight.9" -Value 0x00010007
+# Set-ItemProperty -Path $cachePath -Name "IdealWidth.9" -Value "OneDrive"
+# Set-ItemProperty -Path $cachePath -Name "OrbWidth.96" -Value 0x00000020
+# Set-ItemProperty -Path $cachePath -Name "OrbHeight.96" -Value 0x0000001e
+# Set-ItemProperty -Path $cachePath -Name "IdealHeight.7" -Value 0x00000000
+# Set-ItemProperty -Path $cachePath -Name "OrbWidth.144" -Value 0x00000030
+# Set-ItemProperty -Path $cachePath -Name "OrbHeight.144" -Value 0x0000002e
 
 Stop-Process -Name "Explorer" -Force
 Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
