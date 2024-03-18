@@ -49,9 +49,9 @@ $list = @(
 Write-Host "Installing Packages" -ForegroundColor Yellow
 
 foreach ($app in $list) {
-    Write-Host "Installing $app" -ForegroundColor Black
+    Write-Output "Installing $app" -ForegroundColor Black
     winget install --id $app --no-upgrade --silent
-    Write-Host "Installed $app" -ForegroundColor Black
+    Write-Output "Installed $app" -ForegroundColor Black
 }
 Write-Host @"
 
@@ -192,8 +192,8 @@ Set-ItemProperty -Path $cachePath -Name "OrbHeight.144" -Value 0x0000002e
 
 Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
 Write-Host "Restarting Explorer" -ForegroundColor Yellow
-Stop-Process -Name explorer -Force -Wait
-Start-Process -Name explorer
+Stop-Process --Name explorer
+Start-Process --Name explorer
 Write-Host @"
 
 Adding WinMac function to PowerShell profile. Function will be appended to PowerShell profile file.
