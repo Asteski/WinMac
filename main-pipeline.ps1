@@ -23,71 +23,79 @@ This is Work in Progress.
 # Remove-Item -Path $installPath
 # Write-Information "WinGet installation completed."
 
-$list = @(
-    # "9NRWMJP3717K", ## Python # interactive
-    # "BotProductions.IconViewer", # interactive
-    # "Brave.Brave",
-    # "CPUID.CPU-Z", # interactive
-    # "Helm.Helm",
-    # "Irfanview.IrfanView",
-    # "Logitech.OptionsPlus", # interactive
-    # "Microsoft.AzureCLI", # interactive
-    # "Microsoft.VisualStudioCode",
-    # "Neovim.Neovim",
-    # "Python.Launcher",
-    # "Kuberentes.Minikube",
-    # "7zip.7zip",
-    # "Git.Git",
-    # "Microsoft.PowerShell",
-    # "JanDeDobbeleer.OhMyPosh",
-    # 'Microsoft.PowerToys',
-    # 'Voidtools.Everything',
-    # 'lin-ycv.EverythingPowerToys',
+# $winget = @(
+#     "9NRWMJP3717K", ## Python # interactive
+#     "BotProductions.IconViewer", # interactive
+#     "Brave.Brave",
+#     "CPUID.CPU-Z", # interactive
+#     "Helm.Helm",
+#     "Irfanview.IrfanView",
+#     "Logitech.OptionsPlus", # interactive
+#     "Microsoft.AzureCLI", # interactive
+#     "Microsoft.VisualStudioCode",
+#     "Neovim.Neovim",
+#     "Python.Launcher",
+#     "Kuberentes.Minikube",
+#     "7zip.7zip",
+#     "Git.Git",
+#     "Microsoft.PowerShell",
+#     "JanDeDobbeleer.OhMyPosh"
+# )
 
-)
+# Write-Host @"
+# Installing Packages:
 
-Write-Host @"
-Installing Packages:
+# "@ -ForegroundColor Yellow
 
-"@ -ForegroundColor Yellow
+# foreach ($app in $winget) {winget install --id $app --no-upgrade --silent}
 
-foreach ($app in $list) {winget install --id $app --no-upgrade --silent}
-
-Write-Host "Installing Packages completed." -ForegroundColor Green
+# Write-Host "Installing Packages completed." -ForegroundColor Green
 
 ## PowerToys
 
-# Write-Host "Configuring PowerToys..." -ForegroundColor Yellow
+Write-Host @"
+Installing PowerToys...
 
-# $plugins = $env:LOCALAPPDATA + '\Microsoft\PowerToys\'
-# $winget = 'https://github.com/bostrot/PowerToysRunPluginWinget/releases/download/v1.2.3/winget-powertoys-1.2.3.zip'
-# $prockill = 'https://github.com/8LWXpg/PowerToysRun-ProcessKiller/releases/download/v1.0.1/ProcessKiller-v1.0.1-x64.zip'
-# Get-Process -Name PowerToys* | Stop-Process -Force
-# Invoke-WebRequest -uri $winget -Method "GET" -Outfile 'winget.zip'
-# Invoke-WebRequest -uri $prockill -Method "GET" -Outfile 'prockill.zip'
-# Expand-Archive 'winget.zip' -DestinationPath $pwd\Winget -Force
-# Expand-Archive 'prockill.zip' -DestinationPath $pwd -Force
-# Copy-item $pwd\Winget -Destination $plugins -Recurse -Force
-# Copy-item $pwd\ProcessKiller -Destination $plugins -Recurse -Force
-# $PowerToysProc = Get-Process -Name PowerToys*
-# ForEach ($proc in $PowerToysProc) {
-#     $proc.WaitForExit(10000)
-#     $proc.Kill()
-# }
-# $powerToysPath = $env:LOCALAPPDATA + '\PowerToys\PowerToys.exe'
+"@ -ForegroundColor Yellow
 
-# Add-Content -Path "C:\Program Files\Everything\Everything.ini" -Value "show_tray_icon=0"
+$powerToys = @(
+    'Microsoft.PowerToys',
+    'Voidtools.Everything',
+    'lin-ycv.EverythingPowerToys'
+)
+
+foreach ($app in $powerToys) {winget install --id $app --no-upgrade --silent}
+
+$plugins = $env:LOCALAPPDATA + '\Microsoft\PowerToys\'
+$winget = 'https://github.com/bostrot/PowerToysRunPluginWinget/releases/download/v1.2.3/winget-powertoys-1.2.3.zip'
+$prockill = 'https://github.com/8LWXpg/PowerToysRun-ProcessKiller/releases/download/v1.0.1/ProcessKiller-v1.0.1-x64.zip'
+Get-Process -Name PowerToys* | Stop-Process -Force
+Invoke-WebRequest -uri $winget -Method "GET" -Outfile 'winget.zip'
+Invoke-WebRequest -uri $prockill -Method "GET" -Outfile 'prockill.zip'
+Expand-Archive 'winget.zip' -DestinationPath $pwd\Winget -Force
+Expand-Archive 'prockill.zip' -DestinationPath $pwd -Force
+Copy-item $pwd\Winget -Destination $plugins -Recurse -Force
+Copy-item $pwd\ProcessKiller -Destination $plugins -Recurse -Force
+$PowerToysProc = Get-Process -Name PowerToys*
+ForEach ($proc in $PowerToysProc) {
+    $proc.WaitForExit(10000)
+    $proc.Kill()
+}
+$powerToysPath = $env:LOCALAPPDATA + '\PowerToys\PowerToys.exe'
+
+Add-Content -Path "C:\Program Files\Everything\Everything.ini" -Value "show_tray_icon=0"
 # Start-Process -FilePath "C:\Program Files\Everything\Everything.exe"
-# Start-Process -FilePath $powerToysPath
-# Remove-Item -Recurse -Force Winget
-# Remove-Item -Recurse -Force ProcessKiller
-# Get-ChildItem * -Include *.zip -Recurse | Remove-Item -Force
-# Stop-Process -Name "Explorer" -Force
-# Write-Host "Configuring PowerToys completed." -ForegroundColor Green
+Start-Process -FilePath $powerToysPath
+Remove-Item -Recurse -Force Winget
+Remove-Item -Recurse -Force ProcessKiller
+Get-ChildItem * -Include *.zip -Recurse | Remove-Item -Force
+Write-Host "Configuring PowerToys completed." -ForegroundColor Green
 
 ## StartAllBack
 
 Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
+
+taskkill /f /im explorer.exe
 
 $exPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\"
 $sabPath = "HKCU:\Software\StartIsBack"
@@ -97,6 +105,7 @@ Set-ItemProperty -Path $exPath\StuckRects3 -Name "Settings" -Value ([byte[]]@(1,
 Set-ItemProperty -Path $exPath\Advanced -Name "TaskbarSmallIcons" -Value 1
 Set-ItemProperty -Path $exPath\Advanced -Name "TaskbarSi" -Value 0
 Set-ItemProperty -Path $exPath\Advanced -Name "TaskbarAl" -Value 0
+Set-ItemProperty -Path $exPath\Advanced -Name "UseCompactMode" -Value 1
 
 Winget Install --id "StartIsBack.StartAllBack" --silent --no-upgrade
 
@@ -166,18 +175,8 @@ Set-ItemProperty -Path $sabPath -Name "SysTrayCopilotIcon" -Value 1
 Set-ItemProperty -Path $sabPath -Name "MultiColumnFlyout" -Value 0
 Set-ItemProperty -Path $sabPath -Name "Start_LargeMFUIcons" -Value 0
 
-# Set-ItemProperty -Path $cachePath -Name "OrbWidth.120" -Value 0x00000027
-# Set-ItemProperty -Path $cachePath -Name "OrbHeight.120" -Value 0x00000026
-# Set-ItemProperty -Path $cachePath -Name "IdealHeight.6" -Value 0x00000000
-# Set-ItemProperty -Path $cachePath -Name "IdealHeight.9" -Value 0x00010007
-# Set-ItemProperty -Path $cachePath -Name "IdealWidth.9" -Value "OneDrive"
-# Set-ItemProperty -Path $cachePath -Name "OrbWidth.96" -Value 0x00000020
-# Set-ItemProperty -Path $cachePath -Name "OrbHeight.96" -Value 0x0000001e
-# Set-ItemProperty -Path $cachePath -Name "IdealHeight.7" -Value 0x00000000
-# Set-ItemProperty -Path $cachePath -Name "OrbWidth.144" -Value 0x00000030
-# Set-ItemProperty -Path $cachePath -Name "OrbHeight.144" -Value 0x0000002e
+start explorer.exe
 
-Stop-Process -Name "Explorer" -Force
 Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
 
 ## FIXME: Define ps subfolder in the project and use it to copy the function to the profile
@@ -202,5 +201,10 @@ WinMac function have been added to PowerShell profile.
 Use 'winmac' command to get the version of WinMac.
 
 "@ -ForegroundColor Cyan
+Sleep 2
 Write-Host "This is Work in Progress. Use on your own responsibility." -ForegroundColor Magenta
+Sleep 2
+Write-Host "Windows will restart in 5 seconds..." -ForegroundColor Red
+Sleep 5
+Restart-Computer -Force
 # EOF
