@@ -12,16 +12,16 @@ This is Work in Progress.
 
 "@ -ForegroundColor Cyan
 
-Write-Host "Checking for Windows Package Manager (WinGet)" -ForegroundColor Yellow
-$progressPreference = 'silentlyContinue'
-Write-Information "Downloading WinGet and its dependencies..."
-$wingetUrl = "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
-$installPath = "$env:TEMP\winget.msixbundle"
-Invoke-WebRequest -Uri $wingetUrl -OutFile $installPath
-Write-Information "Installing WinGet..."
-Add-AppxPackage -Path $installPath
-Remove-Item -Path $installPath
-Write-Information "WinGet installation completed."
+# Write-Host "Checking for Windows Package Manager (WinGet)" -ForegroundColor Yellow
+# $progressPreference = 'silentlyContinue'
+# Write-Information "Downloading WinGet and its dependencies..."
+# $wingetUrl = "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
+# $installPath = "$env:TEMP\winget.msixbundle"
+# Invoke-WebRequest -Uri $wingetUrl -OutFile $installPath
+# Write-Information "Installing WinGet..."
+# Add-AppxPackage -Path $installPath
+# Remove-Item -Path $installPath
+# Write-Information "WinGet installation completed."
 
 $list = @(
     # "9NRWMJP3717K", ## Python # interactive
@@ -51,7 +51,7 @@ Installing Packages:
 
 "@ -ForegroundColor Yellow
 
-foreach ($app in $list) {winget install --id $app --no-upgrade --silent}
+# foreach ($app in $list) {winget install --id $app --no-upgrade --silent}
 
 Write-Host "Installing Packages completed." -ForegroundColor Green
 
@@ -95,7 +95,11 @@ $sabPath = "HKCU:\Software\StartIsBack"
 
 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name TaskbarGlomLevel -Value 1
 Set-ItemProperty -Path $exPath\StuckRects3 -Name "Settings" -Value ([byte[]]@(1,0,0,0,0,0,0,0,1,0,0,0,3,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,64,18,0,0,0,0,0,0,4,0,0,0,10,0,0,0,01,00,00,00))
-Set-ItemProperty -Path $exPath\Advanced -Name "TaskbarSmallIcons" -Value 0
+Set-ItemProperty -Path $exPath\Advanced -Name "TaskbarSmallIcons" -Value 1
+Set-ItemProperty -Path $exPath\Advanced -Name "TaskbarSi" -Value 0
+
+foreach ($app in $list) {winget install --id $app --no-upgrade --silent}
+
 Set-ItemProperty -Path $sabPath -Name "WinBuild" -Value 0x5867
 Set-ItemProperty -Path $sabPath -Name "WinLangID" -Value 0x0409
 Set-ItemProperty -Path $sabPath -Name "ModernIconsColorized" -Value 0
