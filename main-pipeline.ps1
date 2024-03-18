@@ -169,16 +169,16 @@ Set-ItemProperty -Path $registryPath -Name "SysTrayCopilotIcon" -Value 1
 Set-ItemProperty -Path $registryPath -Name "MultiColumnFlyout" -Value 0
 Set-ItemProperty -Path $registryPath -Name "Start_LargeMFUIcons" -Value 0
 
-Set-ItemProperty -Path $cachePath -Name "OrbWidth.120" -Value 0x00000027
-Set-ItemProperty -Path $cachePath -Name "OrbHeight.120" -Value 0x00000026
-Set-ItemProperty -Path $cachePath -Name "IdealHeight.6" -Value 0x00000000
-Set-ItemProperty -Path $cachePath -Name "IdealHeight.9" -Value 0x00010007
-Set-ItemProperty -Path $cachePath -Name "IdealWidth.9" -Value "OneDrive"
-Set-ItemProperty -Path $cachePath -Name "OrbWidth.96" -Value 0x00000020
-Set-ItemProperty -Path $cachePath -Name "OrbHeight.96" -Value 0x0000001e
-Set-ItemProperty -Path $cachePath -Name "IdealHeight.7" -Value 0x00000000
-Set-ItemProperty -Path $cachePath -Name "OrbWidth.144" -Value 0x00000030
-Set-ItemProperty -Path $cachePath -Name "OrbHeight.144" -Value 0x0000002e
+# Set-ItemProperty -Path $cachePath -Name "OrbWidth.120" -Value 0x00000027
+# Set-ItemProperty -Path $cachePath -Name "OrbHeight.120" -Value 0x00000026
+# Set-ItemProperty -Path $cachePath -Name "IdealHeight.6" -Value 0x00000000
+# Set-ItemProperty -Path $cachePath -Name "IdealHeight.9" -Value 0x00010007
+# Set-ItemProperty -Path $cachePath -Name "IdealWidth.9" -Value "OneDrive"
+# Set-ItemProperty -Path $cachePath -Name "OrbWidth.96" -Value 0x00000020
+# Set-ItemProperty -Path $cachePath -Name "OrbHeight.96" -Value 0x0000001e
+# Set-ItemProperty -Path $cachePath -Name "IdealHeight.7" -Value 0x00000000
+# Set-ItemProperty -Path $cachePath -Name "OrbWidth.144" -Value 0x00000030
+# Set-ItemProperty -Path $cachePath -Name "OrbHeight.144" -Value 0x0000002e
 
 Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
 Write-Host "Restarting Explorer" -ForegroundColor Yellow
@@ -195,7 +195,7 @@ $funcPath = "$pwd\Utilities\func.ps1"
 $funcContent = Get-Content -Path $funcPath -Raw
 $profilePath = Split-Path -Path $profile -Parent
 if (-not (Test-Path -Path $profile)){New-Item -Path $profilePath -Name 'Microsoft.PowerShell_profile.ps1' -ItemType File}
-Add-Content -Path $profile1 -Value `n$funcContent
+Add-Content -Path $profile -Value `n$funcContent
 
 Write-Host @"
 ------------------------ WinMac Deployment completed. ------------------------
