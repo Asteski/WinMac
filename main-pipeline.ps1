@@ -49,9 +49,9 @@ $list = @(
 Write-Host "Installing Packages" -ForegroundColor Yellow
 
 foreach ($app in $list) {
-    Write-Output "Installing $app" -ForegroundColor Black
+    Write-Host "Installing $app" -ForegroundColor Black
     winget install --id $app --no-upgrade --silent
-    Write-Output "Installed $app" -ForegroundColor Black
+    Write-Host "Installed $app" -ForegroundColor Black
 }
 Write-Host @"
 
