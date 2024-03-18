@@ -179,9 +179,9 @@ Set-ItemProperty -Path $registryPath -Name "Start_LargeMFUIcons" -Value 0
 # Set-ItemProperty -Path $cachePath -Name "OrbWidth.144" -Value 0x00000030
 # Set-ItemProperty -Path $cachePath -Name "OrbHeight.144" -Value 0x0000002e
 
-Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
-Write-Host "Restarting Explorer" -ForegroundColor Yellow
 Stop-Process -Name "explorer" -Force
+Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
+Sleep 5
 Write-Host @"
 
 Adding WinMac function to PowerShell profile. Function will be appended to PowerShell profile file.
