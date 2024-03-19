@@ -12,7 +12,7 @@
 
 # TODO:
 # * Add more packages
-# * Add $profile
+# * Add $profile + ~/.bash_aliases
 # * Add Terminal profiles
 # * Add Windows Terminal settings
 # * Add Everything configuration
