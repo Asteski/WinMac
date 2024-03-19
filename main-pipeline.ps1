@@ -22,6 +22,7 @@
 # ! Force Taskbar to go on top automatically after installation
 # ? Restart Computer
 
+$version = '0.0.3'
 Clear-Host
 Write-Host @"
 ------------------------ WinMac Deployment ------------------------ 
@@ -30,7 +31,7 @@ Welcome to WinMac Deployment!
 
 Author: Adam Kamienski
 GitHub: Asteski
-Version: 0.0.3
+Version: $version
 
 This is Work in Progress.
 
@@ -50,31 +51,46 @@ Remove-Item -Path $installPath
 Write-Information "WinGet installation completed."
 
 # TODO: add more packages
-
-# * Vivaldi
-# * Microsoft Edge
-# * OneDrive
-# * Notion
-# * 
-# *
+# ? KeePass/KeeWeb or BitWarden
+# ? 7zip or NanaZip
 
 $winget = @(
-    "9NRWMJP3717K", ## Python # interactive
-    "BotProductions.IconViewer", # interactive
+    "Python.Python.3.13",
+    "BotProductions.IconViewer",
     "Brave.Brave",
-    "CPUID.CPU-Z", # interactive
+    "CPUID.CPU-Z",
+    "File-New-Project.EarTrumpet",
     "Helm.Helm",
     "Irfanview.IrfanView",
-    "Logitech.OptionsPlus", # interactive
-    "Microsoft.AzureCLI", # interactive
+    "Logitech.OptionsPlus",
+    "Microsoft.AzureCLI", 
     "Microsoft.VisualStudioCode",
-    "Neovim.Neovim",
-    "Python.Launcher",
+    "Microsoft.VisualStudio.2022.Professional",
+    "Neovim.Neovim", # ! Neovim - manual installation is better?
     "Kuberentes.Minikube",
-    "7zip.7zip",
+    "Kubernetes.kubectl",
     "Git.Git",
     "Microsoft.PowerShell",
-    "JanDeDobbeleer.OhMyPosh"
+    "JanDeDobbeleer.OhMyPosh",
+    "WhatsApp.WhatsApp ",
+    "9PGCV4V3BK4W", # DevToys
+    "SomePythonThings.WingetUIStore",
+    "Discord.Discord",
+    "GIMP.GIMP",
+    "Helm.Helm",
+    "Kubernetes.minikube",
+    "Mozilla.Firefox",
+    "NapiProjekt_is1",
+    "JAMSoftware.TreeSize.Free",
+    "VideoLAN.VLC",
+    "Vivaldi.Vivaldi",
+    "Wireshark.Wireshark",
+    "Armin2208.WindowsAutoNightMode",
+    "Logitech.OptionsPlus",
+    "qBittorrent.qBittorrent",
+    'Microsoft.PowerToys',
+    'Voidtools.Everything',
+    'lin-ycv.EverythingPowerToys'
 )
 
 Write-Host @"
@@ -89,17 +105,17 @@ Write-Host "Installing Packages completed." -ForegroundColor Green
 ## * PowerToys
 
 Write-Host @"
-Installing PowerToys...
+Configuring PowerToys...
 
 "@ -ForegroundColor Yellow
 
-$powerToys = @(
-    'Microsoft.PowerToys',
-    'Voidtools.Everything',
-    'lin-ycv.EverythingPowerToys'
-)
+# $powerToys = @(
+#     'Microsoft.PowerToys',
+#     'Voidtools.Everything',
+#     'lin-ycv.EverythingPowerToys'
+# )
 
-foreach ($app in $powerToys) {winget install --id $app --no-upgrade --silent}
+# foreach ($app in $powerToys) {winget install --id $app --no-upgrade --silent}
 
 $plugins = $env:LOCALAPPDATA + '\Microsoft\PowerToys\'
 $winget = 'https://github.com/bostrot/PowerToysRunPluginWinget/releases/download/v1.2.3/winget-powertoys-1.2.3.zip'
@@ -221,14 +237,13 @@ Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
 #     $pt = (winget show --id Microsoft.PowerToys | Select-String -Pattern "Version").ToString().Split(":")[1].Trim()
 #     $ev = (winget show --id Voidtools.Everything | Select-String -Pattern "Version").ToString().Split(":")[1].Trim()
 #     $output = @{
-#         'Version' = '0.0.1'
+#         'Version' = $version
 #         'StartAllBackVersion' = $sab
 #         'PowerToysVersion' = $pt
 #         'EverythingVersion' = $ev
 #     }
 #     return $output
 # }
-# 
 # $funcContent = Get-Content -Path $funcPath -Raw
 # $filePath = Split-Path -Path $profile -Parent
 # $profilePath = Split-Path -Path $filePath -Parent
@@ -250,7 +265,7 @@ Use 'winmac' command to get the version of WinMac.
 "@ -ForegroundColor Cyan
 
 Start-Sleep 2
-Write-Host "This is Work in Progress. Use on your own responsibility." -ForegroundColor Magenta
+Write-Host "This is Work in Progress. Use at your own responsibility!!" -ForegroundColor Magenta
 
 # ! Restart Computer
 # Start-Sleep 2
