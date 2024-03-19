@@ -11,7 +11,9 @@
 #################################################################################
 
 # TODO:
-# * Add more packages
+# * Add more packages:
+#   ? KeePass/KeeWeb or BitWarden
+#   ? 7zip or NanaZip
 # * Add $profile + ~/.bash_aliases
 # * Add Terminal profiles
 # * Add Windows Terminal settings
@@ -49,10 +51,6 @@ Write-Information "Installing WinGet..."
 Add-AppxPackage -Path $installPath
 Remove-Item -Path $installPath
 Write-Information "WinGet installation completed."
-
-# TODO: add more packages
-# ? KeePass/KeeWeb or BitWarden
-# ? 7zip or NanaZip
 
 $winget = @(
     "Python.Python.3.13",
