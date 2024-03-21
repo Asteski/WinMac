@@ -61,7 +61,6 @@ $winget = @(
     # # "Brave.Brave",
     # "CPUID.CPU-Z",
     # "Discord.Discord",
-    "File-New-Project.EarTrumpet", # ? If trayicon will be modified
     # "GIMP.GIMP",
     # "Git.Git",
     "Helm.Helm",
