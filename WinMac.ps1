@@ -15,6 +15,7 @@
 # ! Add Everything configuration
 # ! Fix adding WinMac cmd to $profile
 #   Add more packages to WinGet
+# ! Traffic Monitor not available on Winget
 # ? KeePass/KeeWeb or BitWarden
 # ? VMWare instead of VirtualBox
 #   Import $profile and ~/.bash_aliases
@@ -52,41 +53,39 @@ Remove-Item -Path $installPath
 Write-Information "WinGet installation completed."
 
 $winget = @(
-    $winget = @(
-        "Microsoft.PowerShell",
-        "7zip.7zip",
-        "9PGCV4V3BK4W", # DevToys
-        "Armin2208.WindowsAutoNightMode",
-        "BotProductions.IconViewer",
-        "Brave.Brave",
-        "CPUID.CPU-Z",
-        "Discord.Discord",
-#        "File-New-Project.EarTrumpet", # ? If trayicon will be modified
-        "GIMP.GIMP",
-        "Git.Git",
-        "Helm.Helm",
-        "Irfanview.IrfanView",
-        "JAMSoftware.TreeSize.Free",
-        "JanDeDobbeleer.OhMyPosh",
-        "Kuberentes.Minikube",
-        "Kubernetes.kubectl",
-        "Logitech.OptionsPlus",
-#        "M2Team.NanaZip.Preview",
-        "Microsoft.AzureCLI", 
-        "Microsoft.PowerToys",
-        "Microsoft.VisualStudio.2022.Professional",
-        "Microsoft.VisualStudioCode",
-        "Mozilla.Firefox",
-#        "Neovim.Neovim", # ! Neovim - manual install better?
-        "RamenSoftware.7+TaskbarTweaker",
-#        "SomePythonThings.WingetUIStore",
-        "VideoLAN.VLC",
-#        "Vivaldi.Vivaldi",
-        "Voidtools.Everything",
-        "WhatsApp.WhatsApp",
-        "Wireshark.Wireshark",
-        "lin-ycv.EverythingPowerToys"
-    )
+    "Microsoft.PowerShell",
+    "7zip.7zip",
+    "9PGCV4V3BK4W", # DevToys
+    "Armin2208.WindowsAutoNightMode",
+    "BotProductions.IconViewer",
+    # # "Brave.Brave",
+    # "CPUID.CPU-Z",
+    # "Discord.Discord",
+    "File-New-Project.EarTrumpet", # ? If trayicon will be modified
+    # "GIMP.GIMP",
+    # "Git.Git",
+    "Helm.Helm",
+    "Irfanview.IrfanView",
+    "JAMSoftware.TreeSize.Free",
+    "JanDeDobbeleer.OhMyPosh",
+    "Kuberentes.Minikube",
+    "Kubernetes.kubectl",
+    # "Logitech.OptionsPlus",
+    # "M2Team.NanaZip.Preview",
+    "Microsoft.AzureCLI", 
+    "Microsoft.PowerToys",
+    # "Microsoft.VisualStudio.2022.Professional",
+    # "Microsoft.VisualStudioCode",
+    # "Mozilla.Firefox",
+    # "Neovim.Neovim", # ! Neovim - manual install better?
+    "RamenSoftware.7+TaskbarTweaker",
+    # "SomePythonThings.WingetUIStore",
+    # "VideoLAN.VLC",
+    # "Vivaldi.Vivaldi",
+    "Voidtools.Everything",
+    # "WhatsApp.WhatsApp",
+    # "Wireshark.Wireshark",
+    "lin-ycv.EverythingPowerToys"
 )
 
 Write-Host @"
