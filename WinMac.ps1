@@ -1,7 +1,7 @@
 #################################################################################
 #                                                                               #
 #                                                                               #
-#                  WinMac deployment script  - WinMac.ps1                       #
+#                   WinMac deployment script - WinMac.ps1                       #
 #                                                                               #
 # Author: Adam Kamienski                                                        #
 # GitHub: Asteski                                                               #
@@ -12,6 +12,8 @@
 
 # TODO:
 # !! Force Taskbar to go on top automatically after installation
+# ! Add Everything configuration
+# ! Fix adding WinMac cmd to $profile
 #   Add more packages to WinGet
 # ? KeePass/KeeWeb or BitWarden
 # ? VMWare instead of VirtualBox
@@ -20,8 +22,6 @@
 # * Import Windows Terminal settings
 # * Import StartAllBack license
 #   Import VSC settings, keybindings and workspaces
-# ! Add Everything configuration
-# ! Fix adding WinMac cmd to $profile
 
 $version = '0.0.4'
 Clear-Host
