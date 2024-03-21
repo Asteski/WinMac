@@ -1,7 +1,7 @@
 #################################################################################
 #                                                                               #
 #                                                                               #
-#                  WinMac deployment script  - main-pipeline.ps1                #
+#                  WinMac deployment script  - WinMac.ps1                       #
 #                                                                               #
 # Author: Adam Kamienski                                                        #
 # GitHub: Asteski                                                               #
@@ -11,18 +11,17 @@
 #################################################################################
 
 # TODO:
-# * Add more packages:
-#   ? KeePass/KeeWeb or BitWarden
-#   ? 7zip or NanaZip
-# * Add $profile + ~/.bash_aliases
-# * Add Terminal profiles
-# * Add Windows Terminal settings
-# * Add Everything configuration
-# * Import VSC settings, keybindings and workspaces
-# * Import Brave settings
+# !! Force Taskbar to go on top automatically after installation
+#   Add more packages to WinGet
+# ? KeePass/KeeWeb or BitWarden
+# ? VMWare instead of VirtualBox
+#   Import $profile and ~/.bash_aliases
+# * Import Terminal profiles
+# * Import Windows Terminal settings
+# * Import StartAllBack license
+#   Import VSC settings, keybindings and workspaces
+# ! Add Everything configuration
 # ! Fix adding WinMac cmd to $profile
-# ! Force Taskbar to go on top automatically after installation
-# ? Restart Computer
 
 $version = '0.0.4'
 Clear-Host
@@ -53,42 +52,41 @@ Remove-Item -Path $installPath
 Write-Information "WinGet installation completed."
 
 $winget = @(
-    "Python.Python.3.13",
-    "BotProductions.IconViewer",
-    "Brave.Brave",
-    "CPUID.CPU-Z",
-    "File-New-Project.EarTrumpet",
-    "Helm.Helm",
-    "Irfanview.IrfanView",
-    "Logitech.OptionsPlus",
-    "Microsoft.AzureCLI", 
-    "Microsoft.VisualStudioCode",
-    "Microsoft.VisualStudio.2022.Professional",
-    "Neovim.Neovim", # ! Neovim - manual installation is better?
-    "Kuberentes.Minikube",
-    "Kubernetes.kubectl",
-    "Git.Git",
-    "Microsoft.PowerShell",
-    "JanDeDobbeleer.OhMyPosh",
-    "WhatsApp.WhatsApp ",
-    "9PGCV4V3BK4W", # DevToys
-    "SomePythonThings.WingetUIStore",
-    "Discord.Discord",
-    "GIMP.GIMP",
-    "Helm.Helm",
-    "Kubernetes.minikube",
-    "Mozilla.Firefox",
-    "NapiProjekt_is1",
-    "JAMSoftware.TreeSize.Free",
-    "VideoLAN.VLC",
-    "Vivaldi.Vivaldi",
-    "Wireshark.Wireshark",
-    "Armin2208.WindowsAutoNightMode",
-    "Logitech.OptionsPlus",
-    "qBittorrent.qBittorrent",
-    'Microsoft.PowerToys',
-    'Voidtools.Everything',
-    'lin-ycv.EverythingPowerToys'
+    $winget = @(
+        "Microsoft.PowerShell",
+        "7zip.7zip",
+        "9PGCV4V3BK4W", # DevToys
+        "Armin2208.WindowsAutoNightMode",
+        "BotProductions.IconViewer",
+        "Brave.Brave",
+        "CPUID.CPU-Z",
+        "Discord.Discord",
+#        "File-New-Project.EarTrumpet", # ? If trayicon will be modified
+        "GIMP.GIMP",
+        "Git.Git",
+        "Helm.Helm",
+        "Irfanview.IrfanView",
+        "JAMSoftware.TreeSize.Free",
+        "JanDeDobbeleer.OhMyPosh",
+        "Kuberentes.Minikube",
+        "Kubernetes.kubectl",
+        "Logitech.OptionsPlus",
+#        "M2Team.NanaZip.Preview",
+        "Microsoft.AzureCLI", 
+        "Microsoft.PowerToys",
+        "Microsoft.VisualStudio.2022.Professional",
+        "Microsoft.VisualStudioCode",
+        "Mozilla.Firefox",
+#        "Neovim.Neovim", # ! Neovim - manual install better?
+        "RamenSoftware.7+TaskbarTweaker",
+#        "SomePythonThings.WingetUIStore",
+        "VideoLAN.VLC",
+#        "Vivaldi.Vivaldi",
+        "Voidtools.Everything",
+        "WhatsApp.WhatsApp",
+        "Wireshark.Wireshark",
+        "lin-ycv.EverythingPowerToys"
+    )
 )
 
 Write-Host @"
