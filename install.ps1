@@ -1,30 +1,29 @@
 #################################################################################
 #                                                                               #
 #                                                                               #
-#                   WinMac deployment script - WinMac.ps1                       #
+#                    WinMac deployment script - WinMac.ps1                      #
 #                                                                               #
-# Author: Adam Kamienski                                                        #
-# GitHub: Asteski                                                               #
-# Version: 0.0.4                                                                #
+#                           Author: Adam Kamienski                              #
+#                               GitHub: Asteski                                 #
+#                               Version: 0.0.6                                  #
 #                                                                               #
 #                                                                               #
 #################################################################################
 
 # TODO:
-# !! Force Taskbar to go on top automatically after installation
-# ! Add Everything configuration
+# ! Force Taskbar to go on top automatically after installation
 # ! Fix adding WinMac cmd to $profile
-#   Add more packages to WinGet
-# ! Traffic Monitor not available on Winget
-# ? KeePass/KeeWeb or BitWarden
-# ? VMWare instead of VirtualBox
-#   Import $profile and ~/.bash_aliases
+# ? KeePass or BitWarden
+# ? VMWare Workstation Pro
+# * Import VSC settings, keybindings, extensions, snippets
 # * Import Terminal profiles
 # * Import Windows Terminal settings
 # * Import StartAllBack license
-#   Import VSC settings, keybindings and workspaces
+# * Find a way to apply middle-mouse button closing app with registry
+# * Find a way to apply start button behaviour with registry
+#   Add more packages to WinGet
+#   Import $profile and ~/.bash_aliases
 
-$version = '0.0.4'
 Clear-Host
 Write-Host @"
 ------------------------ WinMac Deployment ------------------------ 
@@ -33,13 +32,13 @@ Welcome to WinMac Deployment!
 
 Author: Adam Kamienski
 GitHub: Asteski
-Version: $version
+Version: 0.0.6
 
 This is Work in Progress.
 
 "@ -ForegroundColor Cyan
 
-## * WinGet
+## WinGet
 
 Write-Host "Checking for Windows Package Manager (WinGet)" -ForegroundColor Yellow
 $progressPreference = 'silentlyContinue'
@@ -53,39 +52,13 @@ Remove-Item -Path $installPath
 Write-Information "WinGet installation completed."
 
 $winget = @(
-    "Microsoft.PowerShell",
-    "7zip.7zip",
-    "9PGCV4V3BK4W", # DevToys
+    # "RamenSoftware.7+TaskbarTweaker",
+    # "Open-Shell.Open-Shell-Menu",
     "Armin2208.WindowsAutoNightMode",
-    "BotProductions.IconViewer",
-    # # "Brave.Brave",
-    # "CPUID.CPU-Z",
-    # "Discord.Discord",
-    # "File-New-Project.EarTrumpet", # ? If trayicon will be modified
-    # "GIMP.GIMP",
-    # "Git.Git",
-    "Helm.Helm",
-    "Irfanview.IrfanView",
-    "JAMSoftware.TreeSize.Free",
     "JanDeDobbeleer.OhMyPosh",
-    "Kuberentes.Minikube",
-    "Kubernetes.kubectl",
-    # "Logitech.OptionsPlus",
-    # "M2Team.NanaZip.Preview",
-    "Microsoft.AzureCLI", 
     "Microsoft.PowerToys",
-    # "Microsoft.VisualStudio.2022.Professional",
-    # "Microsoft.VisualStudioCode",
-    # "Mozilla.Firefox",
-    # "Neovim.Neovim", # ! Neovim - manual install better?
-    "RamenSoftware.7+TaskbarTweaker",
-    # "SomePythonThings.WingetUIStore",
-    # "VideoLAN.VLC",
-    # "Vivaldi.Vivaldi",
     "Voidtools.Everything",
-    # "WhatsApp.WhatsApp",
-    # "Wireshark.Wireshark",
-    "lin-ycv.EverythingPowerToys"
+    "lin-ycv.EverythingPowerToys",
 )
 
 Write-Host @"
@@ -97,20 +70,12 @@ foreach ($app in $winget) {winget install --id $app --no-upgrade --silent}
 
 Write-Host "Installing Packages completed." -ForegroundColor Green
 
-## * PowerToys
+## PowerToys
 
 Write-Host @"
 Configuring PowerToys...
 
 "@ -ForegroundColor Yellow
-
-# $powerToys = @(
-#     'Microsoft.PowerToys',
-#     'Voidtools.Everything',
-#     'lin-ycv.EverythingPowerToys'
-# )
-
-# foreach ($app in $powerToys) {winget install --id $app --no-upgrade --silent}
 
 $plugins = $env:LOCALAPPDATA + '\Microsoft\PowerToys\'
 $winget = 'https://github.com/bostrot/PowerToysRunPluginWinget/releases/download/v1.2.3/winget-powertoys-1.2.3.zip'
@@ -140,10 +105,30 @@ Write-Host "Configuring PowerToys completed." -ForegroundColor Green
 
 Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
 
-taskkill /f /im explorer.exe
-
 $explorerPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\"
 $sabPath = "HKCU:\Software\StartIsBack"
+
+taskkill /f /im explorer.exe
+
+Add-Type -TypeDefinition @"
+using System;
+using System.Runtime.InteropServices;
+
+public class Taskbar {
+    [DllImport("user32.dll", SetLastError = true)]
+    public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+}
+"@
+
+$taskbarHandle = [Taskbar]::FindWindow("Shell_TrayWnd", "")
+
+$HWND_TOP = [IntPtr]::Zero
+$SWP_SHOWWINDOW = 0x0040
+
+[Taskbar]::SetWindowPos($taskbarHandle, $HWND_TOP, 0, 0, 0, 0, $SWP_SHOWWINDOW)
 
 Set-ItemProperty -Path $explorerPath\Advanced -Name "TaskbarGlomLevel" -Value 1
 Set-ItemProperty -Path $explorerPath\Advanced -Name "TaskbarSmallIcons" -Value 1
@@ -153,7 +138,6 @@ Set-ItemProperty -Path $explorerPath\Advanced -Name "UseCompactMode" -Value 1
 # Set-ItemProperty -Path $explorerPath\StuckRects3 -Name "Settings" -Value ([byte[]](0x30,0x00,0x00,0x00,0xfe,0xff,0xff,0xff,0x7a,0xf4,0x00,0x00,0x01,0x00,0x00,0x00,0x3c,0x00,0x00,0x00,0x3c,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xfc,0x03,0x00,0x00,0x80,0x07,0x00,0x00,0x38,0x04,0x00,0x00,0x78,0x00,0x00,0x00,0x01,0x00,0x00,0x00))# reg import $pwd\tb-top.reg
 
 winget install --id "StartIsBack.StartAllBack" --silent --no-upgrade
-
 # Main settings
 Set-ItemProperty -Path $sabPath -Name "ModernIconsColorized" -Value 0
 Set-ItemProperty -Path $sabPath -Name "SettingsVersion" -Value 5
@@ -220,7 +204,7 @@ Set-ItemProperty -Path $sabPath -Name "SysTrayLocation" -Value 0
 Set-ItemProperty -Path $sabPath -Name "SysTraySpacierIcons" -Value 1
 
 # Dark Magic settings
-Set-ItemProperty -Path $sabPath\DarkMagic -Name "Unround" -Value 1
+Set-ItemProperty -Path $sabPath\DarkMagic -Name "Unround" -Value 0
 
 Start-Process explorer.exe
 
@@ -260,11 +244,11 @@ Use 'winmac' command to get the version of WinMac.
 "@ -ForegroundColor Cyan
 
 Start-Sleep 2
-Write-Host "This is Work in Progress. Use at your own responsibility!!" -ForegroundColor Magenta
+Write-Host "This is Work in Progress. Use at your own risk!" -ForegroundColor Magenta
 
 # ! Restart Computer
 # Start-Sleep 2
 # Write-Host "Windows will restart in 5 seconds..." -ForegroundColor Red
 # Start-Sleep 5
 # Restart-Computer -Force
-# * EOF
+# EOF
