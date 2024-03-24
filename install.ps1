@@ -139,41 +139,17 @@ Set-ItemProperty -Path $explorerPath\Advanced -Name "TaskbarAl" -Value 0
 Set-ItemProperty -Path $explorerPath\Advanced -Name "UseCompactMode" -Value 1
 # Set-ItemProperty -Path $explorerPath\StuckRects3 -Name "Settings" -Value ([byte[]](0x30,0x00,0x00,0x00,0xfe,0xff,0xff,0xff,0x7a,0xf4,0x00,0x00,0x01,0x00,0x00,0x00,0x3c,0x00,0x00,0x00,0x3c,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xfc,0x03,0x00,0x00,0x80,0x07,0x00,0x00,0x38,0x04,0x00,0x00,0x78,0x00,0x00,0x00,0x01,0x00,0x00,0x00))# reg import $pwd\tb-top.reg
 winget install --id "StartIsBack.StartAllBack" --silent --no-upgrade
-Set-ItemProperty -Path $sabPath -Name "ModernIconsColorized" -Value 0
-Set-ItemProperty -Path $sabPath -Name "SettingsVersion" -Value 5
-Set-ItemProperty -Path $sabPath -Name "WelcomeShown" -Value 3
-Set-ItemProperty -Path $sabPath -Name "UpdateCheck" -Value ([byte[]](0x44, 0xCE, 0xBE, 0x05, 0x25, 0x77, 0xDA, 0x01))
-Set-ItemProperty -Path $sabPath -Name "FrameStyle" -Value 1
-Set-ItemProperty -Path $sabPath -Name "AlterStyle" -Value "Plain8.msstyles"
-Set-ItemProperty -Path $sabPath -Name "SysTrayStyle" -Value 1
-Set-ItemProperty -Path $sabPath -Name "BottomDetails" -Value 0
-Set-ItemProperty -Path $sabPath -Name "RestyleIcons" -Value 1
-Set-ItemProperty -Path $sabPath -Name "NavBarGlass" -Value 1
-Set-ItemProperty -Path $sabPath -Name "OldSearch" -Value 1
-Set-ItemProperty -Path $sabPath -Name "NoXAMLMenus" -Value 1
-Set-ItemProperty -Path $sabPath -Name "RestyleControls" -Value 0
-Set-ItemProperty -Path $sabPath -Name "WinkeyFunction" -Value 0
-Set-ItemProperty -Path $sabPath -Name "TaskbarJumpList" -Value 1
-Set-ItemProperty -Path $sabPath -Name "TaskbarOneSegment" -Value 0
-Set-ItemProperty -Path $sabPath -Name "TaskbarCenterIcons" -Value 1
-Set-ItemProperty -Path $sabPath -Name "TaskbarTranslucentEffect" -Value 0
-Set-ItemProperty -Path $sabPath -Name "SysTrayActionCenter" -Value 0
-Set-ItemProperty -Path $sabPath -Name "TaskbarLargerIcons" -Value 0
-Set-ItemProperty -Path $sabPath -Name "UndeadControlPanel" -Value 1
-Set-ItemProperty -Path $sabPath -Name "LegacyTaskbar" -Value 1
-Set-ItemProperty -Path $sabPath -Name "TaskbarSpacierIcons" -Value 1
-Set-ItemProperty -Path $sabPath -Name "SysTrayNetwork" -Value 1
-Set-ItemProperty -Path $sabPath -Name "SysTrayClockFormat" -Value 3
-Set-ItemProperty -Path $sabPath -Name "TaskbarControlCenter" -Value 1
-Set-ItemProperty -Path $sabPath -Name "SysTrayVolume" -Value 1
-Set-ItemProperty -Path $sabPath -Name "SysTrayPower" -Value 1
-Set-ItemProperty -Path $sabPath -Name "Start_AskCortana" -Value 0
-# Set-ItemProperty -Path $sabPath -Name "SysTrayCopilotIcon" -Value 1
-Set-ItemProperty -Path $sabPath -Name "MultiColumnFlyout" -Value 0
-Set-ItemProperty -Path $sabPath -Name "SysTrayLocation" -Value 0
-Set-ItemProperty -Path $sabPath -Name "SysTraySpacierIcons" -Value 1
-Set-ItemProperty -Path $sabPath\DarkMagic -Name "Unround" -Value 0
-Start-Process explorer.exe
+# ...
+
+# Import registry settings from a specific file
+$regFilePath = "$pwd\config\sab.reg"
+$regContent = Get-Content -Path $regFilePath -Raw
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "Settings" -Value $regContent
+
+# ...
+
+# Set-ItemProperty -Path $sabPath\DarkMagic -Name "Unround" -Value 0
+# Set-ItemProperty -Path $sabPath\DarkMagic -Name "DarkMode" -Value 1
 
 Write-Host "Configuring Shell..." -ForegroundColor Yellow
 
