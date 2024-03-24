@@ -58,7 +58,7 @@ $winget = @(
     "JanDeDobbeleer.OhMyPosh",
     "Microsoft.PowerToys",
     "Voidtools.Everything",
-    "lin-ycv.EverythingPowerToys",
+    "lin-ycv.EverythingPowerToys"
 )
 
 Write-Host @"
