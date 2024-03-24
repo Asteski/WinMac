@@ -168,37 +168,26 @@ Set-ItemProperty -Path $sabRegPath\Recolor -Name "(default)" -Value "0"
 # Set-ItemProperty -Path $sabPath\DarkMagic -Name "DarkMode" -Value 1
 Stop-Process -Name Explorer -Force
 Write-Host "Configuring StartAllBack completed." -ForegroundColor Yellow
-Start-Sleep 2
 Write-Host "Configuring Shell..." -ForegroundColor Yellow
-
-# winget install --id "Open-Shell.Open-Shell-Menu" --silent --no-upgrade
-taskkill /f /im explorer.exe
+ # winget install --id "Open-Shell.Open-Shell-Menu" --silent --no-upgrade
 # New-Item -ItemType Directory -Force -Path "$env:LOCALAPPDATA\OpenShell"
 # Copy-Item -Path "$pwd\config\OpenShell\DataCache.db" -Destination "$env:LOCALAPPDATA\OpenShell\DataCache.db"
-
-$startexePath = Join-Path $pwd\bin "start.exe"
-if (-not (Test-Path $startexePath)) {
-    Write-Host "start.exe not found at path: $startexePath" -ForegroundColor Red
-    exit 1
-}
-$registryPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
-$registryKey = Get-Item -LiteralPath $registryPath
-if ($null -eq $registryKey) { 
-    $registryKey = New-Item -Path $registryPath -Force
-}
-Set-ItemProperty -Path $registryPath -Name "StartMenuInit" -Value $startexePath
-
-Start-Process explorer
 $winexePath = Join-Path $pwd\bin "winx.exe"
 $process = Start-Process -FilePath $winexePath -WindowStyle Minimized -PassThru
 Start-Sleep -Seconds 5
 $process.CloseMainWindow()
 $process.WaitForExit()
-taskkill /f /im explorer.exe
+taskill /IM explorer.exe /F
 Start-Sleep -Seconds 3
 Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
 Copy-Item -Path "$pwd\config\WinX\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
-Start-Process explorer
+$ahkPath = Join-Path $pwd\bin "ahk.exe"
+if (-not (Test-Path $ahkPath)) {
+    Write-Host "ahk.exe not found at path: $exePath" -ForegroundColor Red
+    exit 1
+}
+$registryPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
+Set-ItemProperty -Path $registryPath -Name "AutoHotKeyScript" -Value $ahkPath
 Write-Host "Configuring Shell completed." -ForegroundColor Green
 
 ## ! FIXME: Define ps subfolder in the project and use it to copy the function to the profile
