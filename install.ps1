@@ -5,16 +5,17 @@
 #                                                                               #
 #                           Author: Adam Kamienski                              #
 #                               GitHub: Asteski                                 #
-#                               Version: 0.0.6                                  #
+#                               Version: 0.0.7                                  #
 #                                                                               #
 #                                                                               #
 #################################################################################
 
 # TODO:
-# !! Force Taskbar to go on top
-# !! Disable ClassicExplorer in Open-Shell
+# !! Force Taskbar to go on top in StartAllBack
+# ! Disable Status Bar in Open-Shell
 # ! Update $profile
 # ! Add winget and prockill pliugins to PowerToys
+# Disable ClassicExplorer in Open-Shell
 #   Modify Start menu/Win key actions
 # * Create WinMac Control Panel UWP app:
 #   * Add setting to modify middle-mouse button behaviour on taskbar
@@ -35,7 +36,7 @@ Welcome to WinMac Deployment!
 
 Author: Adam Kamienski
 GitHub: Asteski
-Version: 0.0.6
+Version: 0.0.7
 
 This is Work in Progress.
 
