@@ -1,4 +1,4 @@
-#################################################################################
+v#################################################################################
 #                                                                               #
 #                                                                               #
 #                    WinMac deployment script - WinMac.ps1                      #
@@ -80,6 +80,7 @@ Configuring PowerToys...
 $plugins = $env:LOCALAPPDATA + '\Microsoft\PowerToys\'
 $winget = 'https://github.com/bostrot/PowerToysRunPluginWinget/releases/download/v1.2.3/winget-powertoys-1.2.3.zip'
 $prockill = 'https://github.com/8LWXpg/PowerToysRun-ProcessKiller/releases/download/v1.0.1/ProcessKiller-v1.0.1-x64.zip'
+
 Get-Process -Name PowerToys* | Stop-Process -Force
 Invoke-WebRequest -uri $winget -Method "GET" -Outfile 'winget.zip'
 Invoke-WebRequest -uri $prockill -Method "GET" -Outfile 'prockill.zip'
@@ -87,14 +88,15 @@ Expand-Archive 'winget.zip' -DestinationPath $pwd\Winget -Force
 Expand-Archive 'prockill.zip' -DestinationPath $pwd -Force
 Copy-item $pwd\Winget -Destination $plugins -Recurse -Force
 Copy-item $pwd\ProcessKiller -Destination $plugins -Recurse -Force
+
 $PowerToysProc = Get-Process -Name PowerToys*
 ForEach ($proc in $PowerToysProc) {
     $proc.WaitForExit(10000)
     $proc.Kill()
 }
-$powerToysPath = $env:LOCALAPPDATA + '\PowerToys\PowerToys.exe'
 
-Add-Content -Path "C:\Program Files\Everything\Everything.ini" -Value "show_tray_icon=0"
+$powerToysPath = $env:LOCALAPPDATA + '\PowerToys\PowerToys.exe'
+# Add-Content -Path "C:\Program Files\Everything\Everything.ini" -Value "show_tray_icon=0"
 Start-Process -FilePath $powerToysPath
 Remove-Item -Recurse -Force Winget
 Remove-Item -Recurse -Force ProcessKiller
@@ -124,10 +126,8 @@ public class Taskbar {
 "@
 
 $taskbarHandle = [Taskbar]::FindWindow("Shell_TrayWnd", "")
-
 $HWND_TOP = [IntPtr]::Zero
 $SWP_SHOWWINDOW = 0x0040
-
 [Taskbar]::SetWindowPos($taskbarHandle, $HWND_TOP, 0, 0, 0, 0, $SWP_SHOWWINDOW)
 
 Set-ItemProperty -Path $explorerPath\Advanced -Name "TaskbarGlomLevel" -Value 1
@@ -136,9 +136,7 @@ Set-ItemProperty -Path $explorerPath\Advanced -Name "TaskbarSi" -Value 0
 Set-ItemProperty -Path $explorerPath\Advanced -Name "TaskbarAl" -Value 0
 Set-ItemProperty -Path $explorerPath\Advanced -Name "UseCompactMode" -Value 1
 # Set-ItemProperty -Path $explorerPath\StuckRects3 -Name "Settings" -Value ([byte[]](0x30,0x00,0x00,0x00,0xfe,0xff,0xff,0xff,0x7a,0xf4,0x00,0x00,0x01,0x00,0x00,0x00,0x3c,0x00,0x00,0x00,0x3c,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xfc,0x03,0x00,0x00,0x80,0x07,0x00,0x00,0x38,0x04,0x00,0x00,0x78,0x00,0x00,0x00,0x01,0x00,0x00,0x00))# reg import $pwd\tb-top.reg
-
 winget install --id "StartIsBack.StartAllBack" --silent --no-upgrade
-# Main settings
 Set-ItemProperty -Path $sabPath -Name "ModernIconsColorized" -Value 0
 Set-ItemProperty -Path $sabPath -Name "SettingsVersion" -Value 5
 Set-ItemProperty -Path $sabPath -Name "WelcomeShown" -Value 3
@@ -202,26 +200,21 @@ Set-ItemProperty -Path $sabPath -Name "MultiColumnFlyout" -Value 0
 Set-ItemProperty -Path $sabPath -Name "Start_LargeMFUIcons" -Value 0
 Set-ItemProperty -Path $sabPath -Name "SysTrayLocation" -Value 0
 Set-ItemProperty -Path $sabPath -Name "SysTraySpacierIcons" -Value 1
-
-# Dark Magic settings
 Set-ItemProperty -Path $sabPath\DarkMagic -Name "Unround" -Value 0
-
 Start-Process explorer.exe
 
 Write-Host "Configuring Open Shell..." -ForegroundColor Yellow
 
 winget install --id "Open-Shell.Open-Shell-Menu" --silent --no-upgrade
-
 taskkill /f /im explorer.exe
-
+Start-Process explorer.exe
 $exePath = Join-Path $pwd\bin "WinX.exe"
 $process = Start-Process -FilePath $exePath -WindowStyle Minimized -PassThru
 Start-Sleep -Seconds 2
 $process.CloseMainWindow()
 $process.WaitForExit()
-
-Copy-Item -Path "$pwd\etc\WinX\*" -Destination $env:LOCALAPPDATA\Microsoft\Windows\WinX\* -Recurse
-
+taskkill /f /im explorer.exe
+Copy-Item -Path "$pwd\etc\WinX" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
 Start-Process explorer.exe
 
 Write-Host "Configuration completed." -ForegroundColor Green
