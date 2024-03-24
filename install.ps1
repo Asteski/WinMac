@@ -109,11 +109,6 @@ Write-Information "WinGet installation completed."
 
 Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
 
-$explorerPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\"
-$sabPath = "HKCU:\Software\StartIsBack"
-
-taskkill /f /im explorer.exe
-
 Add-Type -TypeDefinition @"
 using System;
 using System.Runtime.InteropServices;
@@ -132,6 +127,8 @@ $HWND_TOP = [IntPtr]::Zero
 $SWP_SHOWWINDOW = 0x0040
 [Taskbar]::SetWindowPos($taskbarHandle, $HWND_TOP, 0, 0, 0, 0, $SWP_SHOWWINDOW)
 
+$explorerPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\"
+$sabRegPath = "HKCU:\Software\StartIsBack"
 Set-ItemProperty -Path $explorerPath\Advanced -Name "TaskbarGlomLevel" -Value 1
 Set-ItemProperty -Path $explorerPath\Advanced -Name "TaskbarSmallIcons" -Value 1
 Set-ItemProperty -Path $explorerPath\Advanced -Name "TaskbarSi" -Value 0
@@ -139,18 +136,45 @@ Set-ItemProperty -Path $explorerPath\Advanced -Name "TaskbarAl" -Value 0
 Set-ItemProperty -Path $explorerPath\Advanced -Name "UseCompactMode" -Value 1
 # Set-ItemProperty -Path $explorerPath\StuckRects3 -Name "Settings" -Value ([byte[]](0x30,0x00,0x00,0x00,0xfe,0xff,0xff,0xff,0x7a,0xf4,0x00,0x00,0x01,0x00,0x00,0x00,0x3c,0x00,0x00,0x00,0x3c,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xfc,0x03,0x00,0x00,0x80,0x07,0x00,0x00,0x38,0x04,0x00,0x00,0x78,0x00,0x00,0x00,0x01,0x00,0x00,0x00))# reg import $pwd\tb-top.reg
 winget install --id "StartIsBack.StartAllBack" --silent --no-upgrade
-# ...
+Set-ItemProperty -Path $sabRegPath -Name "WinBuild" -Value 22759
+Set-ItemProperty -Path $sabRegPath -Name "WinLangID" -Value 2064
+Set-ItemProperty -Path $sabRegPath -Name "ModernIconsColorized" -Value 0
+Set-ItemProperty -Path $sabRegPath -Name "SettingsVersion" -Value 5
+Set-ItemProperty -Path $sabRegPath -Name "WelcomeShown" -Value 3
+Set-ItemProperty -Path $sabRegPath -Name "UpdateCheck" -Value ([byte[]](160, 224, 8, 201, 49, 125, 218, 1))
+Set-ItemProperty -Path $sabRegPath -Name "FrameStyle" -Value 2
+Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1
+Set-ItemProperty -Path $sabRegPath -Name "TaskbarOneSegment" -Value 0
+Set-ItemProperty -Path $sabRegPath -Name "TaskbarCenterIcons" -Value 1
+Set-ItemProperty -Path $sabRegPath -Name "TaskbarTranslucentEffect" -Value 0
+Set-ItemProperty -Path $sabRegPath -Name "TaskbarLargerIcons" -Value 0
+Set-ItemProperty -Path $sabRegPath -Name "TaskbarSpacierIcons" -Value (-1)
+Set-ItemProperty -Path $sabRegPath -Name "UpdateInfo" -Value ([byte[]](60, 63, 120, 109, 108, 32, 118, 101, 114, 115, 105, 111, 110, 61, 34, 49, 46, 48, 34, 63, 62, 10, 60, 85, 112, 100, 97, 116, 101, 32, 78, 97, 109, 101, 61, 34, 83, 116, 97, 114, 116, 65, 108, 108, 66, 97, 99, 107, 32, 51, 46, 55, 46, 55, 34, 32, 68, 101, 115, 99, 114, 105, 112, 116, 105, 111, 110, 61, 34, 34, 32, 68, 111, 119, 110, 108, 111, 97, 100, 85, 82, 76, 61, 34, 104, 116, 116, 112, 115, 58, 47, 47, 115, 116, 97, 114, 116, 105, 115, 98, 97, 99, 107, 46, 115, 102, 111, 51, 46, 99, 100, 110, 46, 100, 105, 103, 105, 116, 97, 108, 111, 99, 101, 97, 110, 115, 112, 97, 99, 101, 115, 46, 99, 111, 109, 47, 83, 116, 97, 114, 116, 65, 108, 108, 66, 97, 99, 107, 95, 51, 46, 55, 46, 55, 95, 115, 101, 116, 117, 112, 46, 101, 120, 101, 34, 32, 76, 101, 97, 114, 110, 77, 111, 114, 101, 85, 82, 76, 61, 34, 104, 116, 116, 112, 115, 58, 47, 47, 119, 119, 119, 46, 115, 116, 97, 114, 116, 97, 108, 108, 98, 97, 99, 107, 46, 99, 111, 109, 47, 34, 47, 62, 10))
+Set-ItemProperty -Path $sabRegPath -Name "UpdateInfoHash" -Value 805441044
+Set-ItemProperty -Path $sabRegPath -Name "SysTrayActionCenter" -Value 0
+Set-ItemProperty -Path $sabRegPath -Name "TaskbarControlCenter" -Value 1
+Set-ItemProperty -Path $sabRegPath -Name "SysTrayStyle" -Value 1
 
-# Import registry settings from a specific file
-$regFilePath = "$pwd\config\sab.reg"
-$regContent = Get-Content -Path $regFilePath -Raw
-Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "Settings" -Value $regContent
+Set-ItemProperty -Path $sabRegPath\AutoUpdatePending -Name "(default)" -Value ""
+
+Set-ItemProperty -Path $sabRegPath\Cache -Name "OrbWidth.120" -Value 39
+Set-ItemProperty -Path $sabRegPath\Cache -Name "OrbHeight.120" -Value 38
+Set-ItemProperty -Path $sabRegPath\Cache -Name "IdealHeight.9" -Value 81930
+Set-ItemProperty -Path $sabRegPath\Cache -Name "IdealWidth.9" -Value "Control Panel"
+Set-ItemProperty -Path $sabRegPath\Cache -Name "IdealHeight.6" -Value 10
+
+Set-ItemProperty -Path $sabRegPath\Cache\Volatile -Name "WidgetsPayload" -Value "{\"type\":\"AdaptiveCard\",\"version\":\"1.3\",\"id\":\"Weather_Preview_Small\",\"speak\":\"Widgets 42°F Cloudy\",\"body\":[{\"type\":\"ColumnSet\",\"columns\":[{\"id\":\"SmallTicker1\",\"type\":\"Column\",\"width\":\"auto\",\"items\":[{\"id\":\"BadgeAnchorSmallTicker\",\"type\":\"Image\",\"size\":\"medium\",\"url\":\"https://assets.msn.com/weathermapdata/1/static/weather/Icons/KRYFGAA=/Condition/AAehyQC.png\",\"horizontalAlignment\":\"center\",\"lottieAnimation\":\"Cloudy\",\"rotationAnimation\":\"Cloudy\",\"svgUrl\":\"https://assets.msn.com/weathermapdata/1/static/weather/Icons/KRYFGAA=/Condition/AAehyQC.svg\",\"svgSize\":\"72\",\"isAnimated\":false,\"animationCount\":0,\"frameIntervalInMs\":0,\"animationDurationInMs\":0,\"animationSvgSize\":0}],\"verticalContentAlignment\":\"center\"},{\"id\":\"LargeTicker1\",\"type\":\"Column\",\"width\":\"auto\",\"items\":[{\"id\":\"BadgeAnchorLargeTicker\",\"type\":\"Image\",\"size\":\"medium\",\"url\":\"https://assets.msn.com/weathermapdata/1/static/weather/Icons/KRYFGAA=/Condition/AAehyQC.png\",\"horizontalAlignment\":\"center\",\"lottieAnimation\":\"Cloudy\",\"rotationAnimation\":\"Cloudy\",\"svgUrl\":\"https://assets.msn.com/weathermapdata/1/static/weather/Icons/KRYFGAA=/Condition/AAehyQC.svg\",\"svgSize\":\"72\",\"isAnimated\":false,\"animationCount\":0,\"frameIntervalInMs\":0,\"animationDurationInMs\":0,\"animationSvgSize\":0}],\"verticalContentAlignment\":\"center\",\"spacing\":\"none\"},{\"id\":\"LargeTicker2\",\"type\":\"Column\",\"width\":\"stretch\",\"items\":[{\"type\":\"TextBlock\",\"text\":\"42°F\",\"spacing\":\"none\"},{\"type\":\"TextBlock\",\"isSubtle\":true,\"text\":\"Cloudy\",\"spacing\":\"none\"}]}]}],\"playHoverAnimation\":true,\"playClickAnimation\":true,\"playRotationIconAnimation\":true,\"playRotationTransition\":true,\"widgetsOverlay\":{\"type\":\"AdaptiveCard\",\"version\":\"1.3\",\"id\":\"WP_Small_Normal_png\",\"speak\":\"Widgets 42°F Cloudy\",\"body\":[{\"type\":\"ColumnSet\",\"columns\":[{\"type\":\"Column\",\"items\":[{\"type\":\"TextBlock\",\"id\":\"WidgetsOverlayText\",\"size\":\"small\",\"text\":\"42°\",\"horizontalAlignment\":\"center\"}]}]}]},\"widgetsBadgeId\":\"alert_549_SN_Y\",\"widgetsBadge\":{\"type\":\"AdaptiveCard\",\"version\":\"1.3\",\"id\":\"Notification_Overlay_RedDotWithOneInside\",\"body\":[{\"type\":\"ColumnSet\",\"columns\":[{\"id\":\"WidgetsBadgeBackground\",\"type\":\"Column\",\"items\":[{\"type\":\"TextBlock\",\"id\":\"WidgetsBadgeText\",\"size\":\"small\",\"text\":\"1\",\"horizontalAlignment\":\"center\"}],\"style\":\"attention\"}]}]},\"previewSource\":\"BgTaskRotation\",\"debugId\":\"66002957-fcfd-4efb-a20e-010f69665252|2024-03-24T13:23:36.5639783Z|fabric_winfeed|WEU|WinFeed_200\",\"relatedCardId\":-1,\"contentType\":\"Weather_NormalWeather_SevereWeather_wxswysn_TkBs-0\",\"widgetsTelemetryId\":\"{1e967e74-5df9-47fe-ae4c-a8d163acfca3}\"}"
+Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "(default)" -Value "1"
+Set-ItemProperty -Path $sabRegPath\Recolor -Name "(default)" -Value "0"
+Set-ItemProperty -Path $sabRegPath\StopAutoDownload -Name "(default)" -Value "1"
 
 # ...
 
 # Set-ItemProperty -Path $sabPath\DarkMagic -Name "Unround" -Value 0
 # Set-ItemProperty -Path $sabPath\DarkMagic -Name "DarkMode" -Value 1
-
+Stop-Process -Name Explorer -Force
+Write-Host "Configuring StartAllBack completed." -ForegroundColor Yellow
+Start-Sleep 2
 Write-Host "Configuring Shell..." -ForegroundColor Yellow
 
 # winget install --id "Open-Shell.Open-Shell-Menu" --silent --no-upgrade
