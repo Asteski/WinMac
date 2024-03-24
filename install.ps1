@@ -180,7 +180,7 @@ $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"
 # Remove-Item -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Recurse -Force
 New-Item -Path $shellRegPath\StartMenu\Settings -Force | Out-Null
 New-Item -Path $shellRegPath\OpenShell\Settings -Force | Out-Null
-Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "ShowedToolbar" -Value 1
+Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "ShowedToolbar" -Value 0
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "NewLine" -Value 0
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "CSettingsDlg" -Value ([byte[]](0,0,0,0,103,0,0,0,0,0,0,0,0,0,0,0,170,15,0,0,1,0,185,115,0,0,0,0))
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer\Settings" -Name "Version" -Value 10741631
