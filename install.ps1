@@ -176,24 +176,6 @@ taskkill /f /im explorer.exe
 # New-Item -ItemType Directory -Force -Path "$env:LOCALAPPDATA\OpenShell"
 # Copy-Item -Path "$pwd\config\OpenShell\DataCache.db" -Destination "$env:LOCALAPPDATA\OpenShell\DataCache.db"
 
-# ! FIXME: not working
-# Add-Type -TypeDefinition @"
-# using Microsoft.Win32;
-# class Program
-# {
-#     static void Main()
-#     {
-#         string currentDirectory = Directory.GetCurrentDirectory();
-#         string folderName = "bin";
-#         string exePath = Path.Combine(currentDirectory, folderName, "start.exe");
-#         RegistryKey startMenuKey = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", true);
-#         startMenuKey.SetValue("StartMenuInit", exePath);
-#         startMenuKey.Close();
-#     }
-# }
-# "@
-# [Program]::Main()
-
 $startexePath = Join-Path $pwd\bin "start.exe"
 if (-not (Test-Path $startexePath)) {
     Write-Host "start.exe not found at path: $startexePath" -ForegroundColor Red
@@ -209,14 +191,15 @@ Set-ItemProperty -Path $registryPath -Name "StartMenuInit" -Value $startexePath
 Start-Process explorer
 $winexePath = Join-Path $pwd\bin "winx.exe"
 $process = Start-Process -FilePath $winexePath -WindowStyle Minimized -PassThru
-Start-Sleep -Seconds 2
+Start-Sleep -Seconds 5
 $process.CloseMainWindow()
 $process.WaitForExit()
-taskkill /f /im explorer
+taskkill /f /im explorer.exe
+Start-Sleep -Seconds 3
+Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
 Copy-Item -Path "$pwd\config\WinX\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
 Start-Process explorer
-
-Write-Host "Configuration completed." -ForegroundColor Green
+Write-Host "Configuring Shell completed." -ForegroundColor Green
 
 ## ! FIXME: Define ps subfolder in the project and use it to copy the function to the profile
 # function WinMac {    
