@@ -176,7 +176,7 @@ winget install --id "Open-Shell.Open-Shell-Menu" --no-upgrade
 Start-Sleep -Seconds 5
 Stop-Process -Name StartMenu -Force
 $shellRegPath = "HKCU:\Software\OpenShell"
-$shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell" startmenu.exe
+$shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"
 Set-ItemProperty -Path $shellRegPath\ClassicExplorer -Name 'ShowedToolbar' -Value 1
 Set-ItemProperty -Path $shellRegPath\ClassicExplorer -Name 'NewLine' -Value 0
 Set-ItemProperty -Path $shellRegPath\ClassicExplorer -Name 'CSettingsDlg' -Value ([byte[]](0x38,0x02,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x02,0x08,0x00,0x00,0x00,0x00,0xb1,0x70,0x00,0x00,0x00,0x00))
