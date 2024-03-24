@@ -220,7 +220,46 @@ taskkill /IM explorer.exe /F | Out-Null
 Start-Sleep -Seconds 3
 Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
 Copy-Item -Path "$pwd\config\WinX\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
-Start-Process Explorer
+Start-Process explorer
+Start-Sleep -Seconds 3
+Start-Process explorer
+Add-Type -TypeDefinition @"
+    using System;
+    using System.Runtime.InteropServices;
+
+    public class Keyboard {
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+
+        [DllImport("user32.dll")]
+        public static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, int dwExtraInfo);
+    }
+"@
+$explorerHandle = [Keyboard]::FindWindow("CabinetWClass", $null)
+[Keyboard]::SetForegroundWindow($explorerHandle)
+$KEYEVENTF_KEYUP = 0x2
+$VK_MENU = 0x12 # Alt key
+$VK_V = 0x56 # V key
+$VK_RETURN = 0x0D # Enter key
+$VK_F4 = 0x73 # F4 key
+[Keyboard]::keybd_event($VK_MENU, 0, 0, 0) # Alt key press
+[Keyboard]::keybd_event($VK_V, 0, 0, 0) # V key press
+[Keyboard]::keybd_event($VK_V, 0, $KEYEVENTF_KEYUP, 0) # V key release
+[Keyboard]::keybd_event($VK_MENU, 0, $KEYEVENTF_KEYUP, 0) # Alt key release
+Start-Sleep -Milliseconds 100
+[Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
+[Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
+Start-Sleep -Milliseconds 100
+[Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
+[Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
+Start-Sleep -Milliseconds 100
+[Keyboard]::keybd_event($VK_MENU, 0, 0, 0) # Alt key press
+[Keyboard]::keybd_event($VK_F4, 0, 0, 0) # F4 key press
+[Keyboard]::keybd_event($VK_F4, 0, $KEYEVENTF_KEYUP, 0) # F4 key release
+[Keyboard]::keybd_event($VK_MENU, 0, $KEYEVENTF_KEYUP, 0) # Alt key release
 
 ## ! FIXME: Define ps subfolder in the project and use it to copy the function to the profile
 # function WinMac {    
@@ -261,7 +300,7 @@ Write-Host "This is Work in Progress. Use at your own risk!" -ForegroundColor Ma
 # ! Restart Computer
 Start-Sleep 2
 Write-Host "Windows will re start in:" -ForegroundColor Red
-for ($i = 10; $i -ge 1; $i--) {
+for ($i = 20; $i -ge 1; $i--) {
     Write-Host $i -ForegroundColor Red
     Start-Sleep 1
 }
