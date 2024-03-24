@@ -26,6 +26,7 @@
 
 # Clear-Host
 Write-Host @"
+
 ------------------------ WinMac Deployment ------------------------ 
 
 Welcome to WinMac Deployment!
@@ -203,12 +204,33 @@ Set-ItemProperty -Path $sabPath -Name "SysTraySpacierIcons" -Value 1
 Set-ItemProperty -Path $sabPath\DarkMagic -Name "Unround" -Value 0
 Start-Process explorer.exe
 
-Write-Host "Configuring Open Shell..." -ForegroundColor Yellow
+Write-Host "Configuring Shell..." -ForegroundColor Yellow
 
-winget install --id "Open-Shell.Open-Shell-Menu" --silent --no-upgrade
+# winget install --id "Open-Shell.Open-Shell-Menu" --silent --no-upgrade
 taskkill /f /im explorer.exe
-New-Item -ItemType Directory -Force -Path "$env:LOCALAPPDATA\OpenShell"
-Copy-Item -Path "$pwd\etc\OpenShell\DataCache.db" -Destination "$env:LOCALAPPDATA\OpenShell\DataCache.db"
+# New-Item -ItemType Directory -Force -Path "$env:LOCALAPPDATA\OpenShell"
+# Copy-Item -Path "$pwd\etc\OpenShell\DataCache.db" -Destination "$env:LOCALAPPDATA\OpenShell\DataCache.db"
+
+using Microsoft.Win32;
+
+class Program
+{
+    static void Main()
+    {
+        // Specify the path to the executable file you want to run
+        string currentDirectory = Directory.GetCurrentDirectory();
+        string folderName = "bin";
+        string exePath = Path.Combine(currentDirectory, folderName, "startmenu.exe");
+
+        // Set the registry key to modify the start menu button behavior
+        RegistryKey startMenuKey = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", true);
+        startMenuKey.SetValue("StartMenuInit", exePath);
+
+        // Close the registry key
+        startMenuKey.Close();
+    }
+}
+
 Start-Process explorer.exe
 $exePath = Join-Path $pwd\bin "WinX.exe"
 $process = Start-Process -FilePath $exePath -WindowStyle Minimized -PassThru
@@ -216,7 +238,7 @@ Start-Sleep -Seconds 2
 $process.CloseMainWindow()
 $process.WaitForExit()
 taskkill /f /im explorer.exe
-Copy-Item -Path "$pwd\etc\WinX" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
+Copy-Item -Path "$pwd\etc\WinX\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
 Start-Process explorer.exe
 
 Write-Host "Configuration completed." -ForegroundColor Green
