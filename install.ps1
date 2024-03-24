@@ -1,4 +1,3 @@
-using Microsoft.Win32;
 #################################################################################
 #                                                                               #
 #                                                                               #
@@ -14,6 +13,7 @@ using Microsoft.Win32;
 # TODO:
 # ! Force Taskbar to go on top automatically after installation
 # ! Fix adding WinMac cmd to $profile
+# ! Add winget and prockill pliugins to PowerToys
 # ? KeePass or BitWarden
 # ? VMWare Workstation Pro
 # * Import VSC settings, keybindings, extensions, snippets
@@ -83,29 +83,29 @@ $plugins = $env:LOCALAPPDATA + '\Microsoft\PowerToys\'
 $winget = 'https://github.com/bostrot/PowerToysRunPluginWinget/releases/download/v1.2.3/winget-powertoys-1.2.3.zip'
 $prockill = 'https://github.com/8LWXpg/PowerToysRun-ProcessKiller/releases/download/v1.0.1/ProcessKiller-v1.0.1-x64.zip'
 
-Get-Process -Name PowerToys* | Stop-Process -Force
-Invoke-WebRequest -uri $winget -Method "GET" -Outfile 'winget.zip'
-Invoke-WebRequest -uri $prockill -Method "GET" -Outfile 'prockill.zip'
-Expand-Archive 'winget.zip' -DestinationPath $pwd\Winget -Force
-Expand-Archive 'prockill.zip' -DestinationPath $pwd -Force
-Copy-item $pwd\Winget -Destination $plugins -Recurse -Force
-Copy-item $pwd\ProcessKiller -Destination $plugins -Recurse -Force
+# Get-Process -Name PowerToys* | Stop-Process -Force
+# Invoke-WebRequest -uri $winget -Method "GET" -Outfile 'winget.zip'
+# Invoke-WebRequest -uri $prockill -Method "GET" -Outfile 'prockill.zip'
+# Expand-Archive 'winget.zip' -DestinationPath $pwd\Winget -Force
+# Expand-Archive 'prockill.zip' -DestinationPath $pwd -Force
+# Copy-item $pwd\Winget -Destination $plugins -Recurse -Force
+# Copy-item $pwd\ProcessKiller -Destination $plugins -Recurse -Force
 
-$PowerToysProc = Get-Process -Name PowerToys*
-ForEach ($proc in $PowerToysProc) {
-    $proc.WaitForExit(10000)
-    $proc.Kill()
-}
+# $PowerToysProc = Get-Process -Name PowerToys*
+# ForEach ($proc in $PowerToysProc) {
+#     $proc.WaitForExit(10000)
+#     $proc.Kill()
+# }
 
-$powerToysPath = $env:LOCALAPPDATA + '\PowerToys\PowerToys.exe'
+# $powerToysPath = $env:LOCALAPPDATA + '\PowerToys\PowerToys.exe'
 # Add-Content -Path "C:\Program Files\Everything\Everything.ini" -Value "show_tray_icon=0"
-Start-Process -FilePath $powerToysPath
-Remove-Item -Recurse -Force Winget
-Remove-Item -Recurse -Force ProcessKiller
-Get-ChildItem * -Include *.zip -Recurse | Remove-Item -Force
+# Start-Process -FilePath $powerToysPath
+# Remove-Item -Recurse -Force Winget
+# Remove-Item -Recurse -Force ProcessKiller
+# Get-ChildItem * -Include *.zip -Recurse | Remove-Item -Force
 Write-Host "Configuring PowerToys completed." -ForegroundColor Green
 
-## * StartAllBack
+## StartAllBack
 
 Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
 
@@ -167,39 +167,9 @@ Set-ItemProperty -Path $sabPath -Name "SysTrayClockFormat" -Value 3
 Set-ItemProperty -Path $sabPath -Name "TaskbarControlCenter" -Value 1
 Set-ItemProperty -Path $sabPath -Name "SysTrayVolume" -Value 1
 Set-ItemProperty -Path $sabPath -Name "SysTrayPower" -Value 1
-Set-ItemProperty -Path $sabPath -Name "Start_LargeAllAppsIcons" -Value 0
-Set-ItemProperty -Path $sabPath -Name "AllProgramsFlyout" -Value 1
-Set-ItemProperty -Path $sabPath -Name "StartMetroAppsFolder" -Value 1
-Set-ItemProperty -Path $sabPath -Name "Start_SortOverride" -Value 0
-Set-ItemProperty -Path $sabPath -Name "Start_NotifyNewApps" -Value 1
-Set-ItemProperty -Path $sabPath -Name "Start_AutoCascade" -Value 0
 Set-ItemProperty -Path $sabPath -Name "Start_AskCortana" -Value 0
-Set-ItemProperty -Path $sabPath -Name "HideUserFrame" -Value 1
-Set-ItemProperty -Path $sabPath -Name "Start_RightPaneIcons" -Value 0
-Set-ItemProperty -Path $sabPath -Name "Start_ShowUser" -Value 1
-Set-ItemProperty -Path $sabPath -Name "Start_ShowMyDocs" -Value 1
-Set-ItemProperty -Path $sabPath -Name "Start_ShowMyPics" -Value 1
-Set-ItemProperty -Path $sabPath -Name "Start_ShowMyMusic" -Value 0
-Set-ItemProperty -Path $sabPath -Name "Start_ShowVideos" -Value 1
-Set-ItemProperty -Path $sabPath -Name "Start_ShowDownloads" -Value 1
-Set-ItemProperty -Path $sabPath -Name "Start_ShowSkyDrive" -Value 1
-Set-ItemProperty -Path $sabPath -Name "StartMenuFavorites" -Value 2
-Set-ItemProperty -Path $sabPath -Name "Start_ShowRecentDocs" -Value 2
-Set-ItemProperty -Path $sabPath -Name "Start_ShowNetPlaces" -Value 0
-Set-ItemProperty -Path $sabPath -Name "Start_ShowNetConn" -Value 0
-Set-ItemProperty -Path $sabPath -Name "Start_ShowMyComputer" -Value 1
-Set-ItemProperty -Path $sabPath -Name "Start_ShowControlPanel" -Value 0
-Set-ItemProperty -Path $sabPath -Name "Start_ShowPCSettings" -Value 0
-Set-ItemProperty -Path $sabPath -Name "Start_AdminToolsRoot" -Value 0
-Set-ItemProperty -Path $sabPath -Name "Start_ShowPrinters" -Value 0
-Set-ItemProperty -Path $sabPath -Name "Start_ShowSetProgramAccessAndDefaults" -Value 0
-Set-ItemProperty -Path $sabPath -Name "Start_ShowTerminal" -Value 0
-Set-ItemProperty -Path $sabPath -Name "Start_ShowCommandPrompt" -Value 0
-Set-ItemProperty -Path $sabPath -Name "Start_ShowRun" -Value 0
-Set-ItemProperty -Path $sabPath -Name "Start_MinMFU" -Value 14
-Set-ItemProperty -Path $sabPath -Name "SysTrayCopilotIcon" -Value 1
+# Set-ItemProperty -Path $sabPath -Name "SysTrayCopilotIcon" -Value 1
 Set-ItemProperty -Path $sabPath -Name "MultiColumnFlyout" -Value 0
-Set-ItemProperty -Path $sabPath -Name "Start_LargeMFUIcons" -Value 0
 Set-ItemProperty -Path $sabPath -Name "SysTrayLocation" -Value 0
 Set-ItemProperty -Path $sabPath -Name "SysTraySpacierIcons" -Value 1
 Set-ItemProperty -Path $sabPath\DarkMagic -Name "Unround" -Value 0
@@ -212,23 +182,22 @@ taskkill /f /im explorer.exe
 # New-Item -ItemType Directory -Force -Path "$env:LOCALAPPDATA\OpenShell"
 # Copy-Item -Path "$pwd\etc\OpenShell\DataCache.db" -Destination "$env:LOCALAPPDATA\OpenShell\DataCache.db"
 
+Add-Type -TypeDefinition @"
+using Microsoft.Win32;
 class Program
 {
     static void Main()
     {
-        // Specify the path to the executable file you want to run
         string currentDirectory = Directory.GetCurrentDirectory();
         string folderName = "bin";
         string exePath = Path.Combine(currentDirectory, folderName, "startmenu.exe");
-
-        // Set the registry key to modify the start menu button behavior
         RegistryKey startMenuKey = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", true);
         startMenuKey.SetValue("StartMenuInit", exePath);
-
-        // Close the registry key
         startMenuKey.Close();
     }
 }
+"@
+[Program]::Main()
 
 Start-Process explorer.exe
 $exePath = Join-Path $pwd\bin "WinX.exe"
