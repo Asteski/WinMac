@@ -11,10 +11,11 @@
 #################################################################################
 
 # TODO:
-# !! Force Taskbar to go on top automatically
-# !! Modify Start menu/Win key actions
+# !! Force Taskbar to go on top
+# !! Disable ClassicExplorer in Open-Shell
 # ! Update $profile
 # ! Add winget and prockill pliugins to PowerToys
+#   Modify Start menu/Win key actions
 # * Create WinMac Control Panel UWP app:
 #   * Add setting to modify middle-mouse button behaviour on taskbar
 #   * Taskbar Position
@@ -159,13 +160,9 @@ Set-ItemProperty -Path $sabRegPath\Cache -Name "OrbHeight.120" -Value 38
 Set-ItemProperty -Path $sabRegPath\Cache -Name "IdealHeight.9" -Value 81930
 Set-ItemProperty -Path $sabRegPath\Cache -Name "IdealWidth.9" -Value "Control Panel"
 Set-ItemProperty -Path $sabRegPath\Cache -Name "IdealHeight.6" -Value 10
-# Set-ItemProperty -Path $sabRegPath\Cache\Volatile -Name "WidgetsPayload" -Value "{\"type\":\"AdaptiveCard\",\"version\":\"1.3\",\"id\":\"Weather_Preview_Small\",\"speak\":\"Widgets 42°F Cloudy\",\"body\":[{\"type\":\"ColumnSet\",\"columns\":[{\"id\":\"SmallTicker1\",\"type\":\"Column\",\"width\":\"auto\",\"items\":[{\"id\":\"BadgeAnchorSmallTicker\",\"type\":\"Image\",\"size\":\"medium\",\"url\":\"https://assets.msn.com/weathermapdata/1/static/weather/Icons/KRYFGAA=/Condition/AAehyQC.png\",\"horizontalAlignment\":\"center\",\"lottieAnimation\":\"Cloudy\",\"rotationAnimation\":\"Cloudy\",\"svgUrl\":\"https://assets.msn.com/weathermapdata/1/static/weather/Icons/KRYFGAA=/Condition/AAehyQC.svg\",\"svgSize\":\"72\",\"isAnimated\":false,\"animationCount\":0,\"frameIntervalInMs\":0,\"animationDurationInMs\":0,\"animationSvgSize\":0}],\"verticalContentAlignment\":\"center\"},{\"id\":\"LargeTicker1\",\"type\":\"Column\",\"width\":\"auto\",\"items\":[{\"id\":\"BadgeAnchorLargeTicker\",\"type\":\"Image\",\"size\":\"medium\",\"url\":\"https://assets.msn.com/weathermapdata/1/static/weather/Icons/KRYFGAA=/Condition/AAehyQC.png\",\"horizontalAlignment\":\"center\",\"lottieAnimation\":\"Cloudy\",\"rotationAnimation\":\"Cloudy\",\"svgUrl\":\"https://assets.msn.com/weathermapdata/1/static/weather/Icons/KRYFGAA=/Condition/AAehyQC.svg\",\"svgSize\":\"72\",\"isAnimated\":false,\"animationCount\":0,\"frameIntervalInMs\":0,\"animationDurationInMs\":0,\"animationSvgSize\":0}],\"verticalContentAlignment\":\"center\",\"spacing\":\"none\"},{\"id\":\"LargeTicker2\",\"type\":\"Column\",\"width\":\"stretch\",\"items\":[{\"type\":\"TextBlock\",\"text\":\"42°F\",\"spacing\":\"none\"},{\"type\":\"TextBlock\",\"isSubtle\":true,\"text\":\"Cloudy\",\"spacing\":\"none\"}]}]}],\"playHoverAnimation\":true,\"playClickAnimation\":true,\"playRotationIconAnimation\":true,\"playRotationTransition\":true,\"widgetsOverlay\":{\"type\":\"AdaptiveCard\",\"version\":\"1.3\",\"id\":\"WP_Small_Normal_png\",\"speak\":\"Widgets 42°F Cloudy\",\"body\":[{\"type\":\"ColumnSet\",\"columns\":[{\"type\":\"Column\",\"items\":[{\"type\":\"TextBlock\",\"id\":\"WidgetsOverlayText\",\"size\":\"small\",\"text\":\"42°\",\"horizontalAlignment\":\"center\"}]}]}]},\"widgetsBadgeId\":\"alert_549_SN_Y\",\"widgetsBadge\":{\"type\":\"AdaptiveCard\",\"version\":\"1.3\",\"id\":\"Notification_Overlay_RedDotWithOneInside\",\"body\":[{\"type\":\"ColumnSet\",\"columns\":[{\"id\":\"WidgetsBadgeBackground\",\"type\":\"Column\",\"items\":[{\"type\":\"TextBlock\",\"id\":\"WidgetsBadgeText\",\"size\":\"small\",\"text\":\"1\",\"horizontalAlignment\":\"center\"}],\"style\":\"attention\"}]}]},\"previewSource\":\"BgTaskRotation\",\"debugId\":\"66002957-fcfd-4efb-a20e-010f69665252|2024-03-24T13:23:36.5639783Z|fabric_winfeed|WEU|WinFeed_200\",\"relatedCardId\":-1,\"contentType\":\"Weather_NormalWeather_SevereWeather_wxswysn_TkBs-0\",\"widgetsTelemetryId\":\"{1e967e74-5df9-47fe-ae4c-a8d163acfca3}\"}"
 Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "(default)" -Value "1"
-Set-ItemProperty -Path $sabRegPath\Recolor -Name "(default)" -Value "0"
-# ...
-
-# Set-ItemProperty -Path $sabPath\DarkMagic -Name "Unround" -Value 0
-# Set-ItemProperty -Path $sabPath\DarkMagic -Name "DarkMode" -Value 1
+Set-ItemProperty -Path $sabPath\DarkMagic -Name "Unround" -Value 0
+Set-ItemProperty -Path $sabPath\DarkMagic -Name "DarkMode" -Value 1
 Stop-Process -Name Explorer -Force
 
 Write-Host "Configuring StartAllBack completed." -ForegroundColor Yellow
@@ -180,13 +177,10 @@ $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"
 # New-Item -Path $shellRegPath\ClassicExplorer\Settings -Force | Out-Null
 New-Item -Path $shellRegPath\StartMenu\Settings -Force | Out-Null
 New-Item -Path $shellRegPath\OpenShell\Settings -Force | Out-Null
-Remove-Item -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "ShowedToolbar"
-Remove-Item -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "NewLine"
-Remove-Item -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "CSettingsDlg"
-Remove-Item -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Force
-# Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "ShowedToolbar" -Value 0x00000000
-# Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "NewLine" -Value 0x00000000
-# Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "CSettingsDlg" -Value ([byte[]](0x38, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x08, 0x00, 0x00, 0x00, 0x00, 0xb1, 0x70, 0x00, 0x00, 0x00))
+Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "ShowedToolbar" -Value 0x00000000
+Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "NewLine" -Value 0x00000000
+Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "CSettingsDlg" -Value ([byte[]](0x38, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x08, 0x00, 0x00, 0x00, 0x00, 0xb1, 0x70, 0x00, 0x00, 0x00))
+Remove-Item -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Recurse -Force
 # Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer\Settings" -Name "Version" -Value 0x040400bf
 # Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer\Settings" -Name "TreeStyle" -Value "Vista"
 # Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer\Settings" -Name "HScrollbar" -Value "Default"
