@@ -177,11 +177,11 @@ $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"
 # New-Item -Path $shellRegPath\ClassicExplorer\Settings -Force | Out-Null
 New-Item -Path $shellRegPath\StartMenu\Settings -Force | Out-Null
 New-Item -Path $shellRegPath\OpenShell\Settings -Force | Out-Null
-# Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "ShowedToolbar" -Value 0x00000000
-# Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "NewLine" -Value 0x00000000
-# Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "CSettingsDlg" -Value ([byte[]](0x38, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x08, 0x00, 0x00, 0x00, 0x00, 0xb1, 0x70, 0x00, 0x00, 0x00))
-Remove-Item -Path "HKCU:\Software\OpenShell\ClassicExplorer\Settings" -Recurse -Force
-Remove-Item -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Recurse -Force
+Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "ShowedToolbar" -Value 0x00000000
+Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "NewLine" -Value 0x00000000
+Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "CSettingsDlg" -Value ([byte[]](0x38, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x08, 0x00, 0x00, 0x00, 0x00, 0xb1, 0x70, 0x00, 0x00, 0x00))
+# Remove-Item -Path "HKCU:\Software\OpenShell\ClassicExplorer\Settings" -Recurse -Force
+# Remove-Item -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Recurse -Force
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer\Settings" -Name "Version" -Value 0x040400bf
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer\Settings" -Name "TreeStyle" -Value "Vista"
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer\Settings" -Name "HScrollbar" -Value "Default"
