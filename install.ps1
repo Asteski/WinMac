@@ -222,6 +222,7 @@ Copy-Item -Path "$pwd\config\WinX\" -Destination "$env:LOCALAPPDATA\Microsoft\Wi
 Start-Process explorer
 Start-Sleep -Seconds 3
 Start-Process explorer
+Start-Sleep -Seconds 3
 Add-Type -TypeDefinition @"
     using System;
     using System.Runtime.InteropServices;
@@ -255,10 +256,10 @@ Start-Sleep -Milliseconds 100
 [Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
 [Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
 Start-Sleep -Milliseconds 100
-[Keyboard]::keybd_event($VK_MENU, 0, 0, 0) # Alt key press
-[Keyboard]::keybd_event($VK_F4, 0, 0, 0) # F4 key press
-[Keyboard]::keybd_event($VK_F4, 0, $KEYEVENTF_KEYUP, 0) # F4 key release
-[Keyboard]::keybd_event($VK_MENU, 0, $KEYEVENTF_KEYUP, 0) # Alt key release
+# [Keyboard]::keybd_event($VK_MENU, 0, 0, 0) # Alt key press
+# [Keyboard]::keybd_event($VK_F4, 0, 0, 0) # F4 key press
+# [Keyboard]::keybd_event($VK_F4, 0, $KEYEVENTF_KEYUP, 0) # F4 key release
+# [Keyboard]::keybd_event($VK_MENU, 0, $KEYEVENTF_KEYUP, 0) # Alt key release
 
 ## ! FIXME: Define ps subfolder in the project and use it to copy the function to the profile
 # function WinMac {    
