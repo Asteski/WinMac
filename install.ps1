@@ -11,19 +11,19 @@
 #################################################################################
 
 # TODO:
-# ! Force Taskbar to go on top automatically after installation
-# ! Fix adding WinMac cmd to $profile
+# !! Force Taskbar to go on top automatically
+# !! Modify Start menu/Win key actions
+# ! Update $profile
 # ! Add winget and prockill pliugins to PowerToys
-# ? KeePass or BitWarden
-# ? VMWare Workstation Pro
-# * Import VSC settings, keybindings, extensions, snippets
-# * Import Terminal profiles
-# * Import Windows Terminal settings
-# * Import StartAllBack license
-# * Find a way to apply middle-mouse button closing app with registry
-# * Find a way to apply start button behaviour with registry
-#   Add more packages to WinGet
-#   Import $profile and ~/.bash_aliases
+# * Create WinMac Control Panel UWP app:
+#   * Add setting to modify middle-mouse button behaviour on taskbar
+#   * Taskbar Position
+#   * Taskbar Alignment
+#   * Taskbar Combine
+#   * Taskbar Size
+#   * Taskbar Transparency
+#   * Explorer Mode
+#   * Tools section PowerToys, StartAllBack, Everything, WinX, AutoDarkMode
 
 # Clear-Host
 Write-Host @"
@@ -156,7 +156,7 @@ Set-ItemProperty -Path $sabPath -Name "WinkeyFunction" -Value 0
 Set-ItemProperty -Path $sabPath -Name "TaskbarJumpList" -Value 1
 Set-ItemProperty -Path $sabPath -Name "TaskbarOneSegment" -Value 0
 Set-ItemProperty -Path $sabPath -Name "TaskbarCenterIcons" -Value 1
-Set-ItemProperty -Path $sabPath -Name "TaskbarTranslucentEffect" -Value 1
+Set-ItemProperty -Path $sabPath -Name "TaskbarTranslucentEffect" -Value 0
 Set-ItemProperty -Path $sabPath -Name "SysTrayActionCenter" -Value 0
 Set-ItemProperty -Path $sabPath -Name "TaskbarLargerIcons" -Value 0
 Set-ItemProperty -Path $sabPath -Name "UndeadControlPanel" -Value 1
