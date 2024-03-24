@@ -254,12 +254,15 @@ Use 'winmac' command to get the version of WinMac.
 
 "@ -ForegroundColor Cyan
 
-Start-Sleep 2
+Start-Sleep 1
 Write-Host "This is Work in Progress. Use at your own risk!" -ForegroundColor Magenta
 
 # ! Restart Computer
-# Start-Sleep 2
-# Write-Host "Windows will restart in 5 seconds..." -ForegroundColor Red
-# Start-Sleep 5
-# Restart-Computer -Force
-# EOF
+Start-Sleep 2
+Write-Host "Windows will re start in:" -ForegroundColor Red
+for ($i = 5; $i -ge 1; $i--) {
+    Write-Host $i -ForegroundColor Red
+    Start-Sleep 1
+}
+Restart-Computer -Force
+EOF
