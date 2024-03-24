@@ -208,7 +208,23 @@ Set-ItemProperty -Path $sabPath\DarkMagic -Name "Unround" -Value 0
 
 Start-Process explorer.exe
 
-Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
+Write-Host "Configuring Open Shell..." -ForegroundColor Yellow
+
+winget install --id "Open-Shell.Open-Shell-Menu" --silent --no-upgrade
+
+taskkill /f /im explorer.exe
+
+$exePath = Join-Path $pwd\bin "WinX.exe"
+$process = Start-Process -FilePath $exePath -WindowStyle Minimized -PassThru
+Start-Sleep -Seconds 2
+$process.CloseMainWindow()
+$process.WaitForExit()
+
+Copy-Item -Path "$pwd\etc\WinX\*" -Destination $env:LOCALAPPDATA\Microsoft\Windows\WinX\* -Recurse
+
+Start-Process explorer.exe
+
+Write-Host "Configuration completed." -ForegroundColor Green
 
 ## ! FIXME: Define ps subfolder in the project and use it to copy the function to the profile
 # function WinMac {    
