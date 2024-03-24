@@ -1,0 +1,12 @@
+SetWorkingDir %A_ScriptDir%bin
+CoordMode(Mouse, Screen)
+
+~LButton::
+MouseGetPos(x := 0, y := 0)
+{
+    if (x > 0 and x < 50 and y > 970 and y < 1080)
+    {
+        Run(start.exe)
+    }
+}
+return

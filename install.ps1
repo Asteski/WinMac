@@ -180,34 +180,48 @@ Write-Host "Configuring Shell..." -ForegroundColor Yellow
 # winget install --id "Open-Shell.Open-Shell-Menu" --silent --no-upgrade
 taskkill /f /im explorer.exe
 # New-Item -ItemType Directory -Force -Path "$env:LOCALAPPDATA\OpenShell"
-# Copy-Item -Path "$pwd\etc\OpenShell\DataCache.db" -Destination "$env:LOCALAPPDATA\OpenShell\DataCache.db"
+# Copy-Item -Path "$pwd\config\OpenShell\DataCache.db" -Destination "$env:LOCALAPPDATA\OpenShell\DataCache.db"
 
-Add-Type -TypeDefinition @"
-using Microsoft.Win32;
-class Program
-{
-    static void Main()
-    {
-        string currentDirectory = Directory.GetCurrentDirectory();
-        string folderName = "bin";
-        string exePath = Path.Combine(currentDirectory, folderName, "startmenu.exe");
-        RegistryKey startMenuKey = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", true);
-        startMenuKey.SetValue("StartMenuInit", exePath);
-        startMenuKey.Close();
-    }
+# ! FIXME: not working
+# Add-Type -TypeDefinition @"
+# using Microsoft.Win32;
+# class Program
+# {
+#     static void Main()
+#     {
+#         string currentDirectory = Directory.GetCurrentDirectory();
+#         string folderName = "bin";
+#         string exePath = Path.Combine(currentDirectory, folderName, "start.exe");
+#         RegistryKey startMenuKey = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", true);
+#         startMenuKey.SetValue("StartMenuInit", exePath);
+#         startMenuKey.Close();
+#     }
+# }
+# "@
+# [Program]::Main()
+
+$startexePath = Join-Path $pwd\bin "start.exe"
+if (-not (Test-Path $startexePath)) {
+    Write-Host "start.exe not found at path: $startexePath" -ForegroundColor Red
+    exit 1
 }
-"@
-[Program]::Main()
+$registryPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+$registryKey = Get-Item -LiteralPath $registryPath
+if ($null -eq $registryKey) {
+    $registryKey = New-Item -Path $registryPath -Force
+}
 
-Start-Process explorer.exe
-$exePath = Join-Path $pwd\bin "WinX.exe"
-$process = Start-Process -FilePath $exePath -WindowStyle Minimized -PassThru
+Set-ItemProperty -Path $registryPath -Name "StartMenuInit" -Value $startexePath
+Stop-Process -Name explorer -Force
+Start-Process explorer
+$winexePath = Join-Path $pwd\bin "WinX.exe"
+$process = Start-Process -FilePath $winexe -WindowStyle Minimized -PassThru
 Start-Sleep -Seconds 2
 $process.CloseMainWindow()
 $process.WaitForExit()
-taskkill /f /im explorer.exe
-Copy-Item -Path "$pwd\etc\WinX\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
-Start-Process explorer.exe
+taskkill /f /im explorer
+Copy-Item -Path "$pwd\config\WinX\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
+Start-Process explorer
 
 Write-Host "Configuration completed." -ForegroundColor Green
 
