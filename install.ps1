@@ -24,7 +24,7 @@ v###############################################################################
 #   Add more packages to WinGet
 #   Import $profile and ~/.bash_aliases
 
-Clear-Host
+# Clear-Host
 Write-Host @"
 ------------------------ WinMac Deployment ------------------------ 
 
@@ -207,6 +207,8 @@ Write-Host "Configuring Open Shell..." -ForegroundColor Yellow
 
 winget install --id "Open-Shell.Open-Shell-Menu" --silent --no-upgrade
 taskkill /f /im explorer.exe
+New-Item -ItemType Directory -Force -Path "$env:LOCALAPPDATA\OpenShell"
+Copy-Item -Path "$pwd\etc\OpenShell\DataCache.db" -Destination "$env:LOCALAPPDATA\OpenShell\DataCache.db"
 Start-Process explorer.exe
 $exePath = Join-Path $pwd\bin "WinX.exe"
 $process = Start-Process -FilePath $exePath -WindowStyle Minimized -PassThru
