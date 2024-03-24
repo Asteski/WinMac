@@ -137,7 +137,7 @@ Set-ItemProperty -Path $explorerPath\Advanced -Name "TaskbarSi" -Value 0
 Set-ItemProperty -Path $explorerPath\Advanced -Name "TaskbarAl" -Value 0
 Set-ItemProperty -Path $explorerPath\Advanced -Name "UseCompactMode" -Value 1
 # Set-ItemProperty -Path $explorerPath\StuckRects3 -Name "Settings" -Value ([byte[]](0x30,0x00,0x00,0x00,0xfe,0xff,0xff,0xff,0x7a,0xf4,0x00,0x00,0x01,0x00,0x00,0x00,0x3c,0x00,0x00,0x00,0x3c,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xfc,0x03,0x00,0x00,0x80,0x07,0x00,0x00,0x38,0x04,0x00,0x00,0x78,0x00,0x00,0x00,0x01,0x00,0x00,0x00))# reg import $pwd\tb-top.reg
-winget install --id "StartIsBack.StartAllBack" --silent --no-upgrade
+winget install --id "StartIsBack.StartAllBack" --silent --no-upgrade | Out-Null
 Set-ItemProperty -Path $sabRegPath -Name "WinBuild" -Value 22759
 Set-ItemProperty -Path $sabRegPath -Name "WinLangID" -Value 2064
 Set-ItemProperty -Path $sabRegPath -Name "ModernIconsColorized" -Value 0
@@ -170,7 +170,7 @@ Write-Host "Configuring StartAllBack completed." -ForegroundColor Yellow
 
 Write-Host "Configuring Shell..." -ForegroundColor Yellow
 
-winget install --id "Open-Shell.Open-Shell-Menu" --no-upgrade
+winget install --id "Open-Shell.Open-Shell-Menu" --no-upgrade | Out-Null
 Start-Sleep -Seconds 5
 Stop-Process -Name StartMenu -Force
 $shellRegPath = "HKCU:\Software\OpenShell"
