@@ -178,9 +178,9 @@ Stop-Process -Name StartMenu -Force
 $shellRegPath = "HKCU:\Software\OpenShell"
 $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"
 
-New-Item -Path $shellRegPath\ClassicExplorer\Settings -Force
-New-Item -Path $shellRegPath\StartMenu\Settings -Force
-New-Item -Path $shellRegPath\OpenShell\Settings -Force
+New-Item -Path $shellRegPath\ClassicExplorer\Settings -Force | Out-Null
+New-Item -Path $shellRegPath\StartMenu\Settings -Force | Out-Null
+New-Item -Path $shellRegPath\OpenShell\Settings -Force | Out-Null
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "ShowedToolbar" -Value 0x00000000
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "NewLine" -Value 0x00000000
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "CSettingsDlg" -Value ([byte[]](0x38, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x08, 0x00, 0x00, 0x00, 0x00, 0xb1, 0x70, 0x00, 0x00, 0x00))
@@ -216,9 +216,9 @@ Start-Process $shellExePath
 $winexePath = Join-Path $pwd\bin "winx.exe"
 $process = Start-Process -FilePath $winexePath -WindowStyle Minimized -PassThru
 Start-Sleep -Seconds 5
-$process.CloseMainWindow()
-$process.WaitForExit()
-taskkill /IM explorer.exe /F
+$process.CloseMainWindow() | Out-Null
+$process.WaitForExit() | Out-Null
+taskkill /IM explorer.exe /F | Out-Null
 Start-Sleep -Seconds 3
 Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
 Copy-Item -Path "$pwd\config\WinX\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
