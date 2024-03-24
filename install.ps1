@@ -181,9 +181,9 @@ taskill /IM explorer.exe /F
 Start-Sleep -Seconds 3
 Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
 Copy-Item -Path "$pwd\config\WinX\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
-$ahkPath = Join-Path $pwd\bin "ahk.exe"
+$ahkPath = Join-Path $pwd "ahk.exe"
 if (-not (Test-Path $ahkPath)) {
-    Write-Host "ahk.exe not found at path: $exePath" -ForegroundColor Red
+    Write-Host "ahk.exe not found at path: $ahkPath" -ForegroundColor Red
     exit 1
 }
 $registryPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
