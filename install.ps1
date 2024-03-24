@@ -175,11 +175,11 @@ Start-Sleep -Seconds 5
 Stop-Process -Name StartMenu -Force
 $shellRegPath = "HKCU:\Software\OpenShell"
 $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"
-# New-Item -Path $shellRegPath\ClassicExplorer\Settings -Force | Out-Null
 # Remove-Item -Path "HKCU:\Software\OpenShell\ClassicExplorer\Settings" -Recurse -Force
 # Remove-Item -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Recurse -Force
 New-Item -Path $shellRegPath\StartMenu\Settings -Force | Out-Null
 New-Item -Path $shellRegPath\OpenShell\Settings -Force | Out-Null
+New-Item -Path $shellRegPath\ClassicExplorer\Settings -Force | Out-Null
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "ShowedToolbar" -Value 0
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "NewLine" -Value 0
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "CSettingsDlg" -Value ([byte[]](0,0,0,0,103,0,0,0,0,0,0,0,0,0,0,0,170,15,0,0,1,0,185,115,0,0,0,0))
