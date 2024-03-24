@@ -179,7 +179,7 @@ $shellRegPath = "HKCU:\Software\OpenShell"
 $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"
 
 New-Item -Path $shellRegPath\ClassicExplorer\Settings -Force
-New-Item -Path $shellRegPath\StartMenu\Settings11 -Force
+New-Item -Path $shellRegPath\StartMenu\Settings -Force
 New-Item -Path $shellRegPath\OpenShell\Settings -Force
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "ShowedToolbar" -Value 0x00000001
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "NewLine" -Value 0x00000000
