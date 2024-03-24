@@ -169,22 +169,17 @@ Set-ItemProperty -Path $sabRegPath\Recolor -Name "(default)" -Value "0"
 Stop-Process -Name Explorer -Force
 Write-Host "Configuring StartAllBack completed." -ForegroundColor Yellow
 Write-Host "Configuring Shell..." -ForegroundColor Yellow
- # winget install --id "Open-Shell.Open-Shell-Menu" --silent --no-upgrade
-# New-Item -ItemType Directory -Force -Path "$env:LOCALAPPDATA\OpenShell"
-# Copy-Item -Path "$pwd\config\OpenShell\DataCache.db" -Destination "$env:LOCALAPPDATA\OpenShell\DataCache.db"
+winget install --id "Open-Shell.Open-Shell-Menu" --silent --no-upgrade
 $winexePath = Join-Path $pwd\bin "winx.exe"
 $process = Start-Process -FilePath $winexePath -WindowStyle Minimized -PassThru
 Start-Sleep -Seconds 5
 $process.CloseMainWindow()
 $process.WaitForExit()
-taskill /IM explorer.exe /F
+taskkill /IM explorer.exe /F
 Start-Sleep -Seconds 3
 Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
 Copy-Item -Path "$pwd\config\WinX\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
-$ahkPath = Join-Path $pwd "ahk.exe"
-$registryPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
-Set-ItemProperty -Path $registryPath -Name "AutoHotKeyScript" -Value $ahkPath
-Write-Host "Configuring Shell completed." -ForegroundColor Green
+Start-Process Explorer
 
 ## ! FIXME: Define ps subfolder in the project and use it to copy the function to the profile
 # function WinMac {    
