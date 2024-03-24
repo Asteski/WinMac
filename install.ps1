@@ -299,7 +299,7 @@ Write-Host "This is Work in Progress. Use at your own risk!" -ForegroundColor Ma
 # ! Restart Computer
 Start-Sleep 2
 Write-Host "Windows will re start in:" -ForegroundColor Red
-for ($i = 20; $i -ge 1; $i--) {
+for ($i = 10; $i -ge 1; $i--) {
     Write-Host $i -ForegroundColor Red
     Start-Sleep 1
 }
