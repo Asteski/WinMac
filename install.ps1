@@ -1,3 +1,4 @@
+using Microsoft.Win32;
 #################################################################################
 #                                                                               #
 #                                                                               #
@@ -210,8 +211,6 @@ Write-Host "Configuring Shell..." -ForegroundColor Yellow
 taskkill /f /im explorer.exe
 # New-Item -ItemType Directory -Force -Path "$env:LOCALAPPDATA\OpenShell"
 # Copy-Item -Path "$pwd\etc\OpenShell\DataCache.db" -Destination "$env:LOCALAPPDATA\OpenShell\DataCache.db"
-
-using Microsoft.Win32;
 
 class Program
 {
