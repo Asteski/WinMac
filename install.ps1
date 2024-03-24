@@ -207,14 +207,14 @@ if (-not (Test-Path $startexePath)) {
 }
 $registryPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
 $registryKey = Get-Item -LiteralPath $registryPath
-if ($null -eq $registryKey) {
+if ($null -eq $registryKey) { 
     $registryKey = New-Item -Path $registryPath -Force
 }
-
 Set-ItemProperty -Path $registryPath -Name "StartMenuInit" -Value $startexePath
+
 Start-Process explorer
-$winexePath = Join-Path $pwd\bin "WinX.exe"
-$process = Start-Process -FilePath $winexe -WindowStyle Minimized -PassThru
+$winexePath = Join-Path $pwd\bin "winx.exe"
+$process = Start-Process -FilePath $winexePath -WindowStyle Minimized -PassThru
 Start-Sleep -Seconds 2
 $process.CloseMainWindow()
 $process.WaitForExit()
