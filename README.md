@@ -8,7 +8,7 @@
 
 ### WinMac User Interface changes:
 
-#### Spotlight-like Feature with enhanced search
+#### Spotlight-like feature
 TBA
 
 #### Revamped Start Menu
