@@ -1,11 +1,11 @@
 #################################################################################
 #                                                                               #
 #                                                                               #
-#                    WinMac deployment script - WinMac.ps1                      #
+#                           WinMac deployment script                            #
 #                                                                               #
+#                               Version: 0.0.7                                  #
 #                           Author: Adam Kamienski                              #
 #                               GitHub: Asteski                                 #
-#                               Version: 0.0.7                                  #
 #                                                                               #
 #                                                                               #
 #################################################################################
@@ -14,20 +14,22 @@
 # !! Force Taskbar to go on top in StartAllBack
 # ! Disable Status Bar (in both Open-Shell and StartAllBack)
 # ! Disable Classic Explorer Bar & Icons
-# ! Add Apps folder in Quick Access
+# ! Pin Programs and User folder to Quick Access
 # ! Update $profile
-# ! Add winget and prockill pliugins to PowerToys
-# Disable ClassicExplorer in Open-Shell
-#   Modify Start menu/Win key actions
+# ! Add winget pliugin to PowerToys
+# * Configure Terminal with Pwsh, Bash and Zsh and apply OhMyPosh and OhMyZsh
 # * Create WinMac Control Panel UWP app:
-#   * Add setting to modify middle-mouse button behaviour on taskbar
+#   * Add setting to modify middle-mouse button behaviour on taskbar (close app, open new window)
 #   * Add setting to modify Start Menu options
-#   * Taskbar Position
-#   * Taskbar Alignment
-#   * Taskbar Size
-#   * Taskbar Transparency
-#   * Explorer Mode (Win11, Win10 or Win7)
-#   * Tools section PowerToys, StartAllBack, Everything, AutoDarkMode
+#   * Taskbar Position (top, bottom, left, right)
+#   * Taskbar Alignment (left, center, start button on left with app icons centered)
+#   * Taskbar Size (small, medium, large)
+#   * Taskbar Transparency (dynamic, static, off)
+#   * Explorer Mode (modern - Win11 mode, classic - Win7 mode)
+#   * Explorer Status Bar (on, off)
+# ? Gestures in Explorer
+#   Disable ClassicExplorer toolbar using keyboard input from install.ps1 script (Alt + V, →, Enter)
+#   Modify Start menu/Win key actions to emulate MacOS behaviour
 
 # Clear-Host
 Write-Host @"
@@ -58,13 +60,13 @@ Remove-Item -Path $installPath
 Write-Information "WinGet installation completed."
 
 $winget = @(
-    # "RamenSoftware.7+TaskbarTweaker",
-    "Open-Shell.Open-Shell-Menu",
-    "Armin2208.WindowsAutoNightMode",
-    "JanDeDobbeleer.OhMyPosh",
-    "Microsoft.PowerToys",
-    "Voidtools.Everything",
-    "lin-ycv.EverythingPowerToys"
+# "RamenSoftware.7+TaskbarTweaker", # Manage middle-mouse click on taskbar
+"Open-Shell.Open-Shell-Menu",
+"Armin2208.WindowsAutoNightMode",
+"JanDeDobbeleer.OhMyPosh",
+"Microsoft.PowerToys",
+"Voidtools.Everything",
+"lin-ycv.EverythingPowerToys"
 )
 
 Write-Host @"
@@ -97,8 +99,8 @@ Copy-item $pwd\ProcessKiller -Destination $plugins -Recurse -Force
 
 $PowerToysProc = Get-Process -Name PowerToys*
 ForEach ($proc in $PowerToysProc) {
-    $proc.WaitForExit(10000)
-    $proc.Kill()
+$proc.WaitForExit(10000)
+$proc.Kill()
 }
 
 $powerToysPath = $env:LOCALAPPDATA + '\PowerToys\PowerToys.exe'
@@ -169,38 +171,40 @@ Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "(default)" -Value "1"
 Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0
 Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
 Stop-Process -Name Explorer -Force
+
 Write-Host "Configuring StartAllBack completed." -ForegroundColor Yellow
 
 Write-Host "Configuring Shell..." -ForegroundColor Yellow
 
-$shortcutPath = Join-Path $pwd "config\QuickAccess\Programs.lnk"
-
-$folderPath = "C:\ProgramData\Microsoft\Windows\Start Menu\Programs"
-$dllPath = Join-Path $env:SYSTEMROOT "\system32\imageres.dll"
-$iconIndex = 16
-$shell = New-Object -ComObject Shell.Application
-$folder = $shell.Namespace($folderPath)
-$folderItem = $folder.Self
-$iconPath = $dllPath + ",$iconIndex"
-$folderItem.IconLocation = $iconPath
-$folderItem.Save()
-
+Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
+# $programsLnkPath = Join-Path $pwd "config\Programs.lnk"
+# $folderPath = "C:\ProgramData\Microsoft\Windows\Start Menu\Programs"
+# $dllPath = Join-Path $env:SYSTEMROOT "\system32\imageres.dll"
+# $iconIndex = 16
+# $shell = New-Object -ComObject Shell.Application
+# $folder = $shell.Namespace($folderPath)
+# $folderItem = $folder.Self
+# $iconPath = $dllPath + ",$iconIndex"
+# $folderItem.IconLocation = $iconPath
+# $folderItem.Save()
 $programsDir = "C:\ProgramData\Microsoft\Windows\Start Menu\Programs"
 $userDir = "C:\Users\$env:USERNAME"
-$desktopIni = @"
-[.ShellClassInfo]
-IconResource=C:\WINDOWS\System32\imageres.dll,32
-"@
-
-# TODO: assign speific icon to programs and user folder before pinning to Quick Access
+# TODO: assign specific icons to programs and user folder before pinning to Quick Access
+# $desktopIni = @"
+# [.ShellClassInfo]
+# IconResource=C:\WINDOWS\System32\imageres.dll,32
+# "@
 # Add-Content "$($targetDir)\desktop.ini" -Value $desktopIni
 # (Get-Item "$($targetDir)\desktop.ini" -Force).Attributes = 'Hidden, System, Archive'
 # (Get-Item $targetDir -Force).Attributes = 'ReadOnly, Directory'
-
-$qa = new-object -com shell.application
-$qa.Namespace($targetPath).Self.InvokeVerb("pintohome")
+$programsPin = new-object -com shell.application
+$programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome")
+$userPin = new-object -com shell.application
+$userPin.Namespace($userDir).Self.InvokeVerb("pintohome")
 
 winget install --id "Open-Shell.Open-Shell-Menu" --no-upgrade | Out-Null
+
 Start-Sleep -Seconds 5
 Stop-Process -Name StartMenu -Force
 $shellRegPath = "HKCU:\Software\OpenShell"
@@ -209,7 +213,6 @@ $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"
 # Remove-Item -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Recurse -Force
 New-Item -Path $shellRegPath\StartMenu\Settings -Force | Out-Null
 New-Item -Path $shellRegPath\OpenShell\Settings -Force | Out-Null
-New-Item -Path $shellRegPath\ClassicExplorer\Settings -Force | Out-Null
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "ShowedToolbar" -Value 0
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "NewLine" -Value 0
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "CSettingsDlg" -Value ([byte[]](0,0,0,0,103,0,0,0,0,0,0,0,0,0,0,0,170,15,0,0,1,0,185,115,0,0,0,0))
@@ -327,12 +330,12 @@ Use 'winmac' command to get the version of WinMac.
 Start-Sleep 1
 Write-Host "This is Work in Progress. Use at your own risk!" -ForegroundColor Magenta
 
-# ! Restart Computer
-Start-Sleep 2
-Write-Host "Windows will re start in:" -ForegroundColor Red
-for ($i = 10; $i -ge 1; $i--) {
-    Write-Host $i -ForegroundColor Red
-    Start-Sleep 1
-}
-Restart-Computer -Force
-EOF
+# ! Restart Computer after deployment - Recommened for full effect
+# Start-Sleep 2
+# Write-Host "Windows will re start in:" -ForegroundColor Red
+# for ($i = 10; $i -ge 1; $i--) {
+#     Write-Host $i -ForegroundColor Red
+#     Start-Sleep 1
+# }
+# Restart-Computer -Force
+# EOF
