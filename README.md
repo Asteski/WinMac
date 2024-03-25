@@ -30,4 +30,4 @@ TBA
 
 Discover the future of computing with WinMac, where the power of Windows meets the elegance of macOS in perfect harmony. Upgrade to WinMac and elevate your computing experience to new heights!
 
-Please be informed this is alpha version - you're installing it at your own risk!!
+Please be informed that this is an alpha version - you're installing it at your own risk!!
