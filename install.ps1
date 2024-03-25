@@ -13,6 +13,7 @@
 # TODO:
 # !! Force Taskbar to go on top in StartAllBack
 # ! Disable Status Bar in Open-Shell
+# ! Add Apps folder in Quick Access
 # ! Update $profile
 # ! Add winget and prockill pliugins to PowerToys
 # Disable ClassicExplorer in Open-Shell
@@ -136,8 +137,9 @@ Set-ItemProperty -Path $explorerPath\Advanced -Name "TaskbarSmallIcons" -Value 1
 Set-ItemProperty -Path $explorerPath\Advanced -Name "TaskbarSi" -Value 0
 Set-ItemProperty -Path $explorerPath\Advanced -Name "TaskbarAl" -Value 0
 Set-ItemProperty -Path $explorerPath\Advanced -Name "UseCompactMode" -Value 1
-# Set-ItemProperty -Path $explorerPath\StuckRects3 -Name "Settings" -Value ([byte[]](0x30,0x00,0x00,0x00,0xfe,0xff,0xff,0xff,0x7a,0xf4,0x00,0x00,0x01,0x00,0x00,0x00,0x3c,0x00,0x00,0x00,0x3c,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xfc,0x03,0x00,0x00,0x80,0x07,0x00,0x00,0x38,0x04,0x00,0x00,0x78,0x00,0x00,0x00,0x01,0x00,0x00,0x00))# reg import $pwd\tb-top.reg
+
 winget install --id "StartIsBack.StartAllBack" --silent --no-upgrade | Out-Null
+
 Set-ItemProperty -Path $sabRegPath -Name "WinBuild" -Value 22759
 Set-ItemProperty -Path $sabRegPath -Name "WinLangID" -Value 2064
 Set-ItemProperty -Path $sabRegPath -Name "ModernIconsColorized" -Value 0
@@ -165,10 +167,41 @@ Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "(default)" -Value "1"
 Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0
 Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
 Stop-Process -Name Explorer -Force
-
 Write-Host "Configuring StartAllBack completed." -ForegroundColor Yellow
 
 Write-Host "Configuring Shell..." -ForegroundColor Yellow
+
+$shortcutPath = Join-Path $pwd "config\QuickAccess\Programs.lnk"
+
+$folderPath = "C:\ProgramData\Microsoft\Windows\Start Menu\Programs"
+$dllPath = Join-Path $env:SYSTEMROOT "\system32\imageres.dll"
+$iconIndex = 16
+$shell = New-Object -ComObject Shell.Application
+$folder = $shell.Namespace($folderPath)
+$folderItem = $folder.Self
+$iconPath = $dllPath + ",$iconIndex"
+$folderItem.IconLocation = $iconPath
+$folderItem.Save()
+
+$TargetDirectory = "C:\ProgramData\Microsoft\Windows\Start Menu\Programs"
+
+$DesktopIni = @"
+[.ShellClassInfo]
+IconResource=C:\WINDOWS\System32\imageres.dll,32
+"@
+
+If (Test-Path "$($TargetDirectory)\desktop.ini")  {
+  Write-Warning "The desktop.ini file already exists."
+} Else {
+  Add-Content "$($TargetDirectory)\desktop.ini" -Value $DesktopIni
+  (Get-Item "$($TargetDirectory)\desktop.ini" -Force).Attributes = 'Hidden, System, Archive'
+  (Get-Item $TargetDirectory -Force).Attributes = 'ReadOnly, Directory'
+}
+
+
+
+$qa = new-object -com shell.application
+$qa.Namespace($targetPath).Self.InvokeVerb("pintohome")
 
 winget install --id "Open-Shell.Open-Shell-Menu" --no-upgrade | Out-Null
 Start-Sleep -Seconds 5
