@@ -21,13 +21,13 @@
 #   Modify Start menu/Win key actions
 # * Create WinMac Control Panel UWP app:
 #   * Add setting to modify middle-mouse button behaviour on taskbar
+#   * Add setting to modify Start Menu options
 #   * Taskbar Position
 #   * Taskbar Alignment
-#   * Taskbar Combine
 #   * Taskbar Size
 #   * Taskbar Transparency
-#   * Explorer Mode
-#   * Tools section PowerToys, StartAllBack, Everything, WinX, AutoDarkMode
+#   * Explorer Mode (Win11, Win10 or Win7)
+#   * Tools section PowerToys, StartAllBack, Everything, AutoDarkMode
 
 # Clear-Host
 Write-Host @"
@@ -70,7 +70,7 @@ $winget = @(
 Write-Host @"
 Installing Packages:
 
-# "@ -ForegroundColor Yellow
+"@ -ForegroundColor Yellow
 
 foreach ($app in $winget) {winget install --id $app --no-upgrade --silent}
 
@@ -102,7 +102,7 @@ ForEach ($proc in $PowerToysProc) {
 }
 
 $powerToysPath = $env:LOCALAPPDATA + '\PowerToys\PowerToys.exe'
-Add-Content -Path "C:\Program Files\Everything\Everything.ini" -Value "show_tray_icon=0"
+# Add-Content -Path "C:\Program Files\Everything\Everything.ini" -Value "show_tray_icon=0" # ! Not working in non-admin mode
 Start-Process -FilePath $powerToysPath
 Remove-Item -Recurse -Force Winget
 Remove-Item -Recurse -Force ProcessKiller
@@ -185,22 +185,17 @@ $iconPath = $dllPath + ",$iconIndex"
 $folderItem.IconLocation = $iconPath
 $folderItem.Save()
 
-$TargetDirectory = "C:\ProgramData\Microsoft\Windows\Start Menu\Programs"
-
-$DesktopIni = @"
+$programsDir = "C:\ProgramData\Microsoft\Windows\Start Menu\Programs"
+$userDir = "C:\Users\$env:USERNAME"
+$desktopIni = @"
 [.ShellClassInfo]
 IconResource=C:\WINDOWS\System32\imageres.dll,32
 "@
 
-If (Test-Path "$($TargetDirectory)\desktop.ini")  {
-  Write-Warning "The desktop.ini file already exists."
-} Else {
-  Add-Content "$($TargetDirectory)\desktop.ini" -Value $DesktopIni
-  (Get-Item "$($TargetDirectory)\desktop.ini" -Force).Attributes = 'Hidden, System, Archive'
-  (Get-Item $TargetDirectory -Force).Attributes = 'ReadOnly, Directory'
-}
-
-
+# TODO: assign speific icon to programs and user folder before pinning to Quick Access
+# Add-Content "$($targetDir)\desktop.ini" -Value $desktopIni
+# (Get-Item "$($targetDir)\desktop.ini" -Force).Attributes = 'Hidden, System, Archive'
+# (Get-Item $targetDir -Force).Attributes = 'ReadOnly, Directory'
 
 $qa = new-object -com shell.application
 $qa.Namespace($targetPath).Self.InvokeVerb("pintohome")
