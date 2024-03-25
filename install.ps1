@@ -12,7 +12,8 @@
 
 # TODO:
 # !! Force Taskbar to go on top in StartAllBack
-# ! Disable Status Bar in Open-Shell
+# ! Disable Status Bar (in both Open-Shell and StartAllBack)
+# ! Disable Classic Explorer Bar & Icons
 # ! Add Apps folder in Quick Access
 # ! Update $profile
 # ! Add winget and prockill pliugins to PowerToys
@@ -56,57 +57,58 @@ Add-AppxPackage -Path $installPath
 Remove-Item -Path $installPath
 Write-Information "WinGet installation completed."
 
-# $winget = @(
-#     # "RamenSoftware.7+TaskbarTweaker",
-#     # "Open-Shell.Open-Shell-Menu",
-#     "Armin2208.WindowsAutoNightMode",
-#     "JanDeDobbeleer.OhMyPosh",
-#     "Microsoft.PowerToys",
-#     "Voidtools.Everything",
-#     "lin-ycv.EverythingPowerToys"
-# )
+$winget = @(
+    # "RamenSoftware.7+TaskbarTweaker",
+    "Open-Shell.Open-Shell-Menu",
+    "Armin2208.WindowsAutoNightMode",
+    "JanDeDobbeleer.OhMyPosh",
+    "Microsoft.PowerToys",
+    "Voidtools.Everything",
+    "lin-ycv.EverythingPowerToys"
+)
 
-# Write-Host @"
-# Installing Packages:
-
-# "@ -ForegroundColor Yellow
-
-# foreach ($app in $winget) {winget install --id $app --no-upgrade --silent}
-
-# Write-Host "Installing Packages completed." -ForegroundColor Green
-
-## PowerToys
-
-# Write-Host @"
-# Configuring PowerToys...
+Write-Host @"
+Installing Packages:
 
 # "@ -ForegroundColor Yellow
 
-# $plugins = $env:LOCALAPPDATA + '\Microsoft\PowerToys\'
-# $winget = 'https://github.com/bostrot/PowerToysRunPluginWinget/releases/download/v1.2.3/winget-powertoys-1.2.3.zip'
-# $prockill = 'https://github.com/8LWXpg/PowerToysRun-ProcessKiller/releases/download/v1.0.1/ProcessKiller-v1.0.1-x64.zip'
+foreach ($app in $winget) {winget install --id $app --no-upgrade --silent}
 
-# Get-Process -Name PowerToys* | Stop-Process -Force
-# Invoke-WebRequest -uri $winget -Method "GET" -Outfile 'winget.zip'
-# Invoke-WebRequest -uri $prockill -Method "GET" -Outfile 'prockill.zip'
-# Expand-Archive 'winget.zip' -DestinationPath $pwd\Winget -Force
-# Expand-Archive 'prockill.zip' -DestinationPath $pwd -Force
-# Copy-item $pwd\Winget -Destination $plugins -Recurse -Force
-# Copy-item $pwd\ProcessKiller -Destination $plugins -Recurse -Force
+Write-Host "Installing Packages completed." -ForegroundColor Green
 
-# $PowerToysProc = Get-Process -Name PowerToys*
-# ForEach ($proc in $PowerToysProc) {
-#     $proc.WaitForExit(10000)
-#     $proc.Kill()
-# }
+# PowerToys
 
-# $powerToysPath = $env:LOCALAPPDATA + '\PowerToys\PowerToys.exe'
-# Add-Content -Path "C:\Program Files\Everything\Everything.ini" -Value "show_tray_icon=0"
-# Start-Process -FilePath $powerToysPath
-# Remove-Item -Recurse -Force Winget
-# Remove-Item -Recurse -Force ProcessKiller
-# Get-ChildItem * -Include *.zip -Recurse | Remove-Item -Force
-# Write-Host "Configuring PowerToys completed." -ForegroundColor Green
+Write-Host @"
+Configuring PowerToys...
+
+"@ -ForegroundColor Yellow
+
+$plugins = $env:LOCALAPPDATA + '\Microsoft\PowerToys\'
+$winget = 'https://github.com/bostrot/PowerToysRunPluginWinget/releases/download/v1.2.3/winget-powertoys-1.2.3.zip'
+$prockill = 'https://github.com/8LWXpg/PowerToysRun-ProcessKiller/releases/download/v1.0.1/ProcessKiller-v1.0.1-x64.zip'
+
+Get-Process -Name PowerToys* | Stop-Process -Force
+Invoke-WebRequest -uri $winget -Method "GET" -Outfile 'winget.zip'
+Invoke-WebRequest -uri $prockill -Method "GET" -Outfile 'prockill.zip'
+Expand-Archive 'winget.zip' -DestinationPath $pwd\Winget -Force
+Expand-Archive 'prockill.zip' -DestinationPath $pwd -Force
+Copy-item $pwd\Winget -Destination $plugins -Recurse -Force
+Copy-item $pwd\ProcessKiller -Destination $plugins -Recurse -Force
+
+$PowerToysProc = Get-Process -Name PowerToys*
+ForEach ($proc in $PowerToysProc) {
+    $proc.WaitForExit(10000)
+    $proc.Kill()
+}
+
+$powerToysPath = $env:LOCALAPPDATA + '\PowerToys\PowerToys.exe'
+Add-Content -Path "C:\Program Files\Everything\Everything.ini" -Value "show_tray_icon=0"
+Start-Process -FilePath $powerToysPath
+Remove-Item -Recurse -Force Winget
+Remove-Item -Recurse -Force ProcessKiller
+Get-ChildItem * -Include *.zip -Recurse | Remove-Item -Force
+
+Write-Host "Configuring PowerToys completed." -ForegroundColor Green
 
 ## StartAllBack
 
@@ -252,9 +254,9 @@ taskkill /IM explorer.exe /F | Out-Null
 Start-Sleep -Seconds 3
 Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
 Copy-Item -Path "$pwd\config\WinX\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
-Start-Process explorer
+Start-Process explorer # starts taskbar
 Start-Sleep -Seconds 3
-Start-Process explorer
+Start-Process explorer # starts explore windwos necessary to turn off classic explorer
 Start-Sleep -Seconds 3
 Add-Type -TypeDefinition @"
     using System;
