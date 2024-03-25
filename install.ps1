@@ -3,7 +3,7 @@
 #                                                                               #
 #                           WinMac deployment script                            #
 #                                                                               #
-#                               Version: 0.0.7                                  #
+#                               Version: 0.0.8                                  #
 #                           Author: Adam Kamienski                              #
 #                               GitHub: Asteski                                 #
 #                                                                               #
@@ -40,7 +40,7 @@ Welcome to WinMac Deployment!
 
 Author: Adam Kamienski
 GitHub: Asteski
-Version: 0.0.7
+Version: 0.0.8
 
 This is Work in Progress.
 
