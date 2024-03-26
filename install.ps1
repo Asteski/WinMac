@@ -123,20 +123,16 @@ $HWND_TOP = [IntPtr]::Zero
 $SWP_SHOWWINDOW = 0x0040
 [Taskbar]::SetWindowPos($taskbarHandle, $HWND_TOP, 0, 0, 0, 0, $SWP_SHOWWINDOW) | Out-Null
 winget install --id "StartIsBack.StartAllBack" --silent --no-upgrade | Out-Null
-$explorerPath = "$explorerPath\"
 $sabRegPath = "HKCU:\Software\StartIsBack"
-Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force
-New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
-Set-ItemProperty -Path "$explorerPath\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
-Set-ItemProperty -Path $explorerPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 1
-Set-ItemProperty -Path $explorerPath\Advanced -Name "ShowStatusBar" -Value 0
-Set-ItemProperty -Path $explorerPath\Advanced -Name "EnableSnapAssistFlyout" -Value 0
-Set-ItemProperty -Path $explorerPath\Advanced -Name "EnableSnapBar" -Value 0
-Set-ItemProperty -Path $explorerPath\Advanced -Name "TaskbarGlomLevel" -Value 1
-Set-ItemProperty -Path $explorerPath\Advanced -Name "TaskbarSmallIcons" -Value 1
-Set-ItemProperty -Path $explorerPath\Advanced -Name "TaskbarSi" -Value 0
-Set-ItemProperty -Path $explorerPath\Advanced -Name "TaskbarAl" -Value 0
-Set-ItemProperty -Path $explorerPath\Advanced -Name "UseCompactMode" -Value 1
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel" -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 1
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowStatusBar" -Value 0
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "EnableSnapAssistFlyout" -Value 0
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "EnableSnapBar" -Value 0
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "TaskbarGlomLevel" -Value 1
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "TaskbarSmallIcons" -Value 1
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "TaskbarSi" -Value 0
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "TaskbarAl" -Value 0
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "UseCompactMode" -Value 1
 Set-ItemProperty -Path $sabRegPath -Name "WinBuild" -Value 22759
 Set-ItemProperty -Path $sabRegPath -Name "WinLangID" -Value 2064
 Set-ItemProperty -Path $sabRegPath -Name "ModernIconsColorized" -Value 0
@@ -178,6 +174,9 @@ Remove-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Force
 # $shortcut.Save()
 # Copy-Item -Path $recycleBinShortcutPath -Destination $taskbarFolderPath -Force
 # Set-ItemProperty -Path $recycleBinPath -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 0
+Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force
+New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
 # $programsLnkPath = Join-Path $pwd "config\Programs.lnk"
 # $folderPath = "C:\ProgramData\Microsoft\Windows\Start Menu\Programs"
 # $dllPath = Join-Path $env:SYSTEMROOT "\system32\imageres.dll"
