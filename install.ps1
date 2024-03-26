@@ -49,6 +49,7 @@ This is Work in Progress.
 ## WinGet
 
 Write-Host "Checking for Windows Package Manager (WinGet)" -ForegroundColor Yellow
+
 $progressPreference = 'silentlyContinue'
 Write-Information "Downloading WinGet and its dependencies..."
 $wingetUrl = "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
@@ -58,7 +59,6 @@ Write-Information "Installing WinGet..."
 Add-AppxPackage -Path $installPath
 Remove-Item -Path $installPath
 Write-Information "WinGet installation completed."
-
 $winget = @(
 # "RamenSoftware.7+TaskbarTweaker", # Manage middle-mouse click on taskbar
 "Armin2208.WindowsAutoNightMode",
@@ -70,7 +70,6 @@ $winget = @(
 
 Write-Host @"
 Installing Packages:
-
 "@ -ForegroundColor Yellow
 
 foreach ($app in $winget) {winget install --id $app --no-upgrade --silent}
@@ -79,30 +78,23 @@ Write-Host "Installing Packages completed." -ForegroundColor Green
 
 # PowerToys
 
-Write-Host @"
-Configuring PowerToys...
-
-"@ -ForegroundColor Yellow
+Write-Host "Configuring PowerToys..." -ForegroundColor Yellow
 
 $plugins = $env:LOCALAPPDATA + '\Microsoft\PowerToys\'
 $winget = 'https://github.com/bostrot/PowerToysRunPluginWinget/releases/download/v1.2.3/winget-powertoys-1.2.3.zip'
 $prockill = 'https://github.com/8LWXpg/PowerToysRun-ProcessKiller/releases/download/v1.0.1/ProcessKiller-v1.0.1-x64.zip'
-
-Get-Process -Name PowerToys* | Stop-Process -Force
+$powerToysPath = $env:LOCALAPPDATA + '\PowerToys\PowerToys.exe'
+$PowerToysProc = Get-Process -Name PowerToys*
+ForEach ($proc in $PowerToysProc) {
+$proc.WaitForExit(10000)
+$proc.Kill()
+}
 Invoke-WebRequest -uri $winget -Method "GET" -Outfile 'winget.zip'
 Invoke-WebRequest -uri $prockill -Method "GET" -Outfile 'prockill.zip'
 Expand-Archive 'winget.zip' -DestinationPath $pwd\Winget -Force
 Expand-Archive 'prockill.zip' -DestinationPath $pwd -Force
 Copy-item $pwd\Winget -Destination $plugins -Recurse -Force
 Copy-item $pwd\ProcessKiller -Destination $plugins -Recurse -Force
-
-$PowerToysProc = Get-Process -Name PowerToys*
-ForEach ($proc in $PowerToysProc) {
-$proc.WaitForExit(10000)
-$proc.Kill()
-}
-
-$powerToysPath = $env:LOCALAPPDATA + '\PowerToys\PowerToys.exe'
 # Add-Content -Path "C:\Program Files\Everything\Everything.ini" -Value "show_tray_icon=0" # ! Not working in non-admin mode
 Start-Process -FilePath $powerToysPath
 Remove-Item -Recurse -Force Winget
@@ -118,7 +110,6 @@ Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
 Add-Type -TypeDefinition @"
 using System;
 using System.Runtime.InteropServices;
-
 public class Taskbar {
     [DllImport("user32.dll", SetLastError = true)]
     public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
@@ -127,12 +118,11 @@ public class Taskbar {
     public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
 }
 "@
-
 $taskbarHandle = [Taskbar]::FindWindow("Shell_TrayWnd", "")
 $HWND_TOP = [IntPtr]::Zero
 $SWP_SHOWWINDOW = 0x0040
 [Taskbar]::SetWindowPos($taskbarHandle, $HWND_TOP, 0, 0, 0, 0, $SWP_SHOWWINDOW) | Out-Null
-
+winget install --id "StartIsBack.StartAllBack" --silent --no-upgrade | Out-Null
 $explorerPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\"
 $sabRegPath = "HKCU:\Software\StartIsBack"
 Set-ItemProperty -Path $explorerPath\Advanced -Name "TaskbarGlomLevel" -Value 1
@@ -140,9 +130,6 @@ Set-ItemProperty -Path $explorerPath\Advanced -Name "TaskbarSmallIcons" -Value 1
 Set-ItemProperty -Path $explorerPath\Advanced -Name "TaskbarSi" -Value 0
 Set-ItemProperty -Path $explorerPath\Advanced -Name "TaskbarAl" -Value 0
 Set-ItemProperty -Path $explorerPath\Advanced -Name "UseCompactMode" -Value 1
-
-winget install --id "StartIsBack.StartAllBack" --silent --no-upgrade | Out-Null
-
 Set-ItemProperty -Path $sabRegPath -Name "WinBuild" -Value 22759
 Set-ItemProperty -Path $sabRegPath -Name "WinLangID" -Value 2064
 Set-ItemProperty -Path $sabRegPath -Name "ModernIconsColorized" -Value 0
@@ -177,7 +164,6 @@ Write-Host "Configuring Shell..." -ForegroundColor Yellow
 
 Remove-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Force
 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel" -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 1
-
 # $recycleBinShortcutPath = "$env:USERPROFILE\Desktop\Recycle Bin.lnk"
 # $taskbarFolderPath = "$env:APPDATA\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar"
 # $shell = New-Object -ComObject WScript.Shell
@@ -186,7 +172,6 @@ Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer
 # $shortcut.Save()
 # Copy-Item -Path $recycleBinShortcutPath -Destination $taskbarFolderPath -Force
 # Set-ItemProperty -Path $recycleBinPath -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 0
-
 Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force
 New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons"
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
@@ -214,14 +199,17 @@ $programsPin = new-object -com shell.application
 $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome")
 $userPin = new-object -com shell.application
 $userPin.Namespace($userDir).Self.InvokeVerb("pintohome")
-
 winget install --id "Open-Shell.Open-Shell-Menu" --no-upgrade | Out-Null
 Start-Sleep -Seconds 5
 $shellRegPath = "Registry::HKEY_CURRENT_USER\Software\OpenShell"
 $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"
-New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell\Settings" #| Out-Null
-New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu\Settings" #| Out-Null
-New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\ClassicExplorer\Settings" #| Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force #| Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force #| Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu" -Force #| Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\ClassicExplorer" -Force #| Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell\Settings" -Force #| Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu\Settings" -Force #| Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\ClassicExplorer\Settings" -Force #| Out-Null
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "ShowedToolbar" -Value 0
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "NewLine" -Value 0
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "CSettingsDlg" -Value ([byte[]](0,0,0,0,103,0,0,0,0,0,0,0,0,0,0,0,170,15,0,0,1,0,185,115,0,0,0,0))
