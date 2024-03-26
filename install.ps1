@@ -3,7 +3,7 @@
 #                                                                               #
 #                           WinMac deployment script                            #
 #                                                                               #
-#                               Version: 0.0.8                                  #
+#                               Version: 0.0.9                                  #
 #                           Author: Adam Kamienski                              #
 #                               GitHub: Asteski                                 #
 #                                                                               #
@@ -12,11 +12,9 @@
 
 # TODO:
 # !! Force Taskbar to go on top in StartAllBack
-# ! Disable Status Bar (in both Open-Shell and StartAllBack)
-# ! Disable Classic Explorer Bar & Icons
-# ! Pin Programs and User folder to Quick Access
-# ! Update $profile
-# ! Add winget pliugin to PowerToys
+# ! Modify desktop.ini Programs and User folder to change icon
+# ! Add winget plugin to PowerToys
+# * Update $profile
 # * Configure Terminal with Pwsh, Bash and Zsh and apply OhMyPosh and OhMyZsh
 # * Create WinMac Control Panel UWP app:
 #   * Add setting to modify middle-mouse button behaviour on taskbar (close app, open new window)
@@ -28,8 +26,10 @@
 #   * Explorer Mode (modern - Win11 mode, classic - Win7 mode)
 #   * Explorer Status Bar (on, off)
 # ? Gestures in Explorer
-#   Disable ClassicExplorer toolbar using keyboard input from install.ps1 script (Alt + V, →, Enter)
-#   Modify Start menu/Win key actions to emulate MacOS behaviour
+# Disable Classic Explorer Bar & Icons
+# Disable Status Bar (in both Open-Shell and StartAllBack)
+# Disable ClassicExplorer toolbar using keyboard input from install.ps1 script (Alt + V, →, Enter)
+# Modify Start menu/Win key actions to emulate MacOS behaviour
 
 # Clear-Host
 Write-Host @"
@@ -40,7 +40,7 @@ Welcome to WinMac Deployment!
 
 Author: Adam Kamienski
 GitHub: Asteski
-Version: 0.0.8
+Version: 0.0.9
 
 This is Work in Progress.
 
