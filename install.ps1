@@ -61,7 +61,6 @@ Write-Information "WinGet installation completed."
 
 $winget = @(
 # "RamenSoftware.7+TaskbarTweaker", # Manage middle-mouse click on taskbar
-"Open-Shell.Open-Shell-Menu",
 "Armin2208.WindowsAutoNightMode",
 "JanDeDobbeleer.OhMyPosh",
 "Microsoft.PowerToys",
