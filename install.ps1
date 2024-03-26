@@ -80,26 +80,26 @@ Write-Host "Installing Packages completed." -ForegroundColor Green
 
 Write-Host "Configuring PowerToys..." -ForegroundColor Yellow
 
-$plugins = $env:LOCALAPPDATA + '\Microsoft\PowerToys\'
-$winget = 'https://github.com/bostrot/PowerToysRunPluginWinget/releases/download/v1.2.3/winget-powertoys-1.2.3.zip'
-$prockill = 'https://github.com/8LWXpg/PowerToysRun-ProcessKiller/releases/download/v1.0.1/ProcessKiller-v1.0.1-x64.zip'
-$powerToysPath = $env:LOCALAPPDATA + '\PowerToys\PowerToys.exe'
-$PowerToysProc = Get-Process -Name PowerToys*
-ForEach ($proc in $PowerToysProc) {
-$proc.WaitForExit(10000)
-$proc.Kill()
-}
-Invoke-WebRequest -uri $winget -Method "GET" -Outfile 'winget.zip'
-Invoke-WebRequest -uri $prockill -Method "GET" -Outfile 'prockill.zip'
-Expand-Archive 'winget.zip' -DestinationPath $pwd\Winget -Force
-Expand-Archive 'prockill.zip' -DestinationPath $pwd -Force
-Copy-item $pwd\Winget -Destination $plugins -Recurse -Force
-Copy-item $pwd\ProcessKiller -Destination $plugins -Recurse -Force
-# Add-Content -Path "C:\Program Files\Everything\Everything.ini" -Value "show_tray_icon=0" # ! Not working in non-admin mode
-Start-Process -FilePath $powerToysPath
-Remove-Item -Recurse -Force Winget
-Remove-Item -Recurse -Force ProcessKiller
-Get-ChildItem * -Include *.zip -Recurse | Remove-Item -Force
+# $plugins = $env:LOCALAPPDATA + '\Microsoft\PowerToys\'
+# $winget = 'https://github.com/bostrot/PowerToysRunPluginWinget/releases/download/v1.2.3/winget-powertoys-1.2.3.zip'
+# $prockill = 'https://github.com/8LWXpg/PowerToysRun-ProcessKiller/releases/download/v1.0.1/ProcessKiller-v1.0.1-x64.zip'
+# $powerToysPath = $env:LOCALAPPDATA + '\PowerToys\PowerToys.exe'
+# Invoke-WebRequest -uri $winget -Method "GET" -Outfile 'winget.zip'
+# Invoke-WebRequest -uri $prockill -Method "GET" -Outfile 'prockill.zip'
+# Expand-Archive 'winget.zip' -DestinationPath $pwd\Winget -Force
+# Expand-Archive 'prockill.zip' -DestinationPath $pwd -Force
+# Copy-item $pwd\Winget -Destination $plugins -Recurse -Force
+# Copy-item $pwd\ProcessKiller -Destination $plugins -Recurse -Force
+# # Add-Content -Path "C:\Program Files\Everything\Everything.ini" -Value "show_tray_icon=0" # ! Not working in non-admin mode
+# Start-Process -FilePath $powerToysPath
+# Remove-Item -Recurse -Force Winget
+# Remove-Item -Recurse -Force ProcessKiller
+# Get-ChildItem * -Include *.zip -Recurse | Remove-Item -Force
+# $PowerToysProc = Get-Process -Name PowerToys*
+# ForEach ($proc in $PowerToysProc) {
+# $proc.WaitForExit(10000)
+# $proc.Kill()
+# }
 
 Write-Host "Configuring PowerToys completed." -ForegroundColor Green
 
@@ -123,8 +123,15 @@ $HWND_TOP = [IntPtr]::Zero
 $SWP_SHOWWINDOW = 0x0040
 [Taskbar]::SetWindowPos($taskbarHandle, $HWND_TOP, 0, 0, 0, 0, $SWP_SHOWWINDOW) | Out-Null
 winget install --id "StartIsBack.StartAllBack" --silent --no-upgrade | Out-Null
-$explorerPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\"
+$explorerPath = "$explorerPath\"
 $sabRegPath = "HKCU:\Software\StartIsBack"
+Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force
+New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
+Set-ItemProperty -Path "$explorerPath\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
+Set-ItemProperty -Path $explorerPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 1
+Set-ItemProperty -Path $explorerPath\Advanced -Name "ShowStatusBar" -Value 0
+Set-ItemProperty -Path $explorerPath\Advanced -Name "EnableSnapAssistFlyout" -Value 0
+Set-ItemProperty -Path $explorerPath\Advanced -Name "EnableSnapBar" -Value 0
 Set-ItemProperty -Path $explorerPath\Advanced -Name "TaskbarGlomLevel" -Value 1
 Set-ItemProperty -Path $explorerPath\Advanced -Name "TaskbarSmallIcons" -Value 1
 Set-ItemProperty -Path $explorerPath\Advanced -Name "TaskbarSi" -Value 0
@@ -163,7 +170,6 @@ Write-Host "Configuring StartAllBack completed." -ForegroundColor Yellow
 Write-Host "Configuring Shell..." -ForegroundColor Yellow
 
 Remove-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Force
-Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel" -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 1
 # $recycleBinShortcutPath = "$env:USERPROFILE\Desktop\Recycle Bin.lnk"
 # $taskbarFolderPath = "$env:APPDATA\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar"
 # $shell = New-Object -ComObject WScript.Shell
@@ -172,9 +178,6 @@ Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer
 # $shortcut.Save()
 # Copy-Item -Path $recycleBinShortcutPath -Destination $taskbarFolderPath -Force
 # Set-ItemProperty -Path $recycleBinPath -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 0
-Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force
-New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons"
-Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
 # $programsLnkPath = Join-Path $pwd "config\Programs.lnk"
 # $folderPath = "C:\ProgramData\Microsoft\Windows\Start Menu\Programs"
 # $dllPath = Join-Path $env:SYSTEMROOT "\system32\imageres.dll"
@@ -203,13 +206,13 @@ winget install --id "Open-Shell.Open-Shell-Menu" --no-upgrade | Out-Null
 Start-Sleep -Seconds 5
 $shellRegPath = "Registry::HKEY_CURRENT_USER\Software\OpenShell"
 $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"
-New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force #| Out-Null
-New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force #| Out-Null
-New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu" -Force #| Out-Null
-New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\ClassicExplorer" -Force #| Out-Null
-New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell\Settings" -Force #| Out-Null
-New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu\Settings" -Force #| Out-Null
-New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\ClassicExplorer\Settings" -Force #| Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force | Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force | Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu" -Force | Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\ClassicExplorer" -Force | Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell\Settings" -Force | Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu\Settings" -Force | Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\ClassicExplorer\Settings" -Force | Out-Null
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "ShowedToolbar" -Value 0
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "NewLine" -Value 0
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "CSettingsDlg" -Value ([byte[]](0,0,0,0,103,0,0,0,0,0,0,0,0,0,0,0,170,15,0,0,1,0,185,115,0,0,0,0))
@@ -244,54 +247,50 @@ Start-Process Explorer
 Start-Process $shellExePath
 $winexePath = Join-Path $pwd\bin "menu.exe"
 $process = Start-Process -FilePath $winexePath -WindowStyle Minimized -PassThru
-Start-Sleep -Seconds 5
+Start-Sleep -Seconds 3
 $process.CloseMainWindow() | Out-Null
 $process.WaitForExit() | Out-Null
 taskkill /IM explorer.exe /F | Out-Null
 Start-Sleep -Seconds 3
 Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
 Copy-Item -Path "$pwd\config\WinX\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
-Start-Process explorer # starts taskbar
-Start-Sleep -Seconds 3
-Start-Process explorer # starts explore windwos necessary to turn off classic explorer
-Start-Sleep -Seconds 3
-Add-Type -TypeDefinition @"
-    using System;
-    using System.Runtime.InteropServices;
+Start-Process explorer
+# Start-Sleep -Seconds 3
+# Start-Process explorer # starts explore windows necessary to turn off classic explorer
+# Start-Sleep -Seconds 3
+# Add-Type -TypeDefinition @"
+#     using System;
+#     using System.Runtime.InteropServices;
 
-    public class Keyboard {
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+#     public class Keyboard {
+#         [DllImport("user32.dll", SetLastError = true)]
+#         public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
 
-        [DllImport("user32.dll")]
-        public static extern bool SetForegroundWindow(IntPtr hWnd);
+#         [DllImport("user32.dll")]
+#         public static extern bool SetForegroundWindow(IntPtr hWnd);
 
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, int dwExtraInfo);
-    }
-"@
-$explorerHandle = [Keyboard]::FindWindow("CabinetWClass", $null)
-[Keyboard]::SetForegroundWindow($explorerHandle)
-$KEYEVENTF_KEYUP = 0x2
-$VK_MENU = 0x12 # Alt key
-$VK_V = 0x56 # V key
-$VK_RETURN = 0x0D # Enter key
-$VK_F4 = 0x73 # F4 key
-[Keyboard]::keybd_event($VK_MENU, 0, 0, 0) # Alt key press
-[Keyboard]::keybd_event($VK_V, 0, 0, 0) # V key press
-[Keyboard]::keybd_event($VK_V, 0, $KEYEVENTF_KEYUP, 0) # V key release
-[Keyboard]::keybd_event($VK_MENU, 0, $KEYEVENTF_KEYUP, 0) # Alt key release
-Start-Sleep -Milliseconds 100
-[Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
-[Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
-Start-Sleep -Milliseconds 100
-[Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
-[Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
-Start-Sleep -Milliseconds 100
+#         [DllImport("user32.dll", SetLastError = true)]
+#         public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, int dwExtraInfo);
+#     }
+# "@
+# $explorerHandle = [Keyboard]::FindWindow("CabinetWClass", $null)
+# [Keyboard]::SetForegroundWindow($explorerHandle)
+# $KEYEVENTF_KEYUP = 0x2
+# $VK_MENU = 0x12 # Alt key
+# $VK_V = 0x56 # V key
+# $VK_RETURN = 0x0D # Enter key
+# $VK_F4 = 0x73 # F4 key
 # [Keyboard]::keybd_event($VK_MENU, 0, 0, 0) # Alt key press
-# [Keyboard]::keybd_event($VK_F4, 0, 0, 0) # F4 key press
-# [Keyboard]::keybd_event($VK_F4, 0, $KEYEVENTF_KEYUP, 0) # F4 key release
+# [Keyboard]::keybd_event($VK_V, 0, 0, 0) # V key press
+# [Keyboard]::keybd_event($VK_V, 0, $KEYEVENTF_KEYUP, 0) # V key release
 # [Keyboard]::keybd_event($VK_MENU, 0, $KEYEVENTF_KEYUP, 0) # Alt key release
+# Start-Sleep -Milliseconds 100
+# [Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
+# [Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
+# Start-Sleep -Milliseconds 100
+# [Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
+# [Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
+# Start-Sleep -Milliseconds 100
 
 ## ! FIXME: Define ps subfolder in the project and use it to copy the function to the profile
 # function WinMac {    
