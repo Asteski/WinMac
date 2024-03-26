@@ -207,10 +207,14 @@ $homePin.Namespace($homeDir).Self.InvokeVerb("pintohome")
 if (Test-Path -Path $programsIniFilePath) {
     $programsIni = Get-Content $programsIniFilePath -Raw
     if ($programsIni -match 'Icon') {
+        Remove-ItemProperty -Path $programsIniFilePath -Name "Attributes" -Value ([System.IO.FileAttributes]::ReadOnly)
         $programsIni -replace '(Icon.*)', 'IconResource=C:\Windows\System32\SHELL32.dll,160' | Set-Content $programsIniFilePath
+        Set-ItemProperty -Path $programsIniFilePath -Name "Attributes" -Value ([System.IO.FileAttributes]::ReadOnly)
     }
     else {
-        $programsIni + "`n$programsIcon" | Set-Content $programsIniFilePath   
+        Remove-ItemProperty -Path $programsIniFilePath -Name "Attributes" -Value ([System.IO.FileAttributes]::ReadOnly)
+        $programsIni + "`n$programsIcon" | Set-Content $programsIniFilePath
+        Set-ItemProperty -Path $programsIniFilePath -Name "Attributes" -Value ([System.IO.FileAttributes]::ReadOnly)
     }
 } else {
     New-Item -Path $programsIniFilePath -ItemType File -Force
@@ -226,8 +230,8 @@ New-Item -Path 'C:\' -Name 'QuickAccessObjects' -ItemType Directory -Force
 New-Item -Path 'C:\QuickAccessObjects' -Name 'Recycle Bin.{645FF040-5081-101B-9F08-00AA002F954E}' -ItemType Directory
 (Get-Item -Path 'C:\QuickAccessObjects').attributes = 'Hidden'
 ($TargetShellObject = (Get-ChildItem -Path 'C:\QuickAccessObjects' -Filter 'Recycle*').FullName)
-$oShell = New-Object -ComObject Shell.Application
-$oShell.Namespace(("$TargetShellObject").Self.InvokeVerb("PinToHome"))
+$Shell = New-Object -ComObject Shell.Application
+$Shell.Namespace(("$TargetShellObject").Self.InvokeVerb("PinToHome"))
 
 Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force | Out-Null
 New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
