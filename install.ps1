@@ -181,7 +181,7 @@ New-Item -Path 'C:\QuickAccessObjects' -Name 'Recycle Bin.{645FF040-5081-101B-9F
 (Get-Item -Path 'C:\QuickAccessObjects').attributes = 'Hidden'
 ($TargetShellObject = (Get-ChildItem -Path 'C:\QuickAccessObjects' -Filter 'Recycle*').FullName)
 $oShell = New-Object -ComObject Shell.Application
-$oShell.Namespace("$TargetShellObject").Self.InvokeVerb("PinToHome"))
+$oShell.Namespace(("$TargetShellObject").Self.InvokeVerb("PinToHome"))
 
 Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force | Out-Null
 New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
