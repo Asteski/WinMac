@@ -85,7 +85,6 @@ Write-Host "Configuring PowerToys..." -ForegroundColor Yellow
 # Expand-Archive 'prockill.zip' -DestinationPath $pwd -Force
 # Copy-item $pwd\Winget -Destination $plugins -Recurse -Force
 # Copy-item $pwd\ProcessKiller -Destination $plugins -Recurse -Force
-# # Add-Content -Path "C:\Program Files\Everything\Everything.ini" -Value "show_tray_icon=0" # ! Not working in non-admin mode
 # Start-Process -FilePath $powerToysPath
 # Remove-Item -Recurse -Force Winget
 # Remove-Item -Recurse -Force ProcessKiller
@@ -156,7 +155,7 @@ Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0
 Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
 Stop-Process -Name Explorer -Force
 
-Write-Host "Configuring StartAllBack completed." -ForegroundColor Yellow
+Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
 
 Write-Host "Configuring Shell..." -ForegroundColor Yellow
 
@@ -200,13 +199,13 @@ winget install --id "Open-Shell.Open-Shell-Menu" --no-upgrade | Out-Null
 Start-Sleep -Seconds 5
 $shellRegPath = "Registry::HKEY_CURRENT_USER\Software\OpenShell"
 $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"
-New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force #| Out-Null
-New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force #| Out-Null
-New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu" -Force #| Out-Null
-New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\ClassicExplorer" -Force #| Out-Null
-New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell\Settings" -Force #| Out-Null
-New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu\Settings" -Force #| Out-Null
-New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\ClassicExplorer\Settings" -Force #| Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force | Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force | Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu" -Force | Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\ClassicExplorer" -Force | Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell\Settings" -Force | Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu\Settings" -Force | Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\ClassicExplorer\Settings" -Force | Out-Null
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "ShowedToolbar" -Value 0
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "NewLine" -Value 0
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "CSettingsDlg" -Value ([byte[]](0,0,0,0,103,0,0,0,0,0,0,0,0,0,0,0,170,15,0,0,1,0,185,115,0,0,0,0))
@@ -310,6 +309,12 @@ Start-Sleep -Milliseconds 100
 #     New-Item -Path $filePath -Name $fileName -ItemType File
 # }
 # Add-Content -Path $profile -Value `n$funcContent
+
+Write-Host "Configuring Shell completed." -ForegroundColor Green
+
+Write-Host "Clean up..."
+# TODO: cleanup?
+Write-Host "Clean up completed."
 
 Write-Host @"
 ------------------------ WinMac Deployment completed ------------------------
