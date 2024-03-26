@@ -181,8 +181,8 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer
 # $iconPath = $dllPath + ",$iconIndex"
 # $folderItem.IconLocation = $iconPath
 # $folderItem.Save()
-$programsDir = "C:\ProgramData\Microsoft\Windows\Start Menu\Programs"
 $userDir = "C:\Users\$env:USERNAME"
+$programsDir = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs"
 # TODO: assign specific icons to programs and user folder before pinning to Quick Access
 # $desktopIni = @"
 # [.ShellClassInfo]
