@@ -159,46 +159,37 @@ Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
 
 Write-Host "Configuring Shell..." -ForegroundColor Yellow
 
+$homeDir = "C:\Users\$env:USERNAME"
+$programsDir = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs"
+$shellRegPath = "Registry::HKEY_CURRENT_USER\Software\OpenShell"
+$shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"
+
 Remove-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Force | Out-Null
-# $recycleBinShortcutPath = "$env:USERPROFILE\Desktop\Recycle Bin.lnk"
-# $taskbarFolderPath = "$env:APPDATA\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar"
-# $shell = New-Object -ComObject WScript.Shell
-# $shortcut = $shell.CreateShortcut($recycleBinShortcutPath)
-# $shortcut.TargetPath = "::{645FF040-5081-101B-9F08-00AA002F954E}"
-# $shortcut.Save()
-# Copy-Item -Path $recycleBinShortcutPath -Destination $taskbarFolderPath -Force
-# Set-ItemProperty -Path $recycleBinPath -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 0
+
+$homeIni = Get-Content "$($homeDir)\desktop.ini" -Raw
+$homeIni -replace '(Icon.*)', 'IconResource=C:\Windows\System32\SHELL32.dll,160' | Set-Content "$($homeDir)\desktop.ini"
+$homePin = new-object -com shell.application
+$homePin.Namespace($homeDir).Self.InvokeVerb("pintohome")
+
+$programsIni = Get-Content "$($programsDir)\desktop.ini" -Raw
+$programsIni -replace '(Icon.*)', 'IconResource=C:\WINDOWS\System32\imageres.dll,187' | Set-Content "$($programsDir)\desktop.ini"
+$programsPin = new-object -com shell.application
+$programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome")
+
+New-Item -Path 'C:\' -Name 'QuickAccessObjects' -ItemType Directory -Force
+New-Item -Path 'C:\QuickAccessObjects' -Name 'Recycle Bin.{645FF040-5081-101B-9F08-00AA002F954E}' -ItemType Directory
+(Get-Item -Path 'C:\QuickAccessObjects').attributes = 'Hidden'
+($TargetShellObject = (Get-ChildItem -Path 'C:\QuickAccessObjects' -Filter 'Recycle*').FullName)
+$oShell = New-Object -ComObject Shell.Application
+$oShell.Namespace("$TargetShellObject").Self.InvokeVerb("PinToHome"))
+
 Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force | Out-Null
 New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
-# $programsLnkPath = Join-Path $pwd "config\Programs.lnk"
-# $folderPath = "C:\ProgramData\Microsoft\Windows\Start Menu\Programs"
-# $dllPath = Join-Path $env:SYSTEMROOT "\system32\imageres.dll"
-# $iconIndex = 16
-# $shell = New-Object -ComObject Shell.Application
-# $folder = $shell.Namespace($folderPath)
-# $folderItem = $folder.Self
-# $iconPath = $dllPath + ",$iconIndex"
-# $folderItem.IconLocation = $iconPath
-# $folderItem.Save()
-$userDir = "C:\Users\$env:USERNAME"
-$programsDir = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs"
-# TODO: assign specific icons to programs and user folder before pinning to Quick Access
-# $desktopIni = @"
-# [.ShellClassInfo]
-# IconResource=C:\WINDOWS\System32\imageres.dll,32
-# "@
-# Add-Content "$($targetDir)\desktop.ini" -Value $desktopIni
-# (Get-Item "$($targetDir)\desktop.ini" -Force).Attributes = 'Hidden, System, Archive'
-# (Get-Item $targetDir -Force).Attributes = 'ReadOnly, Directory'
-$programsPin = new-object -com shell.application
-$programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome")
-$userPin = new-object -com shell.application
-$userPin.Namespace($userDir).Self.InvokeVerb("pintohome")
+
 winget install --id "Open-Shell.Open-Shell-Menu" --no-upgrade | Out-Null
 Start-Sleep -Seconds 5
-$shellRegPath = "Registry::HKEY_CURRENT_USER\Software\OpenShell"
-$shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"
+
 New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force | Out-Null
 New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force | Out-Null
 New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu" -Force | Out-Null
@@ -213,7 +204,7 @@ Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer\Settings" -Name
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer\Settings" -Name "ShowStatusBar" -Value 0
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer\Settings" -Name "TreeStyle" -Value "Vista"
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer\Settings" -Name "HScrollbar" -Value "Default"
-Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer\Settings" -Name "NoFadeButtons" -Value 1
+Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer\Settings" -Name "NoFadeButtons" -Value 1  | Out-Null
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer\Settings" -Name "HideSearch" -Value 0
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer\Settings" -Name "UseBigButtons" -Value 0
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer\Settings" -Name "AltEnter" -Value 0
@@ -236,9 +227,9 @@ Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "Sear
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "SkinW7" -Value "Immersive"
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "SkinVariationW7" -Value ""
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "SkinOptionsW7" -Value ([byte[]](0x4c, 0x00, 0x49, 0x00, 0x47, 0x00, 0x48, 0x00, 0x54, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x44, 0x00, 0x41, 0x00, 0x52, 0x00, 0x4b, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x41, 0x00, 0x55, 0x00, 0x54, 0x00, 0x4f, 0x00, 0x3d, 0x00, 0x31, 0x00, 0x00, 0x00, 0x55, 0x00, 0x53, 0x00, 0x45, 0x00, 0x52, 0x00, 0x5f, 0x00, 0x49, 0x00, 0x4d, 0x00, 0x41, 0x00, 0x47, 0x00, 0x45, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x55, 0x00, 0x53, 0x00, 0x45, 0x00, 0x52, 0x00, 0x5f, 0x00, 0x4e, 0x00, 0x41, 0x00, 0x4d, 0x00, 0x45, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x43, 0x00, 0x45, 0x00, 0x4e, 0x00, 0x54, 0x00, 0x45, 0x00, 0x52, 0x00, 0x5f, 0x00, 0x4e, 0x00, 0x41, 0x00, 0x4d, 0x00, 0x45, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x53, 0x00, 0x4d, 0x00, 0x41, 0x00, 0x4c, 0x00, 0x4c, 0x00, 0x5f, 0x00, 0x49, 0x00, 0x43, 0x00, 0x4f, 0x00, 0x4e, 0x00, 0x53, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x4f, 0x00, 0x50, 0x00, 0x41, 0x00, 0x51, 0x00, 0x55, 0x00, 0x45, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x44, 0x00, 0x49, 0x00, 0x53, 0x00, 0x41, 0x00, 0x42, 0x00, 0x4c, 0x00, 0x45, 0x00, 0x5f, 0x00, 0x4d, 0x00, 0x41, 0x00, 0x53, 0x00, 0x4b, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x42, 0x00, 0x4c, 0x00, 0x41, 0x00, 0x43, 0x00, 0x4b, 0x00, 0x5f, 0x00, 0x54, 0x00, 0x45, 0x00, 0x58, 0x00, 0x54, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x42, 0x00, 0x4c, 0x00, 0x41, 0x00, 0x43, 0x00, 0x4b, 0x00, 0x5f, 0x00, 0x46, 0x00, 0x52, 0x00, 0x41, 0x00, 0x4d, 0x00, 0x45, 0x00, 0x53, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x54, 0x00, 0x52, 0x00, 0x41, 0x00, 0x4e, 0x00, 0x53, 0x00, 0x50, 0x00, 0x41, 0x00, 0x52, 0x00, 0x45, 0x00, 0x4e, 0x00, 0x54, 0x00, 0x5f, 0x00, 0x4c, 0x00, 0x45, 0x00, 0x53, 0x00, 0x53, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x54, 0x00, 0x52, 0x00, 0x41, 0x00, 0x4e, 0x00, 0x53, 0x00, 0x50, 0x00, 0x41, 0x00, 0x52, 0x00, 0x45, 0x00, 0x4e, 0x00, 0x54, 0x00, 0x5f, 0x00, 0x4d, 0x00, 0x4f, 0x00, 0x52, 0x00, 0x45, 0x00, 0x3d, 0x00, 0x31, 0x00, 0x00, 0x00))
-Start-Sleep -Seconds 5
 Stop-Process -Name startmenu -Force
 Start-Process Explorer
+Start-Sleep -Seconds 5
 Start-Process $shellExePath
 $winexePath = Join-Path $pwd\bin "menu.exe"
 $process = Start-Process -FilePath $winexePath -WindowStyle Minimized -PassThru
@@ -246,13 +237,14 @@ Start-Sleep -Seconds 3
 $process.CloseMainWindow() | Out-Null
 $process.WaitForExit() | Out-Null
 taskkill /IM explorer.exe /F | Out-Null
-Start-Sleep -Seconds 3
+Start-Sleep -Seconds 2
 Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
 Copy-Item -Path "$pwd\config\WinX\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
 Start-Process explorer
 Start-Sleep -Seconds 3
 Start-Process explorer # starts explore windows necessary to turn off classic explorer
 Start-Sleep -Seconds 3
+
 Add-Type -TypeDefinition @"
     using System;
     using System.Runtime.InteropServices;
