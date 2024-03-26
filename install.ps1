@@ -51,15 +51,15 @@ This is Work in Progress.
 Write-Host "Checking for Windows Package Manager (WinGet)" -ForegroundColor Yellow
 
 $progressPreference = 'silentlyContinue'
-Write-Information "Downloading WinGet and its dependencies..." -ForegroundColor Yellow
+Write-Information "Downloading WinGet and its dependencies..."
 $wingetUrl = "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
 $installPath = "$env:TEMP\winget.msixbundle"
 Invoke-WebRequest -Uri $wingetUrl -OutFile $installPath
-Write-Host "Installing WinGet..." -ForegroundColor Yellow
+Write-Information "Installing WinGet..."
 Add-AppxPackage -Path $installPath
 Remove-Item -Path $installPath
-Write-Host "WinGet installation completed." -ForegroundColor Green
-Write-Host "Installing Packages:" -ForegroundColor Yellow
+Write-Information "WinGet installation completed."
+Write-Host "Installing Packages:"
 $winget = @(
 # "RamenSoftware.7+TaskbarTweaker", # Manage middle-mouse click on taskbar
 "Armin2208.WindowsAutoNightMode",
