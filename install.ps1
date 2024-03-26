@@ -11,6 +11,12 @@
 #################################################################################
 
 # TODO:
+# TODO: shift+righ-click to open Run, win+shift to open Shutdown
+# TODO: hide righ-click OSH menu
+# TODO: add cmdlet to $profile as path dir to function/script
+# TODO: change desktop.ini to change icon
+# TODO: winget plugin to PowerToys
+# TODO: hide Windows Terminal from Start Menu
 # !! Force Taskbar to go on top in StartAllBack
 # ! Modify desktop.ini Programs and User folder to change icon
 # ! Add winget plugin to PowerToys
@@ -117,6 +123,7 @@ $HWND_TOP = [IntPtr]::Zero
 $SWP_SHOWWINDOW = 0x0040
 [Taskbar]::SetWindowPos($taskbarHandle, $HWND_TOP, 0, 0, 0, 0, $SWP_SHOWWINDOW) | Out-Null
 winget install --id "StartIsBack.StartAllBack" --silent --no-upgrade | Out-Null
+
 $sabRegPath = "HKCU:\Software\StartIsBack"
 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel" -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 1
 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowStatusBar" -Value 0
@@ -153,26 +160,65 @@ Set-ItemProperty -Path $sabRegPath\Cache -Name "IdealHeight.6" -Value 10
 Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "(default)" -Value "1"
 Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0
 Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
+
 Stop-Process -Name Explorer -Force
+
 
 Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
 
+## Shell & Explorer tweeks
+
 Write-Host "Configuring Shell..." -ForegroundColor Yellow
 
-$homeDir = "C:\Users\$env:USERNAME"
-$programsDir = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs"
+Remove-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Force | Out-Null
 $shellRegPath = "Registry::HKEY_CURRENT_USER\Software\OpenShell"
 $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"
 
-Remove-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Force | Out-Null
+$homeDir = "C:\Users\$env:USERNAME"
+$homeIcon = @"
+[.ShellClassInfo]
+IconResource=C:\Windows\System32\SHELL32.dll,160
+"@
+$programsDir = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs"
+$programsIcon = @"
+[.ShellClassInfo]
+IconResource=C:\WINDOWS\System32\imageres.dll,187
+"@
+$homeIniFilePath = "$($homeDir)\desktop.ini"
 
-$homeIni = Get-Content "$($homeDir)\desktop.ini" -Raw
-$homeIni -replace '(Icon.*)', 'IconResource=C:\Windows\System32\SHELL32.dll,160' | Set-Content "$($homeDir)\desktop.ini"
+if (Test-Path -Path $homeIniFilePath) {
+    $homeIni = Get-Content $homeIniFilePath -Raw
+    if ($homeIni -match 'Icon') {
+        $homeIni -replace '(Icon.*)', 'IconResource=C:\Windows\System32\SHELL32.dll,160' | Set-Content $homeIniFilePath
+    }
+    else {
+        $homeIni + "`n$homeIcon" | Set-Content $homeIniFilePath   
+    }
+} else {
+    New-Item -Path $homeIniFilePath -ItemType File -Force
+    Set-ItemProperty -Path $homeIniFilePath -Name "Attributes" -Value ([System.IO.FileAttributes]::Hidden)
+    $homeIni + "`n$homeIcon" | Set-Content $homeIniFilePath 
+    # Set-ItemProperty -Path $programsIniFilePath -Name "Attributes" -Value ([System.IO.FileAttributes]::ReadOnly)
+}
+
 $homePin = new-object -com shell.application
 $homePin.Namespace($homeDir).Self.InvokeVerb("pintohome")
 
-$programsIni = Get-Content "$($programsDir)\desktop.ini" -Raw
-$programsIni -replace '(Icon.*)', 'IconResource=C:\WINDOWS\System32\imageres.dll,187' | Set-Content "$($programsDir)\desktop.ini"
+if (Test-Path -Path $programsIniFilePath) {
+    $programsIni = Get-Content $programsIniFilePath -Raw
+    if ($programsIni -match 'Icon') {
+        $programsIni -replace '(Icon.*)', 'IconResource=C:\Windows\System32\SHELL32.dll,160' | Set-Content $programsIniFilePath
+    }
+    else {
+        $programsIni + "`n$programsIcon" | Set-Content $programsIniFilePath   
+    }
+} else {
+    New-Item -Path $programsIniFilePath -ItemType File -Force
+    Set-ItemProperty -Path $programsIniFilePath -Name "Attributes" -Value ([System.IO.FileAttributes]::Hidden)
+    $programsIni + "`n$programsIcon" | Set-Content $programsIniFilePath
+    Set-ItemProperty -Path $programsIniFilePath -Name "Attributes" -Value ([System.IO.FileAttributes]::ReadOnly)
+}
+
 $programsPin = new-object -com shell.application
 $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome")
 
