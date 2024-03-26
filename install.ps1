@@ -200,13 +200,13 @@ winget install --id "Open-Shell.Open-Shell-Menu" --no-upgrade | Out-Null
 Start-Sleep -Seconds 5
 $shellRegPath = "Registry::HKEY_CURRENT_USER\Software\OpenShell"
 $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"
-New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force | Out-Null
-New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force | Out-Null
-New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu" -Force | Out-Null
-New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\ClassicExplorer" -Force | Out-Null
-New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell\Settings" -Force | Out-Null
-New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu\Settings" -Force | Out-Null
-New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\ClassicExplorer\Settings" -Force | Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force #| Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force #| Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu" -Force #| Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\ClassicExplorer" -Force #| Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell\Settings" -Force #| Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu\Settings" -Force #| Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\ClassicExplorer\Settings" -Force #| Out-Null
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "ShowedToolbar" -Value 0
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "NewLine" -Value 0
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "CSettingsDlg" -Value ([byte[]](0,0,0,0,103,0,0,0,0,0,0,0,0,0,0,0,170,15,0,0,1,0,185,115,0,0,0,0))
@@ -221,9 +221,11 @@ Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer\Settings" -Name
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer\Settings" -Name "DisableBreadcrumbs" -Value 0
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\OpenShell" -Name "LastUpdateTime" -Value 0x161cde38
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\OpenShell\Settings" -Name "Nightly" -Value 0x00000001
-Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu" -Name "ShowedStyle2" -Value 0x00000001
+Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu" -Name "ShowedStyle2" -Value 0x00000000
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu" -Name "CSettingsDlg" -Value ([byte[]](0xaf, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xe4, 0x02, 0x00, 0x00, 0xb4, 0x00, 0x00, 0x00, 0xd7, 0x0b, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00))
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "Version" -Value 0x040400bf
+Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "DisablePinExt" -Value 1
+Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "EnableContextMenu" -Value 0
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "MouseClick" -Value "Command"
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftClick" -Value "Command"
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "WinKey" -Value "Command"
@@ -249,42 +251,42 @@ Start-Sleep -Seconds 3
 Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
 Copy-Item -Path "$pwd\config\WinX\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
 Start-Process explorer
-# Start-Sleep -Seconds 3
-# Start-Process explorer # starts explore windows necessary to turn off classic explorer
-# Start-Sleep -Seconds 3
-# Add-Type -TypeDefinition @"
-#     using System;
-#     using System.Runtime.InteropServices;
+Start-Sleep -Seconds 3
+Start-Process explorer # starts explore windows necessary to turn off classic explorer
+Start-Sleep -Seconds 3
+Add-Type -TypeDefinition @"
+    using System;
+    using System.Runtime.InteropServices;
 
-#     public class Keyboard {
-#         [DllImport("user32.dll", SetLastError = true)]
-#         public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+    public class Keyboard {
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
 
-#         [DllImport("user32.dll")]
-#         public static extern bool SetForegroundWindow(IntPtr hWnd);
+        [DllImport("user32.dll")]
+        public static extern bool SetForegroundWindow(IntPtr hWnd);
 
-#         [DllImport("user32.dll", SetLastError = true)]
-#         public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, int dwExtraInfo);
-#     }
-# "@
-# $explorerHandle = [Keyboard]::FindWindow("CabinetWClass", $null)
-# [Keyboard]::SetForegroundWindow($explorerHandle)
-# $KEYEVENTF_KEYUP = 0x2
-# $VK_MENU = 0x12 # Alt key
-# $VK_V = 0x56 # V key
-# $VK_RETURN = 0x0D # Enter key
-# $VK_F4 = 0x73 # F4 key
-# [Keyboard]::keybd_event($VK_MENU, 0, 0, 0) # Alt key press
-# [Keyboard]::keybd_event($VK_V, 0, 0, 0) # V key press
-# [Keyboard]::keybd_event($VK_V, 0, $KEYEVENTF_KEYUP, 0) # V key release
-# [Keyboard]::keybd_event($VK_MENU, 0, $KEYEVENTF_KEYUP, 0) # Alt key release
-# Start-Sleep -Milliseconds 100
-# [Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
-# [Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
-# Start-Sleep -Milliseconds 100
-# [Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
-# [Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
-# Start-Sleep -Milliseconds 100
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, int dwExtraInfo);
+    }
+"@
+$explorerHandle = [Keyboard]::FindWindow("CabinetWClass", $null)
+[Keyboard]::SetForegroundWindow($explorerHandle)
+$KEYEVENTF_KEYUP = 0x2
+$VK_MENU = 0x12 # Alt key
+$VK_V = 0x56 # V key
+$VK_RETURN = 0x0D # Enter key
+$VK_F4 = 0x73 # F4 key
+[Keyboard]::keybd_event($VK_MENU, 0, 0, 0) # Alt key press
+[Keyboard]::keybd_event($VK_V, 0, 0, 0) # V key press
+[Keyboard]::keybd_event($VK_V, 0, $KEYEVENTF_KEYUP, 0) # V key release
+[Keyboard]::keybd_event($VK_MENU, 0, $KEYEVENTF_KEYUP, 0) # Alt key release
+Start-Sleep -Milliseconds 100
+[Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
+[Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
+Start-Sleep -Milliseconds 100
+[Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
+[Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
+Start-Sleep -Milliseconds 100
 
 ## ! FIXME: Define ps subfolder in the project and use it to copy the function to the profile
 # function WinMac {    
