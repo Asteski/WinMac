@@ -176,7 +176,20 @@ Write-Host "Configuring StartAllBack completed." -ForegroundColor Yellow
 
 Write-Host "Configuring Shell..." -ForegroundColor Yellow
 
+Remove-Item -Path "C:\Users\Public\Everything.lnk" -Force
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel" -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 1
+
+# $recycleBinShortcutPath = "$env:USERPROFILE\Desktop\Recycle Bin.lnk"
+# $taskbarFolderPath = "$env:APPDATA\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar"
+# $shell = New-Object -ComObject WScript.Shell
+# $shortcut = $shell.CreateShortcut($recycleBinShortcutPath)
+# $shortcut.TargetPath = "::{645FF040-5081-101B-9F08-00AA002F954E}"
+# $shortcut.Save()
+# Copy-Item -Path $recycleBinShortcutPath -Destination $taskbarFolderPath -Force
+# Set-ItemProperty -Path $recycleBinPath -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 0
+
 Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force
+New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons"
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
 # $programsLnkPath = Join-Path $pwd "config\Programs.lnk"
 # $folderPath = "C:\ProgramData\Microsoft\Windows\Start Menu\Programs"
@@ -207,12 +220,12 @@ winget install --id "Open-Shell.Open-Shell-Menu" --no-upgrade | Out-Null
 
 Start-Sleep -Seconds 5
 Stop-Process -Name StartMenu -Force
-$shellRegPath = "HKCU:\Software\OpenShell"
+$shellRegPath = "Registry::HKEY_CURRENT_USER\Software\OpenShell"
 $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"
 # Remove-Item -Path "HKCU:\Software\OpenShell\ClassicExplorer\Settings" -Recurse -Force
 # Remove-Item -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Recurse -Force
-New-Item -Path $shellRegPath\StartMenu\Settings -Force | Out-Null
-New-Item -Path $shellRegPath\OpenShell\Settings -Force | Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu\Settings" -Force #| Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\Settings" -Force #| Out-Null
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "ShowedToolbar" -Value 0
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "NewLine" -Value 0
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "CSettingsDlg" -Value ([byte[]](0,0,0,0,103,0,0,0,0,0,0,0,0,0,0,0,170,15,0,0,1,0,185,115,0,0,0,0))
