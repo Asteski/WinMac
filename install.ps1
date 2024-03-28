@@ -32,7 +32,7 @@
 # Disable ClassicExplorer toolbar using keyboard input from install.ps1 script (Alt + V, →, Enter)
 # Modify Start menu/Win key actions to emulate MacOS behaviour
 
-# Clear-Host
+Clear-Host
 Write-Host @"
 
 ------------------------ WinMac Deployment ------------------------ 
@@ -332,6 +332,11 @@ Start-Sleep -Milliseconds 100
 Start-Sleep -Milliseconds 100
 [Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
 [Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
+Start-Sleep -Milliseconds 100
+[Keyboard]::keybd_event($VK_MENU, 0, 0, 0) # Alt key press
+[Keyboard]::keybd_event($VK_F4, 0, 0, 0) # F4 key press
+[Keyboard]::keybd_event($VK_F4, 0, $KEYEVENTF_KEYUP, 0) # F4 key release
+[Keyboard]::keybd_event($VK_MENU, 0, $KEYEVENTF_KEYUP, 0) # Alt key release
 Start-Sleep -Milliseconds 100
 
 Write-Host "Configuring Shell completed." -ForegroundColor Green
