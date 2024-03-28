@@ -34,7 +34,7 @@
 
 Clear-Host
 Write-Host @"
------------------------- WinMac Deployment ------------------------ 
+-------------------------- WinMac Deployment ----------------------
 
                     Welcome to WinMac Deployment!
 
@@ -43,6 +43,7 @@ Write-Host @"
                             Version: 0.0.9
 
                       This is Work in Progress. 
+
 -------------------------------------------------------------------
 
 "@ -ForegroundColor Cyan
