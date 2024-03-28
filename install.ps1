@@ -76,15 +76,43 @@ Write-Host "Installing Packages completed." -ForegroundColor Green
 
 Write-Host "Configuring PowerShell Profile..." -ForegroundColor Yellow
 $profilePath = $PROFILE
-if (-not (Test-Path $profilePath)) {
+$theme = 'jandedobbeleer'
+# $themes = 'catppuccin'
+$uri = "https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/$theme.omp.json"
+$outputPath = "$env:USERPROFILE\AppData\Local\Programs\oh-my-posh\themes\"
+$configPath = Join-Path $outputPath $theme".omp.json"
+$ohMyPosh = "oh-my-posh init pwsh --config $configPath | Invoke-Expression"
+
+function Download-File {
+    param (
+        [Parameter(Mandatory = $true)]
+        [string]$uri,
+        [Parameter(Mandatory = $true)]
+        [string]$outputPath
+    )
+}
+
+Write-Host "Settings up prompt theme engine to PowerShell Profile..."
+
+if (!(Test-Path $profilePath)) {   
     Write-Host "Profile file does not exist. Creating profile..."
     New-Item -ItemType File -Path $profilePath -Force
     Write-Host "Profile file created." -ForegroundColor Green
+
+    if (!(Test-Path $configPath)) {
+            $webClient = New-Object System.Net.WebClient
+            $webClient.DownloadFile($uri, $outputPath)
+    } else {
+        Write-Host "$theme theme file exists."  -ForegroundColor Green
+    }
+    Add-Content -Path $profilePath -Value `n$ohMyPosh
+    Write-Host "PowerShell Profile configured." -ForegroundColor Green
+} else {
+    Add-Content -Path $profilePath -Value `n$ohMyPosh
+    Write-Host "PowerShell Profile configured." -ForegroundColor Green
 }
-Write-Host "Settings up prompt theme engine to PowerShell Profile..."
-$ohMyPosh = "Import-Module posh-git; Import-Module oh-my-posh; Set-Theme jandedobbeleer"
-Add-Content -Path $profilePath -Value $ohMyPosh
-Write-Host "PowerShell Profile configured." -ForegroundColor Green
+
+# $ohMyPosh = "Import-Module posh-git; Import-Module oh-my-posh; Set-Theme jandedobbeleer"
 
 ## StartAllBack
 ## Shell & Explorer tweaks
