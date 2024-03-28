@@ -79,25 +79,28 @@ Write-Host "Installing Packages completed." -ForegroundColor Green
 
 Write-Host "Configuring PowerToys..." -ForegroundColor Yellow
 
-# $plugins = $env:LOCALAPPDATA + '\Microsoft\PowerToys\'
-$plugins = "C:\Program Files\PowerToys"
+$plugins1 = $env:LOCALAPPDATA + '\Microsoft\PowerToys\'
+$plugins2 = "C:\Program Files\PowerToys"
 $winget = 'https://github.com/bostrot/PowerToysRunPluginWinget/releases/download/v1.2.3/winget-powertoys-1.2.3.zip'
 $prockill = 'https://github.com/8LWXpg/PowerToysRun-ProcessKiller/releases/download/v1.0.1/ProcessKiller-v1.0.1-x64.zip'
 Invoke-WebRequest -uri $winget -Method "GET" -Outfile 'winget.zip'
 Invoke-WebRequest -uri $prockill -Method "GET" -Outfile 'prockill.zip'
 Expand-Archive 'winget.zip' -DestinationPath $pwd\Winget -Force
 Expand-Archive 'prockill.zip' -DestinationPath $pwd -Force
-Copy-item $pwd\Winget -Destination "$($plugins)\RunPlugins\" -Recurse -Force
-Copy-item $pwd\ProcessKiller -Destination "$($plugins)\RunPlugins\" -Recurse -Force
-Start-Process -FilePath "$($plugins)\PowerToys.exe" # -ArgumentList "--settings-folder $($plugins)\settings --no-admin --no-startup" -Wait
+Copy-item $pwd\Winget -Destination "$($plugins1)\RunPlugins\" -Recurse -Force
+Copy-item $pwd\ProcessKiller -Destination "$($plugins1)\Plugins\" -Recurse -Force
+Copy-item $pwd\Winget -Destination "$($plugins2)\Plugins\" -Recurse -Force
+Copy-item $pwd\ProcessKiller -Destination "$($plugins2)\Plugins\" -Recurse -Force
 Remove-Item -Recurse -Force Winget
 Remove-Item -Recurse -Force ProcessKiller
 Get-ChildItem * -Include *.zip -Recurse | Remove-Item -Force
 $PowerToysProc = Get-Process -Name PowerToys*
 ForEach ($proc in $PowerToysProc) {
-$proc.WaitForExit(10000)
-$proc.Kill()
+    $proc.WaitForExit(10000)
+    $proc.Kill()
 }
+Start-Sleep -Seconds 5
+Start-Process -FilePath "C:\Program Files\PowerToys\PowerToys.exe" # -ArgumentList "--settings-folder $($plugins)\settings --no-admin --no-startup" -Wait
 
 Write-Host "Configuring PowerToys completed." -ForegroundColor Green
 
