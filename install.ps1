@@ -13,8 +13,9 @@
 # TODO:
 # !! Force Taskbar to go on top in StartAllBack
 # ! Modify desktop.ini Programs and User folder to change icon
+# TODO: winsetview
 # TODO: hide righ-click menu
-# TODO: hide Windows Terminal from Start Menu
+# TODO: hide Windows Terminal from Start Menu - set pwsh as default first then delete
 # * Setup prompt theme engine to PowerShell Profile
 # * Setup prompt aliases to PowerShell Profile
 # * Create WinMac Control Panel UWP app:
@@ -33,16 +34,15 @@
 
 # Clear-Host
 Write-Host @"
-
 ------------------------ WinMac Deployment ------------------------ 
 
-Welcome to WinMac Deployment!
+                    Welcome to WinMac Deployment!
 
-Author: Adam Kamienski
-GitHub: Asteski
-Version: 0.0.9
+                        Author: Adam Kamienski
+                            GitHub: Asteski
+                            Version: 0.0.9
 
-This is Work in Progress.
+                      This is Work in Progress. 
 
 "@ -ForegroundColor Cyan
 
@@ -77,7 +77,7 @@ Write-Host "Installing Packages completed." -ForegroundColor Green
 ## PowerShell Profile
 
 Write-Host "Configuring PowerShell Profile..." -ForegroundColor Yellow
-$profilePath = $PROFILE
+# $profilePath = $PROFILE
 # $theme = 'jandedobbeleer'
 # # $themes = 'catppuccin'
 # $uri = "https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/$theme.omp.json"
@@ -176,9 +176,7 @@ Stop-Process -Name Explorer -Force
 Write-Host "Configuring StartAllBack completed." -ForegroundColor Yellow
 
 Remove-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Force | Out-Null
-$shellRegPath = "Registry::HKEY_CURRENT_USER\Software\OpenShell"
 $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"
-
 $homeDir = "C:\Users\$env:USERNAME"
 $homeIniFilePath = "$($homeDir)\desktop.ini"
 $homeIcon = @"
@@ -232,16 +230,12 @@ if (Test-Path -Path $programsIniFilePath) {
 $programsPin = new-object -com shell.application
 $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome")
 
-#!
-#! FIXME: Could not find item/attribute
-#!
-
-New-Item -Path 'C:\' -Name 'QuickAccessObjects' -ItemType Directory -Force
-New-Item -Path 'C:\QuickAccessObjects' -Name 'Recycle Bin.{645FF040-5081-101B-9F08-00AA002F954E}' -ItemType Directory
-(Get-Item -Path 'C:\QuickAccessObjects').attributes = 'Hidden' # ! could not find item/attribute
-($TargetShellObject = (Get-ChildItem -Path 'C:\QuickAccessObjects' -Filter 'Recycle*').FullName)
-$Shell = New-Object -ComObject Shell.Application
-$Shell.Namespace(("$TargetShellObject").Self.InvokeVerb("PinToHome")) # ! error null output value?
+New-Item -Path 'C:\' -Name 'QuickAccessObjects' -ItemType Directory -Force | Out-Null
+New-Item -Path 'C:\QuickAccessObjects' -Name 'Applications.{4234d49b-0245-4df3-B780-3893943456e1}' -ItemType Directory | Out-Null
+(Get-Item -Path 'C:\QuickAccessObjects' -Include Hidden).attributes = 'Hidden' | Out-Null
+($TargetShellObject = (Get-ChildItem -Path 'C:\QuickAccessObjects' -Filter 'Shell*').FullName) | Out-Null
+$Shell = New-Object -ComObject Shell.Application | Out-Null
+$Shell.Namespace(($TargetShellObject).Self.InvokeVerb("PinToHome")) | Out-Null
 
 Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force | Out-Null
 New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
@@ -288,21 +282,22 @@ Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "Skin
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "SkinOptionsW7" -Value ([byte[]](0x4c, 0x00, 0x49, 0x00, 0x47, 0x00, 0x48, 0x00, 0x54, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x44, 0x00, 0x41, 0x00, 0x52, 0x00, 0x4b, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x41, 0x00, 0x55, 0x00, 0x54, 0x00, 0x4f, 0x00, 0x3d, 0x00, 0x31, 0x00, 0x00, 0x00, 0x55, 0x00, 0x53, 0x00, 0x45, 0x00, 0x52, 0x00, 0x5f, 0x00, 0x49, 0x00, 0x4d, 0x00, 0x41, 0x00, 0x47, 0x00, 0x45, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x55, 0x00, 0x53, 0x00, 0x45, 0x00, 0x52, 0x00, 0x5f, 0x00, 0x4e, 0x00, 0x41, 0x00, 0x4d, 0x00, 0x45, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x43, 0x00, 0x45, 0x00, 0x4e, 0x00, 0x54, 0x00, 0x45, 0x00, 0x52, 0x00, 0x5f, 0x00, 0x4e, 0x00, 0x41, 0x00, 0x4d, 0x00, 0x45, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x53, 0x00, 0x4d, 0x00, 0x41, 0x00, 0x4c, 0x00, 0x4c, 0x00, 0x5f, 0x00, 0x49, 0x00, 0x43, 0x00, 0x4f, 0x00, 0x4e, 0x00, 0x53, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x4f, 0x00, 0x50, 0x00, 0x41, 0x00, 0x51, 0x00, 0x55, 0x00, 0x45, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x44, 0x00, 0x49, 0x00, 0x53, 0x00, 0x41, 0x00, 0x42, 0x00, 0x4c, 0x00, 0x45, 0x00, 0x5f, 0x00, 0x4d, 0x00, 0x41, 0x00, 0x53, 0x00, 0x4b, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x42, 0x00, 0x4c, 0x00, 0x41, 0x00, 0x43, 0x00, 0x4b, 0x00, 0x5f, 0x00, 0x54, 0x00, 0x45, 0x00, 0x58, 0x00, 0x54, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x42, 0x00, 0x4c, 0x00, 0x41, 0x00, 0x43, 0x00, 0x4b, 0x00, 0x5f, 0x00, 0x46, 0x00, 0x52, 0x00, 0x41, 0x00, 0x4d, 0x00, 0x45, 0x00, 0x53, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x54, 0x00, 0x52, 0x00, 0x41, 0x00, 0x4e, 0x00, 0x53, 0x00, 0x50, 0x00, 0x41, 0x00, 0x52, 0x00, 0x45, 0x00, 0x4e, 0x00, 0x54, 0x00, 0x5f, 0x00, 0x4c, 0x00, 0x45, 0x00, 0x53, 0x00, 0x53, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x54, 0x00, 0x52, 0x00, 0x41, 0x00, 0x4e, 0x00, 0x53, 0x00, 0x50, 0x00, 0x41, 0x00, 0x52, 0x00, 0x45, 0x00, 0x4e, 0x00, 0x54, 0x00, 0x5f, 0x00, 0x4d, 0x00, 0x4f, 0x00, 0x52, 0x00, 0x45, 0x00, 0x3d, 0x00, 0x31, 0x00, 0x00, 0x00))
 Stop-Process -Name startmenu -Force
 Start-Process Explorer
-Start-Sleep -Seconds 5
+Start-Sleep -Seconds 2
 Start-Process $shellExePath
-$winexePath = Join-Path $pwd\bin "menu.exe"
-$process = Start-Process -FilePath $winexePath -WindowStyle Minimized -PassThru
-Start-Sleep -Seconds 3
-$process.CloseMainWindow() | Out-Null
-$process.WaitForExit() | Out-Null
+Start-Sleep -Seconds 2
+# $winexePath = Join-Path $pwd\bin "menu.exe"
+# $process = Start-Process -FilePath $winexePath -WindowStyle Minimized -PassThru
+# Start-Sleep -Seconds 3
+# $process.CloseMainWindow() | Out-Null
+# $process.WaitForExit() | Out-Null
 taskkill /IM explorer.exe /F | Out-Null
 Start-Sleep -Seconds 2
 Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
 Copy-Item -Path "$pwd\config\WinX\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
 Start-Process explorer
-Start-Sleep -Seconds 3
+Start-Sleep -Seconds 2
 Start-Process explorer # starts explorer window necessary to turn off classic explorer bar using key combination
-Start-Sleep -Seconds 3
+Start-Sleep -Seconds 4
 
 Add-Type -TypeDefinition @"
     using System;
@@ -347,15 +342,9 @@ Write-Host "Clean up completed."
 Write-Host @"
 ------------------------ WinMac Deployment completed ------------------------
 
-Enjoy and support work in progress by giving feedback and contributing to the project!
+    Enjoy and support by giving feedback and contributing to the project!
 
-WinMac function have been added to PowerShell profile. 
-Use 'winmac' command to get the version of WinMac.
-
-"@ -ForegroundColor Cyan
-
-Start-Sleep 1
-Write-Host "This is Work in Progress. Use at your own risk!" -ForegroundColor Magenta
+"@ -ForegroundColor Green
 
 # ! Restart Computer after deployment - Recommened for full effect
 # Start-Sleep 2
