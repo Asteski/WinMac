@@ -13,23 +13,19 @@
 # TODO:
 # !! Force Taskbar to go on top in StartAllBack
 # ! Modify desktop.ini Programs and User folder to change icon
-# ! Add winget plugin to PowerToys
-# TODO: shift+righ-click to open Run, win+shift to open Shutdown
-# TODO: hide righ-click OSH menu
-# TODO: winget plugin to PowerToys
+# TODO: hide righ-click menu
 # TODO: hide Windows Terminal from Start Menu
-# * Update $profile
-# * Configure Terminal with Pwsh, Bash and Zsh and apply OhMyPosh and OhMyZsh
+# * Setup prompt theme engine to PowerShell Profile
+# * Setup prompt aliases to PowerShell Profile
 # * Create WinMac Control Panel UWP app:
 #   * Add setting to modify middle-mouse button behaviour on taskbar (close app, open new window)
 #   * Add setting to modify Start Menu options
-#   * Taskbar Position (top, bottom, left, right)
+#   * Taskbar Position
 #   * Taskbar Alignment (left, center, start button on left with app icons centered)
 #   * Taskbar Size (small, medium, large)
 #   * Taskbar Transparency (dynamic, static, off)
-#   * Explorer Mode (modern - Win11 mode, classic - Win7 mode)
-#   * Explorer Status Bar (on, off)
-# ? Gestures in Explorer
+#   * Explorer Mode
+#   * Explorer Status Bar
 # Disable Classic Explorer Bar & Icons
 # Disable Status Bar (in both Open-Shell and StartAllBack)
 # Disable ClassicExplorer toolbar using keyboard input from install.ps1 script (Alt + V, →, Enter)
@@ -75,38 +71,20 @@ $winget = @(
 foreach ($app in $winget) {winget install --id $app --no-upgrade --silent}
 Write-Host "Installing Packages completed." -ForegroundColor Green
 
-# PowerToys
+## PowerShell Profile
 
-Write-Host "Configuring PowerToys..." -ForegroundColor Yellow
-
-$plugins1 = $env:LOCALAPPDATA + '\Microsoft\PowerToys\'
-$plugins2 = "C:\Program Files\PowerToys"
-$winget = 'https://github.com/bostrot/PowerToysRunPluginWinget/releases/download/v1.2.3/winget-powertoys-1.2.3.zip'
-$prockill = 'https://github.com/8LWXpg/PowerToysRun-ProcessKiller/releases/download/v1.0.1/ProcessKiller-v1.0.1-x64.zip'
-Invoke-WebRequest -uri $winget -Method "GET" -Outfile 'winget.zip'
-Invoke-WebRequest -uri $prockill -Method "GET" -Outfile 'prockill.zip'
-Expand-Archive 'winget.zip' -DestinationPath $pwd\Winget -Force
-Expand-Archive 'prockill.zip' -DestinationPath $pwd -Force
-Copy-item $pwd\Winget -Destination "$($plugins1)\RunPlugins\" -Recurse -Force
-Copy-item $pwd\ProcessKiller -Destination "$($plugins1)\Plugins\" -Recurse -Force
-Copy-item $pwd\Winget -Destination "$($plugins2)\Plugins\" -Recurse -Force
-Copy-item $pwd\ProcessKiller -Destination "$($plugins2)\Plugins\" -Recurse -Force
-Remove-Item -Recurse -Force Winget
-Remove-Item -Recurse -Force ProcessKiller
-Get-ChildItem * -Include *.zip -Recurse | Remove-Item -Force
-$PowerToysProc = Get-Process -Name PowerToys*
-ForEach ($proc in $PowerToysProc) {
-    $proc.WaitForExit(10000)
-    $proc.Kill()
-}
-Start-Sleep -Seconds 5
-Start-Process -FilePath "C:\Program Files\PowerToys\PowerToys.exe" # -ArgumentList "--settings-folder $($plugins)\settings --no-admin --no-startup" -Wait
-
-Write-Host "Configuring PowerToys completed." -ForegroundColor Green
+Write-Host "Configuring PowerShell Profile..." -ForegroundColor Yellow
+$profilePath = $PROFILE
+Write-Host "Profile Path: $profilePath"
+Write-Host "Settings up prompt theme engine to PowerShell Profile..."
+$ohMyPosh = "Import-Module posh-git; Import-Module oh-my-posh; Set-Theme jandedobbeleer"
+Add-Content -Path $profilePath -Value $ohMyPosh
+Write-Host "PowerShell Profile configured." -ForegroundColor Green
 
 ## StartAllBack
+## Shell & Explorer tweaks
 
-Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
+Write-Host "Configuring Shell..." -ForegroundColor Yellow
 
 Add-Type -TypeDefinition @"
 using System;
@@ -123,6 +101,7 @@ $taskbarHandle = [Taskbar]::FindWindow("Shell_TrayWnd", "")
 $HWND_TOP = [IntPtr]::Zero
 $SWP_SHOWWINDOW = 0x0040
 [Taskbar]::SetWindowPos($taskbarHandle, $HWND_TOP, 0, 0, 0, 0, $SWP_SHOWWINDOW) | Out-Null
+
 winget install --id "StartIsBack.StartAllBack" --silent --no-upgrade | Out-Null
 
 $sabRegPath = "HKCU:\Software\StartIsBack"
@@ -158,12 +137,6 @@ Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0
 Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
 
 Stop-Process -Name Explorer -Force
-
-Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
-
-## Shell & Explorer tweeks
-
-Write-Host "Configuring Shell..." -ForegroundColor Yellow
 
 Remove-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Force | Out-Null
 $shellRegPath = "Registry::HKEY_CURRENT_USER\Software\OpenShell"
@@ -238,7 +211,6 @@ New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentV
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
 
 winget install --id "Open-Shell.Open-Shell-Menu" --no-upgrade | Out-Null
-Start-Sleep -Seconds 5
 
 New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force | Out-Null
 New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force | Out-Null
@@ -292,7 +264,7 @@ Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
 Copy-Item -Path "$pwd\config\WinX\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
 Start-Process explorer
 Start-Sleep -Seconds 3
-Start-Process explorer # starts explore windows necessary to turn off classic explorer
+Start-Process explorer # starts explorer window necessary to turn off classic explorer bar using key combination
 Start-Sleep -Seconds 3
 
 Add-Type -TypeDefinition @"
@@ -328,29 +300,6 @@ Start-Sleep -Milliseconds 100
 [Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
 [Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
 Start-Sleep -Milliseconds 100
-
-## ! FIXME: Define ps subfolder in the project and use it to copy the function to the profile
-# function WinMac {    
-#     $sab = (winget show --id StartIsBack.StartAllBack | Select-String -Pattern "Version").ToString().Split(":")[1].Trim()
-#     $pt = (winget show --id Microsoft.PowerToys | Select-String -Pattern "Version").ToString().Split(":")[1].Trim()
-#     $ev = (winget show --id Voidtools.Everything | Select-String -Pattern "Version").ToString().Split(":")[1].Trim()
-#     $output = @{
-#         'Version' = $version
-#         'StartAllBackVersion' = $sab
-#         'PowerToysVersion' = $pt
-#         'EverythingVersion' = $ev
-#     }
-#     return $output
-# }
-# $funcContent = Get-Content -Path $funcPath -Raw
-# $filePath = Split-Path -Path $profile -Parent
-# $profilePath = Split-Path -Path $filePath -Parent
-# $fileName = Split-Path -Path $profile -Leaf
-# if (-not (Test-Path -Path $profile)){
-#     New-Item -Path $profilePath -Name 'WindowsPowershell' -ItemType Directory
-#     New-Item -Path $filePath -Name $fileName -ItemType File
-# }
-# Add-Content -Path $profile -Value `n$funcContent
 
 Write-Host "Configuring Shell completed." -ForegroundColor Green
 
