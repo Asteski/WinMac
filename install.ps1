@@ -11,15 +11,13 @@
 #################################################################################
 
 # TODO:
-# TODO: shift+righ-click to open Run, win+shift to open Shutdown
-# TODO: hide righ-click OSH menu
-# TODO: add cmdlet to $profile as path dir to function/script
-# TODO: change desktop.ini to change icon
-# TODO: winget plugin to PowerToys
-# TODO: hide Windows Terminal from Start Menu
 # !! Force Taskbar to go on top in StartAllBack
 # ! Modify desktop.ini Programs and User folder to change icon
 # ! Add winget plugin to PowerToys
+# TODO: shift+righ-click to open Run, win+shift to open Shutdown
+# TODO: hide righ-click OSH menu
+# TODO: winget plugin to PowerToys
+# TODO: hide Windows Terminal from Start Menu
 # * Update $profile
 # * Configure Terminal with Pwsh, Bash and Zsh and apply OhMyPosh and OhMyZsh
 # * Create WinMac Control Panel UWP app:
@@ -82,24 +80,24 @@ Write-Host "Installing Packages completed." -ForegroundColor Green
 Write-Host "Configuring PowerToys..." -ForegroundColor Yellow
 
 # $plugins = $env:LOCALAPPDATA + '\Microsoft\PowerToys\'
-# $winget = 'https://github.com/bostrot/PowerToysRunPluginWinget/releases/download/v1.2.3/winget-powertoys-1.2.3.zip'
-# $prockill = 'https://github.com/8LWXpg/PowerToysRun-ProcessKiller/releases/download/v1.0.1/ProcessKiller-v1.0.1-x64.zip'
-# $powerToysPath = $env:LOCALAPPDATA + '\PowerToys\PowerToys.exe'
-# Invoke-WebRequest -uri $winget -Method "GET" -Outfile 'winget.zip'
-# Invoke-WebRequest -uri $prockill -Method "GET" -Outfile 'prockill.zip'
-# Expand-Archive 'winget.zip' -DestinationPath $pwd\Winget -Force
-# Expand-Archive 'prockill.zip' -DestinationPath $pwd -Force
-# Copy-item $pwd\Winget -Destination $plugins -Recurse -Force
-# Copy-item $pwd\ProcessKiller -Destination $plugins -Recurse -Force
-# Start-Process -FilePath $powerToysPath
-# Remove-Item -Recurse -Force Winget
-# Remove-Item -Recurse -Force ProcessKiller
-# Get-ChildItem * -Include *.zip -Recurse | Remove-Item -Force
-# $PowerToysProc = Get-Process -Name PowerToys*
-# ForEach ($proc in $PowerToysProc) {
-# $proc.WaitForExit(10000)
-# $proc.Kill()
-# }
+$plugins = "C:\Program Files\PowerToys"
+$winget = 'https://github.com/bostrot/PowerToysRunPluginWinget/releases/download/v1.2.3/winget-powertoys-1.2.3.zip'
+$prockill = 'https://github.com/8LWXpg/PowerToysRun-ProcessKiller/releases/download/v1.0.1/ProcessKiller-v1.0.1-x64.zip'
+Invoke-WebRequest -uri $winget -Method "GET" -Outfile 'winget.zip'
+Invoke-WebRequest -uri $prockill -Method "GET" -Outfile 'prockill.zip'
+Expand-Archive 'winget.zip' -DestinationPath $pwd\Winget -Force
+Expand-Archive 'prockill.zip' -DestinationPath $pwd -Force
+Copy-item $pwd\Winget -Destination "$($plugins)\RunPlugins\" -Recurse -Force
+Copy-item $pwd\ProcessKiller -Destination "$($plugins)\RunPlugins\" -Recurse -Force
+Start-Process -FilePath "$($plugins)\PowerToys.exe" # -ArgumentList "--settings-folder $($plugins)\settings --no-admin --no-startup" -Wait
+Remove-Item -Recurse -Force Winget
+Remove-Item -Recurse -Force ProcessKiller
+Get-ChildItem * -Include *.zip -Recurse | Remove-Item -Force
+$PowerToysProc = Get-Process -Name PowerToys*
+ForEach ($proc in $PowerToysProc) {
+$proc.WaitForExit(10000)
+$proc.Kill()
+}
 
 Write-Host "Configuring PowerToys completed." -ForegroundColor Green
 
@@ -152,17 +150,11 @@ Set-ItemProperty -Path $sabRegPath -Name "UpdateInfoHash" -Value 805441044
 Set-ItemProperty -Path $sabRegPath -Name "SysTrayActionCenter" -Value 0
 Set-ItemProperty -Path $sabRegPath -Name "TaskbarControlCenter" -Value 1
 Set-ItemProperty -Path $sabRegPath -Name "SysTrayStyle" -Value 1
-Set-ItemProperty -Path $sabRegPath\Cache -Name "OrbWidth.120" -Value 39
-Set-ItemProperty -Path $sabRegPath\Cache -Name "OrbHeight.120" -Value 38
-Set-ItemProperty -Path $sabRegPath\Cache -Name "IdealHeight.9" -Value 81930
-Set-ItemProperty -Path $sabRegPath\Cache -Name "IdealWidth.9" -Value "Control Panel"
-Set-ItemProperty -Path $sabRegPath\Cache -Name "IdealHeight.6" -Value 10
 Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "(default)" -Value "1"
 Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0
 Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
 
 Stop-Process -Name Explorer -Force
-
 
 Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
 
@@ -175,16 +167,17 @@ $shellRegPath = "Registry::HKEY_CURRENT_USER\Software\OpenShell"
 $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"
 
 $homeDir = "C:\Users\$env:USERNAME"
+$homeIniFilePath = "$($homeDir)\desktop.ini"
 $homeIcon = @"
 [.ShellClassInfo]
 IconResource=C:\Windows\System32\SHELL32.dll,160
 "@
 $programsDir = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs"
+$programsIniFilePath = "$($programsDir)\desktop.ini"
 $programsIcon = @"
 [.ShellClassInfo]
 IconResource=C:\WINDOWS\System32\imageres.dll,187
 "@
-$homeIniFilePath = "$($homeDir)\desktop.ini"
 
 if (Test-Path -Path $homeIniFilePath) {
     $homeIni = Get-Content $homeIniFilePath -Raw
@@ -226,12 +219,16 @@ if (Test-Path -Path $programsIniFilePath) {
 $programsPin = new-object -com shell.application
 $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome")
 
+#!
+#! FIXME: Could not find item/attribute
+#!
+
 New-Item -Path 'C:\' -Name 'QuickAccessObjects' -ItemType Directory -Force
 New-Item -Path 'C:\QuickAccessObjects' -Name 'Recycle Bin.{645FF040-5081-101B-9F08-00AA002F954E}' -ItemType Directory
-(Get-Item -Path 'C:\QuickAccessObjects').attributes = 'Hidden'
+(Get-Item -Path 'C:\QuickAccessObjects').attributes = 'Hidden' # ! could not find item/attribute
 ($TargetShellObject = (Get-ChildItem -Path 'C:\QuickAccessObjects' -Filter 'Recycle*').FullName)
 $Shell = New-Object -ComObject Shell.Application
-$Shell.Namespace(("$TargetShellObject").Self.InvokeVerb("PinToHome"))
+$Shell.Namespace(("$TargetShellObject").Self.InvokeVerb("PinToHome")) # ! error null output value?
 
 Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force | Out-Null
 New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
