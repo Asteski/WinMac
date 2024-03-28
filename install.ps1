@@ -34,6 +34,7 @@
 
 # Clear-Host
 Write-Host @"
+
 ------------------------ WinMac Deployment ------------------------ 
 
                     Welcome to WinMac Deployment!
@@ -347,12 +348,12 @@ Write-Host @"
 "@ -ForegroundColor Green
 
 # ! Restart Computer after deployment - Recommened for full effect
-# Start-Sleep 2
-# Write-Host "Windows will restart in:" -ForegroundColor Red
-# for ($i = 10; $i -ge 1; $i--) {
-#     Write-Host $i -ForegroundColor Red
-#     Start-Sleep 1
-# }
-# Restart-Computer -Force
+Start-Sleep 2
+Write-Host "Windows will restart in:" -ForegroundColor Red
+for ($i = 10; $i -ge 1; $i--) {
+    Write-Host $i -ForegroundColor Red
+    Start-Sleep 1
+}
+Restart-Computer -Force
 
 # EOF
