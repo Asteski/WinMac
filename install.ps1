@@ -66,8 +66,8 @@ $winget = @(
 "JanDeDobbeleer.OhMyPosh",
 "Microsoft.PowerToys",
 "Voidtools.Everything",
-"lin-ycv.EverythingPowerToys"
-"Armin2208.WindowsAutoNightMode",
+"lin-ycv.EverythingPowerToys",
+"Armin2208.WindowsAutoNightMode"
 )
 foreach ($app in $winget) {winget install --id $app --no-upgrade --silent}
 Write-Host "Installing Packages completed." -ForegroundColor Green
