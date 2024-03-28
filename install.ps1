@@ -62,11 +62,12 @@ Write-Information "WinGet installation completed."
 Write-Host "Installing Packages:"
 $winget = @(
 # "RamenSoftware.7+TaskbarTweaker", # Manage middle-mouse click on taskbar
-"Armin2208.WindowsAutoNightMode",
+"Microsoft.PowerShell",
 "JanDeDobbeleer.OhMyPosh",
 "Microsoft.PowerToys",
 "Voidtools.Everything",
 "lin-ycv.EverythingPowerToys"
+"Armin2208.WindowsAutoNightMode",
 )
 foreach ($app in $winget) {winget install --id $app --no-upgrade --silent}
 Write-Host "Installing Packages completed." -ForegroundColor Green
@@ -75,7 +76,11 @@ Write-Host "Installing Packages completed." -ForegroundColor Green
 
 Write-Host "Configuring PowerShell Profile..." -ForegroundColor Yellow
 $profilePath = $PROFILE
-Write-Host "Profile Path: $profilePath"
+if (-not (Test-Path $profilePath)) {
+    Write-Host "Profile file does not exist. Creating profile..."
+    New-Item -ItemType File -Path $profilePath -Force
+    Write-Host "Profile file created." -ForegroundColor Green
+}
 Write-Host "Settings up prompt theme engine to PowerShell Profile..."
 $ohMyPosh = "Import-Module posh-git; Import-Module oh-my-posh; Set-Theme jandedobbeleer"
 Add-Content -Path $profilePath -Value $ohMyPosh
