@@ -299,7 +299,6 @@ Start-Process explorer
 Start-Sleep -Seconds 2
 Start-Process explorer # starts explorer window necessary to turn off classic explorer bar using key combination
 Start-Sleep -Seconds 4
-
 Add-Type -TypeDefinition @"
     using System;
     using System.Runtime.InteropServices;
