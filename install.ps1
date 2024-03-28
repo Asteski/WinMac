@@ -72,50 +72,51 @@ $winget = @(
 foreach ($app in $winget) {winget install --id $app --no-upgrade --silent}
 Write-Host "Installing Packages completed." -ForegroundColor Green
 
+### Shell
+
 ## PowerShell Profile
 
 Write-Host "Configuring PowerShell Profile..." -ForegroundColor Yellow
 $profilePath = $PROFILE
-$theme = 'jandedobbeleer'
-# $themes = 'catppuccin'
-$uri = "https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/$theme.omp.json"
-$outputPath = "$env:USERPROFILE\AppData\Local\Programs\oh-my-posh\themes\"
-$configPath = Join-Path $outputPath $theme".omp.json"
-$ohMyPosh = "oh-my-posh init pwsh --config $configPath | Invoke-Expression"
+# $theme = 'jandedobbeleer'
+# # $themes = 'catppuccin'
+# $uri = "https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/$theme.omp.json"
+# $outputPath = "$env:USERPROFILE\AppData\Local\Programs\oh-my-posh\themes\"
+# $configPath = Join-Path $outputPath $theme".omp.json"
+# $ohMyPosh = "oh-my-posh init pwsh --config $configPath | Invoke-Expression"
 
-function Download-File {
-    param (
-        [Parameter(Mandatory = $true)]
-        [string]$uri,
-        [Parameter(Mandatory = $true)]
-        [string]$outputPath
-    )
-}
+# function Download-File {
+#     param (
+#         [Parameter(Mandatory = $true)]
+#         [string]$uri,
+#         [Parameter(Mandatory = $true)]
+#         [string]$outputPath
+#     )
+# }
 
-Write-Host "Settings up prompt theme engine to PowerShell Profile..."
+# Write-Host "Settings up prompt theme engine to PowerShell Profile..."
 
-if (!(Test-Path $profilePath)) {   
-    Write-Host "Profile file does not exist. Creating profile..."
-    New-Item -ItemType File -Path $profilePath -Force
-    Write-Host "Profile file created." -ForegroundColor Green
+# if (!(Test-Path $profilePath)) {   
+#     Write-Host "Profile file does not exist. Creating profile..."
+#     New-Item -ItemType File -Path $profilePath -Force
+#     Write-Host "Profile file created." -ForegroundColor Green
 
-    if (!(Test-Path $configPath)) {
-            $webClient = New-Object System.Net.WebClient
-            $webClient.DownloadFile($uri, $outputPath)
-    } else {
-        Write-Host "$theme theme file exists."  -ForegroundColor Green
-    }
-    Add-Content -Path $profilePath -Value `n$ohMyPosh
-    Write-Host "PowerShell Profile configured." -ForegroundColor Green
-} else {
-    Add-Content -Path $profilePath -Value `n$ohMyPosh
-    Write-Host "PowerShell Profile configured." -ForegroundColor Green
-}
+#     if (!(Test-Path $configPath)) {
+#             $webClient = New-Object System.Net.WebClient
+#             $webClient.DownloadFile($uri, $outputPath)
+#     } else {
+#         Write-Host "$theme theme file exists."  -ForegroundColor Green
+#     }
+#     Add-Content -Path $profilePath -Value `n$ohMyPosh
+#     Write-Host "PowerShell Profile configured." -ForegroundColor Green
+# } else {
+#     Add-Content -Path $profilePath -Value `n$ohMyPosh
+#     Write-Host "PowerShell Profile configured." -ForegroundColor Green
+# }
 
-# $ohMyPosh = "Import-Module posh-git; Import-Module oh-my-posh; Set-Theme jandedobbeleer"
+Write-Host "Configuring PowerShell Profile completed." -ForegroundColor Green
 
 ## StartAllBack
-## Shell & Explorer tweaks
 
 Write-Host "Configuring Shell..." -ForegroundColor Yellow
 
@@ -134,6 +135,8 @@ $taskbarHandle = [Taskbar]::FindWindow("Shell_TrayWnd", "")
 $HWND_TOP = [IntPtr]::Zero
 $SWP_SHOWWINDOW = 0x0040
 [Taskbar]::SetWindowPos($taskbarHandle, $HWND_TOP, 0, 0, 0, 0, $SWP_SHOWWINDOW) | Out-Null
+
+Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
 
 winget install --id "StartIsBack.StartAllBack" --silent --no-upgrade | Out-Null
 
@@ -168,8 +171,9 @@ Set-ItemProperty -Path $sabRegPath -Name "SysTrayStyle" -Value 1
 Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "(default)" -Value "1"
 Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0
 Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
-
 Stop-Process -Name Explorer -Force
+
+Write-Host "Configuring StartAllBack completed." -ForegroundColor Yellow
 
 Remove-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Force | Out-Null
 $shellRegPath = "Registry::HKEY_CURRENT_USER\Software\OpenShell"
