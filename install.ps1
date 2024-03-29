@@ -10,10 +10,6 @@
 #                                                                               #
 #################################################################################
 
-# TODO:
-# ! Force Taskbar to go on top in StartAllBack
-# ! hide Windows Terminal from Start Menu (StartAllBack bug, forces Terminal shortcuts on classic Start Menu)
-
 Clear-Host
 Write-Host @"
 -------------------------- WinMac Deployment ----------------------
