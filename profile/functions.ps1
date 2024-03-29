@@ -113,7 +113,7 @@ function ll { Get-ChildItem -Force }
 function la { Get-ChildItem -Force -Attributes !D }
 
 function tree { 
-    if (($args[0] -eq "--all") or ($args[0] -eq "-a")) 
+    if (($args[0] -eq "--all") -or ($args[0] -eq "-a")) 
     {
         Get-ChildItem -Recurse -Force
     }
