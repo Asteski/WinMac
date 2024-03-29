@@ -3,7 +3,7 @@
 #                                                                               #
 #                           WinMac deployment script                            #
 #                                                                               #
-#                               Version: 0.0.9                                  #
+#                               Version: 0.1.0                                  #
 #                           Author: Adam Kamienski                              #
 #                               GitHub: Asteski                                 #
 #                                                                               #
@@ -11,12 +11,9 @@
 #################################################################################
 
 # TODO:
-# !! Force Taskbar to go on top in StartAllBack
-# TODO: winsetview
-# TODO: hide righ-click menu
-# TODO: hide Windows Terminal from Start Menu - set pwsh as default first then delete
-# * Setup prompt theme engine to PowerShell Profile
-# * Setup prompt aliases to PowerShell Profile
+# ! Force Taskbar to go on top in StartAllBack
+# ! hide Windows Terminal from Start Menu (StartAllBack bug, forces Terminal shortcuts on classic Start Menu)
+# TODO: hide righ-click menu on taskbar
 # * Create WinMac Control Panel UWP app:
 #   * Add setting to modify middle-mouse button behaviour on taskbar (close app, open new window)
 #   * Add setting to modify Start Menu options
@@ -39,7 +36,7 @@ Write-Host @"
 
                         Author: Adam Kamienski
                             GitHub: Asteski
-                            Version: 0.0.9
+                            Version: 0.1.0
 
                       This is Work in Progress. 
 
@@ -62,7 +59,6 @@ Remove-Item -Path $installPath
 Write-Information "WinGet installation completed."
 Write-Host "Installing Packages:"
 $winget = @(
-# "RamenSoftware.7+TaskbarTweaker", # Manage middle-mouse click on taskbar
 "Microsoft.PowerShell",
 "JanDeDobbeleer.OhMyPosh",
 "Microsoft.PowerToys",
