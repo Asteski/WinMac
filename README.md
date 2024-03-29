@@ -16,7 +16,7 @@
 
 - **Spotlight-like quick launcher**
 
-PowerToys brings a MacOS Spotlight-like functionality to Windows with PoweToys Run. It allows users to quickly search for files, applications, and settings on your system. 
+PowerToys brings a MacOS Spotlight-like functionality to Windows with PowerToys Run. It allows users to quickly search for files, applications, and settings on your system. 
 
 By pressing a customizable hotkey combination (alt+space by default), a search bar appears, enabling users to type their query and quickly launch or access the desired item without navigating through menus or directories. Besides PowerToys run, this utility allows for many customization, improving your workflow in many different ways.
 
@@ -34,7 +34,7 @@ Additionally, StartAllBack offers options for customizing the appearance and beh
 
 StartAllBack extends its enhancements beyond the Taskbar to the Windows Explorer, providing users with a more streamlined and efficient file browsing experience, by bringing back older versions of Explorer from Windows 7 or Windows 10. 
 
-Utility introduces features such as tabs, customizable toolbar buttons, enhanced file previews, and improved navigation options. With StartAllBack and PowerToys, users can personalize their Explorer interface to better suit their workflow and access files and folders more efficiently.
+Utility introduces features such as ribbons, tabs, customizable toolbar buttons, enhanced file previews, and improved navigation options. With StartAllBack and PowerToys, users can personalize our Explorer interface to better suit your workflow and access files and folders more efficiently.
 
 Additionally, deployment script includes pinning User folder and Programs folder to Quick Access.
 
