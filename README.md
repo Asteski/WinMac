@@ -103,6 +103,6 @@ Please support creators however you can for their wonderful work!
 
 Keep in mind that StartAllBack is not a free software and requires license to run permanently. Free version will stop working after 100 days.
 
-WinMac is not planned to be used for business/earning purposes. If you're not okay with me installing your software with WinMac deployment script, please let me know!
+WinMac is not planned to be used for business/earning purposes. If you're not okay with me using your software by installing your software (using Winget) with WinMac deployment script, please let me know!
 
 Enjoy!
