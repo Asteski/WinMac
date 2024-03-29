@@ -58,7 +58,7 @@ $winget = @(
 "JanDeDobbeleer.OhMyPosh",
 "Microsoft.PowerToys",
 "Voidtools.Everything",
-"lin-ycv.EverythingPowerToys",
+"lin-ycv.EverythingPowerToys"
 )
 foreach ($app in $winget) {winget install --id $app --no-upgrade --silent}
 Write-Host "Installing Packages completed." -ForegroundColor Green

@@ -47,7 +47,7 @@ Additionally, I've included pinning User folder and Programs folder to Quick Acc
 WinMac provides you with addition of most commonly used commands in MacOS/Linux, like *touch, ditto, top, whatis, killall, ll, la, tree* with additional commands like:
 
 - *np* which opens notepad with or without provided file name,
-- *of* or *open*, which is used to open current Powershell directory in Explorer, or opening folder where specific file resides. 
+- *of* or *open*, which is used to open current Powershell directory in Explorer, or opening folder where specific file resides.
 
 Examples: 
 
@@ -63,7 +63,7 @@ Examples:
 
 - **Unified Computing Experience:** WinMac provides a cohesive blend of Windows and macOS elements, ensuring a smooth and efficient workflow for all users.
 - **Enhanced Productivity:** Take advantage of the versatility and compatibility of WinMac to maximize productivity across various tasks and applications.
-- **Privacy and Security:** Rest assured knowing that your data is protected by the advanced security features as part of Windows 11 Security.
+- **Privacy and Security:** Rest assured knowing that your data is protected by the advanced security features as part of Windows 11 Security services.
 
 ## Experience WinMac Today!
 
@@ -81,7 +81,8 @@ For the most reliable deployment process, I recommend to install latest Powershe
 - Force Taskbar to go automatically on top upon deployment
 - Hide Windows Terminal options from Start Menu
 - Deploy OhMyPosh configuration for Powershell
-- Replace Programs directory with Applications Shell object to show all installed apps
+- Replace Programs directory with Applications Shell object to show all installed apps, 
+instead of a shortcut to Start Menu programs ($env:APPDATA\Microsoft\Windows\Start Menu\Programs)
 
 ## Credit:
 
