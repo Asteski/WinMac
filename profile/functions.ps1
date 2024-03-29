@@ -54,18 +54,6 @@ function top {
     $process | Format-Table -AutoSize
 }
 
-function whatis {
-    $command = $args[0]
-    if($null -eq $command) 
-    {
-        Write-Host "Command is required" -ForegroundColor Red
-    }
-    else
-    {
-        help $command
-    }
-}
-
 function killall {
     $procName = $args[0]
     $process = Get-Process | Where-Object { $_.ProcessName -eq $procName }
@@ -125,3 +113,4 @@ function tree {
 
 set-alias -name np -value notepad
 set-alias -name open -value of
+set-alias -name whatis -value man
