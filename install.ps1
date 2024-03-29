@@ -131,6 +131,8 @@ Stop-Process -Name Explorer -Force
 
 Write-Host "Configuring StartAllBack completed." -ForegroundColor Yellow
 
+## Miscellaneous
+
 Remove-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Force | Out-Null
 $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"
 $homeDir = "C:\Users\$env:USERNAME"
@@ -196,6 +198,8 @@ $Shell.Namespace(($TargetShellObject).Self.InvokeVerb("PinToHome")) | Out-Null
 Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force | Out-Null
 New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
+
+## Open-Shell
 
 winget install --id "Open-Shell.Open-Shell-Menu" --no-upgrade | Out-Null
 
