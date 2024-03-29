@@ -14,60 +14,83 @@
 
 ## Features:
 
-### * **Spotlight-like quick launcher**
+- **Spotlight-like quick launcher**
 
 PowerToys brings a MacOS Spotlight-like functionality to Windows with PoweToys Run. It allows users to quickly search for files, applications, and settings on your system. 
 
 By pressing a customizable hotkey combination (alt+space by default), a search bar appears, enabling users to type their query and quickly launch or access the desired item without navigating through menus or directories. Besides PowerToys run, this utility allows for many customization, improving your workflow in many different ways.
 
-### * **Revamped and decluttered Start Menu**
+- **Revamped and decluttered Start Menu**
 
 Open-Shell is a customizable Start Menu replacement for Windows that provides users with possiblity to completely replace traditional Start Menu with customized WinX menu, resembling MacOS main menu.
 
-### * **Enhanced Taskbar**
+- **Enhanced Taskbar**
 
 StartAllBack enhances the functionality of the Windows Taskbar by introducing features inspired by earlier versions of Windows, such as Windows 7 and Windows 10. It brings back familiar elements like colored title bars and customizable Start buttons. 
 
 Additionally, StartAllBack offers options for customizing the appearance and behavior of the Taskbar to suit individual user preferences.
 
-### * **Enhanced Explorer**
+- **Enhanced Explorer**
 
 StartAllBack extends its enhancements beyond the Taskbar to the Windows Explorer, providing users with a more streamlined and efficient file browsing experience, by bringing back older versions of Explorer from Windows 7 or Windows 10. 
 
 It introduces features such as customizable toolbar buttons, enhanced file previews, and improved navigation options. With StartAllBack, users can personalize their Explorer interface to better suit their workflow and access files and folders more efficiently.
 
+- **Revamped Terminal**
+
+*[Not working in current WinMac version]* OhMyPosh is a prompt theme engine for Powershell, enabling you to use the full color set of your terminal by using colors or predefined themes to define and render the prompt. 
+
+WinMac provides you with addition of most commonly used commands in MacOS, like *touch, ditto, top, whatis, killall,* with additional command called *of* or *open*, which is used to open current Powershell directory in Explorer, or opening folder of a file directory.
+
+Examples: 
+
+*of $profile* or *open $profile* opens folder, where $profile file resides
+
+*of foldername* or *open foldername* opens specific folder that is placed in current folder
+
+*of folderdir* or *open folderdir* opens specific folder directory
+
+*of* or *open* opens current folder
+
 ## Benefits:
 
 - **Unified Computing Experience:** WinMac provides a cohesive blend of Windows and macOS elements, ensuring a smooth and efficient workflow for all users.
 - **Enhanced Productivity:** Take advantage of the versatility and compatibility of WinMac to maximize productivity across various tasks and applications.
-- **Privacy and Security:** Rest assured knowing that your data is protected by the advanced security features incorporated into WinMac.
+- **Privacy and Security:** Rest assured knowing that your data is protected by the advanced security features as part of Windows 11 Security.
 
 ## Experience WinMac Today!
 
 Discover the future of computing with WinMac, where the power of Windows meets the elegance of macOS in perfect harmony. Upgrade to WinMac and elevate your computing experience to new heights!
 
-Please be informed that this is an alpha version - you're installing it at your own risk!!
+Please be informed that this is a beta version - you're installing it at your own risk!!
+
+## Recommendation:
+
+For the most reliable deployment process, I recommend to install latest Powershell Core and run it as an administrator. Everything else will be deployed automatically for you(including Winget if not installed).
 
 ## Planned features:
 
-#### Force Taskbar to go on top in StartAllBack
-#### Hide Windows Terminal from Start Menu (StartAllBack bug, forces Terminal shortcuts on classic Start Menu)
-#### Create WinMac Control Panel UWP app to manage UI settings
+- Create WinMac Control Panel UWP app to manage UI settings
+- Force Taskbar to go automatically on top upon deployment
+- Hide Windows Terminal options from Start Menu
+- Deploy OhMyPosh configuration for Powershell
 
 ## Credit:
 
-List of the utilities used with this deployment script:
+List of utilities used with WinMac deployment script:
 
-- Microsoft: (PowerToys)[https://learn.microsoft.com/en-us/windows/powertoys/]
+- Microsoft: [PowerToys](https://learn.microsoft.com/en-us/windows/powertoys/)
 
-- Stanislav Zinukhov: (StartAllBack)[https://www.startallback.com/]
+- Stanislav Zinukhov: [StartAllBack](https://www.startallback.com/)
 
-- Ivo Beltchev: (Open-Shell)[https://open-shell.github.io/Open-Shell-Menu/]
+- Ivo Beltchev: [Open-Shell](https://open-shell.github.io/Open-Shell-Menu/)
 
-- Jan Doebbler: (OhMyPosh)[https://ohmyposh.dev/]
+- Jan Doebbler: [OhMyPosh](https://ohmyposh.dev/)
 
-Please support utilities creators however you can. Keep in mind that StartAllBack is not a free software and requires license to run permanently. Free version will stop working after 100 days.
+Please support creators however you can for their wonderful work!
 
-WinMac is not planned to be used for business/earning purposes. If you're not okay with installing your tool with this deployment script, please let me know!
+Keep in mind that StartAllBack is not a free software and requires license to run permanently. Free version will stop working after 100 days.
 
+WinMac is not planned to be used for business/earning purposes. If you're not okay with me installing your software with WinMac deployment script, please let me know!
 
+Enjoy!
