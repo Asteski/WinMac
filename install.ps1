@@ -13,7 +13,6 @@
 # TODO:
 # ! Force Taskbar to go on top in StartAllBack
 # ! hide Windows Terminal from Start Menu (StartAllBack bug, forces Terminal shortcuts on classic Start Menu)
-# TODO: hide righ-click menu on taskbar
 # * Create WinMac Control Panel UWP app:
 #   * Add setting to modify middle-mouse button behaviour on taskbar (close app, open new window)
 #   * Add setting to modify Start Menu options

@@ -14,23 +14,26 @@
 
 ## Features:
 
-### - Spotlight-like quick launcher
+### * **Spotlight-like quick launcher**
 
-PowerToys Run brings a MacOS Spotlight-like functionality to Windows with PoweToys Run. It allows users to quickly search for files, applications, and settings on your system. 
+PowerToys brings a MacOS Spotlight-like functionality to Windows with PoweToys Run. It allows users to quickly search for files, applications, and settings on your system. 
+
 By pressing a customizable hotkey combination (alt+space by default), a search bar appears, enabling users to type their query and quickly launch or access the desired item without navigating through menus or directories. Besides PowerToys run, this utility allows for many customization, improving your workflow in many different ways.
 
-### - Revamped and decluttered Start Menu
+### * **Revamped and decluttered Start Menu**
 
 Open-Shell is a customizable Start Menu replacement for Windows that provides users with possiblity to completely replace traditional Start Menu with customized WinX menu, resembling MacOS main menu.
 
-### - Enhanced Taskbar
+### * **Enhanced Taskbar**
 
 StartAllBack enhances the functionality of the Windows Taskbar by introducing features inspired by earlier versions of Windows, such as Windows 7 and Windows 10. It brings back familiar elements like colored title bars and customizable Start buttons. 
+
 Additionally, StartAllBack offers options for customizing the appearance and behavior of the Taskbar to suit individual user preferences.
 
-### - Enhanced Explorer
+### * **Enhanced Explorer**
 
 StartAllBack extends its enhancements beyond the Taskbar to the Windows Explorer, providing users with a more streamlined and efficient file browsing experience, by bringing back older versions of Explorer from Windows 7 or Windows 10. 
+
 It introduces features such as customizable toolbar buttons, enhanced file previews, and improved navigation options. With StartAllBack, users can personalize their Explorer interface to better suit their workflow and access files and folders more efficiently.
 
 ## Benefits:
