@@ -2,8 +2,6 @@
 
 **WinMac** is a revolutionary modification that brings together the best of both Windows and macOS operating systems, offering users a unique and seamless computing experience.
 
-Current version: 0.1.0
-
 ## Dark:
 
 ![winmac_dark_01](https://github.com/Asteski/WinMac/assets/163755955/e857e2b7-97cc-4d70-b3a9-816f03bb6a7d)
