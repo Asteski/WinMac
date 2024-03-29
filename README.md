@@ -34,9 +34,9 @@ Additionally, StartAllBack offers options for customizing the appearance and beh
 
 StartAllBack extends its enhancements beyond the Taskbar to the Windows Explorer, providing users with a more streamlined and efficient file browsing experience, by bringing back older versions of Explorer from Windows 7 or Windows 10. 
 
-It introduces features such as customizable toolbar buttons, enhanced file previews, and improved navigation options. With StartAllBack, users can personalize their Explorer interface to better suit their workflow and access files and folders more efficiently.
+Utility introduces features such as tabs, customizable toolbar buttons, enhanced file previews, and improved navigation options. With StartAllBack and PowerToys, users can personalize their Explorer interface to better suit their workflow and access files and folders more efficiently.
 
-Additionally, I've included pinning User folder and Programs folder to Quick Access.
+Additionally, deployment script includes pinning User folder and Programs folder to Quick Access.
 
 - **Revamped Terminal**
 
