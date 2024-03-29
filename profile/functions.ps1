@@ -12,20 +12,23 @@ function prompt {
     }
 }
 
+
 function touch {
     $file = $args[0]
     if($null -eq $file) 
     {
         $file = "touch_" + (Get-Date -Format "yyyy-MM-ddTHHmmss") + ".txt"
         Write-Output $null > $file
+        Write-Host "File created: $file" -ForegroundColor Green
     }
     elseif(Test-Path $file)
     {
-        throw "file already exists"
+        Write-Host "File already exists" -ForegroundColor Red
     }
     else
     {
         Write-Output $null > $file
+        Write-Host "File created: $file" -ForegroundColor Green
     }
 }
 
@@ -34,7 +37,7 @@ function ditto {
     $destination = $args[1]
     if($null -eq $source -or $null -eq $destination) 
     {
-        throw "Source and destination are required"
+        Write-Host "Source does not exist or destination already exists"  -ForegroundColor Red
     }
     elseif((Test-Path $source) -and -not (Test-Path $destination)) 
     {
@@ -42,7 +45,7 @@ function ditto {
     }
     else 
     {
-        throw "Source does not exist or destination already exists"
+        Write-Host "Source does not exist or destination already exists" -ForegroundColor Red
     }
 }
 
@@ -55,7 +58,7 @@ function whatis {
     $command = $args[0]
     if($null -eq $command) 
     {
-        throw "Command is required"
+        Write-Host "Command is required" -ForegroundColor Red
     }
     else
     {
@@ -68,11 +71,12 @@ function killall {
     $process = Get-Process | Where-Object { $_.ProcessName -eq $procName }
     if ($null -eq $procName -or $null -eq $process) 
     {
-        throw "Process is not running or not found"
+        Write-Host "Process is not running or not found" -ForegroundColor Red
     } 
     else 
     {
         $process | Stop-Process -Force
+        WRite-Host "Process $procName stopped" -ForegroundColor Green
     }
 }
 
@@ -100,13 +104,24 @@ function of {
     }
     else
     {
-        throw "File or directory does not exist"
+        Write-Host "File or directory does not exist" -ForegroundColor Red
     }
 }
 
 function ll { Get-ChildItem -Force }
+
 function la { Get-ChildItem -Force -Attributes !D }
-function tree { Get-ChildItem -Recurse -Force }
+
+function tree { 
+    if (($args[0] -eq "--all") or ($args[0] -eq "-a")) 
+    {
+        Get-ChildItem -Recurse -Force
+    }
+    else
+    {
+        Get-ChildItem -Recurse
+    }
+}
 
 set-alias -name np -value notepad
 set-alias -name open -value of

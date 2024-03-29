@@ -13,15 +13,6 @@
 # TODO:
 # ! Force Taskbar to go on top in StartAllBack
 # ! hide Windows Terminal from Start Menu (StartAllBack bug, forces Terminal shortcuts on classic Start Menu)
-# * Create WinMac Control Panel UWP app:
-#   * Add setting to modify middle-mouse button behaviour on taskbar (close app, open new window)
-#   * Add setting to modify Start Menu options
-#   * Taskbar Position
-#   * Taskbar Alignment (left, center, start button on left with app icons centered)
-#   * Taskbar Size (small, medium, large)
-#   * Taskbar Transparency (dynamic, static, off)
-#   * Explorer Mode
-#   * Explorer Status Bar
 
 Clear-Host
 Write-Host @"

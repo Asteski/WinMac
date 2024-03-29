@@ -57,6 +57,10 @@ Examples:
 
 *of* or *open* opens current folder
 
+*tree* lists all subdirectories and their content
+
+*tree --all* or *tree -a* lists all subdirectories and their content including hidden folders and files
+
 ## Benefits:
 
 - **Unified Computing Experience:** WinMac provides a cohesive blend of Windows and macOS elements, ensuring a smooth and efficient workflow for all users.
