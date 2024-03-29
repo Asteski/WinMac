@@ -12,7 +12,6 @@
 
 # TODO:
 # !! Force Taskbar to go on top in StartAllBack
-# ! Modify desktop.ini Programs and User folder to change icon
 # TODO: winsetview
 # TODO: hide righ-click menu
 # TODO: hide Windows Terminal from Start Menu - set pwsh as default first then delete
