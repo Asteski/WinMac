@@ -1,6 +1,6 @@
 
 function prompt { 
-    $userName = 'Adams'
+    $userName = $env:USERNAME
     $folder = Split-Path -Leaf $pwd
     if ($folder -eq $env:USERNAME) 
     {
@@ -96,7 +96,7 @@ function of {
         }
     }
     elseif (-not (Test-Path $Path)) {
-        ii .
+        Invoke-Item .
     }
     else
     {
@@ -104,17 +104,9 @@ function of {
     }
 }
 
-function ll {
-    Get-ChildItem -Force
-}
-
-function la {
-    Get-ChildItem -Force -Attributes !D
-}
-
-function tree {
-    Get-ChildItem -Recurse -Force
-}
+function ll { Get-ChildItem -Force }
+function la { Get-ChildItem -Force -Attributes !D }
+function tree { Get-ChildItem -Recurse -Force }
 
 set-alias -name np -value notepad
 set-alias -name open -value of

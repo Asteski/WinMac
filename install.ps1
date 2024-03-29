@@ -70,7 +70,12 @@ Write-Host "Installing Packages completed." -ForegroundColor Green
 Write-Host "Configuring PowerShell Profile..." -ForegroundColor Yellow
 
 $profilePath = $PROFILE
+$profileDirectory = Split-Path $profilePath -Parent
 $functions = Get-Content "$pwd\profile\functions.ps1" -Raw
+
+if (-not (Test-Path $profileDirectory)) {
+    New-Item -ItemType Directory -Path $profileDirectory | Out-Null
+}
 
 if (-not (Test-Path $profilePath)) {
     New-Item -ItemType File -Path $profilePath | Out-Null
