@@ -82,7 +82,7 @@ For the most reliable deployment process, I recommend to install latest Powershe
 - Hide Windows Terminal options from Start Menu
 - Deploy OhMyPosh configuration for Powershell
 - Replace Programs directory with Applications Shell object to show all installed apps, 
-instead of a shortcut to Start Menu programs ($env:APPDATA\Microsoft\Windows\Start Menu\Programs)
+instead of a shortcut to Start Menu programs folder
 
 ## Credit:
 
