@@ -83,7 +83,7 @@ For the most reliable deployment process, I recommend to install latest Powershe
 - Force Taskbar to go automatically on top upon deployment
 - Hide Windows Terminal options from Start Menu
 - Deploy OhMyPosh configuration for Powershell
-- Improve *tree* output
+- Improve *tree* output and parameters
 - Add option to close taskbar tasks with middle mouse button
 - Replace Programs directory with Applications Shell object to show all installed apps, instead of a shortcut to Start Menu programs folder
 
