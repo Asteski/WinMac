@@ -86,13 +86,13 @@ For the most reliable deployment process, I recommend to install latest Powershe
 
 List of utilities used with WinMac deployment script:
 
-- [Microsoft](https://github.com/microsoft): [PowerToys](https://learn.microsoft.com/en-us/windows/powertoys/)
+- [Microsoft:](https://github.com/microsoft) [PowerToys](https://learn.microsoft.com/en-us/windows/powertoys/)
 
 - Stanislav Zinukhov: [StartAllBack](https://www.startallback.com/)
 
 - Ivo Beltchev: [Open-Shell](https://open-shell.github.io/Open-Shell-Menu/)
 
-- [Jan De Dobbeleer](https://github.com/JanDeDobbeleer): [OhMyPosh](https://ohmyposh.dev/)
+- [Jan De Dobbeleer:](https://github.com/JanDeDobbeleer) [OhMyPosh](https://ohmyposh.dev/)
 
 Please support creators however you can for their wonderful work!
 
