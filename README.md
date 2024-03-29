@@ -92,7 +92,7 @@ List of utilities used with WinMac deployment script:
 
 - Ivo Beltchev: [Open-Shell](https://open-shell.github.io/Open-Shell-Menu/)
 
-- Jan Doebbler: [OhMyPosh](https://ohmyposh.dev/)
+- [Jan De Dobbeleer](https://github.com/JanDeDobbeleer): [OhMyPosh](https://ohmyposh.dev/)
 
 Shoutout to 
 
