@@ -58,13 +58,13 @@ Please be informed that this is an alpha version - you're installing it at your 
 
 List of the utilities used with this deployment script:
 
-- Microsoft: (**PowerToys**)[https://learn.microsoft.com/en-us/windows/powertoys/]
+- Microsoft: (PowerToys)[https://learn.microsoft.com/en-us/windows/powertoys/]
 
-- Stanislav Zinukhov: (**StartAllBack**)[https://www.startallback.com/]
+- Stanislav Zinukhov: (StartAllBack)[https://www.startallback.com/]
 
-- Ivo Beltchev: (**Open-Shell**)[https://open-shell.github.io/Open-Shell-Menu/]
+- Ivo Beltchev: (Open-Shell)[https://open-shell.github.io/Open-Shell-Menu/]
 
-- Jan Doebbler: (**OhMyPosh**)[https://ohmyposh.dev/]
+- Jan Doebbler: (OhMyPosh)[https://ohmyposh.dev/]
 
 Please support utilities creators however you can. Keep in mind that StartAllBack is not a free software and requires license to run permanently. Free version will stop working after 100 days.
 
