@@ -86,7 +86,7 @@ For the most reliable deployment process, I recommend to install latest Powershe
 
 List of utilities used with WinMac deployment script:
 
-- Microsoft: [PowerToys](https://learn.microsoft.com/en-us/windows/powertoys/)
+- [Microsoft](https://github.com/microsoft): [PowerToys](https://learn.microsoft.com/en-us/windows/powertoys/)
 
 - Stanislav Zinukhov: [StartAllBack](https://www.startallback.com/)
 
