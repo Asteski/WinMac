@@ -22,10 +22,6 @@
 #   * Taskbar Transparency (dynamic, static, off)
 #   * Explorer Mode
 #   * Explorer Status Bar
-# Disable Classic Explorer Bar & Icons
-# Disable Status Bar (in both Open-Shell and StartAllBack)
-# Disable ClassicExplorer toolbar using keyboard input from install.ps1 script (Alt + V, →, Enter)
-# Modify Start menu/Win key actions to emulate MacOS behaviour
 
 Clear-Host
 Write-Host @"
@@ -43,9 +39,9 @@ Write-Host @"
 
 "@ -ForegroundColor Cyan
 
-## WinGet
+## Winget
 
-Write-Host "Checking for Windows Package Manager (WinGet)" -ForegroundColor Yellow
+Write-Host "Checking for Windows Package Manager (Winget)" -ForegroundColor Yellow
 
 $progressPreference = 'silentlyContinue'
 Write-Information "Downloading WinGet and its dependencies..."
@@ -55,7 +51,7 @@ Invoke-WebRequest -Uri $wingetUrl -OutFile $installPath
 Write-Information "Installing WinGet..."
 Add-AppxPackage -Path $installPath
 Remove-Item -Path $installPath
-Write-Information "WinGet installation completed."
+Write-Information "Winget installation completed."
 Write-Host "Installing Packages:"
 $winget = @(
 "Microsoft.PowerShell",
@@ -63,7 +59,6 @@ $winget = @(
 "Microsoft.PowerToys",
 "Voidtools.Everything",
 "lin-ycv.EverythingPowerToys",
-"Armin2208.WindowsAutoNightMode"
 )
 foreach ($app in $winget) {winget install --id $app --no-upgrade --silent}
 Write-Host "Installing Packages completed." -ForegroundColor Green
@@ -73,42 +68,15 @@ Write-Host "Installing Packages completed." -ForegroundColor Green
 ## PowerShell Profile
 
 Write-Host "Configuring PowerShell Profile..." -ForegroundColor Yellow
-# $profilePath = $PROFILE
-# $theme = 'jandedobbeleer'
-# # $themes = 'catppuccin'
-# $uri = "https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/$theme.omp.json"
-# $outputPath = "$env:USERPROFILE\AppData\Local\Programs\oh-my-posh\themes\"
-# $configPath = Join-Path $outputPath $theme".omp.json"
-# $ohMyPosh = "oh-my-posh init pwsh --config $configPath | Invoke-Expression"
 
-# function Download-File {
-#     param (
-#         [Parameter(Mandatory = $true)]
-#         [string]$uri,
-#         [Parameter(Mandatory = $true)]
-#         [string]$outputPath
-#     )
-# }
+$profilePath = $PROFILE
+$functions = Get-Content "$pwd\profile\functions.ps1" -Raw
 
-# Write-Host "Settings up prompt theme engine to PowerShell Profile..."
+if (-not (Test-Path $profilePath)) {
+    New-Item -ItemType File -Path $profilePath | Out-Null
+}
 
-# if (!(Test-Path $profilePath)) {   
-#     Write-Host "Profile file does not exist. Creating profile..."
-#     New-Item -ItemType File -Path $profilePath -Force
-#     Write-Host "Profile file created." -ForegroundColor Green
-
-#     if (!(Test-Path $configPath)) {
-#             $webClient = New-Object System.Net.WebClient
-#             $webClient.DownloadFile($uri, $outputPath)
-#     } else {
-#         Write-Host "$theme theme file exists."  -ForegroundColor Green
-#     }
-#     Add-Content -Path $profilePath -Value `n$ohMyPosh
-#     Write-Host "PowerShell Profile configured." -ForegroundColor Green
-# } else {
-#     Add-Content -Path $profilePath -Value `n$ohMyPosh
-#     Write-Host "PowerShell Profile configured." -ForegroundColor Green
-# }
+Add-Content -Path $profilePath -Value $functions
 
 Write-Host "Configuring PowerShell Profile completed." -ForegroundColor Green
 
@@ -281,11 +249,6 @@ Start-Process Explorer
 Start-Sleep -Seconds 2
 Start-Process $shellExePath
 Start-Sleep -Seconds 2
-# $winexePath = Join-Path $pwd\bin "menu.exe"
-# $process = Start-Process -FilePath $winexePath -WindowStyle Minimized -PassThru
-# Start-Sleep -Seconds 3
-# $process.CloseMainWindow() | Out-Null
-# $process.WaitForExit() | Out-Null
 taskkill /IM explorer.exe /F | Out-Null
 Start-Sleep -Seconds 2
 Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
@@ -309,6 +272,9 @@ Add-Type -TypeDefinition @"
         public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, int dwExtraInfo);
     }
 "@
+
+Write-Ouput "Now, please wait for the script to finish configuring the shell, as it requires to open Explorer and call specific key combinations to disable Open-Shell Explorer Bar."
+
 $explorerHandle = [Keyboard]::FindWindow("CabinetWClass", $null)
 [Keyboard]::SetForegroundWindow($explorerHandle)
 $KEYEVENTF_KEYUP = 0x2
@@ -335,14 +301,16 @@ Start-Sleep -Milliseconds 100
 
 Write-Host "Configuring Shell completed." -ForegroundColor Green
 
-Write-Host "Clean up..."
+# Write-Host "Clean up..."
 # TODO: cleanup?
-Write-Host "Clean up completed."
+# Write-Host "Clean up completed."
 
 Write-Host @"
 ------------------------ WinMac Deployment completed ------------------------
 
     Enjoy and support by giving feedback and contributing to the project!
+
+ For more information please visit my GitHub page: github.com/Asteski/WinMac
 
 "@ -ForegroundColor Green
 
@@ -354,5 +322,4 @@ for ($i = 10; $i -ge 1; $i--) {
     Start-Sleep 1
 }
 Restart-Computer -Force
-
 # EOF

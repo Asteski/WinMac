@@ -2,6 +2,8 @@
 
 **WinMac** is a revolutionary modification that brings together the best of both Windows and macOS operating systems, offering users a unique and seamless computing experience.
 
+Current version: 0.1.0
+
 ## Dark:
 
 ![winmac_dark_01](https://github.com/Asteski/WinMac/assets/163755955/e857e2b7-97cc-4d70-b3a9-816f03bb6a7d)
@@ -36,11 +38,16 @@ StartAllBack extends its enhancements beyond the Taskbar to the Windows Explorer
 
 It introduces features such as customizable toolbar buttons, enhanced file previews, and improved navigation options. With StartAllBack, users can personalize their Explorer interface to better suit their workflow and access files and folders more efficiently.
 
+Additionally, I've included pinning User folder and Programs folder to Quick Access.
+
 - **Revamped Terminal**
 
 *[Not working in current WinMac version]* OhMyPosh is a prompt theme engine for Powershell, enabling you to use the full color set of your terminal by using colors or predefined themes to define and render the prompt. 
 
-WinMac provides you with addition of most commonly used commands in MacOS, like *touch, ditto, top, whatis, killall,* with additional command called *of* or *open*, which is used to open current Powershell directory in Explorer, or opening folder of a file directory.
+WinMac provides you with addition of most commonly used commands in MacOS/Linux, like *touch, ditto, top, whatis, killall, ll, la, tree* with additional commands like:
+
+- *np* which opens notepad with or without provided file name,
+- *of* or *open*, which is used to open current Powershell directory in Explorer, or opening folder where specific file resides. 
 
 Examples: 
 
@@ -66,7 +73,7 @@ Please be informed that this is a beta version - you're installing it at your ow
 
 ## Recommendation:
 
-For the most reliable deployment process, I recommend to install latest Powershell Core and run it as an administrator. Everything else will be deployed automatically for you(including Winget if not installed).
+For the most reliable deployment process, I recommend to install latest Powershell Core and run deployment script from the script directory and run is as an administrator. Everything else will be deployed automatically for you (including Winget if not already installed).
 
 ## Planned features:
 
@@ -74,6 +81,7 @@ For the most reliable deployment process, I recommend to install latest Powershe
 - Force Taskbar to go automatically on top upon deployment
 - Hide Windows Terminal options from Start Menu
 - Deploy OhMyPosh configuration for Powershell
+- Replace Programs directory with Applications Shell object to show all installed apps
 
 ## Credit:
 
