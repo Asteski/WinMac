@@ -42,8 +42,6 @@ Additionally, deployment script includes pinning User folder and Programs folder
 
 - **Revamped Terminal**
 
-*[Not working in current WinMac version]* OhMyPosh is a prompt theme engine for Powershell, enabling you to use the full color set of your terminal by using colors or predefined themes to define and render the prompt. 
-
 WinMac provides you with addition of most commonly used commands in MacOS/Linux, like *touch, ditto, top, whatis, killall, ll, la, tree* with additional commands like:
 
 - *np* which opens notepad with or without provided file name,
@@ -93,8 +91,6 @@ List of utilities and their creators, used with WinMac deployment script:
 - Stanislav Zinukhov: [StartAllBack](https://www.startallback.com/)
 
 - Ivo Beltchev: [Open-Shell](https://open-shell.github.io/Open-Shell-Menu/)
-
-- [Jan De Dobbeleer:](https://github.com/JanDeDobbeleer) [OhMyPosh](https://ohmyposh.dev/)
 
 Please support creators however you can for their wonderful work!
 
