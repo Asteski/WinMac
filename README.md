@@ -42,7 +42,7 @@ Additionally, deployment script includes pinning User folder and Programs folder
 
 - **Revamped Terminal**
 
-WinMac provides you with addition of most commonly used commands in MacOS/Linux, like *touch, ditto, top, whatis, killall, ll, la, tree* with additional commands like:
+WinMac provides you with debloated prompt with addition of most commonly used commands in MacOS/Linux, like *touch, ditto, top, whatis, killall, ll, la, tree* with additional commands like:
 
 - *np* which opens notepad with or without provided file name,
 - *of* or *open*, which is used to open current Powershell directory in Explorer, or opening folder where specific file resides.
