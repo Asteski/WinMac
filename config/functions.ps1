@@ -1,4 +1,3 @@
-Import-Module -Name PSTree
 
 function prompt { 
     $userName = $env:USERNAME
