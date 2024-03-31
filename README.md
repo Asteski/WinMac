@@ -77,7 +77,7 @@ For the most reliable deployment process, I recommend to install latest Powershe
 - Create WinMac Control Panel UWP app to manage UI settings
 - Force Taskbar to go automatically on top upon deployment
 - Toggle Windows Terminal visibility in Start Menu
-- Improve *tree* output and parameters
+- Improve Terminal (Powershell) prompt
 - Add option to close taskbar tasks with middle mouse button
 - Replace Programs directory with Applications Shell object to show all installed apps, instead of a shortcut to Start Menu programs folder
 
