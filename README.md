@@ -91,6 +91,8 @@ List of utilities and their creators, used with WinMac deployment script:
 
 - [Open-Shell](https://open-shell.github.io/Open-Shell-Menu/) by Ivo Beltchev
 
+- [PSTree](https://github.com/santisq/PSTree) by santisq
+
 Please support creators however you can for their wonderful work!
 
 Keep in mind that StartAllBack is not a free software and requires license to run permanently. Free version will stop working after 100 days.
