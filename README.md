@@ -53,8 +53,6 @@ Examples:
 - *of foldername* or *open foldername* opens specific folder that is placed in current folder
 - *of folderdir* or *open folderdir* opens specific folder directory
 - *of* or *open* opens current folder
-- *tree* lists all subdirectories and their content
-- *tree --all* or *tree -a* lists all subdirectories and their content including hidden folders and files
 
 ## Benefits
 
