@@ -97,20 +97,9 @@ function of {
 }
 
 function ll { Get-ChildItem -Force }
-
 function la { Get-ChildItem -Force -Attributes !D }
-
-function tree { 
-    if (($args[0] -eq "--all") -or ($args[0] -eq "-a")) 
-    {
-        Get-ChildItem -Recurse -Force
-    }
-    else
-    {
-        Get-ChildItem -Recurse
-    }
-}
 
 set-alias -name np -value notepad
 set-alias -name open -value of
 set-alias -name whatis -value man
+set-alias -name tree -value PSTree
