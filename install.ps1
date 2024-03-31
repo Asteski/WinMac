@@ -68,7 +68,7 @@ if (-not (Test-Path $profilePath)) {
     New-Item -ItemType File -Path $profilePath | Out-Null
 }
 
-Install-Module PSTree -Scope CurrentUser
+Install-Module PSTree -Scope CurrentUser -Force
 Add-Content -Path $profilePath -Value $functions
 
 Write-Host "Configuring PowerShell Profile completed." -ForegroundColor Green

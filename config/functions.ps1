@@ -1,3 +1,4 @@
+Import-Module -Name PSTree
 
 function prompt { 
     $userName = $env:USERNAME
@@ -11,7 +12,6 @@ function prompt {
         'PS: ' + $userName + ' @ ' + $folder + ' > '
     }
 }
-
 
 function touch {
     $file = $args[0]
