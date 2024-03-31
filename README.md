@@ -60,7 +60,7 @@ Examples:
 
 - **Unified Computing Experience:** WinMac provides a cohesive blend of Windows and macOS elements, ensuring a smooth and efficient workflow for all users.
 - **Enhanced Productivity:** Take advantage of the versatility and compatibility of WinMac to maximize productivity across various tasks and applications.
-- **Privacy and Security:** Rest assured knowing that your data is protected by the advanced security features as part of Windows 11 Security services.
+- **Privacy and Security:** Rest assured knowing that your data is protected by the advanced security features as part of Windows 11 Defender Security services.
 
 ## Experience WinMac Today!
 
@@ -70,14 +70,13 @@ Please be informed that this is a beta version - you're deploying it at your own
 
 ## Recommendations
 
-For the most reliable deployment process, I recommend to install latest Powershell Core and run deployment script from the script directory and run is as an administrator. Everything else will be deployed automatically for you (including Winget if not already installed).
+For the most reliable deployment process, I recommend to install latest Powershell Core and run deployment script from the script directory and run it as an Administrator. Everything else will be deployed automatically for you (including Winget if not already installed).
 
 ## Planned features
 
 - Create WinMac Control Panel UWP app to manage UI settings
 - Force Taskbar to go automatically on top upon deployment
-- Hide Windows Terminal options from Start Menu
-- Deploy OhMyPosh configuration for Powershell
+- Toggle Windows Terminal visibility in Start Menu
 - Improve *tree* output and parameters
 - Add option to close taskbar tasks with middle mouse button
 - Replace Programs directory with Applications Shell object to show all installed apps, instead of a shortcut to Start Menu programs folder
