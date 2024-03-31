@@ -16,9 +16,9 @@
 
 - **Spotlight-like quick launcher**
 
-PowerToys brings a MacOS Spotlight-like functionality to Windows with PowerToys Run. It allows users to quickly search for files, applications, and settings on your system. 
+PowerToys brings a macOS Spotlight-like functionality to Windows with PowerToys Run. It allows users to quickly search for files, applications, and settings on your system. 
 
-By pressing a customizable hotkey combination (alt+space by default), a search bar appears, enabling users to type their query and quickly launch or access the desired item without navigating through menus or directories. Besides PowerToys Run, this utility allows for many customization, improving your workflow in many different ways.
+By pressing a customizable hotkey combination (alt+space by default), a search bar appears, enabling users to type their query and quickly launch or access the desired item without navigating through menus or directories. Besides PowerToys Run, this utility allows for many OS customizations, like *FancyZones, File Locksmith, File Explorer add-ons or Mouse without borders*, improving your workflow in many different ways.
 
 - **Revamped and decluttered Start Menu**
 
@@ -42,14 +42,14 @@ Additionally, deployment script includes pinning User folder and Programs folder
 
 - **Revamped Terminal**
 
-WinMac provides you with debloated prompt with addition of most commonly used commands in MacOS/Linux, like *touch, ditto, top, whatis, killall, ll, la, tree* with additional commands like:
+WinMac provides you with debloated prompt with addition of most commonly used commands in macOS/Linux, like *touch, ditto, top, whatis, killall, ll, la, tree* with additional commands like:
 
 - *np* which opens notepad with or without provided file name,
 - *of* or *open*, which is used to open current Powershell directory in Explorer, or opening folder where specific file resides.
 
 Examples: 
 
-- *of $profile* or *open $profile* opens folder, where $profile file resides
+- *of $profile* or *open $profile* opens folder, where Powershell $profile file resides
 - *of foldername* or *open foldername* opens specific folder that is placed in current folder
 - *of folderdir* or *open folderdir* opens specific folder directory
 - *of* or *open* opens current folder
