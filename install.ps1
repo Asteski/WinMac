@@ -289,7 +289,10 @@ Add-Type -TypeDefinition @"
     }
 "@
 
-Write-Ouput "Now, please wait for the script to finish configuring the shell, as it requires to open Explorer and call specific key combinations to disable Open-Shell Explorer Bar."
+Write-Output @"
+Now, please wait for the script to finish configuring the shell, 
+as it requires to open Explorer window and run specific key combinations to disable Open-Shell Explorer Bar.
+"@
 
 $explorerHandle = [Keyboard]::FindWindow("CabinetWClass", $null)
 [Keyboard]::SetForegroundWindow($explorerHandle)
