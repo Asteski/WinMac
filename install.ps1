@@ -12,7 +12,7 @@
 
 Clear-Host
 Write-Host @"
--------------------------- WinMac Deployment ----------------------
+-------------------------- WinMac Deployment --------------------------
 
                     Welcome to WinMac Deployment!
 
@@ -22,14 +22,13 @@ Write-Host @"
 
                       This is Work in Progress. 
 
--------------------------------------------------------------------
+-----------------------------------------------------------------------
 
 "@ -ForegroundColor Cyan
 
 ## Winget
 
 Write-Host "Checking for Windows Package Manager (Winget)" -ForegroundColor Yellow
-
 $progressPreference = 'silentlyContinue'
 Write-Information "Downloading WinGet and its dependencies..."
 $wingetUrl = "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
@@ -39,18 +38,30 @@ Write-Information "Installing WinGet..."
 Add-AppxPackage -Path $installPath
 Remove-Item -Path $installPath
 Write-Information "Winget installation completed."
+
+## Powershell Core
+
+Write-Host "Checking for Powershell Core" -ForegroundColor Yellow
+$progressPreference = 'silentlyContinue'
+if (-not (winget list --id "Microsoft.PowerShell" -q)) {
+    Write-Information "Installing Powershell Core..."
+    winget install --id "Microsoft.PowerShell" --silent | Out-Null
+    Write-Information "Powershell installation completed."
+}
+else {
+    Write-Information "Powershell Core is already installed."
+}
+
+## PowerToys
+
 Write-Host "Installing Packages:"
 $winget = @(
-"Microsoft.PowerShell",
-"JanDeDobbeleer.OhMyPosh",
 "Microsoft.PowerToys",
 "Voidtools.Everything",
 "lin-ycv.EverythingPowerToys"
 )
 foreach ($app in $winget) {winget install --id $app --no-upgrade --silent}
 Write-Host "Installing Packages completed." -ForegroundColor Green
-
-### Shell
 
 ## PowerShell Profile
 
@@ -132,7 +143,7 @@ Stop-Process -Name Explorer -Force
 
 Write-Host "Configuring StartAllBack completed." -ForegroundColor Yellow
 
-## Miscellaneous
+## Misc
 
 Remove-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Force | Out-Null
 $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"
