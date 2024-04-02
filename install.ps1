@@ -162,8 +162,8 @@ $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"
 # Pin Home and Programs to Quick Access
 
 $homeDir = "C:\Users\$env:USERNAME"
-$homeIniFilePath = $homeIniFilePath
-$programsDir = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs"
+$homeIniFilePath = "$($homeDir)\desktop.ini"
+$programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
 $programsIniFilePath = "$($programsDir)\desktop.ini"
 $homeIni = @"
 [.ShellClassInfo]
@@ -175,9 +175,8 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
 "@
 
 if (Test-Path $homeIniFilePath)  {
-  Write-Warning "The desktop.ini file already exists."
   Remove-Item $homeIniFilePath -Force
-  New-Item -Path $homeIniFilePath -ItemType File -Force
+  New-Item -Path $homeIniFilePath -ItemType File -Force | Out-Null
 }
 
 Add-Content $homeIniFilePath -Value $homeIni
@@ -187,11 +186,9 @@ Add-Content $homeIniFilePath -Value $homeIni
 $homePin = new-object -com shell.application
 $homePin.Namespace($homeDir).Self.InvokeVerb("pintohome")
 
-
 if (Test-Path $programsIniFilePath)  {
-    Write-Warning "The desktop.ini file already exists."
     Remove-Item $programsIniFilePath -Force
-    New-Item -Path $programsIniFilePath -ItemType File -Force
+    New-Item -Path $programsIniFilePath -ItemType File -Force | Out-Null
 }
   
 Add-Content $programsIniFilePath -Value $programsIni
@@ -201,7 +198,7 @@ Add-Content $programsIniFilePath -Value $programsIni
 $programsPin = new-object -com shell.application
 $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome")
 
-# Pin Recycle Bin to Quck Access
+# Pin Recycle Bin to Quick Access
 
 $RBPath = 'HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\pintohome\command\'
 $name = "DelegateExecute"
