@@ -210,7 +210,7 @@ $trash = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
 $trash.Self.InvokeVerb("PinToHome")
 Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse
 
-# Remove Shortcut icon
+# Remove Shortcut Arrows
 
 Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force | Out-Null
 New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
@@ -333,11 +333,11 @@ Write-Host @"
 "@ -ForegroundColor Green
 
 # ! Restart Computer after deployment - Recommended for full effect
-# Start-Sleep 2
-# Write-Host "Windows will restart in:" -ForegroundColor Red
-# for ($i = 10; $i -ge 1; $i--) {
-#     Write-Host $i -ForegroundColor Red
-#     Start-Sleep 1
-# }
-# Restart-Computer -Force
-# EOF
+Start-Sleep 2
+Write-Host "Windows will restart in:" -ForegroundColor Red
+for ($i = 10; $i -ge 1; $i--) {
+    Write-Host $i -ForegroundColor Red
+    Start-Sleep 1
+}
+Restart-Computer -Force
+EOF
