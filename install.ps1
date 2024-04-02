@@ -1,15 +1,3 @@
-#################################################################################
-#                                                                               #
-#                                                                               #
-#                           WinMac deployment script                            #
-#                                                                               #
-#                               Version: 0.1.0                                  #
-#                           Author: Adam Kamienski                              #
-#                               GitHub: Asteski                                 #
-#                                                                               #
-#                                                                               #
-#################################################################################
-
 Clear-Host
 Write-Host @"
 -------------------------- WinMac Deployment --------------------------
@@ -18,7 +6,7 @@ Write-Host @"
 
                         Author: Adam Kamienski
                             GitHub: Asteski
-                            Version: 0.1.0
+                            Version: 0.1.1
 
                       This is Work in Progress. 
 
