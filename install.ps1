@@ -161,7 +161,7 @@ if (Test-Path -Path $homeIniFilePath) {
     New-Item -Path $homeIniFilePath -ItemType File -Force
     Set-ItemProperty -Path $homeIniFilePath -Name "Attributes" -Value ([System.IO.FileAttributes]::Hidden)
     $homeIni + "`n$homeIcon" | Set-Content $homeIniFilePath 
-    # Set-ItemProperty -Path $programsIniFilePath -Name "Attributes" -Value ([System.IO.FileAttributes]::ReadOnly)
+    Set-ItemProperty -Path $programsIniFilePath -Name "Attributes" -Value ([System.IO.FileAttributes]::ReadOnly)
 }
 
 $homePin = new-object -com shell.application
@@ -189,12 +189,15 @@ if (Test-Path -Path $programsIniFilePath) {
 $programsPin = new-object -com shell.application
 $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome")
 
-New-Item -Path 'C:\' -Name 'QuickAccessObjects' -ItemType Directory -Force | Out-Null
-New-Item -Path 'C:\QuickAccessObjects' -Name 'Applications.{4234d49b-0245-4df3-B780-3893943456e1}' -ItemType Directory | Out-Null
-(Get-Item -Path 'C:\QuickAccessObjects' -Include Hidden).attributes = 'Hidden' | Out-Null
-($TargetShellObject = (Get-ChildItem -Path 'C:\QuickAccessObjects' -Filter 'Shell*').FullName) | Out-Null
-$Shell = New-Object -ComObject Shell.Application | Out-Null
-$Shell.Namespace(($TargetShellObject).Self.InvokeVerb("PinToHome")) | Out-Null
+$RBPath = 'HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\pintohome\command\'
+$name = "DelegateExecute"
+$value = "{b455f46e-e4af-4035-b0a4-cf18d2f6f28e}"
+New-Item -Path $RBPath -Force | out-null
+New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force | out-null
+$oShell = New-Object -ComObject Shell.Application
+$trash = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
+$trash.Self.InvokeVerb("PinToHome")
+Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse
 
 Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force | Out-Null
 New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
