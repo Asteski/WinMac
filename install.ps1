@@ -79,6 +79,17 @@ if (-not (Test-Path $profilePath)) {
     New-Item -ItemType File -Path $profilePath | Out-Null
 }
 
+Write-Host "Checking for NuGet Provider" -ForegroundColor Yellow
+$progressPreference = 'silentlyContinue'
+if (-not (Get-PackageProvider -ListAvailable | Where-Object {$_.Name -eq 'NuGet'})) {
+    Write-Information "Installing NuGet Provider..."
+    Install-PackageProvider -Name NuGet -Force | Out-Null
+    Write-Information "NuGet Provider installation completed."
+}
+else {
+    Write-Information "NuGet Provider is already installed."
+}
+
 Install-Module PSTree -Scope CurrentUser -Force
 Add-Content -Path $profilePath -Value $functions
 
@@ -147,58 +158,50 @@ Write-Host "Configuring StartAllBack completed." -ForegroundColor Yellow
 
 Remove-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Force | Out-Null
 $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"
+
+# Pin Home and Programs to Quick Access
+
 $homeDir = "C:\Users\$env:USERNAME"
-$homeIniFilePath = "$($homeDir)\desktop.ini"
-$homeIcon = @"
+$homeIniFilePath = $homeIniFilePath
+$programsDir = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs"
+$programsIniFilePath = "$($programsDir)\desktop.ini"
+$homeIni = @"
 [.ShellClassInfo]
 IconResource=C:\Windows\System32\SHELL32.dll,160
 "@
-$programsDir = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs"
-$programsIniFilePath = "$($programsDir)\desktop.ini"
-$programsIcon = @"
+$programsIni = @"
 [.ShellClassInfo]
 IconResource=C:\WINDOWS\System32\imageres.dll,187
 "@
 
-if (Test-Path -Path $homeIniFilePath) {
-    $homeIni = Get-Content $homeIniFilePath -Raw
-    if ($homeIni -match 'Icon') {
-        $homeIni -replace '(Icon.*)', 'IconResource=C:\Windows\System32\SHELL32.dll,160' | Set-Content $homeIniFilePath
-    }
-    else {
-        $homeIni + "`n$homeIcon" | Set-Content $homeIniFilePath   
-    }
-} else {
-    New-Item -Path $homeIniFilePath -ItemType File -Force
-    Set-ItemProperty -Path $homeIniFilePath -Name "Attributes" -Value ([System.IO.FileAttributes]::Hidden)
-    $homeIni + "`n$homeIcon" | Set-Content $homeIniFilePath 
-    Set-ItemProperty -Path $programsIniFilePath -Name "Attributes" -Value ([System.IO.FileAttributes]::ReadOnly)
+if (Test-Path $homeIniFilePath)  {
+  Write-Warning "The desktop.ini file already exists."
+  Remove-Item $homeIniFilePath -Force
+  New-Item -Path $homeIniFilePath -ItemType File -Force
 }
+
+Add-Content $homeIniFilePath -Value $homeIni
+(Get-Item $homeIniFilePath -Force).Attributes = 'Hidden, System, Archive'
+(Get-Item $homeDir -Force).Attributes = 'ReadOnly, Directory'
 
 $homePin = new-object -com shell.application
 $homePin.Namespace($homeDir).Self.InvokeVerb("pintohome")
 
-if (Test-Path -Path $programsIniFilePath) {
-    $programsIni = Get-Content $programsIniFilePath -Raw
-    if ($programsIni -match 'Icon') {
-        Remove-ItemProperty -Path $programsIniFilePath -Name "Attributes" -Value ([System.IO.FileAttributes]::ReadOnly)
-        $programsIni -replace '(Icon.*)', 'IconResource=C:\Windows\System32\SHELL32.dll,160' | Set-Content $programsIniFilePath
-        Set-ItemProperty -Path $programsIniFilePath -Name "Attributes" -Value ([System.IO.FileAttributes]::ReadOnly)
-    }
-    else {
-        Remove-ItemProperty -Path $programsIniFilePath -Name "Attributes" -Value ([System.IO.FileAttributes]::ReadOnly)
-        $programsIni + "`n$programsIcon" | Set-Content $programsIniFilePath
-        Set-ItemProperty -Path $programsIniFilePath -Name "Attributes" -Value ([System.IO.FileAttributes]::ReadOnly)
-    }
-} else {
+
+if (Test-Path $programsIniFilePath)  {
+    Write-Warning "The desktop.ini file already exists."
+    Remove-Item $programsIniFilePath -Force
     New-Item -Path $programsIniFilePath -ItemType File -Force
-    Set-ItemProperty -Path $programsIniFilePath -Name "Attributes" -Value ([System.IO.FileAttributes]::Hidden)
-    $programsIni + "`n$programsIcon" | Set-Content $programsIniFilePath
-    Set-ItemProperty -Path $programsIniFilePath -Name "Attributes" -Value ([System.IO.FileAttributes]::ReadOnly)
 }
+  
+Add-Content $programsIniFilePath -Value $programsIni
+(Get-Item $programsIniFilePath -Force).Attributes = 'Hidden, System, Archive'
+(Get-Item $programsDir -Force).Attributes = 'ReadOnly, Directory'
 
 $programsPin = new-object -com shell.application
 $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome")
+
+# Pin Recycle Bin to Quck Access
 
 $RBPath = 'HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\pintohome\command\'
 $name = "DelegateExecute"
@@ -209,6 +212,8 @@ $oShell = New-Object -ComObject Shell.Application
 $trash = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
 $trash.Self.InvokeVerb("PinToHome")
 Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse
+
+# Remove Shortcut icon
 
 Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force | Out-Null
 New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
