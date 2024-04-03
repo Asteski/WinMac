@@ -114,6 +114,5 @@ set-alias -name np -value notepad
 set-alias -name open -value of
 set-alias -name whatis -value man
 set-alias -name tree -value PSTree
-set-alias -name history -value 'Get-History'
-set-alias -name hist -value 'Get-History'
-
+set-alias -name history -value Get-History
+set-alias -name hist -value Get-History
