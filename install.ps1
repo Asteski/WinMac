@@ -90,6 +90,7 @@ else {
     Write-Information "NuGet Provider is already installed."
 }
 
+Install-Module posh-git -Scope CurrentUser -Force
 Install-Module PSTree -Scope CurrentUser -Force
 Add-Content -Path $profilePath -Value $functions
 
