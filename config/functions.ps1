@@ -1,5 +1,6 @@
 
 Set-PSReadlineKeyHandler -Chord Tab -Function ForwardWord
+Set-PSReadlineKeyHandler -Chord Shift+Tab -Function TabCompleteNext
 
 function prompt {
     $prompt = Write-Prompt "$(Get-Date -f "HH:mm:ss") " -ForegroundColor ([ConsoleColor]::Blue)

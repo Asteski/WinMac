@@ -3,7 +3,7 @@
 #                                                                               #
 #                           WinMac deployment script                            #
 #                                                                               #
-#                               Version: 0.1.0                                  #
+#                               Version: 0.1.2                                  #
 #                           Author: Adam Kamienski                              #
 #                               GitHub: Asteski                                 #
 #                                                                               #
@@ -18,7 +18,7 @@ Write-Host @"
 
                         Author: Adam Kamienski
                             GitHub: Asteski
-                            Version: 0.1.0
+                            Version: 0.1.2
 
                       This is Work in Progress. 
 
@@ -333,12 +333,12 @@ Write-Host @"
 
 "@ -ForegroundColor Green
 
-# ! Restart Computer after deployment - Recommended for full effect
-Start-Sleep 2
-Write-Host "Windows will restart in:" -ForegroundColor Red
-for ($i = 10; $i -ge 1; $i--) {
-    Write-Host $i -ForegroundColor Red
-    Start-Sleep 1
-}
-Restart-Computer -Force
-EOF
+Write-Host "Restart Computer after deployment - recommended for full effect." -ForegroundColor Red
+# Start-Sleep 2
+# Write-Host "Windows will restart in:" -ForegroundColor Red
+# for ($i = 10; $i -ge 1; $i--) {
+#     Write-Host $i -ForegroundColor Red
+#     Start-Sleep 1
+# }
+# Restart-Computer -Force
+#EOF
