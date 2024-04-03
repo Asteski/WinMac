@@ -1,15 +1,27 @@
 
-function prompt { 
-    $userName = $env:USERNAME
+Set-PSReadlineKeyHandler -Chord Tab -Function ForwardWord
+
+function prompt {
+    $prompt = Write-Prompt "$(Get-Date -f "HH:mm:ss") " -ForegroundColor ([ConsoleColor]::Blue)
+    $userName = 'Adams'
     $folder = Split-Path -Leaf $pwd
-    if ($folder -eq $env:USERNAME) 
+
+    if ($folder -eq $env:USERNAME)
     {
-        'PS: ' + $userName + ' @ ~ > ' 
+        $prompt += Write-Prompt $userName -ForegroundColor ([ConsoleColor]::Magenta)
+        $prompt += Write-Prompt ' @' 
+        $prompt += Write-Prompt ' ~ ' -ForegroundColor ([ConsoleColor]::Green)
+        $prompt += Write-Prompt '>' -ForegroundColor ([ConsoleColor]::Red)
     }
     else
     {
-        'PS: ' + $userName + ' @ ' + $folder + ' > '
+        $prompt += Write-Prompt $userName -ForegroundColor ([ConsoleColor]::Magenta)
+        $prompt += Write-Prompt ' @'
+        $prompt += Write-Prompt " $folder " -ForegroundColor ([ConsoleColor]::Green)
+        $prompt += Write-Prompt '>' -ForegroundColor ([ConsoleColor]::Red)
     }
+    
+    if ($prompt) { "$prompt " } else { " " }
 }
 
 function touch {
@@ -102,3 +114,6 @@ set-alias -name np -value notepad
 set-alias -name open -value of
 set-alias -name whatis -value man
 set-alias -name tree -value PSTree
+set-alias -name history -value 'Get-History'
+set-alias -name hist -value 'Get-History'
+
