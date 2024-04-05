@@ -24,8 +24,6 @@ By pressing a customizable hotkey combination (alt+space by default), a search b
 
 Open-Shell is a customizable Start Menu replacement for Windows that provides users with possiblity to completely replace traditional Start Menu with customized WinX menu, resembling MacOS main menu.
 
-By clicking Start Orb with shift + left mouse, it brings up classic Windows Shutdown Prompt.
-
 - **Enhanced Taskbar**
 
 StartAllBack enhances the functionality of the Windows Taskbar by introducing features inspired by earlier versions of Windows, such as Windows 7 and Windows 10. It brings back familiar elements like colored title bars and customizable Start buttons. 
