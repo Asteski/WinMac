@@ -3,7 +3,7 @@
 #                                                                               #
 #                           WinMac deployment script                            #
 #                                                                               #
-#                               Version: 0.1.0                                  #
+#                               Version: 0.1.2                                  #
 #                           Author: Adam Kamienski                              #
 #                               GitHub: Asteski                                 #
 #                                                                               #
