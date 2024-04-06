@@ -39,29 +39,16 @@ Add-AppxPackage -Path $installPath
 Remove-Item -Path $installPath
 Write-Information "Winget installation completed."
 
-## Powershell Core
-
-Write-Host "Checking for Powershell Core" -ForegroundColor Yellow
-$progressPreference = 'silentlyContinue'
-if (-not (winget list --id "Microsoft.PowerShell" -q)) {
-    Write-Information "Installing Powershell Core..."
-    winget install --id "Microsoft.PowerShell" --silent | Out-Null
-    Write-Information "Powershell installation completed."
-}
-else {
-    Write-Information "Powershell Core is already installed."
-}
-
 ## PowerToys
 
-Write-Host "Installing Packages:"
+Write-Host "Installing PowerToys:"
 $winget = @(
 "Microsoft.PowerToys",
 "Voidtools.Everything",
 "lin-ycv.EverythingPowerToys"
 )
 foreach ($app in $winget) {winget install --id $app --no-upgrade --silent}
-Write-Host "Installing Packages completed." -ForegroundColor Green
+Write-Host "Installing PowerToys completed." -ForegroundColor Green
 
 ## PowerShell Profile
 
@@ -153,7 +140,7 @@ Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0
 Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
 Stop-Process -Name Explorer -Force
 
-Write-Host "Configuring StartAllBack completed." -ForegroundColor Yellow
+Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
 
 ## Misc
 
@@ -218,6 +205,7 @@ New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentV
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
 
 ## Open-Shell
+Write-Host "Configuring Open-Shell..." -ForegroundColor Yellow
 
 winget install --id "Open-Shell.Open-Shell-Menu" --no-upgrade | Out-Null
 
@@ -286,7 +274,7 @@ Add-Type -TypeDefinition @"
         public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, int dwExtraInfo);
     }
 "@
-
+Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
 Write-Output @"
 
 Now, please wait for the script to finish configuring the shell, 
