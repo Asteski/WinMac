@@ -1,28 +1,29 @@
 
-Set-PSReadlineKeyHandler -Chord Tab -Function ForwardWord
-Set-PSReadlineKeyHandler -Chord Shift+Tab -Function TabCompleteNext
+Set-PSReadlineKeyHandler -Chord Tab -Function TabCompleteNext
+Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
+Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
+
+set-alias -name np -value notepad
+set-alias -name open -value of
+set-alias -name tree -value PSTree
+set-alias -name kill -value killall
+set-alias -name whatis -value man
+
+function ll { Get-ChildItem -Force }
+function la { Get-ChildItem -Force -Attributes !D }
 
 function prompt {
-    $prompt = Write-Prompt "$(Get-Date -f "HH:mm:ss") " -ForegroundColor ([ConsoleColor]::Blue)
     $userName = $env:USERNAME
     $folder = Split-Path -Leaf $pwd
-
+    $date = Get-Date -f HH:mm:ss
     if ($folder -eq $env:USERNAME)
     {
-        $prompt += Write-Prompt $userName -ForegroundColor ([ConsoleColor]::Magenta)
-        $prompt += Write-Prompt ' @' 
-        $prompt += Write-Prompt ' ~ ' -ForegroundColor ([ConsoleColor]::Green)
-        $prompt += Write-Prompt '>' -ForegroundColor ([ConsoleColor]::Red)
+        "$([char]27)[92m$($date)$([char]27)[0m" + ' ' + $userName + ' @ ~' + "$([char]27)[93m$(' > ')$([char]27)[0m"
     }
     else
     {
-        $prompt += Write-Prompt $userName -ForegroundColor ([ConsoleColor]::Magenta)
-        $prompt += Write-Prompt ' @'
-        $prompt += Write-Prompt " $folder " -ForegroundColor ([ConsoleColor]::Green)
-        $prompt += Write-Prompt '>' -ForegroundColor ([ConsoleColor]::Red)
+        "$([char]27)[92m$($date)$([char]27)[0m" + ' ' + $userName + ' @ ' + $folder + "$([char]27)[93m$(' > ')$([char]27)[0m"
     }
-    
-    if ($prompt) { "$prompt " } else { " " }
 }
 
 function touch {
@@ -108,12 +109,74 @@ function of {
     }
 }
 
-function ll { Get-ChildItem -Force }
-function la { Get-ChildItem -Force -Attributes !D }
-function history { Get-History -AllScope }
+function ansi-reverse {
+    param(
+        [Parameter(Mandatory = $true, Position=0)] [string] $txt,   # raw text string
+        [Parameter(Mandatory = $true, Position=1)] [string] $pat    # Pattern string
+    )
+    
+    $ESC = "$([char] 27)"   # ANSI ESC (0x1b)
+    $RES = "`e[0m"          # ANSI Reset ()
+    $RON = "`e[7m"          # Reverse
+    $ROF = "`e[27m"         # ReverseOff
+    $RED = "`e[91m"         # BrightRed
+    $GRY = "`e[90m"         # BrightBlack / "DarkGray"
 
-set-alias -name np -value notepad
-set-alias -name open -value of
-set-alias -name whatis -value man
-set-alias -name tree -value PSTree
-set-alias -name hist -value history
+    # Replace text pattern with ANSI Reversed version (and using capture group for case preserve)
+    # https://stackoverflow.com/a/40683667/1147688
+    $txt = "$txt" -replace "($pat)", "$RED`$1$GRY"      # Using: BrightRed
+
+    Return "$txt"
+}
+
+function print-color {
+    param( 
+        [Parameter(Mandatory = $true, Position=0)] [string] $i,     # Filename
+        [Parameter(Mandatory = $true, Position=1)] [string] $j,     # Linenumber
+        [Parameter(Mandatory = $true, Position=2)] [string] $k,     # Line
+        [Parameter(Mandatory = $true, Position=3)] [string] $p      # Pattern
+    )
+    
+    $fn = " {0}  " -f $i
+    $nn = ": {0,-5}: " -f $j
+    $ln = (ansi-reverse "$k" "$p")
+    
+    Write-Host -f DarkYellow "$fn" -non
+    Write-Host -f Yellow "$nn" -non
+    Write-Host -f DarkGray "$ln"
+}
+
+function string-search {
+    param(
+        [Parameter(Mandatory = $true, Position=0)] [string] $pattern
+    )
+    foreach ($file in $files) {
+        $A = Select-String -Path $file.FullName -AllMatches -Pattern $pattern
+        $A | Select-Object Path, LineNumber, Pattern, Line | ForEach-Object {
+            # $i = $_.Filename
+            $i = $_.Path.Substring(($pwd.Path).Length + 1)
+            $j = $_.LineNumber
+            $k = $_.Line
+            $p = $_.Pattern
+            print-color "$i" "$j" "$k" "$p"
+        }
+    }
+}
+
+function grep {
+    if($args.count -eq 0) { 
+        Write-Host -f Red "Error: " -Non; Write-Host "Please provide a RegEx argument to grep." 
+        Write-Host -f DarkYellow "Usage: grep <RegEx>"  
+    } 
+    else 
+    {
+        if ($args.count -eq 1) {
+            $files = Get-ChildItem
+            string-search $args[0]
+            }
+        elseif (($args.count -eq 2) -and ($args[0] -eq '-r')){
+            $files = Get-ChildItem -Recurse
+            string-search $args[1]
+        }
+    }
+}
