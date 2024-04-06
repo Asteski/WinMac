@@ -44,7 +44,7 @@ Write-Information "Winget installation completed."
 Write-Host "Installing PowerToys..."
 
 # $powerToystConfig = $pwd.Path +  ".\config\powertoys.dsc.yaml"
-wniget configure .\config\powertoys.dsc.yaml
+winget configure .\config\powertoys.dsc.yaml
 
 Write-Host "Installing Everything:"
 $winget = @(
