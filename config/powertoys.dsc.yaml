@@ -1,0 +1,130 @@
+properties:
+  resources:
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install PowerToys
+        allowPrerelease: true
+      settings:
+        id: PowerToys (Preview)
+        source: winget
+
+    - resource: PowerToysConfigure
+      directives:
+        description: Configure PowerToys
+      settings:
+        FancyZones:
+          Enabled: true
+          ShowOnAllMonitors: true
+          AppLastZoneMoveWindows: true
+          RestoreSize: true
+          UseCursorPosEditorStartupScreen: true
+        KeyboardManager:
+          Enabled: false
+        FindMyMouse:
+          Enabled: true
+        Peek:
+          Enabled: true
+          ActivationShortcut: Alt+Space
+        PowerLauncher:
+          Enabled: true
+          OpenPowerLauncher: Ctrl+Space
+          IgnoreHotkeysInFullscreen: false
+          TabSelectsContextButtons: true
+          Position: Focus
+          Plugins:
+            - Name: "Calculator"
+              Disabled: false
+            - Name: "Folder"
+              Disabled: true
+            - Name: "History"
+              Disabled: true
+            - Name: "Windows Search"
+              Disabled: true
+            - Name: "OneNote"
+              Disabled: true
+            - Name: "PowerToys"
+              Disabled: false
+            - Name: "Program"
+              Disabled: false
+              IsGlobal: true
+            - Name: "Registry Plugin"
+              Disabled: false
+            - Name: "Service"
+              Disabled: false
+            - Name: "Shell"
+              Disabled: false
+            - Name: "Windows System Commands"
+              Disabled: false
+            - Name: "Time and Date"
+              Disabled: true
+            - Name: "Unit Converter"
+              Disabled: true
+            - Name: "URI Handler"
+              Disabled: false
+            - Name: "Value Generator"
+              Disabled: true
+            - Name: "Visual Studio Code Workspaces"
+              Disabled: true
+            - Name: "Web Search"
+              Disabled: false
+            - Name: "Windows settings"
+              Disabled: false
+            - Name: "Windows Terminal"
+              Disabled: true
+            - Name: "Window Walker"
+              Disabled: true
+        PastePlain:
+          Enabled: true
+          ActivationShortcut: Ctrl+Shift+V
+        RegistryPreview:
+          Enabled: true
+        AlwaysOnTop:
+          Enabled: false
+        Awake:
+          Enabled: false
+        ColorPicker:
+          Enabled: false
+        CropAndLock:
+          Enabled: false
+        EnvironmentVariables:
+          Enabled: false
+        FileLocksmith:
+          Enabled: false
+        ImageResizer:
+          Enabled: false
+        MouseHighlighter:
+          Enabled: false
+        MouseJump:
+          Enabled: false
+        MousePointerCrosshairs:
+          Enabled: false
+        MouseWithoutBorders:
+          Enabled: false
+        PowerRename:
+          Enabled: false
+        PowerAccent:
+          Enabled: false
+        MeasureTool:
+          Enabled: false
+        Hosts:
+          Enabled: false
+        PowerOcr:
+          Enabled: false
+        ShortcutGuide:
+          Enabled: false
+        VideoConference:
+          Enabled: false
+        PowerPreview:
+          EnableSvgPreview: true
+          EnableSvgThumbnail: false
+          EnableMdPreview: true
+          EnableMonacoPreview: true
+          EnablePdfPreview: true
+          EnablePdfThumbnail: false
+          EnableGcodePreview: true
+          EnableGcodeThumbnail: false
+          EnableStlThumbnail: false
+          EnableQoiPreview: true
+          EnableQoiThumbnail: false
+
+configurationVersion: 0.2.0

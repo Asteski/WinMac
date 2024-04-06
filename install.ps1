@@ -41,9 +41,13 @@ Write-Information "Winget installation completed."
 
 ## PowerToys
 
-Write-Host "Installing PowerToys:"
+Write-Host "Installing PowerToys..."
+
+# $powerToystConfig = $pwd.Path +  ".\config\powertoys.dsc.yaml"
+wniget configure .\config\powertoys.dsc.yaml
+
+Write-Host "Installing Everything:"
 $winget = @(
-"Microsoft.PowerToys",
 "Voidtools.Everything",
 "lin-ycv.EverythingPowerToys"
 )
@@ -77,7 +81,6 @@ else {
     Write-Information "NuGet Provider is already installed."
 }
 
-Install-Module posh-git -Scope CurrentUser -Force
 Install-Module PSTree -Scope CurrentUser -Force
 Add-Content -Path $profilePath -Value $functions
 
