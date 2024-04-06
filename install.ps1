@@ -278,10 +278,9 @@ Add-Type -TypeDefinition @"
     }
 "@
 Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
-Write-Output @"
+Write-Host @"
 
-Now, please wait for the script to finish configuring the shell, 
-as it requires to open Explorer window and run specific key combinations to disable Open-Shell Explorer Bar.
+Now, please wait for the script to finish configuring the shell, as it requires to open Explorer window and run specific key combinations to disable Open-Shell Explorer Bar.
 
 "@ -ForegroundColor Red
 
