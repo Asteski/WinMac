@@ -229,7 +229,7 @@ Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer\Settings" -Name
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer\Settings" -Name "ShowStatusBar" -Value 0
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer\Settings" -Name "TreeStyle" -Value "Vista"
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer\Settings" -Name "HScrollbar" -Value "Default"
-Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer\Settings" -Name "NoFadeButtons" -Value 1  | Out-Null
+Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer\Settings" -Name "NoFadeButtons" -Value 1
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer\Settings" -Name "HideSearch" -Value 0
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer\Settings" -Name "UseBigButtons" -Value 0
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer\Settings" -Name "AltEnter" -Value 0
@@ -294,6 +294,7 @@ $KEYEVENTF_KEYUP = 0x2
 $VK_MENU = 0x12 # Alt key
 $VK_V = 0x56 # V key
 $VK_RETURN = 0x0D # Enter key
+$VK_F4 = 0x73 # F4 key
 [Keyboard]::keybd_event($VK_MENU, 0, 0, 0) # Alt key press
 [Keyboard]::keybd_event($VK_V, 0, 0, 0) # V key press
 [Keyboard]::keybd_event($VK_V, 0, $KEYEVENTF_KEYUP, 0) # V key release
