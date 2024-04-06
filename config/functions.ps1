@@ -52,7 +52,7 @@ function ditto {
     {
         Write-Host "Source does not exist or destination already exists"  -ForegroundColor Red
     }
-    elseif((Test-Path $source) -and -not (Test-Path $destination)) 
+    elseif((Test-Path $source) -and -not (Test-Path $destination))
     {
         Copy-Item -Path $source -Destination $destination -Recurse
     }
