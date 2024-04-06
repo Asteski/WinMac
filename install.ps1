@@ -1,3 +1,15 @@
+#################################################################################
+#                                                                               #
+#                                                                               #
+#                           WinMac deployment script                            #
+#                                                                               #
+#                               Version: 0.1.0                                  #
+#                           Author: Adam Kamienski                              #
+#                               GitHub: Asteski                                 #
+#                                                                               #
+#                                                                               #
+#################################################################################
+
 Clear-Host
 Write-Host @"
 -------------------------- WinMac Deployment --------------------------
@@ -6,7 +18,7 @@ Write-Host @"
 
                         Author: Adam Kamienski
                             GitHub: Asteski
-                            Version: 0.1.1
+                            Version: 0.1.2
 
                       This is Work in Progress. 
 
@@ -27,29 +39,16 @@ Add-AppxPackage -Path $installPath
 Remove-Item -Path $installPath
 Write-Information "Winget installation completed."
 
-## Powershell Core
-
-Write-Host "Checking for Powershell Core" -ForegroundColor Yellow
-$progressPreference = 'silentlyContinue'
-if (-not (winget list --id "Microsoft.PowerShell" -q)) {
-    Write-Information "Installing Powershell Core..."
-    winget install --id "Microsoft.PowerShell" --silent | Out-Null
-    Write-Information "Powershell installation completed."
-}
-else {
-    Write-Information "Powershell Core is already installed."
-}
-
 ## PowerToys
 
-Write-Host "Installing Packages:"
+Write-Host "Installing PowerToys:"
 $winget = @(
 "Microsoft.PowerToys",
 "Voidtools.Everything",
 "lin-ycv.EverythingPowerToys"
 )
 foreach ($app in $winget) {winget install --id $app --no-upgrade --silent}
-Write-Host "Installing Packages completed." -ForegroundColor Green
+Write-Host "Installing PowerToys completed." -ForegroundColor Green
 
 ## PowerShell Profile
 
@@ -78,6 +77,7 @@ else {
     Write-Information "NuGet Provider is already installed."
 }
 
+Install-Module posh-git -Scope CurrentUser -Force
 Install-Module PSTree -Scope CurrentUser -Force
 Add-Content -Path $profilePath -Value $functions
 
@@ -140,10 +140,11 @@ Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0
 Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
 Stop-Process -Name Explorer -Force
 
-Write-Host "Configuring StartAllBack completed." -ForegroundColor Yellow
+Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
 
 ## Misc
 
+# Set-WinLanguageBarOption -UseLegacyLanguageBar $false
 Remove-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Force | Out-Null
 $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"
 
@@ -205,6 +206,8 @@ New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentV
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
 
 ## Open-Shell
+
+Write-Host "Configuring Open-Shell..." -ForegroundColor Yellow
 
 winget install --id "Open-Shell.Open-Shell-Menu" --no-upgrade | Out-Null
 
@@ -274,11 +277,10 @@ Add-Type -TypeDefinition @"
         public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, int dwExtraInfo);
     }
 "@
+Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
+Write-Host @"
 
-Write-Output @"
-
-Now, please wait for the script to finish configuring the shell, 
-as it requires to open Explorer window and run specific key combinations to disable Open-Shell Explorer Bar.
+Now, please wait for the script to finish configuring the shell, as it requires to open Explorer window and run specific key combinations to disable Open-Shell Explorer Bar.
 
 "@ -ForegroundColor Red
 
@@ -321,12 +323,12 @@ Write-Host @"
 
 "@ -ForegroundColor Green
 
-# ! Restart Computer after deployment - Recommended for full effect
-Start-Sleep 2
-Write-Host "Windows will restart in:" -ForegroundColor Red
-for ($i = 10; $i -ge 1; $i--) {
-    Write-Host $i -ForegroundColor Red
-    Start-Sleep 1
-}
-Restart-Computer -Force
-EOF
+Write-Host "Restart Computer after deployment - recommended for full effect." -ForegroundColor Red
+# Start-Sleep 2
+# Write-Host "Windows will restart in:" -ForegroundColor Red
+# for ($i = 10; $i -ge 1; $i--) {
+#     Write-Host $i -ForegroundColor Red
+#     Start-Sleep 1
+# }
+# Restart-Computer -Force
+#EOF
