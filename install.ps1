@@ -144,6 +144,7 @@ Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
 
 ## Misc
 
+Set-WinLanguageBarOption -UseLegacyLanguageBar: $false
 Remove-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Force | Out-Null
 $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"
 
@@ -205,6 +206,7 @@ New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentV
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
 
 ## Open-Shell
+
 Write-Host "Configuring Open-Shell..." -ForegroundColor Yellow
 
 winget install --id "Open-Shell.Open-Shell-Menu" --no-upgrade | Out-Null
@@ -242,6 +244,7 @@ Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "Mous
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftClickCommand" -Value "$pwd\bin\power.exe"
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "WinKeyCommand" -Value "$pwd\bin\start.exe"
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftWin" -Value "Nothing"
+Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftRight" -Value 1
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "SearchBox" -Value "Hide"
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "SkinW7" -Value "Immersive"
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "SkinVariationW7" -Value ""
