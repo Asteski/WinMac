@@ -12,11 +12,11 @@
 
 ## Light
 
-![winmac_light_01](https://github.com/Asteski/WinMac/img/winmac_light_01.jpg)
+![winmac_light_01](https://github.com/Asteski/WinMac/blob/main/img/winmac_light_01.jpg)
 
-![winmac_light_02](https://github.com/Asteski/WinMac/img/winmac_light_02.jpg)
+![winmac_light_02](https://github.com/Asteski/WinMac/blob/main/img/winmac_light_02.jpg)
 
-![winmac_light_03](https://github.com/Asteski/WinMac/img/winmac_light_03.jpg)
+![winmac_light_03](https://github.com/Asteski/WinMac/blob/main/img/winmac_light_03.jpg)
 
 ## Features
 
