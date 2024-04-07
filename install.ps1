@@ -44,8 +44,9 @@ Write-Information "Winget installation completed."
 Write-Host "Installing PowerToys:"
 $winget = @(
 "Microsoft.PowerToys",
-"Voidtools.Everything",
-"lin-ycv.EverythingPowerToys"
+"Voidtools.Everything"
+# "Voidtools.Everything",
+# "lin-ycv.EverythingPowerToys"
 )
 foreach ($app in $winget) {winget install --id $app --no-upgrade --silent}
 Write-Host "Installing PowerToys completed." -ForegroundColor Green
