@@ -107,7 +107,7 @@ $SWP_SHOWWINDOW = 0x0040
 
 Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
 
-winget install --id "StartIsBack.StartAllBack" --silent --no-upgrade | Out-Null
+winget install --id "StartIsBack.StartAllBack" --silent -- --no-upgrade | Out-Null
 
 $exRegPath = “HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer”
 $sabRegPath = "HKCU:\Software\StartIsBack"
@@ -157,7 +157,7 @@ Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0 | Out-Null
 Set-ItemProperty -Path $exRegPath -Name "ShowRecent" -Value 0 | Out-Null
 
 # Theme
-Get-ChildItem .\config\cursor -Recurse -Filter "*inf" | ForEach-Object { PNPUtil.exe /add-driver $_.FullName /install }
+Get-ChildItem .\config\cursor -Recurse -Filter "*inf" | ForEach-Object { PNPUtil.exe /add-driver $_.FullName /install } | Out-Null
 $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]”CurrentUser”,”$env:COMPUTERNAME”)
 $RegCursors = $RegConnect.OpenSubKey(“Control Panel\Cursors”,$true)
 $RegCursors.SetValue(“”,”Windows Black”)
