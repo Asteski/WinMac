@@ -43,7 +43,7 @@ Write-Information "Winget installation completed."
 
 Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
 # $powerToystConfig = $pwd.Path +  ".\config\powertoys.dsc.yaml"
-winget configure .\config\powertoys.dsc.yaml --acceppt-configuration-agreements
+winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements
 Write-Host "Installing PowerToys completed." -ForegroundColor Green
 
 Write-Host "Installing Everything..."
