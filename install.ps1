@@ -329,11 +329,11 @@ Add-Type -TypeDefinition @"
     }
 "@
 Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
-Write-Host @"
+# Write-Host @"
 
-Now, please wait for the script to finish configuring the shell, as it requires to open Explorer window and run specific key combinations to disable Open-Shell Explorer Bar.
+# Now, please wait for the script to finish configuring the shell, as it requires to open Explorer window and run specific key combinations to disable Open-Shell Explorer Bar.
 
-"@ -ForegroundColor Red
+# "@ -ForegroundColor Red
 
 $explorerHandle = [Keyboard]::FindWindow("CabinetWClass", $null)
 [Keyboard]::SetForegroundWindow($explorerHandle)
