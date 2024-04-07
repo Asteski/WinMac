@@ -51,7 +51,7 @@ $winget = @(
     "Voidtools.Everything",
     "lin-ycv.EverythingPowerToys"
 )
-foreach ($app in $winget) {winget install --id $app --no-upgrade --silent --disable-interactivity --force } 
+foreach ($app in $winget) {winget install --id $app --no-upgrade --silent --force }
 Write-Host "Installing Everything completed." -ForegroundColor Green
 
 ## PowerShell Profile
