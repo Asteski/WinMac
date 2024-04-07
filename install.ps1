@@ -160,9 +160,8 @@ Set-ItemProperty -Path $exRegPath -Name "ShowRecent" -Value 0 | Out-Null
 # Theme
 $curSourceFolder = $pwd.Path + '\config\theme'
 $curDestFolder = "C:\Windows\Cursors"
-
 Copy-Item -Path $curSourceFolder\* -Destination $curDestFolder -Recurse -Force
-Get-ChildItem .\config\theme -Recurse -Filter "*inf" | ForEach-Object { PNPUtil.exe /add-driver $_.FullName /install } | Out-Null
+
 $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
 $RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
 $RegCursors.SetValue("","Windows Black")
