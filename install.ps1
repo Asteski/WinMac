@@ -37,13 +37,13 @@ Invoke-WebRequest -Uri $wingetUrl -OutFile $installPath | Out-Null
 Write-Information "Installing WinGet..."
 Add-AppxPackage -Path $installPath | Out-Null
 Remove-Item -Path $installPath | Out-Null
-Write-Information "Winget installation completed." -ForegroundColor Green
+Write-Information "Winget installation completed."
 
 ## PowerToys
 
 Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
 # $powerToystConfig = $pwd.Path +  ".\config\powertoys.dsc.yaml"
-winget configure .\config\powertoys.dsc.yaml --acceppt-configuration-agreements | Out-Null
+winget configure .\config\powertoys.dsc.yaml --acceppt-configuration-agreements
 Write-Host "Installing PowerToys completed." -ForegroundColor Green
 
 Write-Host "Installing Everything..."
