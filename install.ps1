@@ -42,8 +42,7 @@ Write-Information "Winget installation completed."
 ## PowerToys
 
 Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
-# $powerToystConfig = $pwd.Path +  ".\config\powertoys.dsc.yaml"
-winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements
+winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
 Write-Host "Installing PowerToys completed." -ForegroundColor Green
 
 Write-Host "Installing Everything..."
@@ -51,7 +50,7 @@ $winget = @(
     "Voidtools.Everything",
     "lin-ycv.EverythingPowerToys"
 )
-foreach ($app in $winget) {winget install --id $app --no-upgrade --silent --force }
+foreach ($app in $winget) {winget install --id $app --source winget --no-upgrade --silent}
 Write-Host "Installing Everything completed." -ForegroundColor Green
 
 ## PowerShell Profile
@@ -110,16 +109,17 @@ Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
 
 winget install --id "StartIsBack.StartAllBack" --silent --no-upgrade | Out-Null
 
+$exRegPath = “HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer”
 $sabRegPath = "HKCU:\Software\StartIsBack"
-Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel" -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 1
-Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowStatusBar" -Value 0
-Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "EnableSnapAssistFlyout" -Value 0
-Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "EnableSnapBar" -Value 0
-Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "TaskbarGlomLevel" -Value 1
-Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "TaskbarSmallIcons" -Value 1
-Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "TaskbarSi" -Value 0
-Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "TaskbarAl" -Value 0
-Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "UseCompactMode" -Value 1
+Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 1
+Set-ItemProperty -Path $exRegPath\Advanced -Name "ShowStatusBar" -Value 0
+Set-ItemProperty -Path $exRegPath\Advanced -Name "EnableSnapAssistFlyout" -Value 0
+Set-ItemProperty -Path $exRegPath\Advanced -Name "EnableSnapBar" -Value 0
+Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarGlomLevel" -Value 1
+Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSmallIcons" -Value 1
+Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSi" -Value 0
+Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarAl" -Value 0
+Set-ItemProperty -Path $exRegPath\Advanced -Name "UseCompactMode" -Value 1
 Set-ItemProperty -Path $sabRegPath -Name "WinBuild" -Value 22759
 Set-ItemProperty -Path $sabRegPath -Name "WinLangID" -Value 2064
 Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1
@@ -151,35 +151,31 @@ Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
 ## Misc
 
 $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"
-$RegPath = “HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced”
-$RegPath = “HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer”
-$RegPath = “HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer”
 Remove-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Force | Out-Null
-Set-ItemProperty -Path $RegPath -Name "LaunchTO" -Value 1 | Out-Null
-Set-ItemProperty -Path $RegPath -Name "ShowFrequent" -Value 0 | Out-Null
-Set-ItemProperty -Path $RegPath -Name "ShowRecent" -Value 0 | Out-Null
+Set-ItemProperty -Path $exRegPath\Advanced -Name "LaunchTO" -Value 1 | Out-Null
+Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0 | Out-Null
+Set-ItemProperty -Path $exRegPath -Name "ShowRecent" -Value 0 | Out-Null
 
 # Theme
-# TODO: change as a theme instead of a cursor
 Get-ChildItem .\config\cursor -Recurse -Filter "*inf" | ForEach-Object { PNPUtil.exe /add-driver $_.FullName /install }
 $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]”CurrentUser”,”$env:COMPUTERNAME”)
 $RegCursors = $RegConnect.OpenSubKey(“Control Panel\Cursors”,$true)
 $RegCursors.SetValue(“”,”Windows Black”)
-$RegCursors.SetValue(“AppStarting”,”%SystemRoot%\cursors\wait_r.cur”)
-$RegCursors.SetValue(“Arrow”,”%SystemRoot%\cursors\arrow_r.cur”)
-$RegCursors.SetValue(“Crosshair”,”%SystemRoot%\cursors\cross_r.cur”)
-$RegCursors.SetValue(“Hand”,””)
-$RegCursors.SetValue(“Help”,”%SystemRoot%\cursors\help_r.cur”)
-$RegCursors.SetValue(“IBeam”,”%SystemRoot%\cursors\beam_r.cur”)
-$RegCursors.SetValue(“No”,”%SystemRoot%\cursors\no_r.cur”)
-$RegCursors.SetValue(“NWPen”,”%SystemRoot%\cursors\pen_r.cur”)
-$RegCursors.SetValue(“SizeAll”,”%SystemRoot%\cursors\move_r.cur”)
-$RegCursors.SetValue(“SizeNESW”,”%SystemRoot%\cursors\size1_r.cur”)
-$RegCursors.SetValue(“SizeNS”,”%SystemRoot%\cursors\size4_r.cur”)
-$RegCursors.SetValue(“SizeNWSE”,”%SystemRoot%\cursors\size2_r.cur”)
-$RegCursors.SetValue(“SizeWE”,”%SystemRoot%\cursors\size3_r.cur”)
-$RegCursors.SetValue(“UpArrow”,”%SystemRoot%\cursors\up_r.cur”)
-$RegCursors.SetValue(“Wait”,”%SystemRoot%\cursors\busy_r.cur”)
+$RegCursors.SetValue(“AppStarting”,”.\config\cursor\areo_black_working.cur”)
+$RegCursors.SetValue(“Arrow”,”.\config\cursor\areo_black_arrow.cur”)
+$RegCursors.SetValue(“Crosshair”,”.\config\cursor\areo_black_cross.cur”)
+$RegCursors.SetValue(“Hand”,”.\config\cursor\areo_black_link.cur”)
+$RegCursors.SetValue(“Help”,”.\config\cursor\areo_black_helpsel.cur”)
+$RegCursors.SetValue(“IBeam”,”.\config\cursor\areo_black_beam.cur”)
+$RegCursors.SetValue(“No”,”.\config\cursor\areo_black_unavail.cur”)
+$RegCursors.SetValue(“NWPen”,”.\config\cursor\areo_black_pen.cur”)
+$RegCursors.SetValue(“SizeAll”,”.\config\cursor\areo_black_move.cur”)
+$RegCursors.SetValue(“SizeNESW”,”.\config\cursor\areo_black_nesw.cur”)
+$RegCursors.SetValue(“SizeNS”,”.\config\cursor\areo_black_ns.cur”)
+$RegCursors.SetValue(“SizeNWSE”,”.\config\cursor\areo_black_nwse.cur”)
+$RegCursors.SetValue(“SizeWE”,”.\config\cursor\areo_black_ew.cur”)
+$RegCursors.SetValue(“UpArrow”,”.\config\cursor\areo_black_up.cur”)
+$RegCursors.SetValue(“Wait”,”.\config\cursor\areo_black_busy.cur”)
 $RegCursors.Close()
 $RegConnect.Close()
 $CSharpSig = @'
