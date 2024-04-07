@@ -336,20 +336,21 @@ $explorerHandle = [Keyboard]::FindWindow("CabinetWClass", $null)
 [Keyboard]::SetForegroundWindow($explorerHandle)
 $KEYEVENTF_KEYUP = 0x2
 $VK_MENU = 0x12 # Alt key
-$VK_V = 0x56 # V key
-$VK_RETURN = 0x0D # Enter key
-$VK_F4 = 0x73 # F4 key
 [Keyboard]::keybd_event($VK_MENU, 0, 0, 0) # Alt key press
-[Keyboard]::keybd_event($VK_V, 0, 0, 0) # V key press
-[Keyboard]::keybd_event($VK_V, 0, $KEYEVENTF_KEYUP, 0) # V key release
-[Keyboard]::keybd_event($VK_MENU, 0, $KEYEVENTF_KEYUP, 0) # Alt key release
-Start-Sleep -Milliseconds 100
-[Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
-[Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
-Start-Sleep -Milliseconds 100
-[Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
-[Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
-Start-Sleep -Milliseconds 100
+[Keyboard]::keybd_event($VK_MENU, 0, $KEYEVENTF_KEYUP, 0)
+# $VK_V = 0x56 # V key
+# $VK_RETURN = 0x0D # Enter key/
+# [Keyboard]::keybd_event($VK_MENU, 0, 0, 0) # Alt key press
+# [Keyboard]::keybd_event($VK_V, 0, 0, 0) # V key press
+# [Keyboard]::keybd_event($VK_V, 0, $KEYEVENTF_KEYUP, 0) # V key release
+# [Keyboard]::keybd_event($VK_MENU, 0, $KEYEVENTF_KEYUP, 0) # Alt key release
+# Start-Sleep -Milliseconds 100
+# [Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
+# [Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
+# Start-Sleep -Milliseconds 100
+# [Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
+# [Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
+# Start-Sleep -Milliseconds 100
 
 Write-Host "Configuring Shell completed." -ForegroundColor Green
 
