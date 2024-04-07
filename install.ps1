@@ -42,13 +42,14 @@ Write-Information "Winget installation completed."
 ## PowerToys
 
 Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
-winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
+winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements
 Write-Host "Installing PowerToys completed." -ForegroundColor Green
 
 Write-Host "Installing Everything..."
 $winget = @(
-    "Voidtools.Everything",
-    "lin-ycv.EverythingPowerToys"
+    "Voidtools.Everything"
+    # "Voidtools.Everything",
+    # "lin-ycv.EverythingPowerToys"
 )
 foreach ($app in $winget) {winget install --id $app --source winget --no-upgrade --silent}
 Write-Host "Installing Everything completed." -ForegroundColor Green
@@ -107,7 +108,7 @@ $SWP_SHOWWINDOW = 0x0040
 
 Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
 
-winget install --id "StartIsBack.StartAllBack" --silent --no-upgrade | Out-Null
+winget install --id "StartIsBack.StartAllBack" --silent --no-upgrade
 
 $exRegPath = “HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer”
 $sabRegPath = "HKCU:\Software\StartIsBack"
@@ -257,7 +258,7 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer
 
 Write-Host "Configuring Open-Shell..." -ForegroundColor Yellow
 
-winget install --id "Open-Shell.Open-Shell-Menu" --no-upgrade --silent | Out-Null
+winget install --id "Open-Shell.Open-Shell-Menu" --no-upgrade --silent
 
 New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force | Out-Null
 New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force | Out-Null
