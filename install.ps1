@@ -107,7 +107,7 @@ $SWP_SHOWWINDOW = 0x0040
 
 Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
 
-winget install --id "StartIsBack.StartAllBack" --silent -- --no-upgrade | Out-Null
+winget install --id "StartIsBack.StartAllBack" --silent --no-upgrade | Out-Null
 
 $exRegPath = “HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer”
 $sabRegPath = "HKCU:\Software\StartIsBack"
