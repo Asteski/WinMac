@@ -128,6 +128,7 @@ Set-ItemProperty -Path $sabRegPath -Name "WelcomeShown" -Value 3
 Set-ItemProperty -Path $sabRegPath -Name "UpdateCheck" -Value ([byte[]](160, 224, 8, 201, 49, 125, 218, 1))
 Set-ItemProperty -Path $sabRegPath -Name "FrameStyle" -Value 2
 Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1
+Set-ItemProperty -Path $sabRegPath -Name "SysTrayInputSwitch" -Value 0
 Set-ItemProperty -Path $sabRegPath -Name "TaskbarOneSegment" -Value 0
 Set-ItemProperty -Path $sabRegPath -Name "TaskbarCenterIcons" -Value 1
 Set-ItemProperty -Path $sabRegPath -Name "TaskbarTranslucentEffect" -Value 0
