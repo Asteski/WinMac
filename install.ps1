@@ -33,26 +33,26 @@ $progressPreference = 'silentlyContinue'
 Write-Information "Downloading WinGet and its dependencies..."
 $wingetUrl = "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
 $installPath = "$env:TEMP\winget.msixbundle"
-Invoke-WebRequest -Uri $wingetUrl -OutFile $installPath
+Invoke-WebRequest -Uri $wingetUrl -OutFile $installPath | Out-Null
 Write-Information "Installing WinGet..."
-Add-AppxPackage -Path $installPath
-Remove-Item -Path $installPath
-Write-Information "Winget installation completed."
+Add-AppxPackage -Path $installPath | Out-Null
+Remove-Item -Path $installPath | Out-Null
+Write-Information "Winget installation completed." -ForegroundColor Green
 
 ## PowerToys
 
-Write-Host "Installing PowerToys..."
-
+Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
 # $powerToystConfig = $pwd.Path +  ".\config\powertoys.dsc.yaml"
 winget configure .\config\powertoys.dsc.yaml
-
-Write-Host "Installing Everything:"
-$winget = @(
-"Voidtools.Everything",
-"lin-ycv.EverythingPowerToys"
-)
-foreach ($app in $winget) {winget install --id $app --no-upgrade --silent}
 Write-Host "Installing PowerToys completed." -ForegroundColor Green
+
+Write-Host "Installing Everything..."
+$winget = @(
+    "Voidtools.Everything",
+    "lin-ycv.EverythingPowerToys"
+)
+foreach ($app in $winget) {winget install --id $app --no-upgrade --silent} 
+Write-Host "Installing Everything completed." -ForegroundColor Green
 
 ## PowerShell Profile
 
@@ -81,8 +81,8 @@ else {
     Write-Information "NuGet Provider is already installed."
 }
 
-Install-Module PSTree -Scope CurrentUser -Force
-Add-Content -Path $profilePath -Value $functions
+Install-Module PSTree -Scope CurrentUser -Force | Out-Null
+Add-Content -Path $profilePath -Value $functions | Out-Null
 
 Write-Host "Configuring PowerShell Profile completed." -ForegroundColor Green
 
@@ -147,7 +147,7 @@ Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
 
 ## Misc
 
-# TODO Set-WinLanguageBarOption -UseLegacyLanguageBar $false 
+Set-WinLanguageBarOption -UseLegacyLanguageBar: $false 
 
 Remove-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Force | Out-Null
 $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"

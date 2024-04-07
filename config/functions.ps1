@@ -4,10 +4,13 @@ Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
 Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
 
 set-alias -name np -value notepad
+set-alias -name te -value PSTree
 set-alias -name open -value of
 set-alias -name tree -value PSTree
 set-alias -name kill -value killall
 set-alias -name whatis -value man
+set-alias -name backup -value wbadmin
+set-alias -name rcopy -value robocopy
 
 function ll { Get-ChildItem -Force }
 function la { Get-ChildItem -Force -Attributes !D }
