@@ -15,9 +15,7 @@ properties:
         FancyZones:
           Enabled: true
           ShowOnAllMonitors: true
-          AppLastZoneMoveWindows: true
           RestoreSize: true
-          UseCursorPosEditorStartupScreen: true
         KeyboardManager:
           Enabled: false
         FindMyMouse:

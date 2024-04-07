@@ -147,7 +147,7 @@ Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
 
 ## Misc
 
-Set-WinLanguageBarOption -UseLegacyLanguageBar: $false 
+Set-WinLanguageBarOption -UseLegacyLanguageBar: $false
 
 Remove-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Force | Out-Null
 $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"
