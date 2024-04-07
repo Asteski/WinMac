@@ -51,7 +51,7 @@ $winget = @(
     "Voidtools.Everything",
     "lin-ycv.EverythingPowerToys"
 )
-foreach ($app in $winget) {winget install --id $app --no-upgrade --silent} 
+foreach ($app in $winget) {winget install --id $app --no-upgrade --silent --disable-interactivity --force } 
 Write-Host "Installing Everything completed." -ForegroundColor Green
 
 ## PowerShell Profile
@@ -212,7 +212,7 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer
 
 Write-Host "Configuring Open-Shell..." -ForegroundColor Yellow
 
-winget install --id "Open-Shell.Open-Shell-Menu" --no-upgrade | Out-Null
+winget install --id "Open-Shell.Open-Shell-Menu" --no-upgrade --silent | Out-Null
 
 New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force | Out-Null
 New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force | Out-Null
