@@ -163,7 +163,7 @@ $curDestFolder = "C:\Windows\Cursors"
 Copy-Item -Path $curSourceFolder\* -Destination $curDestFolder -Recurse -Force
 $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
 $RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
-$RegCursors.SetValue("","Windows WinMac Black")
+$RegCursors.SetValue("","Windows Black")
 $RegCursors.SetValue("AppStarting","$curDestFolder\aero_black_working.ani")
 $RegCursors.SetValue("Arrow","$curDestFolder\aero_black_arrow.cur")
 $RegCursors.SetValue("Crosshair","$curDestFolder\aero_black_cross.cur")
@@ -179,6 +179,8 @@ $RegCursors.SetValue("SizeNWSE","$curDestFolder\aero_black_nwse.cur")
 $RegCursors.SetValue("SizeWE","$curDestFolder\aero_black_ew.cur")
 $RegCursors.SetValue("UpArrow","$curDestFolder\aero_black_up.cur")
 $RegCursors.SetValue("Wait","$curDestFolder\aero_black_busy.ani")
+$RegCursors.SetValue("Pin","$curDestFolder\aero_black_pin.ani")
+$RegCursors.SetValue("Person","$curDestFolder\aero_black_person.ani")
 $RegCursors.Close()
 $RegConnect.Close()
 $CSharpSig = @'
