@@ -24,13 +24,13 @@ properties:
           Enabled: true
         Peek:
           Enabled: true
-          ActivationShortcut: Alt+Space
+          ActivationShortcut: "Alt+Space"
         PowerLauncher:
           Enabled: true
-          OpenPowerLauncher: Ctrl+Space
+          OpenPowerLauncher: "Ctrl+Space"
           IgnoreHotkeysInFullscreen: false
           TabSelectsContextButtons: true
-          Position: Focus
+          Position: "Focus"
           Plugins:
             - Name: "Calculator"
               Disabled: false
