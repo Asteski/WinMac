@@ -4,6 +4,9 @@ Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
 Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
 
 set-alias -name np -value notepad
+set-alias -name note -value notepad
+# set-alias -name qn -value quicknote
+# set-alias -name qnote -value quicknote
 set-alias -name te -value PSTree
 set-alias -name open -value of
 set-alias -name tree -value PSTree

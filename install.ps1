@@ -108,9 +108,9 @@ $SWP_SHOWWINDOW = 0x0040
 
 Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
 
-winget install --id "StartIsBack.StartAllBack" --silent --no-upgrade
+winget install --id "StartIsBack.StartAllBack" --source winget --silent --no-upgrade
 
-$exRegPath = “HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer”
+$exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
 $sabRegPath = "HKCU:\Software\StartIsBack"
 Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 1
 Set-ItemProperty -Path $exRegPath\Advanced -Name "ShowStatusBar" -Value 0
@@ -158,30 +158,34 @@ Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0 | Out-Null
 Set-ItemProperty -Path $exRegPath -Name "ShowRecent" -Value 0 | Out-Null
 
 # Theme
-Get-ChildItem .\config\cursor -Recurse -Filter "*inf" | ForEach-Object { PNPUtil.exe /add-driver $_.FullName /install } | Out-Null
-$RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]”CurrentUser”,”$env:COMPUTERNAME”)
-$RegCursors = $RegConnect.OpenSubKey(“Control Panel\Cursors”,$true)
-$RegCursors.SetValue(“”,”Windows Black”)
-$RegCursors.SetValue(“AppStarting”,”.\config\cursor\areo_black_working.cur”)
-$RegCursors.SetValue(“Arrow”,”.\config\cursor\areo_black_arrow.cur”)
-$RegCursors.SetValue(“Crosshair”,”.\config\cursor\areo_black_cross.cur”)
-$RegCursors.SetValue(“Hand”,”.\config\cursor\areo_black_link.cur”)
-$RegCursors.SetValue(“Help”,”.\config\cursor\areo_black_helpsel.cur”)
-$RegCursors.SetValue(“IBeam”,”.\config\cursor\areo_black_beam.cur”)
-$RegCursors.SetValue(“No”,”.\config\cursor\areo_black_unavail.cur”)
-$RegCursors.SetValue(“NWPen”,”.\config\cursor\areo_black_pen.cur”)
-$RegCursors.SetValue(“SizeAll”,”.\config\cursor\areo_black_move.cur”)
-$RegCursors.SetValue(“SizeNESW”,”.\config\cursor\areo_black_nesw.cur”)
-$RegCursors.SetValue(“SizeNS”,”.\config\cursor\areo_black_ns.cur”)
-$RegCursors.SetValue(“SizeNWSE”,”.\config\cursor\areo_black_nwse.cur”)
-$RegCursors.SetValue(“SizeWE”,”.\config\cursor\areo_black_ew.cur”)
-$RegCursors.SetValue(“UpArrow”,”.\config\cursor\areo_black_up.cur”)
-$RegCursors.SetValue(“Wait”,”.\config\cursor\areo_black_busy.cur”)
+$curSourceFolder = $pwd.Path + '\config\theme'
+$curDestFolder = "C:\Windows\Cursors"
+
+Copy-Item -Path $curSourceFolder\* -Destination $curDestFolder -Recurse -Force
+Get-ChildItem .\config\theme -Recurse -Filter "*inf" | ForEach-Object { PNPUtil.exe /add-driver $_.FullName /install } | Out-Null
+$RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
+$RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
+$RegCursors.SetValue("","Windows Black")
+$RegCursors.SetValue("AppStarting","$curDestFolder\areo_black_working.cur")
+$RegCursors.SetValue("Arrow","$curDestFolder\areo_black_arrow.cur")
+$RegCursors.SetValue("Crosshair","$curDestFolder\areo_black_cross.cur")
+$RegCursors.SetValue("Hand","$curDestFolder\areo_black_link.cur")
+$RegCursors.SetValue("Help","$curDestFolder\areo_black_helpsel.cur")
+$RegCursors.SetValue("IBeam","$curDestFolder\areo_black_beam.cur")
+$RegCursors.SetValue("No","$curDestFolder\areo_black_unavail.cur")
+$RegCursors.SetValue("NWPen","$curDestFolder\areo_black_pen.cur")
+$RegCursors.SetValue("SizeAll","$curDestFolder\areo_black_move.cur")
+$RegCursors.SetValue("SizeNESW","$curDestFolder\areo_black_nesw.cur")
+$RegCursors.SetValue("SizeNS","$curDestFolder\areo_black_ns.cur")
+$RegCursors.SetValue("SizeNWSE","$curDestFolder\areo_black_nwse.cur")
+$RegCursors.SetValue("SizeWE","$curDestFolder\areo_black_ew.cur")
+$RegCursors.SetValue("UpArrow","$curDestFolder\areo_black_up.cur")
+$RegCursors.SetValue("Wait","$curDestFolder\areo_black_busy.cur")
 $RegCursors.Close()
 $RegConnect.Close()
 $CSharpSig = @'
 
-[DllImport(“user32.dll”, EntryPoint = “SystemParametersInfo”)]
+[DllImport("user32.dll", EntryPoint = "SystemParametersInfo")]
 
 public static extern bool SystemParametersInfo(
 
@@ -258,7 +262,7 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer
 
 Write-Host "Configuring Open-Shell..." -ForegroundColor Yellow
 
-winget install --id "Open-Shell.Open-Shell-Menu" --no-upgrade --silent
+winget install --id "Open-Shell.Open-Shell-Menu" --source winget --no-upgrade --silent
 
 New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force | Out-Null
 New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force | Out-Null
@@ -337,21 +341,19 @@ $explorerHandle = [Keyboard]::FindWindow("CabinetWClass", $null)
 [Keyboard]::SetForegroundWindow($explorerHandle)
 $KEYEVENTF_KEYUP = 0x2
 $VK_MENU = 0x12 # Alt key
+$VK_V = 0x56 # V key
+$VK_RETURN = 0x0D # Enter key
 [Keyboard]::keybd_event($VK_MENU, 0, 0, 0) # Alt key press
-[Keyboard]::keybd_event($VK_MENU, 0, $KEYEVENTF_KEYUP, 0)
-# $VK_V = 0x56 # V key
-# $VK_RETURN = 0x0D # Enter key/
-# [Keyboard]::keybd_event($VK_MENU, 0, 0, 0) # Alt key press
-# [Keyboard]::keybd_event($VK_V, 0, 0, 0) # V key press
-# [Keyboard]::keybd_event($VK_V, 0, $KEYEVENTF_KEYUP, 0) # V key release
-# [Keyboard]::keybd_event($VK_MENU, 0, $KEYEVENTF_KEYUP, 0) # Alt key release
-# Start-Sleep -Milliseconds 100
-# [Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
-# [Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
-# Start-Sleep -Milliseconds 100
-# [Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
-# [Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
-# Start-Sleep -Milliseconds 100
+[Keyboard]::keybd_event($VK_V, 0, 0, 0) # V key press
+[Keyboard]::keybd_event($VK_V, 0, $KEYEVENTF_KEYUP, 0) # V key release
+[Keyboard]::keybd_event($VK_MENU, 0, $KEYEVENTF_KEYUP, 0) # Alt key release
+Start-Sleep -Milliseconds 100
+[Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
+[Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
+Start-Sleep -Milliseconds 100
+[Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
+[Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
+Start-Sleep -Milliseconds 100
 
 Write-Host "Configuring Shell completed." -ForegroundColor Green
 
