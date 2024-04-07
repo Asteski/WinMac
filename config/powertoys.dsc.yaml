@@ -14,6 +14,7 @@ properties:
       settings:
         FancyZones:
           Enabled: true
+          FancyzonesShowZoneNumber: false
         KeyboardManager:
           Enabled: false
         FindMyMouse:
@@ -29,14 +30,17 @@ properties:
         PowerLauncher:
           Enabled: true
           OpenPowerLauncher: "Ctrl+Space"
+          UseCentralizedKeyboardHook: true
+          SearchQueryTuningEnabled: true
           IgnoreHotkeysInFullscreen: false
+          GenerateThumbnailsFromFiles: false
           TabSelectsContextButtons: true
           Position: "Focus"
           Plugins:
             - Name: "Calculator"
               Disabled: false
             - Name: "Folder"
-              Disabled: true
+              Disabled: false
             - Name: "History"
               Disabled: true
             - Name: "Windows Search"
@@ -44,7 +48,7 @@ properties:
             - Name: "OneNote"
               Disabled: true
             - Name: "PowerToys"
-              Disabled: false
+              Disabled: true
             - Name: "Program"
               Disabled: false
               IsGlobal: true
