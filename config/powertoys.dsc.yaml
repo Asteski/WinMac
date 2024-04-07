@@ -15,6 +15,7 @@ properties:
         FancyZones:
           Enabled: true
           FancyzonesShowZoneNumber: false
+          FancyzonesAppLastZoneMoveWindows: true
         KeyboardManager:
           Enabled: false
         FindMyMouse:
@@ -24,7 +25,7 @@ properties:
           ActivationShortcut: "Alt+Space"
         PastePlain:
           Enabled: true
-          ActivationShortcut: Ctrl+Shift+V
+          ActivationShortcut: "Ctrl+Shift+V"
         RegistryPreview:
           Enabled: true
         PowerLauncher:

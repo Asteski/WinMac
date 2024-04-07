@@ -42,7 +42,7 @@ Write-Information "Winget installation completed."
 ## PowerToys
 
 Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
-winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements
+winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
 Write-Host "Installing PowerToys completed." -ForegroundColor Green
 
 Write-Host "Installing Everything..."
