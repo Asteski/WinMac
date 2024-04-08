@@ -372,7 +372,7 @@ Write-Host @"
 
 Write-Host "Restart Computer after deployment - recommended for full effect." -ForegroundColor Red
 Start-Sleep 2
-Write-Host "Windows will restart in:" -ForegroundColor Red
+Write-Host "Computer will restart in:" -ForegroundColor Red
 for ($i = 10; $i -ge 1; $i--) {
     Write-Host $i -ForegroundColor Red
     Start-Sleep 1

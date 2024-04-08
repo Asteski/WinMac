@@ -7,7 +7,6 @@ set-alias -name np -value notepad
 set-alias -name note -value notepad
 # set-alias -name qn -value quicknote
 # set-alias -name qnote -value quicknote
-set-alias -name te -value PSTree
 set-alias -name open -value of
 set-alias -name tree -value PSTree
 set-alias -name kill -value killall
@@ -32,11 +31,16 @@ function prompt {
     }
 }
 
+function qnote { 
+    $file = "qnote" + (Get-Date -Format "yy-MM-ddTHHmmss") + ".txt"
+    $args[0] | Out-File -Append -FilePath "$pwd\$file"
+}
+
 function touch {
     $file = $args[0]
     if($null -eq $file) 
     {
-        $file = "touch_" + (Get-Date -Format "yyyy-MM-ddTHHmmss") + ".txt"
+        $file = "touch_" + (Get-Date -Format "yy-MM-ddTHHmmss") + ".txt"
         Write-Output $null > $file
         Write-Host "File created: $file" -ForegroundColor Green
     }
