@@ -74,12 +74,10 @@ For the most reliable deployment process, I recommend to install latest Powershe
 
 ## Planned features
 
-- Create WinMac Control Panel UWP app to manage UI settings
+- Dock - Give a choice between Dock or Taksbar experience before installation
 - Force Taskbar to go automatically on top upon deployment
-- Toggle Windows Terminal visibility in Start Menu
-- Improve Terminal (Powershell) prompt
-- Add option to close taskbar tasks with middle mouse button
-- Replace Programs directory with Applications Shell object to show all installed apps, instead of a shortcut to Start Menu programs folder
+- Win + Q to run Shutdown prompt
+- Create WinMac Control Panel UWP app to manage UI settings
 
 ## Credit
 
