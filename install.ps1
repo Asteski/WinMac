@@ -22,7 +22,7 @@ Currently no update/uninstall functionality is implemented, so please make sure 
 ## Start Logging
 
 $ErrorActionPreference="SilentlyContinue"
-$date = Get-Date -Format "yy-MM-ddTHH-mm-ss"
+$date = Get-Date -Format "yy-MM-ddTHHmmss"
 mkdir ./temp | Out-Null
 Start-Transcript -Path ".\temp\WinMac_install_log_$date.txt" -Append | Out-Null
 
