@@ -47,7 +47,7 @@ Additionally, deployment script includes pinning User folder and Start Menu\Prog
 WinMac provides you with debloated prompt with addition of most commonly used commands in macOS/Linux, like *touch, ditto, top, whatis, killall, ll, la, tree* with additional commands like:
 
 - *np* opens notepad with or without provided file name,
-- *of or *open*, to open current Powershell directory in Explorer, or opening folder where specific file resides,
+- *of or open*, to open current Powershell directory in Explorer, or opening folder where specific file resides,
 - *backup* is an alias of [wbadmin 1.0 - Backup command-line tool](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/wbadmin),
 - *rcopy* is an alias of [robocopy - Robust File Copy for Windows](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/robocopy).
 
