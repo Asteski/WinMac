@@ -379,12 +379,15 @@ Write-Host @"
 
 "@ -ForegroundColor Green
 
-Write-Host "Restart Computer after deployment - recommended for full effect." -ForegroundColor Red
-Start-Sleep 2
-Write-Host "Computer will restart in:" -ForegroundColor Red
-for ($i = 10; $i -ge 1; $i--) {
-    Write-Host $i -ForegroundColor Red
-    Start-Sleep 1
+$restartConfirmation = Read-Host "Restart computer now? It's recommended to fully apply all the changes. (Y/N)"
+if ($restartConfirmation -eq "Y" -or $restartConfirmation -eq "y") {
+    Write-Host "Restarting computer..." -ForegroundColor Red
+    for ($i = 10; $i -ge 1; $i--) {
+        Write-Host $i -ForegroundColor Yellow
+        Start-Sleep 1
+    }
+    Restart-Computer -Force
+} else {
+    Write-Host "Computer will not be restarted." -ForegroundColor Green
 }
-Restart-Computer -Force
-#EOF
+
