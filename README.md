@@ -60,7 +60,6 @@ Examples:
 - *open foldername* opens specific folder that is stored in current folder
 - *open C:\Users* or *open 'C:\Program Files'* opens specific folder directory
 - *open* opens current folder
-
 - *history* shows the list of commands from current and older sessions
 - *history wsl* or *history grep winmac* searches through commands history by specific string or set of strings
 
