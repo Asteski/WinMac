@@ -8,11 +8,11 @@ set-alias -name np -value notepad
 set-alias -name note -value notepad
 set-alias -name of -value open
 set-alias -name tree -value PSTree
-set-alias -name kill -value killall
+set-alias -name kill -value killall -Option AllScope
 set-alias -name whatis -value man
 set-alias -name backup -value wbadmin
 set-alias -name rcopy -value robocopy
-set-alias -name history -value hist
+set-alias -name history -value hist -Option AllScope
 set-alias -name version -value pwshversion
 
 function ll { Get-ChildItem -Force }
