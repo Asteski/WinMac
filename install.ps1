@@ -369,12 +369,9 @@ Write-Host "Configuring Shell completed." -ForegroundColor Green
 Write-Host "Clean up..."
 Remove-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Force | Out-Null
 Remove-Item -Path "C:\Users\Public\Desktop\gVim*" -Force | Out-Null
-# Remove-Item -Path "C:\Users\Public\Desktop\gVim 9.1.lnk" -Force | Out-Null
-# Remove-Item -Path "C:\Users\Public\Desktop\gVim Easy 9.1.lnk" -Force | Out-Null
-# Remove-Item -Path "C:\Users\Public\Desktop\gVim Read only 9.1.lnk" -Force | Out-Null
 Write-Host "Clean up completed."
 Stop-Transcript | Out-Null
-Write-Host "Logs have been saved to WinMac_install_log_$date.txt in Winget\temp folder." -ForegroundColor Yellow
+Write-Host "Logs have been saved to WinMac_install_log_$date.txt in temp folder." -ForegroundColor Yellow
 
 Write-Host @"
 
@@ -394,7 +391,7 @@ $restartConfirmation = Read-Host "Restart computer now? It's recommended to full
 if ($restartConfirmation -eq "Y" -or $restartConfirmation -eq "y") {
     Write-Host "Restarting computer..." -ForegroundColor Red
     for ($i = 10; $i -ge 1; $i--) {
-        Write-Host $i -ForegroundColor Yellow
+        Write-Host $i -ForegroundColor Red
         Start-Sleep 1
     }
     Restart-Computer -Force

@@ -42,13 +42,14 @@ function hist {
     Get-Content (Get-PSReadlineOption).HistorySavePath | Where-Object {$_ -like "*$find*"} | Get-Unique | more 
 }
 
+# TODO: Add possiblity to create multiple files at once
 function touch {
     $file = $args[0]
     if($null -eq $file) 
     {
         $file = "touch_" + (Get-Date -Format "yy-MM-ddTHHmmss") + ".txt"
         Write-Output $null > $file
-        Write-Host "File created: $file" -ForegroundColor Green
+        Write-Host "File created: $file" -ForegroundColor Yellow
     }
     elseif(Test-Path $file)
     {
