@@ -1,16 +1,18 @@
 
-Set-PSReadlineKeyHandler -Chord Tab -Function TabCompleteNext
+Set-PSReadlineKeyHandler -Chord Tab -Function MenuComplete
 Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
 Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
 
+set-alias -name vi -value vim
 set-alias -name np -value notepad
 set-alias -name note -value notepad
-set-alias -name open -value of
+set-alias -name of -value open
 set-alias -name tree -value PSTree
 set-alias -name kill -value killall
 set-alias -name whatis -value man
 set-alias -name backup -value wbadmin
 set-alias -name rcopy -value robocopy
+set-alias -name history -value hist
 
 function ll { Get-ChildItem -Force }
 function la { Get-ChildItem -Force -Attributes !D }
@@ -29,7 +31,7 @@ function prompt {
     }
 }
 
-function history {
+function hist {
     $find = $args
     Get-Content (Get-PSReadlineOption).HistorySavePath | Where-Object {$_ -like "*$find*"} | Get-Unique | more 
 }
@@ -89,7 +91,7 @@ function killall {
     }
 }
 
-function of {
+function open {
     param (
         [Parameter(Mandatory=$false, Position=0)]
         [ValidateNotNullOrEmpty()]

@@ -21,16 +21,16 @@ $progressPreference = 'silentlyContinue'
 Write-Information "Downloading WinGet and its dependencies..."
 $wingetUrl = "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
 $installPath = "$env:TEMP\winget.msixbundle"
-Invoke-WebRequest -Uri $wingetUrl -OutFile $installPath | Out-Null
+Invoke-WebRequest -Uri $wingetUrl -OutFile $installPath
 Write-Information "Installing WinGet..."
-Add-AppxPackage -Path $installPath | Out-Null
-Remove-Item -Path $installPath | Out-Null
+Add-AppxPackage -Path $installPath
+Remove-Item -Path $installPath -Force | Out-Null
 Write-Information "Winget installation completed."
 
 ## PowerToys
 
 Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
-winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
+winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements
 Write-Host "Installing PowerToys completed." -ForegroundColor Green
 
 Write-Host "Installing Everything..."
@@ -67,6 +67,21 @@ if (-not (Get-PackageProvider -ListAvailable | Where-Object {$_.Name -eq 'NuGet'
 else {
     Write-Information "NuGet Provider is already installed."
 }
+
+$winget = @(
+    "Vim.Vim",
+    "gsass1.NTop"
+)
+foreach ($app in $winget) {winget install --id $app --source winget --no-upgrade --silent}
+
+if (($env:PATH[-1] -eq ';') -eq $false){
+    $env:PATH += ';'
+}
+$vimParentPath = Join-Path $env:PROGRAMFILES Vim
+$latestSubfolder = Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -Property CreationTime -Descending | Select-Object -First 1
+$vimChildPath = $latestSubfolder.FullName
+$vimChildPath += ';'
+$env:PATH += $vimChildPath
 
 Install-Module PSTree -Scope CurrentUser -Force | Out-Null
 Add-Content -Path $profilePath -Value $functions | Out-Null

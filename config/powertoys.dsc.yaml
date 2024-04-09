@@ -16,8 +16,6 @@ properties:
           Enabled: true
           FancyzonesShowZoneNumber: false
           FancyzonesAppLastZoneMoveWindows: true
-        KeyboardManager:
-          Enabled: false
         MouseFindMyMouse:
           Enabled: true
         Peek:
@@ -79,6 +77,8 @@ properties:
               Disabled: true
             - Name: "Window Walker"
               Disabled: true
+        KeyboardManager:
+          Enabled: false
         AlwaysOnTop:
           Enabled: false
         Awake:

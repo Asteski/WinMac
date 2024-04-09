@@ -44,19 +44,19 @@ Additionally, deployment script includes pinning User folder and Start Menu\Prog
 
 - **Revamped Terminal**
 
-WinMac provides you with debloated prompt with addition of most commonly used commands in macOS/Linux, like *grep, touch, ditto, top, whatis, killall, ll, la, tree* with additional commands like:
+WinMac provides you with debloated prompt with addition of completion functions and most commonly used commands in macOS/Linux, like *vim, grep, touch, ditto, top, whatis, killall, ll, la, tree* with additional commands like:
 
 - *np* opens notepad with or without provided file name,
-- *open* or *of* to open current Powershell directory in Explorer, or opening folder where specific file resides,
+- *open* or *of* to open current or specific directory in Explorer,
 - *history* or *hist* to list commands history from current and older sessions,
-- *backup* is an alias of [wbadmin - Backup command-line tool for Windows](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/wbadmin),
-- *rcopy* is an alias of [robocopy - Robust File Copy for Windows](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/robocopy).
+- *backup* as an alias of [wbadmin - Backup command-line tool for Windows](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/wbadmin),
+- *rcopy* as an alias of [robocopy - Robust File Copy for Windows](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/robocopy).
 
 Examples: 
 
 - *open $profile* or *open C:\Users\username\file.txt* opens folder, where specified file is stored
 - *open foldername* opens specific folder that is stored in current folder
-- *open C:\folderdir* opens specific folder directory
+- *open C:\Users* or *open 'C:\Program Files'* opens specific folder directory
 - *open* opens current folder
 
 - *history* shows the list of commands from current and older sessions
