@@ -18,10 +18,10 @@ Write-Host @"
 
 ## Start Logging
 
-$date = Get-Date -Format "yy-MM-ddTHH-mm-ss"
 $ErrorActionPreference="SilentlyContinue"
+$date = Get-Date -Format "yy-MM-ddTHH-mm-ss"
 mkdir ./temp | Out-Null
-Start-Transcript -path ".\temp\WinMac_install_log_$date.txt" -Append | Out-Null
+Start-Transcript -Path ".\temp\WinMac_install_log_$date.txt" -Append | Out-Null
 
 ## Winget
 
