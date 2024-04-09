@@ -16,7 +16,7 @@ properties:
           Enabled: true
           FancyzonesShowZoneNumber: false
           FancyzonesAppLastZoneMoveWindows: true
-        MouseFindMyMouse:
+        FindMyMouse:
           Enabled: true
         Peek:
           Enabled: true
@@ -24,6 +24,9 @@ properties:
         PastePlain:
           Enabled: true
           ActivationShortcut: "Ctrl+Shift+V"
+        AlwaysOnTop:
+          Enabled: true
+          Hotkey: ""
         RegistryPreview:
           Enabled: true
         PowerLauncher:
@@ -78,8 +81,6 @@ properties:
             - Name: "Window Walker"
               Disabled: true
         KeyboardManager:
-          Enabled: false
-        AlwaysOnTop:
           Enabled: false
         Awake:
           Enabled: false
