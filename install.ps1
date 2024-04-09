@@ -54,17 +54,14 @@ Write-Host "Installing Everything completed." -ForegroundColor Green
 
 Write-Host "Configuring PowerShell Profile..." -ForegroundColor Yellow
 
-$profilePath = $PROFILE
-$profileDirectory = Split-Path $profilePath -Parent
+$profilePath = $PROFILE | Split-Path | Split-Path
+$profileFile = $PROFILE | Split-Path -Leaf
 $functions = Get-Content "$pwd\config\functions.ps1" -Raw
 
-if (-not (Test-Path $profileDirectory)) {
-    New-Item -ItemType Directory -Path $profileDirectory | Out-Null
-}
-
-if (-not (Test-Path $profilePath)) {
-    New-Item -ItemType File -Path $profilePath | Out-Null
-}
+if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell" | Out-Null }
+if (-not (Test-Path "$profilePath\WindowsPowerShell")) { New-Item -ItemType Directory -Path "$profilePath\WindowsPowerShell" | Out-Null }
+if (-not (Test-Path "$profilePath\PowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\PowerShell\$profileFile" | Out-Null }
+if (-not (Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\WindowsPowerShell\$profileFile" | Out-Null }
 
 Write-Host "Checking for NuGet Provider" -ForegroundColor Yellow
 $progressPreference = 'silentlyContinue'
@@ -91,7 +88,8 @@ $latestSubfolder = Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -
 $vimChildPath = $latestSubfolder.FullName
 [Environment]::SetEnvironmentVariable("Path", $env:Path + ";$vimChildPath", [EnvironmentVariableTarget]::Machine)
 Install-Module PSTree -Scope CurrentUser -Force | Out-Null
-Add-Content -Path $profilePath -Value $functions | Out-Null
+Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $functions | Out-Null
+Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $functions | Out-Null
 
 Write-Host "Configuring PowerShell Profile completed." -ForegroundColor Green
 
