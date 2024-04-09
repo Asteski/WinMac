@@ -13,9 +13,11 @@ set-alias -name whatis -value man
 set-alias -name backup -value wbadmin
 set-alias -name rcopy -value robocopy
 set-alias -name history -value hist
+set-alias -name version -value pwshversion
 
 function ll { Get-ChildItem -Force }
 function la { Get-ChildItem -Force -Attributes !D }
+function pwshversion { $PSVersionTable }
 
 function prompt {
     $userName = $env:USERNAME

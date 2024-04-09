@@ -79,10 +79,6 @@ $winget = @(
     "gsass1.NTop"
 )
 foreach ($app in $winget) {winget install --id $app --source winget --no-upgrade --silent}
-
-if (($env:PATH[-1] -eq ';') -eq $false){
-    $env:PATH += ';'
-}
 $vimParentPath = Join-Path $env:PROGRAMFILES Vim
 $latestSubfolder = Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -Property CreationTime -Descending | Select-Object -First 1
 $vimChildPath = $latestSubfolder.FullName
