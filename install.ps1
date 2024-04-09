@@ -16,6 +16,7 @@ Write-Host @"
 Write-Host @"
 Please do not do anything while the script is running, as it may impact the installation process. 
 
+Currently no update/upgrade functionality is implemented.
 "@ -ForegroundColor Yellow
 
 ## Start Logging
@@ -162,7 +163,7 @@ Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0 | Out-Null
 Set-ItemProperty -Path $exRegPath -Name "ShowRecent" -Value 0 | Out-Null
 
 # Theme
-$curSourceFolder = $pwd.Path + '\config\theme'
+$curSourceFolder = $pwd.Path + '\config\theme\cursor'
 $curDestFolder = "C:\Windows\Cursors"
 Copy-Item -Path $curSourceFolder\* -Destination $curDestFolder -Recurse -Force | Out-Null
 $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
