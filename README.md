@@ -44,17 +44,17 @@ Additionally, deployment script includes pinning User folder and Start Menu\Prog
 
 - **Revamped Terminal**
 
-WinMac provides you with debloated prompt with addition of most commonly used commands in macOS/Linux, like *touch, ditto, top, whatis, killall, ll, la, tree* with additional commands like:
+WinMac provides you with debloated prompt with addition of most commonly used commands in macOS/Linux, like *grep, touch, ditto, top, whatis, killall, ll, la, tree* with additional commands like:
 
 - *np* opens notepad with or without provided file name,
-- *of or open*, to open current Powershell directory in Explorer, or opening folder where specific file resides,
+- *open* or *of* to open current Powershell directory in Explorer, or opening folder where specific file resides,
+- *history* or *hist* to list commands history from current session,
 - *backup* is an alias of [wbadmin 1.0 - Backup command-line tool](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/wbadmin),
 - *rcopy* is an alias of [robocopy - Robust File Copy for Windows](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/robocopy).
 
-
 Examples: 
 
-- *open $profile* opens folder, where Powershell $profile file resides
+- *open $profile* opens folder, where Powershell profile file resides
 - *open foldername* opens specific folder that is placed in current folder
 - *open folderdir* opens specific folder directory
 - *open* opens current folder

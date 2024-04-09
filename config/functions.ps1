@@ -17,6 +17,11 @@ set-alias -name rcopy -value robocopy
 function ll { Get-ChildItem -Force }
 function la { Get-ChildItem -Force -Attributes !D }
 
+function history {
+    $find = $args
+    Get-Content (Get-PSReadlineOption).HistorySavePath | Where-Object {$_ -like "*$find*"} | Get-Unique | more 
+}
+
 function prompt {
     $userName = $env:USERNAME
     $folder = Split-Path -Leaf $pwd
