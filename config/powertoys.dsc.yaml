@@ -18,7 +18,7 @@ properties:
           FancyzonesAppLastZoneMoveWindows: true
         KeyboardManager:
           Enabled: false
-        FindMyMouse:
+        MouseFindMyMouse:
           Enabled: true
         Peek:
           Enabled: true
@@ -116,15 +116,15 @@ properties:
         VideoConference:
           Enabled: false
         PowerPreview:
-          EnableSvgPreview: true
-          EnableSvgThumbnail: false
-          EnableMdPreview: true
-          EnableMonacoPreview: true
-          EnablePdfPreview: true
-          EnablePdfThumbnail: false
-          EnableGcodePreview: true
-          EnableGcodeThumbnail: false
-          EnableStlThumbnail: false
-          EnableQoiPreview: true
-          EnableQoiThumbnail: false
+          EnableSvgPreview: false
+          EnableSvgThumbnail: true
+          EnableMdPreview: false
+          EnableMonacoPreview: false
+          EnablePdfPreview: false
+          EnablePdfThumbnail: true
+          EnableGcodePreview: false
+          EnableGcodeThumbnail: true
+          EnableStlThumbnail: true
+          EnableQoiPreview: false
+          EnableQoiThumbnail: true
   configurationVersion: 0.2.0

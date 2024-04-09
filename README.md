@@ -48,16 +48,19 @@ WinMac provides you with debloated prompt with addition of most commonly used co
 
 - *np* opens notepad with or without provided file name,
 - *open* or *of* to open current Powershell directory in Explorer, or opening folder where specific file resides,
-- *history* or *hist* to list commands history from current session,
-- *backup* is an alias of [wbadmin 1.0 - Backup command-line tool](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/wbadmin),
+- *history* or *hist* to list commands history from current and older sessions,
+- *backup* is an alias of [wbadmin - Backup command-line tool for Windows](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/wbadmin),
 - *rcopy* is an alias of [robocopy - Robust File Copy for Windows](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/robocopy).
 
 Examples: 
 
-- *open $profile* opens folder, where Powershell profile file resides
-- *open foldername* opens specific folder that is placed in current folder
-- *open folderdir* opens specific folder directory
+- *open $profile* or *open C:\Users\username\file.txt* opens folder, where specified file is stored
+- *open foldername* opens specific folder that is stored in current folder
+- *open C:\folderdir* opens specific folder directory
 - *open* opens current folder
+
+- *history* shows the list of commands from current and older sessions
+- *history wsl* or *history grep winmac* searches through commands history by specific string or set of strings
 
 ## Benefits
 

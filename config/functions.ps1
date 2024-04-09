@@ -5,8 +5,6 @@ Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
 
 set-alias -name np -value notepad
 set-alias -name note -value notepad
-# set-alias -name qn -value quicknote
-# set-alias -name qnote -value quicknote
 set-alias -name open -value of
 set-alias -name tree -value PSTree
 set-alias -name kill -value killall
@@ -16,11 +14,6 @@ set-alias -name rcopy -value robocopy
 
 function ll { Get-ChildItem -Force }
 function la { Get-ChildItem -Force -Attributes !D }
-
-function history {
-    $find = $args
-    Get-Content (Get-PSReadlineOption).HistorySavePath | Where-Object {$_ -like "*$find*"} | Get-Unique | more 
-}
 
 function prompt {
     $userName = $env:USERNAME
@@ -36,9 +29,9 @@ function prompt {
     }
 }
 
-function qnote { 
-    $file = "qnote" + (Get-Date -Format "yy-MM-ddTHHmmss") + ".txt"
-    $args[0] | Out-File -Append -FilePath "$pwd\$file"
+function history {
+    $find = $args
+    Get-Content (Get-PSReadlineOption).HistorySavePath | Where-Object {$_ -like "*$find*"} | Get-Unique | more 
 }
 
 function touch {
