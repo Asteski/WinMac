@@ -371,6 +371,7 @@ Stop-Transcript | Out-Null
 Write-Host "Logs have been saved to WinMac_install_log_$date.txt in Winget\temp folder." -ForegroundColor Yellow
 
 Write-Host @"
+
 ------------------------ WinMac Deployment completed ------------------------
 
     Enjoy and support by giving feedback and contributing to the project!
