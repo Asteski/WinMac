@@ -1,16 +1,27 @@
 
-Set-PSReadlineKeyHandler -Chord Tab -Function TabCompleteNext
+# Completion settings
+Set-PSReadlineKeyHandler -Chord Tab -Function MenuComplete
 Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
 Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
 
+# Aliases
+set-alias -name vi -value vim
 set-alias -name np -value notepad
-set-alias -name open -value of
+set-alias -name note -value notepad
+set-alias -name of -value open
 set-alias -name tree -value PSTree
-set-alias -name kill -value killall
+set-alias -name kill -value killall -Option AllScope
 set-alias -name whatis -value man
+set-alias -name backup -value wbadmin
+set-alias -name rcopy -value robocopy
+set-alias -name history -value hist -Option AllScope
+set-alias -name version -value psversion
+set-alias -name psver -value psversion
 
+# Functions
 function ll { Get-ChildItem -Force }
 function la { Get-ChildItem -Force -Attributes !D }
+function psversion { $PSVersionTable }
 
 function prompt {
     $userName = $env:USERNAME
@@ -26,13 +37,19 @@ function prompt {
     }
 }
 
+function hist {
+    $find = $args;
+    Get-Content (Get-PSReadlineOption).HistorySavePath | Where-Object {$_ -like "*$find*"} | Get-Unique | more 
+}
+
+# TODO: Add possiblity to create multiple files at once
 function touch {
     $file = $args[0]
     if($null -eq $file) 
     {
-        $file = "touch_" + (Get-Date -Format "yyyy-MM-ddTHHmmss") + ".txt"
+        $file = "touch_" + (Get-Date -Format "yy-MM-ddTHHmmss") + ".txt"
         Write-Output $null > $file
-        Write-Host "File created: $file" -ForegroundColor Green
+        Write-Host "File created: $file" -ForegroundColor Yellow
     }
     elseif(Test-Path $file)
     {
@@ -81,7 +98,8 @@ function killall {
     }
 }
 
-function of {
+# TODO: to open directories with spaces in it
+function open {
     param (
         [Parameter(Mandatory=$false, Position=0)]
         [ValidateNotNullOrEmpty()]

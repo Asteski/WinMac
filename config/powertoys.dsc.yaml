@@ -1,0 +1,136 @@
+properties:
+  resources:
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install PowerToys
+        allowPrerelease: true
+      settings:
+        id: Microsoft.PowerToys
+        source: winget
+
+    - resource: PowerToysConfigure
+      directives:
+        description: Configure PowerToys
+      settings:
+        FancyZones:
+          Enabled: true
+          FancyzonesShowZoneNumber: false
+          FancyzonesAppLastZoneMoveWindows: true
+          FancyZonesEditorHotkey: "Win+Shift+F"
+        FindMyMouse:
+          Enabled: true
+          ActivationMethod: 2
+        Peek:
+          Enabled: true
+          ActivationShortcut: "Alt+Space"
+        PastePlain:
+          Enabled: true
+          ActivationShortcut: "Ctrl+Shift+V"
+        AlwaysOnTop:
+          Enabled: true
+          Hotkey: "Win+A"
+          FrameThickness: 4
+          FrameOpacity: 70
+        RegistryPreview:
+          Enabled: false
+        PowerLauncher:
+          Enabled: true
+          OpenPowerLauncher: "Ctrl+Space"
+          UseCentralizedKeyboardHook: true
+          SearchQueryTuningEnabled: true
+          IgnoreHotkeysInFullscreen: false
+          GenerateThumbnailsFromFiles: false
+          TabSelectsContextButtons: true
+          Position: "Focus"
+          Plugins:
+            - Name: "Calculator"
+              Disabled: false
+            - Name: "Folder"
+              Disabled: false
+            - Name: "History"
+              Disabled: true
+            - Name: "Windows Search"
+              Disabled: true
+            - Name: "OneNote"
+              Disabled: true
+            - Name: "PowerToys"
+              Disabled: true
+            - Name: "Program"
+              Disabled: false
+              IsGlobal: true
+            - Name: "Registry Plugin"
+              Disabled: false
+            - Name: "Service"
+              Disabled: false
+            - Name: "Shell"
+              Disabled: false
+            - Name: "Windows System Commands"
+              Disabled: false
+            - Name: "Time and Date"
+              Disabled: true
+            - Name: "Unit Converter"
+              Disabled: true
+            - Name: "URI Handler"
+              Disabled: false
+            - Name: "Value Generator"
+              Disabled: true
+            - Name: "Visual Studio Code Workspaces"
+              Disabled: true
+            - Name: "Web Search"
+              Disabled: false
+            - Name: "Windows settings"
+              Disabled: false
+            - Name: "Windows Terminal"
+              Disabled: true
+            - Name: "Window Walker"
+              Disabled: true
+        ColorPicker:
+          Enabled: true
+          ActivationShortcut: "Win+C"
+        KeyboardManager:
+          Enabled: false
+        Awake:
+          Enabled: false
+        CropAndLock:
+          Enabled: false
+        EnvironmentVariables:
+          Enabled: false
+        FileLocksmith:
+          Enabled: false
+        ImageResizer:
+          Enabled: false
+        MouseHighlighter:
+          Enabled: false
+        MouseJump:
+          Enabled: false
+        MousePointerCrosshairs:
+          Enabled: false
+        MouseWithoutBorders:
+          Enabled: false
+        PowerRename:
+          Enabled: false
+        PowerAccent:
+          Enabled: false
+        MeasureTool:
+          Enabled: false
+        Hosts:
+          Enabled: false
+        PowerOcr:
+          Enabled: false
+        ShortcutGuide:
+          Enabled: false
+        VideoConference:
+          Enabled: false
+        PowerPreview:
+          EnableSvgPreview: false
+          EnableSvgThumbnail: true
+          EnableMdPreview: false
+          EnableMonacoPreview: false
+          EnablePdfPreview: false
+          EnablePdfThumbnail: true
+          EnableGcodePreview: false
+          EnableGcodeThumbnail: true
+          EnableStlThumbnail: true
+          EnableQoiPreview: false
+          EnableQoiThumbnail: true
+  configurationVersion: 0.2.0

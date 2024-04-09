@@ -22,11 +22,11 @@
 
 PowerToys brings a macOS Spotlight-like functionality to Windows with PowerToys Run. It allows users to quickly search for files, applications, and settings on your system. 
 
-By pressing a customizable hotkey combination (alt+space by default), a search bar appears, enabling users to type their query and quickly launch or access the desired item without navigating through menus or directories. Besides PowerToys Run, this utility allows for many OS customizations, like *FancyZones, File Locksmith, Peek, File Explorer add-ons or Mouse without borders*, improving your workflow in many different ways.
+By pressing a customizable hotkey combination (alt+space by default), a search bar appears, enabling users to type their query and quickly launch or access the desired item without navigating through menus or directories. Besides PowerToys Run, this utility allows for many OS customizations, like *FancyZones, Always On Top, Peek, File Explorer add-ons, Color Picker or Find My Mouse*, improving your workflow in many different ways.
 
 - **Revamped and decluttered Start Menu**
 
-Open-Shell is a customizable Start Menu replacement for Windows that provides users with possiblity to completely replace traditional Start Menu with customized WinX menu, resembling MacOS main menu.
+Open-Shell is a customizable Start Menu replacement for Windows that provides users with possiblity to completely replace traditional Start Menu with customized WinX menu, to resemble MacOS main menu.
 
 - **Enhanced Taskbar**
 
@@ -40,21 +40,29 @@ StartAllBack extends its enhancements beyond the Taskbar to the Windows Explorer
 
 Utility introduces features such as ribbons, tabs, customizable toolbar buttons, enhanced file previews, and improved navigation options. With StartAllBack and PowerToys, you can personalize your Explorer interface to better suit your workflow and access files and folders more efficiently.
 
-Additionally, deployment script includes pinning User folder and Programs folder to Quick Access.
+Additionally, deployment script includes pinning User folder and Start Menu\Programs folder to Quick Access.
 
 - **Revamped Terminal**
 
-WinMac provides you with debloated prompt with addition of most commonly used commands in macOS/Linux, like *touch, ditto, top, whatis, killall, ll, la, tree* with additional commands like:
+WinMac provides you with debloated prompt with addition of completion functions and most commonly used commands in macOS/Linux, like *vim, grep, touch, ditto, top, whatis, killall, ll, la, tree* with additional commands like:
 
-- *np* which opens notepad with or without provided file name,
-- *open* or *of*, which is used to open current Powershell directory in Explorer, or opening folder where specific file resides.
+- *np* or *note* opens notepad with or without provided file name,
+- *open* or *of* to open current or specific directory in Explorer,
+- *history* or *hist* to list commands history from current and older sessions,
+- *ntop* is a htop-like system-monitor for Windows with Vi-keybindings,
+- *backup* as an alias of [wbadmin - Backup command-line tool for Windows](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/wbadmin),
+- *rcopy* as an alias of [robocopy - Robust File Copy for Windows](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/robocopy),
+- *psversion, psver* or *version* to show current Powershell version.
 
 Examples: 
 
-- *open $profile* opens folder, where Powershell $profile file resides
-- *open foldername* opens specific folder that is placed in current folder
-- *open folderdir* opens specific folder directory
+- *open $profile* or *open C:\Users\username\file.txt* opens folder, where specified file is stored
+- *open foldername* opens specific folder that is stored in current folder
+- *open C:\Users* or *open 'C:\Program Files'* opens specific folder directory
 - *open* opens current folder
+
+- *history* shows the list of commands from current and older sessions
+- *history wsl* or *history grep winmac* searches through commands history by specific string or set of strings
 
 ## Benefits
 
@@ -74,23 +82,20 @@ For the most reliable deployment process, I recommend to install latest version 
 
 ## Planned features
 
-- Dock - Give a choice between Dock or Taskbar experience before installation
-- Force Taskbar to go automatically on top upon deployment
-- Win + Q to run Shutdown prompt
-- Create WinMac Control Panel UWP app to manage UI settings
+- Dock - Give a choice between Dock or Taskbar experience before deployment,
+- Force Taskbar to go automatically on top upon deployment,
+- Win + Q to run Shutdown prompt,
+- quicknote and computerinfo functions,
+- Create WinMac Control Panel UWP app to manage UI settings.
 
 ## Credit
 
 List of utilities and their creators, used with WinMac deployment script:
 
 - [PowerToys](https://learn.microsoft.com/en-us/windows/powertoys/) by Microsoft
-
 - [StartAllBack](https://www.startallback.com/) by Stanislav Zinukhov
-
 - [Open-Shell](https://open-shell.github.io/Open-Shell-Menu/) by Ivo Beltchev
-
 - [Everything](https://www.voidtools.com/) by David Carpenter
-
 - [PSTree](https://github.com/santisq/PSTree) by santisq
 
 Please support creators however you can for their wonderful work!
