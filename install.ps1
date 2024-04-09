@@ -1,5 +1,3 @@
-
-Stop-Transcript
 Clear-Host
 Write-Host @"
 -------------------------- WinMac Deployment --------------------------
