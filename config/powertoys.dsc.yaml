@@ -32,7 +32,7 @@ properties:
           FrameThickness: 4
           FrameOpacity: 70
         RegistryPreview:
-          Enabled: true
+          Enabled: false
         PowerLauncher:
           Enabled: true
           OpenPowerLauncher: "Ctrl+Space"
