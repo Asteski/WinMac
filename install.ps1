@@ -8,7 +8,7 @@ Write-Host @"
                             GitHub: Asteski
                             Version: 0.2.0
 
-                      This is Work in Progress. 
+                      This is Work in Progress.
 
 -----------------------------------------------------------------------
 
@@ -57,6 +57,7 @@ Write-Host "Installing Everything completed." -ForegroundColor Green
 
 Write-Host "Configuring PowerShell Profile..." -ForegroundColor Yellow
 
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force | Out-Null
 $profilePath = $PROFILE | Split-Path | Split-Path
 $profileFile = $PROFILE | Split-Path -Leaf
 $functions = Get-Content "$pwd\config\functions.ps1" -Raw
@@ -378,6 +379,8 @@ Write-Host @"
     Enjoy and support by giving feedback and contributing to the project!
 
  For more information please visit my GitHub page: github.com/Asteski/WinMac
+
+-----------------------------------------------------------------------------
 
 "@ -ForegroundColor Green
 

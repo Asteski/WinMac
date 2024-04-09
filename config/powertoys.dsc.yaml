@@ -28,6 +28,8 @@ properties:
         AlwaysOnTop:
           Enabled: true
           Hotkey: "Win+A"
+          FrameThickness: 4
+          FrameOpacity: 70
         RegistryPreview:
           Enabled: true
         PowerLauncher:

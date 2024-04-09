@@ -1,8 +1,10 @@
 
+# Completion settings
 Set-PSReadlineKeyHandler -Chord Tab -Function MenuComplete
 Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
 Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
 
+# Aliases
 set-alias -name vi -value vim
 set-alias -name np -value notepad
 set-alias -name note -value notepad
@@ -15,6 +17,7 @@ set-alias -name rcopy -value robocopy
 set-alias -name history -value hist -Option AllScope
 set-alias -name version -value pwshversion
 
+# Functions
 function ll { Get-ChildItem -Force }
 function la { Get-ChildItem -Force -Attributes !D }
 function pwshversion { $PSVersionTable }
