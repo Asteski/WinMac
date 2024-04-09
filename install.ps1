@@ -60,7 +60,6 @@ Write-Host "Installing Everything completed." -ForegroundColor Green
 
 Write-Host "Configuring PowerShell Profile..." -ForegroundColor Yellow
 
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force | Out-Null
 $profilePath = $PROFILE | Split-Path | Split-Path
 $profileFile = $PROFILE | Split-Path -Leaf
 $functions = Get-Content "$pwd\config\functions.ps1" -Raw
