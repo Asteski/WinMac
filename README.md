@@ -49,6 +49,7 @@ WinMac provides you with debloated prompt with addition of completion functions 
 - *np* or *note* opens notepad with or without provided file name,
 - *open* or *of* to open current or specific directory in Explorer,
 - *history* or *hist* to list commands history from current and older sessions,
+- *ntop* is a htop-like system-monitor for Windows with Vi-keybindings,
 - *backup* as an alias of [wbadmin - Backup command-line tool for Windows](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/wbadmin),
 - *rcopy* as an alias of [robocopy - Robust File Copy for Windows](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/robocopy).
 

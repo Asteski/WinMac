@@ -1,3 +1,5 @@
+
+Stop-Transcript
 Clear-Host
 Write-Host @"
 -------------------------- WinMac Deployment --------------------------
@@ -13,6 +15,13 @@ Write-Host @"
 -----------------------------------------------------------------------
 
 "@ -ForegroundColor Cyan
+
+## Start Logging
+
+$date = Get-Date -Format "yy-MM-ddTHH-mm-ss"
+$ErrorActionPreference="SilentlyContinue"
+mkdir ./temp | Out-Null
+Start-Transcript -path ".\temp\WinMac_install_log_$date.txt" -Append | Out-Null
 
 ## Winget
 
@@ -80,10 +89,7 @@ if (($env:PATH[-1] -eq ';') -eq $false){
 $vimParentPath = Join-Path $env:PROGRAMFILES Vim
 $latestSubfolder = Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -Property CreationTime -Descending | Select-Object -First 1
 $vimChildPath = $latestSubfolder.FullName
-$vimChildPath += ';'
-$env:PATH += $vimChildPath
-# TODO: remove Vim shortcuts from desktop
-
+[Environment]::SetEnvironmentVariable("Path", $env:Path + ";$vimChildPath", [EnvironmentVariableTarget]::Machine)
 Install-Module PSTree -Scope CurrentUser -Force | Out-Null
 Add-Content -Path $profilePath -Value $functions | Out-Null
 
@@ -155,7 +161,6 @@ Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
 ## Misc
 
 $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"
-Remove-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Force | Out-Null
 Set-ItemProperty -Path $exRegPath\Advanced -Name "LaunchTO" -Value 1 | Out-Null
 Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0 | Out-Null
 Set-ItemProperty -Path $exRegPath -Name "ShowRecent" -Value 0 | Out-Null
@@ -360,9 +365,14 @@ Start-Sleep -Milliseconds 100
 
 Write-Host "Configuring Shell completed." -ForegroundColor Green
 
-# Write-Host "Clean up..."
-# TODO: cleanup?
-# Write-Host "Clean up completed."
+Write-Host "Clean up..."
+Remove-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Force | Out-Null
+Remove-Item -Path "C:\Users\Public\Desktop\gVim 9.1.lnk" -Force | Out-Null
+Remove-Item -Path "C:\Users\Public\Desktop\gVim Easy 9.1.lnk" -Force | Out-Null
+Remove-Item -Path "C:\Users\Public\Desktop\gVim Read only 9.1.lnk" -Force | Out-Null
+Write-Host "Clean up completed."
+Stop-Transcript | Out-Null
+Write-Host "Logs have been saved to WinMac_install_log_$date.txt in Winget\temp folder." -ForegroundColor Yellow
 
 Write-Host @"
 ------------------------ WinMac Deployment completed ------------------------

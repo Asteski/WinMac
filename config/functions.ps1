@@ -91,6 +91,7 @@ function killall {
     }
 }
 
+# TODO: to open directories with spaces in it
 function open {
     param (
         [Parameter(Mandatory=$false, Position=0)]
