@@ -47,9 +47,8 @@ Write-Host "Installing PowerToys completed." -ForegroundColor Green
 
 Write-Host "Installing Everything..."
 $winget = @(
-    "Voidtools.Everything"
-    # "Voidtools.Everything",
-    # "lin-ycv.EverythingPowerToys"
+    "Voidtools.Everything",
+    "lin-ycv.EverythingPowerToys"
 )
 foreach ($app in $winget) {winget install --id $app --source winget --no-upgrade --silent}
 Write-Host "Installing Everything completed." -ForegroundColor Green

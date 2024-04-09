@@ -40,21 +40,22 @@ StartAllBack extends its enhancements beyond the Taskbar to the Windows Explorer
 
 Utility introduces features such as ribbons, tabs, customizable toolbar buttons, enhanced file previews, and improved navigation options. With StartAllBack and PowerToys, you can personalize your Explorer interface to better suit your workflow and access files and folders more efficiently.
 
-Additionally, deployment script includes pinning User folder and Programs folder to Quick Access.
+Additionally, deployment script includes pinning User folder and Start Menu\Programs folder to Quick Access.
 
 - **Revamped Terminal**
 
 WinMac provides you with debloated prompt with addition of most commonly used commands in macOS/Linux, like *touch, ditto, top, whatis, killall, ll, la, tree* with additional commands like:
 
 - *np* which opens notepad with or without provided file name,
-- *of* or *open*, which is used to open current Powershell directory in Explorer, or opening folder where specific file resides.
+- *of or *open*, which is used to open current Powershell directory in Explorer, or opening folder where specific file resides,
+
 
 Examples: 
 
-- *of $profile* or *open $profile* opens folder, where Powershell $profile file resides
-- *of foldername* or *open foldername* opens specific folder that is placed in current folder
-- *of folderdir* or *open folderdir* opens specific folder directory
-- *of* or *open* opens current folder
+- *open $profile* opens folder, where Powershell $profile file resides
+- *open foldername* opens specific folder that is placed in current folder
+- *open folderdir* opens specific folder directory
+- *open* opens current folder
 
 ## Benefits
 
@@ -74,12 +75,10 @@ For the most reliable deployment process, I recommend to install latest Powershe
 
 ## Planned features
 
-- Create WinMac Control Panel UWP app to manage UI settings
+- Dock - Give a choice between Dock or Taskbar experience before installation
 - Force Taskbar to go automatically on top upon deployment
-- Toggle Windows Terminal visibility in Start Menu
-- Improve Terminal (Powershell) prompt
-- Add option to close taskbar tasks with middle mouse button
-- Replace Programs directory with Applications Shell object to show all installed apps, instead of a shortcut to Start Menu programs folder
+- Win + Q to run Shutdown prompt
+- Create WinMac Control Panel UWP app to manage UI settings
 
 ## Credit
 
