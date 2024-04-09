@@ -32,7 +32,7 @@ function prompt {
 }
 
 function hist {
-    $find = $args
+    $find = $args;
     Get-Content (Get-PSReadlineOption).HistorySavePath | Where-Object {$_ -like "*$find*"} | Get-Unique | more 
 }
 

@@ -27,7 +27,7 @@ properties:
           ActivationShortcut: "Ctrl+Shift+V"
         AlwaysOnTop:
           Enabled: true
-          Hotkey: ""
+          Hotkey: "Win+A"
         RegistryPreview:
           Enabled: true
         PowerLauncher:

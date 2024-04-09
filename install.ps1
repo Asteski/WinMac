@@ -33,7 +33,7 @@ Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
 winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements
 Write-Host "Installing PowerToys completed." -ForegroundColor Green
 
-Write-Host "Installing Everything..."
+Write-Host "Installing Everything..." -ForegroundColor Yellow
 $winget = @(
     "Voidtools.Everything",
     "lin-ycv.EverythingPowerToys"
@@ -82,6 +82,7 @@ $latestSubfolder = Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -
 $vimChildPath = $latestSubfolder.FullName
 $vimChildPath += ';'
 $env:PATH += $vimChildPath
+# TODO: remove Vim shortcuts from desktop
 
 Install-Module PSTree -Scope CurrentUser -Force | Out-Null
 Add-Content -Path $profilePath -Value $functions | Out-Null
@@ -162,7 +163,7 @@ Set-ItemProperty -Path $exRegPath -Name "ShowRecent" -Value 0 | Out-Null
 # Theme
 $curSourceFolder = $pwd.Path + '\config\theme'
 $curDestFolder = "C:\Windows\Cursors"
-Copy-Item -Path $curSourceFolder\* -Destination $curDestFolder -Recurse -Force
+Copy-Item -Path $curSourceFolder\* -Destination $curDestFolder -Recurse -Force | Out-Null
 $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
 $RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
 $RegCursors.SetValue("","Windows Black")
