@@ -379,12 +379,12 @@ Write-Host @"
 
 "@ -ForegroundColor Green
 
-# Write-Host "Restart Computer after deployment - recommended for full effect." -ForegroundColor Red
-# Start-Sleep 2
-# Write-Host "Computer will restart in:" -ForegroundColor Red
-# for ($i = 10; $i -ge 1; $i--) {
-#     Write-Host $i -ForegroundColor Red
-#     Start-Sleep 1
-# }
-# Restart-Computer -Force
+Write-Host "Restart Computer after deployment - recommended for full effect." -ForegroundColor Red
+Start-Sleep 2
+Write-Host "Computer will restart in:" -ForegroundColor Red
+for ($i = 10; $i -ge 1; $i--) {
+    Write-Host $i -ForegroundColor Red
+    Start-Sleep 1
+}
+Restart-Computer -Force
 #EOF
