@@ -15,8 +15,8 @@ Write-Host @"
 "@ -ForegroundColor Cyan
 Write-Host @"
 Please do not do anything while the script is running, as it may impact the installation process. 
+Currently no update/uninstall functionality is implemented, so please make sure to run the script on a clean system.
 
-Currently no update/upgrade functionality is implemented.
 "@ -ForegroundColor Yellow
 
 ## Start Logging
