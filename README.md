@@ -46,7 +46,7 @@ Additionally, deployment script includes pinning User folder and Start Menu\Prog
 
 WinMac provides you with debloated prompt with addition of completion functions and most commonly used commands in macOS/Linux, like *vim, grep, touch, ditto, top, whatis, killall, ll, la, tree* with additional commands like:
 
-- *np* opens notepad with or without provided file name,
+- *np* or *note* opens notepad with or without provided file name,
 - *open* or *of* to open current or specific directory in Explorer,
 - *history* or *hist* to list commands history from current and older sessions,
 - *backup* as an alias of [wbadmin - Backup command-line tool for Windows](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/wbadmin),
