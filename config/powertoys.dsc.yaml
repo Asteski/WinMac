@@ -18,7 +18,7 @@ properties:
           FancyzonesAppLastZoneMoveWindows: true
         FindMyMouse:
           Enabled: true
-          ActivationMethod: "Shake mouse"
+          ActivationMethod: 2
         Peek:
           Enabled: true
           ActivationShortcut: "Alt+Space"
