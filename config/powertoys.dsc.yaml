@@ -16,6 +16,7 @@ properties:
           Enabled: true
           FancyzonesShowZoneNumber: false
           FancyzonesAppLastZoneMoveWindows: true
+          FancyZonesEditorHotkey: "Win+Shift+F"
         FindMyMouse:
           Enabled: true
           ActivationMethod: 2
@@ -83,11 +84,12 @@ properties:
               Disabled: true
             - Name: "Window Walker"
               Disabled: true
+        ColorPicker:
+          Enabled: true
+          ActivationShortcut: "Win+C"
         KeyboardManager:
           Enabled: false
         Awake:
-          Enabled: false
-        ColorPicker:
           Enabled: false
         CropAndLock:
           Enabled: false

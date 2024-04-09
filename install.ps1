@@ -15,13 +15,16 @@ Write-Host @"
 "@ -ForegroundColor Cyan
 Write-Host @"
 Please do not do anything while the script is running, as it may impact the installation process. 
+
 Currently no update/uninstall functionality is implemented, so please make sure to run the script on a clean system.
+
+Please be informed that this is a beta version - you're deploying it at your own risk!!
 
 "@ -ForegroundColor Yellow
 
 ## Start Logging
 
-$ErrorActionPreference="SilentlyContinue"
+$errorActionPreference="SilentlyContinue"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 mkdir ./temp | Out-Null
 Start-Transcript -Path ".\temp\WinMac_install_log_$date.txt" -Append | Out-Null
@@ -365,9 +368,10 @@ Write-Host "Configuring Shell completed." -ForegroundColor Green
 
 Write-Host "Clean up..."
 Remove-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Force | Out-Null
-Remove-Item -Path "C:\Users\Public\Desktop\gVim 9.1.lnk" -Force | Out-Null
-Remove-Item -Path "C:\Users\Public\Desktop\gVim Easy 9.1.lnk" -Force | Out-Null
-Remove-Item -Path "C:\Users\Public\Desktop\gVim Read only 9.1.lnk" -Force | Out-Null
+Remove-Item -Path "C:\Users\Public\Desktop\gVim*" -Force | Out-Null
+# Remove-Item -Path "C:\Users\Public\Desktop\gVim 9.1.lnk" -Force | Out-Null
+# Remove-Item -Path "C:\Users\Public\Desktop\gVim Easy 9.1.lnk" -Force | Out-Null
+# Remove-Item -Path "C:\Users\Public\Desktop\gVim Read only 9.1.lnk" -Force | Out-Null
 Write-Host "Clean up completed."
 Stop-Transcript | Out-Null
 Write-Host "Logs have been saved to WinMac_install_log_$date.txt in Winget\temp folder." -ForegroundColor Yellow
@@ -379,6 +383,8 @@ Write-Host @"
     Enjoy and support by giving feedback and contributing to the project!
 
  For more information please visit my GitHub page: github.com/Asteski/WinMac
+
+    If you have any questions or suggestions, please contact me on GitHub.
 
 -----------------------------------------------------------------------------
 
