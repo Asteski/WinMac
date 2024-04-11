@@ -39,6 +39,7 @@ userName@computerName ~ %
 
 WinMac prompt: 
 12:35:06 userName @ ~ > 
+
 "@ -ForegroundColor Yellow
 $promptSet = Read-Host "Do you want to use MacOS-like prompt? (y/n)"
 if ($promptSet -eq 'y') {
