@@ -395,7 +395,7 @@ Remove-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Force | Out-Null
 Remove-Item -Path "C:\Users\Public\Desktop\gVim*" -Force | Out-Null
 Write-Host "Clean up completed."
 Stop-Transcript | Out-Null
-Write-Host "Logs have been saved to WinMac_install_log_$date.txt in temp folder." -ForegroundColor Yellow
+Write-Host "Logs have been saved to WinMac_install_log_$date.txt in $pwd\temp folder." -ForegroundColor Yellow
 
 Write-Host @"
 
