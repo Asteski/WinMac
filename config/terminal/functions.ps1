@@ -18,7 +18,7 @@ set-alias -name history -value hist -Option AllScope
 set-alias -name version -value psversion
 set-alias -name psver -value psversion
 set-alias -name htop -value ntop
-set-alias -name apt-get -value winget
+set-alias -name apt -value winget
 
 # Functions
 function psversion { $PSVersionTable }
@@ -95,19 +95,19 @@ function open {
     if (!($path)) {
         Invoke-Item .
     }
-    elseif (Test-Path $path) {
+    elseif (Test-Path "$path") {
         $fullPath = Get-Item -Path "$path" -Force | Select-Object -ExpandProperty FullName
-        if ((Test-Path $fullPath) -and (Get-Item $fullPath -Force).PSIsContainer) 
+        if ((Test-Path "$fullPath") -and (Get-Item "$fullPath" -Force).PSIsContainer) 
         {
-            explorer.exe $fullPath
+            Invoke-Item "$fullPath"
         }
         else
         {
-            $folderPath = Split-Path -Path $fullPath
+            $folderPath = Split-Path -Path "$fullPath"
             explorer.exe $folderPath
         }
     }
-    else
+    elseif (!(Test-Path "$path"))
     {
         Write-Host "File or directory does not exist" -ForegroundColor Red
     }
