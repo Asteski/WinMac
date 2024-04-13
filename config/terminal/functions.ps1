@@ -17,32 +17,24 @@ set-alias -name rcopy -value robocopy
 set-alias -name history -value hist -Option AllScope
 set-alias -name version -value psversion
 set-alias -name psver -value psversion
+set-alias -name htop -value ntop
+set-alias -name apt -value winget
 
 # Functions
+function psversion { $PSVersionTable }
 function ll { Get-ChildItem -Force }
 function la { Get-ChildItem -Force -Attributes !D }
-function psversion { $PSVersionTable }
-
-function prompt {
-    $userName = $env:USERNAME
-    $folder = Split-Path -Leaf $pwd
-    $date = Get-Date -f HH:mm:ss
-    if ($folder -eq $env:USERNAME)
-    {
-        "$([char]27)[92m$($date)$([char]27)[0m" + ' ' + $userName + ' @ ~' + "$([char]27)[93m$(' > ')$([char]27)[0m"
-    }
-    else
-    {
-        "$([char]27)[92m$($date)$([char]27)[0m" + ' ' + $userName + ' @ ' + $folder + "$([char]27)[93m$(' > ')$([char]27)[0m"
-    }
-}
+function wl { winget list }
+function ws { winget search $args }
+function wi { winget install $args }
+function wd { winget uninstall $args }
+function wu { winget upgrade $args }
 
 function hist {
     $find = $args;
     Get-Content (Get-PSReadlineOption).HistorySavePath | Where-Object {$_ -like "*$find*"} | Get-Unique | more 
 }
 
-# TODO: Add possiblity to create multiple files at once
 function touch {
     $file = $args[0]
     if($null -eq $file) 
@@ -94,34 +86,28 @@ function killall {
     else 
     {
         $process | Stop-Process -Force
-        WRite-Host "Process $procName stopped" -ForegroundColor Green
+        Write-Host "Process $procName stopped" -ForegroundColor Green
     }
 }
 
-# TODO: to open directories with spaces in it
 function open {
-    param (
-        [Parameter(Mandatory=$false, Position=0)]
-        [ValidateNotNullOrEmpty()]
-        [string]$Path
-    )
-
-    if (Test-Path $Path) {
-        $fullPath = Get-Item -Path $Path | Select-Object -ExpandProperty FullName
-        if ((Test-Path $fullPath) -and (Get-Item $fullPath).PSIsContainer) 
+    $path = $args
+    if (!($path)) {
+        Invoke-Item .
+    }
+    elseif (Test-Path "$path") {
+        $fullPath = Get-Item -Path "$path" -Force | Select-Object -ExpandProperty FullName
+        if ((Test-Path "$fullPath") -and (Get-Item "$fullPath" -Force).PSIsContainer) 
         {
-            explorer.exe $fullPath
+            Invoke-Item "$fullPath"
         }
-        else 
+        else
         {
-            $folderPath = Split-Path -Path $fullPath
+            $folderPath = Split-Path -Path "$fullPath"
             explorer.exe $folderPath
         }
     }
-    elseif (-not (Test-Path $Path)) {
-        Invoke-Item .
-    }
-    else
+    elseif (!(Test-Path "$path"))
     {
         Write-Host "File or directory does not exist" -ForegroundColor Red
     }

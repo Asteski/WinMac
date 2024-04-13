@@ -15,7 +15,7 @@ properties:
         FancyZones:
           Enabled: true
           FancyzonesShowZoneNumber: false
-          FancyzonesAppLastZoneMoveWindows: true
+          FancyzonesAppLastZoneMoveWindows: false
           FancyZonesEditorHotkey: "Win+Shift+F"
         FindMyMouse:
           Enabled: true

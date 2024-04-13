@@ -6,7 +6,7 @@ Write-Host @"
 
                         Author: Adam Kamienski
                             GitHub: Asteski
-                            Version: 0.2.0
+                            Version: 0.2.1
 
                       This is Work in Progress.
 
@@ -28,6 +28,27 @@ $errorActionPreference="SilentlyContinue"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 mkdir ./temp | Out-Null
 Start-Transcript -Path ".\temp\WinMac_install_log_$date.txt" -Append | Out-Null
+
+## User Configuration
+
+Write-Host @"
+You can choose now between MacOS-like prompt and WinMac prompt.
+
+MacOS prompt:
+userName@computerName ~ % 
+
+WinMac prompt: 
+12:35:06 userName @ ~ > 
+
+"@ -ForegroundColor Yellow
+$promptSet = Read-Host "Do you want to use MacOS-like prompt? (y/n)"
+if ($promptSet -eq 'y') {
+     Write-Host "Using MacOS-like prompt." -ForegroundColor Green 
+}
+else 
+{ 
+    Write-Host "Using WinMac prompt." -ForegroundColor Green 
+}
 
 ## Winget
 
@@ -62,13 +83,15 @@ Write-Host "Configuring PowerShell Profile..." -ForegroundColor Yellow
 
 $profilePath = $PROFILE | Split-Path | Split-Path
 $profileFile = $PROFILE | Split-Path -Leaf
-$functions = Get-Content "$pwd\config\functions.ps1" -Raw
+if ($promptSet -eq 'y') { $prompt = Get-Content "$pwd\config\terminal\macos-prompt.ps1" -Raw }
+else { $promptSet = Get-Content "$pwd\config\terminal\winmac-prompt.ps1" -Raw }
+$functions = Get-Content "$pwd\config\terminal\functions.ps1" -Raw
 
 if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell" | Out-Null }
 if (-not (Test-Path "$profilePath\WindowsPowerShell")) { New-Item -ItemType Directory -Path "$profilePath\WindowsPowerShell" | Out-Null }
 if (-not (Test-Path "$profilePath\PowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\PowerShell\$profileFile" | Out-Null }
 if (-not (Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\WindowsPowerShell\$profileFile" | Out-Null }
-
+ 
 Write-Host "Checking for NuGet Provider" -ForegroundColor Yellow
 $progressPreference = 'silentlyContinue'
 if (-not (Get-PackageProvider -ListAvailable | Where-Object {$_.Name -eq 'NuGet'})) {
@@ -90,7 +113,9 @@ $latestSubfolder = Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -
 $vimChildPath = $latestSubfolder.FullName
 [Environment]::SetEnvironmentVariable("Path", $env:Path + ";$vimChildPath", [EnvironmentVariableTarget]::Machine)
 Install-Module PSTree -Scope CurrentUser -Force | Out-Null
+Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $prompt | Out-Null
 Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $functions | Out-Null
+Add-Content -Path "$profilePath\WindowsPowerShell\$prompt" -Value $functions | Out-Null
 Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $functions | Out-Null
 
 Write-Host "Configuring PowerShell Profile completed." -ForegroundColor Green
@@ -370,7 +395,7 @@ Remove-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Force | Out-Null
 Remove-Item -Path "C:\Users\Public\Desktop\gVim*" -Force | Out-Null
 Write-Host "Clean up completed."
 Stop-Transcript | Out-Null
-Write-Host "Logs have been saved to WinMac_install_log_$date.txt in temp folder." -ForegroundColor Yellow
+Write-Host "Logs have been saved to WinMac_install_log_$date.txt in $pwd\temp folder." -ForegroundColor Yellow
 
 Write-Host @"
 
