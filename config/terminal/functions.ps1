@@ -21,14 +21,14 @@ set-alias -name htop -value ntop
 set-alias -name apt-get -value winget
 
 # Functions
+function psversion { $PSVersionTable }
 function ll { Get-ChildItem -Force }
 function la { Get-ChildItem -Force -Attributes !D }
-function psversion { $PSVersionTable }
 function wl { winget list }
-function ws { winget search $args[0] }
-function wi { winget install $args[0] }
-function wu { winget uninstall $args[0] }
-function wp { winget upgrade $args[0] }
+function ws { winget search $args }
+function wi { winget install $args }
+function wd { winget uninstall $args }
+function wu { winget upgrade $args }
 
 function hist {
     $find = $args;
@@ -86,32 +86,26 @@ function killall {
     else 
     {
         $process | Stop-Process -Force
-        WRite-Host "Process $procName stopped" -ForegroundColor Green
+        Write-Host "Process $procName stopped" -ForegroundColor Green
     }
 }
 
-# TODO: to open directories with spaces in it
 function open {
-    param (
-        [Parameter(Mandatory=$false, Position=0)]
-        [ValidateNotNullOrEmpty()]
-        [string]$Path
-    )
-
-    if (Test-Path $Path) {
-        $fullPath = Get-Item -Path $Path | Select-Object -ExpandProperty FullName
-        if ((Test-Path $fullPath) -and (Get-Item $fullPath).PSIsContainer) 
+    $path = $args
+    if (!($path)) {
+        Invoke-Item .
+    }
+    elseif (Test-Path $path) {
+        $fullPath = Get-Item -Path "$path" -Force | Select-Object -ExpandProperty FullName
+        if ((Test-Path $fullPath) -and (Get-Item $fullPath -Force).PSIsContainer) 
         {
             explorer.exe $fullPath
         }
-        else 
+        else
         {
             $folderPath = Split-Path -Path $fullPath
             explorer.exe $folderPath
         }
-    }
-    elseif (-not (Test-Path $Path)) {
-        Invoke-Item .
     }
     else
     {
