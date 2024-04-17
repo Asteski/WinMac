@@ -189,9 +189,11 @@ $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"
 Set-ItemProperty -Path $exRegPath\Advanced -Name "LaunchTO" -Value 1 | Out-Null
 Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0 | Out-Null
 Set-ItemProperty -Path $exRegPath -Name "ShowRecent" -Value 0 | Out-Null
+Set-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\Windows\Explorer" -Name "TaskbarNoMultimon" -Value 1
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer" -Name "TaskbarNoMultimon" -Value 1
 
-# Theme
-$curSourceFolder = $pwd.Path + '\config\theme\cursor'
+# Themes
+$curSourceFolder = $pwd.Path + '\config\cursor'
 $curDestFolder = "C:\Windows\Cursors"
 Copy-Item -Path $curSourceFolder\* -Destination $curDestFolder -Recurse -Force | Out-Null
 $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
