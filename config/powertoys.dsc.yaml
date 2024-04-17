@@ -87,6 +87,14 @@ properties:
         ColorPicker:
           Enabled: true
           ActivationShortcut: "Win+C"
+        PowerRename:
+          Enabled: true
+          MRUEnabled: true
+          MaxMRUSize: 5
+          ExtendedContextMenuOnly: true
+          UseBoostLib: true
+        ImageResizer:
+          Enabled: true
         KeyboardManager:
           Enabled: false
         Awake:
@@ -97,8 +105,6 @@ properties:
           Enabled: false
         FileLocksmith:
           Enabled: false
-        ImageResizer:
-          Enabled: false
         MouseHighlighter:
           Enabled: false
         MouseJump:
@@ -106,8 +112,6 @@ properties:
         MousePointerCrosshairs:
           Enabled: false
         MouseWithoutBorders:
-          Enabled: false
-        PowerRename:
           Enabled: false
         PowerAccent:
           Enabled: false
