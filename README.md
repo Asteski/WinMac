@@ -84,7 +84,7 @@ For the most reliable deployment process, I recommend to install latest version 
 - Dock - Give a choice between Dock or Taskbar experience before deployment,
 - Force Taskbar to go automatically on top upon deployment,
 - Win+Q to run Shutdown prompt,
-- Quicknote - function that will allow to create text files with content pasted into terminal, and opening either notepad or vim once command is run,
+- Remove non-critical Windows components (Ads, Bloatware, Data Collection)
 - Proper WinMac wallpaper,
 - Create WinMac Control Panel UWP app to manage UI settings.
 
