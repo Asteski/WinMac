@@ -80,6 +80,8 @@ properties:
               Disabled: false
             - Name: "Windows settings"
               Disabled: false
+              ActionKeyword: ","
+              IsGlobal: false
             - Name: "Windows Terminal"
               Disabled: true
             - Name: "Window Walker"
