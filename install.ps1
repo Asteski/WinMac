@@ -6,7 +6,7 @@ Write-Host @"
 
                         Author: Adam Kamienski
                             GitHub: Asteski
-                            Version: 0.2.1
+                            Version: 0.2.2
 
                       This is Work in Progress.
 
