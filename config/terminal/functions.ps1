@@ -29,7 +29,7 @@ function la { Get-ChildItem -Force -Attributes !D }
 function wl { winget list }
 function ws { winget search $args }
 function wi { winget install $args }
-function wd { winget uninstall $args }
+function wr { winget uninstall $args }
 function wu { winget upgrade $args }
 
 function battery { 

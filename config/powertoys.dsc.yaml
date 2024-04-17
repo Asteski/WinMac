@@ -88,7 +88,7 @@ properties:
           Enabled: true
           ActivationShortcut: "Win+C"
         PowerRename:
-          Enabled: true
+          Enabled: false
           MRUEnabled: true
           MaxMRUSize: 5
           ExtendedContextMenuOnly: true
