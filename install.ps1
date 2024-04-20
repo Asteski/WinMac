@@ -385,7 +385,14 @@ Start-Sleep -Milliseconds 100
 [Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
 Start-Sleep -Milliseconds 100
 
-
+# Move the Windows 10 taskbar to the top
+$taskbarSettingsPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\StuckRects3"
+$taskbarSettings = Get-ItemProperty -Path $taskbarSettingsPath
+$taskbarSettings.Location = 2
+Set-ItemProperty -Path $taskbarSettingsPath -Name "Settings" -Value $taskbarSettings.Settings
+Stop-Process -Name explorer -Force
+Start-Sleep -Seconds 2
+Start-Process explorer
 
 Write-Host "Configuring Shell completed." -ForegroundColor Green
 
