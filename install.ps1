@@ -14,9 +14,9 @@ Write-Host @"
 
 "@ -ForegroundColor Cyan
 Write-Host @"
-Please do not do anything while the script is running, as it may impact the installation process. 
+Please do not do anything while the script is running, as it may impact the installation process.
 
-Currently no update/uninstall functionality is implemented, so please make sure to run the script on a clean system.
+Currently no update/uninstall functionality is implemented, so please make sure to run the script on a clean system or test it on VM beforehand.
 
 Please be informed that this is a beta version - you're deploying it at your own risk!!
 
@@ -40,14 +40,14 @@ userName@computerName ~ %
 WinMac prompt: 
 12:35:06 userName @ ~ > 
 
-"@ -ForegroundColor Green
+"@
 $promptSet = Read-Host "Do you want to use MacOS-like prompt? (y/n)"
 if ($promptSet -eq 'y') {
-    Write-Host "Using MacOS-like prompt." -ForegroundColor Green 
+    Write-Host "Using MacOS-like prompt." -ForegroundColor Yellow
 }
 else 
 { 
-    Write-Host "Using WinMac prompt." -ForegroundColor Green 
+    Write-Host "Using WinMac prompt." -ForegroundColor Yellow
 }
 
 ## Winget
@@ -74,7 +74,7 @@ $winget = @(
     "Voidtools.Everything",
     "lin-ycv.EverythingPowerToys"
 )
-foreach ($app in $winget) {winget install --id $app --source winget --no-upgrade --silent --scope user}
+foreach ($app in $winget) {winget install --id $app --source winget --no-upgrade --silent}
 Write-Host "Installing Everything completed." -ForegroundColor Green
 
 ## PowerShell Profile
@@ -107,7 +107,7 @@ $winget = @(
     "Vim.Vim",
     "gsass1.NTop"
 )
-foreach ($app in $winget) {winget install --id $app --source winget --no-upgrade --silent --scope user}
+foreach ($app in $winget) {winget install --id $app --source winget --no-upgrade --silent}
 $vimParentPath = Join-Path $env:PROGRAMFILES Vim
 $latestSubfolder = Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -Property CreationTime -Descending | Select-Object -First 1
 $vimChildPath = $latestSubfolder.FullName
@@ -142,11 +142,12 @@ $SWP_SHOWWINDOW = 0x0040
 
 Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
 
-winget install --id "StartIsBack.StartAllBack" --source winget --silent --no-upgrade --scope user
+winget install --id "StartIsBack.StartAllBack" --source winget --silent --no-upgrade
 
 $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
 $sabRegPath = "HKCU:\Software\StartIsBack"
 Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 1
+Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSizeMove" -Value 1
 Set-ItemProperty -Path $exRegPath\Advanced -Name "ShowStatusBar" -Value 0
 Set-ItemProperty -Path $exRegPath\Advanced -Name "EnableSnapAssistFlyout" -Value 0
 Set-ItemProperty -Path $exRegPath\Advanced -Name "EnableSnapBar" -Value 0
@@ -297,7 +298,7 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer
 
 Write-Host "Configuring Open-Shell..." -ForegroundColor Yellow
 
-winget install --id "Open-Shell.Open-Shell-Menu" --source winget --no-upgrade --silent --scope user
+winget install --id "Open-Shell.Open-Shell-Menu" --source winget --no-upgrade --silent
 
 New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force
 New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force
@@ -350,49 +351,6 @@ Start-Process explorer
 Start-Sleep -Seconds 2
 Start-Process explorer # starts explorer window necessary to turn off classic explorer bar using key combination
 Start-Sleep -Seconds 4
-Add-Type -TypeDefinition @"
-    using System;
-    using System.Runtime.InteropServices;
-
-    public class Keyboard {
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-
-        [DllImport("user32.dll")]
-        public static extern bool SetForegroundWindow(IntPtr hWnd);
-
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, int dwExtraInfo);
-    }
-"@
-Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
-
-$explorerHandle = [Keyboard]::FindWindow("CabinetWClass", $null)
-[Keyboard]::SetForegroundWindow($explorerHandle)
-$KEYEVENTF_KEYUP = 0x2
-$VK_MENU = 0x12 # Alt key
-$VK_V = 0x56 # V key
-$VK_RETURN = 0x0D # Enter key
-[Keyboard]::keybd_event($VK_MENU, 0, 0, 0) # Alt key press
-[Keyboard]::keybd_event($VK_V, 0, 0, 0) # V key press
-[Keyboard]::keybd_event($VK_V, 0, $KEYEVENTF_KEYUP, 0) # V key release
-[Keyboard]::keybd_event($VK_MENU, 0, $KEYEVENTF_KEYUP, 0) # Alt key release
-Start-Sleep -Milliseconds 100
-[Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
-[Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
-Start-Sleep -Milliseconds 100
-[Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
-[Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
-Start-Sleep -Milliseconds 100
-
-# Move the Windows 10 taskbar to the top
-$taskbarSettingsPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\StuckRects3"
-$taskbarSettings = Get-ItemProperty -Path $taskbarSettingsPath
-$taskbarSettings.Location = 2
-Set-ItemProperty -Path $taskbarSettingsPath -Name "Settings" -Value $taskbarSettings.Settings
-Stop-Process -Name explorer -Force
-Start-Sleep -Seconds 2
-Start-Process explorer
 
 Write-Host "Configuring Shell completed." -ForegroundColor Green
 
@@ -402,6 +360,41 @@ Remove-Item -Path "C:\Users\Public\Desktop\gVim*" -Force
 Write-Host "Clean up completed."
 Stop-Transcript
 Write-Host "Logs have been saved to WinMac_install_log_$date.txt in $pwd\temp folder." -ForegroundColor Yellow
+
+Add-Type -AssemblyName System.Windows.Forms
+Add-Type -TypeDefinition @"
+using System;
+using System.Runtime.InteropServices;
+
+public class MouseInput
+{
+    [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+    public static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint cButtons, uint dwExtraInfo);
+
+    public const uint MOUSEEVENTF_LEFTDOWN = 0x02;
+    public const uint MOUSEEVENTF_LEFTUP = 0x04;
+
+    public static void HoldLeftMouseButton()
+    {
+        mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
+    }
+
+    public static void ReleaseLeftMouseButton()
+    {
+        mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+    }
+}
+"@
+
+$screen = [System.Windows.Forms.SystemInformation]::VirtualScreen
+$w = $screen.width/4
+[Windows.Forms.Cursor]::Position = "$($w),$($screen.Height)"
+Start-Sleep -Seconds 1
+[MouseInput]::HoldLeftMouseButton()
+Start-Sleep -Seconds 1
+[Windows.Forms.Cursor]::Position = "$($w),1"
+Start-Sleep -Seconds 1
+[MouseInput]::ReleaseLeftMouseButton()
 
 Write-Host @"
 
