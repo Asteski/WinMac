@@ -43,7 +43,7 @@ WinMac prompt:
 "@ -ForegroundColor Green
 $promptSet = Read-Host "Do you want to use MacOS-like prompt? (y/n)"
 if ($promptSet -eq 'y') {
-     Write-Host "Using MacOS-like prompt." -ForegroundColor Green 
+    Write-Host "Using MacOS-like prompt." -ForegroundColor Green 
 }
 else 
 { 
@@ -87,11 +87,11 @@ if ($promptSet -eq 'y') { $prompt = Get-Content "$pwd\config\terminal\macos-prom
 else { $promptSet = Get-Content "$pwd\config\terminal\winmac-prompt.ps1" -Raw }
 $functions = Get-Content "$pwd\config\terminal\functions.ps1" -Raw
 
-if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell"#| Out-Null }
-if (-not (Test-Path "$profilePath\WindowsPowerShell")) { New-Item -ItemType Directory -Path "$profilePath\WindowsPowerShell"#| Out-Null }
-if (-not (Test-Path "$profilePath\PowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\PowerShell\$profileFile"#| Out-Null }
-if (-not (Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\WindowsPowerShell\$profileFile"#| Out-Null }
- 
+if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell" | Out-Null }
+if (-not (Test-Path "$profilePath\WindowsPowerShell")) { New-Item -ItemType Directory -Path "$profilePath\WindowsPowerShell" | Out-Null }
+if (-not (Test-Path "$profilePath\PowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\PowerShell\$profileFile" | Out-Null }
+if (-not (Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\WindowsPowerShell\$profileFile" | Out-Null }
+
 Write-Host "Checking for NuGet Provider" -ForegroundColor Yellow
 $progressPreference = 'silentlyContinue'
 if (-not (Get-PackageProvider -ListAvailable | Where-Object {$_.Name -eq 'NuGet'})) {
@@ -252,8 +252,8 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
 "@
 
 if (Test-Path $homeIniFilePath)  {
-  Remove-Item $homeIniFilePath -Force
-  New-Item -Path $homeIniFilePath -ItemType File -Force#| Out-Null
+    Remove-Item $homeIniFilePath -Force
+    New-Item -Path $homeIniFilePath -ItemType File -Force#| Out-Null
 }
 
 Add-Content $homeIniFilePath -Value $homeIni
@@ -267,7 +267,7 @@ if (Test-Path $programsIniFilePath)  {
     Remove-Item $programsIniFilePath -Force
     New-Item -Path $programsIniFilePath -ItemType File -Force#| Out-Null
 }
-  
+
 Add-Content $programsIniFilePath -Value $programsIni
 (Get-Item $programsIniFilePath -Force).Attributes = 'Hidden, System, Archive'
 (Get-Item $programsDir -Force).Attributes = 'ReadOnly, Directory'
@@ -366,11 +366,6 @@ Add-Type -TypeDefinition @"
     }
 "@
 Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
-# Write-Host @"
-
-# Now, please wait for the script to finish configuring the shell, as it requires to open Explorer window and run specific key combinations to disable Open-Shell Explorer Bar.
-
-# "@ -ForegroundColor Red
 
 $explorerHandle = [Keyboard]::FindWindow("CabinetWClass", $null)
 [Keyboard]::SetForegroundWindow($explorerHandle)
@@ -389,6 +384,8 @@ Start-Sleep -Milliseconds 100
 [Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
 [Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
 Start-Sleep -Milliseconds 100
+
+
 
 Write-Host "Configuring Shell completed." -ForegroundColor Green
 
