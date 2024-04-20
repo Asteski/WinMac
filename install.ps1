@@ -26,12 +26,13 @@ Please be informed that this is a beta version - you're deploying it at your own
 
 $errorActionPreference="SilentlyContinue"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
-mkdir ./temp
-Start-Transcript -Path ".\temp\WinMac_install_log_$date.txt" -Append
+mkdir ./temp | Out-Null
+Start-Transcript -Path ".\temp\WinMac_install_log_$date.txt" -Append | Out-Null
 
 ## User Configuration
 
 Write-Host @"
+
 You can choose now between MacOS-like prompt and WinMac prompt.
 
 MacOS prompt:
