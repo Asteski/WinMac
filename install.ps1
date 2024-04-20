@@ -22,6 +22,8 @@ Please be informed that this is a beta version - you're deploying it at your own
 
 "@ -ForegroundColor Yellow
 
+Write-Host "-----------------------------------------------------------------------"  -ForegroundColor Cyan
+
 ## Start Logging
 
 $errorActionPreference="SilentlyContinue"
@@ -457,7 +459,7 @@ Logs have been saved to WinMac_install_log_$date.txt in $pwd\temp folder.
 
 "@ -ForegroundColor Green
 
-$restartConfirmation = Read-Host "Restart computer now? It's recommended to fully apply all the changes. (Y/N)"
+$restartConfirmation = Read-Host "Restart computer now? It's recommended to fully apply all the changes. (y/n)"
 if ($restartConfirmation -eq "Y" -or $restartConfirmation -eq "y") {
     Write-Host "Restarting computer..." -ForegroundColor Red
     for ($i = 10; $i -ge 1; $i--) {
