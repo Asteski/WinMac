@@ -348,7 +348,7 @@ Start-Process $shellExePath
 Start-Sleep -Seconds 2
 taskkill /IM explorer.exe /F
 
-Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
+Write-Host "Configuring Open-Shell completed." -ForegroundColor Green
 
 Start-Sleep -Seconds 2
 Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
