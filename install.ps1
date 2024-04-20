@@ -345,6 +345,9 @@ Start-Sleep -Seconds 2
 Start-Process $shellExePath
 Start-Sleep -Seconds 2
 taskkill /IM explorer.exe /F
+
+Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
+
 Start-Sleep -Seconds 2
 Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
 Copy-Item -Path "$pwd\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
@@ -353,15 +356,41 @@ Start-Sleep -Seconds 2
 Start-Process explorer # starts explorer window necessary to turn off classic explorer bar using key combination
 Start-Sleep -Seconds 4
 
-Write-Host "Configuring Shell completed." -ForegroundColor Green
 
-Write-Host "Clean up..."
-Remove-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Force
-Remove-Item -Path "C:\Users\Public\Desktop\gVim*" -Force
-Write-Host "Clean up completed."
-Stop-Transcript
-Write-Host "Logs have been saved to WinMac_install_log_$date.txt in $pwd\temp folder." -ForegroundColor Yellow
+Add-Type -TypeDefinition @"
+    using System;
+    using System.Runtime.InteropServices;
 
+    public class Keyboard {
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+
+        [DllImport("user32.dll")]
+        public static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, int dwExtraInfo);
+    }
+"@
+
+$explorerHandle = [Keyboard]::FindWindow("CabinetWClass", $null)
+[Keyboard]::SetForegroundWindow($explorerHandle)
+$KEYEVENTF_KEYUP = 0x2
+$VK_MENU = 0x12 # Alt key
+$VK_V = 0x56 # V key
+$VK_RETURN = 0x0D # Enter key
+[Keyboard]::keybd_event($VK_MENU, 0, 0, 0) # Alt key press
+[Keyboard]::keybd_event($VK_V, 0, 0, 0) # V key press
+[Keyboard]::keybd_event($VK_V, 0, $KEYEVENTF_KEYUP, 0) # V key release
+[Keyboard]::keybd_event($VK_MENU, 0, $KEYEVENTF_KEYUP, 0) # Alt key release
+Start-Sleep -Milliseconds 100
+[Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
+[Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
+Start-Sleep -Milliseconds 100
+[Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
+[Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
+Start-Sleep -Milliseconds 100
+Start-Sleep -Seconds 1
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -TypeDefinition @"
 using System;
@@ -396,6 +425,21 @@ Start-Sleep -Seconds 1
 [Windows.Forms.Cursor]::Position = "$($w),1"
 Start-Sleep -Seconds 1
 [MouseInput]::ReleaseLeftMouseButton()
+Start-Sleep -Seconds 1
+$screen = [System.Windows.Forms.SystemInformation]::VirtualScreen
+$centerX = $screen.Width / 2
+$centerY = $screen.Height / 2
+[Windows.Forms.Cursor]::Position = "$centerX,$centerY"
+
+Write-Host "Configuring Shell completed." -ForegroundColor Green
+
+Write-Host "Clean up..."
+Remove-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Force | Out-Null
+Remove-Item -Path "C:\Users\Public\Desktop\gVim*" -Force | Out-Null
+Remove-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Force | Out-Null
+Remove-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Force | Out-Null
+Write-Host "Clean up completed."
+Stop-Transcript
 
 Write-Host @"
 
@@ -406,6 +450,8 @@ Write-Host @"
  For more information please visit my GitHub page: github.com/Asteski/WinMac
 
     If you have any questions or suggestions, please contact me on GitHub.
+
+Logs have been saved to WinMac_install_log_$date.txt in $pwd\temp folder.
 
 -----------------------------------------------------------------------------
 
