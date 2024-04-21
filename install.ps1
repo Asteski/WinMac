@@ -259,25 +259,25 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
 "@
 
 if (Test-Path $homeIniFilePath)  {
-    Remove-Item $homeIniFilePath -Force
-    New-Item -Path $homeIniFilePath -ItemType File -Force
+    Remove-Item $homeIniFilePath -Force | Out-Null
+    New-Item -Path $homeIniFilePath -ItemType File -Force | Out-Null
 }
 
 Add-Content $homeIniFilePath -Value $homeIni
-(Get-Item $homeIniFilePath -Force).Attributes = 'Hidden, System, Archive'
-(Get-Item $homeDir -Force).Attributes = 'ReadOnly, Directory'
+(Get-Item $homeIniFilePath -Force).Attributes = 'Hidden, System, Archive' | Out-Null
+(Get-Item $homeDir -Force).Attributes = 'ReadOnly, Directory' | Out-Null
 
 $homePin = new-object -com shell.application
 $homePin.Namespace($homeDir).Self.InvokeVerb("pintohome") | Out-Null
 
 if (Test-Path $programsIniFilePath)  {
-    Remove-Item $programsIniFilePath -Force
-    New-Item -Path $programsIniFilePath -ItemType File -Force
+    Remove-Item $programsIniFilePath -Force | Out-Null
+    New-Item -Path $programsIniFilePath -ItemType File -Force | Out-Null
 }
 
-Add-Content $programsIniFilePath -Value $programsIni
-(Get-Item $programsIniFilePath -Force).Attributes = 'Hidden, System, Archive'
-(Get-Item $programsDir -Force).Attributes = 'ReadOnly, Directory'
+Add-Content $programsIniFilePath -Value $programsIni | Out-Null
+(Get-Item $programsIniFilePath -Force).Attributes = 'Hidden, System, Archive' | Out-Null
+(Get-Item $programsDir -Force).Attributes = 'ReadOnly, Directory' | Out-Null
 
 $programsPin = new-object -com shell.application
 $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome") | Out-Null
@@ -287,18 +287,18 @@ $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome") | Out-Null
 $RBPath = 'HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\pintohome\command\'
 $name = "DelegateExecute"
 $value = "{b455f46e-e4af-4035-b0a4-cf18d2f6f28e}"
-New-Item -Path $RBPath -Force
-New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force
+New-Item -Path $RBPath -Force | Out-Null
+New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force | Out-Null
 $oShell = New-Object -ComObject Shell.Application
 $trash = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
 $trash.Self.InvokeVerb("PinToHome") | Out-Null
-Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse
+Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse | Out-Null
 
 # Remove Shortcut Arrows
 
-Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force
-New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons"
-Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
+Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force | Out-Null
+New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String | Out-Null
 
 ## Open-Shell
 
@@ -306,8 +306,8 @@ Write-Host "Configuring Open-Shell..." -ForegroundColor Yellow
 
 winget install --id "Open-Shell.Open-Shell-Menu" --source winget --silent | Out-Null
 Start-Sleep 5
-Stop-Process -Name startmenu -Force
-taskkill /IM explorer.exe /F
+Stop-Process -Name startmenu -Force | Out-Null
+taskkill /IM explorer.exe /F | Out-Null
 New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force
 New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force
 New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu" -Force
@@ -372,7 +372,7 @@ Add-Type -TypeDefinition @"
 "@
 
 $explorerHandle = [Keyboard]::FindWindow("CabinetWClass", $null)
-[Keyboard]::SetForegroundWindow($explorerHandle)
+[Keyboard]::SetForegroundWindow($explorerHandle) | Out-Null
 $KEYEVENTF_KEYUP = 0x2
 $VK_MENU = 0x12 # Alt key
 $VK_V = 0x56 # V key
@@ -392,12 +392,13 @@ Stop-Process -Name Explorer
 
 Write-Host "Configuring Shell completed." -ForegroundColor Green
 
-Write-Host "Clean up..."
+Write-Host "Clean up..." -ForegroundColor Yellow
 Remove-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Force | Out-Null
 Remove-Item -Path "C:\Users\Public\Desktop\gVim*" -Force | Out-Null
 Remove-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Force | Out-Null
 Remove-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Force | Out-Null
-Write-Host "Clean up completed."
+Write-Host "Clean up completed." -ForegroundColor Green
+Write-Host ""
 Stop-Transcript
 
 Write-Host @"
@@ -410,7 +411,8 @@ Write-Host @"
 
     If you have any questions or suggestions, please contact me on GitHub.
 
-Logs have been saved to WinMac_install_log_$date.txt in $pwd\temp folder.
+Logs have been saved to WinMac_install_log_$date.txt in 
+$pwd\temp folder.
 
 -----------------------------------------------------------------------------
 
