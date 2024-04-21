@@ -80,7 +80,7 @@ $winget = @(
     "Voidtools.Everything",
     "lin-ycv.EverythingPowerToys"
 )
-foreach ($app in $winget) {winget install --id $app --source winget --silent | Out-Null}
+foreach ($app in $winget) {winget install --id $app --source winget --silent}
 Write-Host "Installing Everything completed." -ForegroundColor Green
 
 ## PowerShell Profile
@@ -113,7 +113,7 @@ $winget = @(
     "Vim.Vim",
     "gsass1.NTop"
 )
-foreach ($app in $winget) {winget install --id $app --source winget --silent | Out-Null}
+foreach ($app in $winget) {winget install --id $app --source winget --silent}
 $vimParentPath = Join-Path $env:PROGRAMFILES Vim
 $latestSubfolder = Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -Property CreationTime -Descending | Select-Object -First 1
 $vimChildPath = $latestSubfolder.FullName
@@ -148,7 +148,7 @@ $SWP_SHOWWINDOW = 0x0040
 
 Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
 
-winget install --id "StartIsBack.StartAllBack" --source winget --silent | Out-Null
+winget install --id "StartIsBack.StartAllBack" --source winget --silent
 
 $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
 $sabRegPath = "HKCU:\Software\StartIsBack"
@@ -291,7 +291,7 @@ New-Item -Path $RBPath -Force
 New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force
 $oShell = New-Object -ComObject Shell.Application
 $trash = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
-$trash.Self.InvokeVerb("PinToHome")
+$trash.Self.InvokeVerb("PinToHome") | Out-Null
 Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse
 
 # Remove Shortcut Arrows
@@ -304,7 +304,7 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer
 
 Write-Host "Configuring Open-Shell..." -ForegroundColor Yellow
 
-winget install --id "Open-Shell.Open-Shell-Menu" --source winget --silent | Out-Null
+winget install --id "Open-Shell.Open-Shell-Menu" --source winget --silent
 Start-Sleep 5
 Stop-Process -Name startmenu -Force | Out-Null
 taskkill /IM explorer.exe /F | Out-Null
@@ -399,12 +399,13 @@ Remove-Item -Path "C:\Users\Public\Desktop\gVim*" -Force | Out-Null
 Remove-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Force | Out-Null
 Remove-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Force | Out-Null
 Write-Host "Clean up completed." -ForegroundColor Green
-Write-Host ""
+Write-Host
 Stop-Transcript
 
-Write-Host ""
+Write-Host
 Write-Host "------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
 Write-Host @"
+
 Enjoy and support by giving feedback and contributing to the project!
 
 For more information please visit my GitHub page: github.com/Asteski/WinMac
@@ -414,12 +415,12 @@ If you have any questions or suggestions, please contact me on GitHub.
 "@ -ForegroundColor Green
 
 Write-Host "-----------------------------------------------------------------------------"  -ForegroundColor Cyan
-Write-Host ""
+Write-Host
 $restartConfirmation = Read-Host "Restart computer now? It's recommended to fully apply all the changes. (y/n)"
 if ($restartConfirmation -eq "Y" -or $restartConfirmation -eq "y") {
-    Write-Host "Restarting computer..." -ForegroundColor Red
-    for ($i = 10; $i -ge 1; $i--) {
-        Write-Host $i -ForegroundColor Red
+    Write-Host "Restarting computer in" -ForegroundColor Red
+    for ($a=9; $a -ge 0; $a--) {
+        Write-Host -NoNewLine "`b$a" -ForegroundColor Red
         Start-Sleep 1
     }
     Restart-Computer -Force
