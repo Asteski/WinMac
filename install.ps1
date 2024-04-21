@@ -69,18 +69,18 @@ Write-Information "Winget installation completed."
 ## PowerToys
 
 Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
-winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements
+winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
 Write-Host "Installing PowerToys completed." -ForegroundColor Green
 
 Start-Sleep 5
-Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force
+Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force | Out-Null
 
 Write-Host "Installing Everything..." -ForegroundColor Yellow
 $winget = @(
     "Voidtools.Everything",
     "lin-ycv.EverythingPowerToys"
 )
-foreach ($app in $winget) {winget install --id $app --source winget --no-upgrade --silent}
+foreach ($app in $winget) {winget install --id $app --source winget --silent | Out-Null}
 Write-Host "Installing Everything completed." -ForegroundColor Green
 
 ## PowerShell Profile
@@ -113,12 +113,12 @@ $winget = @(
     "Vim.Vim",
     "gsass1.NTop"
 )
-foreach ($app in $winget) {winget install --id $app --source winget --no-upgrade --silent}
+foreach ($app in $winget) {winget install --id $app --source winget --silent | Out-Null}
 $vimParentPath = Join-Path $env:PROGRAMFILES Vim
 $latestSubfolder = Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -Property CreationTime -Descending | Select-Object -First 1
 $vimChildPath = $latestSubfolder.FullName
-[Environment]::SetEnvironmentVariable("Path", $env:Path + ";$vimChildPath", [EnvironmentVariableTarget]::Machine)
-Install-Module PSTree -Scope CurrentUser -Force
+[Environment]::SetEnvironmentVariable("Path", $env:Path + ";$vimChildPath", [EnvironmentVariableTarget]::Machine) | Out-Null
+Install-Module PSTree -Scope CurrentUser -Force | Out-Null
 Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $prompt
 Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $functions
 Add-Content -Path "$profilePath\WindowsPowerShell\$prompt" -Value $functions
@@ -141,14 +141,14 @@ public class Taskbar {
     public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
 }
 "@
-$taskbarHandle = [Taskbar]::FindWindow("Shell_TrayWnd", "")
+$taskbarHandle = [Taskbar]::FindWindow("Shell_TrayWnd", "") | Out-Null
 $HWND_TOP = [IntPtr]::Zero
 $SWP_SHOWWINDOW = 0x0040
-[Taskbar]::SetWindowPos($taskbarHandle, $HWND_TOP, 0, 0, 0, 0, $SWP_SHOWWINDOW)
+[Taskbar]::SetWindowPos($taskbarHandle, $HWND_TOP, 0, 0, 0, 0, $SWP_SHOWWINDOW) | Out-Null
 
 Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
 
-winget install --id "StartIsBack.StartAllBack" --source winget --silent --no-upgrade
+winget install --id "StartIsBack.StartAllBack" --source winget --silent | Out-Null
 
 $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
 $sabRegPath = "HKCU:\Software\StartIsBack"
@@ -241,7 +241,7 @@ public static extern bool SystemParametersInfo(
 
 '@
 $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
-$CursorRefresh::SystemParametersInfo(0x0057,0,$null,0)
+$CursorRefresh::SystemParametersInfo(0x0057,0,$null,0) | Out-Null
 
 # Pin Home and Programs to Quick Access
 
@@ -268,7 +268,7 @@ Add-Content $homeIniFilePath -Value $homeIni
 (Get-Item $homeDir -Force).Attributes = 'ReadOnly, Directory'
 
 $homePin = new-object -com shell.application
-$homePin.Namespace($homeDir).Self.InvokeVerb("pintohome")
+$homePin.Namespace($homeDir).Self.InvokeVerb("pintohome") | Out-Null
 
 if (Test-Path $programsIniFilePath)  {
     Remove-Item $programsIniFilePath -Force
@@ -280,7 +280,7 @@ Add-Content $programsIniFilePath -Value $programsIni
 (Get-Item $programsDir -Force).Attributes = 'ReadOnly, Directory'
 
 $programsPin = new-object -com shell.application
-$programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome")
+$programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome") | Out-Null
 
 # Pin Recycle Bin to Quick Access
 
@@ -291,7 +291,7 @@ New-Item -Path $RBPath -Force
 New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force
 $oShell = New-Object -ComObject Shell.Application
 $trash = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
-$trash.Self.InvokeVerb("PinToHome")
+$trash.Self.InvokeVerb("PinToHome") | Out-Null
 Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse
 
 # Remove Shortcut Arrows
@@ -304,7 +304,7 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer
 
 Write-Host "Configuring Open-Shell..." -ForegroundColor Yellow
 
-winget install --id "Open-Shell.Open-Shell-Menu" --source winget --no-upgrade --silent
+winget install --id "Open-Shell.Open-Shell-Menu" --source winget --silent | Out-Null
 Start-Sleep 5
 Stop-Process -Name startmenu -Force
 taskkill /IM explorer.exe /F
