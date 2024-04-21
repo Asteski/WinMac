@@ -259,46 +259,46 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
 "@
 
 if (Test-Path $homeIniFilePath)  {
-    Remove-Item $homeIniFilePath -Force | Out-Null
-    New-Item -Path $homeIniFilePath -ItemType File -Force | Out-Null
+    Remove-Item $homeIniFilePath -Force
+    New-Item -Path $homeIniFilePath -ItemType File -Force
 }
 
 Add-Content $homeIniFilePath -Value $homeIni
-(Get-Item $homeIniFilePath -Force).Attributes = 'Hidden, System, Archive' | Out-Null
-(Get-Item $homeDir -Force).Attributes = 'ReadOnly, Directory' | Out-Null
+(Get-Item $homeIniFilePath -Force).Attributes = 'Hidden, System, Archive'
+(Get-Item $homeDir -Force).Attributes = 'ReadOnly, Directory'
 
 $homePin = new-object -com shell.application
-$homePin.Namespace($homeDir).Self.InvokeVerb("pintohome") | Out-Null
+$homePin.Namespace($homeDir).Self.InvokeVerb("pintohome")
 
 if (Test-Path $programsIniFilePath)  {
-    Remove-Item $programsIniFilePath -Force | Out-Null
-    New-Item -Path $programsIniFilePath -ItemType File -Force | Out-Null
+    Remove-Item $programsIniFilePath -Force
+    New-Item -Path $programsIniFilePath -ItemType File -Force
 }
 
-Add-Content $programsIniFilePath -Value $programsIni | Out-Null
-(Get-Item $programsIniFilePath -Force).Attributes = 'Hidden, System, Archive' | Out-Null
-(Get-Item $programsDir -Force).Attributes = 'ReadOnly, Directory' | Out-Null
+Add-Content $programsIniFilePath -Value $programsIni
+(Get-Item $programsIniFilePath -Force).Attributes = 'Hidden, System, Archive'
+(Get-Item $programsDir -Force).Attributes = 'ReadOnly, Directory'
 
 $programsPin = new-object -com shell.application
-$programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome") | Out-Null
+$programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome")
 
 # Pin Recycle Bin to Quick Access
 
 $RBPath = 'HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\pintohome\command\'
 $name = "DelegateExecute"
 $value = "{b455f46e-e4af-4035-b0a4-cf18d2f6f28e}"
-New-Item -Path $RBPath -Force | Out-Null
-New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force | Out-Null
+New-Item -Path $RBPath -Force
+New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force
 $oShell = New-Object -ComObject Shell.Application
 $trash = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
-$trash.Self.InvokeVerb("PinToHome") | Out-Null
-Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse | Out-Null
+$trash.Self.InvokeVerb("PinToHome")
+Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse
 
 # Remove Shortcut Arrows
 
-Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force | Out-Null
+Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force
 New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
-Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String | Out-Null
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
 
 ## Open-Shell
 
