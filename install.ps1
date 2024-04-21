@@ -16,7 +16,7 @@ Write-Host @"
 Write-Host @"
 Please do not do anything while the script is running, as it may impact the installation process.
 
-Currently no update/uninstall functionality is implemented, so please make sure to run the script on a clean system or test it on VM beforehand.
+Currently no update/uninstall functionality is implemented, so please make sure to run the script on a clean system or make a bakcup.
 
 PowerShell profile files will be removed and replaced with the new ones. Please make sure to backup your current profiles if needed.
 
