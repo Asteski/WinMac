@@ -260,7 +260,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
 
 if (Test-Path $homeIniFilePath)  {
     Remove-Item $homeIniFilePath -Force
-    New-Item -Path $homeIniFilePath -ItemType File -Force
+    New-Item -Path $homeIniFilePath -ItemType File -Force | Out-Null
 }
 
 Add-Content $homeIniFilePath -Value $homeIni
@@ -268,11 +268,11 @@ Add-Content $homeIniFilePath -Value $homeIni
 (Get-Item $homeDir -Force).Attributes = 'ReadOnly, Directory'
 
 $homePin = new-object -com shell.application
-$homePin.Namespace($homeDir).Self.InvokeVerb("pintohome")
+$homePin.Namespace($homeDir).Self.InvokeVerb("pintohome") | Out-Null
 
 if (Test-Path $programsIniFilePath)  {
     Remove-Item $programsIniFilePath -Force
-    New-Item -Path $programsIniFilePath -ItemType File -Force
+    New-Item -Path $programsIniFilePath -ItemType File -Force | Out-Null
 }
 
 Add-Content $programsIniFilePath -Value $programsIni
@@ -280,7 +280,7 @@ Add-Content $programsIniFilePath -Value $programsIni
 (Get-Item $programsDir -Force).Attributes = 'ReadOnly, Directory'
 
 $programsPin = new-object -com shell.application
-$programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome")
+$programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome") | Out-Null
 
 # Pin Recycle Bin to Quick Access
 
