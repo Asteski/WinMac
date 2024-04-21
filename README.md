@@ -26,7 +26,7 @@ By pressing a customizable hotkey combination (alt+space by default), a search b
 
 - **Revamped and decluttered Start Menu**
 
-Open-Shell is a customizable Start Menu replacement for Windows that provides users with possiblity to completely replace traditional Start Menu with customized WinX menu, to resemble MacOS main menu.
+Open-Shell is a customizable Start Menu replacement for Windows that provides users with possiblity to completely replace traditional Start Menu with customized WinX menu, to resemble MacOS main menu, which is now called the WinMac Menu.
 
 - **Enhanced Taskbar**
 
@@ -44,24 +44,7 @@ Additionally, deployment script includes pinning User folder and Start Menu\Prog
 
 - **Revamped Terminal**
 
-WinMac provides you with debloated prompt with addition of completion functions and most commonly used commands in macOS/Linux, like *vim, grep, touch, ditto, top, whatis, killall, ll, la, tree* with additional commands like:
-
-  - *np* or *note* opens notepad with or without provided file name,
-  - *open* or *of* to open current or specific directory in Explorer,
-  - *history* or *hist* to list commands history from current and older sessions,
-  - *ntop* is a htop-like system-monitor for Windows with Vi-keybindings,
-  - *backup* as an alias of [wbadmin - Backup command-line tool for Windows](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/wbadmin),
-  - *rcopy* as an alias of [robocopy - Robust File Copy for Windows](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/robocopy),
-  - *psversion, psver* or *version* to show current Powershell version.
-
-Examples: 
-
-  - *open $profile* or *open C:\Users\username\file.txt* opens folder, where specified file is stored
-  - *open foldername* opens specific folder that is stored in current folder
-  - *open C:\Users* or *open C:\Program Files* opens specific folder directory
-  - *open* opens current folder
-  - *history* shows the list of commands from current and older sessions
-  - *history wsl* or *history grep winmac* searches through commands history by specific string or set of strings
+WinMac provides you with debloated prompt with addition of completion functions and most commonly used commands in macOS/Linux, like *vim, grep, touch, ditto, top, whatis, killall, ll, la, tree* with additional commands like history, comuterinfo, battery, backup, ntop, rcopy, brew among ton of other functions! More details on Wiki page [Commands Cheat Sheet](https://github.com/Asteski/WinMac/wiki/Commands-Cheat-Sheet).
 
 ## Benefits
 
