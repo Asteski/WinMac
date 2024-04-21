@@ -72,6 +72,9 @@ Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
 winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements
 Write-Host "Installing PowerToys completed." -ForegroundColor Green
 
+Start-Sleep 5
+Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force
+
 Write-Host "Installing Everything..." -ForegroundColor Yellow
 $winget = @(
     "Voidtools.Everything",
