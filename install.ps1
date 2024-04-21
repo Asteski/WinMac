@@ -353,6 +353,7 @@ Start-Process $shellExePath
 Write-Host "Configuring Open-Shell completed." -ForegroundColor Green
 
 Start-Process Explorer
+Start-Sleep 5
 Add-Type -TypeDefinition @"
     using System;
     using System.Runtime.InteropServices;
