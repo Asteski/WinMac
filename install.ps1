@@ -13,8 +13,6 @@ This is Work in Progress. You're using this script at your own risk.
 
 "@ -ForegroundColor Cyan
 Write-Host @"
-Please do not do anything while the script is running, as it may impact
-the installation process.
 
 Currently no update/uninstall functionality is implemented, so please
 make sure to run the script on a clean system or make a backup.
@@ -28,10 +26,7 @@ Write-Host "--------------------------------------------------------------------
 Write-Host
 $installConfirmation = Read-Host "Are you sure you want to start the installation process (y/n)"
 
-if ($installConfirmation -eq 'y') {
-    Write-Host "Starting installation process..." -ForegroundColor Green
-    Start-Sleep 1
-} else {
+if ($installConfirmation -ne 'y') {
     Write-Host "Installation process aborted." -ForegroundColor Red
     Start-Sleep 2
     exit
@@ -60,12 +55,21 @@ WinMac prompt:
 $promptSet = Read-Host "Do you want to use MacOS-like prompt? (y/n)"
 if ($promptSet -eq 'y') {
     Write-Host "Using MacOS-like prompt." -ForegroundColor Yellow
+    Start-Sleep 2
 }
 else
 { 
     Write-Host "Using WinMac prompt." -ForegroundColor Yellow
+    Start-Sleep 2
 }
 
+Write-Host
+Write-Host "Starting installation process..." -ForegroundColor Green
+Write-Host
+Write-Host @"
+Please do not do anything while the script is running, as it may impact
+the installation process.
+@" -ForegroundColor Red
 ## Winget
 
 Write-Host "Checking for Windows Package Manager (Winget)" -ForegroundColor Yellow
