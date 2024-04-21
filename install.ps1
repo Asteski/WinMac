@@ -13,7 +13,6 @@ This is Work in Progress. You're using this script at your own risk.
 
 "@ -ForegroundColor Cyan
 Write-Host @"
-
 Currently no update/uninstall functionality is implemented, so please
 make sure to run the script on a clean system or make a backup.
 
@@ -78,7 +77,7 @@ for ($a=3; $a -ge 0; $a--) {
 }
 
 ## Winget
-
+Write-Host
 Write-Host "Checking for Windows Package Manager (Winget)" -ForegroundColor Yellow
 $progressPreference = 'silentlyContinue'
 Write-Information "Downloading WinGet and its dependencies..."
@@ -311,7 +310,7 @@ $RBPath = 'HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\s
 $name = "DelegateExecute"
 $value = "{b455f46e-e4af-4035-b0a4-cf18d2f6f28e}"
 New-Item -Path $RBPath -Force | Out-Null
-New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force
+New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force | Out-Null
 $oShell = New-Object -ComObject Shell.Application
 $trash = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
 $trash.Self.InvokeVerb("PinToHome") | Out-Null
