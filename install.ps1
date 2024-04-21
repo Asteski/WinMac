@@ -392,45 +392,6 @@ Start-Sleep -Seconds 2
 [Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
 [Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
 Start-Sleep -Seconds 2
-Add-Type -AssemblyName System.Windows.Forms
-Add-Type -TypeDefinition @"
-using System;
-using System.Runtime.InteropServices;
-
-public class MouseInput
-{
-    [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
-    public static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint cButtons, uint dwExtraInfo);
-
-    public const uint MOUSEEVENTF_LEFTDOWN = 0x02;
-    public const uint MOUSEEVENTF_LEFTUP = 0x04;
-
-    public static void HoldLeftMouseButton()
-    {
-        mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
-    }
-
-    public static void ReleaseLeftMouseButton()
-    {
-        mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
-    }
-}
-"@
-
-$screen = [System.Windows.Forms.SystemInformation]::VirtualScreen
-$w = $screen.width/4
-[Windows.Forms.Cursor]::Position = "$($w),$($screen.Height)"
-Start-Sleep -Seconds 2
-[MouseInput]::HoldLeftMouseButton()
-Start-Sleep -Seconds 2
-[Windows.Forms.Cursor]::Position = "$($w),1"
-Start-Sleep -Seconds 2
-[MouseInput]::ReleaseLeftMouseButton()
-Start-Sleep -Seconds 2
-$screen = [System.Windows.Forms.SystemInformation]::VirtualScreen
-$centerX = $screen.Width / 2
-$centerY = $screen.Height / 2
-[Windows.Forms.Cursor]::Position = "$centerX,$centerY"
 
 Write-Host "Configuring Shell completed." -ForegroundColor Green
 
