@@ -19,6 +19,8 @@ set-alias -name version -value psversion
 set-alias -name psver -value psversion
 set-alias -name htop -value ntop
 set-alias -name apt -value winget
+set-alias -name brew -value winget
+set-alias -name info -value computerinfo
 
 # Functions
 function psversion { $PSVersionTable }
@@ -27,8 +29,46 @@ function la { Get-ChildItem -Force -Attributes !D }
 function wl { winget list }
 function ws { winget search $args }
 function wi { winget install $args }
-function wd { winget uninstall $args }
+function wr { winget uninstall $args }
 function wu { winget upgrade $args }
+
+function battery { 
+    $info = get-wmiobject Win32_Battery |`
+    select-object @{N='Battery ID'; E={$_.DeviceID}},`
+    @{N='Battery Type'; E={$_.Caption}},  `
+    @{N='Battery Status'; E={$_.Status}}, `
+    @{N='Charge Remaining'; E={$_.EstimatedChargeRemaining}}, `
+    @{N='Time Remaining'; E={$_.EstimatedRunTime}} 
+Write-Host @"
+
+Battery Information
+"@ -ForegroundColor Yellow
+    $info
+}
+
+function computerinfo { 
+    $info = Get-ComputerInfo |`
+    select-object `
+    @{N='User Name'; E={$_.CsCaption}}, `
+    @{N='PC Manufacturer'; E={$_.CsManufacturer}}, `
+    @{N='PC Model'; E={$_.CsModel}}, `
+    @{N='OS Name'; E={$_.OsName}}, `
+    @{N='OS Version'; E={$_.OsVersion}}, `
+    @{N='BIOS Version'; E={$_.BiosCaption}}, `
+    @{N='BIOS Release Date'; E={$_.BiosReleaseDate}}, `
+    @{N='CPU Manufacturer'; E={$_.CsProcessors.Manufacturer}}, `
+    @{N='CPU Name'; E={$_.CsProcessors.Name}}, `
+    @{N='CPU Description'; E={$_.CsProcessors.Description}}, `
+    @{N='CPU Availability'; E={$_.CsProcessors.Availability}}, `
+    @{N='CPU Architecture'; E={$_.CsProcessors.Architecture}}, `
+    # @{N='BiosSerialNumber'; E={$_.BiosSerialNumber}}, `
+    @{N='Last BootUp Time'; E={$_.OsLastBootUpTime}}
+Write-Host @"
+
+Computer Information
+"@ -ForegroundColor Yellow
+    $info
+}
 
 function hist {
     $find = $args;

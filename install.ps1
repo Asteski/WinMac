@@ -1,26 +1,38 @@
 Clear-Host
 Write-Host @"
--------------------------- WinMac Deployment --------------------------
+-----------------------------------------------------------------------
 
-                    Welcome to WinMac Deployment!
+Welcome to WinMac Deployment!
 
-                        Author: Adam Kamienski
-                            GitHub: Asteski
-                            Version: 0.2.1
+Author: Asteski
+Version: 0.2.2
 
-                      This is Work in Progress.
+This is Work in Progress. You're using this script at your own risk.
 
 -----------------------------------------------------------------------
 
 "@ -ForegroundColor Cyan
 Write-Host @"
-Please do not do anything while the script is running, as it may impact the installation process. 
+Please do not do anything while the script is running, as it may impact the installation process.
 
-Currently no update/uninstall functionality is implemented, so please make sure to run the script on a clean system.
+Currently no update/uninstall functionality is implemented, so please make sure to run the script on a clean system or make a backup.
 
-Please be informed that this is a beta version - you're deploying it at your own risk!!
+PowerShell profile files will be removed and replaced with the new ones. Please make sure to backup your current profiles if needed.
 
 "@ -ForegroundColor Yellow
+
+Write-Host "-----------------------------------------------------------------------"  -ForegroundColor Cyan
+Write-Host
+$installConfirmation = Read-Host "Are you sure you want to start the installation process (y/n)"
+
+if ($installConfirmation -eq 'y') {
+    Write-Host "Starting installation process..." -ForegroundColor Green
+    Start-Sleep 1
+} else {
+    Write-Host "Installation process aborted." -ForegroundColor Red
+    Start-Sleep 2
+    exit
+}
 
 ## Start Logging
 
@@ -32,6 +44,7 @@ Start-Transcript -Path ".\temp\WinMac_install_log_$date.txt" -Append | Out-Null
 ## User Configuration
 
 Write-Host @"
+
 You can choose now between MacOS-like prompt and WinMac prompt.
 
 MacOS prompt:
@@ -40,14 +53,14 @@ userName@computerName ~ %
 WinMac prompt: 
 12:35:06 userName @ ~ > 
 
-"@ -ForegroundColor Yellow
+"@
 $promptSet = Read-Host "Do you want to use MacOS-like prompt? (y/n)"
 if ($promptSet -eq 'y') {
-     Write-Host "Using MacOS-like prompt." -ForegroundColor Green 
+    Write-Host "Using MacOS-like prompt." -ForegroundColor Yellow
 }
-else 
+else
 { 
-    Write-Host "Using WinMac prompt." -ForegroundColor Green 
+    Write-Host "Using WinMac prompt." -ForegroundColor Yellow
 }
 
 ## Winget
@@ -60,21 +73,23 @@ $installPath = "$env:TEMP\winget.msixbundle"
 Invoke-WebRequest -Uri $wingetUrl -OutFile $installPath
 Write-Information "Installing WinGet..."
 Add-AppxPackage -Path $installPath
-Remove-Item -Path $installPath -Force | Out-Null
+Remove-Item -Path $installPath -Force
 Write-Information "Winget installation completed."
 
 ## PowerToys
 
 Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
-winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements
+winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
 Write-Host "Installing PowerToys completed." -ForegroundColor Green
+Start-Sleep 5
+Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force | Out-Null
 
 Write-Host "Installing Everything..." -ForegroundColor Yellow
 $winget = @(
     "Voidtools.Everything",
     "lin-ycv.EverythingPowerToys"
 )
-foreach ($app in $winget) {winget install --id $app --source winget --no-upgrade --silent}
+foreach ($app in $winget) {winget install --id $app --source winget --silent | Out-Null}
 Write-Host "Installing Everything completed." -ForegroundColor Green
 
 ## PowerShell Profile
@@ -87,16 +102,16 @@ if ($promptSet -eq 'y') { $prompt = Get-Content "$pwd\config\terminal\macos-prom
 else { $promptSet = Get-Content "$pwd\config\terminal\winmac-prompt.ps1" -Raw }
 $functions = Get-Content "$pwd\config\terminal\functions.ps1" -Raw
 
-if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell" | Out-Null }
-if (-not (Test-Path "$profilePath\WindowsPowerShell")) { New-Item -ItemType Directory -Path "$profilePath\WindowsPowerShell" | Out-Null }
+if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell" | Out-Null } else { Remove-Item -Path "$profilePath\PowerShell\$profileFile" -Force | Out-Null }
+if (-not (Test-Path "$profilePath\WindowsPowerShell")) { New-Item -ItemType Directory -Path "$profilePath\WindowsPowerShell" | Out-Null } else { Remove-Item -Path "$profilePath\WindowsPowerShell\$profileFile" -Force | Out-Null }
 if (-not (Test-Path "$profilePath\PowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\PowerShell\$profileFile" | Out-Null }
 if (-not (Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\WindowsPowerShell\$profileFile" | Out-Null }
- 
+
 Write-Host "Checking for NuGet Provider" -ForegroundColor Yellow
 $progressPreference = 'silentlyContinue'
 if (-not (Get-PackageProvider -ListAvailable | Where-Object {$_.Name -eq 'NuGet'})) {
     Write-Information "Installing NuGet Provider..."
-    Install-PackageProvider -Name NuGet -Force | Out-Null
+    Install-PackageProvider -Name NuGet -Force
     Write-Information "NuGet Provider installation completed."
 }
 else {
@@ -107,16 +122,16 @@ $winget = @(
     "Vim.Vim",
     "gsass1.NTop"
 )
-foreach ($app in $winget) {winget install --id $app --source winget --no-upgrade --silent}
+foreach ($app in $winget) {winget install --id $app --source winget --silent | Out-Null}
 $vimParentPath = Join-Path $env:PROGRAMFILES Vim
 $latestSubfolder = Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -Property CreationTime -Descending | Select-Object -First 1
 $vimChildPath = $latestSubfolder.FullName
-[Environment]::SetEnvironmentVariable("Path", $env:Path + ";$vimChildPath", [EnvironmentVariableTarget]::Machine)
+[Environment]::SetEnvironmentVariable("Path", $env:Path + ";$vimChildPath", [EnvironmentVariableTarget]::Machine) | Out-Null
 Install-Module PSTree -Scope CurrentUser -Force | Out-Null
-Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $prompt | Out-Null
-Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $functions | Out-Null
-Add-Content -Path "$profilePath\WindowsPowerShell\$prompt" -Value $functions | Out-Null
-Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $functions | Out-Null
+Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $prompt
+Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $functions
+Add-Content -Path "$profilePath\WindowsPowerShell\$prompt" -Value $functions
+Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $functions
 
 Write-Host "Configuring PowerShell Profile completed." -ForegroundColor Green
 
@@ -135,18 +150,19 @@ public class Taskbar {
     public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
 }
 "@
-$taskbarHandle = [Taskbar]::FindWindow("Shell_TrayWnd", "")
+$taskbarHandle = [Taskbar]::FindWindow("Shell_TrayWnd", "") | Out-Null
 $HWND_TOP = [IntPtr]::Zero
 $SWP_SHOWWINDOW = 0x0040
 [Taskbar]::SetWindowPos($taskbarHandle, $HWND_TOP, 0, 0, 0, 0, $SWP_SHOWWINDOW) | Out-Null
 
 Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
 
-winget install --id "StartIsBack.StartAllBack" --source winget --silent --no-upgrade
+winget install --id "StartIsBack.StartAllBack" --source winget --silent
 
 $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
 $sabRegPath = "HKCU:\Software\StartIsBack"
 Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 1
+Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSizeMove" -Value 1
 Set-ItemProperty -Path $exRegPath\Advanced -Name "ShowStatusBar" -Value 0
 Set-ItemProperty -Path $exRegPath\Advanced -Name "EnableSnapAssistFlyout" -Value 0
 Set-ItemProperty -Path $exRegPath\Advanced -Name "EnableSnapBar" -Value 0
@@ -186,14 +202,16 @@ Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
 ## Misc
 
 $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"
-Set-ItemProperty -Path $exRegPath\Advanced -Name "LaunchTO" -Value 1 | Out-Null
-Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0 | Out-Null
-Set-ItemProperty -Path $exRegPath -Name "ShowRecent" -Value 0 | Out-Null
+Set-ItemProperty -Path $exRegPath\Advanced -Name "LaunchTO" -Value 1
+Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
+Set-ItemProperty -Path $exRegPath -Name "ShowRecent" -Value 0
+Set-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\Windows\Explorer" -Name "TaskbarNoMultimon" -Value 1
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer" -Name "TaskbarNoMultimon" -Value 1
 
-# Theme
-$curSourceFolder = $pwd.Path + '\config\theme\cursor'
+# Themes
+$curSourceFolder = $pwd.Path + '\config\cursor'
 $curDestFolder = "C:\Windows\Cursors"
-Copy-Item -Path $curSourceFolder\* -Destination $curDestFolder -Recurse -Force | Out-Null
+Copy-Item -Path $curSourceFolder\* -Destination $curDestFolder -Recurse -Force
 $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
 $RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
 $RegCursors.SetValue("","Windows Black")
@@ -232,7 +250,7 @@ public static extern bool SystemParametersInfo(
 
 '@
 $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
-$CursorRefresh::SystemParametersInfo(0x0057,0,$null,0)
+$CursorRefresh::SystemParametersInfo(0x0057,0,$null,0) | Out-Null
 
 # Pin Home and Programs to Quick Access
 
@@ -250,8 +268,8 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
 "@
 
 if (Test-Path $homeIniFilePath)  {
-  Remove-Item $homeIniFilePath -Force
-  New-Item -Path $homeIniFilePath -ItemType File -Force | Out-Null
+    Remove-Item $homeIniFilePath -Force
+    New-Item -Path $homeIniFilePath -ItemType File -Force | Out-Null
 }
 
 Add-Content $homeIniFilePath -Value $homeIni
@@ -259,35 +277,35 @@ Add-Content $homeIniFilePath -Value $homeIni
 (Get-Item $homeDir -Force).Attributes = 'ReadOnly, Directory'
 
 $homePin = new-object -com shell.application
-$homePin.Namespace($homeDir).Self.InvokeVerb("pintohome")
+$homePin.Namespace($homeDir).Self.InvokeVerb("pintohome") | Out-Null
 
 if (Test-Path $programsIniFilePath)  {
     Remove-Item $programsIniFilePath -Force
     New-Item -Path $programsIniFilePath -ItemType File -Force | Out-Null
 }
-  
+
 Add-Content $programsIniFilePath -Value $programsIni
 (Get-Item $programsIniFilePath -Force).Attributes = 'Hidden, System, Archive'
 (Get-Item $programsDir -Force).Attributes = 'ReadOnly, Directory'
 
 $programsPin = new-object -com shell.application
-$programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome")
+$programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome") | Out-Null
 
 # Pin Recycle Bin to Quick Access
 
 $RBPath = 'HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\pintohome\command\'
 $name = "DelegateExecute"
 $value = "{b455f46e-e4af-4035-b0a4-cf18d2f6f28e}"
-New-Item -Path $RBPath -Force | out-null
-New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force | out-null
+New-Item -Path $RBPath -Force | Out-Null
+New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force
 $oShell = New-Object -ComObject Shell.Application
 $trash = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
-$trash.Self.InvokeVerb("PinToHome")
-Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse
+$trash.Self.InvokeVerb("PinToHome") | Out-Null
+Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse | Out-Null
 
 # Remove Shortcut Arrows
 
-Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force | Out-Null
+Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force
 New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
 
@@ -295,8 +313,10 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer
 
 Write-Host "Configuring Open-Shell..." -ForegroundColor Yellow
 
-winget install --id "Open-Shell.Open-Shell-Menu" --source winget --no-upgrade --silent
-
+winget install --id "Open-Shell.Open-Shell-Menu" --source winget --silent | Out-Null
+Start-Sleep 5
+Stop-Process -Name startmenu -Force | Out-Null
+taskkill /IM explorer.exe /F | Out-Null
 New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force | Out-Null
 New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force | Out-Null
 New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu" -Force | Out-Null
@@ -335,19 +355,15 @@ Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "Sear
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "SkinW7" -Value "Immersive"
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "SkinVariationW7" -Value ""
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "SkinOptionsW7" -Value ([byte[]](0x4c, 0x00, 0x49, 0x00, 0x47, 0x00, 0x48, 0x00, 0x54, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x44, 0x00, 0x41, 0x00, 0x52, 0x00, 0x4b, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x41, 0x00, 0x55, 0x00, 0x54, 0x00, 0x4f, 0x00, 0x3d, 0x00, 0x31, 0x00, 0x00, 0x00, 0x55, 0x00, 0x53, 0x00, 0x45, 0x00, 0x52, 0x00, 0x5f, 0x00, 0x49, 0x00, 0x4d, 0x00, 0x41, 0x00, 0x47, 0x00, 0x45, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x55, 0x00, 0x53, 0x00, 0x45, 0x00, 0x52, 0x00, 0x5f, 0x00, 0x4e, 0x00, 0x41, 0x00, 0x4d, 0x00, 0x45, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x43, 0x00, 0x45, 0x00, 0x4e, 0x00, 0x54, 0x00, 0x45, 0x00, 0x52, 0x00, 0x5f, 0x00, 0x4e, 0x00, 0x41, 0x00, 0x4d, 0x00, 0x45, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x53, 0x00, 0x4d, 0x00, 0x41, 0x00, 0x4c, 0x00, 0x4c, 0x00, 0x5f, 0x00, 0x49, 0x00, 0x43, 0x00, 0x4f, 0x00, 0x4e, 0x00, 0x53, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x4f, 0x00, 0x50, 0x00, 0x41, 0x00, 0x51, 0x00, 0x55, 0x00, 0x45, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x44, 0x00, 0x49, 0x00, 0x53, 0x00, 0x41, 0x00, 0x42, 0x00, 0x4c, 0x00, 0x45, 0x00, 0x5f, 0x00, 0x4d, 0x00, 0x41, 0x00, 0x53, 0x00, 0x4b, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x42, 0x00, 0x4c, 0x00, 0x41, 0x00, 0x43, 0x00, 0x4b, 0x00, 0x5f, 0x00, 0x54, 0x00, 0x45, 0x00, 0x58, 0x00, 0x54, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x42, 0x00, 0x4c, 0x00, 0x41, 0x00, 0x43, 0x00, 0x4b, 0x00, 0x5f, 0x00, 0x46, 0x00, 0x52, 0x00, 0x41, 0x00, 0x4d, 0x00, 0x45, 0x00, 0x53, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x54, 0x00, 0x52, 0x00, 0x41, 0x00, 0x4e, 0x00, 0x53, 0x00, 0x50, 0x00, 0x41, 0x00, 0x52, 0x00, 0x45, 0x00, 0x4e, 0x00, 0x54, 0x00, 0x5f, 0x00, 0x4c, 0x00, 0x45, 0x00, 0x53, 0x00, 0x53, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x54, 0x00, 0x52, 0x00, 0x41, 0x00, 0x4e, 0x00, 0x53, 0x00, 0x50, 0x00, 0x41, 0x00, 0x52, 0x00, 0x45, 0x00, 0x4e, 0x00, 0x54, 0x00, 0x5f, 0x00, 0x4d, 0x00, 0x4f, 0x00, 0x52, 0x00, 0x45, 0x00, 0x3d, 0x00, 0x31, 0x00, 0x00, 0x00))
-Stop-Process -Name startmenu -Force
-Start-Process Explorer
-Start-Sleep -Seconds 2
-Start-Process $shellExePath
-Start-Sleep -Seconds 2
-taskkill /IM explorer.exe /F | Out-Null
-Start-Sleep -Seconds 2
 Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
 Copy-Item -Path "$pwd\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
-Start-Process explorer
-Start-Sleep -Seconds 2
-Start-Process explorer # starts explorer window necessary to turn off classic explorer bar using key combination
-Start-Sleep -Seconds 4
+Start-Process Explorer
+Start-Process $shellExePath
+
+Write-Host "Configuring Open-Shell completed." -ForegroundColor Green
+
+Start-Process Explorer
+Start-Sleep 5
 Add-Type -TypeDefinition @"
     using System;
     using System.Runtime.InteropServices;
@@ -363,15 +379,10 @@ Add-Type -TypeDefinition @"
         public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, int dwExtraInfo);
     }
 "@
-Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
-# Write-Host @"
-
-# Now, please wait for the script to finish configuring the shell, as it requires to open Explorer window and run specific key combinations to disable Open-Shell Explorer Bar.
-
-# "@ -ForegroundColor Red
-
+Start-Process Explorer
+Start-Sleep 5
 $explorerHandle = [Keyboard]::FindWindow("CabinetWClass", $null)
-[Keyboard]::SetForegroundWindow($explorerHandle)
+[Keyboard]::SetForegroundWindow($explorerHandle) | Out-Null
 $KEYEVENTF_KEYUP = 0x2
 $VK_MENU = 0x12 # Alt key
 $VK_V = 0x56 # V key
@@ -380,42 +391,45 @@ $VK_RETURN = 0x0D # Enter key
 [Keyboard]::keybd_event($VK_V, 0, 0, 0) # V key press
 [Keyboard]::keybd_event($VK_V, 0, $KEYEVENTF_KEYUP, 0) # V key release
 [Keyboard]::keybd_event($VK_MENU, 0, $KEYEVENTF_KEYUP, 0) # Alt key release
-Start-Sleep -Milliseconds 100
+Start-Sleep -Seconds 2
 [Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
 [Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
-Start-Sleep -Milliseconds 100
+Start-Sleep -Seconds 2
 [Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
 [Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
-Start-Sleep -Milliseconds 100
+Start-Sleep -Seconds 2
+Stop-Process -Name Explorer
 
 Write-Host "Configuring Shell completed." -ForegroundColor Green
 
-Write-Host "Clean up..."
+Write-Host "Clean up..." -ForegroundColor Yellow
 Remove-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Force | Out-Null
 Remove-Item -Path "C:\Users\Public\Desktop\gVim*" -Force | Out-Null
-Write-Host "Clean up completed."
-Stop-Transcript | Out-Null
-Write-Host "Logs have been saved to WinMac_install_log_$date.txt in $pwd\temp folder." -ForegroundColor Yellow
+Remove-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Force | Out-Null
+Remove-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Force | Out-Null
+Write-Host "Clean up completed." -ForegroundColor Green
+Write-Host
+Stop-Transcript
 
+Write-Host
+Write-Host "------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
 Write-Host @"
 
------------------------- WinMac Deployment completed ------------------------
+Enjoy and support by giving feedback and contributing to the project!
 
-    Enjoy and support by giving feedback and contributing to the project!
+For more information please visit my GitHub page: github.com/Asteski/WinMac
 
- For more information please visit my GitHub page: github.com/Asteski/WinMac
-
-    If you have any questions or suggestions, please contact me on GitHub.
-
------------------------------------------------------------------------------
+If you have any questions or suggestions, please contact me on GitHub.
 
 "@ -ForegroundColor Green
 
-$restartConfirmation = Read-Host "Restart computer now? It's recommended to fully apply all the changes. (Y/N)"
+Write-Host "-----------------------------------------------------------------------------"  -ForegroundColor Cyan
+Write-Host
+$restartConfirmation = Read-Host "Restart computer now? It's recommended to fully apply all the changes. (y/n)"
 if ($restartConfirmation -eq "Y" -or $restartConfirmation -eq "y") {
-    Write-Host "Restarting computer..." -ForegroundColor Red
-    for ($i = 10; $i -ge 1; $i--) {
-        Write-Host $i -ForegroundColor Red
+    Write-Host "Restarting computer in" -ForegroundColor Red
+    for ($a=9; $a -ge 0; $a--) {
+        Write-Host -NoNewLine "`b$a" -ForegroundColor Red
         Start-Sleep 1
     }
     Restart-Computer -Force
