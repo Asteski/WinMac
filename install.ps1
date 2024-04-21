@@ -19,7 +19,7 @@ the installation process.
 Currently no update/uninstall functionality is implemented, so please
 make sure to run the script on a clean system or make a backup.
 
-PowerShell profile files will be removed and replaced with the new ones. 
+PowerShell profile files will be removed and replaced with new ones. 
 Please make sure to backup your current profiles if needed.
 
 "@ -ForegroundColor Yellow
