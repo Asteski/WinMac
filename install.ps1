@@ -308,13 +308,13 @@ winget install --id "Open-Shell.Open-Shell-Menu" --source winget --silent | Out-
 Start-Sleep 5
 Stop-Process -Name startmenu -Force | Out-Null
 taskkill /IM explorer.exe /F | Out-Null
-New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force
-New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force
-New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu" -Force
-New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\ClassicExplorer" -Force
-New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell\Settings" -Force
-New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu\Settings" -Force
-New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\ClassicExplorer\Settings" -Force
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force | Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force | Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu" -Force | Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\ClassicExplorer" -Force | Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell\Settings" -Force | Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu\Settings" -Force | Out-Null
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\ClassicExplorer\Settings" -Force | Out-Null
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "ShowedToolbar" -Value 0
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "NewLine" -Value 0
 Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "CSettingsDlg" -Value ([byte[]](0,0,0,0,103,0,0,0,0,0,0,0,0,0,0,0,170,15,0,0,1,0,185,115,0,0,0,0))
@@ -401,23 +401,19 @@ Write-Host "Clean up completed." -ForegroundColor Green
 Write-Host ""
 Stop-Transcript
 
+Write-Host ""
+Write-Host "------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
 Write-Host @"
+Enjoy and support by giving feedback and contributing to the project!
 
------------------------- WinMac Deployment completed ------------------------
+For more information please visit my GitHub page: github.com/Asteski/WinMac
 
-    Enjoy and support by giving feedback and contributing to the project!
-
- For more information please visit my GitHub page: github.com/Asteski/WinMac
-
-    If you have any questions or suggestions, please contact me on GitHub.
-
-Logs have been saved to WinMac_install_log_$date.txt in 
-$pwd\temp folder.
-
------------------------------------------------------------------------------
+If you have any questions or suggestions, please contact me on GitHub.
 
 "@ -ForegroundColor Green
 
+Write-Host "-----------------------------------------------------------------------------"  -ForegroundColor Cyan
+Write-Host ""
 $restartConfirmation = Read-Host "Restart computer now? It's recommended to fully apply all the changes. (y/n)"
 if ($restartConfirmation -eq "Y" -or $restartConfirmation -eq "y") {
     Write-Host "Restarting computer..." -ForegroundColor Red
