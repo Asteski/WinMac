@@ -63,13 +63,20 @@ else
     Start-Sleep 2
 }
 
-Write-Host
-Write-Host "Starting installation process..." -ForegroundColor Green
+Start-Sleep 1
 Write-Host
 Write-Host @"
 Please do not do anything while the script is running, as it may impact
 the installation process.
-@" -ForegroundColor Red
+"@ -ForegroundColor Red
+Start-Sleep 2
+Write-Host
+Write-Host "Starting installation process in..." -ForegroundColor Green
+for ($a=3; $a -ge 0; $a--) {
+    Write-Host -NoNewLine "`b$a" -ForegroundColor Green
+    Start-Sleep 1
+}
+
 ## Winget
 
 Write-Host "Checking for Windows Package Manager (Winget)" -ForegroundColor Yellow
