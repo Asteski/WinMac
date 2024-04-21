@@ -18,20 +18,20 @@ Please do not do anything while the script is running, as it may impact the inst
 
 Currently no update/uninstall functionality is implemented, so please make sure to run the script on a clean system or test it on VM beforehand.
 
-Powershell $profile file will be cleaned up and replaced with the new one. Please make sure to backup your current profile if needed.
-
-Please be informed that this is a beta version - you're deploying it at your own risk!!
+PowerShell profile files will be removed and replaced with the new ones. Please make sure to backup your current profiles if needed.
 
 "@ -ForegroundColor Yellow
 
 Write-Host "-----------------------------------------------------------------------"  -ForegroundColor Cyan
-
-$installConfirmation = Read-Host "Do you wish to start an installation process (y/n)"
+Write-Host
+$installConfirmation = Read-Host "Are you sure you want to start the installation process (y/n)"
 
 if ($installConfirmation -eq 'y') {
     Write-Host "Starting installation process..." -ForegroundColor Green
+    Start-Sleep 1
 } else {
     Write-Host "Installation process aborted." -ForegroundColor Red
+    Start-Sleep 2
     exit
 }
 
@@ -297,12 +297,12 @@ $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome") | Out-Null
 $RBPath = 'HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\pintohome\command\'
 $name = "DelegateExecute"
 $value = "{b455f46e-e4af-4035-b0a4-cf18d2f6f28e}"
-New-Item -Path $RBPath -Force
+New-Item -Path $RBPath -Force | Out-Null
 New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force
 $oShell = New-Object -ComObject Shell.Application
 $trash = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
 $trash.Self.InvokeVerb("PinToHome") | Out-Null
-Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse
+Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse | Out-Null
 
 # Remove Shortcut Arrows
 
