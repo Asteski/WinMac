@@ -18,11 +18,22 @@ Please do not do anything while the script is running, as it may impact the inst
 
 Currently no update/uninstall functionality is implemented, so please make sure to run the script on a clean system or test it on VM beforehand.
 
+Powershell $profile file will be cleaned up and replaced with the new one. Please make sure to backup your current profile if needed.
+
 Please be informed that this is a beta version - you're deploying it at your own risk!!
 
 "@ -ForegroundColor Yellow
 
 Write-Host "-----------------------------------------------------------------------"  -ForegroundColor Cyan
+
+$installConfirmation = Read-Host "Do you wish to start an installation process (y/n)"
+
+if ($installConfirmation -eq 'y') {
+    Write-Host "Starting installation process..." -ForegroundColor Green
+} else {
+    Write-Host "Installation process aborted." -ForegroundColor Red
+    exit
+}
 
 ## Start Logging
 
@@ -48,7 +59,7 @@ $promptSet = Read-Host "Do you want to use MacOS-like prompt? (y/n)"
 if ($promptSet -eq 'y') {
     Write-Host "Using MacOS-like prompt." -ForegroundColor Yellow
 }
-else 
+else
 { 
     Write-Host "Using WinMac prompt." -ForegroundColor Yellow
 }
@@ -71,7 +82,6 @@ Write-Information "Winget installation completed."
 Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
 winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
 Write-Host "Installing PowerToys completed." -ForegroundColor Green
-
 Start-Sleep 5
 Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force | Out-Null
 
@@ -93,8 +103,8 @@ if ($promptSet -eq 'y') { $prompt = Get-Content "$pwd\config\terminal\macos-prom
 else { $promptSet = Get-Content "$pwd\config\terminal\winmac-prompt.ps1" -Raw }
 $functions = Get-Content "$pwd\config\terminal\functions.ps1" -Raw
 
-if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell" | Out-Null }
-if (-not (Test-Path "$profilePath\WindowsPowerShell")) { New-Item -ItemType Directory -Path "$profilePath\WindowsPowerShell" | Out-Null }
+if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell" | Out-Null } else { Remove-Item -Path "$profilePath\PowerShell\$profileFile" -Force | Out-Null }
+if (-not (Test-Path "$profilePath\WindowsPowerShell")) { New-Item -ItemType Directory -Path "$profilePath\WindowsPowerShell" | Out-Null } else { Remove-Item -Path "$profilePath\WindowsPowerShell\$profileFile" -Force | Out-Null }
 if (-not (Test-Path "$profilePath\PowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\PowerShell\$profileFile" | Out-Null }
 if (-not (Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\WindowsPowerShell\$profileFile" | Out-Null }
 
