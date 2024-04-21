@@ -385,14 +385,13 @@ $VK_RETURN = 0x0D # Enter key
 [Keyboard]::keybd_event($VK_V, 0, 0, 0) # V key press
 [Keyboard]::keybd_event($VK_V, 0, $KEYEVENTF_KEYUP, 0) # V key release
 [Keyboard]::keybd_event($VK_MENU, 0, $KEYEVENTF_KEYUP, 0) # Alt key release
-Start-Sleep -Milliseconds 100
+Start-Sleep -Seconds 2
 [Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
 [Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
-Start-Sleep -Milliseconds 100
+Start-Sleep -Seconds 2
 [Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
 [Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
-Start-Sleep -Milliseconds 100
-Start-Sleep -Seconds 1
+Start-Sleep -Seconds 2
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -TypeDefinition @"
 using System;
@@ -421,13 +420,13 @@ public class MouseInput
 $screen = [System.Windows.Forms.SystemInformation]::VirtualScreen
 $w = $screen.width/4
 [Windows.Forms.Cursor]::Position = "$($w),$($screen.Height)"
-Start-Sleep -Seconds 1
+Start-Sleep -Seconds 2
 [MouseInput]::HoldLeftMouseButton()
-Start-Sleep -Seconds 1
+Start-Sleep -Seconds 2
 [Windows.Forms.Cursor]::Position = "$($w),1"
-Start-Sleep -Seconds 1
+Start-Sleep -Seconds 2
 [MouseInput]::ReleaseLeftMouseButton()
-Start-Sleep -Seconds 1
+Start-Sleep -Seconds 2
 $screen = [System.Windows.Forms.SystemInformation]::VirtualScreen
 $centerX = $screen.Width / 2
 $centerY = $screen.Height / 2
