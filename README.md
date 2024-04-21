@@ -22,7 +22,7 @@
 
 PowerToys brings a macOS Spotlight-like functionality to Windows with PowerToys Run. It allows users to quickly search for files, applications, and settings on your system. 
 
-By pressing a customizable hotkey combination (alt+space by default), a search bar appears, enabling users to type their query and quickly launch or access the desired item without navigating through menus or directories. Besides PowerToys Run, this utility allows for many OS customizations, like *FancyZones, Always On Top, Peek, File Explorer add-ons, Color Picker or Find My Mouse*, improving your workflow in many different ways.
+By pressing a customizable hotkey combination, a search bar appears, enabling users to type their query and quickly launch or access the desired item without navigating through menus or directories. Besides PowerToys Run, this utility allows for many OS customizations, like *FancyZones, Always On Top, Peek, File Explorer add-ons, Color Picker or Find My Mouse*, improving your workflow in many different ways.
 
 - **Revamped and decluttered Start Menu**
 
