@@ -1,14 +1,13 @@
 Clear-Host
 Write-Host @"
--------------------------- WinMac Deployment --------------------------
+-----------------------------------------------------------------------
 
-                    Welcome to WinMac Deployment!
+Welcome to WinMac Deployment!
 
-                        Author: Adam Kamienski
-                            GitHub: Asteski
-                            Version: 0.2.2
+Author: Asteski
+Version: 0.2.2
 
-                      This is Work in Progress.
+This is Work in Progress. You're using this script at your own risk.
 
 -----------------------------------------------------------------------
 
@@ -16,7 +15,7 @@ Write-Host @"
 Write-Host @"
 Please do not do anything while the script is running, as it may impact the installation process.
 
-Currently no update/uninstall functionality is implemented, so please make sure to run the script on a clean system or make a bakcup.
+Currently no update/uninstall functionality is implemented, so please make sure to run the script on a clean system or make a backup.
 
 PowerShell profile files will be removed and replaced with the new ones. Please make sure to backup your current profiles if needed.
 
