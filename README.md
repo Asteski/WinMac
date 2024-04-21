@@ -80,6 +80,7 @@ List of utilities and their creators, used with WinMac deployment script:
 - [Open-Shell](https://open-shell.github.io/Open-Shell-Menu/) by Ivo Beltchev
 - [Everything](https://www.voidtools.com/) by David Carpenter
 - [PSTree](https://github.com/santisq/PSTree) by santisq
+- [ntop](https://github.com/gsass1/NTop) by gsass1
 
 Please support creators however you can for their wonderful work!
 
