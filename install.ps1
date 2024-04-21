@@ -80,7 +80,7 @@ $winget = @(
     "Voidtools.Everything",
     "lin-ycv.EverythingPowerToys"
 )
-foreach ($app in $winget) {winget install --id $app --source winget --silent}
+foreach ($app in $winget) {winget install --id $app --source winget --silent | Out-Null}
 Write-Host "Installing Everything completed." -ForegroundColor Green
 
 ## PowerShell Profile
@@ -113,7 +113,7 @@ $winget = @(
     "Vim.Vim",
     "gsass1.NTop"
 )
-foreach ($app in $winget) {winget install --id $app --source winget --silent}
+foreach ($app in $winget) {winget install --id $app --source winget --silent | Out-Null}
 $vimParentPath = Join-Path $env:PROGRAMFILES Vim
 $latestSubfolder = Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -Property CreationTime -Descending | Select-Object -First 1
 $vimChildPath = $latestSubfolder.FullName
@@ -304,7 +304,7 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer
 
 Write-Host "Configuring Open-Shell..." -ForegroundColor Yellow
 
-winget install --id "Open-Shell.Open-Shell-Menu" --source winget --silent
+winget install --id "Open-Shell.Open-Shell-Menu" --source winget --silent | Out-Null
 Start-Sleep 5
 Stop-Process -Name startmenu -Force | Out-Null
 taskkill /IM explorer.exe /F | Out-Null
