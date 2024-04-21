@@ -370,7 +370,8 @@ Add-Type -TypeDefinition @"
         public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, int dwExtraInfo);
     }
 "@
-
+Start-Process Explorer
+Start-Sleep 5
 $explorerHandle = [Keyboard]::FindWindow("CabinetWClass", $null)
 [Keyboard]::SetForegroundWindow($explorerHandle) | Out-Null
 $KEYEVENTF_KEYUP = 0x2
