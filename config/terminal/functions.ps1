@@ -21,6 +21,7 @@ set-alias -name htop -value ntop
 set-alias -name apt -value winget
 set-alias -name brew -value winget
 set-alias -name info -value computerinfo
+set-alias -name env -value printenv
 
 # Functions
 function psversion { $PSVersionTable }
@@ -68,7 +69,7 @@ function rmenv {
     if (-not (Test-Path "Env:\$name")) {
         Write-Host "Environment variable '$name' does not exist." -ForegroundColor Red
     } else {
-        Remove-Item Env:\$name
+        [Environment]::SetEnvironmentVariable($name, $null, "User")
     }
 }
 
