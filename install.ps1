@@ -453,6 +453,10 @@ $screen = [System.Windows.Forms.SystemInformation]::VirtualScreen
 $centerX = $screen.Width / 2
 $centerY = $screen.Height / 2
 [Windows.Forms.Cursor]::Position = "$centerX,$centerY"
+Start-Sleep -Milliseconds 100
+[MouseInput]::HoldLeftMouseButton()
+Start-Sleep -Milliseconds 100
+[MouseInput]::ReleaseLeftMouseButton()
 Start-Sleep -Seconds 2
 
 Write-Host "Configuring Shell completed." -ForegroundColor Green
