@@ -326,7 +326,7 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer
 
 Write-Host "Configuring Open-Shell..." -ForegroundColor Yellow
 
-winget install --id "Open-Shell.Open-Shell-Menu" --source winget --silent | Out-Null
+winget install --id "Open-Shell.Open-Shell-Menu" --source winget --custom 'ADDLOCAL=StartMenu' --silent | Out-Null
 Start-Sleep 5
 Stop-Process -Name startmenu -Force | Out-Null
 taskkill /IM explorer.exe /F | Out-Null
@@ -375,44 +375,45 @@ Start-Process $shellExePath
 
 Write-Host "Configuring Open-Shell completed." -ForegroundColor Green
 
-Start-Process Explorer
+# Start-Process Explorer
+# Add-Type -TypeDefinition @"
+#     using System;
+#     using System.Runtime.InteropServices;
+
+#     public class Keyboard {
+#         [DllImport("user32.dll", SetLastError = true)]
+#         public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+
+#         [DllImport("user32.dll")]
+#         public static extern bool SetForegroundWindow(IntPtr hWnd);
+
+#         [DllImport("user32.dll", SetLastError = true)]
+#         public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, int dwExtraInfo);
+#     }
+# "@
+# Start-Process Explorer
+# Start-Sleep 5
+# $explorerHandle = [Keyboard]::FindWindow("CabinetWClass", $null)
+# [Keyboard]::SetForegroundWindow($explorerHandle) | Out-Null
+# $KEYEVENTF_KEYUP = 0x2
+# $VK_MENU = 0x12 # Alt key
+# $VK_V = 0x56 # V key
+# $VK_RETURN = 0x0D # Enter key
+# [Keyboard]::keybd_event($VK_MENU, 0, 0, 0) # Alt key press
+# [Keyboard]::keybd_event($VK_V, 0, 0, 0) # V key press
+# [Keyboard]::keybd_event($VK_V, 0, $KEYEVENTF_KEYUP, 0) # V key release
+# [Keyboard]::keybd_event($VK_MENU, 0, $KEYEVENTF_KEYUP, 0) # Alt key release
+# Start-Sleep -Seconds 2
+# [Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
+# [Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
+# Start-Sleep -Seconds 2
+# [Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
+# [Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
+# Start-Sleep -Seconds 2
+# Stop-Process -Name Explorer
+# Start-Sleep -Seconds 2
+
 Start-Sleep 5
-Add-Type -TypeDefinition @"
-    using System;
-    using System.Runtime.InteropServices;
-
-    public class Keyboard {
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-
-        [DllImport("user32.dll")]
-        public static extern bool SetForegroundWindow(IntPtr hWnd);
-
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, int dwExtraInfo);
-    }
-"@
-Start-Process Explorer
-Start-Sleep 5
-$explorerHandle = [Keyboard]::FindWindow("CabinetWClass", $null)
-[Keyboard]::SetForegroundWindow($explorerHandle) | Out-Null
-$KEYEVENTF_KEYUP = 0x2
-$VK_MENU = 0x12 # Alt key
-$VK_V = 0x56 # V key
-$VK_RETURN = 0x0D # Enter key
-[Keyboard]::keybd_event($VK_MENU, 0, 0, 0) # Alt key press
-[Keyboard]::keybd_event($VK_V, 0, 0, 0) # V key press
-[Keyboard]::keybd_event($VK_V, 0, $KEYEVENTF_KEYUP, 0) # V key release
-[Keyboard]::keybd_event($VK_MENU, 0, $KEYEVENTF_KEYUP, 0) # Alt key release
-Start-Sleep -Seconds 2
-[Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
-[Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
-Start-Sleep -Seconds 2
-[Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
-[Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
-Start-Sleep -Seconds 2
-Stop-Process -Name Explorer
-Start-Sleep -Seconds 2
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -TypeDefinition @"
 using System;
