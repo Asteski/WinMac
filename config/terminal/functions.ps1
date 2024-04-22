@@ -55,11 +55,7 @@ function setenv {
         [Parameter(Mandatory = $true, Position=0)] [string] $name,
         [Parameter(Mandatory = $true, Position=1)] [string] $value
     )
-    if (-not (Test-Path "Env:\$name")) {
-        Write-Host "Environment variable '$name' does not exist." -ForegroundColor Red
-    } else {
-        [Environment]::SetEnvironmentVariable($name, $value, "User")
-    }
+    [Environment]::SetEnvironmentVariable($name, $value, "User")
 }
 
 function rmenv { 
