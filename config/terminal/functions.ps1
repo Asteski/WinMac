@@ -22,6 +22,18 @@ set-alias -name apt -value winget
 set-alias -name brew -value winget
 set-alias -name info -value computerinfo
 set-alias -name env -value printenv
+set-alias -name svc -value Get-Service
+set-alias -name fsvc -value Find-Service
+set-alias -name setsvc -value Set-Service
+set-alias -name rmsvc -value Remove-Service
+set-alias -name startsvc -value Start-Service
+set-alias -name stopsvc -value Stop-Service
+set-alias -name proc -value Get-Process
+set-alias -name fproc -value Find-Process
+set-alias -name setproc -value Set-Process
+set-alias -name rmproc -value Remove-Process
+set-alias -name startproc -value Start-Process
+set-alias -name stopproc -value Stop-Process
 
 # Functions
 function psversion { $PSVersionTable }
@@ -33,6 +45,36 @@ function wr { $appname = $args; winget uninstall "$appname" }
 function wu { $appname = $args; winget upgrade "$appname" } 
 function wi { $appname = $args; winget install "$appname" --accept-package-agreements --accept-source-agreements }
 
+function Find-Service {
+    param (
+        [Parameter(Mandatory = $true, Position = 0)]
+        [string]$SearchString
+    )
+
+    $services = Get-Service -ErrorAction SilentlyContinue | Where-Object { $_.DisplayName -like "*$SearchString*" }
+
+    if ($services.Count -eq 0) {
+        Write-Host "No services found matching '$SearchString'."
+    } else {
+        Write-Host "Services matching '$SearchString':"
+        $services
+    }
+}
+function Find-Process {
+    param (
+        [Parameter(Mandatory = $true, Position = 0)]
+        [string]$SearchString
+    )
+
+    $processes = Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.ProcessName -like "*$SearchString*" }
+
+    if ($processes.Count -eq 0) {
+        Write-Host "No processes found matching '$SearchString'."
+    } else {
+        Write-Host "Processes matching '$SearchString':"
+        $processes
+    }
+}
 
 function printenv { 
     if ($args.Count -eq 0) { 
@@ -67,6 +109,25 @@ function rmenv {
     } else {
         [Environment]::SetEnvironmentVariable($name, $null, "User")
     }
+}
+
+function Get-RandomString
+{
+    #define parameters
+    param([Parameter(ValueFromPipeline=$false)][ValidateRange(1,64)][Alias('l','length')][int]$PasswordLength = 10)
+ 
+    #ASCII Character set for Password
+    $CharacterSet = @{
+            Lowercase   = (97..122) | Get-Random -Count 20 | ForEach-Object {[char]$_}
+            Uppercase   = (65..90)  | Get-Random -Count 20 | ForEach-Object {[char]$_}
+            Numeric     = (48..57)  | Get-Random -Count 20 | ForEach-Object {[char]$_}
+            SpecialChar = (33..47)+(58..64)+(91..96)+(123..126) | Get-Random -Count 10 | ForEach-Object {[char]$_}
+    }
+ 
+    #Frame Random Password from given character set
+    $StringSet = $CharacterSet.Uppercase + $CharacterSet.Lowercase + $CharacterSet.Numeric + $CharacterSet.SpecialChar
+ 
+    -join(Get-Random -Count $PasswordLength -InputObject $StringSet)
 }
 
 function battery { 
