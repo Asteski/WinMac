@@ -115,8 +115,8 @@ Write-Host "Configuring PowerShell Profile..." -ForegroundColor Yellow
 
 $profilePath = $PROFILE | Split-Path | Split-Path
 $profileFile = $PROFILE | Split-Path -Leaf
-if ($promptSet -eq 'y') { $promptSet = Get-Content "$pwd\config\terminal\winmac-prompt.ps1" -Raw }
-else { $promptSet = Get-Content "$pwd\config\terminal\macos-prompt.ps1" -Raw }
+if ($promptSet -eq 'y') { $prompt = Get-Content "$pwd\config\terminal\winmac-prompt.ps1" -Raw }
+else { $prompt = Get-Content "$pwd\config\terminal\macos-prompt.ps1" -Raw }
 $functions = Get-Content "$pwd\config\terminal\functions.ps1" -Raw
 
 if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell" | Out-Null } else { Remove-Item -Path "$profilePath\PowerShell\$profileFile" -Force | Out-Null }
