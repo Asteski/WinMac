@@ -380,7 +380,7 @@ Start-Process Explorer
 Start-Process $shellExePath
 
 Write-Host "Configuring Open-Shell completed." -ForegroundColor Green
-# Start-Sleep 5
+Start-Sleep 5
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -TypeDefinition @"
 using System;
