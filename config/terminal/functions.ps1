@@ -21,16 +21,53 @@ set-alias -name htop -value ntop
 set-alias -name apt -value winget
 set-alias -name brew -value winget
 set-alias -name info -value computerinfo
+set-alias -name env -value printenv
 
 # Functions
 function psversion { $PSVersionTable }
 function ll { Get-ChildItem -Force }
 function la { Get-ChildItem -Force -Attributes !D }
 function wl { winget list }
-function ws { winget search $args }
-function wi { winget install $args }
-function wr { winget uninstall $args }
-function wu { winget upgrade $args }
+function ws { $appname = $args; winget search "$appname" }
+function wr { $appname = $args; winget uninstall "$appname" } 
+function wu { $appname = $args; winget upgrade "$appname" } 
+function wi { $appname = $args; winget install "$appname" --accept-package-agreements --accept-source-agreements }
+
+
+function printenv { 
+    if ($args.Count -eq 0) { 
+        Get-ChildItem Env: 
+    }
+    else { 
+        $args | ForEach-Object { 
+            $envVar = Get-ChildItem Env:$_ -ErrorAction SilentlyContinue
+            if ($envVar) {
+                $envVar
+            } else {
+                Write-Host "Environment variable '$_' does not exist." -ForegroundColor Red
+            }
+        }
+    }
+}
+
+function setenv { 
+    param(
+        [Parameter(Mandatory = $true, Position=0)] [string] $name,
+        [Parameter(Mandatory = $true, Position=1)] [string] $value
+    )
+    [Environment]::SetEnvironmentVariable($name, $value, "User")
+}
+
+function rmenv { 
+    param(
+        [Parameter(Mandatory = $true, Position=0)] [string] $name
+    )
+    if (-not (Test-Path "Env:\$name")) {
+        Write-Host "Environment variable '$name' does not exist." -ForegroundColor Red
+    } else {
+        [Environment]::SetEnvironmentVariable($name, $null, "User")
+    }
+}
 
 function battery { 
     $info = get-wmiobject Win32_Battery |`
@@ -72,7 +109,7 @@ Computer Information
 
 function hist {
     $find = $args;
-    Get-Content (Get-PSReadlineOption).HistorySavePath | Where-Object {$_ -like "*$find*"} | Get-Unique | more 
+    Get-Content (Get-PSReadlineOption).HistorySavePath | Where-Object {$_ -like "*$find*"} | Select-Object -Last 20
 }
 
 function touch {

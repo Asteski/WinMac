@@ -5,7 +5,7 @@ Write-Host @"
 Welcome to WinMac Deployment!
 
 Author: Asteski
-Version: 0.2.2
+Version: 0.2.3
 
 This is Work in Progress. You're using this script at your own risk.
 
@@ -75,6 +75,12 @@ for ($a=3; $a -ge 0; $a--) {
     Write-Host -NoNewLine "`b$a" -ForegroundColor Green
     Start-Sleep 1
 }
+
+Write-Host @"
+
+-----------------------------------------------------------------------
+
+"@  -ForegroundColor Cyan
 
 ## Winget
 Write-Host
@@ -326,7 +332,7 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer
 
 Write-Host "Configuring Open-Shell..." -ForegroundColor Yellow
 
-winget install --id "Open-Shell.Open-Shell-Menu" --source winget --silent | Out-Null
+winget install --id "Open-Shell.Open-Shell-Menu" --source winget --custom 'ADDLOCAL=StartMenu' --silent | Out-Null
 Start-Sleep 5
 Stop-Process -Name startmenu -Force | Out-Null
 taskkill /IM explorer.exe /F | Out-Null
@@ -374,44 +380,51 @@ Start-Process Explorer
 Start-Process $shellExePath
 
 Write-Host "Configuring Open-Shell completed." -ForegroundColor Green
-
-Start-Process Explorer
 Start-Sleep 5
+Add-Type -AssemblyName System.Windows.Forms
 Add-Type -TypeDefinition @"
-    using System;
-    using System.Runtime.InteropServices;
+using System;
+using System.Runtime.InteropServices;
 
-    public class Keyboard {
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+public class MouseInput
+{
+    [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+    public static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint cButtons, uint dwExtraInfo);
 
-        [DllImport("user32.dll")]
-        public static extern bool SetForegroundWindow(IntPtr hWnd);
+    public const uint MOUSEEVENTF_LEFTDOWN = 0x02;
+    public const uint MOUSEEVENTF_LEFTUP = 0x04;
 
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, int dwExtraInfo);
+    public static void HoldLeftMouseButton()
+    {
+        mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
     }
+
+    public static void ReleaseLeftMouseButton()
+    {
+        mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+    }
+}
 "@
-Start-Process Explorer
-Start-Sleep 5
-$explorerHandle = [Keyboard]::FindWindow("CabinetWClass", $null)
-[Keyboard]::SetForegroundWindow($explorerHandle) | Out-Null
-$KEYEVENTF_KEYUP = 0x2
-$VK_MENU = 0x12 # Alt key
-$VK_V = 0x56 # V key
-$VK_RETURN = 0x0D # Enter key
-[Keyboard]::keybd_event($VK_MENU, 0, 0, 0) # Alt key press
-[Keyboard]::keybd_event($VK_V, 0, 0, 0) # V key press
-[Keyboard]::keybd_event($VK_V, 0, $KEYEVENTF_KEYUP, 0) # V key release
-[Keyboard]::keybd_event($VK_MENU, 0, $KEYEVENTF_KEYUP, 0) # Alt key release
+
+$screen = [System.Windows.Forms.SystemInformation]::VirtualScreen
+$w = $screen.width/4
+[Windows.Forms.Cursor]::Position = "$($w),$($screen.Height)"
 Start-Sleep -Seconds 2
-[Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
-[Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
+[MouseInput]::HoldLeftMouseButton()
 Start-Sleep -Seconds 2
-[Keyboard]::keybd_event($VK_RETURN, 0, 0, 0) # Enter key press
-[Keyboard]::keybd_event($VK_RETURN, 0, $KEYEVENTF_KEYUP, 0) # Enter key release
+[Windows.Forms.Cursor]::Position = "$($w),1"
 Start-Sleep -Seconds 2
-Stop-Process -Name Explorer
+[MouseInput]::ReleaseLeftMouseButton()
+Start-Sleep -Seconds 2
+$screen = [System.Windows.Forms.SystemInformation]::VirtualScreen
+$centerX = $screen.Width / 2
+$centerY = $screen.Height / 2
+[Windows.Forms.Cursor]::Position = "$centerX,$centerY"
+Start-Sleep -Milliseconds 100
+[MouseInput]::HoldLeftMouseButton()
+Start-Sleep -Milliseconds 100
+[MouseInput]::ReleaseLeftMouseButton()
+Start-Sleep -Seconds 2
 
 Write-Host "Configuring Shell completed." -ForegroundColor Green
 
