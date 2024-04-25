@@ -5,7 +5,7 @@ Write-Host @"
 Welcome to WinMac Deployment!
 
 Author: Asteski
-Version: 0.2.3
+Version: 0.2.4
 
 This is Work in Progress. You're using this script at your own risk.
 
@@ -42,23 +42,23 @@ Start-Transcript -Path ".\temp\WinMac_install_log_$date.txt" -Append | Out-Null
 
 Write-Host @"
 
-You can choose now between MacOS-like prompt and WinMac prompt.
-
-MacOS prompt:
-userName@computerName ~ % 
+You can now choose between WinMac prompt or MacOS-like prompt.
 
 WinMac prompt: 
 12:35:06 userName @ ~ > 
 
+MacOS prompt:
+userName@computerName ~ % 
+
 "@
-$promptSet = Read-Host "Do you want to use MacOS-like prompt? (y/n)"
+$promptSet = Read-Host "Do you want to use WinMac prompt? (y/n)"
 if ($promptSet -eq 'y') {
-    Write-Host "Using MacOS-like prompt." -ForegroundColor Yellow
+    Write-Host "Using WinMac prompt." -ForegroundColor Yellow
     Start-Sleep 2
 }
 else
 { 
-    Write-Host "Using WinMac prompt." -ForegroundColor Yellow
+    Write-Host "Using MacOS-like prompt." -ForegroundColor Yellow
     Start-Sleep 2
 }
 
@@ -76,11 +76,9 @@ for ($a=3; $a -ge 0; $a--) {
     Start-Sleep 1
 }
 
-Write-Host @"
-
------------------------------------------------------------------------
-
-"@  -ForegroundColor Cyan
+Write-Host
+Write-Host "-----------------------------------------------------------------------" -ForegroundColor Cyan
+Write-Host
 
 ## Winget
 Write-Host
@@ -117,8 +115,8 @@ Write-Host "Configuring PowerShell Profile..." -ForegroundColor Yellow
 
 $profilePath = $PROFILE | Split-Path | Split-Path
 $profileFile = $PROFILE | Split-Path -Leaf
-if ($promptSet -eq 'y') { $prompt = Get-Content "$pwd\config\terminal\macos-prompt.ps1" -Raw }
-else { $promptSet = Get-Content "$pwd\config\terminal\winmac-prompt.ps1" -Raw }
+if ($promptSet -eq 'y') { $prompt = Get-Content "$pwd\config\terminal\winmac-prompt.ps1" -Raw }
+else { $promptSet = Get-Content "$pwd\config\terminal\macos-prompt.ps1" -Raw }
 $functions = Get-Content "$pwd\config\terminal\functions.ps1" -Raw
 
 if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell" | Out-Null } else { Remove-Item -Path "$profilePath\PowerShell\$profileFile" -Force | Out-Null }
