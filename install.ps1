@@ -227,7 +227,16 @@ Set-ItemProperty -Path $exRegPath -Name "ShowRecent" -Value 0
 Set-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\Windows\Explorer" -Name "TaskbarNoMultimon" -Value 1
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer" -Name "TaskbarNoMultimon" -Value 1
 
-# Themes
+# TopNotify
+
+Invoke-WebRequest "https://github.com/SamsidParty/TopNotify/releases/download/2.2.0/TopNotify.zip" -OutFile TopNotify.zip
+$exePath = "$env:PROGRAMFILES\TopNotify"
+Expand-Archive TopNotify.zip -DestinationPath $exePath -Force
+Start-Process -FilePath $exePath\TopNotify.exe
+Remove-Item -Path TopNotify.zip -Force
+
+# Cursor
+
 $curSourceFolder = $pwd.Path + '\config\cursor'
 $curDestFolder = "C:\Windows\Cursors"
 Copy-Item -Path $curSourceFolder\* -Destination $curDestFolder -Recurse -Force
@@ -259,13 +268,13 @@ $CSharpSig = @'
 
 public static extern bool SystemParametersInfo(
 
-                 uint uiAction,
+uint uiAction,
 
-                 uint uiParam,
+uint uiParam,
 
-                 uint pvParam,
+uint pvParam,
 
-                 uint fWinIni);
+uint fWinIni);
 
 '@
 $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
