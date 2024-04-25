@@ -76,6 +76,12 @@ for ($a=3; $a -ge 0; $a--) {
     Start-Sleep 1
 }
 
+Write-Host @"
+
+-----------------------------------------------------------------------
+
+"@  -ForegroundColor Cyan
+
 ## Winget
 Write-Host
 Write-Host "Checking for Windows Package Manager (Winget)" -ForegroundColor Yellow
