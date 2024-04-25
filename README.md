@@ -44,7 +44,7 @@ Additionally, deployment script includes pinning User folder and Start Menu\Prog
 
 - **Revamped Terminal**
 
-WinMac provides you with debloated prompt with addition of completion functions and most commonly used commands in macOS/Linux, like *vim, grep, touch, ditto, top, whatis, killall, ll, la, tree* with additional commands like history, comuterinfo, battery, backup, ntop, rcopy, brew among ton of other functions! More details on Wiki page [Commands Cheat Sheet](https://github.com/Asteski/WinMac/wiki/Commands-Cheat-Sheet).
+WinMac provides you with debloated prompt with addition of completion functions and most commonly used commands in macOS/Linux, like *vim, grep, touch, ditto, top, whatis, killall, ll, la, tree* with additional commands like *history, comuterinfo, battery, backup, ntop, rcopy, brew* among ton of other functions! More details on Wiki page [Commands Cheat Sheet](https://github.com/Asteski/WinMac/wiki/Commands-Cheat-Sheet).
 
 ## Benefits
 
@@ -60,13 +60,13 @@ Please be informed that this is a beta version - you're deploying it at your own
 
 ## Recommendations
 
-For the most reliable deployment process, I recommend to install latest version of [Powershell Core](https://github.com/PowerShell/PowerShell) and run deployment script from the script directory and run it as an Administrator. Everything else will be deployed automatically for you (including Winget if not already installed).
+For the most reliable deployment process, I recommend to install latest version of [Powershell Core](https://github.com/PowerShell/PowerShell) and run *install.ps1* script from the script directory and run it as an Administrator. Everything else will be deployed automatically for you (including Winget if not already installed).
 
 ## Planned features
 
 - Dock - Give a choice between Dock or Taskbar experience before deployment,
 - Force Taskbar to go automatically on top upon deployment,
-- Win+Q to run Shutdown prompt.
+- WinMac theme.
 
 ## Credit
 
