@@ -34,6 +34,7 @@ set-alias -name setproc -value Set-Process
 set-alias -name rmproc -value Remove-Process
 set-alias -name startproc -value Start-Process
 set-alias -name stopproc -value Stop-Process
+set-alias -name less -value more
 
 # Functions
 function psversion { $PSVersionTable }
@@ -44,6 +45,31 @@ function ws { $appname = $args; winget search "$appname" }
 function wr { $appname = $args; winget uninstall "$appname" } 
 function wu { $appname = $args; winget upgrade "$appname" } 
 function wi { $appname = $args; winget install "$appname" --accept-package-agreements --accept-source-agreements }
+
+function head {
+    $file = $args[0]
+    $lines = $args[1]
+    if ($null -eq $lines) { $lines = 10 }
+    more $file | Select-Object -first $lines
+}
+
+function tail {
+    $file = $args[0]
+    $lines = $args[1]
+    if ($null -eq $lines) { $lines = 10 }
+    more $file | Select-Object -last $lines
+}
+
+function unzip {
+    [string]$file = $args
+    Expand-Archive $file
+}
+
+function wget {
+    $url = $args
+    $outFile = $url.Split("/")[-1]
+    Invoke-WebRequest "$url" -OutFile $outFile
+}
 
 function Find-Service {
     param (
