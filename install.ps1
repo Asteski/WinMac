@@ -233,6 +233,10 @@ Expand-Archive TopNotify.zip -DestinationPath $exePath -Force
 Start-Process -FilePath $exePath\TopNotify.exe
 Remove-Item -Path TopNotify.zip -Force
 
+# Nilesoft
+
+winget install nilesoft.shell --silent
+
 # Cursor
 
 $curSourceFolder = $pwd.Path + '\config\cursor'
