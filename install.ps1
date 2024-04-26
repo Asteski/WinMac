@@ -42,7 +42,7 @@ Start-Transcript -Path ".\temp\WinMac_install_log_$date.txt" -Append | Out-Null
 
 Write-Host @"
 
-You can now choose between WinMac prompt or MacOS-like prompt.
+You can choose between WinMac prompt or MacOS-like prompt.
 
 WinMac prompt: 
 12:35:06 userName @ ~ > 
@@ -54,12 +54,28 @@ userName@computerName ~ %
 $promptSet = Read-Host "Do you want to use WinMac prompt? (y/n)"
 if ($promptSet -eq 'y') {
     Write-Host "Using WinMac prompt." -ForegroundColor Yellow
-    Start-Sleep 2
+    Start-Sleep 1W
 }
 else
 { 
     Write-Host "Using MacOS-like prompt." -ForegroundColor Yellow
-    Start-Sleep 2
+    Start-Sleep 1
+}
+
+Write-Host @"
+
+You can choose between rounded or sharp shell corners.
+
+"@
+$styleSet = Read-Host "Do you want to use rounded shell corners? (y/n)"
+if ($styleSet -eq 'y') {
+    Write-Host "Using rounded shell corners." -ForegroundColor Yellow
+    Start-Sleep 1
+}
+else
+{ W
+    Write-Host "Using sharp shell corners." -ForegroundColor Yellow
+    Start-Sleep 1
 }
 
 Start-Sleep 1
@@ -202,6 +218,7 @@ Set-ItemProperty -Path $sabRegPath -Name "TaskbarTranslucentEffect" -Value 0
 Set-ItemProperty -Path $sabRegPath -Name "TaskbarLargerIcons" -Value 0
 Set-ItemProperty -Path $sabRegPath -Name "TaskbarSpacierIcons" -Value (-1)
 Set-ItemProperty -Path $sabRegPath -Name "TaskbarControlCenter" -Value 1
+if ( $styleSet -ne 'y' ) { Set-ItemProperty -Path $sabRegPath -Name "TaskbarStyle" -Value "Plain8.msstyles" } 
 Set-ItemProperty -Path $sabRegPath -Name "UpdateInfo" -Value ([byte[]](60, 63, 120, 109, 108, 32, 118, 101, 114, 115, 105, 111, 110, 61, 34, 49, 46, 48, 34, 63, 62, 10, 60, 85, 112, 100, 97, 116, 101, 32, 78, 97, 109, 101, 61, 34, 83, 116, 97, 114, 116, 65, 108, 108, 66, 97, 99, 107, 32, 51, 46, 55, 46, 55, 34, 32, 68, 101, 115, 99, 114, 105, 112, 116, 105, 111, 110, 61, 34, 34, 32, 68, 111, 119, 110, 108, 111, 97, 100, 85, 82, 76, 61, 34, 104, 116, 116, 112, 115, 58, 47, 47, 115, 116, 97, 114, 116, 105, 115, 98, 97, 99, 107, 46, 115, 102, 111, 51, 46, 99, 100, 110, 46, 100, 105, 103, 105, 116, 97, 108, 111, 99, 101, 97, 110, 115, 112, 97, 99, 101, 115, 46, 99, 111, 109, 47, 83, 116, 97, 114, 116, 65, 108, 108, 66, 97, 99, 107, 95, 51, 46, 55, 46, 55, 95, 115, 101, 116, 117, 112, 46, 101, 120, 101, 34, 32, 76, 101, 97, 114, 110, 77, 111, 114, 101, 85, 82, 76, 61, 34, 104, 116, 116, 112, 115, 58, 47, 47, 119, 119, 119, 46, 115, 116, 97, 114, 116, 97, 108, 108, 98, 97, 99, 107, 46, 99, 111, 109, 47, 34, 47, 62, 10))
 Set-ItemProperty -Path $sabRegPath -Name "UpdateInfoHash" -Value 805441044
 Set-ItemProperty -Path $sabRegPath -Name "SysTrayStyle" -Value 1
@@ -210,7 +227,8 @@ Set-ItemProperty -Path $sabRegPath -Name "SysTraySpacierIcons" -Value 1
 Set-ItemProperty -Path $sabRegPath -Name "SysTrayClockFormat" -Value 3
 Set-ItemProperty -Path $sabRegPath -Name "SysTrayInputSwitch" -Value 0
 Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "(default)" -Value 1
-Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0
+if ($styleSet -ne 'y' ) { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0 }
+else { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 1 }
 Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
 Stop-Process -Name Explorer -Force
 
