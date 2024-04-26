@@ -64,7 +64,7 @@ else
 
 Write-Host @"
 
-You can choose between rounded or sharp shell corners.
+You can choose between rounded or squared shell corners.
 
 "@
 $styleSet = Read-Host "Do you want to use rounded shell corners? (y/n)"
@@ -74,7 +74,7 @@ if ($styleSet -eq 'y') {
 }
 else
 { W
-    Write-Host "Using sharp shell corners." -ForegroundColor Yellow
+    Write-Host "Using squared shell corners." -ForegroundColor Yellow
     Start-Sleep 1
 }
 
