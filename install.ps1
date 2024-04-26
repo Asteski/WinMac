@@ -152,7 +152,7 @@ Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $function
 
 Write-Host "Configuring PowerShell Profile completed." -ForegroundColor Green
 
-## StartAllBack
+## ?
 
 Write-Host "Configuring Shell..." -ForegroundColor Yellow
 
@@ -232,10 +232,6 @@ $exePath = "$env:PROGRAMFILES\TopNotify"
 Expand-Archive TopNotify.zip -DestinationPath $exePath -Force
 Start-Process -FilePath $exePath\TopNotify.exe
 Remove-Item -Path TopNotify.zip -Force
-
-# Nilesoft
-
-winget install nilesoft.shell --silent
 
 # Cursor
 
