@@ -1,6 +1,4 @@
 
-Set-ExecutionPolicy -ExecutionPolicy SignedOnly -Scope Process -Force | Out-Null
-
 # Completion settings
 Set-PSReadlineKeyHandler -Chord Tab -Function MenuComplete
 Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
@@ -37,7 +35,6 @@ set-alias -name rmproc -value Remove-Process
 set-alias -name startproc -value Start-Process
 set-alias -name stopproc -value Stop-Process
 set-alias -name less -value more
-# set-alias -name nohup -value 'Start-Job'
 
 # Functions
 function psversion { $PSVersionTable }
