@@ -24,7 +24,7 @@ reg import $regFile
 
 Start-Sleep 2
 Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe' | Out-Null
-Remove-Item "C:\Users\$env:UERNAME\Desktop\Nexus.lnk" -Force | Out-Null
+Remove-Item "C:\Users\$env:UERNAME\Desktop\Nexus.lnk" -Force -ErrorAction SilentlyContinue | Out-Null
 
 Write-Host "Configuring Nexus Dock completed." -ForegroundColor Green
 
