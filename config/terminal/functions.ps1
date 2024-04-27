@@ -37,6 +37,7 @@ set-alias -name rmproc -value Remove-Process
 set-alias -name startproc -value Start-Process
 set-alias -name stopproc -value Stop-Process
 set-alias -name less -value more
+# set-alias -name nohup -value 'Start-Job'
 
 # Functions
 function psversion { $PSVersionTable }
@@ -47,6 +48,31 @@ function ws { $appname = $args; winget search "$appname" }
 function wr { $appname = $args; winget uninstall "$appname" } 
 function wu { $appname = $args; winget upgrade "$appname" } 
 function wi { $appname = $args; winget install "$appname" --accept-package-agreements --accept-source-agreements }
+
+function nohup {
+    param(
+        [Parameter(Mandatory = $true, Position=0)] [string] $command,
+        [Alias('l')] [switch] $listAll,
+        [Alias('r')] [string] $killJob
+    )
+
+    if ($listAll) {
+        Get-Job | Select-Object -Property Id, Name, State, HasMoreData, Command
+    }
+    elseif ($killJob) {
+        $job = Get-Job -Id $killJob -ErrorAction SilentlyContinue
+        if ($job) {
+            $job | Stop-Job -Force
+            Write-Host "Job with ID $killJob has been killed." -ForegroundColor Green
+        }
+        else {
+            Write-Host "Job with ID $killJob not found." -ForegroundColor Red
+        }
+    }
+    else {
+        Start-Job -ScriptBlock { param($command) & $command } -ArgumentList $command
+    }
+}
 
 function head {
     $file = $args[0]
