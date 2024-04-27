@@ -9,11 +9,11 @@ Expand-Archive -Path $downloadPath -DestinationPath $pwd -Force
 Start-Process -FilePath ".\NexusSetup.exe" -ArgumentList "/silent"
 start-sleep 60
 Stop-Process -n Nexus
-# Remove-Item .\dock.zip -Force
+Remove-Item .\dock.zip -Force
 Remove-Item .\ReadMe.txt -Force
 Remove-Item .\NexusSetup.exe -Force
 $winStep = 'C:\Users\Public\Documents\WinStep'
-Copy-Item -Path "config\dock\themes\*" -Destination "$winStep\" -Recurse -Force
+Copy-Item -Path "config\dock\themes\*" -Destination "$winStep\Themes\" -Recurse -Force
 Copy-Item -Path "config\dock\indicators\*" -Destination "$winStep\NeXus\" -Recurse -Force
 #TODO explorer tasmgr controlpanel terminal downloads recyclebin settings
 New-Item -ItemType Directory -Path "$winStep\Icons" -Force | Out-Null
