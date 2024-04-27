@@ -452,37 +452,36 @@ Start-Sleep -Milliseconds 100
 [MouseInput]::ReleaseLeftMouseButton()
 Start-Sleep -Seconds 2
 
-Write-Host "Configuring Shell completed." -ForegroundColor Green
+# Write-Host "Configuring Shell completed." -ForegroundColor Green
 
-Write-Host "Configuring Nexus Dock..." -ForegroundColor Yellow
 
-$downloadUrl = "https://www.winstep.net/nexus.zip"
-$downloadPath = "dock.zip"
-if (-not (Test-Path $downloadPath)) {
-    Invoke-WebRequest -Uri $downloadUrl -OutFile $downloadPath
-}
-Expand-Archive -Path $downloadPath -DestinationPath $pwd -Force
-Start-Process -FilePath ".\NexusSetup.exe" -ArgumentList "/silent" -Verb RunAsUser
-Start-Sleep 60
-Stop-Process -n Nexus
-# Remove-Item .\dock.zip -Force
-Remove-Item .\ReadMe.txt -Force
-Remove-Item .\NexusSetup.exe -Force
-$winStep = 'C:\Users\Public\Documents\WinStep'
-Copy-Item -Path "config\dock\themes\*" -Destination "$winStep\" -Recurse -Force -Container -Exclude (Get-ChildItem -Path "$winStep\" -Directory).Name | Out-Null
-Copy-Item -Path "config\dock\indicators\*" -Destination "$winStep\NeXus\" -Recurse -Force -Container -Exclude (Get-ChildItem -Path "$winStep\NeXus\" -File).Name | Out-Null
-#TODO explorer tasmgr controlpanel terminal downloads recyclebin settings
-New-Item -ItemType Directory -Path "$winStep\Icons" -Force | Out-Null
-Copy-Item config\dock\icons "$winStep" -Recurse -Force | Out-Null
+# $downloadUrl = "https://www.winstep.net/nexus.zip"
+# $downloadPath = "dock.zip"
+# if (-not (Test-Path $downloadPath)) {
+#     Invoke-WebRequest -Uri $downloadUrl -OutFile $downloadPath
+# }
+# Expand-Archive -Path $downloadPath -DestinationPath $pwd -Force
+# Start-Process -FilePath ".\NexusSetup.exe" -ArgumentList "/silent"
+# Start-Sleep 60
+# Stop-Process -n Nexus
+# # Remove-Item .\dock.zip -Force
+# Remove-Item .\ReadMe.txt -Force
+# Remove-Item .\NexusSetup.exe -Force
+# $winStep = 'C:\Users\Public\Documents\WinStep'
+# Copy-Item -Path "config\dock\themes\*" -Destination "$winStep\" -Recurse -Force -Container -Exclude (Get-ChildItem -Path "$winStep\" -Directory).Name | Out-Null
+# Copy-Item -Path "config\dock\indicators\*" -Destination "$winStep\NeXus\" -Recurse -Force -Container -Exclude (Get-ChildItem -Path "$winStep\NeXus\" -File).Name | Out-Null
+# #TODO explorer tasmgr controlpanel terminal downloads recyclebin settings
+# New-Item -ItemType Directory -Path "$winStep\Icons" -Force | Out-Null
+# Copy-Item config\dock\icons "$winStep" -Recurse -Force | Out-Null
 
-$regFile = "$pwd\config\dock\winstep.reg"
-reg import $regFile
+# $regFile = "$pwd\config\dock\winstep.reg"
+# reg import $regFile
 
-Start-Sleep 2
-Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe' | Out-Null
-Remove-Item "C:\Users\$env:UERNAME\Desktop\Nexus.lnk" -Force | Out-Null
+# Start-Sleep 2
+# Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe' | Out-Null
+# Remove-Item "C:\Users\$env:UERNAME\Desktop\Nexus.lnk" -Force | Out-Null
 
-Write-Host "Configuring Nexus Dock completed." -ForegroundColor Green
+# Write-Host "Configuring Nexus Dock completed." -ForegroundColor Green
 
 
 Write-Host "Clean up..." -ForegroundColor Yellow
@@ -507,6 +506,10 @@ If you have any questions or suggestions, please contact me on GitHub.
 "@ -ForegroundColor Green
 
 Write-Host "-----------------------------------------------------------------------------"  -ForegroundColor Cyan
+Write-Host
+$dockConfirmation = Read-Host "Do you want to install WinGet Dock? (y/n)"
+if ($dockConfirmation -eq "y" -or $dockConfirmation -eq "Y") { Write-Host "Please run dock.ps1 script as non-admin user." -ForegroundColor Green; start-sleep 2; exit 0 }
+
 Write-Host
 $restartConfirmation = Read-Host "Restart computer now? It's recommended to fully apply all the changes. (y/n)"
 if ($restartConfirmation -eq "Y" -or $restartConfirmation -eq "y") {

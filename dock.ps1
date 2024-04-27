@@ -1,11 +1,13 @@
+Write-Host "Configuring Nexus Dock..." -ForegroundColor Yellow
+
 $downloadUrl = "https://www.winstep.net/nexus.zip"
 $downloadPath = "dock.zip"
 if (-not (Test-Path $downloadPath)) {
     Invoke-WebRequest -Uri $downloadUrl -OutFile $downloadPath
 }
 Expand-Archive -Path $downloadPath -DestinationPath $pwd -Force
-Start-Process -FilePath ".\NexusSetup.exe" -ArgumentList "/silent" -Verb RunAs
-Start-Sleep 60
+Start-Process -FilePath ".\NexusSetup.exe" -ArgumentList "/silent"
+start-sleep 5
 Stop-Process -n Nexus
 # Remove-Item .\dock.zip -Force
 Remove-Item .\ReadMe.txt -Force
@@ -19,6 +21,41 @@ Copy-Item config\dock\icons "$winStep" -Recurse -Force | Out-Null
 
 $regFile = "$pwd\config\dock\winstep.reg"
 reg import $regFile
+
+Start-Sleep 2
+Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe' | Out-Null
+Remove-Item "C:\Users\$env:UERNAME\Desktop\Nexus.lnk" -Force | Out-Null
+
+Write-Host "Configuring Nexus Dock completed." -ForegroundColor Green
+
+Write-Host
+Write-Host "------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
+Write-Host @"
+
+Enjoy and support by giving feedback and contributing to the project!
+
+For more information please visit my GitHub page: github.com/Asteski/WinMac
+
+If you have any questions or suggestions, please contact me on GitHub.
+
+"@ -ForegroundColor Green
+
+Write-Host "-----------------------------------------------------------------------------"  -ForegroundColor Cyan
+Write-Host
+$restartConfirmation = Read-Host "Restart computer now? It's recommended to fully apply all the changes. (y/n)"
+if ($restartConfirmation -eq "Y" -or $restartConfirmation -eq "y") {
+    Write-Host "Restarting computer in" -ForegroundColor Red
+    for ($a=9; $a -ge 0; $a--) {
+        Write-Host -NoNewLine "`b$a" -ForegroundColor Red
+        Start-Sleep 1
+    }
+    Restart-Computer -Force
+} else {
+    Write-Host "Computer will not be restarted." -ForegroundColor Green
+}
+
+
+
 
 # $regEntries = @"
 # "BitmapsFolder"="C:\\Users\\Public\\Documents\\WinStep\\Themes\\WinMac Light Opaque Squared\\"
@@ -47,6 +84,3 @@ reg import $regFile
 # Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Shared" -Name "BackupPath" -Value "C:\\Users\\Adams\\OneDrive\\Utilities\\Nexus Dock\\"
 # Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Shared" -Name "TaskIcon1" -Value "C:\\Users\\Adams\\OneDrive\\Utilities\\icons\\System App Icons\\Windows System\\SEO\\Explorer\\Settings.ico"
 
-Start-Sleep 2
-Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe' | Out-Null
-Remove-Item "C:\Users\$env:UERNAME\Desktop\Nexus.lnk" -Force | Out-Null
