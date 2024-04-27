@@ -35,33 +35,6 @@ if ($roundedOrSquared -eq "R" -or $roundedOrSquared -eq "r") {
 
 reg import $regFile
 
-# $dockPath = "HKCU:\Software\WinSTEP2000\NeXuS"
-# Set-ItemProperty -Path $dockPath -Name "GenThemeName" -Value $themeName
-# Set-ItemProperty -Path $dockPath -Name "NeXuSThemeName" -Value $themeName
-# Set-ItemProperty -Path $dockPath -Name "BitmapsFolder" -Value "$themePath\"
-# Set-ItemProperty -Path $dockPath -Name "GlobalBitmapFolder" -Value "$themePath\"
-# Set-ItemProperty -Path $dockPath -Name "NeXuSBitmapFolder" -Value "$themePath\"
-# Set-ItemProperty -Path $dockPath -Name "NeXuSImage3" -Value "$themePath\NxBack.png"
-# Set-ItemProperty -Path $dockPath -Name "ClockBitmapFolder" -Value "$themePath\"
-# Set-ItemProperty -Path $dockPath -Name "TrashBitmapFolder" -Value "$themePath\"
-# Set-ItemProperty -Path $dockPath -Name "POP3BitmapFolder" -Value "$themePath\"
-# Set-ItemProperty -Path $dockPath -Name "CPUBitmapFolder" -Value "$themePath\"
-# Set-ItemProperty -Path $dockPath -Name "METARBitmapFolder" -Value "$themePath\"
-# Set-ItemProperty -Path $dockPath -Name "NetBitmapFolder" -Value "$themePath\"
-# Set-ItemProperty -Path $dockPath -Name "RAMBitmapFolder" -Value "$themePath\"
-# Set-ItemProperty -Path $dockPath -Name "WANDABitmapFolder" -Value "$themePath\"
-
-# $regEntries = @"
-# "DockBitmapFolder1"=$themePath
-# "DockBack3Image1"="$themePath\NxBack.png"
-# "@
-
-# $regEntries | ForEach-Object {
-#     $key = $_.Split("=")[0].Trim()
-#     $value = $_.Split("=")[1].Trim()
-#     Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name $key -Value $value
-# }
-
 Start-Sleep 2
 Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe' | Out-Null
 Remove-Item "C:\Users\$env:USERNAME\Desktop\Nexus.lnk" -Force -ErrorAction SilentlyContinue | Out-Null
