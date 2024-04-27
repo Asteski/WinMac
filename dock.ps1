@@ -7,7 +7,7 @@ if (-not (Test-Path $downloadPath)) {
 }
 Expand-Archive -Path $downloadPath -DestinationPath $pwd -Force
 Start-Process -FilePath ".\NexusSetup.exe" -ArgumentList "/silent"
-start-sleep 5
+start-sleep 60
 Stop-Process -n Nexus
 # Remove-Item .\dock.zip -Force
 Remove-Item .\ReadMe.txt -Force
