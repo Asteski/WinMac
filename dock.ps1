@@ -1,3 +1,4 @@
+Clear-Host
 Write-Host "----------------------------- WinMac Dock Deployment -----------------------------" -ForegroundColor Cyan
 Write-Host
 Write-Host "Configuring Nexus Dock..." -ForegroundColor Yellow
