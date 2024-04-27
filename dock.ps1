@@ -48,4 +48,4 @@ reg import $regFile
 # Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Shared" -Name "TaskIcon1" -Value "C:\\Users\\Adams\\OneDrive\\Utilities\\icons\\System App Icons\\Windows System\\SEO\\Explorer\\Settings.ico"
 
 Start-Sleep 2
-Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe' #| Out-Null
+Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe' | Out-Null
