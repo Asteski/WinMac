@@ -20,53 +20,52 @@ New-Item -ItemType Directory -Path "$winStep\Icons" -Force | Out-Null
 Copy-Item config\dock\icons "$winStep" -Recurse -Force | Out-Null
 
 $regFile = "$pwd\config\dock\winstep.reg"
-reg import $regFile
+$regContent = Get-Content $regFile
 
 $roundedOrSquared = Read-Host "Enter 'R' for rounded dock or 'S' for squared dock"
 if ($roundedOrSquared -eq "R" -or $roundedOrSquared -eq "r") {
-    $themePath = "C:\\Users\\Public\\Documents\\WinStep\\Themes\\WinMac Light Rounded\"
-    $themeName = "WinMac Light Rounded"
+    Write-Host "Setting rounded dock..." -ForegroundColor Yellow
 } elseif ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
-    $themePath = "C:\\Users\\Public\\Documents\\WinStep\\Themes\\WinMac Light Squared\"
-    $themeName = "WinMac Light Squared"
+    Write-Host "Setting squared dock..." -ForegroundColor Yellow
+    $modifiedContent = $regContent -replace "WinMac Light Rounded", "WinMac Light Squared"
+    $modifiedContent | Set-Content $regFile -Force
 } else {
-    Write-Host "Invalid input. Defaulting to rounded dock."
-    $themePath = "C:\\Users\\Public\\Documents\\WinStep\\Themes\\WinMac Light Rounded\"
-    $themeName = "WinMac Light Rounded"
+    Write-Host "Invalid input. Defaulting to rounded dock." -ForegroundColor Yellow
 }
 
-$dockPath = "HKCU:\Software\WinSTEP2000\NeXuS"
-Set-ItemProperty -Path $dockPath -Name "GenThemeName" -Value $themeName
-Set-ItemProperty -Path $dockPath -Name "NeXuSThemeName" -Value $themeName
-Set-ItemProperty -Path $dockPath -Name "BitmapsFolder" -Value "$themePath\"
-Set-ItemProperty -Path $dockPath -Name "GlobalBitmapFolder" -Value "$themePath\"
-Set-ItemProperty -Path $dockPath -Name "NeXuSBitmapFolder" -Value "$themePath\"
-Set-ItemProperty -Path $dockPath -Name "NeXuSImage3" -Value "$themePath\NxBack.png"
-Set-ItemProperty -Path $dockPath -Name "ClockBitmapFolder" -Value "$themePath\"
-Set-ItemProperty -Path $dockPath -Name "TrashBitmapFolder" -Value "$themePath\"
-Set-ItemProperty -Path $dockPath -Name "POP3BitmapFolder" -Value "$themePath\"
-Set-ItemProperty -Path $dockPath -Name "CPUBitmapFolder" -Value "$themePath\"
-Set-ItemProperty -Path $dockPath -Name "METARBitmapFolder" -Value "$themePath\"
-Set-ItemProperty -Path $dockPath -Name "NetBitmapFolder" -Value "$themePath\"
-Set-ItemProperty -Path $dockPath -Name "RAMBitmapFolder" -Value "$themePath\"
-Set-ItemProperty -Path $dockPath -Name "WANDABitmapFolder" -Value "$themePath\"
+reg import $regFile
 
-$regEntries = @"
-"DockBitmapFolder1"=$themePath
-"DockBack3Image1"="$themePath\NxBack.png"
-"@
+# $dockPath = "HKCU:\Software\WinSTEP2000\NeXuS"
+# Set-ItemProperty -Path $dockPath -Name "GenThemeName" -Value $themeName
+# Set-ItemProperty -Path $dockPath -Name "NeXuSThemeName" -Value $themeName
+# Set-ItemProperty -Path $dockPath -Name "BitmapsFolder" -Value "$themePath\"
+# Set-ItemProperty -Path $dockPath -Name "GlobalBitmapFolder" -Value "$themePath\"
+# Set-ItemProperty -Path $dockPath -Name "NeXuSBitmapFolder" -Value "$themePath\"
+# Set-ItemProperty -Path $dockPath -Name "NeXuSImage3" -Value "$themePath\NxBack.png"
+# Set-ItemProperty -Path $dockPath -Name "ClockBitmapFolder" -Value "$themePath\"
+# Set-ItemProperty -Path $dockPath -Name "TrashBitmapFolder" -Value "$themePath\"
+# Set-ItemProperty -Path $dockPath -Name "POP3BitmapFolder" -Value "$themePath\"
+# Set-ItemProperty -Path $dockPath -Name "CPUBitmapFolder" -Value "$themePath\"
+# Set-ItemProperty -Path $dockPath -Name "METARBitmapFolder" -Value "$themePath\"
+# Set-ItemProperty -Path $dockPath -Name "NetBitmapFolder" -Value "$themePath\"
+# Set-ItemProperty -Path $dockPath -Name "RAMBitmapFolder" -Value "$themePath\"
+# Set-ItemProperty -Path $dockPath -Name "WANDABitmapFolder" -Value "$themePath\"
 
-$regEntries | ForEach-Object {
-    $key = $_.Split("=")[0].Trim()
-    $value = $_.Split("=")[1].Trim()
-    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name $key -Value $value
-}
+# $regEntries = @"
+# "DockBitmapFolder1"=$themePath
+# "DockBack3Image1"="$themePath\NxBack.png"
+# "@
 
+# $regEntries | ForEach-Object {
+#     $key = $_.Split("=")[0].Trim()
+#     $value = $_.Split("=")[1].Trim()
+#     Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name $key -Value $value
+# }
 
 Start-Sleep 2
 Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe' | Out-Null
-Remove-Item "C:\Users\$env:UERNAME\Desktop\Nexus.lnk" -Force -ErrorAction SilentlyContinue | Out-Null
-Remove-Item "C:\Users\$env:UERNAME\OneDrive\Desktop\Nexus.lnk" -Force -ErrorAction SilentlyContinue | Out-Null
+Remove-Item "C:\Users\$env:USERNAME\Desktop\Nexus.lnk" -Force -ErrorAction SilentlyContinue | Out-Null
+Remove-Item "C:\Users\$env:USERNAME\OneDrive\Desktop\Nexus.lnk" -Force -ErrorAction SilentlyContinue | Out-Null
 
 Write-Host "Configuring Nexus Dock completed." -ForegroundColor Green
 
