@@ -19,18 +19,17 @@ Copy-Item -Path "config\dock\indicators\*" -Destination "$winStep\NeXus\Indicato
 New-Item -ItemType Directory -Path "$winStep\Icons" -Force | Out-Null
 Copy-Item config\dock\icons "$winStep" -Recurse -Force | Out-Null
 
-$regFile = "$pwd\config\dock\winstep.reg"
-$regContent = Get-Content $regFile
 
 $roundedOrSquared = Read-Host "Enter 'R' for rounded dock or 'S' for squared dock"
 if ($roundedOrSquared -eq "R" -or $roundedOrSquared -eq "r") {
     Write-Host "Setting rounded dock..." -ForegroundColor Yellow
+    $regFile = "$pwd\config\dock\winstepR.reg"
 } elseif ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
     Write-Host "Setting squared dock..." -ForegroundColor Yellow
-    $modifiedContent = $regContent -replace "WinMac Light Rounded", "WinMac Light Squared"
-    $modifiedContent | Set-Content $regFile -Force
+    $regFile = "$pwd\config\dock\winstepS.reg"
 } else {
     Write-Host "Invalid input. Defaulting to rounded dock." -ForegroundColor Yellow
+    $regFile = "$pwd\config\dock\winstepR.reg"
 }
 
 reg import $regFile
