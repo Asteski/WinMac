@@ -11,11 +11,11 @@ Stop-Process -n Nexus #| Out-Null
 Remove-Item .\ReadMe.txt -Force #| Out-Null
 Remove-Item .\NexusSetup.exe -Force
 $winStep = 'C:\Users\Public\Documents\WinStep'
-Copy-Item config\dock\themes\ "$winStep\" -Recurse -Force #| Out-Null
-Copy-Item config\dock\indicators\ "$winStep\NeXus\" -Recurse -Force #| Out-Null
+Copy-Item config\dock\themes\ "$winStep\" -Recurse -Force | Out-Null
+Copy-Item config\dock\indicators\ "$winStep\NeXus\" -Recurse -Force | Out-Null
 #TODO explorer tasmgr controlpanel terminal downloads recyclebin settings
-New-Item -ItemType Directory -Path "$winStep\Icons" -Force #| Out-Null
-Copy-Item config\dock\icons "$winStep" -Recurse -Force #| Out-Null
+New-Item -ItemType Directory -Path "$winStep\Icons" -Force | Out-Null
+Copy-Item config\dock\icons "$winStep" -Recurse -Force | Out-Null
 
 $regFile = "$pwd\config\dock\winstep.reg"
 reg import $regFile
