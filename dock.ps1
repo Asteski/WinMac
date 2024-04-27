@@ -20,28 +20,28 @@ Copy-Item config\dock\icons "$winStep" -Recurse -Force #| Out-Null
 $regFile = "$pwd\config\dock\winstep.reg"
 reg import $regFile
 
-$regEntries = @"
-"BitmapsFolder"="C:\\Users\\Public\\Documents\\WinStep\\Themes\\WinMac Light Opaque Squared\\"
-"GlobalBitmapFolder"="C:\\Users\\Public\\Documents\\WinStep\\Themes\\WinMac Light Opaque Squared\\"
-"NeXuSBitmapFolder"="C:\\Users\\Public\\Documents\\WinStep\\Themes\\WinMac Light Opaque Squared\\"
-"NeXuSImage3"="C:\\Users\\Public\\Documents\\WinStep\\Themes\\WinMac Light Opaque Squared\\NxBack.png"
-"ClockVoiceFolder"="C:\\Users\\Public\\Documents\\WinStep\\Themes\\Female Voice\\"
-"ClockSoundFolder"="C:\\Users\\Public\\Documents\\WinStep\\Themes\\WinstepSamples\\"
-"ClockBitmapFolder"="C:\\Users\\Public\\Documents\\WinStep\\Themes\\WinMac Light Opaque Squared\\"
-"TrashBitmapFolder"="C:\\Users\\Public\\Documents\\WinStep\\Themes\\WinMac Light Opaque Squared\\"
-"CPUBitmapFolder"="C:\\Users\\Public\\Documents\\WinStep\\Themes\\WinMac Light Opaque Squared\\"
-"POP3BitmapFolder"="C:\\Users\\Public\\Documents\\WinStep\\Themes\\WinMac Light Opaque Squared\\"
-"METARBitmapFolder"="C:\\Users\\Public\\Documents\\WinStep\\Themes\\WinMac Light Opaque Squared\\"
-"@
+# $regEntries = @"
+# "BitmapsFolder"="C:\\Users\\Public\\Documents\\WinStep\\Themes\\WinMac Light Opaque Squared\\"
+# "GlobalBitmapFolder"="C:\\Users\\Public\\Documents\\WinStep\\Themes\\WinMac Light Opaque Squared\\"
+# "NeXuSBitmapFolder"="C:\\Users\\Public\\Documents\\WinStep\\Themes\\WinMac Light Opaque Squared\\"
+# "NeXuSImage3"="C:\\Users\\Public\\Documents\\WinStep\\Themes\\WinMac Light Opaque Squared\\NxBack.png"
+# "ClockVoiceFolder"="C:\\Users\\Public\\Documents\\WinStep\\Themes\\Female Voice\\"
+# "ClockSoundFolder"="C:\\Users\\Public\\Documents\\WinStep\\Themes\\WinstepSamples\\"
+# "ClockBitmapFolder"="C:\\Users\\Public\\Documents\\WinStep\\Themes\\WinMac Light Opaque Squared\\"
+# "TrashBitmapFolder"="C:\\Users\\Public\\Documents\\WinStep\\Themes\\WinMac Light Opaque Squared\\"
+# "CPUBitmapFolder"="C:\\Users\\Public\\Documents\\WinStep\\Themes\\WinMac Light Opaque Squared\\"
+# "POP3BitmapFolder"="C:\\Users\\Public\\Documents\\WinStep\\Themes\\WinMac Light Opaque Squared\\"
+# "METARBitmapFolder"="C:\\Users\\Public\\Documents\\WinStep\\Themes\\WinMac Light Opaque Squared\\"
+# "@
 
-$regEntries | ForEach-Object {
-    $key = $_.Split("=")[0].Trim()
-    $value = $_.Split("=")[1].Trim()
-    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS" -Name $key -Value $value
-}
+# $regEntries | ForEach-Object {
+#     $key = $_.Split("=")[0].Trim()
+#     $value = $_.Split("=")[1].Trim()
+#     Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS" -Name $key -Value $value
+# }
 
-Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockBitmapFolder1" -Value "C:\\Users\\Public\\Documents\\WinStep\\Themes\\WinMac Light Opaque Squared\\"
-Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockBack3Image1" -Value "C:\\Users\\Public\\Documents\\WinStep\\Themes\\WinMac Light Opaque Squared\\NxBack.png"
+# Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockBitmapFolder1" -Value "C:\\Users\\Public\\Documents\\WinStep\\Themes\\WinMac Light Opaque Squared\\"
+# Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockBack3Image1" -Value "C:\\Users\\Public\\Documents\\WinStep\\Themes\\WinMac Light Opaque Squared\\NxBack.png"
 
 # Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Shared" -Name "IconBrowserPath" -Value "C:\\Users\\Adams\\OneDrive\\Utilities\\icons\\System App Icons\\Windows System\\SEO\\Explorer\\"
 # Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Shared" -Name "BackupPath" -Value "C:\\Users\\Adams\\OneDrive\\Utilities\\Nexus Dock\\"
