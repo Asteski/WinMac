@@ -474,8 +474,12 @@ If you have any questions or suggestions, please contact me on GitHub.
 
 Write-Host "-----------------------------------------------------------------------------"  -ForegroundColor Cyan
 Write-Host
-$dockConfirmation = Read-Host "Do you want to install WinGet Dock? (y/n)"
-if ($dockConfirmation -eq "y" -or $dockConfirmation -eq "Y") { Write-Host "Please run dock.ps1 script as non-admin user." -ForegroundColor Green; start-sleep 2; exit 0 }
+$dockConfirmation = Read-Host "Do you want to install WinMac Dock? (y/n)"
+if ($dockConfirmation -eq "y" -or $dockConfirmation -eq "Y") { 
+    Write-Host "Please run the dock.ps1 script in a PowerShell session without administrative privileges." -ForegroundColor Green
+    Start-Sleep 2
+    exit 0
+}
 
 Write-Host
 $restartConfirmation = Read-Host "Restart computer now? It's recommended to fully apply all the changes. (y/n)"

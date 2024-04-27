@@ -29,7 +29,6 @@ Remove-Item -Path "$winStep\Themes\*" -Recurse -Force
 Copy-Item -Path "config\dock\themes\*" -Destination "$winStep\Themes\" -Recurse -Force
 Remove-Item -Path "$winStep\NeXus\Indicators\*" -Force -Recurse
 Copy-Item -Path "config\dock\indicators\*" -Destination "$winStep\NeXus\Indicators\" -Recurse -Force
-#TODO explorer tasmgr controlpanel terminal downloads recyclebin settings
 New-Item -ItemType Directory -Path "$winStep\Icons" -Force | Out-Null
 Copy-Item config\dock\icons "$winStep" -Recurse -Force | Out-Null
 
