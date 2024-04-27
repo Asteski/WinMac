@@ -36,8 +36,8 @@ if ($roundedOrSquared -eq "R" -or $roundedOrSquared -eq "r") {
 }
 
 $dockPath = "HKCU:\Software\WinSTEP2000\NeXuS"
-Set-ItemProperty -Path $dockPath -Name "GenThemeName" -Value $themePath
-Set-ItemProperty -Path $dockPath -Name "NeXuSThemeName" -Value $themePath
+Set-ItemProperty -Path $dockPath -Name "GenThemeName" -Value $themeName
+Set-ItemProperty -Path $dockPath -Name "NeXuSThemeName" -Value $themeName
 
 Set-ItemProperty -Path $dockPath -Name "BitmapsFolder" -Value $themePath
 Set-ItemProperty -Path $dockPath -Name "GlobalBitmapFolder" -Value $themePath
