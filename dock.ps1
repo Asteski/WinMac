@@ -1,10 +1,22 @@
+Write-Host "----------------------------- WinMac Dock Deployment -----------------------------" -ForegroundColor Cyan
+Write-Host
 Write-Host "Configuring Nexus Dock..." -ForegroundColor Yellow
+Write-Host
+$roundedOrSquared = Read-Host "Enter 'R' for rounded dock or 'S' for squared dock"
+if ($roundedOrSquared -eq "R" -or $roundedOrSquared -eq "r") {
+    Write-Host "Setting rounded dock..." -ForegroundColor Yellow
+} elseif ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
+    Write-Host "Setting squared dock..." -ForegroundColor Yellow
+} else {
+    Write-Host "Invalid input. Defaulting to rounded dock." -ForegroundColor Yellow
+}
 
 $downloadUrl = "https://www.winstep.net/nexus.zip"
 $downloadPath = "dock.zip"
 if (-not (Test-Path $downloadPath)) {
     Invoke-WebRequest -Uri $downloadUrl -OutFile $downloadPath
 }
+
 Expand-Archive -Path $downloadPath -DestinationPath $pwd -Force
 Start-Process -FilePath ".\NexusSetup.exe" -ArgumentList "/silent"
 start-sleep 60
@@ -21,16 +33,11 @@ Copy-Item -Path "config\dock\indicators\*" -Destination "$winStep\NeXus\Indicato
 New-Item -ItemType Directory -Path "$winStep\Icons" -Force | Out-Null
 Copy-Item config\dock\icons "$winStep" -Recurse -Force | Out-Null
 
-
-$roundedOrSquared = Read-Host "Enter 'R' for rounded dock or 'S' for squared dock"
 if ($roundedOrSquared -eq "R" -or $roundedOrSquared -eq "r") {
-    Write-Host "Setting rounded dock..." -ForegroundColor Yellow
     $regFile = "$pwd\config\dock\winstepR.reg"
 } elseif ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
-    Write-Host "Setting squared dock..." -ForegroundColor Yellow
     $regFile = "$pwd\config\dock\winstepS.reg"
 } else {
-    Write-Host "Invalid input. Defaulting to rounded dock." -ForegroundColor Yellow
     $regFile = "$pwd\config\dock\winstepR.reg"
 }
 
@@ -44,7 +51,7 @@ Remove-Item "C:\Users\$env:USERNAME\OneDrive\Desktop\Nexus.lnk" -Force -ErrorAct
 Write-Host "Configuring Nexus Dock completed." -ForegroundColor Green
 
 Write-Host
-Write-Host "------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
+Write-Host "------------------------ WinMac Dock Deployment completed ------------------------" -ForegroundColor Cyan
 Write-Host @"
 
 Enjoy and support by giving feedback and contributing to the project!
