@@ -24,33 +24,32 @@ reg import $regFile
 
 $roundedOrSquared = Read-Host "Enter 'R' for rounded dock or 'S' for squared dock"
 if ($roundedOrSquared -eq "R" -or $roundedOrSquared -eq "r") {
-    $themePath = "C:\Users\Public\Documents\WinStep\Themes\WinMac Light Rounded\"
+    $themePath = "C:\\Users\\Public\\Documents\\WinStep\\Themes\\WinMac Light Rounded\"
     $themeName = "WinMac Light Rounded"
 } elseif ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
-    $themePath = "C:\Users\Public\Documents\WinStep\Themes\WinMac Light Squared\"
+    $themePath = "C:\\Users\\Public\\Documents\\WinStep\\Themes\\WinMac Light Squared\"
     $themeName = "WinMac Light Squared"
 } else {
     Write-Host "Invalid input. Defaulting to rounded dock."
-    $themePath = "C:\Users\Public\Documents\WinStep\Themes\WinMac Light Rounded\"
+    $themePath = "C:\\Users\\Public\\Documents\\WinStep\\Themes\\WinMac Light Rounded\"
     $themeName = "WinMac Light Rounded"
 }
 
 $dockPath = "HKCU:\Software\WinSTEP2000\NeXuS"
 Set-ItemProperty -Path $dockPath -Name "GenThemeName" -Value $themeName
 Set-ItemProperty -Path $dockPath -Name "NeXuSThemeName" -Value $themeName
-
-Set-ItemProperty -Path $dockPath -Name "BitmapsFolder" -Value $themePath
-Set-ItemProperty -Path $dockPath -Name "GlobalBitmapFolder" -Value $themePath
-Set-ItemProperty -Path $dockPath -Name "NeXuSBitmapFolder" -Value $themePath
+Set-ItemProperty -Path $dockPath -Name "BitmapsFolder" -Value "$themePath\"
+Set-ItemProperty -Path $dockPath -Name "GlobalBitmapFolder" -Value "$themePath\"
+Set-ItemProperty -Path $dockPath -Name "NeXuSBitmapFolder" -Value "$themePath\"
 Set-ItemProperty -Path $dockPath -Name "NeXuSImage3" -Value "$themePath\NxBack.png"
-Set-ItemProperty -Path $dockPath -Name "ClockBitmapFolder" -Value $themePath
-Set-ItemProperty -Path $dockPath -Name "TrashBitmapFolder" -Value $themePath
-Set-ItemProperty -Path $dockPath -Name "POP3BitmapFolder" -Value $themePath
-Set-ItemProperty -Path $dockPath -Name "CPUBitmapFolder" -Value $themePath
-Set-ItemProperty -Path $dockPath -Name "METARBitmapFolder" -Value $themePath
-Set-ItemProperty -Path $dockPath -Name "NetBitmapFolder" -Value $themePath
-Set-ItemProperty -Path $dockPath -Name "RAMBitmapFolder" -Value $themePath
-Set-ItemProperty -Path $dockPath -Name "WANDABitmapFolder" -Value $themePath
+Set-ItemProperty -Path $dockPath -Name "ClockBitmapFolder" -Value "$themePath\"
+Set-ItemProperty -Path $dockPath -Name "TrashBitmapFolder" -Value "$themePath\"
+Set-ItemProperty -Path $dockPath -Name "POP3BitmapFolder" -Value "$themePath\"
+Set-ItemProperty -Path $dockPath -Name "CPUBitmapFolder" -Value "$themePath\"
+Set-ItemProperty -Path $dockPath -Name "METARBitmapFolder" -Value "$themePath\"
+Set-ItemProperty -Path $dockPath -Name "NetBitmapFolder" -Value "$themePath\"
+Set-ItemProperty -Path $dockPath -Name "RAMBitmapFolder" -Value "$themePath\"
+Set-ItemProperty -Path $dockPath -Name "WANDABitmapFolder" -Value "$themePath\"
 
 $regEntries = @"
 "DockBitmapFolder1"=$themePath
