@@ -135,10 +135,10 @@ if ($promptSet -eq 'y') { $prompt = Get-Content "$pwd\config\terminal\winmac-pro
 else { $prompt = Get-Content "$pwd\config\terminal\macos-prompt.ps1" -Raw }
 $functions = Get-Content "$pwd\config\terminal\functions.ps1" -Raw
 
-if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell" } else { Remove-Item -Path "$profilePath\PowerShell\$profileFile" -Force }
-if (-not (Test-Path "$profilePath\WindowsPowerShell")) { New-Item -ItemType Directory -Path "$profilePath\WindowsPowerShell" } else { Remove-Item -Path "$profilePath\WindowsPowerShell\$profileFile" -Force }
-if (-not (Test-Path "$profilePath\PowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\PowerShell\$profileFile" }
-if (-not (Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\WindowsPowerShell\$profileFile" }
+if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell" | Out-Null } else { Remove-Item -Path "$profilePath\PowerShell\$profileFile" -Force | Out-Null }
+if (-not (Test-Path "$profilePath\WindowsPowerShell")) { New-Item -ItemType Directory -Path "$profilePath\WindowsPowerShell" | Out-Null } else { Remove-Item -Path "$profilePath\WindowsPowerShell\$profileFile" -Force | Out-Null }
+if (-not (Test-Path "$profilePath\PowerShell\$profileFile"l)) { New-Item -ItemType File -Path "$profilePath\PowerShell\$profileFile" | Out-Null }
+if (-not (Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\WindowsPowerShell\$profileFile" | Out-Null }
 
 Write-Host "Checking for NuGet Provider" -ForegroundColor Yellow
 $progressPreference = 'silentlyContinue'
