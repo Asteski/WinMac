@@ -1,4 +1,6 @@
 
+Set-ExecutionPolicy -ExecutionPolicy SignedOnly -Scope Process -Force | Out-Null
+
 # Completion settings
 Set-PSReadlineKeyHandler -Chord Tab -Function MenuComplete
 Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
