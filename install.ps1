@@ -227,9 +227,9 @@ Set-ItemProperty -Path $sabRegPath -Name "SysTraySpacierIcons" -Value 1
 Set-ItemProperty -Path $sabRegPath -Name "SysTrayClockFormat" -Value 3
 Set-ItemProperty -Path $sabRegPath -Name "SysTrayInputSwitch" -Value 0
 Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "(default)" -Value 1
-if ($styleSet -ne 'y' ) { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0 }
-else { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 1 }
 Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
+if ($styleSet -eq 'y' ) { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0 }
+else { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 1 }
 Stop-Process -Name Explorer -Force
 
 Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
