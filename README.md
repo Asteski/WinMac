@@ -24,6 +24,12 @@ PowerToys brings a macOS Spotlight-like functionality to Windows with PowerToys 
 
 By pressing a customizable hotkey combination, a search bar appears, enabling users to type their query and quickly launch or access the desired item without navigating through menus or directories. Besides PowerToys Run, this utility allows for many OS customizations, like *FancyZones, Always On Top, Peek, File Explorer add-ons, Color Picker or Find My Mouse*, improving your workflow in many different ways.
 
+- **WinMac Dock**
+
+WinStep Nexus is a highly customizable and feature-rich dock application for Windows that can be used to achieve a macOS-like dock experience. It offers a wide range of customization options, including different themes, icons, and animations.
+
+By integrating WinStep Nexus into your WinMac modification, you can provide users with a visually appealing and functional dock that resembles the macOS style. This will enhance the overall user experience and make the transition between Windows and macOS elements seamless.
+
 - **Revamped and decluttered Start Menu**
 
 Open-Shell is a customizable Start Menu replacement for Windows that provides users with possiblity to completely replace traditional Start Menu with customized WinX menu, to resemble MacOS main menu, which is now called the WinMac Menu.
@@ -64,9 +70,8 @@ For the most reliable deployment process, I recommend to install latest version 
 
 ## Planned features
 
-- Dock - Give a choice between Dock or Taskbar experience before deployment,
-- Force Taskbar to go automatically on top upon deployment,
-- WinMac theme.
+- WinMac theme,
+- more functions.
 
 ## Credit
 
@@ -76,6 +81,8 @@ List of utilities and their creators, used with WinMac deployment script:
 - [StartAllBack](https://www.startallback.com/) by Stanislav Zinukhov
 - [Open-Shell](https://open-shell.github.io/Open-Shell-Menu/) by Ivo Beltchev
 - [Everything](https://www.voidtools.com/) by David Carpenter
+- [Nexus](https://www.winstep.net/nexus.asp) by Winstep
+- [TopNotify](https://github.com/SamsidParty/TopNotify) by SamsidParty
 - [PSTree](https://github.com/santisq/PSTree) by santisq
 - [ntop](https://github.com/gsass1/NTop) by gsass1
 
@@ -86,3 +93,5 @@ Keep in mind that StartAllBack is not a free software and requires license to ru
 WinMac is not planned to be used for business/earning purposes. If you're not okay with me using your software by installing it (using Winget) with Powershell deployment script, please let me know!
 
 Enjoy and support my work by giving feedback and contributing to the project!
+
+#EOF
