@@ -246,7 +246,8 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer" -Nam
 # TopNotify
 
 Invoke-WebRequest "https://github.com/SamsidParty/TopNotify/releases/download/2.2.0/TopNotify.zip" -OutFile TopNotify.zip
-$exePath = "$env:PROGRAMFILES\TopNotify"
+$local = ($env:AppData | Split-Path) + "\local\WinGet"
+$exePath = "$local\TopNotify"
 Expand-Archive TopNotify.zip -DestinationPath $exePath -Force
 Start-Process -FilePath $exePath\TopNotify.exe
 Remove-Item -Path TopNotify.zip -Force
