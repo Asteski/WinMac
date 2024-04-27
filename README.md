@@ -65,7 +65,6 @@ For the most reliable deployment process, I recommend to install latest version 
 ## Planned features
 
 - Dock - Give a choice between Dock or Taskbar experience before deployment,
-- Force Taskbar to go automatically on top upon deployment,
 - WinMac theme.
 
 ## Credit
