@@ -4,7 +4,7 @@ if (-not (Test-Path $downloadPath)) {
     Invoke-WebRequest -Uri $downloadUrl -OutFile $downloadPath #| Out-Null
 }
 Expand-Archive -Path $downloadPath -DestinationPath $pwd -Force #| Out-Null
-Start-Process -FilePath ".\NexusSetup.exe" -ArgumentList "/silent"
+Start-Process -FilePath ".\NexusSetup.exe" -ArgumentList "/silent" -Verb RunAs
 Start-Sleep 60
 Stop-Process -n Nexus #| Out-Null
 # Remove-Item .\dock.zip -Force #| Out-Null
