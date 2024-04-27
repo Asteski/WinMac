@@ -65,10 +65,16 @@ Set-ItemProperty -Path $dockPath -Name "NetBitmapFolder" -Value $themePath
 Set-ItemProperty -Path $dockPath -Name "RAMBitmapFolder" -Value $themePath
 Set-ItemProperty -Path $dockPath -Name "WANDABitmapFolder" -Value $themePath
 
-HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks
-
+$regEntries = @"
 "DockBitmapFolder1"="C:\\Users\\Public\\Documents\\WinStep\\Themes\\WinMac Light Rounded\\"
 "DockBack3Image1"="C:\\Users\\Public\\Documents\\WinStep\\Themes\\WinMac Light Rounded\\NxBack.png"
+"@
+
+$regEntries | ForEach-Object {
+    $key = $_.Split("=")[0].Trim()
+    $value = $_.Split("=")[1].Trim()
+    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name $key -Value $value
+}
 
 
 Start-Sleep 2
