@@ -1,14 +1,14 @@
 $downloadUrl = "https://www.winstep.net/nexus.zip"
 $downloadPath = "dock.zip"
 if (-not (Test-Path $downloadPath)) {
-    Invoke-WebRequest -Uri $downloadUrl -OutFile $downloadPath #| Out-Null
+    Invoke-WebRequest -Uri $downloadUrl -OutFile $downloadPath
 }
-Expand-Archive -Path $downloadPath -DestinationPath $pwd -Force #| Out-Null
+Expand-Archive -Path $downloadPath -DestinationPath $pwd -Force
 Start-Process -FilePath ".\NexusSetup.exe" -ArgumentList "/silent" -Verb RunAs
 Start-Sleep 60
-Stop-Process -n Nexus #| Out-Null
-# Remove-Item .\dock.zip -Force #| Out-Null
-Remove-Item .\ReadMe.txt -Force #| Out-Null
+Stop-Process -n Nexus
+# Remove-Item .\dock.zip -Force
+Remove-Item .\ReadMe.txt -Force
 Remove-Item .\NexusSetup.exe -Force
 $winStep = 'C:\Users\Public\Documents\WinStep'
 Copy-Item -Path "config\dock\themes\*" -Destination "$winStep\" -Recurse -Force -Container -Exclude (Get-ChildItem -Path "$winStep\" -Directory).Name | Out-Null
