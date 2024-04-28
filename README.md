@@ -34,7 +34,7 @@ By integrating WinStep Nexus into your WinMac modification, you can provide user
 
 - **Revamped and decluttered Start Menu**
 
-Open-Shell is a customizable Start Menu replacement for Windows that provides users with possiblity to completely replace traditional Start Menu with customized WinX menu, to resemble MacOS main menu, which is now called the WinMac Menu.
+Open-Shell is a customizable Start Menu replacement for Windows that provides users with possiblity to completely replace traditional Start Menu with customized WinX menu, to resemble MacOS main menu.
 
 - **Enhanced Taskbar**
 
