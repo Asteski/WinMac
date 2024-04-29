@@ -18,6 +18,10 @@
 
 ![winmac_light_03](https://github.com/Asteski/WinMac/blob/main/img/winmac_light_03.jpg)
 
+## Dock
+
+![winmac_docks](https://github.com/Asteski/WinMac/blob/main/img/winmac_docks.png)
+
 ## Features
 
 - **Spotlight-like quick launcher**
