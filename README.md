@@ -79,7 +79,7 @@ For the most reliable deployment process, I recommend to install latest version 
 - WinMac theme,
 - more functions.
 
-## Credit
+## Credits to
 
 List of utilities and their creators, used with WinMac deployment script:
 
