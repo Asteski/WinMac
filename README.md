@@ -18,19 +18,20 @@
 
 ![winmac_light_03](https://github.com/Asteski/WinMac/blob/main/img/winmac_light_03.jpg)
 
-## Dock
-
-![winmac_docks](https://github.com/Asteski/WinMac/blob/main/img/winmac_docks.png)
 
 ## Features
 
 - **Spotlight-like quick launcher**
+
+![powertoys_run](https://github.com/Asteski/WinMac/blob/main/img/powertoys_run.png)
 
 PowerToys brings a macOS Spotlight-like functionality to Windows with PowerToys Run. It allows users to quickly search for files, applications, and settings on your system. 
 
 By pressing a customizable hotkey combination, a search bar appears, enabling users to type their query and quickly launch or access the desired item without navigating through menus or directories. Besides PowerToys Run, this utility allows for many OS customizations, like *FancyZones, Always On Top, Peek, File Explorer add-ons, Color Picker or Find My Mouse*, improving your workflow in many different ways.
 
 - **WinMac Dock**
+
+![winmac_docks](https://github.com/Asteski/WinMac/blob/main/img/winmac_docks.png)
 
 Winstep Nexus is a highly customizable and feature-rich dock application for Windows that can be used to achieve a macOS-like dock experience. It offers a wide range of customization options, including different themes, icons, and animations.
 
