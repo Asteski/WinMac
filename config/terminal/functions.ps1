@@ -35,6 +35,8 @@ set-alias -name rmproc -value Remove-Process
 set-alias -name startproc -value Start-Process
 set-alias -name stopproc -value Stop-Process
 set-alias -name less -value more
+set-alias -name random -value Get-RandomString
+set-alias -name user -value getuser
 
 # Functions
 function psversion { $PSVersionTable }
@@ -45,6 +47,47 @@ function ws { $appname = $args; winget search "$appname" }
 function wr { $appname = $args; winget uninstall "$appname" } 
 function wu { $appname = $args; winget upgrade "$appname" } 
 function wi { $appname = $args; winget install "$appname" --accept-package-agreements --accept-source-agreements }
+
+function getuser {
+    $userName = $args
+    Import-Module microsoft.powershell.localaccounts -UseWindowsPowerShell -WarningAction SilentlyContinue
+    if ($userName) {
+        Get-LocalUser $userName | Select-Object Name, Enabled, LastLogon, SID, PasswordExpires, PasswordChangeableDate, PasswordLastSet
+    } else {
+        Get-LocalUser | Select-Object Name, Enabled, LastLogon, PasswordExpires, PasswordChangeableDate, PasswordLastSet | Format-Table
+    }
+}
+
+function adduser {
+    $userName = $args
+    Import-Module microsoft.powershell.localaccounts -UseWindowsPowerShell -WarningAction SilentlyContinue
+    $new = New-LocalUser "$userName" -NoPassword
+    if ($new) {
+        Write-Host "User $userName created."
+    }
+}
+
+function rmuser {
+    $userName = $args[0]
+    Import-Module microsoft.powershell.localaccounts -UseWindowsPowerShell -WarningAction SilentlyContinue
+    Remove-LocalUser "$userName"
+}
+
+function passwd {
+    [string]$userName = $args[0]
+    Import-Module microsoft.powershell.localaccounts -UseWindowsPowerShell -WarningAction SilentlyContinue
+    $securePwd1 = Read-Host "Enter Password" -AsSecureString
+    $plainPwd1 =[Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($securePwd1))
+    $securePwd2 = Read-Host "Enter Password again" -AsSecureString
+    $plainPwd2 =[Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($securePwd2))
+    
+    if($plainPwd1 -NE $plainPwd2) {
+        Write-Host "Passwords do not match." -ForegroundColor Red
+    } else {
+        Set-LocalUser -Name $userName -Password $securePwd1
+        Write-Host "Password changed for $userName." -ForegroundColor Green
+    }
+}
 
 function nohup {
     param(
@@ -164,20 +207,17 @@ function rmenv {
 
 function Get-RandomString
 {
-    #define parameters
     param([Parameter(ValueFromPipeline=$false)][ValidateRange(1,64)][Alias('l','length')][int]$PasswordLength = 10)
- 
-    #ASCII Character set for Password
+
     $CharacterSet = @{
             Lowercase   = (97..122) | Get-Random -Count 20 | ForEach-Object {[char]$_}
             Uppercase   = (65..90)  | Get-Random -Count 20 | ForEach-Object {[char]$_}
             Numeric     = (48..57)  | Get-Random -Count 20 | ForEach-Object {[char]$_}
             SpecialChar = (33..47)+(58..64)+(91..96)+(123..126) | Get-Random -Count 10 | ForEach-Object {[char]$_}
     }
- 
-    #Frame Random Password from given character set
+
     $StringSet = $CharacterSet.Uppercase + $CharacterSet.Lowercase + $CharacterSet.Numeric + $CharacterSet.SpecialChar
- 
+
     -join(Get-Random -Count $PasswordLength -InputObject $StringSet)
 }
 
@@ -188,11 +228,16 @@ function battery {
     @{N='Battery Status'; E={$_.Status}}, `
     @{N='Charge Remaining'; E={$_.EstimatedChargeRemaining}}, `
     @{N='Time Remaining'; E={$_.EstimatedRunTime}} 
-Write-Host @"
+    if ($info.'Time Remaining' -ge 2000) { $info.'Battery Status' = "Charging"; $info.'Time Remaining' = "N/A"}
+    if ($info) {
+    Write-Host @"
 
 Battery Information
 "@ -ForegroundColor Yellow
-    $info
+    $info 
+    } else {
+        Write-Host "No battery found" -ForegroundColor Red 
+        }
 }
 
 function computerinfo { 

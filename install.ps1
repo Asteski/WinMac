@@ -5,7 +5,7 @@ Write-Host @"
 Welcome to WinMac Deployment!
 
 Author: Asteski
-Version: 0.3.0
+Version: 0.3.1
 
 This is Work in Progress. You're using this script at your own risk.
 
@@ -58,7 +58,7 @@ if ($promptSet -eq 'y') {
 }
 else
 { 
-    Write-Host "Using MacOS-like prompt." -ForegroundColor Yellow
+    Write-Host "Using MacOS prompt." -ForegroundColor Yellow
     Start-Sleep 1
 }
 
@@ -67,18 +67,22 @@ Write-Host @"
 You can choose between rounded or squared shell corners.
 
 "@
-$styleSet = Read-Host "Do you want to use rounded corners? (y/n)"
-if ($styleSet -eq 'y') {
+$roundedOrSquared = Read-Host "Enter 'R' for rounded corners or 'S' for squared corners"
+if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') {
     Write-Host "Using rounded corners." -ForegroundColor Yellow
     Start-Sleep 1
 }
-else
-{ W
+elseif ($roundedOrSquared -eq 'S' -or $roundedOrSquared -eq 's') {
     Write-Host "Using squared corners." -ForegroundColor Yellow
     Start-Sleep 1
 }
+else
+{
+    Write-Host "Invalid input. Defaulting to rounded corners." -ForegroundColor Yellow
+    $roundedOrSquared = 'R'
+    Start-Sleep 1
+}
 
-Start-Sleep 1
 Write-Host
 Write-Host @"
 Please do not do anything while the script is running, as it may impact
@@ -97,7 +101,6 @@ Write-Host "--------------------------------------------------------------------
 Write-Host
 
 ## Winget
-Write-Host
 Write-Host "Checking for Windows Package Manager (Winget)" -ForegroundColor Yellow
 $progressPreference = 'silentlyContinue'
 Write-Information "Downloading WinGet and its dependencies..."
@@ -110,11 +113,9 @@ Remove-Item -Path $installPath -Force
 Write-Information "Winget installation completed."
 
 ## PowerToys
-
 Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
 winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
-Write-Host "Installing PowerToys completed." -ForegroundColor Green
-Start-Sleep 5
+Start-Sleep 3
 Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force | Out-Null
 
 Write-Host "Installing Everything..." -ForegroundColor Yellow
@@ -125,8 +126,11 @@ $winget = @(
 foreach ($app in $winget) {winget install --id $app --source winget --silent | Out-Null }
 Write-Host "Installing Everything completed." -ForegroundColor Green
 
-## PowerShell Profile
+$programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+Start-Process "$programsDir\PowerToys (Preview)\PowerToys (Preview).lnk" -WindowStyle Minimized
+Write-Host "Installing PowerToys completed." -ForegroundColor Green
 
+## PowerShell Profile
 Write-Host "Configuring PowerShell Profile..." -ForegroundColor Yellow
 
 $profilePath = $PROFILE | Split-Path | Split-Path
@@ -168,8 +172,7 @@ Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $function
 
 Write-Host "Configuring PowerShell Profile completed." -ForegroundColor Green
 
-## ?
-
+## Shell
 Write-Host "Configuring Shell..." -ForegroundColor Yellow
 
 Add-Type -TypeDefinition @"
@@ -188,9 +191,13 @@ $HWND_TOP = [IntPtr]::Zero
 $SWP_SHOWWINDOW = 0x0040
 [Taskbar]::SetWindowPos($taskbarHandle, $HWND_TOP, 0, 0, 0, 0, $SWP_SHOWWINDOW) | Out-Null
 
+## StartAllBack
 Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
 
 winget install --id "StartIsBack.StartAllBack" --source winget --silent | Out-Null
+
+$sabLocal = ($env:AppData | Split-Path) + "\local\StartAllBack\Orbs"
+Copy-Item $pwd\config\taskbar\orbs\* $sabLocal -Force | Out-Null
 
 $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
 $sabRegPath = "HKCU:\Software\StartIsBack"
@@ -227,32 +234,34 @@ Set-ItemProperty -Path $sabRegPath -Name "SysTrayClockFormat" -Value 3
 Set-ItemProperty -Path $sabRegPath -Name "SysTrayInputSwitch" -Value 0
 Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "(default)" -Value 1
 Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
-if ($styleSet -eq 'y' ) { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0 }
+if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0 }
 else { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 1 }
 Stop-Process -Name Explorer -Force
 
 Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
 
 ## Misc
-
 $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"
 Set-ItemProperty -Path $exRegPath\Advanced -Name "LaunchTO" -Value 1
 Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
 Set-ItemProperty -Path $exRegPath -Name "ShowRecent" -Value 0
 Set-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\Windows\Explorer" -Name "TaskbarNoMultimon" -Value 1
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer" -Name "TaskbarNoMultimon" -Value 1
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
+Remove-Item -Path "HKCR:\exefile\shellex\ContextMenuHandlers\PintoStartScreen" -Force
+Remove-ItemProperty -Path "HKCR:\exefile\shellex\ContextMenuHandlers\PintoStartScreen" -Name "PintoStartScreen" -Confirm
+Remove-Item -Path "HKCR:\Folder\ShellEx\ContextMenuHandlers\PintoStartScreen" -Force
+Remove-Item -Path "HKCR:\Microsoft.Website\shellex\ContextMenuHandlers\PintoStartScreen" -Force
+Remove-Item -Path "HKCR:\mscfile\shellex\ContextMenuHandlers\PintoStartScreen" -Force
 
 # TopNotify
-
 Invoke-WebRequest "https://github.com/SamsidParty/TopNotify/releases/download/2.2.0/TopNotify.zip" -OutFile TopNotify.zip
-$local = ($env:AppData | Split-Path) + "\local\WinGet"
-$exePath = "$local\TopNotify"
+$exePath = ($env:AppData | Split-Path) + "\local\TopNotify"
 Expand-Archive TopNotify.zip -DestinationPath $exePath -Force
 Start-Process -FilePath $exePath\TopNotify.exe
 Remove-Item -Path TopNotify.zip -Force
 
 # Cursor
-
 $curSourceFolder = $pwd.Path + '\config\cursor'
 $curDestFolder = "C:\Windows\Cursors"
 Copy-Item -Path $curSourceFolder\* -Destination $curDestFolder -Recurse -Force
@@ -297,7 +306,6 @@ $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespa
 $CursorRefresh::SystemParametersInfo(0x0057,0,$null,0) | Out-Null
 
 # Pin Home and Programs to Quick Access
-
 $homeDir = "C:\Users\$env:USERNAME"
 $homeIniFilePath = "$($homeDir)\desktop.ini"
 $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
@@ -336,7 +344,6 @@ $programsPin = new-object -com shell.application
 $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome") | Out-Null
 
 # Pin Recycle Bin to Quick Access
-
 $RBPath = 'HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\pintohome\command\'
 $name = "DelegateExecute"
 $value = "{b455f46e-e4af-4035-b0a4-cf18d2f6f28e}"
@@ -348,13 +355,11 @@ $trash.Self.InvokeVerb("PinToHome") | Out-Null
 Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse | Out-Null
 
 # Remove Shortcut Arrows
-
 Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force
 New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
 
 ## Open-Shell
-
 Write-Host "Configuring Open-Shell..." -ForegroundColor Yellow
 
 winget install --id "Open-Shell.Open-Shell-Menu" --source winget --custom 'ADDLOCAL=StartMenu' --silent | Out-Null
