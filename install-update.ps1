@@ -40,17 +40,43 @@ Start-Transcript -Path ".\temp\WinMac_install_log_$date.txt" -Append | Out-Null
 
 ## User Configuration
 
-$selectedApps = @()
+You can choose between full and custom installation.
 
-Write-Host "Please select packages you want to install:"
-Write-Host "1. PowerToys"
-Write-Host "2. Powershell Profile"
-Write-Host "3. StartAllBack"
-Write-Host "4. Open-Shell"
-Write-Host "5. TopNotify"
+$fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom installation"
+if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
+    $selectedApps = "1","2","3","4","5"
+    Write-Host "Choosing full installation." -ForegroundColor Yellow
+    Start-Sleep 1
+}
+elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
+    Write-Host "Choosing custom installation." -ForegroundColor Yellow
+    Start-Sleep 1
 
-$selection = Read-Host "Enter the numbers of the packages you want to install (separated by commas):"
-$selectedApps = $selection.Split(',')
+
+    $selectedApps = @()
+Write-Host @"
+
+Please select packages you want to install:
+
+"@ -ForegroundColor Yellow
+    Write-Host "1. PowerToys"
+    Write-Host "2. Powershell Profile"
+    Write-Host "3. StartAllBack"
+    Write-Host "4. Open-Shell"
+    Write-Host "5. TopNotify"
+
+    $selection = Read-Host "Enter the numbers of the packages you want to install (separated by commas)" -ForegroundColor Yellow
+    $selectedApps = $selection.Split(',')
+    $if ($selectedApps -contains '0') {
+        
+    }
+}
+else
+{
+    $selectedApps = "1","2","3","4","5"
+    Write-Host "Invalid input. Defaulting to full installation." -ForegroundColor Yellow
+    Start-Sleep 1
+}
 
 Write-Host @"
 
@@ -122,8 +148,34 @@ Invoke-WebRequest -Uri $wingetUrl -OutFile $installPath
 Write-Information "Installing WinGet..."
 Add-AppxPackage -Path $installPath
 Remove-Item -Path $installPath -Force
-Write-Information "Winget installation completed."
+Write-Information "Winget installation completed." -ForegroundColor Green
+
+## Defintions
 $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
+Add-Type -AssemblyName System.Windows.Forms
+Add-Type -TypeDefinition @"
+using System;
+using System.Runtime.InteropServices;
+
+public class MouseInput
+{
+    [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+    public static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint cButtons, uint dwExtraInfo);
+    
+    public const uint MOUSEEVENTF_LEFTDOWN = 0x02;
+    public const uint MOUSEEVENTF_LEFTUP = 0x04;
+
+    public static void HoldLeftMouseButton()
+    {
+        mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
+    }
+    
+    public static void ReleaseLeftMouseButton()
+    {
+        mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+    }
+}
+"@
 Add-Type -TypeDefinition @"
 using System;
 using System.Runtime.InteropServices;
@@ -181,7 +233,6 @@ foreach ($app in $selectedApps) {
             else {
                 Write-Information "NuGet Provider is already installed."
             }
-
             $winget = @(
                 "Vim.Vim",
                 "gsass1.NTop"
@@ -196,7 +247,6 @@ foreach ($app in $selectedApps) {
             Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $functions
             Add-Content -Path "$profilePath\WindowsPowerShell\$prompt" -Value $functions
             Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $functions
-
             Write-Host "Configuring PowerShell Profile completed." -ForegroundColor Green
         }
         "3" {
@@ -206,7 +256,6 @@ foreach ($app in $selectedApps) {
             $SWP_SHOWWINDOW = 0x0040
             [Taskbar]::SetWindowPos($taskbarHandle, $HWND_TOP, 0, 0, 0, 0, $SWP_SHOWWINDOW) | Out-Null
             $sabRegPath = "HKCU:\Software\StartIsBack"
-
             Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
             winget install --id "StartIsBack.StartAllBack" --source winget --silent | Out-Null
             $sabLocal = ($env:AppData | Split-Path) + "\local\StartAllBack\Orbs"
@@ -247,7 +296,26 @@ foreach ($app in $selectedApps) {
             if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0 }
             else { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 1 }
             Stop-Process -Name Explorer -Force
-
+            Start-Sleep 5
+            $screen = [System.Windows.Forms.SystemInformation]::VirtualScreen
+            $w = $screen.width/4
+            [Windows.Forms.Cursor]::Position = "$($w),$($screen.Height)"
+            Start-Sleep -Seconds 2
+            [MouseInput]::HoldLeftMouseButton()
+            Start-Sleep -Seconds 2
+            [Windows.Forms.Cursor]::Position = "$($w),1"
+            Start-Sleep -Seconds 2
+            [MouseInput]::ReleaseLeftMouseButton()
+            Start-Sleep -Seconds 2
+            $screen = [System.Windows.Forms.SystemInformation]::VirtualScreen
+            $centerX = $screen.Width / 2
+            $centerY = $screen.Height / 2
+            [Windows.Forms.Cursor]::Position = "$centerX,$centerY"
+            Start-Sleep -Milliseconds 100
+            [MouseInput]::HoldLeftMouseButton()
+            Start-Sleep -Milliseconds 100
+            [MouseInput]::ReleaseLeftMouseButton()
+            Start-Sleep -Seconds 2
             Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
         }
         "4" {
@@ -304,11 +372,13 @@ foreach ($app in $selectedApps) {
         }
         "5" {
             # TopNotify
+            Write-Host "Configuring TopNotify..." -ForegroundColor Yellow
             Invoke-WebRequest "https://github.com/SamsidParty/TopNotify/releases/download/2.2.0/TopNotify.zip" -OutFile TopNotify.zip
             $exePath = ($env:AppData | Split-Path) + "\local\TopNotify"
             Expand-Archive TopNotify.zip -DestinationPath $exePath -Force
             Start-Process -FilePath $exePath\TopNotify.exe
             Remove-Item -Path TopNotify.zip -Force
+            Write-Host "Configuring TopNotify completed." -ForegroundColor Green
         }
     }
 }
@@ -326,7 +396,7 @@ Remove-Item -Path "HKCR:\Folder\ShellEx\ContextMenuHandlers\PintoStartScreen" -F
 Remove-Item -Path "HKCR:\Microsoft.Website\shellex\ContextMenuHandlers\PintoStartScreen" -Force
 Remove-Item -Path "HKCR:\mscfile\shellex\ContextMenuHandlers\PintoStartScreen" -Force
 
-#TODO: Check in reg if was already set
+#TODO: Add Pins and Cursor to reg
 # Cursor
 $curSourceFolder = $pwd.Path + '\config\cursor'
 $curDestFolder = "C:\Windows\Cursors"
@@ -432,53 +502,6 @@ Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force
 New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
 Start-Sleep 5
-
-#TODO: check if taskbar was already set to top
-Add-Type -AssemblyName System.Windows.Forms
-Add-Type -TypeDefinition @"
-using System;
-using System.Runtime.InteropServices;
-
-public class MouseInput
-{
-    [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
-    public static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint cButtons, uint dwExtraInfo);
-
-    public const uint MOUSEEVENTF_LEFTDOWN = 0x02;
-    public const uint MOUSEEVENTF_LEFTUP = 0x04;
-
-    public static void HoldLeftMouseButton()
-    {
-        mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
-    }
-
-    public static void ReleaseLeftMouseButton()
-    {
-        mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
-    }
-}
-"@
-
-$screen = [System.Windows.Forms.SystemInformation]::VirtualScreen
-$w = $screen.width/4
-[Windows.Forms.Cursor]::Position = "$($w),$($screen.Height)"
-Start-Sleep -Seconds 2
-[MouseInput]::HoldLeftMouseButton()
-Start-Sleep -Seconds 2
-[Windows.Forms.Cursor]::Position = "$($w),1"
-Start-Sleep -Seconds 2
-[MouseInput]::ReleaseLeftMouseButton()
-Start-Sleep -Seconds 2
-$screen = [System.Windows.Forms.SystemInformation]::VirtualScreen
-$centerX = $screen.Width / 2
-$centerY = $screen.Height / 2
-[Windows.Forms.Cursor]::Position = "$centerX,$centerY"
-Start-Sleep -Milliseconds 100
-[MouseInput]::HoldLeftMouseButton()
-Start-Sleep -Milliseconds 100
-[MouseInput]::ReleaseLeftMouseButton()
-Start-Sleep -Seconds 2
-#TODO/END
 
 Write-Host "Clean up..." -ForegroundColor Yellow
 Remove-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Force | Out-Null
