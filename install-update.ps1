@@ -45,22 +45,23 @@ $fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom installation"
 if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
     Write-Host "Choosing full installation." -ForegroundColor Yellow
     $selectedApps = "1","2","3","4","5"
-    Write-Host "Selected options: PowerToys, Powershell Profile, StartAllBack, Open-Shell, TopNotify" -ForegroundColor Green
+    Write-Host "$([char]27)[92m$("Selected options:")$([char]27)[0m PowerToys, Everything, Powershell Profile, StartAllBack, Open-Shell, TopNotify"
 }
 elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
     Write-Host "Choosing custom installation." -ForegroundColor Yellow
     Start-Sleep 1
-    $appList = @{"1"="PowerToys"; "2"="Powershell Profile"; "3"="StartAllBack"; "4"="Open-Shell"; "5"="TopNotify"}
+    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="Open-Shell"; "6"="TopNotify"}
 Write-Host @"
 
-Please select options you want to install:
+$([char]27)[93m$("Please select options you want to install:")$([char]27)[0m
 
 "@
     Write-Host "1. PowerToys"
-    Write-Host "2. Powershell Profile"
-    Write-Host "3. StartAllBack"
-    Write-Host "4. Open-Shell"
-    Write-Host "5. TopNotify"
+    Write-Host "2. Everything"
+    Write-Host "3. Powershell Profile"
+    Write-Host "4. StartAllBack"
+    Write-Host "5. Open-Shell"
+    Write-Host "6. TopNotify"
     Write-Host
     $selection = Read-Host "Enter the numbers of options you want to install (separated by commas)"
     $selectedApps = @()
@@ -72,18 +73,18 @@ Please select options you want to install:
         }
     }
     Write-Host
-    Write-Host "Selected options: $($selectedAppNames -join ', ')" -ForegroundColor Green
+    Write-Host "$([char]27)[92m$("Selected options:")$([char]27)[0m $($selectedAppNames -join ', ')"
 }
 else
 {
     Write-Host "Invalid input. Defaulting to full installation." -ForegroundColor Yellow
     $selectedApps = "1","2","3","4","5"
-    Write-Host "Selected options: PowerToys, Powershell Profile, StartAllBack, Open-Shell, TopNotify" -ForegroundColor Green
+    Write-Host "$([char]27)[92m$("Selected options:")$([char]27)[0m PowerToys, Everything, Powershell Profile, StartAllBack, Open-Shell, TopNotify"
 }
 
 Write-Host @"
 
-You can choose between WinMac prompt or MacOS-like prompt.
+$([char]27)[93m$("You can choose between WinMac prompt or MacOS-like prompt.")$([char]27)[0m
 
 WinMac prompt: 
 12:35:06 userName @ ~ > 
@@ -103,7 +104,7 @@ else
 
 Write-Host @"
 
-You can choose between rounded or squared shell corners.
+$([char]27)[93m$("You can choose between rounded or squared shell corners.")$([char]27)[0m
 
 "@
 $roundedOrSquared = Read-Host "Enter 'R' for rounded corners or 'S' for squared corners"
@@ -194,17 +195,18 @@ foreach ($app in $selectedApps) {
             winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
             Start-Sleep 3
             Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force | Out-Null
+            Write-Host "Installing PowerToys completed." -ForegroundColor Green
+        }
+        "2" {
+            ## Everything
             $winget = @(
                 "Voidtools.Everything",
                 "lin-ycv.EverythingPowerToys"
             )
             foreach ($app in $winget) {winget install --id $app --source winget --silent | Out-Null }
-
-            $ptDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
-            Start-Process "$ptDir\PowerToys (Preview)\PowerToys (Preview).lnk" -WindowStyle Minimized
-            Write-Host "Installing PowerToys completed." -ForegroundColor Green
-        }
-        "2" {
+            Start-Sleep 2
+            }
+        "3" {
             ## PowerShell Profile
             Write-Host "Configuring PowerShell Profile..." -ForegroundColor Yellow
 
@@ -245,7 +247,7 @@ foreach ($app in $selectedApps) {
             Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $functions
             Write-Host "Configuring PowerShell Profile completed." -ForegroundColor Green
         }
-        "3" {
+        "4" {
             ## StartAllBack
             $taskbarHandle = [Taskbar]::FindWindow("Shell_TrayWnd", "") | Out-Null
             $HWND_TOP = [IntPtr]::Zero
@@ -314,7 +316,7 @@ foreach ($app in $selectedApps) {
             Start-Sleep -Seconds 2
             Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
         }
-        "4" {
+        "5" {
             ## Open-Shell
             Write-Host "Configuring Open-Shell..." -ForegroundColor Yellow
             $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"
@@ -366,7 +368,7 @@ foreach ($app in $selectedApps) {
             Start-Process $shellExePath
             Write-Host "Configuring Open-Shell completed." -ForegroundColor Green
         }
-        "5" {
+        "6" {
             # TopNotify
             Write-Host "Configuring TopNotify..." -ForegroundColor Yellow
             Invoke-WebRequest "https://github.com/SamsidParty/TopNotify/releases/download/2.2.0/TopNotify.zip" -OutFile TopNotify.zip
@@ -378,6 +380,9 @@ foreach ($app in $selectedApps) {
         }
     }
 }
+
+$ptDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+Start-Process "$ptDir\PowerToys (Preview)\PowerToys (Preview).lnk" -WindowStyle Minimized
 
 # Cursor
 $curSourceFolder = $pwd.Path + '\config\cursor'
