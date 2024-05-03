@@ -123,6 +123,7 @@ Write-Information "Installing WinGet..."
 Add-AppxPackage -Path $installPath
 Remove-Item -Path $installPath -Force
 Write-Information "Winget installation completed."
+$exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
 
 foreach ($app in $selectedApps) {
     switch ($app.Trim()) {
@@ -188,6 +189,7 @@ foreach ($app in $selectedApps) {
             Write-Host "Configuring PowerShell Profile completed." -ForegroundColor Green
         }
         "3" {
+            ## StartAllBack
 Add-Type -TypeDefinition @"
 using System;
 using System.Runtime.InteropServices;
@@ -203,14 +205,12 @@ public class Taskbar {
             $HWND_TOP = [IntPtr]::Zero
             $SWP_SHOWWINDOW = 0x0040
             [Taskbar]::SetWindowPos($taskbarHandle, $HWND_TOP, 0, 0, 0, 0, $SWP_SHOWWINDOW) | Out-Null
+            $sabRegPath = "HKCU:\Software\StartIsBack"
 
-            ## StartAllBack
             Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
             winget install --id "StartIsBack.StartAllBack" --source winget --silent | Out-Null
             $sabLocal = ($env:AppData | Split-Path) + "\local\StartAllBack\Orbs"
             Copy-Item $pwd\config\taskbar\orbs\* $sabLocal -Force | Out-Null
-            $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
-            $sabRegPath = "HKCU:\Software\StartIsBack"
             Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 1
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSizeMove" -Value 1
             Set-ItemProperty -Path $exRegPath\Advanced -Name "ShowStatusBar" -Value 0
