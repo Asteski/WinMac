@@ -124,6 +124,17 @@ Add-AppxPackage -Path $installPath
 Remove-Item -Path $installPath -Force
 Write-Information "Winget installation completed."
 $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
+Add-Type -TypeDefinition @"
+using System;
+using System.Runtime.InteropServices;
+public class Taskbar {
+    [DllImport("user32.dll", SetLastError = true)]
+    public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+}
+"@
 
 foreach ($app in $selectedApps) {
     switch ($app.Trim()) {
@@ -190,17 +201,6 @@ foreach ($app in $selectedApps) {
         }
         "3" {
             ## StartAllBack
-Add-Type -TypeDefinition @"
-using System;
-using System.Runtime.InteropServices;
-public class Taskbar {
-    [DllImport("user32.dll", SetLastError = true)]
-    public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-
-    [DllImport("user32.dll", SetLastError = true)]
-    public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
-}
-"@
             $taskbarHandle = [Taskbar]::FindWindow("Shell_TrayWnd", "") | Out-Null
             $HWND_TOP = [IntPtr]::Zero
             $SWP_SHOWWINDOW = 0x0040
@@ -310,6 +310,8 @@ public class Taskbar {
             Start-Process -FilePath $exePath\TopNotify.exe
             Remove-Item -Path TopNotify.zip -Force
         }
+    }
+}
 
 ### MISC
 Set-ItemProperty -Path "$exRegPath\Advanced" -Name "LaunchTO" -Value 1
