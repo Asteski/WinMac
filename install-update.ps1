@@ -42,6 +42,7 @@ Start-Transcript -Path ".\temp\WinMac_install_log_$date.txt" -Append | Out-Null
 
 You can choose between full and custom installation.
 
+Write-Host
 $fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom installation"
 if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
     $selectedApps = "1","2","3","4","5"
@@ -51,21 +52,19 @@ if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
 elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
     Write-Host "Choosing custom installation." -ForegroundColor Yellow
     Start-Sleep 1
-
-
     $selectedApps = @()
 Write-Host @"
 
 Please select packages you want to install:
 
-"@ -ForegroundColor Yellow
+"@
     Write-Host "1. PowerToys"
     Write-Host "2. Powershell Profile"
     Write-Host "3. StartAllBack"
     Write-Host "4. Open-Shell"
     Write-Host "5. TopNotify"
 
-    $selection = Read-Host "Enter the numbers of the packages you want to install (separated by commas)" -ForegroundColor Yellow
+    $selection = Read-Host "Enter the numbers of the packages you want to install (separated by commas)"
     $selectedApps = $selection.Split(',')
 }
 else
