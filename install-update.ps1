@@ -195,6 +195,8 @@ foreach ($app in $selectedApps) {
             Start-Sleep 3
             Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force | Out-Null
             Write-Host "Installing PowerToys completed." -ForegroundColor Green
+            $ptDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+            Start-Process "$ptDir\PowerToys (Preview)\PowerToys (Preview).lnk" -WindowStyle Minimized
         }
         "2" {
             ## Everything
@@ -205,6 +207,8 @@ foreach ($app in $selectedApps) {
                 )
             foreach ($app in $winget) { winget install --id $app --source winget --silent | Out-Null }
             Start-Sleep 2
+            $ptDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+            Start-Process "$ptDir\PowerToys (Preview)\PowerToys (Preview).lnk" -WindowStyle Minimized
             Write-Host "Installing Everything completed." -ForegroundColor Green
             }
         "3" {
@@ -382,9 +386,6 @@ foreach ($app in $selectedApps) {
         }
     }
 }
-
-$ptDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
-Start-Process "$ptDir\PowerToys (Preview)\PowerToys (Preview).lnk" -WindowStyle Minimized
 
 # Cursor
 $curSourceFolder = $pwd.Path + '\config\cursor'
