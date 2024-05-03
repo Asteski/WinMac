@@ -45,8 +45,8 @@ You can choose between full and custom installation.
 Write-Host
 $fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom installation"
 if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
-    $selectedApps = "1","2","3","4","5"
     Write-Host "Choosing full installation." -ForegroundColor Yellow
+    $selectedApps = "1","2","3","4","5"
     Start-Sleep 1
 }
 elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
@@ -63,14 +63,14 @@ Please select packages you want to install:
     Write-Host "3. StartAllBack"
     Write-Host "4. Open-Shell"
     Write-Host "5. TopNotify"
-
+    Write-Host
     $selection = Read-Host "Enter the numbers of the packages you want to install (separated by commas)"
     $selectedApps = $selection.Split(',')
 }
 else
 {
-    $selectedApps = "1","2","3","4","5"
     Write-Host "Invalid input. Defaulting to full installation." -ForegroundColor Yellow
+    $selectedApps = "1","2","3","4","5"
     Start-Sleep 1
 }
 
@@ -88,7 +88,7 @@ userName@computerName ~ %
 $promptSet = Read-Host "Do you want to use WinMac prompt? (y/n)"
 if ($promptSet -eq 'y') {
     Write-Host "Using WinMac prompt." -ForegroundColor Yellow
-    Start-Sleep 1W
+    Start-Sleep 1
 }
 else
 { 
