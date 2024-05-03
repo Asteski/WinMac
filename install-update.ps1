@@ -198,17 +198,18 @@ foreach ($app in $selectedApps) {
         }
         "2" {
             ## Everything
+            Write-Host "Installing Everything..."  -ForegroundColor Yellow
             $winget = @(
                 "Voidtools.Everything",
                 "lin-ycv.EverythingPowerToys"
-            )
-            foreach ($app in $winget) {winget install --id $app --source winget --silent | Out-Null }
+                )
+            foreach ($app in $winget) { winget install --id $app --source winget --silent | Out-Null }
             Start-Sleep 2
+            Write-Host "Installing Everything completed." -ForegroundColor Green
             }
         "3" {
             ## PowerShell Profile
             Write-Host "Configuring PowerShell Profile..." -ForegroundColor Yellow
-
             $profilePath = $PROFILE | Split-Path | Split-Path
             $profileFile = $PROFILE | Split-Path -Leaf
             if ($promptSet -eq 'y') { $prompt = Get-Content "$pwd\config\terminal\winmac-prompt.ps1" -Raw }
@@ -312,6 +313,8 @@ foreach ($app in $selectedApps) {
             [MouseInput]::HoldLeftMouseButton()
             Start-Sleep -Milliseconds 100
             [MouseInput]::ReleaseLeftMouseButton()
+            Start-Sleep -Milliseconds 100
+            Start-Process explorer
             Start-Sleep -Seconds 2
             Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
         }
