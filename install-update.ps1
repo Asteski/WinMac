@@ -45,7 +45,7 @@ $fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom installation"
 if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
     Write-Host "Choosing full installation." -ForegroundColor Yellow
     $selectedApps = "1","2","3","4","5"
-    Write-Host "Selected options: PowerToys, Powershell Profile, StartAllBack, Open-Shell, TopNotify"
+    Write-Host "Selected options: PowerToys, Powershell Profile, StartAllBack, Open-Shell, TopNotify" -ForegroundColor Green
 }
 elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
     Write-Host "Choosing custom installation." -ForegroundColor Yellow
@@ -71,13 +71,14 @@ Please select options you want to install:
             $selectedAppNames += $appList[$appNumber]
         }
     }
-    Write-Host "Selected options: $($selectedAppNames -join ', ')"
+    Write-Host
+    Write-Host "Selected options: $($selectedAppNames -join ', ')" -ForegroundColor Green
 }
 else
 {
     Write-Host "Invalid input. Defaulting to full installation." -ForegroundColor Yellow
     $selectedApps = "1","2","3","4","5"
-    Write-Host "Selected options: PowerToys, Powershell Profile, StartAllBack, Open-Shell, TopNotify"
+    Write-Host "Selected options: PowerToys, Powershell Profile, StartAllBack, Open-Shell, TopNotify" -ForegroundColor Green
 }
 
 Write-Host @"
