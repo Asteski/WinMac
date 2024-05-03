@@ -72,7 +72,6 @@ $([char]27)[93m$("Please select options you want to install:")$([char]27)[0m
             $selectedAppNames += $appList[$appNumber]
         }
     }
-    Write-Host
     Write-Host "$([char]27)[92m$("Selected options:")$([char]27)[0m $($selectedAppNames -join ', ')"
 }
 else
