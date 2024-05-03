@@ -198,8 +198,8 @@ foreach ($app in $selectedApps) {
             )
             foreach ($app in $winget) {winget install --id $app --source winget --silent | Out-Null }
 
-            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
-            Start-Process "$programsDir\PowerToys (Preview)\PowerToys (Preview).lnk" -WindowStyle Minimized
+            $ptDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+            Start-Process "$ptDir\PowerToys (Preview)\PowerToys (Preview).lnk" -WindowStyle Minimized
             Write-Host "Installing PowerToys completed." -ForegroundColor Green
         }
         "2" {
@@ -377,20 +377,6 @@ foreach ($app in $selectedApps) {
     }
 }
 
-### MISC
-Set-ItemProperty -Path "$exRegPath\Advanced" -Name "LaunchTO" -Value 1
-Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
-Set-ItemProperty -Path $exRegPath -Name "ShowRecent" -Value 0
-Set-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\Windows\Explorer" -Name "TaskbarNoMultimon" -Value 1
-Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer" -Name "TaskbarNoMultimon" -Value 1
-Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
-Remove-Item -Path "HKCR:\exefile\shellex\ContextMenuHandlers\PintoStartScreen" -Force
-Remove-ItemProperty -Path "HKCR:\exefile\shellex\ContextMenuHandlers\PintoStartScreen" -Name "PintoStartScreen" -Confirm
-Remove-Item -Path "HKCR:\Folder\ShellEx\ContextMenuHandlers\PintoStartScreen" -Force
-Remove-Item -Path "HKCR:\Microsoft.Website\shellex\ContextMenuHandlers\PintoStartScreen" -Force
-Remove-Item -Path "HKCR:\mscfile\shellex\ContextMenuHandlers\PintoStartScreen" -Force
-
-#TODO: Add Pins and Cursor to reg
 # Cursor
 $curSourceFolder = $pwd.Path + '\config\cursor'
 $curDestFolder = "C:\Windows\Cursors"
@@ -435,18 +421,12 @@ uint fWinIni);
 $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
 $CursorRefresh::SystemParametersInfo(0x0057,0,$null,0) | Out-Null
 
-# Pin Home and Programs to Quick Access
+# Pin Home, Programs and Recycle Bin to Quick Access
 $homeDir = "C:\Users\$env:USERNAME"
 $homeIniFilePath = "$($homeDir)\desktop.ini"
-$programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
-$programsIniFilePath = "$($programsDir)\desktop.ini"
 $homeIni = @"
 [.ShellClassInfo]
 IconResource=C:\Windows\System32\SHELL32.dll,160
-"@
-$programsIni = @"
-[.ShellClassInfo]
-IconResource=C:\WINDOWS\System32\imageres.dll,187
 "@
 
 if (Test-Path $homeIniFilePath)  {
@@ -463,6 +443,13 @@ if (-not ($homePin.Namespace($homeDir).Self.Verbs() | Where-Object {$_.Name -eq 
     $homePin.Namespace($homeDir).Self.InvokeVerb("pintohome") | Out-Null
 }
 
+$programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+$programsIniFilePath = "$($programsDir)\desktop.ini"
+$programsIni = @"
+[.ShellClassInfo]
+IconResource=C:\WINDOWS\System32\imageres.dll,187
+"@
+
 if (Test-Path $programsIniFilePath)  {
     Remove-Item $programsIniFilePath -Force
     New-Item -Path $programsIniFilePath -ItemType File -Force | Out-Null
@@ -477,16 +464,15 @@ if (-not ($programsPin.Namespace($programsDir).Self.Verbs() | Where-Object {$_.N
     $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome") | Out-Null
 }
 
-# Pin Recycle Bin to Quick Access
 $RBPath = 'HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\pintohome\command\'
 $name = "DelegateExecute"
 $value = "{b455f46e-e4af-4035-b0a4-cf18d2f6f28e}"
-New-Item -Path $RBPath -Force | Out-Null
-New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force | Out-Null
+New-Item -Path $RBPath -Force
+New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force
 $oShell = New-Object -ComObject Shell.Application
-$trash = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
-if (-not ($programsPin.Namespace($programsDir).Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
-    $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome") | Out-Null
+$recycleBin = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
+if (-not ($recycleBin.Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
+    $recycleBin.Self.InvokeVerb("PinToHome") | Out-Null
 }
 Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse | Out-Null
 
@@ -496,6 +482,20 @@ New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentV
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
 Start-Sleep 5
 
+# Other Configurations
+Set-ItemProperty -Path "$exRegPath\Advanced" -Name "LaunchTO" -Value 1
+Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
+Set-ItemProperty -Path $exRegPath -Name "ShowRecent" -Value 0
+Set-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\Windows\Explorer" -Name "TaskbarNoMultimon" -Value 1
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer" -Name "TaskbarNoMultimon" -Value 1
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
+Remove-Item -Path "HKCR:\exefile\shellex\ContextMenuHandlers\PintoStartScreen" -Force
+Remove-ItemProperty -Path "HKCR:\exefile\shellex\ContextMenuHandlers\PintoStartScreen" -Name "PintoStartScreen" -Confirm
+Remove-Item -Path "HKCR:\Folder\ShellEx\ContextMenuHandlers\PintoStartScreen" -Force
+Remove-Item -Path "HKCR:\Microsoft.Website\shellex\ContextMenuHandlers\PintoStartScreen" -Force
+Remove-Item -Path "HKCR:\mscfile\shellex\ContextMenuHandlers\PintoStartScreen" -Force
+
+# Clean up
 Write-Host "Clean up..." -ForegroundColor Yellow
 Remove-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Force | Out-Null
 Remove-Item -Path "C:\Users\Public\Desktop\gVim*" -Force | Out-Null
