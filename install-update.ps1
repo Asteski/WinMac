@@ -45,15 +45,14 @@ $fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom installation"
 if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
     Write-Host "Choosing full installation." -ForegroundColor Yellow
     $selectedApps = "1","2","3","4","5"
-    Write-Host "Selected apps: PowerToys, Powershell Profile, StartAllBack, Open-Shell, TopNotify"
-    Start-Sleep 1
+    Write-Host "Selected options: PowerToys, Powershell Profile, StartAllBack, Open-Shell, TopNotify"
 }
 elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
     Write-Host "Choosing custom installation." -ForegroundColor Yellow
     Start-Sleep 1
 Write-Host @"
 
-Please select packages you want to install:
+Please select options you want to install:
 
 "@
     Write-Host "1. PowerToys"
@@ -62,7 +61,7 @@ Please select packages you want to install:
     Write-Host "4. Open-Shell"
     Write-Host "5. TopNotify"
     Write-Host
-    $selection = Read-Host "Enter the numbers of the packages you want to install (separated by commas)"
+    $selection = Read-Host "Enter the numbers of options you want to install (separated by commas)"
     $selectedApps = @()
     $selectedApps = $selection.Split(',')
     $selectedAppNames = @()
@@ -71,14 +70,13 @@ Please select packages you want to install:
             $selectedAppNames += $appList[$appNumber]
         }
     }
-    Write-Host "Selected apps: $($selectedAppNames -join ', ')"
+    Write-Host "Selected options: $($selectedAppNames -join ', ')"
 }
 else
 {
     Write-Host "Invalid input. Defaulting to full installation." -ForegroundColor Yellow
     $selectedApps = "1","2","3","4","5"
-    Write-Host "Selected apps: PowerToys, Powershell Profile, StartAllBack, Open-Shell, TopNotify"
-    Start-Sleep 1
+    Write-Host "Selected options: PowerToys, Powershell Profile, StartAllBack, Open-Shell, TopNotify"
 }
 
 Write-Host @"
@@ -95,12 +93,10 @@ userName@computerName ~ %
 $promptSet = Read-Host "Do you want to use WinMac prompt? (y/n)"
 if ($promptSet -eq 'y') {
     Write-Host "Using WinMac prompt." -ForegroundColor Yellow
-    Start-Sleep 1
 }
 else
 { 
     Write-Host "Using MacOS prompt." -ForegroundColor Yellow
-    Start-Sleep 1
 }
 
 Write-Host @"
@@ -111,17 +107,14 @@ You can choose between rounded or squared shell corners.
 $roundedOrSquared = Read-Host "Enter 'R' for rounded corners or 'S' for squared corners"
 if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') {
     Write-Host "Using rounded corners." -ForegroundColor Yellow
-    Start-Sleep 1
 }
 elseif ($roundedOrSquared -eq 'S' -or $roundedOrSquared -eq 's') {
     Write-Host "Using squared corners." -ForegroundColor Yellow
-    Start-Sleep 1
 }
 else
 {
     Write-Host "Invalid input. Defaulting to rounded corners." -ForegroundColor Yellow
     $roundedOrSquared = 'R'
-    Start-Sleep 1
 }
 
 Write-Host
