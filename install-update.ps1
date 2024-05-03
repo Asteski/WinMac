@@ -67,9 +67,6 @@ Please select packages you want to install:
 
     $selection = Read-Host "Enter the numbers of the packages you want to install (separated by commas)" -ForegroundColor Yellow
     $selectedApps = $selection.Split(',')
-    $if ($selectedApps -contains '0') {
-        
-    }
 }
 else
 {
