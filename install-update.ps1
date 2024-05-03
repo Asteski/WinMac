@@ -40,19 +40,17 @@ Start-Transcript -Path ".\temp\WinMac_install_log_$date.txt" -Append | Out-Null
 
 ## User Configuration
 
-You can choose between full and custom installation.
-
 Write-Host
 $fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom installation"
 if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
     Write-Host "Choosing full installation." -ForegroundColor Yellow
     $selectedApps = "1","2","3","4","5"
+    Write-Host "Selected apps: PowerToys, Powershell Profile, StartAllBack, Open-Shell, TopNotify"
     Start-Sleep 1
 }
 elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
     Write-Host "Choosing custom installation." -ForegroundColor Yellow
     Start-Sleep 1
-    $selectedApps = @()
 Write-Host @"
 
 Please select packages you want to install:
@@ -65,12 +63,21 @@ Please select packages you want to install:
     Write-Host "5. TopNotify"
     Write-Host
     $selection = Read-Host "Enter the numbers of the packages you want to install (separated by commas)"
+    $selectedApps = @()
     $selectedApps = $selection.Split(',')
+    $selectedAppNames = @()
+    foreach ($appNumber in $selectedApps) {
+        if ($appList.ContainsKey($appNumber)) {
+            $selectedAppNames += $appList[$appNumber]
+        }
+    }
+    Write-Host "Selected apps: $($selectedAppNames -join ', ')"
 }
 else
 {
     Write-Host "Invalid input. Defaulting to full installation." -ForegroundColor Yellow
     $selectedApps = "1","2","3","4","5"
+    Write-Host "Selected apps: PowerToys, Powershell Profile, StartAllBack, Open-Shell, TopNotify"
     Start-Sleep 1
 }
 
