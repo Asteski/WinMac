@@ -192,8 +192,6 @@ foreach ($app in $selectedApps) {
             winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
             Start-Sleep 3
             Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force | Out-Null
-
-            Write-Host "Installing Everything..." -ForegroundColor Yellow
             $winget = @(
                 "Voidtools.Everything",
                 "lin-ycv.EverythingPowerToys"
@@ -487,9 +485,8 @@ New-Item -Path $RBPath -Force | Out-Null
 New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force | Out-Null
 $oShell = New-Object -ComObject Shell.Application
 $trash = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
-$pinVerb = "pintohome"
-if (-not ($programsPin.Namespace($programsDir).Self.Verbs() | Where-Object {$_.Name -eq $pinVerb})) {
-    $programsPin.Namespace($programsDir).Self.InvokeVerb($pinVerb) | Out-Null
+if (-not ($programsPin.Namespace($programsDir).Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
+    $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome") | Out-Null
 }
 Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse | Out-Null
 
