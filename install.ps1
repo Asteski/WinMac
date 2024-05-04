@@ -480,7 +480,7 @@ Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002
 
 # Remove Shortcut Arrows
 Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force
-New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons"# | Out-Null
+New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
 Set-ItemProperty -Path "$exRegPath\Advanced" -Name "LaunchTO" -Value 1
 Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
