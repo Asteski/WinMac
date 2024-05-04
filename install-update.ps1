@@ -474,7 +474,7 @@ $name = "DelegateExecute"
 $value = "{b455f46e-e4af-4035-b0a4-cf18d2f6f28e}"
 New-Item -Path $RBPath -Force | Out-Null
 New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force | Out-Null
-$oShell = New-Object -ComObject Shell.Application | Out-Null
+$oShell = New-Object -ComObject Shell.Application
 $recycleBin = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
 if (-not ($recycleBin.Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
     $recycleBin.Self.InvokeVerb("PinToHome") | Out-Null
