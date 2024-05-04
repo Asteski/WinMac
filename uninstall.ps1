@@ -12,7 +12,7 @@ This is Work in Progress. You're using this script at your own risk.
 -----------------------------------------------------------------------
 
 "@ -ForegroundColor Cyan
-Write-Host
+
 $installConfirmation = Read-Host "Are you sure you want to start the uninstallation process (y/n)"
 
 if ($installConfirmation -ne 'y') {
