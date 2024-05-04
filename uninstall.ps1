@@ -12,14 +12,6 @@ This is Work in Progress. You're using this script at your own risk.
 -----------------------------------------------------------------------
 
 "@ -ForegroundColor Cyan
-Write-Host @"
-
-PowerShell profile files will be removed and replaced with new ones. 
-Please make sure to backup your current profiles if needed.
-
-"@ -ForegroundColor Yellow
-
-Write-Host "-----------------------------------------------------------------------"  -ForegroundColor Cyan
 Write-Host
 $installConfirmation = Read-Host "Are you sure you want to start the uninstallation process (y/n)"
 
@@ -34,7 +26,7 @@ if ($installConfirmation -ne 'y') {
 $errorActionPreference="SilentlyContinue"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 mkdir ./temp | Out-Null
-Start-Transcript -Path ".\temp\WinMac_install_log_$date.txt" -Append | Out-Null
+Start-Transcript -Path ".\temp\WinMac_uninstall_log_$date.txt" -Append | Out-Null
 
 ## User Configuration
 
@@ -42,12 +34,12 @@ Write-Host
 $fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom uninstallation"
 if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
     Write-Host "Choosing full uninstallation." -ForegroundColor Yellow
-    $selectedApps = "1","2","3","4","5","6","7","8"
+    $selectedApps = "1","2","3","4","5","6","7"
 }
 elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
     Write-Host "Choosing custom uninstallation." -ForegroundColor Yellow
     Start-Sleep 1
-    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="Open-Shell"; "6"="TopNotify"; "8"="Nexus"; "7"="Other"}
+    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="Open-Shell"; "6"="TopNotify"; "7"="Other"}
 Write-Host @"
 
 $([char]27)[93m$("Please select options you want to uninstall:")$([char]27)[0m
@@ -59,8 +51,9 @@ $([char]27)[93m$("Please select options you want to uninstall:")$([char]27)[0m
     Write-Host "4. StartAllBack"
     Write-Host "5. Open-Shell"
     Write-Host "6. TopNotify"
-    Write-Host "7. Nexus"
-    Write-Host "8. Other (cursor, pinned folders, shortcut arrows)"
+    Write-Host "7. Other (cursor, pinned folders, shortcut arrows)"
+    Write-Host
+    Write-Host "Winstep Nexus needs to be uninstalled manually."
     Write-Host
     $selection = Read-Host "Enter the numbers of options you want to uninstall (separated by commas)"
     $selectedApps = @()
@@ -76,14 +69,8 @@ $([char]27)[93m$("Please select options you want to uninstall:")$([char]27)[0m
 else
 {
     Write-Host "Invalid input. Defaulting to full uninstallation." -ForegroundColor Yellow
-    $selectedApps = "1","2","3","4","5","6","7","8"
+    $selectedApps = "1","2","3","4","5","6","7"
 }
-
-Write-Host
-Write-Host @"
-Please do not do anything while the script is running, as it may impact
-the uninstallation process.
-"@ -ForegroundColor Red
 Start-Sleep 2
 Write-Host
 Write-Host "Starting uninstallation process in..." -ForegroundColor Green
@@ -208,13 +195,6 @@ foreach ($app in $selectedApps) {
             Write-Host "Uninstalling TopNotify completed." -ForegroundColor Green
         }
         "7" {
-            # Nexus
-            Write-Host "Uninstalling Nexus..." -ForegroundColor Yellow
-            $nexusPath = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs\Winstep"
-            Remove-Item -Path $nexusPath -Recurse -Force | Out-Null
-            Write-Host "Uninstalling Nexus completed." -ForegroundColor Green
-        }
-        "8" {
             # Other
             Write-Host "Uninstalling Other configurations..." -ForegroundColor Yellow
             $curDestFolder = "C:\Windows\Cursors"
