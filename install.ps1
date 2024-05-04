@@ -44,8 +44,7 @@ Write-Host
 $fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom installation"
 if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
     Write-Host "Choosing full installation." -ForegroundColor Yellow
-    $selectedApps = "1","2","3","4","5"
-    Write-Host "$([char]27)[92m$("Selected options:")$([char]27)[0m PowerToys, Everything, Powershell Profile, StartAllBack, Open-Shell, TopNotify"
+    $selectedApps = "1","2","3","4","5","6"
 }
 elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
     Write-Host "Choosing custom installation." -ForegroundColor Yellow
@@ -77,8 +76,7 @@ $([char]27)[93m$("Please select options you want to install:")$([char]27)[0m
 else
 {
     Write-Host "Invalid input. Defaulting to full installation." -ForegroundColor Yellow
-    $selectedApps = "1","2","3","4","5"
-    Write-Host "$([char]27)[92m$("Selected options:")$([char]27)[0m PowerToys, Everything, Powershell Profile, StartAllBack, Open-Shell, TopNotify"
+    $selectedApps = "1","2","3","4","5","6"
 }
 
 Write-Host @"
@@ -493,11 +491,6 @@ Set-ItemProperty -Path $exRegPath -Name "ShowRecent" -Value 0
 Set-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\Windows\Explorer" -Name "TaskbarNoMultimon" -Value 1
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer" -Name "TaskbarNoMultimon" -Value 1
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
-Remove-Item -Path "HKCR:\exefile\shellex\ContextMenuHandlers\PintoStartScreen" -Force
-Remove-ItemProperty -Path "HKCR:\exefile\shellex\ContextMenuHandlers\PintoStartScreen" -Name "PintoStartScreen" -Confirm
-Remove-Item -Path "HKCR:\Folder\ShellEx\ContextMenuHandlers\PintoStartScreen" -Force
-Remove-Item -Path "HKCR:\Microsoft.Website\shellex\ContextMenuHandlers\PintoStartScreen" -Force
-Remove-Item -Path "HKCR:\mscfile\shellex\ContextMenuHandlers\PintoStartScreen" -Force
 
 # Clean up
 Write-Host "Clean up..." -ForegroundColor Yellow
