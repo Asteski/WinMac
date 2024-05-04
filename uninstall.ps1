@@ -13,14 +13,6 @@ This is Work in Progress. You're using this script at your own risk.
 
 "@ -ForegroundColor Cyan
 
-$installConfirmation = Read-Host "Are you sure you want to start the uninstallation process (y/n)"
-
-if ($installConfirmation -ne 'y') {
-    Write-Host "Uninstallation process aborted." -ForegroundColor Red
-    Start-Sleep 2
-    exit
-}
-
 ## Start Logging
 
 $errorActionPreference="SilentlyContinue"
@@ -71,7 +63,14 @@ else
     Write-Host "Invalid input. Defaulting to full uninstallation." -ForegroundColor Yellow
     $selectedApps = "1","2","3","4","5","6","7"
 }
-Start-Sleep 2
+Start-Sleep 1
+$installConfirmation = Read-Host "Are you sure you want to start the uninstallation process (y/n)"
+
+if ($installConfirmation -ne 'y') {
+    Write-Host "Uninstallation process aborted." -ForegroundColor Red
+    Start-Sleep 2
+    exit
+}
 Write-Host
 Write-Host "Starting uninstallation process in..." -ForegroundColor Green
 for ($a=3; $a -ge 0; $a--) {
