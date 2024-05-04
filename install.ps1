@@ -310,7 +310,6 @@ foreach ($app in $selectedApps) {
             Start-Sleep -Milliseconds 100
             [MouseInput]::ReleaseLeftMouseButton()
             Start-Sleep -Milliseconds 100
-            Start-Process explorer
             Start-Sleep -Seconds 2
             Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
         }
