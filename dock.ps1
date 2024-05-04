@@ -47,24 +47,24 @@ Copy-Item config\dock\icons "$winStep" -Recurse -Force | Out-Null
 $regFile = "$pwd\config\dock\winstep.reg"
 $tempFolder = "$pwd\temp"
     if (-not (Test-Path $tempFolder)) {
-    New-Item -ItemType Directory -Path $tempFolder -Force
+    New-Item -ItemType Directory -Path $tempFolder -Force | Out-Null
 }
 
 if ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
     $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "Rounded", "Squared" }
     $modifiedFile = "$pwd\temp\winstep.reg"
-    $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8
+    $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 | Out-Null
     $regFile = $modifiedFile
     if ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
         $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "Light", "Dark" }
         $modifiedFile = "$pwd\temp\winstep.reg"
-        $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8
+        $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 | Out-Null
     }
 }
 elseif (($roundedOrSquared -ne "S" -or $roundedOrSquared -ne "s") -and ($lightOrDark -eq "D" -or $lightOrDark -eq "d")) {
     $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "Light", "Dark" }
     $modifiedFile = "$pwd\temp\winstep.reg"
-    $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8
+    $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 | Out-Null
     $regFile = $modifiedFile
 }
 
