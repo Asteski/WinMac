@@ -42,9 +42,10 @@ set-alias -name user -value getuser
 function psversion { $PSVersionTable }
 function ll { Get-ChildItem -Force }
 function la { Get-ChildItem -Force -Attributes !D }
-function wl { winget list }
+function wl { winget list } 
+function wo { $appname = $args; winget show "$appname" }
 function ws { $appname = $args; winget search "$appname" }
-function wr { $appname = $args; winget uninstall "$appname" } 
+function wr { $appname = $args; winget uninstall "$appname" }
 function wu { $appname = $args; winget upgrade "$appname" } 
 function wi { $appname = $args; winget install "$appname" --accept-package-agreements --accept-source-agreements }
 
