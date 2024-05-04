@@ -14,7 +14,6 @@ properties:
       settings:
         id: lin-ycv.EverythingPowerToys
         source: winget
-
     - resource: PowerToysConfigure
       directives:
         description: Configure PowerToys
@@ -58,7 +57,7 @@ properties:
               Disabled: false
               IsGlobal: true
             - Name: "Registry Plugin"
-              Disabled: false
+              Disabled: true
             - Name: "Service"
               Disabled: false
             - Name: "Shell"
@@ -76,6 +75,24 @@ properties:
             - Name: "Everything"
               Disabled: false
               ActionKeyword: "?"
+            - Name: "History"
+              Disabled: true
+            - Name: "Windows Search"
+              Disabled: true
+            - Name: "OneNote"
+              Disabled: true
+            - Name: "PowerToys"
+              Disabled: true
+            - Name: "Unit Converter"
+              Disabled: true
+            - Name: "Value Generator"
+              Disabled: true
+            - Name: "Visual Studio Code Workspaces"
+              Disabled: true
+            - Name: "Windows Terminal"
+              Disabled: true
+            - Name: "Window Walker"
+              Disabled: true
         ColorPicker:
           Enabled: true
           ActivationShortcut: "Win+C"
@@ -87,36 +104,8 @@ properties:
           UseBoostLib: true
         ImageResizer:
           Enabled: true
-        KeyboardManager:
-          Enabled: false
         Awake:
-          Enabled: false
-        CropAndLock:
-          Enabled: false
-        EnvironmentVariables:
-          Enabled: false
-        FileLocksmith:
-          Enabled: false
-        MouseHighlighter:
-          Enabled: false
-        MouseJump:
-          Enabled: false
-        MousePointerCrosshairs:
-          Enabled: false
-        MouseWithoutBorders:
-          Enabled: false
-        PowerAccent:
-          Enabled: false
-        MeasureTool:
-          Enabled: false
-        Hosts:
-          Enabled: false
-        PowerOcr:
-          Enabled: false
-        ShortcutGuide:
-          Enabled: false
-        VideoConference:
-          Enabled: false
+          Enabled: true
         PowerPreview:
           EnableSvgPreview: false
           EnableSvgThumbnail: true
