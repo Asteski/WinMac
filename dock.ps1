@@ -55,7 +55,6 @@ if ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
     $modifiedFile = "$pwd\temp\winstep.reg"
     $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8
     $regFile = $modifiedFile
-    }
 }
 
 if ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
