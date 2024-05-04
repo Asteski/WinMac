@@ -192,23 +192,18 @@ foreach ($app in $selectedApps) {
             ## PowerToys
             Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
             winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
-            Start-Sleep 3
+            Start-Sleep 2
             Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force | Out-Null
-            Write-Host "Installing PowerToys completed." -ForegroundColor Green
+            # winget install --id "lin-ycv.EverythingPowerToys" --source winget --silent | Out-Null
             $ptDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+            Start-Sleep 2
             Start-Process "$ptDir\PowerToys (Preview)\PowerToys (Preview).lnk" -WindowStyle Minimized
+            Write-Host "Installing PowerToys completed." -ForegroundColor Green
         }
         "2" {
             ## Everything
             Write-Host "Installing Everything..."  -ForegroundColor Yellow
-            $winget = @(
-                "Voidtools.Everything",
-                "lin-ycv.EverythingPowerToys"
-                )
-            foreach ($app in $winget) { winget install --id $app --source winget --silent | Out-Null }
-            Start-Sleep 2
-            $ptDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
-            Start-Process "$ptDir\PowerToys (Preview)\PowerToys (Preview).lnk" -WindowStyle Minimized
+            winget install --id "Voidtools.Everything" --source winget --silent | Out-Null
             Write-Host "Installing Everything completed." -ForegroundColor Green
             }
         "3" {

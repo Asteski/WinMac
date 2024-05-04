@@ -7,6 +7,13 @@ properties:
       settings:
         id: Microsoft.PowerToys
         source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install Everything
+        allowPrerelease: true
+      settings:
+        id: lin-ycv.EverythingPowerToys
+        source: winget
 
     - resource: PowerToysConfigure
       directives:
@@ -47,14 +54,6 @@ properties:
               Disabled: false
             - Name: "Folder"
               Disabled: false
-            - Name: "History"
-              Disabled: true
-            - Name: "Windows Search"
-              Disabled: true
-            - Name: "OneNote"
-              Disabled: true
-            - Name: "PowerToys"
-              Disabled: true
             - Name: "Program"
               Disabled: false
               IsGlobal: true
@@ -66,26 +65,17 @@ properties:
               Disabled: false
             - Name: "Windows System Commands"
               Disabled: false
-            - Name: "Time and Date"
-              Disabled: true
-            - Name: "Unit Converter"
-              Disabled: true
             - Name: "URI Handler"
               Disabled: false
-            - Name: "Value Generator"
-              Disabled: true
-            - Name: "Visual Studio Code Workspaces"
-              Disabled: true
             - Name: "Web Search"
               Disabled: false
             - Name: "Windows settings"
               Disabled: false
               ActionKeyword: ","
               IsGlobal: false
-            - Name: "Windows Terminal"
-              Disabled: true
-            - Name: "Window Walker"
-              Disabled: true
+            - Name: "Everything"
+              Disabled: false
+              ActionKeyword: "?"
         ColorPicker:
           Enabled: true
           ActivationShortcut: "Win+C"
