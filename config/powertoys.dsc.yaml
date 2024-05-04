@@ -75,7 +75,7 @@ properties:
               IsGlobal: false
             - Name: "Everything"
               Disabled: false
-              ActivationShortcut: "?"
+              ActionKeyword: "?"
         ColorPicker:
           Enabled: true
           ActivationShortcut: "Win+C"
