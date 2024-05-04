@@ -55,12 +55,17 @@ if ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
     $modifiedFile = "$pwd\temp\winstep.reg"
     $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8
     $regFile = $modifiedFile
+    if ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
+        $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "Light", "Dark" }
+        $modifiedFile = "$pwd\temp\winstep.reg"
+        $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8
+    }
 }
-
-if ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
+elseif (($roundedOrSquared -ne "S" -or $roundedOrSquared -ne "s") -and ($lightOrDark -eq "D" -or $lightOrDark -eq "d")) {
     $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "Light", "Dark" }
     $modifiedFile = "$pwd\temp\winstep.reg"
     $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8
+    $regFile = $modifiedFile
 }
 
 
