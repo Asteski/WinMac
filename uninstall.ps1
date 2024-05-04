@@ -24,12 +24,12 @@ Start-Transcript -Path ".\temp\WinMac_uninstall_log_$date.txt" -Append | Out-Nul
 
 $fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom uninstallation"
 if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
-    Write-Host "Choosing full uninstallation." -ForegroundColor Yellow
     $selectedApps = "1","2","3","4","5","6","7"
+    Write-Host "Choosing full uninstallation." -ForegroundColor Yellow
+    Write-Host "Winstep Nexus needs to be uninstalled manually in Apps Settings." -ForegroundColor Yellow
 }
 elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
     Write-Host "Choosing custom uninstallation." -ForegroundColor Yellow
-    Write-Host "Winstep Nexus needs to be uninstalled manually in Apps Settings." -ForegroundColor Yellow
     Start-Sleep 1
     $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="Open-Shell"; "6"="TopNotify"; "7"="Other"}
 Write-Host @"
@@ -60,9 +60,9 @@ $([char]27)[93m$("Please select options you want to uninstall:")$([char]27)[0m
 }
 else
 {
+    $selectedApps = "1","2","3","4","5","6","7"
     Write-Host "Invalid input. Defaulting to full uninstallation." -ForegroundColor Yellow
     Write-Host "Winstep Nexus needs to be uninstalled manually in Apps Settings." -ForegroundColor Yellow
-    $selectedApps = "1","2","3","4","5","6","7"
 }
 Start-Sleep 1
 Write-Host
