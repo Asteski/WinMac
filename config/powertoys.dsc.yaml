@@ -106,6 +106,32 @@ properties:
           Enabled: true
         Awake:
           Enabled: true
+        CropAndLock:
+          Enabled: false
+        EnvironmentVariables:
+          Enabled: false
+        FileLocksmith:
+          Enabled: false
+        MouseHighlighter:
+          Enabled: false
+        MouseJump:
+          Enabled: false
+        MousePointerCrosshairs:
+          Enabled: false
+        MouseWithoutBorders:
+          Enabled: false
+        PowerAccent:
+          Enabled: false
+        MeasureTool:
+          Enabled: false
+        Hosts:
+          Enabled: false
+        PowerOcr:
+          Enabled: false
+        ShortcutGuide:
+          Enabled: false
+        VideoConference:
+          Enabled: false
         PowerPreview:
           EnableSvgPreview: false
           EnableSvgThumbnail: true
