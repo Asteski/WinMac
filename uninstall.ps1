@@ -53,7 +53,7 @@ $([char]27)[93m$("Please select options you want to uninstall:")$([char]27)[0m
     Write-Host "6. TopNotify"
     Write-Host "7. Other (cursor, pinned folders, shortcut arrows)"
     Write-Host
-    Write-Host "Winstep Nexus needs to be uninstalled manually."
+    Write-Host "Winstep Nexus needs to be uninstalled manually in Apps Settings."
     Write-Host
     $selection = Read-Host "Enter the numbers of options you want to uninstall (separated by commas)"
     $selectedApps = @()
