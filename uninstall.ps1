@@ -42,12 +42,12 @@ Write-Host
 $fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom uninstallation"
 if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
     Write-Host "Choosing full uninstallation." -ForegroundColor Yellow
-    $selectedApps = "1","2","3","4","5","6","7"
+    $selectedApps = "1","2","3","4","5","6","7","8"
 }
 elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
     Write-Host "Choosing custom uninstallation." -ForegroundColor Yellow
     Start-Sleep 1
-    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="Open-Shell"; "6"="TopNotify"; "7"="Other"}
+    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="Open-Shell"; "6"="TopNotify"; "8"="Nexus"; "7"="Other"}
 Write-Host @"
 
 $([char]27)[93m$("Please select options you want to uninstall:")$([char]27)[0m
@@ -59,7 +59,8 @@ $([char]27)[93m$("Please select options you want to uninstall:")$([char]27)[0m
     Write-Host "4. StartAllBack"
     Write-Host "5. Open-Shell"
     Write-Host "6. TopNotify"
-    Write-Host "7. Other (cursor, pinned folders, shortcut arrows)"
+    Write-Host "7. Nexus"
+    Write-Host "8. Other (cursor, pinned folders, shortcut arrows)"
     Write-Host
     $selection = Read-Host "Enter the numbers of options you want to uninstall (separated by commas)"
     $selectedApps = @()
@@ -75,7 +76,7 @@ $([char]27)[93m$("Please select options you want to uninstall:")$([char]27)[0m
 else
 {
     Write-Host "Invalid input. Defaulting to full uninstallation." -ForegroundColor Yellow
-    $selectedApps = "1","2","3","4","5","6","7"
+    $selectedApps = "1","2","3","4","5","6","7","8"
 }
 
 Write-Host
@@ -171,7 +172,7 @@ foreach ($app in $selectedApps) {
                 "Vim.Vim",
                 "gsass1.NTop"
             )
-            foreach ($app in $winget) {winget uninstall --id $app --source winget --silent | Out-Null}
+            foreach ($app in $winget) {winget uninstall --id $app --source winget --silent --force | Out-Null}
             Uninstall-Module PSTree -Force
             if ((Test-Path "$profilePath\PowerShell\$profileFile")) { Remove-Item -Path "$profilePath\PowerShell\$profileFile" | Out-Null }
             if ((Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { Remove-Item -Path "$profilePath\WindowsPowerShell\$profileFile" | Out-Null }
@@ -194,7 +195,7 @@ foreach ($app in $selectedApps) {
             Write-Host "Uninstalling Open-Shell..." -ForegroundColor Yellow
             Stop-Process -Name startmenu -Force | Out-Null
             taskkill /IM explorer.exe /F | Out-Null
-            winget uninstall --id "Open-Shell.Open-Shell-Menu" --source winget --custom 'ADDLOCAL=StartMenu' --silent | Out-Null
+            winget uninstall --id "Open-Shell.Open-Shell-Menu" --source winget --force | Out-Null
             Start-Process Explorer
             Write-Host "Uninstalling Open-Shell completed." -ForegroundColor Green
         }
@@ -202,11 +203,18 @@ foreach ($app in $selectedApps) {
             # TopNotify
             Write-Host "Uninstalling TopNotify..." -ForegroundColor Yellow
             $exePath = ($env:AppData | Split-Path) + "\local\TopNotify"
-            Stop-Process -FilePath $exePath\TopNotify.exe | Out-Null
+            Get-Process TopNotify | Stop-Process -Force | Out-Null
             Remove-Item -Path $exePath -Recurse -Force | Out-Null
             Write-Host "Uninstalling TopNotify completed." -ForegroundColor Green
         }
         "7" {
+            # Nexus
+            Write-Host "Uninstalling Nexus..." -ForegroundColor Yellow
+            $nexusPath = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs\Winstep"
+            Remove-Item -Path $nexusPath -Recurse -Force | Out-Null
+            Write-Host "Uninstalling Nexus completed." -ForegroundColor Green
+        }
+        "8" {
             # Other
             Write-Host "Uninstalling Other configurations..." -ForegroundColor Yellow
             $curDestFolder = "C:\Windows\Cursors"
@@ -272,21 +280,6 @@ uint fWinIni);
     }
 }
 
-# Remove Shortcut Arrows
-
-# Other Configurations
-Set-ItemProperty -Path "$exRegPath\Advanced" -Name "LaunchTO" -Value 1
-Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
-Set-ItemProperty -Path $exRegPath -Name "ShowRecent" -Value 0
-Set-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\Windows\Explorer" -Name "TaskbarNoMultimon" -Value 1
-Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer" -Name "TaskbarNoMultimon" -Value 1
-Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
-Remove-Item -Path "HKCR:\exefile\shellex\ContextMenuHandlers\PintoStartScreen" -Force
-Remove-ItemProperty -Path "HKCR:\exefile\shellex\ContextMenuHandlers\PintoStartScreen" -Name "PintoStartScreen" -Confirm
-Remove-Item -Path "HKCR:\Folder\ShellEx\ContextMenuHandlers\PintoStartScreen" -Force
-Remove-Item -Path "HKCR:\Microsoft.Website\shellex\ContextMenuHandlers\PintoStartScreen" -Force
-Remove-Item -Path "HKCR:\mscfile\shellex\ContextMenuHandlers\PintoStartScreen" -Force
-
 # Clean up
 Write-Host "Clean up..." -ForegroundColor Yellow
 Remove-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Force | Out-Null
@@ -310,14 +303,6 @@ If you have any questions or suggestions, please contact me on GitHub.
 "@ -ForegroundColor Green
 
 Write-Host "-----------------------------------------------------------------------------"  -ForegroundColor Cyan
-Write-Host
-$dockConfirmation = Read-Host "Do you want to install WinMac Dock? (y/n)"
-if ($dockConfirmation -eq "y" -or $dockConfirmation -eq "Y") { 
-    Write-Host "Please run the dock.ps1 script in a PowerShell session without administrative privileges." -ForegroundColor Green
-    Start-Sleep 2
-    exit 0
-}
-
 Write-Host
 $restartConfirmation = Read-Host "Restart computer now? It's recommended to fully apply all the changes. (y/n)"
 if ($restartConfirmation -eq "Y" -or $restartConfirmation -eq "y") {
