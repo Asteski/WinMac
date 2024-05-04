@@ -12,6 +12,15 @@ if ($roundedOrSquared -eq "R" -or $roundedOrSquared -eq "r") {
     Write-Host "Invalid input. Defaulting to rounded dock." -ForegroundColor Yellow
 }
 
+$lightOrDark = Read-Host "Enter 'L' for light themed dock or 'D' for dark themed dock"
+if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
+    Write-Host "Using light theme." -ForegroundColor Yellow 
+} elseif ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
+    Write-Host "Using dark theme." -ForegroundColor Yellow
+} else {
+    Write-Host "Invalid input. Defaulting to light theme." -ForegroundColor Yellow
+}
+
 $downloadUrl = "https://www.winstep.net/nexus.zip"
 $downloadPath = "dock.zip"
 if (-not (Test-Path $downloadPath)) {
@@ -36,18 +45,25 @@ New-Item -ItemType Directory -Path "$winStep\Icons" -Force | Out-Null
 Copy-Item config\dock\icons "$winStep" -Recurse -Force | Out-Null
 
 $regFile = "$pwd\config\dock\winstep.reg"
-if ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
-    $tempFolder = "$pwd\temp"
+$tempFolder = "$pwd\temp"
     if (-not (Test-Path $tempFolder)) {
-        New-Item -ItemType Directory -Path $tempFolder -Force
-    }
-    $modifiedContent = Get-Content $regFile | ForEach-Object {
-        $_ -replace "Rounded", "Squared"
-    }
+    New-Item -ItemType Directory -Path $tempFolder -Force
+}
+
+if ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
+    $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "Rounded", "Squared" }
     $modifiedFile = "$pwd\temp\winstep.reg"
     $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8
     $regFile = $modifiedFile
+    }
 }
+
+if ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
+    $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "Light", "Dark" }
+    $modifiedFile = "$pwd\temp\winstep.reg"
+    $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8
+}
+
 
 reg import $regFile
 Start-Sleep 2
