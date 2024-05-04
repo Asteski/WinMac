@@ -2,7 +2,7 @@ Clear-Host
 Write-Host @"
 -----------------------------------------------------------------------
 
-Welcome to WinMac Uninstallation!
+Welcome to WinMac Deployment!
 
 Author: Asteski
 Version: 0.3.2

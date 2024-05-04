@@ -521,6 +521,8 @@ if ($dockConfirmation -eq "y" -or $dockConfirmation -eq "Y") {
     Write-Host "Please run the dock.ps1 script in a PowerShell session without administrative privileges." -ForegroundColor Green
     Start-Sleep 2
     exit 0
+} else {
+    Write-Host "WinMac Dock will not be installed." -ForegroundColor Green
 }
 
 Write-Host
