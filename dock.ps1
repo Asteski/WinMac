@@ -46,7 +46,8 @@ Copy-Item config\dock\icons "$winStep" -Recurse -Force | Out-Null
 
 $regFile = "$pwd\config\dock\winstep.reg"
 $tempFolder = "$pwd\temp"
-    if (-not (Test-Path $tempFolder)) {
+$tempPath = Test-Path $tempFolder
+    if (-not ($tempPath)) {
     New-Item -ItemType Directory -Path $tempFolder -Force | Out-Null
 }
 
