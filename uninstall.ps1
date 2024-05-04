@@ -47,7 +47,7 @@ if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
 elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
     Write-Host "Choosing custom uninstallation." -ForegroundColor Yellow
     Start-Sleep 1
-    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="Open-Shell"; "6"="TopNotify", "7"="Other"}
+    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="Open-Shell"; "6"="TopNotify"; "7"="Other"}
 Write-Host @"
 
 $([char]27)[93m$("Please select options you want to uninstall:")$([char]27)[0m
