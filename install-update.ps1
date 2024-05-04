@@ -194,7 +194,6 @@ foreach ($app in $selectedApps) {
             winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
             Start-Sleep 2
             Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force | Out-Null
-            # winget install --id "lin-ycv.EverythingPowerToys" --source winget --silent | Out-Null
             $ptDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Start-Sleep 2
             Start-Process "$ptDir\PowerToys (Preview)\PowerToys (Preview).lnk" -WindowStyle Minimized
