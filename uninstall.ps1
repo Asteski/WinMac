@@ -159,7 +159,7 @@ foreach ($app in $selectedApps) {
         "2" {
             ## Everything
             Write-Host "Uninstalling Everything..."  -ForegroundColor Yellow
-            winget uninstall --id Voidtools.Everything --source winget --silent --force | Out-Null
+            winget uninstall --id Voidtools.Everything --source winget --force | Out-Null
             Write-Host "Uninstalling Everything completed." -ForegroundColor Green
             }
         "3" {
