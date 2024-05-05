@@ -5,7 +5,7 @@ Write-Host @"
 Welcome to WinMac Deployment!
 
 Author: Asteski
-Version: 0.3.2
+Version: 0.3.3
 
 This is Work in Progress. You're using this script at your own risk.
 
@@ -44,12 +44,12 @@ Write-Host
 $fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom installation"
 if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
     Write-Host "Choosing full installation." -ForegroundColor Yellow
-    $selectedApps = "1","2","3","4","5","6"
+    $selectedApps = "1","2","3","4","5","6","7"
 }
 elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
     Write-Host "Choosing custom installation." -ForegroundColor Yellow
     Start-Sleep 1
-    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="Open-Shell"; "6"="TopNotify"}
+    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="Open-Shell"; "6"="TopNotify"; "7"="Other"}
 Write-Host @"
 
 $([char]27)[93m$("Please select options you want to install:")$([char]27)[0m
@@ -61,6 +61,7 @@ $([char]27)[93m$("Please select options you want to install:")$([char]27)[0m
     Write-Host "4. StartAllBack"
     Write-Host "5. Open-Shell"
     Write-Host "6. TopNotify"
+    Write-Host "7. Other (cursor, pinned folders, shortcut arrows)"
     Write-Host
     $selection = Read-Host "Enter the numbers of options you want to install (separated by commas)"
     $selectedApps = @()
@@ -76,7 +77,7 @@ $([char]27)[93m$("Please select options you want to install:")$([char]27)[0m
 else
 {
     Write-Host "Invalid input. Defaulting to full installation." -ForegroundColor Yellow
-    $selectedApps = "1","2","3","4","5","6"
+    $selectedApps = "1","2","3","4","5","6","7"
 }
 
 Write-Host @"
@@ -375,35 +376,33 @@ foreach ($app in $selectedApps) {
             Remove-Item -Path TopNotify.zip -Force
             Write-Host "Configuring TopNotify completed." -ForegroundColor Green
         }
-    }
-}
-
-# Cursor
-$curSourceFolder = $pwd.Path + '\config\cursor'
-$curDestFolder = "C:\Windows\Cursors"
-Copy-Item -Path $curSourceFolder\* -Destination $curDestFolder -Recurse -Force
-$RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
-$RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
-$RegCursors.SetValue("","Windows Black")
-$RegCursors.SetValue("AppStarting","$curDestFolder\aero_black_working.ani")
-$RegCursors.SetValue("Arrow","$curDestFolder\aero_black_arrow.cur")
-$RegCursors.SetValue("Crosshair","$curDestFolder\aero_black_cross.cur")
-$RegCursors.SetValue("Hand","$curDestFolder\aero_black_link.cur")
-$RegCursors.SetValue("Help","$curDestFolder\aero_black_helpsel.cur")
-$RegCursors.SetValue("IBeam","$curDestFolder\aero_black_beam.cur")
-$RegCursors.SetValue("No","$curDestFolder\aero_black_unavail.cur")
-$RegCursors.SetValue("NWPen","$curDestFolder\aero_black_pen.cur")
-$RegCursors.SetValue("SizeAll","$curDestFolder\aero_black_move.cur")
-$RegCursors.SetValue("SizeNESW","$curDestFolder\aero_black_nesw.cur")
-$RegCursors.SetValue("SizeNS","$curDestFolder\aero_black_ns.cur")
-$RegCursors.SetValue("SizeNWSE","$curDestFolder\aero_black_nwse.cur")
-$RegCursors.SetValue("SizeWE","$curDestFolder\aero_black_ew.cur")
-$RegCursors.SetValue("UpArrow","$curDestFolder\aero_black_up.cur")
-$RegCursors.SetValue("Wait","$curDestFolder\aero_black_busy.ani")
-$RegCursors.SetValue("Pin","$curDestFolder\aero_black_pin.ani")
-$RegCursors.SetValue("Person","$curDestFolder\aero_black_person.ani")
-$RegCursors.Close()
-$RegConnect.Close()
+        "7" {
+            # Black Cursor
+            $curSourceFolder = $pwd.Path + '\config\cursor'
+            $curDestFolder = "C:\Windows\Cursors"
+            Copy-Item -Path $curSourceFolder\* -Destination $curDestFolder -Recurse -Force
+            $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
+            $RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
+            $RegCursors.SetValue("","Windows Black")
+            $RegCursors.SetValue("AppStarting","$curDestFolder\aero_black_working.ani")
+            $RegCursors.SetValue("Arrow","$curDestFolder\aero_black_arrow.cur")
+            $RegCursors.SetValue("Crosshair","$curDestFolder\aero_black_cross.cur")
+            $RegCursors.SetValue("Hand","$curDestFolder\aero_black_link.cur")
+            $RegCursors.SetValue("Help","$curDestFolder\aero_black_helpsel.cur")
+            $RegCursors.SetValue("IBeam","$curDestFolder\aero_black_beam.cur")
+            $RegCursors.SetValue("No","$curDestFolder\aero_black_unavail.cur")
+            $RegCursors.SetValue("NWPen","$curDestFolder\aero_black_pen.cur")
+            $RegCursors.SetValue("SizeAll","$curDestFolder\aero_black_move.cur")
+            $RegCursors.SetValue("SizeNESW","$curDestFolder\aero_black_nesw.cur")
+            $RegCursors.SetValue("SizeNS","$curDestFolder\aero_black_ns.cur")
+            $RegCursors.SetValue("SizeNWSE","$curDestFolder\aero_black_nwse.cur")
+            $RegCursors.SetValue("SizeWE","$curDestFolder\aero_black_ew.cur")
+            $RegCursors.SetValue("UpArrow","$curDestFolder\aero_black_up.cur")
+            $RegCursors.SetValue("Wait","$curDestFolder\aero_black_busy.ani")
+            $RegCursors.SetValue("Pin","$curDestFolder\aero_black_pin.ani")
+            $RegCursors.SetValue("Person","$curDestFolder\aero_black_person.ani")
+            $RegCursors.Close()
+            $RegConnect.Close()
 $CSharpSig = @'
 
 [DllImport("user32.dll", EntryPoint = "SystemParametersInfo")]
@@ -419,75 +418,78 @@ uint pvParam,
 uint fWinIni);
 
 '@
-$CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
-$CursorRefresh::SystemParametersInfo(0x0057,0,$null,0) | Out-Null
+            $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
+            $CursorRefresh::SystemParametersInfo(0x0057,0,$null,0) | Out-Null
 
-# Pin Home, Programs and Recycle Bin to Quick Access
-$homeDir = "C:\Users\$env:USERNAME"
-$homeIniFilePath = "$($homeDir)\desktop.ini"
+            # Pin Home, Programs and Recycle Bin to Quick Access
 $homeIni = @"
 [.ShellClassInfo]
 IconResource=C:\Windows\System32\SHELL32.dll,160
 "@
+            $homeDir = "C:\Users\$env:USERNAME"
+            $homeIniFilePath = "$($homeDir)\desktop.ini"
 
-if (Test-Path $homeIniFilePath)  {
-    Remove-Item $homeIniFilePath -Force
-    New-Item -Path $homeIniFilePath -ItemType File -Force | Out-Null
-}
+            if (Test-Path $homeIniFilePath)  {
+                Remove-Item $homeIniFilePath -Force
+                New-Item -Path $homeIniFilePath -ItemType File -Force | Out-Null
+            }
 
-Add-Content $homeIniFilePath -Value $homeIni
-(Get-Item $homeIniFilePath -Force).Attributes = 'Hidden, System, Archive'
-(Get-Item $homeDir -Force).Attributes = 'ReadOnly, Directory'
+            Add-Content $homeIniFilePath -Value $homeIni
+            (Get-Item $homeIniFilePath -Force).Attributes = 'Hidden, System, Archive'
+            (Get-Item $homeDir -Force).Attributes = 'ReadOnly, Directory'
 
-$homePin = new-object -com shell.application
-if (-not ($homePin.Namespace($homeDir).Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
-    $homePin.Namespace($homeDir).Self.InvokeVerb("pintohome") | Out-Null
-}
-
-$programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
-$programsIniFilePath = "$($programsDir)\desktop.ini"
+            $homePin = new-object -com shell.application
+            if (-not ($homePin.Namespace($homeDir).Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
+                $homePin.Namespace($homeDir).Self.InvokeVerb("pintohome") | Out-Null
+            }
+            
 $programsIni = @"
 [.ShellClassInfo]
 IconResource=C:\WINDOWS\System32\imageres.dll,187
 "@
+            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+            $programsIniFilePath = "$($programsDir)\desktop.ini"
 
-if (Test-Path $programsIniFilePath)  {
-    Remove-Item $programsIniFilePath -Force
-    New-Item -Path $programsIniFilePath -ItemType File -Force | Out-Null
+            if (Test-Path $programsIniFilePath)  {
+                Remove-Item $programsIniFilePath -Force
+                New-Item -Path $programsIniFilePath -ItemType File -Force | Out-Null
+            }
+
+            Add-Content $programsIniFilePath -Value $programsIni
+            (Get-Item $programsIniFilePath -Force).Attributes = 'Hidden, System, Archive'
+            (Get-Item $programsDir -Force).Attributes = 'ReadOnly, Directory'
+
+            $programsPin = new-object -com shell.application
+            if (-not ($programsPin.Namespace($programsDir).Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
+                $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome") | Out-Null
+            }
+
+            $RBPath = 'HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\pintohome\command\'
+            $name = "DelegateExecute"
+            $value = "{b455f46e-e4af-4035-b0a4-cf18d2f6f28e}"
+            New-Item -Path $RBPath -Force | Out-Null
+            New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force | Out-Null
+            $oShell = New-Object -ComObject Shell.Application
+            $recycleBin = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
+            if (-not ($recycleBin.Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
+                $recycleBin.Self.InvokeVerb("PinToHome") | Out-Null
+            }
+            Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse | Out-Null
+
+            # Remove Shortcut Arrows
+            Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force
+            New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
+            Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
+            Set-ItemProperty -Path "$exRegPath\Advanced" -Name "LaunchTO" -Value 1
+            Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
+            Set-ItemProperty -Path $exRegPath -Name "ShowRecent" -Value 0
+            Set-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\Windows\Explorer" -Name "TaskbarNoMultimon" -Value 1
+            Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer" -Name "TaskbarNoMultimon" -Value 1
+            Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
+            Stop-Process -n explorer
+        }
+    }
 }
-
-Add-Content $programsIniFilePath -Value $programsIni
-(Get-Item $programsIniFilePath -Force).Attributes = 'Hidden, System, Archive'
-(Get-Item $programsDir -Force).Attributes = 'ReadOnly, Directory'
-
-$programsPin = new-object -com shell.application
-if (-not ($programsPin.Namespace($programsDir).Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
-    $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome") | Out-Null
-}
-
-$RBPath = 'HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\pintohome\command\'
-$name = "DelegateExecute"
-$value = "{b455f46e-e4af-4035-b0a4-cf18d2f6f28e}"
-New-Item -Path $RBPath -Force | Out-Null
-New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force | Out-Null
-$oShell = New-Object -ComObject Shell.Application
-$recycleBin = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
-if (-not ($recycleBin.Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
-    $recycleBin.Self.InvokeVerb("PinToHome") | Out-Null
-}
-Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse | Out-Null
-
-# Remove Shortcut Arrows
-Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force
-New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
-Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
-Set-ItemProperty -Path "$exRegPath\Advanced" -Name "LaunchTO" -Value 1
-Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
-Set-ItemProperty -Path $exRegPath -Name "ShowRecent" -Value 0
-Set-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\Windows\Explorer" -Name "TaskbarNoMultimon" -Value 1
-Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer" -Name "TaskbarNoMultimon" -Value 1
-Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
-Stop-Process -n explorer
 
 # Clean up
 Write-Host "Clean up..." -ForegroundColor Yellow
