@@ -43,11 +43,12 @@ function psversion { $PSVersionTable }
 function ll { Get-ChildItem -Force }
 function la { Get-ChildItem -Force -Attributes !D }
 function wl { winget list } 
-function ww { $appname = $args; winget show "$appname" }
+function wi { winget install $args }
+function wl { winget list }
+function wr { winget uninstall $args } 
 function ws { $appname = $args; winget search "$appname" }
-function wr { $appname = $args; winget uninstall "$appname" }
-function wu { $appname = $args; winget upgrade "$appname" } 
-function wi { $appname = $args; winget install "$appname" --accept-package-agreements --accept-source-agreements }
+function wu { winget upgrade $args } 
+function ww { $appname = $args; winget show "$appname" } 
 
 function getuser {
     $userName = $args
