@@ -10,11 +10,15 @@ Version: 0.3.3
 This is Work in Progress. You're using this script at your own risk.
 
 -----------------------------------------------------------------------
-
 "@ -ForegroundColor Cyan
 Write-Host @"
-Currently no update/uninstall functionality is implemented, so please
-make sure to run the script on a clean system or make a backup.
+
+This script is responsible for installing all or specific WinMac 
+components.
+
+Installation process is seperated into two parts: main install and dock.
+Main script must be run with admin privileges, while dock script 
+must be run in non-elevated pwsh session.
 
 PowerShell profile files will be removed and replaced with new ones. 
 Please make sure to backup your current profiles if needed.

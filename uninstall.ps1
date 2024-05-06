@@ -10,8 +10,19 @@ Version: 0.3.3
 This is Work in Progress. You're using this script at your own risk.
 
 -----------------------------------------------------------------------
+"@  -ForegroundColor Cyan
+Write-Host @"
 
-"@ -ForegroundColor Cyan
+This script is responsible for uninstalling all or specific WinMac 
+components.
+
+PowerShell profile files will be removed, please make sure to backup 
+your current profiles if needed.
+
+"@ -ForegroundColor Yellow
+
+Write-Host "-----------------------------------------------------------------------"  -ForegroundColor Cyan
+Write-Host
 
 ## Start Logging
 
@@ -24,14 +35,13 @@ Start-Transcript -Path ".\temp\WinMac_uninstall_log_$date.txt" -Append | Out-Nul
 
 $fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom uninstallation"
 if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
-    $selectedApps = "1","2","3","4","5","6","7"
+    $selectedApps = "1","2","3","4","5","6","7","8"
     Write-Host "Choosing full uninstallation." -ForegroundColor Yellow
-    Write-Host "Winstep Nexus needs to be uninstalled manually in Apps Settings." -ForegroundColor Yellow
 }
 elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
     Write-Host "Choosing custom uninstallation." -ForegroundColor Yellow
     Start-Sleep 1
-    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="Open-Shell"; "6"="TopNotify"; "7"="Other"}
+    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="Open-Shell"; "6"="TopNotify"; "7"="Nexus Dock"; "8"="Other"}
 Write-Host @"
 
 $([char]27)[93m$("Please select options you want to uninstall:")$([char]27)[0m
@@ -43,9 +53,8 @@ $([char]27)[93m$("Please select options you want to uninstall:")$([char]27)[0m
     Write-Host "4. StartAllBack"
     Write-Host "5. Open-Shell"
     Write-Host "6. TopNotify"
-    Write-Host "7. Other (cursor, pinned folders, shortcut arrows)"
-    Write-Host
-    Write-Host "Winstep Nexus needs to be uninstalled manually in Apps Settings."
+    Write-Host "7. Nexus Dock"
+    Write-Host "8. Other (cursor, pinned folders, shortcut arrows, recycle bin)"
     Write-Host
     $selection = Read-Host "Enter the numbers of options you want to uninstall (separated by commas)"
     $selectedApps = @()
@@ -60,9 +69,8 @@ $([char]27)[93m$("Please select options you want to uninstall:")$([char]27)[0m
 }
 else
 {
-    $selectedApps = "1","2","3","4","5","6","7"
+    $selectedApps = "1","2","3","4","5","6","7","8"
     Write-Host "Invalid input. Defaulting to full uninstallation." -ForegroundColor Yellow
-    Write-Host "Winstep Nexus needs to be uninstalled manually in Apps Settings." -ForegroundColor Yellow
 }
 Start-Sleep 1
 Write-Host
@@ -197,8 +205,17 @@ foreach ($app in $selectedApps) {
             Write-Host "Uninstalling TopNotify completed." -ForegroundColor Green
         }
         "7" {
+            # Nexus Dock
+            Write-Host "Uninstalling Nexus Dock..." -ForegroundColor Yellow
+            Get-Process Nexus | Stop-Process -Force | Out-Null
+            winget uninstall --id "Winstep Xtreme_is1" --force | Out-Null
+            Write-Host "Uninstalling Nexus Dock completed." -ForegroundColor Green
+        }
+        "8" {
             # Other
             Write-Host "Uninstalling Other configurations..." -ForegroundColor Yellow
+            Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 0
+
             $curDestFolder = "C:\Windows\Cursors"
             $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
             $RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
