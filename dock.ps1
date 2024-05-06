@@ -1,5 +1,16 @@
 Clear-Host
-Write-Host "----------------------------- WinMac Deployment -----------------------------" -ForegroundColor Cyan
+Write-Host @"
+-----------------------------------------------------------------------
+
+Welcome to WinMac Deployment!
+
+Author: Asteski
+Version: 0.3.3
+
+This is Work in Progress. You're using this script at your own risk.
+
+-----------------------------------------------------------------------
+"@ -ForegroundColor Cyan
 Write-Host
 Write-Host "Configuring Nexus Dock..." -ForegroundColor Yellow
 Write-Host

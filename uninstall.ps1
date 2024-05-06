@@ -10,7 +10,7 @@ Version: 0.3.3
 This is Work in Progress. You're using this script at your own risk.
 
 -----------------------------------------------------------------------
-"@  -ForegroundColor Cyan
+"@ -ForegroundColor Cyan
 Write-Host @"
 
 This script is responsible for uninstalling all or specific WinMac 
@@ -21,7 +21,7 @@ your current profiles if needed.
 
 "@ -ForegroundColor Yellow
 
-Write-Host "-----------------------------------------------------------------------"  -ForegroundColor Cyan
+Write-Host "-----------------------------------------------------------------------" -ForegroundColor Cyan
 Write-Host
 
 ## Start Logging
