@@ -222,7 +222,6 @@ foreach ($app in $selectedApps) {
             if (-not (Test-Path "$profilePath\PowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\PowerShell\$profileFile" | Out-Null }
             if (-not (Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\WindowsPowerShell\$profileFile" | Out-Null }
 
-            Write-Host "Checking for NuGet Provider" -ForegroundColor Yellow
             $progressPreference = 'silentlyContinue'
             if (-not (Get-PackageProvider -ListAvailable | Where-Object {$_.Name -eq 'NuGet'})) {
                 Write-Information "Installing NuGet Provider..."
