@@ -31,7 +31,7 @@ By pressing a customizable hotkey combination, a search bar appears, enabling us
 
 Winstep Nexus is a highly customizable and feature-rich dock application for Windows that can be used to achieve a macOS-like dock experience. It offers a wide range of customization options, including different themes, icons, and animations.
 
-By integrating WinStep Nexus into your WinMac modification, you can provide users with a visually appealing and functional dock that resembles the macOS style. This will enhance the overall user experience and make the transition between Windows and macOS elements seamless.
+By integrating WinStep Nexus into your WinMac modification, you can provide users with a visually appealing and functional dock that resembles the macOS style. This will enhance the overall user experience and make the transition between Windows and macOS seamless.
 
 - **Revamped and decluttered Start Menu**
 
