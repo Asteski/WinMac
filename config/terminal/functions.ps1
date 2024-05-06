@@ -47,7 +47,7 @@ function ww { $appname = $args; winget show "$appname" }
 function ws { $appname = $args; winget search "$appname" }
 function wr { $appname = $args; winget uninstall "$appname" }
 function wu { $appname = $args; winget upgrade "$appname" } 
-function wi { $appname = $args; winget install "$appname" --accept-package-agreements --accept-source-agreements }
+function wi { $appname = $args; winget install "$appname" }
 
 function getuser {
     $userName = $args
