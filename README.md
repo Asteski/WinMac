@@ -10,7 +10,7 @@
 
 ![winmac_dark_03](https://github.com/Asteski/WinMac/blob/main/img/winmac_dark_03.png)
 
-![winmac_dark_03](https://github.com/Asteski/WinMac/blob/main/img/winmac_dark_04.png)
+![winmac_dark_04](https://github.com/Asteski/WinMac/blob/main/img/winmac_dark_04.png)
 
 ## Light
 
