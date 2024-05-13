@@ -259,15 +259,15 @@ foreach ($app in $selectedApps) {
             $sabLocal = ($env:AppData | Split-Path) + "\local\StartAllBack\Orbs"
             Copy-Item $pwd\config\taskbar\orbs\* $sabLocal -Force | Out-Null
             Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 1
-            # Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSizeMove" -Value 1
+            Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSizeMove" -Value 1
             Set-ItemProperty -Path $exRegPath\Advanced -Name "ShowStatusBar" -Value 0
             Set-ItemProperty -Path $exRegPath\Advanced -Name "EnableSnapAssistFlyout" -Value 0
             Set-ItemProperty -Path $exRegPath\Advanced -Name "EnableSnapBar" -Value 0
-            # Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarGlomLevel" -Value 1
-            # Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSmallIcons" -Value 1
-            # Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSi" -Value 0
-            # Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarAl" -Value 1
-            # Set-ItemProperty -Path $exRegPath\Advanced -Name "UseCompactMode" -Value 1
+            Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarGlomLevel" -Value 1
+            Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSmallIcons" -Value 1
+            Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSi" -Value 0
+            Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarAl" -Value 1
+            Set-ItemProperty -Path $exRegPath\Advanced -Name "UseCompactMode" -Value 1
             Set-ItemProperty -Path $sabRegPath -Name "WinBuild" -Value 22759
             Set-ItemProperty -Path $sabRegPath -Name "WinLangID" -Value 2064
             Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1
