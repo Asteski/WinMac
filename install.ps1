@@ -266,7 +266,7 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarGlomLevel" -Value 1
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSmallIcons" -Value 1
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSi" -Value 0
-            Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarAl" -Value 1
+            Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarAl" -Value 0
             Set-ItemProperty -Path $exRegPath\Advanced -Name "UseCompactMode" -Value 1
             Set-ItemProperty -Path $sabRegPath -Name "WinBuild" -Value 22759
             Set-ItemProperty -Path $sabRegPath -Name "WinLangID" -Value 2064
