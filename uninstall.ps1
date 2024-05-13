@@ -189,11 +189,10 @@ foreach ($app in $selectedApps) {
             ## Open-Shell
             Write-Host "Uninstalling Open-Shell..." -ForegroundColor Yellow
             Stop-Process -Name startmenu -Force | Out-Null
-            taskkill /IM explorer.exe /F | Out-Null
             winget uninstall --id "Open-Shell.Open-Shell-Menu" --source winget --force | Out-Null
             Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\winx" -Recurse -Force | Out-Null
             Expand-Archive -Path "$pwd\config\WinX_default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
-            Start-Process Explorer
+            Stop-Process -n Explorer
             Write-Host "Uninstalling Open-Shell completed." -ForegroundColor Green
         }
         "6" {
@@ -275,8 +274,8 @@ uint fWinIni);
             Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse | Out-Null
             Remove-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
             Set-ItemProperty -Path $exRegPath\Advanced -Name "UseCompactMode" -Value 0
-            Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarAl" -Value 0
-
+            Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarAl" -Value 1
+            Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarGlomLevel" -Value 0
             Stop-Process -Name explorer -Force | Out-Null            
         }
     }
