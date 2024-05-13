@@ -29,6 +29,7 @@ properties:
         Peek:
           Enabled: true
           ActivationShortcut: "Alt+Space"
+          CloseAfterLosingFocus: true
         PastePlain:
           Enabled: true
           ActivationShortcut: "Ctrl+Shift+V"

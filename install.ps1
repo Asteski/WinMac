@@ -271,6 +271,7 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $sabRegPath -Name "WinBuild" -Value 22759
             Set-ItemProperty -Path $sabRegPath -Name "WinLangID" -Value 2064
             Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1
+            Set-ItemProperty -Path $sabRegPath -Name "RestyleControls" -Value 1
             Set-ItemProperty -Path $sabRegPath -Name "WelcomeShown" -Value 3
             Set-ItemProperty -Path $sabRegPath -Name "UpdateCheck" -Value ([byte[]](160, 224, 8, 201, 49, 125, 218, 1))
             Set-ItemProperty -Path $sabRegPath -Name "SettingsVersion" -Value 5
