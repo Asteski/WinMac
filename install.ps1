@@ -381,7 +381,8 @@ foreach ($app in $selectedApps) {
             Write-Host "Configuring TopNotify completed." -ForegroundColor Green
         }
         "7" {
-            # Black Cursor
+            # Other
+            ## Black Cursor
             $curSourceFolder = $pwd.Path + '\config\cursor'
             $curDestFolder = "C:\Windows\Cursors"
             Copy-Item -Path $curSourceFolder\* -Destination $curDestFolder -Recurse -Force
@@ -425,7 +426,7 @@ uint fWinIni);
             $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
             $CursorRefresh::SystemParametersInfo(0x0057,0,$null,0) | Out-Null
 
-            # Pin Home, Programs and Recycle Bin to Quick Access
+            ## Pin Home, Programs and Recycle Bin to Quick Access
 $homeIni = @"
 [.ShellClassInfo]
 IconResource=C:\Windows\System32\SHELL32.dll,160
@@ -480,10 +481,12 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             }
             Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse | Out-Null
 
-            # Remove Shortcut Arrows
+            ## Remove Shortcut Arrows
             Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force
             New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
+
+            ## Misc
             Set-ItemProperty -Path "$exRegPath\Advanced" -Name "LaunchTO" -Value 1
             Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
             Set-ItemProperty -Path $exRegPath -Name "ShowRecent" -Value 0
