@@ -207,7 +207,7 @@ foreach ($app in $selectedApps) {
             # Nexus Dock
             Write-Host "Uninstalling Nexus Dock..." -ForegroundColor Yellow
             Get-Process Nexus | Stop-Process -Force | Out-Null
-            winget uninstall --id "Winstep Xtreme_is1" --force | Out-Null
+            winget uninstall --id "Winstep Xtreme_is1" --custom "/VERYSILENT /SP-" --force | Out-Null
             Write-Host "Uninstalling Nexus Dock completed." -ForegroundColor Green
         }
         "8" {
