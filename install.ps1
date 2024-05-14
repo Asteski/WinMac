@@ -5,7 +5,7 @@ Write-Host @"
 Welcome to WinMac Deployment!
 
 Author: Asteski
-Version: 0.3.3
+Version: 0.3.4
 
 This is Work in Progress. You're using this script at your own risk.
 
@@ -65,7 +65,7 @@ $([char]27)[93m$("Please select options you want to install:")$([char]27)[0m
     Write-Host "4. StartAllBack"
     Write-Host "5. Open-Shell"
     Write-Host "6. TopNotify"
-    Write-Host "7. Other (cursor, pinned folders, shortcut arrows, recycle bin desktop icon)"
+    Write-Host "7. Other (cursor, pinned folders, shortcut arrows, remove recycle bin desktop icon)"
     Write-Host
     $selection = Read-Host "Enter the numbers of options you want to install (separated by commas)"
     $selectedApps = @()
@@ -217,10 +217,10 @@ foreach ($app in $selectedApps) {
             else { $prompt = Get-Content "$pwd\config\terminal\macos-prompt.ps1" -Raw }
             $functions = Get-Content "$pwd\config\terminal\functions.ps1" -Raw
 
-            if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell" | Out-Null } else { Remove-Item -Path "$profilePath\PowerShell\$profileFile" -Force | Out-Null }
-            if (-not (Test-Path "$profilePath\WindowsPowerShell")) { New-Item -ItemType Directory -Path "$profilePath\WindowsPowerShell" | Out-Null } else { Remove-Item -Path "$profilePath\WindowsPowerShell\$profileFile" -Force | Out-Null }
-            if (-not (Test-Path "$profilePath\PowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\PowerShell\$profileFile" | Out-Null }
-            if (-not (Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\WindowsPowerShell\$profileFile" | Out-Null }
+            if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell"| Out-Null } else { Remove-Item -Path "$profilePath\PowerShell\$profileFile" -Force| Out-Null }
+            if (-not (Test-Path "$profilePath\WindowsPowerShell")) { New-Item -ItemType Directory -Path "$profilePath\WindowsPowerShell"| Out-Null } else { Remove-Item -Path "$profilePath\WindowsPowerShell\$profileFile" -Force| Out-Null }
+            if (-not (Test-Path "$profilePath\PowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\PowerShell\$profileFile"| Out-Null }
+            if (-not (Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\WindowsPowerShell\$profileFile"| Out-Null }
 
             $progressPreference = 'silentlyContinue'
             if (-not (Get-PackageProvider -ListAvailable | Where-Object {$_.Name -eq 'NuGet'})) {
@@ -271,6 +271,7 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $sabRegPath -Name "WinBuild" -Value 22759
             Set-ItemProperty -Path $sabRegPath -Name "WinLangID" -Value 2064
             Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1
+            Set-ItemProperty -Path $sabRegPath -Name "RestyleControls" -Value 1
             Set-ItemProperty -Path $sabRegPath -Name "WelcomeShown" -Value 3
             Set-ItemProperty -Path $sabRegPath -Name "UpdateCheck" -Value ([byte[]](160, 224, 8, 201, 49, 125, 218, 1))
             Set-ItemProperty -Path $sabRegPath -Name "SettingsVersion" -Value 5
@@ -324,7 +325,7 @@ foreach ($app in $selectedApps) {
             winget install --id "Open-Shell.Open-Shell-Menu" --source winget --custom 'ADDLOCAL=StartMenu' --silent | Out-Null
             Start-Sleep 5
             Stop-Process -Name startmenu -Force | Out-Null
-            taskkill /IM explorer.exe /F | Out-Null
+            # taskkill /IM explorer.exe /F | Out-Null
             New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force | Out-Null
             New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force | Out-Null
             New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu" -Force | Out-Null
@@ -380,7 +381,8 @@ foreach ($app in $selectedApps) {
             Write-Host "Configuring TopNotify completed." -ForegroundColor Green
         }
         "7" {
-            # Black Cursor
+            # Other
+            ## Black Cursor
             $curSourceFolder = $pwd.Path + '\config\cursor'
             $curDestFolder = "C:\Windows\Cursors"
             Copy-Item -Path $curSourceFolder\* -Destination $curDestFolder -Recurse -Force
@@ -424,7 +426,7 @@ uint fWinIni);
             $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
             $CursorRefresh::SystemParametersInfo(0x0057,0,$null,0) | Out-Null
 
-            # Pin Home, Programs and Recycle Bin to Quick Access
+            ## Pin Home, Programs and Recycle Bin to Quick Access
 $homeIni = @"
 [.ShellClassInfo]
 IconResource=C:\Windows\System32\SHELL32.dll,160
@@ -479,10 +481,12 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             }
             Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse | Out-Null
 
-            # Remove Shortcut Arrows
+            ## Remove Shortcut Arrows
             Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force
             New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
+
+            ## Misc
             Set-ItemProperty -Path "$exRegPath\Advanced" -Name "LaunchTO" -Value 1
             Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
             Set-ItemProperty -Path $exRegPath -Name "ShowRecent" -Value 0

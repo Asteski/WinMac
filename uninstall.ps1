@@ -5,7 +5,7 @@ Write-Host @"
 Welcome to WinMac Deployment!
 
 Author: Asteski
-Version: 0.3.3
+Version: 0.3.4
 
 This is Work in Progress. You're using this script at your own risk.
 
@@ -18,6 +18,9 @@ components.
 
 PowerShell profile files will be removed, please make sure to backup 
 your current profiles if needed.
+
+Vim package will show prompt to uninstall, please confirm the
+uninstallation manually.
 
 "@ -ForegroundColor Yellow
 
@@ -54,7 +57,7 @@ $([char]27)[93m$("Please select options you want to uninstall:")$([char]27)[0m
     Write-Host "5. Open-Shell"
     Write-Host "6. TopNotify"
     Write-Host "7. Nexus Dock"
-    Write-Host "8. Other (cursor, pinned folders, shortcut arrows, recycle bin desktop icon)"
+    Write-Host "8. Other (cursor, pinned folders, shortcut arrows, remove recycle bin desktop icon)"
     Write-Host
     $selection = Read-Host "Enter the numbers of options you want to uninstall (separated by commas)"
     $selectedApps = @()
@@ -81,9 +84,9 @@ if ($installConfirmation -ne 'y') {
     Start-Sleep 2
     exit
 }
-Write-Host "Starting uninstallation process in..." -ForegroundColor Green
+Write-Host "Starting uninstallation process in..." -ForegroundColor Red
 for ($a=3; $a -ge 0; $a--) {
-    Write-Host -NoNewLine "`b$a" -ForegroundColor Green
+    Write-Host -NoNewLine "`b$a" -ForegroundColor Red
     Start-Sleep 1
 }
 
@@ -189,11 +192,10 @@ foreach ($app in $selectedApps) {
             ## Open-Shell
             Write-Host "Uninstalling Open-Shell..." -ForegroundColor Yellow
             Stop-Process -Name startmenu -Force | Out-Null
-            taskkill /IM explorer.exe /F | Out-Null
             winget uninstall --id "Open-Shell.Open-Shell-Menu" --source winget --force | Out-Null
             Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\winx" -Recurse -Force | Out-Null
             Expand-Archive -Path "$pwd\config\WinX_default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
-            Start-Process Explorer
+            Stop-Process -n Explorer
             Write-Host "Uninstalling Open-Shell completed." -ForegroundColor Green
         }
         "6" {
@@ -208,7 +210,7 @@ foreach ($app in $selectedApps) {
             # Nexus Dock
             Write-Host "Uninstalling Nexus Dock..." -ForegroundColor Yellow
             Get-Process Nexus | Stop-Process -Force | Out-Null
-            winget uninstall --id "Winstep Xtreme_is1" --force | Out-Null
+            winget uninstall --id "Winstep Xtreme_is1" --custom "/VERYSILENT /SP-" --force | Out-Null
             Write-Host "Uninstalling Nexus Dock completed." -ForegroundColor Green
         }
         "8" {
@@ -274,7 +276,11 @@ uint fWinIni);
             $recycleBin.Self.InvokeVerb("PinToHome") | Out-Null
             Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse | Out-Null
             Remove-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
-            Stop-Process -Name explorer -Force | Out-Null
+
+            Set-ItemProperty -Path $exRegPath\Advanced -Name "UseCompactMode" -Value 0
+            Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarAl" -Value 1
+            Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarGlomLevel" -Value 0
+            Stop-Process -Name explorer -Force | Out-Null            
         }
     }
 }

@@ -180,7 +180,7 @@ function printenv {
         $args | ForEach-Object { 
             $envVar = Get-ChildItem Env:$_ -ErrorAction SilentlyContinue
             if ($envVar) {
-                $envVar
+                $envVar.Value
             } else {
                 Write-Host "Environment variable '$_' does not exist." -ForegroundColor Red
             }
@@ -411,12 +411,14 @@ function grep {
     else 
     {
         if ($args.count -eq 1) {
-            $files = Get-ChildItem
+            $files = Get-ChildItem -Exclude *.exe,*.dll,*.sys,*.com,*.msi,*.msp,*.msu,*.cab,*.iso,*.img,*.vhd,*.vhdx,*.zip,*.rar,*.7z
             string-search $args[0]
             }
         elseif (($args.count -eq 2) -and ($args[0] -eq '-r')){
-            $files = Get-ChildItem -Recurse
+            $files = Get-ChildItem -Recurse -Exclude *.exe,*.dll,*.sys,*.com,*.msi,*.msp,*.msu,*.cab,*.iso,*.img,*.vhd,*.vhdx ,*.zip,*.rar,*.7z
             string-search $args[1]
         }
     }
 }
+
+#EOF
