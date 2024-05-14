@@ -84,9 +84,9 @@ if ($installConfirmation -ne 'y') {
     Start-Sleep 2
     exit
 }
-Write-Host "Starting uninstallation process in..." -ForegroundColor Green
+Write-Host "Starting uninstallation process in..." -ForegroundColor Red
 for ($a=3; $a -ge 0; $a--) {
-    Write-Host -NoNewLine "`b$a" -ForegroundColor Green
+    Write-Host -NoNewLine "`b$a" -ForegroundColor Red
     Start-Sleep 1
 }
 
