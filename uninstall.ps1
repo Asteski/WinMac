@@ -174,12 +174,6 @@ foreach ($app in $selectedApps) {
             Uninstall-Module PSTree -Force
             if ((Test-Path "$profilePath\PowerShell\$profileFile")) { Remove-Item -Path "$profilePath\PowerShell\$profileFile" | Out-Null }
             if ((Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { Remove-Item -Path "$profilePath\WindowsPowerShell\$profileFile" | Out-Null }
-
-            # $vimParentPath = Join-Path $env:PROGRAMFILES Vim
-            # $latestSubfolder = Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -Property CreationTime -Descending | Select-Object -First 1
-            # $vimChildPath = $latestSubfolder.FullName
-            # [Environment]::SetEnvironmentVariable("Path", $env:Path + ";$vimChildPath", [EnvironmentVariableTarget]::Machine) | Out-Null
-
             Write-Host "Uninstalling PowerShell Profile completed." -ForegroundColor Green
         }
         "4" {
