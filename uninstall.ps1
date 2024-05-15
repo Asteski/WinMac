@@ -19,8 +19,8 @@ components.
 PowerShell profile files will be removed, please make sure to backup 
 your current profiles if needed.
 
-Vim package will show prompt to uninstall, please confirm the
-uninstallation manually.
+Vim and Nexus packages will show prompt to uninstall, please confirm the
+uninstallations manually.
 
 "@ -ForegroundColor Yellow
 
@@ -104,7 +104,7 @@ Invoke-WebRequest -Uri $wingetUrl -OutFile $installPath
 Write-Information "Uninstalling WinGet..."
 Add-AppxPackage -Path $installPath
 Remove-Item -Path $installPath -Force
-Write-Information "Winget installation completed." -ForegroundColor Green
+Write-Information "Winget installation completed."
 
 ## Defintions
 $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
@@ -210,7 +210,7 @@ foreach ($app in $selectedApps) {
             # Nexus Dock
             Write-Host "Uninstalling Nexus Dock..." -ForegroundColor Yellow
             Get-Process Nexus | Stop-Process -Force | Out-Null
-            winget uninstall --id "Winstep Xtreme_is1" --custom "/VERYSILENT /SP-" --force | Out-Null
+            winget uninstall --id "Winstep Xtreme_is1" --silent --force | Out-Null
             Write-Host "Uninstalling Nexus Dock completed." -ForegroundColor Green
         }
         "8" {
