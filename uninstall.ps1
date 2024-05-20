@@ -5,7 +5,7 @@ Write-Host @"
 Welcome to WinMac Deployment!
 
 Author: Asteski
-Version: 0.3.4
+Version: 0.3.5
 
 This is Work in Progress. You're using this script at your own risk.
 
@@ -211,6 +211,8 @@ foreach ($app in $selectedApps) {
             # Other
             Write-Host "Uninstalling Other configurations..." -ForegroundColor Yellow
             Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 0
+
+            #TODO remove icons from dirs
 
             $curDestFolder = "C:\Windows\Cursors"
             $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
