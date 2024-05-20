@@ -155,6 +155,7 @@ foreach ($app in $selectedApps) {
             $ptDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Write-Host "Uninstalling PowerToys completed." -ForegroundColor Green
         }
+
         "2" {
             ## Everything
             Write-Host "Uninstalling Everything..."  -ForegroundColor Yellow
@@ -213,6 +214,12 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 0
 
             #TODO remove icons from dirs
+            $homeDir = "C:\Users\$env:USERNAME"
+            $homeIniFilePath = "$($homeDir)\desktop.ini"
+            Remove-Item -Path $homeIniFilePath -Force | Out-Null
+            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+            $programsIniFilePath = "$($programsDir)\desktop.ini"
+            Remove-Item -Path $programsIniFilePath -Force | Out-Null
 
             $curDestFolder = "C:\Windows\Cursors"
             $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
