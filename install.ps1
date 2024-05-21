@@ -5,7 +5,7 @@ Write-Host @"
 Welcome to WinMac Deployment!
 
 Author: Asteski
-Version: 0.3.4
+Version: 0.3.5
 
 This is Work in Progress. You're using this script at your own risk.
 
@@ -26,14 +26,6 @@ Please make sure to backup your current profiles if needed.
 "@ -ForegroundColor Yellow
 
 Write-Host "-----------------------------------------------------------------------"  -ForegroundColor Cyan
-Write-Host
-$installConfirmation = Read-Host "Are you sure you want to start the installation process (y/n)"
-
-if ($installConfirmation -ne 'y') {
-    Write-Host "Installation process aborted." -ForegroundColor Red
-    Start-Sleep 2
-    exit
-}
 
 ## Start Logging
 
@@ -65,7 +57,13 @@ $([char]27)[93m$("Please select options you want to install:")$([char]27)[0m
     Write-Host "4. StartAllBack"
     Write-Host "5. Open-Shell"
     Write-Host "6. TopNotify"
-    Write-Host "7. Other (cursor, pinned folders, shortcut arrows, remove recycle bin desktop icon)"
+    Write-Host @"
+7. Other:
+    - black cursor
+    - pin folders
+    - remove shortcut arrows
+    - remove recycle bin desktop icon
+"@
     Write-Host
     $selection = Read-Host "Enter the numbers of options you want to install (separated by commas)"
     $selectedApps = @()
@@ -120,6 +118,16 @@ else
 {
     Write-Host "Invalid input. Defaulting to rounded corners." -ForegroundColor Yellow
     $roundedOrSquared = 'R'
+}
+
+Start-Sleep 1
+Write-Host
+$installConfirmation = Read-Host "Are you sure you want to start the installation process (y/n)"
+
+if ($installConfirmation -ne 'y') {
+    Write-Host "Installation process aborted." -ForegroundColor Red
+    Start-Sleep 2
+    exit
 }
 
 Write-Host

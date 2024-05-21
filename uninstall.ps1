@@ -5,7 +5,7 @@ Write-Host @"
 Welcome to WinMac Deployment!
 
 Author: Asteski
-Version: 0.3.4
+Version: 0.3.5
 
 This is Work in Progress. You're using this script at your own risk.
 
@@ -57,8 +57,7 @@ $([char]27)[93m$("Please select options you want to uninstall:")$([char]27)[0m
     Write-Host "5. Open-Shell"
     Write-Host "6. TopNotify"
     Write-Host "7. Nexus Dock"
-    Write-Host "8. Other (cursor, pinned folders, shortcut arrows, remove recycle bin desktop icon)"
-    Write-Host
+    Write-Host "8. Other"
     $selection = Read-Host "Enter the numbers of options you want to uninstall (separated by commas)"
     $selectedApps = @()
     $selectedApps = $selection.Split(',')
@@ -155,6 +154,7 @@ foreach ($app in $selectedApps) {
             $ptDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Write-Host "Uninstalling PowerToys completed." -ForegroundColor Green
         }
+
         "2" {
             ## Everything
             Write-Host "Uninstalling Everything..."  -ForegroundColor Yellow
@@ -180,7 +180,12 @@ foreach ($app in $selectedApps) {
             ## StartAllBack
             Write-Host "Uninstalling StartAllBack..." -ForegroundColor Yellow
             winget uninstall --id "StartIsBack.StartAllBack" --source winget --silent --force | Out-Null
-            Write-Host "Uninstalling StartAllBack completed." -ForegroundColor Green
+            Write-Host "Uninstalling StartAllBack completed." -ForegroundColor 
+            Set-ItemProperty -Path $exRegPath\Advanced -Name "UseCompactMode" -Value 0
+            Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarAl" -Value 1
+            Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarGlomLevel" -Value 0
+            Stop-Process -Name explorer -Force | Out-Null
+            Start-Sleep 3
         }
         "5" {
             ## Open-Shell
@@ -211,6 +216,13 @@ foreach ($app in $selectedApps) {
             # Other
             Write-Host "Uninstalling Other configurations..." -ForegroundColor Yellow
             Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 0
+
+            $homeDir = "C:\Users\$env:USERNAME"
+            $homeIniFilePath = "$($homeDir)\desktop.ini"
+            Remove-Item -Path $homeIniFilePath -Force | Out-Null
+            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+            $programsIniFilePath = "$($programsDir)\desktop.ini"
+            Remove-Item -Path $programsIniFilePath -Force | Out-Null
 
             $curDestFolder = "C:\Windows\Cursors"
             $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
@@ -270,10 +282,6 @@ uint fWinIni);
             $recycleBin.Self.InvokeVerb("PinToHome") | Out-Null
             Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse | Out-Null
             Remove-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
-
-            Set-ItemProperty -Path $exRegPath\Advanced -Name "UseCompactMode" -Value 0
-            Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarAl" -Value 1
-            Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarGlomLevel" -Value 0
             Stop-Process -Name explorer -Force | Out-Null            
         }
     }
