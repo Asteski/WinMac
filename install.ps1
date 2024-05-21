@@ -26,14 +26,6 @@ Please make sure to backup your current profiles if needed.
 "@ -ForegroundColor Yellow
 
 Write-Host "-----------------------------------------------------------------------"  -ForegroundColor Cyan
-Write-Host
-$installConfirmation = Read-Host "Are you sure you want to start the installation process (y/n)"
-
-if ($installConfirmation -ne 'y') {
-    Write-Host "Installation process aborted." -ForegroundColor Red
-    Start-Sleep 2
-    exit
-}
 
 ## Start Logging
 
@@ -120,6 +112,16 @@ else
 {
     Write-Host "Invalid input. Defaulting to rounded corners." -ForegroundColor Yellow
     $roundedOrSquared = 'R'
+}
+
+Start-Sleep 1
+Write-Host
+$installConfirmation = Read-Host "Are you sure you want to start the installation process (y/n)"
+
+if ($installConfirmation -ne 'y') {
+    Write-Host "Installation process aborted." -ForegroundColor Red
+    Start-Sleep 2
+    exit
 }
 
 Write-Host
