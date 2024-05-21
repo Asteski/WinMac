@@ -57,8 +57,7 @@ $([char]27)[93m$("Please select options you want to uninstall:")$([char]27)[0m
     Write-Host "5. Open-Shell"
     Write-Host "6. TopNotify"
     Write-Host "7. Nexus Dock"
-    Write-Host "8. Other (cursor, pinned folders, shortcut arrows, remove recycle bin desktop icon)"
-    Write-Host
+    Write-Host "8. Other"
     $selection = Read-Host "Enter the numbers of options you want to uninstall (separated by commas)"
     $selectedApps = @()
     $selectedApps = $selection.Split(',')

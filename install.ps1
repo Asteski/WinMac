@@ -57,7 +57,13 @@ $([char]27)[93m$("Please select options you want to install:")$([char]27)[0m
     Write-Host "4. StartAllBack"
     Write-Host "5. Open-Shell"
     Write-Host "6. TopNotify"
-    Write-Host "7. Other (cursor, pinned folders, shortcut arrows, remove recycle bin desktop icon)"
+    Write-Host @"
+7. Other:
+    - black cursor
+    - pin folders
+    - remove shortcut arrows
+    - remove recycle bin desktop icon
+"@
     Write-Host
     $selection = Read-Host "Enter the numbers of options you want to install (separated by commas)"
     $selectedApps = @()
