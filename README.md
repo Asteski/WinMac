@@ -77,7 +77,7 @@ For the most reliable deployment process, I recommend to install latest version 
 
 ## Planned features
 
-- WinMac theme,
+- Droptop Four theme,
 - more functions.
 
 ## Credits to
