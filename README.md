@@ -77,7 +77,8 @@ For the most reliable deployment process, I recommend to install latest version 
 
 ## Planned features
 
-- Droptop Four theme,
+- Tasklist object to resemble top-level menus of macOS menu bar,
+- more Dock customization,
 - more functions.
 
 ## Credits to
