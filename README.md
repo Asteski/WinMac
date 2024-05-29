@@ -78,6 +78,7 @@ For the most reliable deployment process, I recommend to install latest version 
 ## Planned features
 
 - Tasklist object to resemble top-level menus of macOS menu bar,
+- Modern UI theme,
 - more Dock customization,
 - more functions.
 
