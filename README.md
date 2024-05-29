@@ -4,21 +4,21 @@
 
 ## Dark
 
-![winmac_dark_01](https://github.com/Asteski/WinMac/blob/main/img/winmac_dark_01.png)
+![winmac_dark_01](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_01.png)
 
-![winmac_dark_02](https://github.com/Asteski/WinMac/blob/main/img/winmac_dark_02.png)
+![winmac_dark_02](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_02.png)
 
-![winmac_dark_03](https://github.com/Asteski/WinMac/blob/main/img/winmac_dark_03.png)
+![winmac_dark_03](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_03.png)
 
-![winmac_dark_04](https://github.com/Asteski/WinMac/blob/main/img/winmac_dark_04.png)
+![winmac_dark_04](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_04.png)
 
 ## Light
 
-![winmac_light_01](https://github.com/Asteski/WinMac/blob/main/img/winmac_light_01.jpg)
+![winmac_light_01](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_01.jpg)
 
-![winmac_light_02](https://github.com/Asteski/WinMac/blob/main/img/winmac_light_02.jpg)
+![winmac_light_02](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_02.jpg)
 
-![winmac_light_03](https://github.com/Asteski/WinMac/blob/main/img/winmac_light_03.png)
+![winmac_light_03](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_03.jpg)
 
 
 ## Features
