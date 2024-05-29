@@ -157,7 +157,7 @@ Invoke-WebRequest -Uri $wingetUrl -OutFile $installPath
 Write-Information "Installing WinGet..."
 Add-AppxPackage -Path $installPath
 Remove-Item -Path $installPath -Force
-Write-Information "Winget installation completed." -ForegroundColor Green
+Write-Information "Winget installation completed."
 
 ## Defintions
 $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
