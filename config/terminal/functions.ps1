@@ -38,6 +38,8 @@ set-alias -name less -value more
 set-alias -name random -value Get-RandomString
 set-alias -name user -value getuser
 set-alias -name pwd -value ppwd
+set-alias -name lnk -value run
+set-alias -name l -value ls
 
 # Functions
 function psversion { $PSVersionTable }
@@ -51,6 +53,23 @@ function ws { $appname = $args; winget search "$appname" }
 function wu { winget upgrade $args } 
 function ww { $appname = $args; winget show "$appname" } 
 function ppwd { $pwd.path }
+function ld { Get-ChildItem -Directory }
+function c { cd .. }
+
+function run {
+    $start = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+    $name = "$args"
+    $lnk = Get-ChildItem -Path $start -Filter "*.lnk" -Recurse | Where-Object { $_.Name -like "*$name*" }
+    if ($lnk.Count -gt 1) {
+        Write-Host "Multiple shortcuts found. Please provide a more specific name:" -ForegroundColor Red
+        Write-Host
+        (($lnk | Select-Object -Property Name).Name).Replace(".lnk", "")
+    } elseif ($lnk.Count -eq 0) {
+        Write-Host "No shortcut found." -ForegroundColor Red
+    } else {
+        Start-Process -FilePath $lnk.FullName
+    }
+}
 
 function getuser {
     $userName = $args
