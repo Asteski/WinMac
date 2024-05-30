@@ -6,10 +6,6 @@ New-Item -ItemType Directory -Path $env:PROGRAMFILES\Stahky -Force
 New-Item -ItemType Directory -Path $env:PROGRAMFILES\Stahky\config -Force
 Invoke-WebRequest -Uri $url -OutFile $outputPath
 Expand-Archive -Path $outputPath -DestinationPath $exePath
-
-$sourceFolder = "$exePath\folder1"
-$destinationFolder = "$exePath\folder2"
-
 Copy-Item -Path $pwd\config\taskbar\stacks\* -Destination $exePath\config -Recurse -Force
 
 $Target = "$exePath\config\shortcuts\favorites.stahky.lnk"
