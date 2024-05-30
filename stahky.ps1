@@ -9,7 +9,7 @@ $shell = New-Object -ComObject Shell.Application
 $shortcutPath1 = "$($pwd)\config\taskbar\stacks\shortcuts\Control.stahky.lnk"
 $shortcutPath2 = "$($pwd)\config\taskbar\stacks\shortcuts\Favorites.stahky.lnk"
 $taskbar = $shell.Namespace('C:\Users\Adams\AppData\Roaming\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar')
-Copy-Item "$($pwd)\config\taskbar\stacks\themes\stahky-light.ini" "$exePath\stahky.ini" --Force
+Copy-Item "$($pwd)\config\taskbar\stacks\themes\stahky-light.ini" "$exePath\stahky.ini" -Force
 $shortcut1 = $taskbar.ParseName($shortcutPath1)
 $shortcut2 = $taskbar.ParseName($shortcutPath2)
 $verb = $shortcut1.Verbs() | Where-Object { $_.Name -eq 'Pin to Taskbar' }
