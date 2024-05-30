@@ -1,6 +1,6 @@
 $url = "https://github.com/joedf/stahky/releases/download/v0.1.0.8/stahky_U64_v0.1.0.8.zip"
 $outputPath = "$($pwd)\stahky_U64_v0.1.0.8.zip"
-$exePath = ($env:AppData | Split-Path) + "\local\Stahky\"
+$exePath = ($env:AppData | Split-Path) + "\local\Stahky"
 
 Invoke-WebRequest -Uri $url -OutFile $outputPath
 Expand-Archive -Path $outputPath -DestinationPath $exePath
@@ -17,6 +17,11 @@ Expand-Archive -Path $outputPath -DestinationPath $exePath
 
 # $taskbarFolder.CopyHere($shortcut1.FullName)
 # $taskbarFolder.CopyHere($shortcut2.FullName)
+
+$shortcutPath = "$($pwd)\config\taskbar\stacks\shortcuts\Favorites.stahky.lnk"
+$shortcut = $shell.CreateShortcut($shortcutPath)
+$shortcut.TargetPath = "$($exePath)\stahky.exe /stahky $($pwd)\config\taskbar\stacks\shortcuts\Favorites.stahky.lnk"
+$shortcut.Save()
 
 $Target = "$($pwd)\config\taskbar\stacks\shortcuts\Favorites.stahky.lnk"
 $KeyPath1  = "HKCU:\SOFTWARE\Classes"
