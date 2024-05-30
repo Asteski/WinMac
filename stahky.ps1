@@ -1,20 +1,18 @@
 $url = "https://github.com/joedf/stahky/releases/download/v0.1.0.8/stahky_U64_v0.1.0.8.zip"
 $outputPath = "$pwd\stahky_U64_v0.1.0.8.zip"
-$exePath = "$env:programfiles\Stahky"
+$exePath = "$env:PROGRAMFILES\Stahky"
 
+New-Item -ItemType Directory -Path $env:PROGRAMFILES\Stahky -Force
+New-Item -ItemType Directory -Path $env:PROGRAMFILES\Stahky\config -Force
 Invoke-WebRequest -Uri $url -OutFile $outputPath
 Expand-Archive -Path $outputPath -DestinationPath $exePath
 
-$shell = New-Object -ComObject WScript.Shell
-$shortcutPath = "$pwd\stahky.lnk"
-$targetPath = "$pwd\stahky.exe /stahky $pwd\config\taskbar\stacks\shortcuts\Favorites.stahky.lnk"
+$sourceFolder = "$exePath\folder1"
+$destinationFolder = "$exePath\folder2"
 
-$shortcut = $shell.CreateShortcut($shortcutPath)
-$shortcut.TargetPath = $targetPath
-$shortcut.Save()
+Copy-Item -Path $pwd\config\taskbar\stacks\* -Destination $exePath\config -Recurse -Force
 
-
-$Target = "$pwd\config\taskbar\stacks\shortcuts\Favorites.stahky.lnk"
+$Target = "$exePath\config\shortcuts\favorites.stahky.lnk"
 $KeyPath1  = "HKCU:\SOFTWARE\Classes"
 $KeyPath2  = "*"
 $KeyPath3  = "shell"
