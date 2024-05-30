@@ -8,11 +8,12 @@ Expand-Archive -Path $outputPath -DestinationPath $exePath
 $shell = New-Object -ComObject Shell.Application
 $shortcutPath1 = "$($pwd)\config\taskbar\stacks\shortcuts\Control.stahky.lnk"
 $shortcutPath2 = "$($pwd)\config\taskbar\stacks\shortcuts\Favorites.stahky.lnk"
-$taskbar = $shell.Namespace('C:\Users\Adams\AppData\Roaming\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar')
-Copy-Item "$($pwd)\config\taskbar\stacks\themes\stahky-light.ini" "$exePath\stahky.ini" -Force
-$shortcut1 = $taskbar.ParseName($shortcutPath1)
-$shortcut2 = $taskbar.ParseName($shortcutPath2)
-$verb = $shortcut1.Verbs() | Where-Object { $_.Name -eq 'Pin to Taskbar' }
-$verb.DoIt()
-$verb = $shortcut2.Verbs() | Where-Object { $_.Name -eq 'Pin to Taskbar' }
-$verb.DoIt()
+
+$taskbarPath = [System.IO.Path]::Combine($env:APPDATA, "Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar")
+$taskbarFolder = $shell.Namespace($taskbarPath)
+
+$shortcut1 = $shell.CreateShortcut($shortcutPath1)
+$shortcut2 = $shell.CreateShortcut($shortcutPath2)
+
+$taskbarFolder.CopyHere($shortcut1.FullName)
+$taskbarFolder.CopyHere($shortcut2.FullName)
