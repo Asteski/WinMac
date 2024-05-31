@@ -63,7 +63,7 @@ function stahky {
         Write-Host "Stahky not found." -ForegroundColor Red
     } 
     elseif ($args.Count -eq 0) {
-        Write-Host "Please provide a directory to stack." -ForegroundColor Yellow
+        Write-Host "Please provide a directory to stack:" -ForegroundColor Yellow
         Write-Host "stack <directory> for specific directory"
         Write-Host "stack . for current directory"
     }
