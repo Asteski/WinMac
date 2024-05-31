@@ -84,8 +84,6 @@ elseif (($roundedOrSquared -ne "S" -or $roundedOrSquared -ne "s") -and ($lightOr
 }
 
 reg import $regFile
-# $modifiedContent = Get-Content $$modifiedFile | ForEach-Object { $_ -replace  }
-# $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "16119283", "2563870" }
 
 Start-Sleep 2
 Write-Host "Configuring Nexus Dock completed." -ForegroundColor Green
