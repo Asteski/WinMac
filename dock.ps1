@@ -68,7 +68,7 @@ if ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
     $regFile = $modifiedFile
     if ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
         $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "Light", "Dark" }
-        $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "1644825", "1563132" }
+        $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "1644825", "15658734" }
         $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "16119283", "2563870" }
         $modifiedFile = "$pwd\temp\winstep.reg"
         $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 | Out-Null
