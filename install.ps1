@@ -64,6 +64,7 @@ $([char]27)[93m$("Please select options you want to install:")$([char]27)[0m
     - pin folders
     - remove shortcut arrows
     - remove recycle bin desktop icon
+    - add End Task
 "@
     Write-Host
     $selection = Read-Host "Enter the numbers of options you want to install (separated by commas)"
