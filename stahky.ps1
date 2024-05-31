@@ -10,7 +10,7 @@ Copy-Item -Path $pwd\config\taskbar\stacks\* -Destination $exePath\config -Recur
 Copy-Item -Path $exePath\config\themes\stahky-dark.ini -Destination $exePath\stahky.init
 
 $shortcutPath = "$exePath\control.stahky.lnk"
-$shell = New-Object -ComObject Shell.Application
+$shell = New-Object -ComObject WScript.Shell
 $taskbarPath = [System.IO.Path]::Combine($env:APPDATA, "Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar")
 $shortcut = $shell.CreateShortcut($shortcutPath)
 $shortcut.TargetPath = $exePath
