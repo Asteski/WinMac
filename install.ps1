@@ -402,6 +402,8 @@ foreach ($app in $selectedApps) {
             Write-Host "Configuring TopNotify completed." -ForegroundColor Green
         }
         "7" {
+            # Stahky
+            Write-Host "Configuring Stahky..." -ForegroundColor Yellow
             $url = "https://github.com/joedf/stahky/releases/download/v0.1.0.8/stahky_U64_v0.1.0.8.zip"
             $outputPath = "$pwd\stahky_U64_v0.1.0.8.zip"
             $exePath = "$env:PROGRAMFILES\Stahky"
@@ -415,7 +417,8 @@ foreach ($app in $selectedApps) {
                 Expand-Archive -Path $outputPath -DestinationPath $exePath
             }
             Copy-Item -Path $pwd\config\taskbar\stacks\* -Destination $exePath\config -Recurse -Force
-            Copy-Item -Path $exePath\config\themes\stahky-$stackTheme.ini -Destination $exePath\stahky.init
+            Copy-Item -Path $exePath\config\themes\stahky-$stackTheme.ini -Destination $exePath\stahky.ini
+            Write-Host "Configuring Stahky completed." -ForegroundColor Green
         }
         "8" {
             # Other
