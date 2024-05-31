@@ -70,8 +70,8 @@ if ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
     if ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
         $replaceStrings = @{
             "Light" = "Dark";
-            "1644825" = "2563870";
-            "16119283" = "15658734";
+            "1644825" = "15658734";
+            "16119283" = "2563870";
         }
         $modifiedContent = Get-Content $regFile | ForEach-Object { $replaceStrings.GetEnumerator() | ForEach-Object { $_ } | ForEach-Object { $_.Key -replace $_.Value } }
         $modifiedFile = "$pwd\temp\winstep.reg"
