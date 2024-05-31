@@ -166,15 +166,23 @@ Write-Host
 
 ## Winget
 Write-Host "Checking for Windows Package Manager (Winget)" -ForegroundColor Yellow
-$progressPreference = 'silentlyContinue'
-Write-Information "Downloading WinGet and its dependencies..."
-$wingetUrl = "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
-$installPath = "$env:TEMP\winget.msixbundle"
-Invoke-WebRequest -Uri $wingetUrl -OutFile $installPath
-Write-Information "Installing WinGet..."
-Add-AppxPackage -Path $installPath
-Remove-Item -Path $installPath -Force
-Write-Information "Winget installation completed."
+$wingetCheck = winget -v
+if ($wingetCheck -eq $null) {
+    $progressPreference = 'silentlyContinue'
+    Write-Information "Downloading WinGet and its dependencies..."
+    Invoke-WebRequest -Uri https://aka.ms/getwinget -OutFile Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+    Invoke-WebRequest -Uri https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx -OutFile Microsoft.VCLibs.x64.14.00.Desktop.appx
+    Invoke-WebRequest -Uri https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.6/Microsoft.UI.Xaml.2.8.x64.appx -OutFile Microsoft.UI.Xaml.2.8.x64.appx
+    Add-AppxPackage Microsoft.VCLibs.x64.14.00.Desktop.appx
+    Add-AppxPackage Microsoft.UI.Xaml.2.8.x64.appx
+    Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+}
+else 
+{
+    Write-Host "Winget is already installed." -ForegroundColor Green
+    Write-Host "Version: $($wingetCheck)"
+}
+
 
 ## Defintions
 $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
