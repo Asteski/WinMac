@@ -40,12 +40,12 @@ Write-Host
 $fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom installation"
 if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
     Write-Host "Choosing full installation." -ForegroundColor Yellow
-    $selectedApps = "1","2","3","4","5","6","7"
+    $selectedApps = "1","2","3","4","5","6","7","8"
 }
 elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
     Write-Host "Choosing custom installation." -ForegroundColor Yellow
     Start-Sleep 1
-    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="Open-Shell"; "6"="TopNotify"; "7"="Other"}
+    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="Open-Shell"; "6"="TopNotify"; "7"="Stahky"; "8"="Other"}
 Write-Host @"
 
 $([char]27)[93m$("Please select options you want to install:")$([char]27)[0m
@@ -57,8 +57,9 @@ $([char]27)[93m$("Please select options you want to install:")$([char]27)[0m
     Write-Host "4. StartAllBack"
     Write-Host "5. Open-Shell"
     Write-Host "6. TopNotify"
+    Write-Host "7. Stahky"
     Write-Host @"
-7. Other:
+8. Other:
     - black cursor
     - pin folders
     - remove shortcut arrows
@@ -79,7 +80,7 @@ $([char]27)[93m$("Please select options you want to install:")$([char]27)[0m
 else
 {
     Write-Host "Invalid input. Defaulting to full installation." -ForegroundColor Yellow
-    $selectedApps = "1","2","3","4","5","6","7"
+    $selectedApps = "1","2","3","4","5","6","7","8"
 }
 
 Write-Host @"
@@ -118,6 +119,15 @@ else
 {
     Write-Host "Invalid input. Defaulting to rounded corners." -ForegroundColor Yellow
     $roundedOrSquared = 'R'
+}
+
+$lightOrDark = Read-Host "Enter 'L' for light themed or 'D' for dark themed Windows"
+if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
+    Write-Host "Using light theme." -ForegroundColor Yellow 
+} elseif ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
+    Write-Host "Using dark theme." -ForegroundColor Yellow
+} else {
+    Write-Host "Invalid input. Defaulting to light theme." -ForegroundColor Yellow
 }
 
 Start-Sleep 1
@@ -389,6 +399,11 @@ foreach ($app in $selectedApps) {
             Write-Host "Configuring TopNotify completed." -ForegroundColor Green
         }
         "7" {
+            ...
+            ...
+            ...
+        }
+        "8" {
             # Other
             ## Black Cursor
             $curSourceFolder = $pwd.Path + '\config\cursor'
