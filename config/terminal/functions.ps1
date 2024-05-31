@@ -40,6 +40,7 @@ set-alias -name user -value getuser
 set-alias -name pwd -value ppwd
 set-alias -name lnk -value run
 set-alias -name l -value ls
+set-alias -name stack -value stahky
 
 # Functions
 function psversion { $PSVersionTable }
@@ -55,6 +56,28 @@ function ww { $appname = $args; winget show "$appname" }
 function ppwd { $pwd.path }
 function ld { Get-ChildItem -Directory }
 function c { cd .. }
+function stahky { 
+    $dir = "$args"
+    $cd = $pwd
+    if (-not (Test-Path "C:\Program Files\Stahky\Stahky.exe")) {
+        Write-Host "Stahky not found." -ForegroundColor Red
+    } 
+    elseif ($args.Count -eq 0) {
+        Write-Host "Please provide a directory to stack." -ForegroundColor Yellow
+        Write-Host "stack <directory> for specific directory"
+        Write-Host "stack . for current directory"
+    }
+    elseif ($args -eq ".") {
+        cd "C:\Program Files\Stahky"
+        .\Stahky.exe $cd
+        cd $cd
+    }
+    else {
+        cd "C:\Program Files\Stahky"
+        .\Stahky.exe $dir
+        cd $cd
+    }
+}
 
 function run {
     $start = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
