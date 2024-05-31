@@ -124,6 +124,7 @@ Write-Host
 $lightOrDark = Read-Host "Enter 'L' for light themed or 'D' for dark themed Windows"
 if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
     $stackTheme = 'light'
+    $orbTheme = 'black'
     Write-Host "Using light theme." -ForegroundColor Yellow 
 } elseif ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
     $stackTheme = 'dark'
@@ -540,6 +541,11 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
         }
     }
 }
+$taskbarDevSettings = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
+if (-not (Test-Path $taskbarDevSettings)) {
+  New-Item -Path $taskbarDevSettings -Force | Out-Null
+}
+New-ItemProperty -Path $taskbarDevSettings -Name "TaskbarEndTask" -Value 1 -PropertyType DWORD -Force | Out-Null
 
 # Clean up
 Write-Host "Clean up..." -ForegroundColor Yellow
