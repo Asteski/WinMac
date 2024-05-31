@@ -32,15 +32,15 @@ if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
     Write-Host "Invalid input. Defaulting to light theme." -ForegroundColor Yellow
 }
 
-# $downloadUrl = "https://www.winstep.net/nexus.zip"
-# $downloadPath = "dock.zip"
-# if (-not (Test-Path $downloadPath)) {
-#     Invoke-WebRequest -Uri $downloadUrl -OutFile $downloadPath
-# }
+$downloadUrl = "https://www.winstep.net/nexus.zip"
+$downloadPath = "dock.zip"
+if (-not (Test-Path $downloadPath)) {
+    Invoke-WebRequest -Uri $downloadUrl -OutFile $downloadPath
+}
 
-# Expand-Archive -Path $downloadPath -DestinationPath $pwd -Force
-# Start-Process -FilePath ".\NexusSetup.exe" -ArgumentList "/silent"
-# start-sleep 60
+Expand-Archive -Path $downloadPath -DestinationPath $pwd -Force
+Start-Process -FilePath ".\NexusSetup.exe" -ArgumentList "/silent"
+start-sleep 60
 Stop-Process -n Nexus
 Remove-Item .\dock.zip -Force | Out-Null
 Remove-Item .\ReadMe.txt -Force | Out-Null
