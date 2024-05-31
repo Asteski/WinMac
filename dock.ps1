@@ -46,7 +46,7 @@ Remove-Item .\dock.zip -Force | Out-Null
 Remove-Item .\ReadMe.txt -Force | Out-Null
 Remove-Item .\NexusSetup.exe -Force | Out-Null
 $winStep = 'C:\Users\Public\Documents\WinStep'
-Remove-Item -Path "$winStep\Themes\*" -Recurse -Force| Out-Null
+Remove-Item -Path "$winStep\Themes\*" -Recurse -Force | Out-Null
 Copy-Item -Path "config\dock\themes\*" -Destination "$winStep\Themes\" -Recurse -Force | Out-Null
 Remove-Item -Path "$winStep\NeXus\Indicators\*" -Force -Recurse | Out-Null
 Copy-Item -Path "config\dock\indicators\*" -Destination "$winStep\NeXus\Indicators\" -Recurse -Force | Out-Null
