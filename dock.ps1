@@ -61,7 +61,6 @@ $tempPath = Test-Path $tempFolder
     if (-not ($tempPath)) {
     New-Item -ItemType Directory -Path $tempFolder -Force | Out-Null
 }
-
 if ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
     $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "Rounded", "Squared" }
     $modifiedFile = "$pwd\temp\winstep.reg"
@@ -71,24 +70,18 @@ if ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
         $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "Light", "Dark" }
         $modifiedFile = "$pwd\temp\winstep.reg"
         $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 | Out-Null
-        $modifiedContent = Get-Content $$modifiedFile | ForEach-Object { $_ -replace "1644825", "15658734" }
-        $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 | Out-Null
-        $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "16119283", "2563870" }
-        $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 | Out-Null
     }
 }
 elseif (($roundedOrSquared -ne "S" -or $roundedOrSquared -ne "s") -and ($lightOrDark -eq "D" -or $lightOrDark -eq "d")) {
     $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "Light", "Dark" }
     $modifiedFile = "$pwd\temp\winstep.reg"
     $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 | Out-Null
-    $modifiedContent = Get-Content $$modifiedFile | ForEach-Object { $_ -replace "1644825", "15658734" }
-    $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 | Out-Null
-    $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "16119283", "2563870" }
-    $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 | Out-Null
     $regFile = $modifiedFile
 }
 
 reg import $regFile
+$modifiedContent = Get-Content $$modifiedFile | ForEach-Object { $_ -replace "1644825", "15658734" }
+$modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "16119283", "2563870" }
 
 Start-Sleep 2
 Write-Host "Configuring Nexus Dock completed." -ForegroundColor Green
