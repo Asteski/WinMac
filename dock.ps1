@@ -32,15 +32,15 @@ if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
     Write-Host "Invalid input. Defaulting to light theme." -ForegroundColor Yellow
 }
 
-# $downloadUrl = "https://www.winstep.net/nexus.zip"
-# $downloadPath = "dock.zip"
-# if (-not (Test-Path $downloadPath)) {
-#     Invoke-WebRequest -Uri $downloadUrl -OutFile $downloadPath
-# }
+$downloadUrl = "https://www.winstep.net/nexus.zip"
+$downloadPath = "dock.zip"
+if (-not (Test-Path $downloadPath)) {
+    Invoke-WebRequest -Uri $downloadUrl -OutFile $downloadPath
+}
 
-# Expand-Archive -Path $downloadPath -DestinationPath $pwd -Force
-# Start-Process -FilePath ".\NexusSetup.exe" -ArgumentList "/silent"
-# start-sleep 60
+Expand-Archive -Path $downloadPath -DestinationPath $pwd -Force
+Start-Process -FilePath ".\NexusSetup.exe" -ArgumentList "/silent"
+start-sleep 60
 Stop-Process -n Nexus
 Remove-Item .\dock.zip -Force | Out-Null
 Remove-Item .\ReadMe.txt -Force | Out-Null
@@ -68,7 +68,7 @@ if ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
     $regFile = $modifiedFile
     if ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
         $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "Light", "Dark" }
-        $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "1644825", "15658734" }
+        $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "1644825", "1563132" }
         $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "16119283", "2563870" }
         $modifiedFile = "$pwd\temp\winstep.reg"
         $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 | Out-Null
