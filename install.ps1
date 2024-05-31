@@ -176,9 +176,7 @@ if ($wingetCheck -eq $null) {
     Add-AppxPackage Microsoft.VCLibs.x64.14.00.Desktop.appx
     Add-AppxPackage Microsoft.UI.Xaml.2.8.x64.appx
     Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
-}
-else 
-{
+} else {
     Write-Host "Winget is already installed." -ForegroundColor Green
     Write-Host "Version: $($wingetCheck)"
 }
