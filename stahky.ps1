@@ -7,4 +7,4 @@ New-Item -ItemType Directory -Path $env:PROGRAMFILES\Stahky\config -Force
 Invoke-WebRequest -Uri $url -OutFile $outputPath
 Expand-Archive -Path $outputPath -DestinationPath $exePath
 Copy-Item -Path $pwd\config\taskbar\stacks\* -Destination $exePath\config -Recurse -Force
-
+Copy-Item -Path $exePath\config\themes\stahky-dark.ini -Destination $exePath\stahky.ini
