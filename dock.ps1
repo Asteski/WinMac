@@ -42,9 +42,9 @@ Expand-Archive -Path $downloadPath -DestinationPath $pwd -Force
 Start-Process -FilePath ".\NexusSetup.exe" -ArgumentList "/silent"
 start-sleep 60
 Stop-Process -n Nexus
-Remove-Item .\dock.zip -Force
-Remove-Item .\ReadMe.txt -Force
-Remove-Item .\NexusSetup.exe -Force
+Remove-Item .\dock.zip -Force | Out-Null
+Remove-Item .\ReadMe.txt -Force | Out-Null
+Remove-Item .\NexusSetup.exe -Force | Out-Null
 $winStep = 'C:\Users\Public\Documents\WinStep'
 Remove-Item -Path "$winStep\Themes\*" -Recurse -Force| Out-Null
 Copy-Item -Path "config\dock\themes\*" -Destination "$winStep\Themes\" -Recurse -Force | Out-Null
@@ -70,8 +70,8 @@ if ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
     if ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
         $replaceStrings = @{
             "Light" = "Dark";
-            "1644825" = "15658734";
-            "16119283" = "2563870";
+            "1644825" = "2563870";
+            "16119283" = "15658734";
         }
         $modifiedContent = Get-Content $regFile | ForEach-Object { $replaceStrings.GetEnumerator() | ForEach-Object { $_ } | ForEach-Object { $_.Key -replace $_.Value } }
         $modifiedFile = "$pwd\temp\winstep.reg"
