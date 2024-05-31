@@ -68,13 +68,12 @@ if ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
     $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 | Out-Null
     $regFile = $modifiedFile
     if ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
-        $replaceStrings = @{
-            "Light" = "Dark";
-            "1644825" = "15658734";
-            "16119283" = "2563870";
-        }
-        $modifiedContent = Get-Content $regFile | ForEach-Object { $replaceStrings.GetEnumerator() | ForEach-Object { $_ } | ForEach-Object { $_.Key -replace $_.Value } }
+        $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "Light", "Dark" }
         $modifiedFile = "$pwd\temp\winstep.reg"
+        $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 | Out-Null
+        $modifiedContent = Get-Content $$modifiedFile | ForEach-Object { $_ -replace "1644825", "15658734" }
+        $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 | Out-Null
+        $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "16119283", "2563870" }
         $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 | Out-Null
     }
 }
@@ -82,11 +81,15 @@ elseif (($roundedOrSquared -ne "S" -or $roundedOrSquared -ne "s") -and ($lightOr
     $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "Light", "Dark" }
     $modifiedFile = "$pwd\temp\winstep.reg"
     $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 | Out-Null
+    $modifiedContent = Get-Content $$modifiedFile | ForEach-Object { $_ -replace "1644825", "15658734" }
+    $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 | Out-Null
+    $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "16119283", "2563870" }
+    $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 | Out-Null
     $regFile = $modifiedFile
 }
 
-
 reg import $regFile
+
 Start-Sleep 2
 Write-Host "Configuring Nexus Dock completed." -ForegroundColor Green
 
