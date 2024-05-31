@@ -120,16 +120,18 @@ else
     Write-Host "Invalid input. Defaulting to rounded corners." -ForegroundColor Yellow
     $roundedOrSquared = 'R'
 }
-
+Write-Host
 $lightOrDark = Read-Host "Enter 'L' for light themed or 'D' for dark themed Windows"
 if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
     $stackTheme = 'light'
     Write-Host "Using light theme." -ForegroundColor Yellow 
 } elseif ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
     $stackTheme = 'dark'
+    $orbTheme = 'white'
     Write-Host "Using dark theme." -ForegroundColor Yellow
 } else {
     $stackTheme = 'light'
+    $orbTheme = 'black'
     Write-Host "Invalid input. Defaulting to light theme." -ForegroundColor Yellow
 }
 
@@ -311,6 +313,7 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $sabRegPath -Name "SysTraySpacierIcons" -Value 1
             Set-ItemProperty -Path $sabRegPath -Name "SysTrayClockFormat" -Value 3
             Set-ItemProperty -Path $sabRegPath -Name "SysTrayInputSwitch" -Value 0
+            Set-ItemProperty -Path $sabRegPath -Name "OrbBitmap" -Value "$($orbTheme).svg"
             Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "(default)" -Value 1
             Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
             if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0 }
