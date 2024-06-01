@@ -60,7 +60,6 @@ function c { Set-Location .. }
 $stacks = "C:\Program Files\Stahky"
 function stahky { 
     $dir = "$args"
-    $cd = $pwd
     if (-not (Test-Path $stacks)) {
         Write-Host "Stahky not found." -ForegroundColor Red
     } 
