@@ -592,9 +592,11 @@ If you have any questions or suggestions, please contact me on GitHub.
 
 Write-Host "-----------------------------------------------------------------------------"  -ForegroundColor Cyan
 Write-Host
-Write-Host "Please run the dock.ps1 script in a PowerShell session without administrative privileges." -ForegroundColor Green
+Write-Host @"
+To install Winstep Nexus Dock, please run the dock.ps1 script
+in a PowerShell session without administrative privileges.
+"@ -ForegroundColor Green
 Start-Sleep 2
-
 Write-Host
 $restartConfirmation = Read-Host "Restart computer now? It's recommended to fully apply all the changes. (y/n)"
 if ($restartConfirmation -eq "Y" -or $restartConfirmation -eq "y") {
