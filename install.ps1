@@ -570,10 +570,10 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
 
 # Clean up
 Write-Host "Clean up..." -ForegroundColor Yellow
-Remove-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Force | Out-Null
-Remove-Item -Path "C:\Users\Public\Desktop\gVim*" -Force | Out-Null
-Remove-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Force | Out-Null
-Remove-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Force | Out-Null
+Move-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
+Move-Item -Path "C:\Users\Public\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
+Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
+Move-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
 Write-Host "Clean up completed." -ForegroundColor Green
 Write-Host
 Stop-Transcript
@@ -591,13 +591,13 @@ If you have any questions or suggestions, please contact me on GitHub.
 "@ -ForegroundColor Green
 
 Write-Host "-----------------------------------------------------------------------------"  -ForegroundColor Cyan
-Write-Host
 Write-Host @"
+
 To install Winstep Nexus Dock, please run the dock.ps1 script
 in a PowerShell session without administrative privileges.
+
 "@ -ForegroundColor Green
 Start-Sleep 2
-Write-Host
 $restartConfirmation = Read-Host "Restart computer now? It's recommended to fully apply all the changes. (y/n)"
 if ($restartConfirmation -eq "Y" -or $restartConfirmation -eq "y") {
     Write-Host "Restarting computer in" -ForegroundColor Red
