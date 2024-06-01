@@ -67,7 +67,8 @@ function stahky {
         Write-Host "Please provide a directory to stack:" -ForegroundColor Yellow
         Write-Host "stack <full path to directory>"
         Write-Host "stack . for current directory"
-        Write-Host "stack go to run stacks directory."
+        Write-Host
+        Write-Host "stack go to peek stacks directory."
     }
     elseif ($args -eq "go") {
         open $stacks
