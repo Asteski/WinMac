@@ -429,6 +429,22 @@ foreach ($app in $selectedApps) {
             }
             Copy-Item -Path $pwd\config\taskbar\stacks\* -Destination $exePath\config -Recurse -Force
             Copy-Item -Path $exePath\config\themes\stahky-$stackTheme.ini -Destination $exePath\stahky.ini
+            $pathVarUser = [Environment]::GetEnvironmentVariable("Path", "User")
+            $pathVarMachine = [Environment]::GetEnvironmentVariable("Path", "Machine")
+            
+            if (-not ($pathVarUser -like "*C:\Program Files\Stahky*")) {
+                $pathVarUser += ";C:\Program Files\Stahky"
+                [Environment]::SetEnvironmentVariable("Path", $pathVarUser, "User")
+            }
+            if (-not ($pathVarMachine -like "*C:\Program Files\Stahky*")) {
+                $pathVarMachine += ";C:\Program Files\Stahky"
+                [Environment]::SetEnvironmentVariable("Path", $pathVarMachine, "Machine")
+            }
+            
+            $pathVar = [Environment]::GetEnvironmentVariable("Path", "Machine") + ";C:\Program Files\Stahky"
+            [Environment]::SetEnvironmentVariable("Path", $pathVar, "Machine")
+            $pathVar = [Environment]::GetEnvironmentVariable("Path", "User") + ";C:\Program Files\Stahky"
+            [Environment]::SetEnvironmentVariable("Path", $pathVar, "User")
             Write-Host "Configuring Stahky completed." -ForegroundColor Green
         }
         "8" {
