@@ -167,7 +167,7 @@ Write-Host
 ## Winget
 Write-Host "Checking for Windows Package Manager (Winget)" -ForegroundColor Yellow
 $wingetCheck = winget -v
-if ($wingetCheck -eq $null) {
+if ($null -eq $wingetCheck) {
     $progressPreference = 'silentlyContinue'
     Write-Information "Downloading WinGet and its dependencies..."
     Invoke-WebRequest -Uri https://aka.ms/getwinget -OutFile Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle

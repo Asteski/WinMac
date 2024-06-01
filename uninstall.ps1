@@ -96,7 +96,7 @@ Write-Host
 
 ## Winget
 $wingetCheck = winget -v
-if ($wingetCheck -eq $null) {
+if ($null -eq $wingetCheck) {
     $progressPreference = 'silentlyContinue'
     Write-Information "Downloading WinGet and its dependencies..."
     Invoke-WebRequest -Uri https://aka.ms/getwinget -OutFile Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
@@ -158,7 +158,6 @@ foreach ($app in $selectedApps) {
             Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force | Out-Null
             Start-Sleep 2
             winget uninstall --id Microsoft.PowerToys --silent --force | Out-Null
-            $ptDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Write-Host "Uninstalling PowerToys completed." -ForegroundColor Green
         }
 
