@@ -55,11 +55,13 @@ function wu { winget upgrade $args }
 function ww { $appname = $args; winget show "$appname" } 
 function ppwd { $pwd.path }
 function ld { Get-ChildItem -Directory }
-function c { cd .. }
+function c { Set-Location .. }
+
+$stacks = "C:\Program Files\Stahky"
 function stahky { 
     $dir = "$args"
     $cd = $pwd
-    if (-not (Test-Path "C:\Program Files\Stahky\Stahky.exe")) {
+    if (-not (Test-Path $stacks)) {
         Write-Host "Stahky not found." -ForegroundColor Red
     } 
     elseif ($args.Count -eq 0) {
@@ -68,14 +70,10 @@ function stahky {
         Write-Host "stack . for current directory"
     }
     elseif ($args -eq ".") {
-        cd "C:\Program Files\Stahky"
-        .\Stahky.exe $cd
-        cd $cd
+        Stahky.exe $pwd
     }
     else {
-        cd "C:\Program Files\Stahky"
-        .\Stahky.exe $dir
-        cd $cd
+        Stahky.exe $dir
     }
 }
 
