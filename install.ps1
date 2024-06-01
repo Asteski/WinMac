@@ -417,10 +417,10 @@ foreach ($app in $selectedApps) {
             Write-Host "Configuring Stahky..." -ForegroundColor Yellow
             $url = "https://github.com/joedf/stahky/releases/download/v0.1.0.8/stahky_U64_v0.1.0.8.zip"
             $outputPath = "$pwd\stahky_U64_v0.1.0.8.zip"
-            $exePath = "$env:PROGRAMFILES\Stahky"
+            $exePath = "$env:LOCALAPPDATA\Stahky"
             
-            New-Item -ItemType Directory -Path $env:PROGRAMFILES\Stahky -Force | Out-Null
-            New-Item -ItemType Directory -Path $env:PROGRAMFILES\Stahky\config -Force | Out-Null
+            New-Item -ItemType Directory -Path $exePath -Force | Out-Null
+            New-Item -ItemType Directory -Path $exePath\config -Force | Out-Null
             Invoke-WebRequest -Uri $url -OutFile $outputPath
             if (Test-Path -Path "$exePath\stahky.exe") {
                 Write-Host "Stahky already exists."
