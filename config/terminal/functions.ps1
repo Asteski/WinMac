@@ -57,7 +57,7 @@ function ppwd { $pwd.path }
 function ld { Get-ChildItem -Directory }
 function c { Set-Location .. }
 
-$stacks = "C:\Program Files\Stahky"
+$stacks = "$env:LOCALAPPDATA\Stahky"
 function stahky { 
     $dir = "$args"
     if (-not (Test-Path $stacks)) {

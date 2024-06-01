@@ -65,6 +65,7 @@ if ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
     $regFile = $modifiedFile
     if ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
         $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "Light", "Dark" }
+        $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace '"UIDarkMode"="3"', '"UIDarkMode"="1"' }
         $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "1644825", "15658734" }
         $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "16119283", "2563870" }
         $modifiedFile = "$pwd\temp\winstep.reg"
@@ -73,6 +74,7 @@ if ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
 }
 elseif (($roundedOrSquared -ne "S" -or $roundedOrSquared -ne "s") -and ($lightOrDark -eq "D" -or $lightOrDark -eq "d")) {
     $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "Light", "Dark" }
+    $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace '"UIDarkMode"="3"', '"UIDarkMode"="1"' }
     $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "1644825", "15658734" }
     $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "16119283", "2563870" }
     $modifiedFile = "$pwd\temp\winstep.reg"
