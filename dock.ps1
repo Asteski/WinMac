@@ -42,7 +42,6 @@ Expand-Archive -Path $downloadPath -DestinationPath $pwd -Force
 Start-Process -FilePath ".\NexusSetup.exe" -ArgumentList "/silent"
 start-sleep 80
 Get-Process -n Nexus | Stop-Process
-
 $winStep = 'C:\Users\Public\Documents\WinStep'
 Remove-Item -Path "$winStep\Themes\*" -Recurse -Force | Out-Null
 Copy-Item -Path "config\dock\themes\*" -Destination "$winStep\Themes\" -Recurse -Force | Out-Null
