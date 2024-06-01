@@ -67,8 +67,10 @@ function stahky {
         Write-Host "Please provide a directory to stack:" -ForegroundColor Yellow
         Write-Host "stack <full path to directory>"
         Write-Host "stack . for current directory"
-        Write-Host
-        Write-Host 'run "of $stacks" to go to stacks directory.'
+        Write-Host "stack go to run stacks directory."
+    }
+    elseif ($args -eq "go") {
+        open $stacks
     }
     elseif ($args -eq ".") {
         Stahky.exe $pwd
