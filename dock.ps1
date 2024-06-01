@@ -41,7 +41,7 @@ if (-not (Test-Path $downloadPath)) {
 Expand-Archive -Path $downloadPath -DestinationPath $pwd -Force
 Start-Process -FilePath ".\NexusSetup.exe" -ArgumentList "/silent"
 start-sleep 60
-Stop-Process -n Nexus
+Stop-Process -n Nexus -Force
 
 $winStep = 'C:\Users\Public\Documents\WinStep'
 Remove-Item -Path "$winStep\Themes\*" -Recurse -Force | Out-Null
