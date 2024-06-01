@@ -64,7 +64,7 @@ function stahky {
     } 
     elseif ($args.Count -eq 0) {
         Write-Host "Please provide a directory to stack:" -ForegroundColor Yellow
-        Write-Host "stack <directory> for specific directory"
+        Write-Host "stack <full path to directory>"
         Write-Host "stack . for current directory"
     }
     elseif ($args -eq ".") {
