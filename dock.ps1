@@ -83,7 +83,7 @@ elseif (($roundedOrSquared -ne "S" -or $roundedOrSquared -ne "s") -and ($lightOr
 }
 
 reg import $regFile
-Remove-Item -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "DockLabelColorHotTrack1"
+Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "DockLabelColorHotTrack1"
 Start-Sleep 2
 Write-Host "Configuring Nexus Dock completed." -ForegroundColor Green
 
