@@ -432,18 +432,18 @@ foreach ($app in $selectedApps) {
             $pathVarUser = [Environment]::GetEnvironmentVariable("Path", "User")
             $pathVarMachine = [Environment]::GetEnvironmentVariable("Path", "Machine")
             
-            if (-not ($pathVarUser -like "*C:\Program Files\Stahky*")) {
-                $pathVarUser += ";C:\Program Files\Stahky"
+            if (-not ($pathVarUser -like "*$exePath*")) {
+                $pathVarUser += ";$exePath"
                 [Environment]::SetEnvironmentVariable("Path", $pathVarUser, "User")
             }
-            if (-not ($pathVarMachine -like "*C:\Program Files\Stahky*")) {
-                $pathVarMachine += ";C:\Program Files\Stahky"
+            if (-not ($pathVarMachine -like "* $exePath*")) {
+                $pathVarMachine += "; $exePath"
                 [Environment]::SetEnvironmentVariable("Path", $pathVarMachine, "Machine")
             }
             
-            $pathVar = [Environment]::GetEnvironmentVariable("Path", "Machine") + ";C:\Program Files\Stahky"
+            $pathVar = [Environment]::GetEnvironmentVariable("Path", "Machine") + ";$exePath"
             [Environment]::SetEnvironmentVariable("Path", $pathVar, "Machine")
-            $pathVar = [Environment]::GetEnvironmentVariable("Path", "User") + ";C:\Program Files\Stahky"
+            $pathVar = [Environment]::GetEnvironmentVariable("Path", "User") + ";$exePath"
             [Environment]::SetEnvironmentVariable("Path", $pathVar, "User")
             Write-Host "Configuring Stahky completed." -ForegroundColor Green
         }
