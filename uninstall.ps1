@@ -108,8 +108,7 @@ if ($null -eq $wingetCheck) {
 }
 else 
 {
-    Write-Host "Winget is already installed." -ForegroundColor Green
-    Write-Host "Version: $($wingetCheck)"
+    Write-Host "Winget is already installed. Version: $($wingetCheck)" -ForegroundColor Green
 }
 
 ## Defintions
