@@ -20,7 +20,7 @@
 
 ![winmac_light_03](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_03.png)
 
-![winmac_light_03](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_04.png)
+![winmac_light_04](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_04.png)
 
 
 ## Features
