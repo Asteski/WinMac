@@ -38,6 +38,9 @@ set-alias -name less -value more
 set-alias -name random -value Get-RandomString
 set-alias -name user -value getuser
 set-alias -name pwd -value ppwd
+set-alias -name lnk -value run
+set-alias -name l -value ls
+set-alias -name stack -value stahky
 
 # Functions
 function psversion { $PSVersionTable }
@@ -51,6 +54,47 @@ function ws { $appname = $args; winget search "$appname" }
 function wu { winget upgrade $args } 
 function ww { $appname = $args; winget show "$appname" } 
 function ppwd { $pwd.path }
+function ld { Get-ChildItem -Directory }
+function c { Set-Location .. }
+
+$stacks = "$env:LOCALAPPDATA\Stahky"
+function stahky { 
+    $dir = "$args"
+    if (-not (Test-Path $stacks)) {
+        Write-Host "Stahky not found." -ForegroundColor Red
+    } 
+    elseif ($args.Count -eq 0) {
+        Write-Host "Please provide a directory to stack:" -ForegroundColor Yellow
+        Write-Host "stack <full path to directory>"
+        Write-Host "stack . for current directory"
+        Write-Host
+        Write-Host "stack go to peek stacks directory"
+    }
+    elseif ($args -eq "go") {
+        open $stacks
+    }
+    elseif ($args -eq ".") {
+        Stahky.exe $pwd
+    }
+    else {
+        Stahky.exe $dir
+    }
+}
+
+function run {
+    $start = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+    $name = "$args"
+    $lnk = Get-ChildItem -Path $start -Filter "*.lnk" -Recurse | Where-Object { $_.Name -like "*$name*" }
+    if ($lnk.Count -gt 1) {
+        Write-Host "Multiple shortcuts found. Please provide a more specific name:" -ForegroundColor Red
+        Write-Host
+        (($lnk | Select-Object -Property Name).Name).Replace(".lnk", "")
+    } elseif ($lnk.Count -eq 0) {
+        Write-Host "No shortcut found." -ForegroundColor Red
+    } else {
+        Start-Process -FilePath $lnk.FullName
+    }
+}
 
 function getuser {
     $userName = $args

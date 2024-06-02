@@ -5,7 +5,7 @@ Write-Host @"
 Welcome to WinMac Deployment!
 
 Author: Asteski
-Version: 0.3.5
+Version: 0.4.0
 
 This is Work in Progress. You're using this script at your own risk.
 
@@ -38,13 +38,13 @@ Start-Transcript -Path ".\temp\WinMac_uninstall_log_$date.txt" -Append | Out-Nul
 
 $fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom uninstallation"
 if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
-    $selectedApps = "1","2","3","4","5","6","7","8"
+    $selectedApps = "1","2","3","4","5","6","7","8","9"
     Write-Host "Choosing full uninstallation." -ForegroundColor Yellow
 }
 elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
     Write-Host "Choosing custom uninstallation." -ForegroundColor Yellow
     Start-Sleep 1
-    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="Open-Shell"; "6"="TopNotify"; "7"="Nexus Dock"; "8"="Other"}
+    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="Open-Shell"; "6"="TopNotify"; "7"="Nexus Dock"; "8"="Stahky"; "9"="Other"}
 Write-Host @"
 
 $([char]27)[93m$("Please select options you want to uninstall:")$([char]27)[0m
@@ -57,7 +57,8 @@ $([char]27)[93m$("Please select options you want to uninstall:")$([char]27)[0m
     Write-Host "5. Open-Shell"
     Write-Host "6. TopNotify"
     Write-Host "7. Nexus Dock"
-    Write-Host "8. Other"
+    Write-Host "8. Stahky"
+    Write-Host "9. Other"
     $selection = Read-Host "Enter the numbers of options you want to uninstall (separated by commas)"
     $selectedApps = @()
     $selectedApps = $selection.Split(',')
@@ -71,7 +72,7 @@ $([char]27)[93m$("Please select options you want to uninstall:")$([char]27)[0m
 }
 else
 {
-    $selectedApps = "1","2","3","4","5","6","7","8"
+    $selectedApps = "1","2","3","4","5","6","7","8","9"
     Write-Host "Invalid input. Defaulting to full uninstallation." -ForegroundColor Yellow
 }
 Start-Sleep 1
@@ -94,16 +95,21 @@ Write-Host "--------------------------------------------------------------------
 Write-Host
 
 ## Winget
-Write-Host "Checking for Windows Package Manager (Winget)" -ForegroundColor Yellow
-$progressPreference = 'silentlyContinue'
-Write-Information "Downloading WinGet and its dependencies..."
-$wingetUrl = "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
-$installPath = "$env:TEMP\winget.msixbundle"
-Invoke-WebRequest -Uri $wingetUrl -OutFile $installPath
-Write-Information "Uninstalling WinGet..."
-Add-AppxPackage -Path $installPath
-Remove-Item -Path $installPath -Force
-Write-Information "Winget installation completed."
+$wingetCheck = winget -v
+if ($null -eq $wingetCheck) {
+    $progressPreference = 'silentlyContinue'
+    Write-Information "Downloading WinGet and its dependencies..."
+    Invoke-WebRequest -Uri https://aka.ms/getwinget -OutFile Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+    Invoke-WebRequest -Uri https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx -OutFile Microsoft.VCLibs.x64.14.00.Desktop.appx
+    Invoke-WebRequest -Uri https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.6/Microsoft.UI.Xaml.2.8.x64.appx -OutFile Microsoft.UI.Xaml.2.8.x64.appx
+    Add-AppxPackage Microsoft.VCLibs.x64.14.00.Desktop.appx
+    Add-AppxPackage Microsoft.UI.Xaml.2.8.x64.appx
+    Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+}
+else 
+{
+    Write-Host "$([char]27)[92m$("Winget is already installed.")$([char]27)[0m Version: $($wingetCheck)"
+}
 
 ## Defintions
 $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
@@ -151,7 +157,6 @@ foreach ($app in $selectedApps) {
             Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force | Out-Null
             Start-Sleep 2
             winget uninstall --id Microsoft.PowerToys --silent --force | Out-Null
-            $ptDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Write-Host "Uninstalling PowerToys completed." -ForegroundColor Green
         }
 
@@ -213,6 +218,13 @@ foreach ($app in $selectedApps) {
             Write-Host "Uninstalling Nexus Dock completed." -ForegroundColor Green
         }
         "8" {
+            # Stahky
+            Write-Host "Uninstalling Stahky..." -ForegroundColor Yellow
+            $exePath = "$env:LOCALAPPDATA\Stahky"
+            Remove-Item -Path $exePath -Recurse -Force | Out-Null
+            Write-Host "Uninstalling Stahky completed." -ForegroundColor Green
+        }
+        "9" {
             # Other
             Write-Host "Uninstalling Other configurations..." -ForegroundColor Yellow
             Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 0
@@ -282,17 +294,22 @@ uint fWinIni);
             $recycleBin.Self.InvokeVerb("PinToHome") | Out-Null
             Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse | Out-Null
             Remove-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
-            Stop-Process -Name explorer -Force | Out-Null            
+            Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings" -Recurse | Out-Null
+            Stop-Process -Name explorer -Force | Out-Null         
         }
     }
 }
 
 # Clean up
 Write-Host "Clean up..." -ForegroundColor Yellow
-Remove-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Force | Out-Null
-Remove-Item -Path "C:\Users\Public\Desktop\gVim*" -Force | Out-Null
-Remove-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Force | Out-Null
-Remove-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Force | Out-Null
+$programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+Remove-Item -Path "$programsDir\Everything.lnk" -Force | Out-Null
+Remove-Item -Path "$programsDir\Nexus.lnk" -Force | Out-Null
+Remove-Item -Path "$programsDir\gVim*" -Force | Out-Null
+$explorerProcess = Get-Process -Name explorer -ErrorAction SilentlyContinue
+if ($null -eq $explorerProcess) {
+    Start-Process -FilePath explorer.exe
+}
 Write-Host "Clean up completed." -ForegroundColor Green
 Write-Host
 Stop-Transcript

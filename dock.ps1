@@ -5,7 +5,7 @@ Write-Host @"
 Welcome to WinMac Deployment!
 
 Author: Asteski
-Version: 0.3.5
+Version: 0.4.0
 
 This is Work in Progress. You're using this script at your own risk.
 
@@ -40,13 +40,10 @@ if (-not (Test-Path $downloadPath)) {
 
 Expand-Archive -Path $downloadPath -DestinationPath $pwd -Force
 Start-Process -FilePath ".\NexusSetup.exe" -ArgumentList "/silent"
-start-sleep 60
-Stop-Process -n Nexus
-Remove-Item .\dock.zip -Force
-Remove-Item .\ReadMe.txt -Force
-Remove-Item .\NexusSetup.exe -Force
+start-sleep 80
+Get-Process -n Nexus | Stop-Process
 $winStep = 'C:\Users\Public\Documents\WinStep'
-Remove-Item -Path "$winStep\Themes\*" -Recurse -Force| Out-Null
+Remove-Item -Path "$winStep\Themes\*" -Recurse -Force | Out-Null
 Copy-Item -Path "config\dock\themes\*" -Destination "$winStep\Themes\" -Recurse -Force | Out-Null
 Remove-Item -Path "$winStep\NeXus\Indicators\*" -Force -Recurse | Out-Null
 Copy-Item -Path "config\dock\indicators\*" -Destination "$winStep\NeXus\Indicators\" -Recurse -Force | Out-Null
@@ -61,7 +58,6 @@ $tempPath = Test-Path $tempFolder
     if (-not ($tempPath)) {
     New-Item -ItemType Directory -Path $tempFolder -Force | Out-Null
 }
-
 if ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
     $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "Rounded", "Squared" }
     $modifiedFile = "$pwd\temp\winstep.reg"
@@ -69,27 +65,37 @@ if ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
     $regFile = $modifiedFile
     if ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
         $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "Light", "Dark" }
+        $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace '"UIDarkMode"="3"', '"UIDarkMode"="1"' }
+        $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "1644825", "15658734" }
+        $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "16119283", "2563870" }
         $modifiedFile = "$pwd\temp\winstep.reg"
         $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 | Out-Null
     }
 }
 elseif (($roundedOrSquared -ne "S" -or $roundedOrSquared -ne "s") -and ($lightOrDark -eq "D" -or $lightOrDark -eq "d")) {
     $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "Light", "Dark" }
+    $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace '"UIDarkMode"="3"', '"UIDarkMode"="1"' }
+    $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "1644825", "15658734" }
+    $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "16119283", "2563870" }
     $modifiedFile = "$pwd\temp\winstep.reg"
     $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 | Out-Null
     $regFile = $modifiedFile
 }
 
-
 reg import $regFile
+Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "DockLabelColorHotTrack1"
 Start-Sleep 2
 Write-Host "Configuring Nexus Dock completed." -ForegroundColor Green
 
 Write-Host "Clean up..." -ForegroundColor Yellow
+$programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
 Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe' | Out-Null
-Remove-Item "C:\Users\$env:USERNAME\Desktop\Nexus.lnk" -Force -ErrorAction SilentlyContinue | Out-Null
-Remove-Item "C:\Users\$env:USERNAME\OneDrive\Desktop\Nexus.lnk" -Force -ErrorAction SilentlyContinue | Out-Null
+Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Nexus.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
+Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\Nexus.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
 Remove-Item "$pwd\temp\*" -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
+Remove-Item .\dock.zip -Force | Out-Null
+Remove-Item .\ReadMe.txt -Force | Out-Null
+Remove-Item .\NexusSetup.exe -Force | Out-Null
 Write-Host "Clean up completed." -ForegroundColor Green
 
 Write-Host

@@ -20,6 +20,8 @@
 
 ![winmac_light_03](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_03.png)
 
+![winmac_light_04](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_04.png)
+
 
 ## Features
 
@@ -55,6 +57,10 @@ Utility introduces features such as ribbons, tabs, customizable toolbar buttons,
 
 Additionally, deployment script includes pinning User folder and Start Menu\Programs folder to Quick Access.
 
+- **Stacks Context Menus**
+
+Stahky allows to create shortcuts for taskbar, that show custom context menus which can include settings and control panel shortcuts, website shortcuts, other files and folders.
+
 - **Enhanced Terminal**
 
 WinMac provides you with debloated prompt with addition of completion functions and most commonly used commands in macOS/Linux, like *vim, grep, touch, ditto, top, whatis, killall, ll, la, tree* with additional commands like *history, comuterinfo, battery, backup, ntop, rcopy, brew* among ton of other functions! More details on Wiki page [Commands Cheat Sheet](https://github.com/Asteski/WinMac/wiki/Commands-Cheat-Sheet).
@@ -77,9 +83,8 @@ For the most reliable deployment process, I recommend to install latest version 
 
 ## Planned features
 
-- Tasklist object to resemble top-level menus of macOS menu bar,
-- Modern UI theme,
-- more Dock customization,
+- Modern OS theme,
+- more Dock themes,
 - more functions.
 
 ## Credits to
@@ -92,6 +97,7 @@ List of utilities and their creators, used with WinMac deployment script:
 - [Everything](https://www.voidtools.com/) by David Carpenter
 - [Nexus](https://www.winstep.net/nexus.asp) by Winstep
 - [TopNotify](https://github.com/SamsidParty/TopNotify) by SamsidParty
+- [Stahky](https://github.com/joedf/stahky) by joedf
 - [PSTree](https://github.com/santisq/PSTree) by santisq
 - [ntop](https://github.com/gsass1/NTop) by gsass1
 

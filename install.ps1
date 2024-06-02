@@ -5,7 +5,7 @@ Write-Host @"
 Welcome to WinMac Deployment!
 
 Author: Asteski
-Version: 0.3.5
+Version: 0.4.0
 
 This is Work in Progress. You're using this script at your own risk.
 
@@ -40,12 +40,12 @@ Write-Host
 $fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom installation"
 if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
     Write-Host "Choosing full installation." -ForegroundColor Yellow
-    $selectedApps = "1","2","3","4","5","6","7"
+    $selectedApps = "1","2","3","4","5","6","7","8"
 }
 elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
     Write-Host "Choosing custom installation." -ForegroundColor Yellow
     Start-Sleep 1
-    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="Open-Shell"; "6"="TopNotify"; "7"="Other"}
+    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="Open-Shell"; "6"="TopNotify"; "7"="Stahky"; "8"="Other"}
 Write-Host @"
 
 $([char]27)[93m$("Please select options you want to install:")$([char]27)[0m
@@ -57,12 +57,14 @@ $([char]27)[93m$("Please select options you want to install:")$([char]27)[0m
     Write-Host "4. StartAllBack"
     Write-Host "5. Open-Shell"
     Write-Host "6. TopNotify"
+    Write-Host "7. Stahky"
     Write-Host @"
-7. Other:
+8. Other:
     - black cursor
     - pin folders
     - remove shortcut arrows
     - remove recycle bin desktop icon
+    - add End Task
 "@
     Write-Host
     $selection = Read-Host "Enter the numbers of options you want to install (separated by commas)"
@@ -79,7 +81,7 @@ $([char]27)[93m$("Please select options you want to install:")$([char]27)[0m
 else
 {
     Write-Host "Invalid input. Defaulting to full installation." -ForegroundColor Yellow
-    $selectedApps = "1","2","3","4","5","6","7"
+    $selectedApps = "1","2","3","4","5","6","7","8"
 }
 
 Write-Host @"
@@ -119,6 +121,21 @@ else
     Write-Host "Invalid input. Defaulting to rounded corners." -ForegroundColor Yellow
     $roundedOrSquared = 'R'
 }
+Write-Host
+$lightOrDark = Read-Host "Enter 'L' for light themed or 'D' for dark themed Windows"
+if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
+    $stackTheme = 'light'
+    $orbTheme = 'black.svg'
+    Write-Host "Using light theme." -ForegroundColor Yellow 
+} elseif ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
+    $stackTheme = 'dark'
+    $orbTheme = 'white.svg'
+    Write-Host "Using dark theme." -ForegroundColor Yellow
+} else {
+    $stackTheme = 'light'
+    $orbTheme = 'black.svg'
+    Write-Host "Invalid input. Defaulting to light theme." -ForegroundColor Yellow
+}
 
 Start-Sleep 1
 Write-Host
@@ -149,15 +166,20 @@ Write-Host
 
 ## Winget
 Write-Host "Checking for Windows Package Manager (Winget)" -ForegroundColor Yellow
-$progressPreference = 'silentlyContinue'
-Write-Information "Downloading WinGet and its dependencies..."
-$wingetUrl = "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
-$installPath = "$env:TEMP\winget.msixbundle"
-Invoke-WebRequest -Uri $wingetUrl -OutFile $installPath
-Write-Information "Installing WinGet..."
-Add-AppxPackage -Path $installPath
-Remove-Item -Path $installPath -Force
-Write-Information "Winget installation completed." -ForegroundColor Green
+$wingetCheck = winget -v
+if ($null -eq $wingetCheck) {
+    $progressPreference = 'silentlyContinue'
+    Write-Information "Downloading WinGet and its dependencies..."
+    Invoke-WebRequest -Uri https://aka.ms/getwinget -OutFile Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+    Invoke-WebRequest -Uri https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx -OutFile Microsoft.VCLibs.x64.14.00.Desktop.appx
+    Invoke-WebRequest -Uri https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.6/Microsoft.UI.Xaml.2.8.x64.appx -OutFile Microsoft.UI.Xaml.2.8.x64.appx
+    Add-AppxPackage Microsoft.VCLibs.x64.14.00.Desktop.appx
+    Add-AppxPackage Microsoft.UI.Xaml.2.8.x64.appx
+    Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+} else {
+    Write-Host "$([char]27)[92m$("Winget is already installed.")$([char]27)[0m Version: $($wingetCheck)"
+}
+
 
 ## Defintions
 $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
@@ -298,6 +320,7 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $sabRegPath -Name "SysTraySpacierIcons" -Value 1
             Set-ItemProperty -Path $sabRegPath -Name "SysTrayClockFormat" -Value 3
             Set-ItemProperty -Path $sabRegPath -Name "SysTrayInputSwitch" -Value 0
+            Set-ItemProperty -Path $sabRegPath -Name "OrbBitmap" -Value "$($orbTheme)"
             Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "(default)" -Value 1
             Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
             if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0 }
@@ -389,6 +412,41 @@ foreach ($app in $selectedApps) {
             Write-Host "Configuring TopNotify completed." -ForegroundColor Green
         }
         "7" {
+            # Stahky
+            Write-Host "Configuring Stahky..." -ForegroundColor Yellow
+            $url = "https://github.com/joedf/stahky/releases/download/v0.1.0.8/stahky_U64_v0.1.0.8.zip"
+            $outputPath = "$pwd\stahky_U64_v0.1.0.8.zip"
+            $exePath = "$env:LOCALAPPDATA\Stahky"
+            
+            New-Item -ItemType Directory -Path $exePath -Force | Out-Null
+            New-Item -ItemType Directory -Path $exePath\config -Force | Out-Null
+            Invoke-WebRequest -Uri $url -OutFile $outputPath
+            if (Test-Path -Path "$exePath\stahky.exe") {
+                Write-Host "Stahky already exists."
+            } else {
+                Expand-Archive -Path $outputPath -DestinationPath $exePath
+            }
+            Copy-Item -Path $pwd\config\taskbar\stacks\* -Destination $exePath\config -Recurse -Force
+            Copy-Item -Path $exePath\config\themes\stahky-$stackTheme.ini -Destination $exePath\stahky.ini
+            $pathVarUser = [Environment]::GetEnvironmentVariable("Path", "User")
+            $pathVarMachine = [Environment]::GetEnvironmentVariable("Path", "Machine")
+            
+            if (-not ($pathVarUser -like "*$exePath*")) {
+                $pathVarUser += ";$exePath"
+                [Environment]::SetEnvironmentVariable("Path", $pathVarUser, "User")
+            }
+            if (-not ($pathVarMachine -like "* $exePath*")) {
+                $pathVarMachine += "; $exePath"
+                [Environment]::SetEnvironmentVariable("Path", $pathVarMachine, "Machine")
+            }
+            
+            $pathVar = [Environment]::GetEnvironmentVariable("Path", "Machine") + ";$exePath"
+            [Environment]::SetEnvironmentVariable("Path", $pathVar, "Machine")
+            $pathVar = [Environment]::GetEnvironmentVariable("Path", "User") + ";$exePath"
+            [Environment]::SetEnvironmentVariable("Path", $pathVar, "User")
+            Write-Host "Configuring Stahky completed." -ForegroundColor Green
+        }
+        "8" {
             # Other
             ## Black Cursor
             $curSourceFolder = $pwd.Path + '\config\cursor'
@@ -501,6 +559,9 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             Set-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\Windows\Explorer" -Name "TaskbarNoMultimon" -Value 1
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer" -Name "TaskbarNoMultimon" -Value 1
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
+            $taskbarDevSettings = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
+            if (-not (Test-Path $taskbarDevSettings)) { New-Item -Path $taskbarDevSettings -Force | Out-Null }
+            New-ItemProperty -Path $taskbarDevSettings -Name "TaskbarEndTask" -Value 1 -PropertyType DWORD -Force | Out-Null
             Stop-Process -n explorer
         }
     }
@@ -508,10 +569,10 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
 
 # Clean up
 Write-Host "Clean up..." -ForegroundColor Yellow
-Remove-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Force | Out-Null
-Remove-Item -Path "C:\Users\Public\Desktop\gVim*" -Force | Out-Null
-Remove-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Force | Out-Null
-Remove-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Force | Out-Null
+Move-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
+Move-Item -Path "C:\Users\Public\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
+Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
+Move-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
 Write-Host "Clean up completed." -ForegroundColor Green
 Write-Host
 Stop-Transcript
@@ -529,17 +590,13 @@ If you have any questions or suggestions, please contact me on GitHub.
 "@ -ForegroundColor Green
 
 Write-Host "-----------------------------------------------------------------------------"  -ForegroundColor Cyan
-Write-Host
-$dockConfirmation = Read-Host "Do you want to install WinMac Dock? (y/n)"
-if ($dockConfirmation -eq "y" -or $dockConfirmation -eq "Y") { 
-    Write-Host "Please run the dock.ps1 script in a PowerShell session without administrative privileges." -ForegroundColor Green
-    Start-Sleep 2
-    exit 0
-} else {
-    Write-Host "WinMac Dock will not be installed." -ForegroundColor Green
-}
+Write-Host @"
 
-Write-Host
+To install Winstep Nexus Dock, please run the dock.ps1 script
+in a PowerShell session without administrative privileges.
+
+"@ -ForegroundColor Yellow
+Start-Sleep 2
 $restartConfirmation = Read-Host "Restart computer now? It's recommended to fully apply all the changes. (y/n)"
 if ($restartConfirmation -eq "Y" -or $restartConfirmation -eq "y") {
     Write-Host "Restarting computer in" -ForegroundColor Red
