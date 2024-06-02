@@ -596,7 +596,7 @@ Write-Host @"
 To install Winstep Nexus Dock, please run the dock.ps1 script
 in a PowerShell session without administrative privileges.
 
-"@ -ForegroundColor Green
+"@ -ForegroundColor Yellow
 Start-Sleep 2
 $restartConfirmation = Read-Host "Restart computer now? It's recommended to fully apply all the changes. (y/n)"
 if ($restartConfirmation -eq "Y" -or $restartConfirmation -eq "y") {
