@@ -220,7 +220,7 @@ foreach ($app in $selectedApps) {
         "8" {
             # Stahky
             Write-Host "Uninstalling Stahky..." -ForegroundColor Yellow
-            $exePath = "$env:PROGRAMFILES\Stahky"
+            $exePath = "$env:LOCALAPPDATA\Stahky"
             Remove-Item -Path $exePath -Recurse -Force | Out-Null
             Write-Host "Uninstalling Stahky completed." -ForegroundColor Green
         }
@@ -292,20 +292,24 @@ uint fWinIni);
             $oShell = New-Object -ComObject Shell.Application
             $recycleBin = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
             $recycleBin.Self.InvokeVerb("PinToHome") | Out-Null
-        Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse | Out-Null
+            Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse | Out-Null
             Remove-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
             Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings" -Recurse | Out-Null
-            Stop-Process -Name explorer -Force | Out-Null            
+            Stop-Process -Name explorer -Force | Out-Null         
         }
     }
 }
 
 # Clean up
 Write-Host "Clean up..." -ForegroundColor Yellow
-Remove-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Force | Out-Null
-Remove-Item -Path "C:\Users\Public\Desktop\gVim*" -Force | Out-Null
-Remove-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Force | Out-Null
-Remove-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Force | Out-Null
+$programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+Remove-Item -Path "$programsDir\Everything.lnk" -Force | Out-Null
+Remove-Item -Path "$programsDir\Nexus.lnk" -Force | Out-Null
+Remove-Item -Path "$programsDir\gVim*" -Force | Out-Null
+$explorerProcess = Get-Process -Name explorer -ErrorAction SilentlyContinue
+if ($null -eq $explorerProcess) {
+    Start-Process -FilePath explorer.exe
+}
 Write-Host "Clean up completed." -ForegroundColor Green
 Write-Host
 Stop-Transcript
