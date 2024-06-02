@@ -55,6 +55,10 @@ Utility introduces features such as ribbons, tabs, customizable toolbar buttons,
 
 Additionally, deployment script includes pinning User folder and Start Menu\Programs folder to Quick Access.
 
+- **Stacks Context Menus**
+
+Stahky allows to create shortcuts for taskbar, that show custom context menus which can include settings and control panel shortcuts, website shortcuts, other files and folders.
+
 - **Enhanced Terminal**
 
 WinMac provides you with debloated prompt with addition of completion functions and most commonly used commands in macOS/Linux, like *vim, grep, touch, ditto, top, whatis, killall, ll, la, tree* with additional commands like *history, comuterinfo, battery, backup, ntop, rcopy, brew* among ton of other functions! More details on Wiki page [Commands Cheat Sheet](https://github.com/Asteski/WinMac/wiki/Commands-Cheat-Sheet).
