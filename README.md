@@ -98,6 +98,7 @@ List of utilities and their creators, used with WinMac deployment script:
 - [Everything](https://www.voidtools.com/) by David Carpenter
 - [Nexus](https://www.winstep.net/nexus.asp) by Winstep
 - [TopNotify](https://github.com/SamsidParty/TopNotify) by SamsidParty
+- [Stahky](https://github.com/joedf/stahky) by joedf
 - [PSTree](https://github.com/santisq/PSTree) by santisq
 - [ntop](https://github.com/gsass1/NTop) by gsass1
 
