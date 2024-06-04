@@ -5,7 +5,7 @@ Write-Host @"
 Welcome to WinMac Deployment!
 
 Author: Asteski
-Version: 0.4.0
+Version: 0.4.1
 
 This is Work in Progress. You're using this script at your own risk.
 
@@ -224,7 +224,7 @@ foreach ($app in $selectedApps) {
         "1" {
             ## PowerToys
             Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
-            winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
+            winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements
             Start-Sleep 2
             Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force | Out-Null
             $ptDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
