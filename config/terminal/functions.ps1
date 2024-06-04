@@ -41,11 +41,12 @@ set-alias -name pwd -value ppwd
 set-alias -name lnk -value run
 set-alias -name l -value ls
 set-alias -name stack -value stahky
+set-alias -name fi -value find
 
 # Functions
 function psversion { $PSVersionTable }
 function ll { Get-ChildItem -Force }
-function la { Get-ChildItem -Force -Attributes !D }
+function la { Get-ChildItem -Force -Attributes !D }fi insta
 function wl { winget list } 
 function wi { winget install $args }
 function wl { winget list }
@@ -56,6 +57,7 @@ function ww { $appname = $args; winget show "$appname" }
 function ppwd { $pwd.path }
 function ld { Get-ChildItem -Directory }
 function c { Set-Location .. }
+function find { $filter = "*$args*"; (Get-ChildItem -Recurse | Where-Object { $_.Name -like $filter }).FullName }
 
 $stacks = "$env:LOCALAPPDATA\Stahky"
 function stahky { 
@@ -303,7 +305,6 @@ function computerinfo {
     @{N='CPU Description'; E={$_.CsProcessors.Description}}, `
     @{N='CPU Availability'; E={$_.CsProcessors.Availability}}, `
     @{N='CPU Architecture'; E={$_.CsProcessors.Architecture}}, `
-    # @{N='BiosSerialNumber'; E={$_.BiosSerialNumber}}, `
     @{N='Last BootUp Time'; E={$_.OsLastBootUpTime}}
 Write-Host @"
 
@@ -313,8 +314,10 @@ Computer Information
 }
 
 function hist {
-    $find = $args;
-    Get-Content (Get-PSReadlineOption).HistorySavePath | Where-Object {$_ -like "*$find*"} | Select-Object -Last 20
+    $find = $args[0]
+    $last = $args[1]
+    if ($last) {Get-Content (Get-PSReadlineOption).HistorySavePath | Where-Object {$_ -like "*$find*"} | Select-Object -Last $last}
+    else {Get-Content (Get-PSReadlineOption).HistorySavePath | Where-Object {$_ -like "*$find*"} | Select-Object -Last 20}
 }
 
 function touch {
