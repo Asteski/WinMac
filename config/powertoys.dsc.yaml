@@ -30,7 +30,7 @@ properties:
           Enabled: true
           ActivationShortcut: "Alt+Space"
           CloseAfterLosingFocus: true
-        PastePlain:
+        AdvancedPaste:
           Enabled: true
           ActivationShortcut: "Ctrl+Shift+V"
         AlwaysOnTop:
