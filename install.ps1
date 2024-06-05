@@ -446,26 +446,27 @@ foreach ($app in $selectedApps) {
             [Environment]::SetEnvironmentVariable("Path", $pathVar, "User")
             Write-Host "Configuring Stahky completed." -ForegroundColor Green
 
-            $pinnedPath =  "$env:appdata\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar\"
-
             $shortcutPath1 = "$env:LOCALAPPDATA\Stahky\config\shortcuts\Control.stahky.lnk"
             $shortcutPath2 = "$env:LOCALAPPDATA\Stahky\config\shortcuts\Favorites.stahky.lnk"
             $newTargetPath = "$env:LOCALAPPDATA\Stahky\Stahky.exe"
-            $newArguments1 = '/stahky "C:\Program Files\Stahky\config\control"'
-            $newArguments2 = '/stahky "C:\Program Files\Stahky\config\favorites"'
+            $newArguments1 = '/stahky "$env:LOCALAPPDATA\Stahky\config\control"'
+            $newArguments2 = '/stahky "$env:LOCALAPPDATA\Stahky\config\favorites"'
+            $newWorkDir1 = "$env:LOCALAPPDATA\Stahky\config\control"
+            $newWorkDir2 = "$env:LOCALAPPDATA\Stahky\config\favorites"
 
-            $shell = New-Object -ComObject Shell.Application
-            $shortcut = $shell.NameSpace((Split-Path $shortcutPath)).ParseName((Split-Path $shortcutPath -Leaf))
-            $shortcut.Path = $shortcutPath1
-            $shortcut.GetLink.Path = $newTargetPath
-            $shortcut.GetLink.Arguments = $newTargetPath
-            $shortcut.GetLink.WorkingDirectory = $newTargetPath
-            $shortcut.GetLink.Target.Path = $newTargetPath
-            $shortcut.Save()
+            $shell1 = New-Object -ComObject WScript.Shell
+            $shortcut1 = $shell1.CreateShortcut($shortcutPath1) 
+            $shortcut1.Arguments = $newArguments1
+            $shortcut1.TargetPath = $newTargetPath
+            $shortcut1.WorkingDirectory = $newWorkDir1
+            $shortcut1.Save()
 
-            $shortcut.GetLink.Path
-            $shortcut.GetLink.WorkingDirectory
-
+            $shell2 = New-Object -ComObject WScript.Shell
+            $shortcut2 = $shell2.CreateShortcut($shortcutPath2) 
+            $shortcut2.Arguments = $newArguments2
+            $shortcut2.TargetPath = $newTargetPath
+            $shortcut2.WorkingDirectory = $newWorkDir2
+            $shortcut2.Save()
         }
         "8" {
             # Other
