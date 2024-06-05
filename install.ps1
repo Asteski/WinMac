@@ -5,7 +5,7 @@ Write-Host @"
 Welcome to WinMac Deployment!
 
 Author: Asteski
-Version: 0.4.0
+Version: 0.4.1
 
 This is Work in Progress. You're using this script at your own risk.
 
@@ -445,6 +445,28 @@ foreach ($app in $selectedApps) {
             $pathVar = [Environment]::GetEnvironmentVariable("Path", "User") + ";$exePath"
             [Environment]::SetEnvironmentVariable("Path", $pathVar, "User")
             Write-Host "Configuring Stahky completed." -ForegroundColor Green
+
+            $shortcutPath1 = "$env:LOCALAPPDATA\Stahky\config\shortcuts\Management.lnk"
+            $shortcutPath2 = "$env:LOCALAPPDATA\Stahky\config\shortcuts\Favorites.lnk"
+            $newTargetPath = "$env:LOCALAPPDATA\Stahky\Stahky.exe"
+            $newArguments1 = '/stahky ' + "$env:LOCALAPPDATA\Stahky\config\management"
+            $newArguments2 = '/stahky ' + "$env:LOCALAPPDATA\Stahky\config\favorites"
+            $newWorkDir1 = "$env:LOCALAPPDATA\Stahky\config\management"
+            $newWorkDir2 = "$env:LOCALAPPDATA\Stahky\config\favorites"
+
+            $shell1 = New-Object -ComObject WScript.Shell
+            $shortcut1 = $shell1.CreateShortcut($shortcutPath1) 
+            $shortcut1.Arguments = $newArguments1
+            $shortcut1.TargetPath = $newTargetPath
+            $shortcut1.WorkingDirectory = $newWorkDir1
+            $shortcut1.Save()
+
+            $shell2 = New-Object -ComObject WScript.Shell
+            $shortcut2 = $shell2.CreateShortcut($shortcutPath2) 
+            $shortcut2.Arguments = $newArguments2
+            $shortcut2.TargetPath = $newTargetPath
+            $shortcut2.WorkingDirectory = $newWorkDir2
+            $shortcut2.Save()
         }
         "8" {
             # Other

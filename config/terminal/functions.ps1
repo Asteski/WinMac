@@ -41,6 +41,8 @@ set-alias -name pwd -value ppwd
 set-alias -name lnk -value run
 set-alias -name l -value ls
 set-alias -name stack -value stahky
+set-alias -name find -value ffind
+set-alias -name fi -value ffind
 
 # Functions
 function psversion { $PSVersionTable }
@@ -52,10 +54,11 @@ function wl { winget list }
 function wr { winget uninstall $args } 
 function ws { $appname = $args; winget search "$appname" }
 function wu { winget upgrade $args } 
-function ww { $appname = $args; winget show "$appname" } 
+function ww { $appname = $args; winget show "$appname" }
 function ppwd { $pwd.path }
 function ld { Get-ChildItem -Directory }
 function c { Set-Location .. }
+function ffind { $filter = "*$args*"; if ($filter) {(Get-ChildItem -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -like $filter }).FullName} else {Write-Host "No filename provided." -ForegroundColor Red}}
 
 $stacks = "$env:LOCALAPPDATA\Stahky"
 function stahky { 
@@ -303,7 +306,6 @@ function computerinfo {
     @{N='CPU Description'; E={$_.CsProcessors.Description}}, `
     @{N='CPU Availability'; E={$_.CsProcessors.Availability}}, `
     @{N='CPU Architecture'; E={$_.CsProcessors.Architecture}}, `
-    # @{N='BiosSerialNumber'; E={$_.BiosSerialNumber}}, `
     @{N='Last BootUp Time'; E={$_.OsLastBootUpTime}}
 Write-Host @"
 
@@ -313,7 +315,7 @@ Computer Information
 }
 
 function hist {
-    $find = $args;
+    $find = $args
     Get-Content (Get-PSReadlineOption).HistorySavePath | Where-Object {$_ -like "*$find*"} | Select-Object -Last 20
 }
 
