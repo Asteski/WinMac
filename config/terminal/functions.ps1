@@ -41,7 +41,8 @@ set-alias -name pwd -value ppwd
 set-alias -name lnk -value run
 set-alias -name l -value ls
 set-alias -name stack -value stahky
-set-alias -name fi -value find
+set-alias -name find -value ffind
+set-alias -name fi -value ffind
 
 # Functions
 function psversion { $PSVersionTable }
@@ -57,7 +58,7 @@ function ww { $appname = $args; winget show "$appname" }
 function ppwd { $pwd.path }
 function ld { Get-ChildItem -Directory }
 function c { Set-Location .. }
-function find { $filter = "*$args*"; (Get-ChildItem -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -like $filter }).FullName }
+function ffind { $filter = "*$args*"; if ($filter {(Get-ChildItem -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -like $filter }).FullName} else {Write-Host "No filename provided." -ForegroundColor Red}}
 
 $stacks = "$env:LOCALAPPDATA\Stahky"
 function stahky { 
