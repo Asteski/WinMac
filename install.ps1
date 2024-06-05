@@ -445,6 +445,27 @@ foreach ($app in $selectedApps) {
             $pathVar = [Environment]::GetEnvironmentVariable("Path", "User") + ";$exePath"
             [Environment]::SetEnvironmentVariable("Path", $pathVar, "User")
             Write-Host "Configuring Stahky completed." -ForegroundColor Green
+
+            $pinnedPath =  "$env:appdata\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar\"
+
+            $shortcutPath1 = "$env:LOCALAPPDATA\Stahky\config\shortcuts\Control.stahky.lnk"
+            $shortcutPath2 = "$env:LOCALAPPDATA\Stahky\config\shortcuts\Favorites.stahky.lnk"
+            $newTargetPath = "$env:LOCALAPPDATA\Stahky\Stahky.exe"
+            $newArguments1 = '/stahky "C:\Program Files\Stahky\config\control"'
+            $newArguments2 = '/stahky "C:\Program Files\Stahky\config\favorites"'
+
+            $shell = New-Object -ComObject Shell.Application
+            $shortcut = $shell.NameSpace((Split-Path $shortcutPath)).ParseName((Split-Path $shortcutPath -Leaf))
+            $shortcut.Path = $shortcutPath1
+            $shortcut.GetLink.Path = $newTargetPath
+            $shortcut.GetLink.Arguments = $newTargetPath
+            $shortcut.GetLink.WorkingDirectory = $newTargetPath
+            $shortcut.GetLink.Target.Path = $newTargetPath
+            $shortcut.Save()
+
+            $shortcut.GetLink.Path
+            $shortcut.GetLink.WorkingDirectory
+
         }
         "8" {
             # Other

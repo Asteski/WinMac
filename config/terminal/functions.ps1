@@ -54,11 +54,11 @@ function wl { winget list }
 function wr { winget uninstall $args } 
 function ws { $appname = $args; winget search "$appname" }
 function wu { winget upgrade $args } 
-function ww { $appname = $args; winget show "$appname" } 
+function ww { $appname = $args; winget show "$appname" }
 function ppwd { $pwd.path }
 function ld { Get-ChildItem -Directory }
 function c { Set-Location .. }
-function ffind { $filter = "*$args*"; if ($filter {(Get-ChildItem -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -like $filter }).FullName} else {Write-Host "No filename provided." -ForegroundColor Red}}
+function ffind { $filter = "*$args*"; if ($filter) {(Get-ChildItem -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -like $filter }).FullName} else {Write-Host "No filename provided." -ForegroundColor Red}}
 
 $stacks = "$env:LOCALAPPDATA\Stahky"
 function stahky { 
