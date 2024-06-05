@@ -57,7 +57,7 @@ function ww { $appname = $args; winget show "$appname" }
 function ppwd { $pwd.path }
 function ld { Get-ChildItem -Directory }
 function c { Set-Location .. }
-function find { $filter = "*$args*"; (Get-ChildItem -Recurse | Where-Object { $_.Name -like $filter }).FullName }
+function find { $filter = "*$args*"; (Get-ChildItem -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -like $filter }).FullName }
 
 $stacks = "$env:LOCALAPPDATA\Stahky"
 function stahky { 
