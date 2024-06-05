@@ -446,12 +446,12 @@ foreach ($app in $selectedApps) {
             [Environment]::SetEnvironmentVariable("Path", $pathVar, "User")
             Write-Host "Configuring Stahky completed." -ForegroundColor Green
 
-            $shortcutPath1 = "$env:LOCALAPPDATA\Stahky\config\shortcuts\Control.stahky.lnk"
-            $shortcutPath2 = "$env:LOCALAPPDATA\Stahky\config\shortcuts\Favorites.stahky.lnk"
+            $shortcutPath1 = "$env:LOCALAPPDATA\Stahky\config\shortcuts\Management.lnk"
+            $shortcutPath2 = "$env:LOCALAPPDATA\Stahky\config\shortcuts\Favorites.lnk"
             $newTargetPath = "$env:LOCALAPPDATA\Stahky\Stahky.exe"
-            $newArguments1 = '/stahky ' + "$env:LOCALAPPDATA\Stahky\config\control"
+            $newArguments1 = '/stahky ' + "$env:LOCALAPPDATA\Stahky\config\management"
             $newArguments2 = '/stahky ' + "$env:LOCALAPPDATA\Stahky\config\favorites"
-            $newWorkDir1 = "$env:LOCALAPPDATA\Stahky\config\control"
+            $newWorkDir1 = "$env:LOCALAPPDATA\Stahky\config\management"
             $newWorkDir2 = "$env:LOCALAPPDATA\Stahky\config\favorites"
 
             $shell1 = New-Object -ComObject WScript.Shell
