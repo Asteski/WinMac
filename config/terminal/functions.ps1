@@ -315,7 +315,7 @@ Computer Information
 }
 
 function hist {
-    $find = $args[0]
+    $find = $args
     Get-Content (Get-PSReadlineOption).HistorySavePath | Where-Object {$_ -like "*$find*"} | Select-Object -Last 20
 }
 
