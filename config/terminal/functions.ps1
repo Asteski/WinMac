@@ -47,7 +47,7 @@ set-alias -name fi -value ffind
 # Functions
 function psversion { $PSVersionTable }
 function ll { Get-ChildItem -Force }
-function la { Get-ChildItem -Force -Attributes !D }fi insta
+function la { Get-ChildItem -Force -Attributes !D }
 function wl { winget list } 
 function wi { winget install $args }
 function wl { winget list }

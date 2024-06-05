@@ -449,8 +449,8 @@ foreach ($app in $selectedApps) {
             $shortcutPath1 = "$env:LOCALAPPDATA\Stahky\config\shortcuts\Control.stahky.lnk"
             $shortcutPath2 = "$env:LOCALAPPDATA\Stahky\config\shortcuts\Favorites.stahky.lnk"
             $newTargetPath = "$env:LOCALAPPDATA\Stahky\Stahky.exe"
-            $newArguments1 = '/stahky "$env:LOCALAPPDATA\Stahky\config\control"'
-            $newArguments2 = '/stahky "$env:LOCALAPPDATA\Stahky\config\favorites"'
+            $newArguments1 = '/stahky ' + "$env:LOCALAPPDATA\Stahky\config\control"
+            $newArguments2 = '/stahky ' + "$env:LOCALAPPDATA\Stahky\config\favorites"
             $newWorkDir1 = "$env:LOCALAPPDATA\Stahky\config\control"
             $newWorkDir2 = "$env:LOCALAPPDATA\Stahky\config\favorites"
 
