@@ -5,7 +5,7 @@ Write-Host @"
 Welcome to WinMac Deployment!
 
 Author: Asteski
-Version: 0.4.1
+Version: 0.4.2
 
 This is Work in Progress. You're using this script at your own risk.
 
@@ -185,11 +185,11 @@ foreach ($app in $selectedApps) {
             ## StartAllBack
             Write-Host "Uninstalling StartAllBack..." -ForegroundColor Yellow
             winget uninstall --id "StartIsBack.StartAllBack" --source winget --silent --force | Out-Null
-            Write-Host "Uninstalling StartAllBack completed." -ForegroundColor 
             Set-ItemProperty -Path $exRegPath\Advanced -Name "UseCompactMode" -Value 0
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarAl" -Value 1
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarGlomLevel" -Value 0
             Stop-Process -Name explorer -Force | Out-Null
+            Write-Host "Uninstalling StartAllBack completed." -ForegroundColor Green
             Start-Sleep 3
         }
         "5" {
@@ -295,7 +295,8 @@ uint fWinIni);
             Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse | Out-Null
             Remove-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
             Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings" -Recurse | Out-Null
-            Stop-Process -Name explorer -Force | Out-Null         
+            Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarSmallIcons" | Out-Null
+            Stop-Process -Name explorer -Force | Out-Null
         }
     }
 }

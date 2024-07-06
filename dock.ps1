@@ -5,7 +5,7 @@ Write-Host @"
 Welcome to WinMac Deployment!
 
 Author: Asteski
-Version: 0.4.1
+Version: 0.4.2
 
 This is Work in Progress. You're using this script at your own risk.
 

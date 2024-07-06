@@ -5,7 +5,7 @@ Write-Host @"
 Welcome to WinMac Deployment!
 
 Author: Asteski
-Version: 0.4.1
+Version: 0.4.2
 
 This is Work in Progress. You're using this script at your own risk.
 
@@ -264,6 +264,7 @@ foreach ($app in $selectedApps) {
             $winget = @(
                 "Vim.Vim",
                 "gsass1.NTop"
+                "gerardog.gsudo"
             )
             foreach ($app in $winget) {winget install --id $app --source winget --silent | Out-Null }
             $vimParentPath = Join-Path $env:PROGRAMFILES Vim
