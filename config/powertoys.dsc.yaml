@@ -7,6 +7,13 @@ properties:
       settings:
         id: Microsoft.PowerToys
         source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install Everything
+        allowPrerelease: true
+      settings:
+        id: lin-ycv.EverythingPowerToys
+        source: winget
     - resource: PowerToysConfigure
       directives:
         description: Configure PowerToys
@@ -97,32 +104,6 @@ properties:
           Enabled: true
         Awake:
           Enabled: true
-        CropAndLock:
-          Enabled: false
-        EnvironmentVariables:
-          Enabled: false
-        FileLocksmith:
-          Enabled: false
-        MouseHighlighter:
-          Enabled: false
-        MouseJump:
-          Enabled: false
-        MousePointerCrosshairs:
-          Enabled: false
-        MouseWithoutBorders:
-          Enabled: false
-        PowerAccent:
-          Enabled: false
-        MeasureTool:
-          Enabled: false
-        Hosts:
-          Enabled: false
-        PowerOcr:
-          Enabled: false
-        ShortcutGuide:
-          Enabled: false
-        VideoConference:
-          Enabled: false
         PowerPreview:
           EnableSvgPreview: false
           EnableSvgThumbnail: true
