@@ -575,7 +575,8 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             if (-not ($recycleBin.Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
                 $recycleBin.Self.InvokeVerb("PinToHome") | Out-Null
             }
-            # Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse | Out-Null
+            
+            Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse | Out-Null
 
             ## Remove Shortcut Arrows
             Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force
