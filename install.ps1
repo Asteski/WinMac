@@ -99,9 +99,14 @@ $promptSet = Read-Host "Do you want to use WinMac prompt? (y/n)"
 if ($promptSet -eq 'y') {
     Write-Host "Using WinMac prompt." -ForegroundColor Yellow
 }
-else
+elseif ($promptSet -eq 'n')
 { 
     Write-Host "Using MacOS prompt." -ForegroundColor Yellow
+}
+else
+{
+    Write-Host "Invalid input. Defaulting to WinMac prompt." -ForegroundColor Yellow
+    $promptSet = 'y'
 }
 
 Write-Host @"
@@ -225,6 +230,7 @@ foreach ($app in $selectedApps) {
             Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
             winget install Microsoft.PowerToys --source winget --version '0.81.1' --silent
             winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements
+            winget upgrade Microsoft.PowerToys --silent --force
             Start-Sleep 2
             Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force
             $ptDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
@@ -244,7 +250,8 @@ foreach ($app in $selectedApps) {
             $profilePath = $PROFILE | Split-Path | Split-Path
             $profileFile = $PROFILE | Split-Path -Leaf
             if ($promptSet -eq 'y') { $prompt = Get-Content "$pwd\config\terminal\winmac-prompt.ps1" -Raw }
-            else { $prompt = Get-Content "$pwd\config\terminal\macos-prompt.ps1" -Raw }
+            elseif ($promptSet -eq 'n' ) { $prompt = Get-Content "$pwd\config\terminal\macos-prompt.ps1" -Raw }
+            else { $prompt = Get-Content "$pwd\config\terminal\winmac-prompt.ps1" -Raw }
             $functions = Get-Content "$pwd\config\terminal\functions.ps1" -Raw
 
             if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell"| Out-Null } else { Remove-Item -Path "$profilePath\PowerShell\$profileFile" -Force| Out-Null }
