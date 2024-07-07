@@ -149,8 +149,7 @@ if ($installConfirmation -ne 'y') {
 
 Write-Host
 Write-Host @"
-Please do not do anything while the script is running, as it may impact
-the installation process.
+Please do not do anything while the script is running, as it may impact the installation process.
 "@ -ForegroundColor Red
 Start-Sleep 2
 Write-Host
