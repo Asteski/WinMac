@@ -616,6 +616,7 @@ $debloat = @(
     "Windows Maps",
     "Outlook for Windows",
     "Quick Assist",
+    "Xbox",
     "Xbox TCUI",
     "Xbox Game Bar Plugin",
     "Xbox Game Bar",
