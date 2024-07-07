@@ -273,12 +273,12 @@ foreach ($app in $selectedApps) {
                 "gsass1.NTop"
                 "gerardog.gsudo"
             )
-            foreach ($app in $winget) {winget install --id $app --source winget --silent | Out-Null }
+            foreach ($app in $winget) {winget install --id $app --source winget --silent }
             $vimParentPath = Join-Path $env:PROGRAMFILES Vim
             $latestSubfolder = Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -Property CreationTime -Descending | Select-Object -First 1
             $vimChildPath = $latestSubfolder.FullName
-            [Environment]::SetEnvironmentVariable("Path", $env:Path + ";$vimChildPath", [EnvironmentVariableTarget]::Machine) | Out-Null
-            Install-Module PSTree -Force | Out-Null
+            [Environment]::SetEnvironmentVariable("Path", $env:Path + ";$vimChildPath", [EnvironmentVariableTarget]::Machine)
+            Install-Module PSTree -Force
             Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $prompt
             Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $functions
             Add-Content -Path "$profilePath\WindowsPowerShell\$prompt" -Value $functions
