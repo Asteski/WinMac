@@ -228,7 +228,7 @@ foreach ($app in $selectedApps) {
         "1" {
             ## PowerToys
             Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
-            winget install Microsoft.PowerToys --source winget --version '0.81.1' --silent | Out-Null
+            winget install Microsoft.PowerToys --source winget --version '0.81.0' --silent | Out-Null
             winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
             # winget upgrade Microsoft.PowerToys --silent --force #! upgrades to latest PT version 
             Start-Sleep 2
@@ -604,6 +604,19 @@ Move-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Destination $programsD
 Move-Item -Path "C:\Users\Public\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
 Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
 Move-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
+$debloat = @(
+    "Cortana",
+    "Microsoft News",
+    "MSN Weather",
+    "Get Help",
+    "Power Auomate",
+    "Microsoft Tips",
+    "Microsoft People",
+    "Feedback Hub",
+    "Windows Maps",
+    "Outlook for Windows"
+)
+foreach ($app in $debloat) { winegt uninstall --name $app --silent }
 Write-Host "Clean up completed." -ForegroundColor Green
 Write-Host
 Stop-Transcript

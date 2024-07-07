@@ -43,7 +43,6 @@ set-alias -name l -value ls
 set-alias -name stack -value stahky
 set-alias -name find -value ffind
 set-alias -name fi -value ffind
-set-alias -name sudo -value gsudo
 
 # Functions
 function psversion { $PSVersionTable }
@@ -230,7 +229,7 @@ function printenv {
         $args | ForEach-Object { 
             $envVar = Get-ChildItem Env:$_ -ErrorAction SilentlyContinue
             if ($envVar) {
-                $envVar.Value
+                $envVar.Value -split ';' | Sort-Object 
             } else {
                 Write-Host "Environment variable '$_' does not exist." -ForegroundColor Red
             }
