@@ -254,10 +254,10 @@ foreach ($app in $selectedApps) {
             else { $prompt = Get-Content "$pwd\config\terminal\winmac-prompt.ps1" -Raw }
             $functions = Get-Content "$pwd\config\terminal\functions.ps1" -Raw
 
-            if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell" } else { Remove-Item -Path "$profilePath\PowerShell\$profileFile" -Force }
-            if (-not (Test-Path "$profilePath\WindowsPowerShell")) { New-Item -ItemType Directory -Path "$profilePath\WindowsPowerShell" } else { Remove-Item -Path "$profilePath\WindowsPowerShell\$profileFile" -Force }
-            if (-not (Test-Path "$profilePath\PowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\PowerShell\$profileFile" }
-            if (-not (Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\WindowsPowerShell\$profileFile" }
+            if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell" | Out-Null } else { Remove-Item -Path "$profilePath\PowerShell\$profileFile" -Force | Out-Null }
+            if (-not (Test-Path "$profilePath\WindowsPowerShell")) { New-Item -ItemType Directory -Path "$profilePath\WindowsPowerShell" | Out-Null } else { Remove-Item -Path "$profilePath\WindowsPowerShell\$profileFile" -Force | Out-Null }
+            if (-not (Test-Path "$profilePath\PowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\PowerShell\$profileFile" | Out-Null }
+            if (-not (Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\WindowsPowerShell\$profileFile" | Out-Null }
 
             $progressPreference = 'silentlyContinue'
             if (-not (Get-PackageProvider -ListAvailable | Where-Object {$_.Name -eq 'NuGet'})) {
@@ -273,12 +273,12 @@ foreach ($app in $selectedApps) {
                 "gsass1.NTop"
                 "gerardog.gsudo"
             )
-            foreach ($app in $winget) {winget install --id $app --source winget --silent }
+            foreach ($app in $winget) {winget install --id $app --source winget --silent | Out-Null }
             $vimParentPath = Join-Path $env:PROGRAMFILES Vim
             $latestSubfolder = Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -Property CreationTime -Descending | Select-Object -First 1
             $vimChildPath = $latestSubfolder.FullName
-            [Environment]::SetEnvironmentVariable("Path", $env:Path + ";$vimChildPath", [EnvironmentVariableTarget]::Machine)
-            Install-Module PSTree -Force
+            [Environment]::SetEnvironmentVariable("Path", $env:Path + ";$vimChildPath", [EnvironmentVariableTarget]::Machine) | Out-Null
+            Install-Module PSTree -Force | Out-Null
             Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $prompt
             Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $functions
             Add-Content -Path "$profilePath\WindowsPowerShell\$prompt" -Value $functions
