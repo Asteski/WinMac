@@ -614,7 +614,14 @@ $debloat = @(
     "Microsoft People",
     "Feedback Hub",
     "Windows Maps",
-    "Outlook for Windows"
+    "Outlook for Windows",
+    "Quick Assist",
+    "Xbox TCUI",
+    "Xbox Game Bar Plugin",
+    "Xbox Game Bar",
+    "Xbox Identity Provider",
+    "Xbox Game Speech Window",
+    "Movies & TV"
 )
 foreach ($app in $debloat) { winegt uninstall --name $app --silent }
 Write-Host "Clean up completed." -ForegroundColor Green
