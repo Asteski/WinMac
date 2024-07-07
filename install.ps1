@@ -230,7 +230,7 @@ foreach ($app in $selectedApps) {
             Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
             winget install Microsoft.PowerToys --source winget --version '0.81.1' --silent
             winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements
-            winget upgrade Microsoft.PowerToys --silent --force
+            # winget upgrade Microsoft.PowerToys --silent --force
             Start-Sleep 2
             Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force
             $ptDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"

@@ -2,13 +2,6 @@ properties:
   resources:
     - resource: Microsoft.WinGet.DSC/WinGetPackage
       directives:
-        description: Install PowerToys
-        allowPrerelease: true
-      settings:
-        id: Microsoft.PowerToys
-        source: winget
-    - resource: Microsoft.WinGet.DSC/WinGetPackage
-      directives:
         description: Install Everything
         allowPrerelease: true
       settings:
