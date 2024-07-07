@@ -270,10 +270,10 @@ foreach ($app in $selectedApps) {
             }
             $winget = @(
                 "Vim.Vim",
-                "gsass1.NTop"
+                "gsass1.NTop",
                 "gerardog.gsudo"
             )
-            foreach ($app in $winget) {winget install --id $app --source winget --silent | Out-Null }
+            foreach ($app in $winget) {winget install --id $app --source winget --silent}
             $vimParentPath = Join-Path $env:PROGRAMFILES Vim
             $latestSubfolder = Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -Property CreationTime -Descending | Select-Object -First 1
             $vimChildPath = $latestSubfolder.FullName
@@ -624,7 +624,7 @@ $debloat = @(
     "Xbox Game Speech Window",
     "Movies & TV"
 )
-foreach ($app in $debloat) { winget uninstall --name $app --silent }
+foreach ($app in $debloat) { winget uninstall --name $app --silent | Out-Null }
 Write-Host "Clean up completed." -ForegroundColor Green
 Write-Host
 Stop-Transcript
