@@ -44,7 +44,7 @@ if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
 elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
     Write-Host "Choosing custom uninstallation." -ForegroundColor Yellow
     Start-Sleep 1
-    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="Open-Shell"; "6"="TopNotify"; "7"="Nexus Dock"; "8"="Stahky"; "9"="Other"}
+    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="Open-Shell"; "6"="TopNotify"; "7"="Nexus Dock"; "8"="Stahky"; "9"="Other"; "10"="Unbloat"}
 Write-Host @"
 
 $([char]27)[93m$("Please select options you want to uninstall:")$([char]27)[0m
@@ -297,6 +297,29 @@ uint fWinIni);
             Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings" -Recurse | Out-Null
             Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarSmallIcons" | Out-Null
             Stop-Process -Name explorer -Force | Out-Null
+        }
+        "10"{
+            $unbloat = @(
+                "Cortana",
+                "Microsoft News",
+                "MSN Weather",
+                "Get Help",
+                "Power Auomate",
+                "Microsoft Tips",
+                "Microsoft People",
+                "Feedback Hub",
+                "Windows Maps",
+                "Outlook for Windows",
+                "Quick Assist",
+                "Xbox",
+                "Xbox TCUI",
+                "Xbox Game Bar Plugin",
+                "Xbox Game Bar",
+                "Xbox Identity Provider",
+                "Xbox Game Speech Window",
+                "Movies & TV"
+            )
+            foreach ($app in $unbloat) { winegt uninstall --name $app --silent }
         }
     }
 }
