@@ -300,7 +300,6 @@ uint fWinIni);
         }
         "10"{
             $unbloat = @(
-                "Clipchamp",
                 "Cortana",
                 "Microsoft News",
                 "MSN Weather",
@@ -320,7 +319,7 @@ uint fWinIni);
                 "Xbox Game Speech Window",
                 "Movies & TV"
             )
-            foreach ($app in $unbloat) { winegt uninstall --name $app --silent }
+            foreach ($app in $unbloat) { winget uninstall --name $app --silent }
         }
     }
 }
