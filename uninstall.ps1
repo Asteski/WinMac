@@ -300,6 +300,7 @@ uint fWinIni);
         }
         "10"{
             $unbloat = @(
+                "Clipchamp",
                 "Cortana",
                 "Microsoft News",
                 "MSN Weather",

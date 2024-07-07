@@ -624,7 +624,7 @@ $debloat = @(
     "Xbox Game Speech Window",
     "Movies & TV"
 )
-foreach ($app in $debloat) { winegt uninstall --name $app --silent }
+foreach ($app in $debloat) { winget uninstall --name $app --silent }
 Write-Host "Clean up completed." -ForegroundColor Green
 Write-Host
 Stop-Transcript
