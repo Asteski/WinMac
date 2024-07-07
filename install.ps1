@@ -228,8 +228,8 @@ foreach ($app in $selectedApps) {
         "1" {
             ## PowerToys
             Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
-            winget install Microsoft.PowerToys --source winget --version '0.81.0' --silent | Out-Null
-            winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
+            winget install Microsoft.PowerToys --source winget --version '0.80.0' --silent
+            winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements
             # winget upgrade Microsoft.PowerToys --silent --force #! upgrades to latest PT version 
             Start-Sleep 2
             Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force
