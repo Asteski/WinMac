@@ -40,8 +40,12 @@ if (-not (Test-Path $downloadPath)) {
 
 Expand-Archive -Path $downloadPath -DestinationPath $pwd -Force
 Start-Process -FilePath ".\NexusSetup.exe" -ArgumentList "/silent"
-start-sleep 80
-Get-Process -n Nexus | Stop-Process -force
+Expand-Archive -Path $downloadPath -DestinationPath $pwd -Force
+Start-Process -FilePath ".\NexusSetup.exe" -ArgumentList "/silent"
+$procNexus Get-Process -n 'Nexus Setup x64'
+while (!($procNexus)) {
+    Get-Process -n Nexus | Stop-Process 
+}
 $winStep = 'C:\Users\Public\Documents\WinStep'
 Remove-Item -Path "$winStep\Themes\*" -Recurse -Force | Out-Null
 Copy-Item -Path "config\dock\themes\*" -Destination "$winStep\Themes\" -Recurse -Force | Out-Null
@@ -86,7 +90,7 @@ reg import $regFile
 echo 1 
 Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "DockLabelColorHotTrack1"
 echo 2
-Remove-ItemProperty -Path "HCKU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockLabelColorHotTrack1"
+Remove-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockLabelColorHotTrack1"
 Start-Sleep 2
 Write-Host "Configuring Nexus Dock completed." -ForegroundColor Green
 
@@ -96,7 +100,7 @@ Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe' | Out-Null
 Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Nexus.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
 Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\Nexus.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
 Remove-Item "$pwd\temp\*" -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
-Remove-Item .\dock.zip -Force | Out-Null
+#Remove-Item .\dock.zip -Force | Out-Null
 Remove-Item .\ReadMe.txt -Force | Out-Null
 Remove-Item .\NexusSetup.exe -Force | Out-Null
 Write-Host "Clean up completed." -ForegroundColor Green
