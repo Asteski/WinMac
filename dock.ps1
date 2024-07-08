@@ -39,21 +39,22 @@ if (-not (Test-Path $downloadPath)) {
 }
 Expand-Archive -Path $downloadPath -DestinationPath $pwd -Force
 Start-Process -FilePath ".\NexusSetup.exe" -ArgumentList "/silent"
+Start-Sleep 10
 $process1 = Get-Process -Name "NexusSetup" -ErrorAction SilentlyContinue
-if ($process1) {
+while ($process1) {
     Write-Host "NexusSetup process is running. Please wait for the installation to complete." -ForegroundColor Yellow
     Start-Sleep 5
-} else {
-    Write-Host "NexusSetup process is not running." -ForegroundColor Green
+    $process1 = Get-Process -Name "NexusSetup" -ErrorAction SilentlyContinue
 }
-$process2 = Get-Process -Name "Nexus" -ErrorAction SilentlyContinue
+Start-Sleep 10
+$process2 = Get-Process -Name "Nexus" -ErrorAction SilentlyContinuec
 if (!($process2)) {
     Write-Host "Nexus Dock is not running." -ForegroundColor Green
     Start-Sleep 5
     $process2 = Get-Process -Name "Nexus" -ErrorAction SilentlyContinue
 } else {
     Write-Host "Nexus Dock is running." -ForegroundColor Yellow
-    Start-Sleep 5
+    Start-Sleep 10
 }
 Get-Process -n Nexus | Stop-Process 
 $winStep = 'C:\Users\Public\Documents\WinStep'
