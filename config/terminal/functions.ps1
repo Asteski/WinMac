@@ -39,15 +39,18 @@ set-alias -name random -value Get-RandomString
 set-alias -name user -value getuser
 set-alias -name pwd -value ppwd
 set-alias -name lnk -value run
-set-alias -name l -value ls
+set-alias -name ls -value lls
+set-alias -name l -value lls
 set-alias -name stack -value stahky
 set-alias -name find -value ffind
 set-alias -name fi -value ffind
 
 # Functions
 function psversion { $PSVersionTable }
-function ll { Get-ChildItem -Force }
-function la { Get-ChildItem -Force -Attributes !D }
+function lls { Get-ChildItem | format-table -autosize }
+function ll { Get-ChildItem -Force | format-table -autosize }
+function la { Get-ChildItem -Force -Attributes !D | format-table -autosize }
+function ld { Get-ChildItem -Directory | format-table -autosize }
 function wl { winget list } 
 function wi { winget install $args }
 function wl { winget list }
