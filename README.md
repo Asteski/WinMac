@@ -100,7 +100,6 @@ List of utilities and their creators, used with WinMac deployment script:
 - [Stahky](https://github.com/joedf/stahky) by joedf
 - [PSTree](https://github.com/santisq/PSTree) by santisq
 - [ntop](https://github.com/gsass1/NTop) by gsass1
-- [gsudo](https://github.com/gerardog/gsudo) by gerardog
 
 Please support creators however you can for their wonderful work!
 

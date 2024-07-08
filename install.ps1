@@ -228,7 +228,7 @@ foreach ($app in $selectedApps) {
         "1" {
             ## PowerToys
             Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
-            winget install Microsoft.PowerToys --source winget --version '0.80.0' --silent
+            winget install Microsoft.PowerToys --source winget --version '0.80.0' --silent | Out-Null
             winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements
             # winget upgrade Microsoft.PowerToys --silent --force #! upgrades to latest PT version 
             Start-Sleep 2
@@ -273,7 +273,6 @@ foreach ($app in $selectedApps) {
                 "gsass1.NTop"
             )
             foreach ($app in $winget) {winget install --id $app --source winget --silent}
-            winget install --id "gerardog.gsudo"
             $vimParentPath = Join-Path $env:PROGRAMFILES Vim
             $latestSubfolder = Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -Property CreationTime -Descending | Select-Object -First 1
             $vimChildPath = $latestSubfolder.FullName
