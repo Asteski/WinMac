@@ -228,8 +228,8 @@ foreach ($app in $selectedApps) {
         "1" {
             ## PowerToys
             Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
-            winget install Microsoft.PowerToys --source winget --silent #--version '0.80.0'
-            winget install lin-ycv.EverythingPowerToys --source winget --silent #--version '0.80.0'
+            winget install Microsoft.PowerToys --source winget --silent --version '0.81.1'
+            winget install lin-ycv.EverythingPowerToys --source winget --silent --version '0.81.0.1'
             winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements
             # winget upgrade Microsoft.PowerToys --silent --force #! upgrades to latest PT version 
             Start-Sleep 2
