@@ -47,7 +47,7 @@ while ($process1) {
     $process1 = Get-Process -Name "NexusSetup" -ErrorAction SilentlyContinue
 }
 Start-Sleep 10
-$process2 = Get-Process -Name "Nexus" -ErrorAction SilentlyContinuec
+$process2 = Get-Process -Name "Nexus" -ErrorAction SilentlyContinue
 if (!($process2)) {
     Write-Host "Nexus Dock is not running." -ForegroundColor Green
     Start-Sleep 5
