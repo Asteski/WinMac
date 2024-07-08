@@ -228,8 +228,8 @@ foreach ($app in $selectedApps) {
         "1" {
             ## PowerToys
             Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
-            winget install Microsoft.PowerToys --source winget --version '0.80.0' --silent 
-            winget install lin-ycv.EverythingPowerToys --source winget --version '0.80.0' --silent 
+            winget install Microsoft.PowerToys --source winget --silent #--version '0.80.0'
+            winget install lin-ycv.EverythingPowerToys --source winget --silent #--version '0.80.0'
             winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements
             # winget upgrade Microsoft.PowerToys --silent --force #! upgrades to latest PT version 
             Start-Sleep 2
@@ -604,27 +604,6 @@ Move-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Destination $programsD
 Move-Item -Path "C:\Users\Public\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
 Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
 Move-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
-$debloat = @(
-    "Cortana",
-    "Microsoft News",
-    "MSN Weather",
-    "Get Help",
-    "Power Auomate",
-    "Microsoft Tips",
-    "Microsoft People",
-    "Feedback Hub",
-    "Windows Maps",
-    "Outlook for Windows",
-    "Quick Assist",
-    "Xbox",
-    "Xbox TCUI",
-    "Xbox Game Bar Plugin",
-    "Xbox Game Bar",
-    "Xbox Identity Provider",
-    "Xbox Game Speech Window",
-    "Movies & TV"
-)
-foreach ($app in $debloat) { winget uninstall --name $app --silent }
 Write-Host "Clean up completed." -ForegroundColor Green
 Write-Host
 Stop-Transcript
