@@ -42,7 +42,6 @@ Start-Process -FilePath ".\NexusSetup.exe" -ArgumentList "/silent"
 Start-Sleep 10
 $process1 = Get-Process -Name "NexusSetup" -ErrorAction SilentlyContinue
 while ($process1) {
-    Write-Host "NexusSetup process is running. Please wait for the installation to complete." -ForegroundColor Yellow
     Start-Sleep 5
     $process1 = Get-Process -Name "NexusSetup" -ErrorAction SilentlyContinue
 }
