@@ -42,9 +42,14 @@ Expand-Archive -Path $downloadPath -DestinationPath $pwd -Force
 Start-Process -FilePath ".\NexusSetup.exe" -ArgumentList "/silent"
 Expand-Archive -Path $downloadPath -DestinationPath $pwd -Force
 Start-Process -FilePath ".\NexusSetup.exe" -ArgumentList "/silent"
-$procNexus Get-Process -n 'Nexus Setup x64'
-while (!($procNexus)) {
-    Get-Process -n Nexus | Stop-Process 
+$procNexus = Get-Process -n 'Nexus Setup x64'
+while ($procNexus) {
+    Sleep 2
+}
+$procNexus = Get-Process -n Nexus
+
+if ($procNexus) {
+    $procNexus = Stop-Process 
 }
 $winStep = 'C:\Users\Public\Documents\WinStep'
 Remove-Item -Path "$winStep\Themes\*" -Recurse -Force | Out-Null
