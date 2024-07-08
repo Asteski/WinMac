@@ -1,12 +1,5 @@
 properties:
   resources:
-    - resource: Microsoft.WinGet.DSC/WinGetPackage
-      directives:
-        description: Install Everything
-        allowPrerelease: true
-      settings:
-        id: lin-ycv.EverythingPowerToys
-        source: winget
     - resource: PowerToysConfigure
       directives:
         description: Configure PowerToys
@@ -63,9 +56,6 @@ properties:
               Disabled: false
               ActionKeyword: ","
               IsGlobal: false
-            - Name: "Everything"
-              Disabled: false
-              ActionKeyword: "?"
             - Name: "History"
               Disabled: true
             - Name: "Windows Search"
