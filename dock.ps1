@@ -39,6 +39,7 @@ if (-not (Test-Path $downloadPath)) {
 }
 Expand-Archive -Path $downloadPath -DestinationPath $pwd -Force
 Start-Process -FilePath ".\NexusSetup.exe" -ArgumentList "/silent"
+Start-Sleep 10
 $processRunning = Get-Process -Name "NexusSetup" -ErrorAction SilentlyContinue
 if ($processRunning) {
     Write-Host "NexusSetup process is running. Please wait for the installation to complete." -ForegroundColor Yellow
