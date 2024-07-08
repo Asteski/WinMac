@@ -39,16 +39,12 @@ if (-not (Test-Path $downloadPath)) {
 }
 Expand-Archive -Path $downloadPath -DestinationPath $pwd -Force
 Start-Process -FilePath ".\NexusSetup.exe" -ArgumentList "/silent"
-$overwatch = [System.Diagnostics.Stopwatch]::StartNew()
-$processName = 'NexusSetup'
-while ((Get-Process -Name $processName -ErrorAction SilentlyContinue) -and ($overwatch.Elapsed.TotalSeconds -lt $timeout)) {
-    Start-Sleep -Seconds 1
-}
-$overwatch.Stop()
-if ($overwatch.Elapsed.TotalSeconds -ge $timeout) {
-    Write-Host "Timeout reached. Nexus process did not stop." -ForegroundColor Red
+$processRunning = Get-Process -Name "NexusSetup" -ErrorAction SilentlyContinue
+if ($processRunning) {
+    Write-Host "NexusSetup process is running. Please wait for the installation to complete." -ForegroundColor Yellow
+    Start-Sleep 5
 } else {
-    Write-Host "Nexus process stopped." -ForegroundColor Green
+    Write-Host "NexusSetup process is not running." -ForegroundColor Green
 }
 Get-Process -n Nexus | Stop-Process 
 $winStep = 'C:\Users\Public\Documents\WinStep'

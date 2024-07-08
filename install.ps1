@@ -184,7 +184,6 @@ if ($null -eq $wingetCheck) {
     Write-Host "$([char]27)[92m$("Winget is already installed.")$([char]27)[0m Version: $($wingetCheck)"
 }
 
-
 ## Defintions
 $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
 Add-Type -AssemblyName System.Windows.Forms
