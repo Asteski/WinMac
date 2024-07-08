@@ -43,15 +43,18 @@ Start-Process -FilePath ".\NexusSetup.exe" -ArgumentList "/silent"
 Expand-Archive -Path $downloadPath -DestinationPath $pwd -Force
 Start-Process -FilePath ".\NexusSetup.exe" -ArgumentList "/silent"
 $procNexus = Get-Process -n 'NexusSetup'
+echo 1
 while ($procNexus) {
     start-sleep 2
 }
 start-sleep 10
+echo 2
 $procNexus = Get-Process -n Nexus
-
 if (!($procNexus)) {
-    Start-Sleep 1 }
+    Start-Sleep 1 
+}
 else {
+    echo 3
     $procNexus = Stop-Process 
 }
 $winStep = 'C:\Users\Public\Documents\WinStep'
