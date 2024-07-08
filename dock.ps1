@@ -49,13 +49,9 @@ while ($process1) {
 Start-Sleep 10
 $process2 = Get-Process -Name "Nexus" -ErrorAction SilentlyContinue
 if (!($process2)) {
-    Write-Host "Nexus Dock is not running." -ForegroundColor Green
     Start-Sleep 5
     $process2 = Get-Process -Name "Nexus" -ErrorAction SilentlyContinue
-} else {
-    Write-Host "Nexus Dock is running." -ForegroundColor Yellow
-    Start-Sleep 10
-}
+} else { Start-Sleep 10 }
 Get-Process -n Nexus | Stop-Process 
 $winStep = 'C:\Users\Public\Documents\WinStep'
 Remove-Item -Path "$winStep\Themes\*" -Recurse -Force | Out-Null
@@ -108,9 +104,9 @@ Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe' | Out-Null
 Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Nexus.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
 Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\Nexus.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
 Remove-Item "$pwd\temp\*" -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
-# Remove-Item .\dock.zip -Force | Out-Null
-# Remove-Item .\ReadMe.txt -Force | Out-Null
-# Remove-Item .\NexusSetup.exe -Force | Out-Null
+Remove-Item .\dock.zip -Force | Out-Null
+Remove-Item .\ReadMe.txt -Force | Out-Null
+Remove-Item .\NexusSetup.exe -Force | Out-Null
 Write-Host "Clean up completed." -ForegroundColor Green
 
 Write-Host
