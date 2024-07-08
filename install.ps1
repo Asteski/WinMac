@@ -230,9 +230,9 @@ foreach ($app in $selectedApps) {
             Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
             winget install Microsoft.PowerToys --source winget --silent | Out-Null
             winget install lin-ycv.EverythingPowerToys --source winget --silent | Out-Null
+            winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements
             Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force
             Start-Sleep 2
-            winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements
             $ptDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Start-Sleep 2
             Start-Process "$ptDir\PowerToys (Preview)\PowerToys (Preview).lnk" -WindowStyle Minimized
@@ -242,6 +242,9 @@ foreach ($app in $selectedApps) {
             ## Everything
             Write-Host "Installing Everything..."  -ForegroundColor Yellow
             winget install --id "Voidtools.Everything" --source winget --silent | Out-Null
+            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+            Move-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
+            Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
             Write-Host "Installing Everything completed." -ForegroundColor Green
             }
         "3" {
@@ -282,6 +285,9 @@ foreach ($app in $selectedApps) {
             Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $functions
             Add-Content -Path "$profilePath\WindowsPowerShell\$prompt" -Value $functions
             Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $functions
+            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+            Move-Item -Path "C:\Users\Public\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
+            Move-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
             Write-Host "Configuring PowerShell Profile completed." -ForegroundColor Green
         }
         "4" {
@@ -596,13 +602,6 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
     }
 }
 
-# Clean up
-Write-Host "Clean up..." -ForegroundColor Yellow
-Move-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
-Move-Item -Path "C:\Users\Public\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
-Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
-Move-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
-Write-Host "Clean up completed." -ForegroundColor Green
 Write-Host
 Stop-Transcript
 
