@@ -37,16 +37,8 @@ $downloadPath = "dock.zip"
 if (-not (Test-Path $downloadPath)) {
     Invoke-WebRequest -Uri $downloadUrl -OutFile $downloadPath
 }
-
 Expand-Archive -Path $downloadPath -DestinationPath $pwd -Force
-Start-Process -FilePath ".\NexusSetup.exe" -ArgumentList "/silent"
-Expand-Archive -Path $downloadPath -DestinationPath $pwd -Force
-Start-Process -FilePath ".\NexusSetup.exe" -ArgumentList "/silent"
-$procNexus = Get-Process -n 'NexusSetup'
-echo 1
-while ($procNexus) {
-    start-sleep 2
-}
+Start-Process -FilePath ".\NexusSetup.exe" -ArgumentList "/silent" -wait
 start-sleep 10
 echo 2
 Get-Process -n Nexus | Stop-Process 
@@ -106,7 +98,8 @@ Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\Nexus.lnk" -Destination
 Remove-Item "$pwd\temp\*" -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
 Remove-Item .\dock.zip -Force | Out-Null
 Remove-Item .\ReadMe.txt -Force | Out-Null
-Remove-Item .\NexusSetup.exe -Force | Out-Null
+Remove-Item .\NexusSetu
+p.exe -Force | Out-Null
 Write-Host "Clean up completed." -ForegroundColor Green
 
 Write-Host
