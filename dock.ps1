@@ -51,7 +51,7 @@ if (!($process2)) {
     Start-Sleep 5
     $process2 = Get-Process -Name "Nexus" -ErrorAction SilentlyContinue
 } else { Start-Sleep 10 }
-Get-Process -n Nexus | Stop-Process 
+Get-Process -n Nexus | Stop-Process
 $winStep = 'C:\Users\Public\Documents\WinStep'
 Remove-Item -Path "$winStep\Themes\*" -Recurse -Force | Out-Null
 Copy-Item -Path "config\dock\themes\*" -Destination "$winStep\Themes\" -Recurse -Force | Out-Null
