@@ -363,7 +363,6 @@ foreach ($app in $selectedApps) {
             winget install --id "Open-Shell.Open-Shell-Menu" --source winget --custom 'ADDLOCAL=StartMenu' --silent | Out-Null
             Start-Sleep 5
             Stop-Process -Name startmenu -Force | Out-Null
-            # taskkill /IM explorer.exe /F | Out-Null
             New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force | Out-Null
             New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force | Out-Null
             New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu" -Force | Out-Null
