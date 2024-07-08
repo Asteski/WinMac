@@ -40,6 +40,7 @@ if (-not (Test-Path $downloadPath)) {
 Expand-Archive -Path $downloadPath -DestinationPath $pwd -Force
 Start-Process -FilePath ".\NexusSetup.exe" -ArgumentList "/silent"
 $overwatch = [System.Diagnostics.Stopwatch]::StartNew()
+$processName = 'NexusSetup'
 while ((Get-Process -Name $processName -ErrorAction SilentlyContinue) -and ($overwatch.Elapsed.TotalSeconds -lt $timeout)) {
     Start-Sleep -Seconds 1
 }
