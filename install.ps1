@@ -228,7 +228,7 @@ foreach ($app in $selectedApps) {
         "1" {
             ## PowerToys
             Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
-            winget install Microsoft.PowerToys --source winget --version '0.80.0' --silent
+            winget install Microsoft.PowerToys --source winget --version '0.80.0' --silent | Out-Null
             winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements
             # winget upgrade Microsoft.PowerToys --silent --force #! upgrades to latest PT version 
             Start-Sleep 2
@@ -270,10 +270,10 @@ foreach ($app in $selectedApps) {
             }
             $winget = @(
                 "Vim.Vim",
-                "gsass1.NTop",
-                "gerardog.gsudo"
+                "gsass1.NTop"
             )
             foreach ($app in $winget) {winget install --id $app --source winget --silent}
+            winget install --id "gerardog.gsudo"
             $vimParentPath = Join-Path $env:PROGRAMFILES Vim
             $latestSubfolder = Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -Property CreationTime -Descending | Select-Object -First 1
             $vimChildPath = $latestSubfolder.FullName
@@ -624,7 +624,7 @@ $debloat = @(
     "Xbox Game Speech Window",
     "Movies & TV"
 )
-foreach ($app in $debloat) { winget uninstall --name $app --silent | Out-Null }
+foreach ($app in $debloat) { winget uninstall --name $app --silent }
 Write-Host "Clean up completed." -ForegroundColor Green
 Write-Host
 Stop-Transcript
@@ -644,8 +644,7 @@ If you have any questions or suggestions, please contact me on GitHub.
 Write-Host "-----------------------------------------------------------------------------"  -ForegroundColor Cyan
 Write-Host @"
 
-To install Winstep Nexus Dock, please run the dock.ps1 script
-in a PowerShell session without administrative privileges.
+To install Winstep Nexus Dock, please run the dock.ps1 script in a PowerShell session without administrative privileges.
 
 "@ -ForegroundColor Yellow
 Start-Sleep 2
