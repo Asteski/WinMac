@@ -280,13 +280,11 @@ foreach ($app in $selectedApps) {
             $vimChildPath = $latestSubfolder.FullName
             [Environment]::SetEnvironmentVariable("Path", $env:Path + ";$vimChildPath", [EnvironmentVariableTarget]::Machine) | Out-Null
             Install-Module PSTree -Force | Out-Null
+            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $prompt
             Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $functions
             Add-Content -Path "$profilePath\WindowsPowerShell\$prompt" -Value $functions
             Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $functions
-            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
-            Move-Item -Path "C:\Users\Public\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
-            Move-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
             Write-Host "Configuring PowerShell Profile completed." -ForegroundColor Green
         }
         "4" {
@@ -602,6 +600,10 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
 }
 
 Write-Host
+
+# Cleanup
+Move-Item -Path "C:\Users\Public\Desktop\gVim*" -Destination $programsDir -Force 
+Move-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Destination $programsDir -Force 
 Stop-Transcript
 
 Write-Host
