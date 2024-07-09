@@ -5,6 +5,4 @@ New-Item -ItemType File -Path ".\temp\scripts.yaml" -Force
 $newContent | Set-Content -Path ".\temp\scripts.yaml"
 #Get-Process "AutoDarkMode" -ErrorAction SilentlyContinue | Stop-Process -Force
 Copy-Item ".\temp\scripts.yaml" "C:\Users\$ENV:USERNAME\AppData\Roaming\AutoDarkMode"  -Force
-Copy-Item ".\config\adm\color-scheme.ps1" "C:\Users\$ENV:USERNAME\AppData\Roaming\AutoDarkMode" -Force
-
- -Path "C:\Users\$ENV:USERNAME\AppData\Roaming\AutoDarkMode\newfile.txt"
+Copy-Item ".\config\adm\color-mode.ps1" "C:\Users\$ENV:USERNAME\AppData\Roaming\AutoDarkMode" -Force
