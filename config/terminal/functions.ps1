@@ -462,11 +462,11 @@ function grep {
     else 
     {
         if ($args.count -eq 1) {
-            $files = Get-ChildItem -Exclude *.exe,*.dll,*.sys,*.com,*.msi,*.msp,*.msu,*.cab,*.iso,*.img,*.vhd,*.vhdx,*.zip,*.rar,*.7z
+            $files = Get-ChildItem 
             string-search $args[0]
             }
         elseif (($args.count -eq 2) -and ($args[0] -eq '-r')){
-            $files = Get-ChildItem -Recurse -Exclude *.exe,*.dll,*.sys,*.com,*.msi,*.msp,*.msu,*.cab,*.iso,*.img,*.vhd,*.vhdx ,*.zip,*.rar,*.7z
+            $files = Get-ChildItem -Recurse
             string-search $args[1]
         }
     }

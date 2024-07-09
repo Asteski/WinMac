@@ -56,9 +56,6 @@ properties:
               Disabled: false
               ActionKeyword: ","
               IsGlobal: false
-            - Name: "Everything"
-              Disabled: false
-              ActionKeyword: "?"
             - Name: "History"
               Disabled: true
             - Name: "Windows Search"
