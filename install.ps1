@@ -227,8 +227,7 @@ foreach ($app in $selectedApps) {
         "1" {
             ## PowerToys
             Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
-            winget install Microsoft.PowerToys --source winget --silent | Out-Null
-            winget install lin-ycv.EverythingPowerToys --source winget --silent | Out-Null
+            # winget install Microsoft.PowerToys --source winget --silent | Out-Null
             winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
             Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force
             Start-Sleep 2
@@ -241,6 +240,7 @@ foreach ($app in $selectedApps) {
             ## Everything
             Write-Host "Installing Everything..."  -ForegroundColor Yellow
             winget install --id "Voidtools.Everything" --source winget --silent | Out-Null
+            winget install lin-ycv.EverythingPowerToys --source winget --silent | Out-Null
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Move-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
             Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
