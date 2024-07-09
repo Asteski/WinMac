@@ -1,0 +1,8 @@
+Enabled: true
+Component:
+  Scripts:
+  - Name: WinMac UI Color Scheme
+    Command: powershell
+    ArgsLight: [<STRING_TO_REPLACE>\color-mode.ps1 -colorScheme 'Present Light']
+    ArgsDark: [<STRING_TO_REPLACE>\color-mode.ps1 -colorScheme 'Tango Dark']
+    AllowedSources: [Any]
