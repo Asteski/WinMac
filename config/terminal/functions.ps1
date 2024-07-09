@@ -52,9 +52,9 @@ function lls { Get-ChildItem | format-table -autosize }
 function ll { Get-ChildItem -Force | format-table -autosize }
 function la { Get-ChildItem -Force -Attributes !D | format-table -autosize }
 function lld { Get-ChildItem -Directory | format-table -autosize }
-function wl { winget list } 
+# function wl { winget list } 
+function wl { $out = get-wingetpackage $args | Sort-Object name; if ($out) { $out } else { Write-Host "No package found" -ForegroundColor Red }}
 function wi { winget install $args }
-function wl { winget list }
 function wr { winget uninstall $args } 
 function ws { $appname = $args; winget search "$appname" }
 function wu { winget upgrade $args } 

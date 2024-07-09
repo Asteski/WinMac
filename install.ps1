@@ -270,6 +270,7 @@ foreach ($app in $selectedApps) {
             else {
                 Write-Information "NuGet Provider is already installed."
             }
+            Install-Module -Name Microsoft.WinGet.Client -Force -ErrorAction SilentlyContinue | Out-Null
             $winget = @(
                 "Vim.Vim",
                 "gsass1.NTop"
