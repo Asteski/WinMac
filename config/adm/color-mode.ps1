@@ -53,6 +53,7 @@ Set-ItemProperty -Path $registryPath0 -Name "WANDABitmapFolder" -Value "C:\Users
 
 $registryPath1 = "HKCU:\Software\WinSTEP2000\NeXuS\Docks"
 $indicator = (Get-ItemProperty -Path $registryPath1 -Name "DockRunningIndicator1").DockRunningIndicator1
+
 if ($indicator -like "*Dark*") {
 	$indicatorValue = $indicator.Replace("Dark","Light")
 }
