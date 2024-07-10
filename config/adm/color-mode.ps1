@@ -4,7 +4,7 @@ param
 	[string]
 	$colorScheme
 )
-$settings = 'C:\Users\Adams\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json'
+$settings = "C:\Users\$ENV:USERNAME\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
 $settingsJson = Get-Content "$settings" -raw | ConvertFrom-Json
 $settingsJson.profiles.defaults.colorScheme="$colorScheme"
 $settingsJson | ConvertTo-Json -depth 32 | Set-Content "$settings"
@@ -17,7 +17,7 @@ else
 {
 	$orbColor = 'black'
 }
-Set-ItemProperty -Path "HKCU:\Software\StartIsBack" -Name "OrbBitmap" -Value "C:\Users\Adams\AppData\Local\StartAllBack\Orbs\$orbColor.svg"
+Set-ItemProperty -Path "HKCU:\Software\StartIsBack" -Name "OrbBitmap" -Value "C:\Users\$ENV:USERNAME\AppData\Local\StartAllBack\Orbs\$orbColor.svg"
 
 if ($colorScheme -eq 'Tango Dark')
 {
