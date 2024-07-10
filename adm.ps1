@@ -3,7 +3,13 @@ winget install --id Armin2208.WindowsAutoNightMode --silent
 echo 1
 Start-Process -FilePath "C:\Users\$ENV:USERNAME\AppData\Local\Programs\AutoDarkMode\adm-app\autodarkmodeapp.exe" -Verb RunAs
 echo 2
-Start-Sleep 10
+if (Get-Process -Name "autodarkmodesvc" -ErrorAction SilentlyContinue) {
+    Write-Host "Process is already running."
+    Start-Sleep 10
+} else {
+    Write-Host "Process is not running."
+    Start-Sleep 1
+}
 echo 3
 Stop-Process -Name "AutoDarkMode*" -Force
 echo 4
