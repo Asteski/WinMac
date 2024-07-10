@@ -417,7 +417,7 @@ foreach ($app in $selectedApps) {
             Invoke-WebRequest "https://github.com/SamsidParty/TopNotify/releases/download/2.3.7/TopNotify.Msix" -OutFile "TopNotify.Msix"
             $exePath = ($env:AppData | Split-Path) + "\local\TopNotify"
             # Expand-Archive TopNotify.zip -DestinationPath $exePath -Force
-            Add-AppPackage -path $exePath\TopNotify.msix
+            Add-AppPackage -path .\TopNotify.msix
             # Remove-Item -Path TopNotify.zip -Force
             Write-Host "Configuring TopNotify completed." -ForegroundColor Green
         }
