@@ -32,9 +32,9 @@ else
 	$DockLabelBackColor1 = '16119283'
 }
 
-Stop-Process -Name TopNotify -force
-Stop-Process -Name explorer -force
-Stop-Process -Name nexus -force
+Stop-Process -n TopNotify -force
+Stop-Process -n Explorer -force
+Stop-Process -n Nexus -force
 $registryPath0 = "HKCU:\Software\WinSTEP2000\NeXuS"
 Set-ItemProperty -Path $registryPath0 -Name "GenThemeName" -Value "WinMac $themeColor Rounded"
 Set-ItemProperty -Path $registryPath0 -Name "BitmapsFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\WinMac $themeColor Rounded\"
