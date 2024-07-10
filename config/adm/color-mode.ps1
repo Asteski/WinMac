@@ -4,12 +4,10 @@ param
 	[string]
 	$colorScheme
 )
-$settings = "C:\Users\$ENV:USERNAME\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
-$settingsJson = Get-Content "$settings" -raw | ConvertFrom-Json
-$settingsJson.profiles.defaults.colorScheme="$colorScheme"
-$settingsJson | ConvertTo-Json -depth 32 | Set-Content "$settings"
 
-if ($colorScheme -eq 'Tango Dark')
+$ErrorActionPreference = 'Continue'
+
+if ($colorScheme -eq 'Dark')
 {
 	$orbColor = 'white'
 }
@@ -19,7 +17,7 @@ else
 }
 Set-ItemProperty -Path "HKCU:\Software\StartIsBack" -Name "OrbBitmap" -Value "C:\Users\$ENV:USERNAME\AppData\Local\StartAllBack\Orbs\$orbColor.svg"
 
-if ($colorScheme -eq 'Tango Dark')
+if ($colorScheme -eq 'Dark')
 {
 	$themeColor = 'Dark'
 	$UIDarkMode = '1'
