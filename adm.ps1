@@ -1,4 +1,4 @@
-#winget install --id Armin2208.WindowsAutoNightMode --silent
+winget install --id Armin2208.WindowsAutoNightMode --silent
 Start-Process -FilePath "C:\Users\$ENV:USERNAME\AppData\Local\Programs\AutoDarkMode\adm-app\autodarkmodesvc.exe" -Verb RunAs
 Start-Sleep 10
 Stop-Process -Name "AutoDarkMode*" -Force
