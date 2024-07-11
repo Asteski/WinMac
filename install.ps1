@@ -31,7 +31,7 @@ Write-Host "--------------------------------------------------------------------
 
 $errorActionPreference="SilentlyContinue"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
-mkdir ./Temp | Out-Null
+mkdir ./temp | Out-Null
 Start-Transcript -Path ".\temp\WinMac_install_log_$date.txt" -Append | Out-Null
 
 ## User Configuration
@@ -414,11 +414,11 @@ foreach ($app in $selectedApps) {
         "6" {
             # TopNotify
             Write-Host "Configuring TopNotify..." -ForegroundColor Yellow
-            Invoke-WebRequest "https://github.com/SamsidParty/TopNotify/releases/download/2.3.1/TopNotify.zip" -OutFile ".\Temp\TopNotify.zip"
+            Invoke-WebRequest "https://github.com/SamsidParty/TopNotify/releases/download/2.3.1/TopNotify.zip" -OutFile ".\temp\TopNotify.zip"
             $exePath = $env:AppData + "\TopNotify"
-            Expand-Archive .\Temp\TopNotify.zip -DestinationPath $exePath -Force
+            Expand-Archive .\temp\TopNotify.zip -DestinationPath $exePath -Force
             Start-Process -FilePath $exePath\TopNotify.exe
-            Remove-Item -Path .\Temp\TopNotify.zip -Force
+            Remove-Item -Path .\temp\TopNotify.zip -Force
             Write-Host "Configuring TopNotify completed." -ForegroundColor Green
         }
         "7" {
