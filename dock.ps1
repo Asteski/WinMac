@@ -5,7 +5,7 @@ Write-Host @"
 Welcome to WinMac Deployment!
 
 Author: Asteski
-Version: 0.4.1
+Version: 0.4.2
 
 This is Work in Progress. You're using this script at your own risk.
 
@@ -37,10 +37,20 @@ $downloadPath = "dock.zip"
 if (-not (Test-Path $downloadPath)) {
     Invoke-WebRequest -Uri $downloadUrl -OutFile $downloadPath
 }
-
 Expand-Archive -Path $downloadPath -DestinationPath $pwd -Force
 Start-Process -FilePath ".\NexusSetup.exe" -ArgumentList "/silent"
-start-sleep 80
+Start-Sleep 10
+$process1 = Get-Process -Name "NexusSetup" -ErrorAction SilentlyContinue
+while ($process1) {
+    Start-Sleep 5
+    $process1 = Get-Process -Name "NexusSetup" -ErrorAction SilentlyContinue
+}
+Start-Sleep 10
+$process2 = Get-Process -Name "Nexus" -ErrorAction SilentlyContinue
+if (!($process2)) {
+    Start-Sleep 5
+    $process2 = Get-Process -Name "Nexus" -ErrorAction SilentlyContinue
+} else { Start-Sleep 10 }
 Get-Process -n Nexus | Stop-Process
 $winStep = 'C:\Users\Public\Documents\WinStep'
 Remove-Item -Path "$winStep\Themes\*" -Recurse -Force | Out-Null
@@ -83,7 +93,7 @@ elseif (($roundedOrSquared -ne "S" -or $roundedOrSquared -ne "s") -and ($lightOr
 }
 
 reg import $regFile
-Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "DockLabelColorHotTrack1"
+Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "DockLabelColorHotTrack1" | Out-Null
 Start-Sleep 2
 Write-Host "Configuring Nexus Dock completed." -ForegroundColor Green
 

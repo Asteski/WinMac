@@ -39,18 +39,22 @@ set-alias -name random -value Get-RandomString
 set-alias -name user -value getuser
 set-alias -name pwd -value ppwd
 set-alias -name lnk -value run
-set-alias -name l -value ls
+set-alias -name ld -value lld
+set-alias -name ls -value lls
+set-alias -name l -value lls
 set-alias -name stack -value stahky
 set-alias -name find -value ffind
 set-alias -name fi -value ffind
 
 # Functions
 function psversion { $PSVersionTable }
-function ll { Get-ChildItem -Force }
-function la { Get-ChildItem -Force -Attributes !D }
-function wl { winget list } 
+function lls { Get-ChildItem | format-table -autosize }
+function ll { Get-ChildItem -Force | format-table -autosize }
+function la { Get-ChildItem -Force -Attributes !D | format-table -autosize }
+function lld { Get-ChildItem -Directory | format-table -autosize }
+# function wl { winget list } 
+function wl { $out = get-wingetpackage $args | Sort-Object name; if ($out) { $out } else { Write-Host "No package found" -ForegroundColor Red }}
 function wi { winget install $args }
-function wl { winget list }
 function wr { winget uninstall $args } 
 function ws { $appname = $args; winget search "$appname" }
 function wu { winget upgrade $args } 
@@ -229,7 +233,7 @@ function printenv {
         $args | ForEach-Object { 
             $envVar = Get-ChildItem Env:$_ -ErrorAction SilentlyContinue
             if ($envVar) {
-                $envVar.Value
+                $envVar.Value -split ';' | Sort-Object 
             } else {
                 Write-Host "Environment variable '$_' does not exist." -ForegroundColor Red
             }
@@ -459,11 +463,11 @@ function grep {
     else 
     {
         if ($args.count -eq 1) {
-            $files = Get-ChildItem -Exclude *.exe,*.dll,*.sys,*.com,*.msi,*.msp,*.msu,*.cab,*.iso,*.img,*.vhd,*.vhdx,*.zip,*.rar,*.7z
+            $files = Get-ChildItem 
             string-search $args[0]
             }
         elseif (($args.count -eq 2) -and ($args[0] -eq '-r')){
-            $files = Get-ChildItem -Recurse -Exclude *.exe,*.dll,*.sys,*.com,*.msi,*.msp,*.msu,*.cab,*.iso,*.img,*.vhd,*.vhdx ,*.zip,*.rar,*.7z
+            $files = Get-ChildItem -Recurse
             string-search $args[1]
         }
     }

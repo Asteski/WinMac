@@ -5,7 +5,7 @@ Write-Host @"
 Welcome to WinMac Deployment!
 
 Author: Asteski
-Version: 0.4.1
+Version: 0.4.2
 
 This is Work in Progress. You're using this script at your own risk.
 
@@ -99,9 +99,14 @@ $promptSet = Read-Host "Do you want to use WinMac prompt? (y/n)"
 if ($promptSet -eq 'y') {
     Write-Host "Using WinMac prompt." -ForegroundColor Yellow
 }
-else
+elseif ($promptSet -eq 'n')
 { 
     Write-Host "Using MacOS prompt." -ForegroundColor Yellow
+}
+else
+{
+    Write-Host "Invalid input. Defaulting to WinMac prompt." -ForegroundColor Yellow
+    $promptSet = 'y'
 }
 
 Write-Host @"
@@ -149,8 +154,7 @@ if ($installConfirmation -ne 'y') {
 
 Write-Host
 Write-Host @"
-Please do not do anything while the script is running, as it may impact
-the installation process.
+Please do not do anything while the script is running, as it may impact the installation process.
 "@ -ForegroundColor Red
 Start-Sleep 2
 Write-Host
@@ -179,7 +183,6 @@ if ($null -eq $wingetCheck) {
 } else {
     Write-Host "$([char]27)[92m$("Winget is already installed.")$([char]27)[0m Version: $($wingetCheck)"
 }
-
 
 ## Defintions
 $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
@@ -224,9 +227,10 @@ foreach ($app in $selectedApps) {
         "1" {
             ## PowerToys
             Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
+            winget install Microsoft.PowerToys --source winget --silent | Out-Null
             winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
+            Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force
             Start-Sleep 2
-            Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force | Out-Null
             $ptDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Start-Sleep 2
             Start-Process "$ptDir\PowerToys (Preview)\PowerToys (Preview).lnk" -WindowStyle Minimized
@@ -236,6 +240,10 @@ foreach ($app in $selectedApps) {
             ## Everything
             Write-Host "Installing Everything..."  -ForegroundColor Yellow
             winget install --id "Voidtools.Everything" --source winget --silent | Out-Null
+            winget install lin-ycv.EverythingPowerToys --source winget --silent | Out-Null
+            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+            Move-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
+            Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
             Write-Host "Installing Everything completed." -ForegroundColor Green
             }
         "3" {
@@ -244,13 +252,14 @@ foreach ($app in $selectedApps) {
             $profilePath = $PROFILE | Split-Path | Split-Path
             $profileFile = $PROFILE | Split-Path -Leaf
             if ($promptSet -eq 'y') { $prompt = Get-Content "$pwd\config\terminal\winmac-prompt.ps1" -Raw }
-            else { $prompt = Get-Content "$pwd\config\terminal\macos-prompt.ps1" -Raw }
+            elseif ($promptSet -eq 'n' ) { $prompt = Get-Content "$pwd\config\terminal\macos-prompt.ps1" -Raw }
+            else { $prompt = Get-Content "$pwd\config\terminal\winmac-prompt.ps1" -Raw }
             $functions = Get-Content "$pwd\config\terminal\functions.ps1" -Raw
 
-            if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell"| Out-Null } else { Remove-Item -Path "$profilePath\PowerShell\$profileFile" -Force| Out-Null }
-            if (-not (Test-Path "$profilePath\WindowsPowerShell")) { New-Item -ItemType Directory -Path "$profilePath\WindowsPowerShell"| Out-Null } else { Remove-Item -Path "$profilePath\WindowsPowerShell\$profileFile" -Force| Out-Null }
-            if (-not (Test-Path "$profilePath\PowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\PowerShell\$profileFile"| Out-Null }
-            if (-not (Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\WindowsPowerShell\$profileFile"| Out-Null }
+            if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell" | Out-Null } else { Remove-Item -Path "$profilePath\PowerShell\$profileFile" -Force | Out-Null }
+            if (-not (Test-Path "$profilePath\WindowsPowerShell")) { New-Item -ItemType Directory -Path "$profilePath\WindowsPowerShell" | Out-Null } else { Remove-Item -Path "$profilePath\WindowsPowerShell\$profileFile" -Force | Out-Null }
+            if (-not (Test-Path "$profilePath\PowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\PowerShell\$profileFile" | Out-Null }
+            if (-not (Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\WindowsPowerShell\$profileFile" | Out-Null }
 
             $progressPreference = 'silentlyContinue'
             if (-not (Get-PackageProvider -ListAvailable | Where-Object {$_.Name -eq 'NuGet'})) {
@@ -261,16 +270,18 @@ foreach ($app in $selectedApps) {
             else {
                 Write-Information "NuGet Provider is already installed."
             }
+            Install-Module -Name Microsoft.WinGet.Client -Force -ErrorAction SilentlyContinue | Out-Null
             $winget = @(
                 "Vim.Vim",
                 "gsass1.NTop"
             )
-            foreach ($app in $winget) {winget install --id $app --source winget --silent | Out-Null }
+            foreach ($app in $winget) {winget install --id $app --source winget --silent | Out-Null .\.action}
             $vimParentPath = Join-Path $env:PROGRAMFILES Vim
             $latestSubfolder = Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -Property CreationTime -Descending | Select-Object -First 1
             $vimChildPath = $latestSubfolder.FullName
             [Environment]::SetEnvironmentVariable("Path", $env:Path + ";$vimChildPath", [EnvironmentVariableTarget]::Machine) | Out-Null
-            Install-Module PSTree -Scope CurrentUser -Force | Out-Null
+            Install-Module PSTree -Force | Out-Null
+            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $prompt
             Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $functions
             Add-Content -Path "$profilePath\WindowsPowerShell\$prompt" -Value $functions
@@ -356,7 +367,6 @@ foreach ($app in $selectedApps) {
             winget install --id "Open-Shell.Open-Shell-Menu" --source winget --custom 'ADDLOCAL=StartMenu' --silent | Out-Null
             Start-Sleep 5
             Stop-Process -Name startmenu -Force | Out-Null
-            # taskkill /IM explorer.exe /F | Out-Null
             New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force | Out-Null
             New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force | Out-Null
             New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu" -Force | Out-Null
@@ -404,18 +414,18 @@ foreach ($app in $selectedApps) {
         "6" {
             # TopNotify
             Write-Host "Configuring TopNotify..." -ForegroundColor Yellow
-            Invoke-WebRequest "https://github.com/SamsidParty/TopNotify/releases/download/2.2.0/TopNotify.zip" -OutFile TopNotify.zip
-            $exePath = ($env:AppData | Split-Path) + "\local\TopNotify"
-            Expand-Archive TopNotify.zip -DestinationPath $exePath -Force
+            Invoke-WebRequest "https://github.com/SamsidParty/TopNotify/releases/download/2.3.1/TopNotify.zip" -OutFile ".\temp\TopNotify.zip"
+            $exePath = $env:AppData + "\TopNotify"
+            Expand-Archive .\temp\TopNotify.zip -DestinationPath $exePath -Force
             Start-Process -FilePath $exePath\TopNotify.exe
-            Remove-Item -Path TopNotify.zip -Force
+            Remove-Item -Path .\temp\TopNotify.zip -Force
             Write-Host "Configuring TopNotify completed." -ForegroundColor Green
         }
         "7" {
             # Stahky
             Write-Host "Configuring Stahky..." -ForegroundColor Yellow
-            $url = "https://github.com/joedf/stahky/releases/download/v0.1.0.8/stahky_U64_v0.1.0.8.zip"
-            $outputPath = "$pwd\stahky_U64_v0.1.0.8.zip"
+            $url = "https://github.com/SamsidParty/TopNotify/archive/refs/tags/2.3.7.zip"
+            $outputPath = "$pwd\stahky_U64_v2.3.7.zip"
             $exePath = "$env:LOCALAPPDATA\Stahky"
             
             New-Item -ItemType Directory -Path $exePath -Force | Out-Null
@@ -567,6 +577,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             if (-not ($recycleBin.Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
                 $recycleBin.Self.InvokeVerb("PinToHome") | Out-Null
             }
+            
             Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse | Out-Null
 
             ## Remove Shortcut Arrows
@@ -589,14 +600,11 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
     }
 }
 
-# Clean up
-Write-Host "Clean up..." -ForegroundColor Yellow
-Move-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
-Move-Item -Path "C:\Users\Public\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
-Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
-Move-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
-Write-Host "Clean up completed." -ForegroundColor Green
 Write-Host
+
+# Cleanup
+Move-Item -Path "C:\Users\Public\Desktop\gVim*" -Destination $programsDir -Force 
+Move-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Destination $programsDir -Force 
 Stop-Transcript
 
 Write-Host
@@ -614,8 +622,7 @@ If you have any questions or suggestions, please contact me on GitHub.
 Write-Host "-----------------------------------------------------------------------------"  -ForegroundColor Cyan
 Write-Host @"
 
-To install Winstep Nexus Dock, please run the dock.ps1 script
-in a PowerShell session without administrative privileges.
+To install Winstep Nexus Dock, please run the dock.ps1 script in a PowerShell session without administrative privileges.
 
 "@ -ForegroundColor Yellow
 Start-Sleep 2
