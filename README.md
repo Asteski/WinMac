@@ -81,10 +81,12 @@ Please be informed that this is a beta version - you're deploying it at your own
 
 For the most reliable deployment process, I recommend to install latest version of [Powershell Core](https://github.com/PowerShell/PowerShell) and run *install.ps1* script from the script directory and run it as an Administrator. Everything else (except dock, which must be run separately in non-elevated pwsh session) will be deployed automatically for you (including Winget if not already installed).
 
+There are many dock customization you can find around the web, including [DeviantArt](https://www.deviantart.com/search?q=winstep+dock+windows).
+
 ## Planned features
 
 - Modern OS theme,
-- more Dock themes,
+- 
 - more functions.
 
 ## Credits to
