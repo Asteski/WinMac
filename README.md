@@ -86,7 +86,6 @@ There are many dock customization you can find around the web, including [Devian
 ## Planned features
 
 - Modern OS theme,
-- 
 - more functions.
 
 ## Credits to
