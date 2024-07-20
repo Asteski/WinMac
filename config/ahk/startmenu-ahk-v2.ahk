@@ -1,4 +1,5 @@
-﻿#HotIf HoveringStart()
+﻿#NoTrayIcon
+#HotIf HoveringStart()
 $LButton::Send("#{x}")
 Return
 #HotIf
