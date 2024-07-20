@@ -341,7 +341,8 @@ foreach ($app in $selectedApps) {
             # while (!(get-itemproperty -Path $registryPath -Name $registryValueName -ErrorAction SilentlyContinue)) {
             #     Start-Sleep -Seconds 1
             # }
-            Set-ItemProperty -Path $registryPath -Name $registryValueName -Value $registryValueData -Force
+            New-ItemProperty -Path $registryPath -Name $propertyName -Value $propertyValue -PropertyType Binary
+            # Set-ItemProperty -Path $registryPath -Name $registryValueName -Value $registryValueData -Force
             # Start-Sleep 3
             Stop-Process -Name explorer -Force | Out-Null
             # Start-Sleep 3
