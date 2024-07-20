@@ -333,13 +333,13 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
             if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0 }
             else { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 1 }
-            tasskill -f -im explorer.exe
-            Start-Sleep 6
+            taskkill -f -im explorer.exe
+            Start-Sleep 3
             $registryPath = "$exRegPath\StuckRectsLegacy"
             $registryValueName = "Settings"
             $registryValueData = @(0x30,0x00,0x00,0x00,0xfe,0xff,0xff,0xff,0x02,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x5a,0x00,0x00,0x00,0x32,0x00,0x00,0x00,0x26,0x07,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0x07,0x00,0x00,0x38,0x04,0x00,0x00,0x78,0x00,0x00,0x00,0x01,0x00,0x00,0x00)
             Set-ItemProperty -Path $registryPath -Name $registryValueName -Value $registryValueData -Force
-            Stop-Process -Name Explorer -Force
+            explorer.exe
             Start-Sleep 3
             # $screen = [System.Windows.Forms.SystemInformation]::VirtualScreen
             # $w = $screen.width/4
