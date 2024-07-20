@@ -185,7 +185,6 @@ if ($null -eq $wingetCheck) {
 }
 
 ## Defintions
-$exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -TypeDefinition @"
 using System;
@@ -290,6 +289,7 @@ foreach ($app in $selectedApps) {
         }
         "4" {
             ## StartAllBack
+            $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             $sabLocal = ($env:AppData | Split-Path) + "\local\StartAllBack\Orbs"
             $sabRegPath = "HKCU:\Software\StartIsBack"
             Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
@@ -484,6 +484,7 @@ foreach ($app in $selectedApps) {
         "8" {
             # Other
             ## Black Cursor
+            $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             $curSourceFolder = $pwd.Path + '\config\cursor'
             $curDestFolder = "C:\Windows\Cursors"
             Copy-Item -Path $curSourceFolder\* -Destination $curDestFolder -Recurse -Force
