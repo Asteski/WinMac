@@ -294,6 +294,11 @@ foreach ($app in $selectedApps) {
             $sabRegPath = "HKCU:\Software\StartIsBack"
             Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
             # winget install --id "StartIsBack.StartAllBack" --source winget --silent | Out-Null
+            $registryPath = "$exRegPath\StuckRectsLegacy"
+            $registryValueName = "Settings"
+            $registryValueData = @(0x30,0x00,0x00,0x00,0xfe,0xff,0xff,0xff,0x02,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x5a,0x00,0x00,0x00,0x32,0x00,0x00,0x00,0x26,0x07,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0x07,0x00,0x00,0x38,0x04,0x00,0x00,0x78,0x00,0x00,0x00,0x01,0x00,0x00,0x00)
+            New-Item -Path $registryPath -Force | Out-Null
+            New-ItemProperty -Path $registryPath -Name $registryValueName -Value $registryValueData -PropertyType Binary | Out-Null
             Copy-Item $pwd\config\taskbar\orbs\* $sabLocal -Force | Out-Null
             Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 1
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSizeMove" -Value 1
@@ -332,16 +337,11 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
             if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0 }
             else { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 1 }
-            # reg import .\config\sabv2.reg
-            $registryPath = "$exRegPath\StuckRectsLegacy"
-            $registryValueName = "Settings"
-            $registryValueData = @(0x30,0x00,0x00,0x00,0xfe,0xff,0xff,0xff,0x02,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x5a,0x00,0x00,0x00,0x32,0x00,0x00,0x00,0x26,0x07,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0x07,0x00,0x00,0x38,0x04,0x00,0x00,0x78,0x00,0x00,0x00,0x01,0x00,0x00,0x00)
             # if (!(get-itemproperty -Path $registryPath -Name $registryValueName -ErrorAction SilentlyContinue)) {
             # }
             # while (!(get-itemproperty -Path $registryPath -Name $registryValueName -ErrorAction SilentlyContinue)) {
             #     Start-Sleep -Seconds 1
             # }
-            New-ItemProperty -Path $registryPath -Name $propertyName -Value $propertyValue -PropertyType Binary
             # Set-ItemProperty -Path $registryPath -Name $registryValueName -Value $registryValueData -Force
             # Start-Sleep 3
             Stop-Process -Name explorer -Force | Out-Null
