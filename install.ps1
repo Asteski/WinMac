@@ -294,7 +294,12 @@ foreach ($app in $selectedApps) {
             $sabRegPath = "HKCU:\Software\StartIsBack"
             Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
             winget install --id "StartIsBack.StartAllBack" --source winget --silent | Out-Null
-
+            
+            $registryPath = "$exRegPath\StuckRectsLegacy"
+            $registryValueName = "Settings"
+            $registryValueData = @(0x30,0x00,0x00,0x00,0xfe,0xff,0xff,0xff,0x02,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x5a,0x00,0x00,0x00,0x32,0x00,0x00,0x00,0x26,0x07,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0x07,0x00,0x00,0x38,0x04,0x00,0x00,0x78,0x00,0x00,0x00,0x01,0x00,0x00,0x00)
+            Set-ItemProperty -Path $registryPath -Name $registryValueName -Value $registryValueData -Force
+            stop-process -n explorer -Force
             Copy-Item $pwd\config\taskbar\orbs\* $sabLocal -Force | Out-Null
             Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 1
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSizeMove" -Value 1
@@ -333,33 +338,9 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
             if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0 }
             else { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 1 }
-            $registryPath = "$exRegPath\StuckRectsLegacy"
-            $registryValueName = "Settings"
-            $registryValueData = @(0x30,0x00,0x00,0x00,0xfe,0xff,0xff,0xff,0x02,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x5a,0x00,0x00,0x00,0x32,0x00,0x00,0x00,0x26,0x07,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0x07,0x00,0x00,0x38,0x04,0x00,0x00,0x78,0x00,0x00,0x00,0x01,0x00,0x00,0x00)
-            Set-ItemProperty -Path $registryPath -Name $registryValueName -Value $registryValueData -Force            taskkill -f -im explorer.exe
+            Stop-Process -Name explorer -Force | Out-Null
             Start-Sleep 3
-            explorer.exe
-            Start-Sleep 3
-            # $screen = [System.Windows.Forms.SystemInformation]::VirtualScreen
-            # $w = $screen.width/4
-            # [Windows.Forms.Cursor]::Position = "$($w),$($screen.Height)"
-            # Start-Sleep -Seconds 2
-            # [MouseInput]::HoldLeftMouseButton()
-            # Start-Sleep -Seconds 2
-            # [Windows.Forms.Cursor]::Position = "$($w),1"
-            # Start-Sleep -Seconds 2
-            # [MouseInput]::ReleaseLeftMouseButton()
-            # Start-Sleep -Seconds 2
-            # $screen = [System.Windows.Forms.SystemInformation]::VirtualScreen
-            # $centerX = $screen.Width / 2
-            # $centerY = $screen.Height / 2
-            # [Windows.Forms.Cursor]::Position = "$centerX,$centerY"
-            # Start-Sleep -Milliseconds 100
-            # [MouseInput]::HoldLeftMouseButton()
-            # Start-Sleep -Milliseconds 100
-            # [MouseInput]::ReleaseLeftMouseButton()
-            # Start-Sleep -Milliseconds 100
-            # Start-Sleep -Seconds 2
+
             Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
         }
         "5" {
