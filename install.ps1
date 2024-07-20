@@ -293,7 +293,7 @@ foreach ($app in $selectedApps) {
             $sabLocal = ($env:AppData | Split-Path) + "\local\StartAllBack\Orbs"
             $sabRegPath = "HKCU:\Software\StartIsBack"
             Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
-            winget install --id "StartIsBack.StartAllBack" --source winget --silent | Out-Null
+            # winget install --id "StartIsBack.StartAllBack" --source winget --silent | Out-Null
             Copy-Item $pwd\config\taskbar\orbs\* $sabLocal -Force | Out-Null
             Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 1
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSizeMove" -Value 1
