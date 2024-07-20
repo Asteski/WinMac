@@ -342,6 +342,8 @@ foreach ($app in $selectedApps) {
             # Start-Sleep 3
             Stop-Process -Name explorer -Force | Out-Null
             # Start-Sleep 3
+            winget install --id autohotkey.autohotkey --source winget --version --silent | Out-Null
+            .\config\ahk\startmenu-sabv2.ahk
             Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
         }
         "5" {
