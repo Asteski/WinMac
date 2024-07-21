@@ -361,14 +361,14 @@ foreach ($app in $selectedApps) {
             ## AutoHotkey
             if ($menuSet -ne 'c') {
                 Write-Host "Configuring AutoHotkey..." -ForegroundColor Yellow
-                winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
-                .\config\ahk\startmenu-ahk-v2.ahk
                 $taskName = "WinMacMenu"
                 $exeFile = "WinMacMenu.ahk"
                 $exePath = "$pwd\config\ahk\"
+                winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
+                Start-Process -FilePath "$exePath\$exeFile"
                 $action = New-ScheduledTaskAction -Execute $exeFile -WorkingDirectory $exePath
                 $trigger = New-ScheduledTaskTrigger -AtLogon
-                Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger
+                Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger  | Out-Null
                 Write-Host "Configuring AutoHotkey completed." -ForegroundColor Green
             }
         }

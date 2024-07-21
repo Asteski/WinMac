@@ -197,14 +197,13 @@ foreach ($app in $selectedApps) {
             Start-Sleep 3
         }
         "5" {
-            ## Open-Shell
-            Write-Host "Uninstalling Open-Shell..." -ForegroundColor Yellow
-            Stop-Process -Name startmenu -Force | Out-Null
-            winget uninstall --id "Open-Shell.Open-Shell-Menu" --source winget --force | Out-Null
-            Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\winx" -Recurse -Force | Out-Null
-            Expand-Archive -Path "$pwd\config\WinX_default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
-            Stop-Process -n Explorer
-            Write-Host "Uninstalling Open-Shell completed." -ForegroundColor Green
+            ## AutoHotkey
+            Write-Host "Uninstalling AutoHotkey..." -ForegroundColor Yellow
+            Stop-Process -Name "AutoHotkey*" -Force | Out-Null
+            winget uninstall --id autohotkey.autohotkey --source winget --force | Out-Null
+            $ahkTask = Get-ScheduledTask -TaskName "WinMacMenu" -ErrorAction SilentlyContinue
+            Unregister-ScheduledTask -TaskName "WinMacMenu" -Confirm:$false -ErrorAction SilentlyContinue
+            Write-Host "Uninstalling AutoHotkey completed." -ForegroundColor Green
         }
         "6" {
             # TopNotify
