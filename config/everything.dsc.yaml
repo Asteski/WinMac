@@ -15,5 +15,5 @@ properties:
           Position: "Focus"
           Everything:
             Enabled: true
-            ActivationMethod: ?
+            ActivationMethod: "?"
   configurationVersion: 0.2.0
