@@ -35,6 +35,9 @@ properties:
           Plugins:
             - Name: "Calculator"
               Disabled: false
+            - Name: "Everything"
+              Disabled: false
+              ActionKeyword: "?"
             - Name: "Folder"
               Disabled: false
             - Name: "Program"
