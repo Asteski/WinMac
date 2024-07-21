@@ -4,7 +4,16 @@ properties:
       directives:
         description: Configure PowerToys Everything plugin
       settings:
-        Everything:
+        PowerLauncher:        
           Enabled: true
-          ActivationMethod: ?
+          OpenPowerLauncher: "Ctrl+Space"
+          UseCentralizedKeyboardHook: true
+          SearchQueryTuningEnabled: true
+          IgnoreHotkeysInFullscreen: false
+          GenerateThumbnailsFromFiles: false
+          TabSelectsContextButtons: true
+          Position: "Focus"
+          Everything:
+            Enabled: true
+            ActivationMethod: ?
   configurationVersion: 0.2.0
