@@ -1,0 +1,10 @@
+properties:
+  resources:
+    - resource: PowerToysConfigure
+      directives:
+        description: Configure PowerToys Everything plugin
+      settings:
+        Everything:
+          Enabled: true
+          ActivationMethod: ?
+  configurationVersion: 0.2.0
