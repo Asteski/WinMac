@@ -5,7 +5,7 @@ Write-Host @"
 Welcome to WinMac Deployment!
 
 Author: Asteski
-Version: 0.4.2
+Version: 0.5.0
 
 This is Work in Progress. You're using this script at your own risk.
 
@@ -54,7 +54,7 @@ $([char]27)[93m$("Please select options you want to uninstall:")$([char]27)[0m
     Write-Host "2. Everything"
     Write-Host "3. Powershell Profile"
     Write-Host "4. StartAllBack"
-    Write-Host "5. Open-Shell"
+    Write-Host "5. AutoHotkey"
     Write-Host "6. TopNotify"
     Write-Host "7. Nexus Dock"
     Write-Host "8. Stahky"
