@@ -309,7 +309,7 @@ foreach ($app in $selectedApps) {
             $sabLocal = ($env:AppData | Split-Path) + "\local\StartAllBack\Orbs"
             $sabRegPath = "HKCU:\Software\StartIsBack"
             Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
-            winget install --id "StartIsBack.StartAllBack" --source winget --silent
+            winget install --id "StartIsBack.StartAllBack" --source winget --silent | Out-Null
             $registryPath = "$exRegPath\StuckRectsLegacy"
             $registryValueName = "Settings"
             $registryValueData = @(0x30,0x00,0x00,0x00,0xfe,0xff,0xff,0xff,0x02,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x5a,0x00,0x00,0x00,0x32,0x00,0x00,0x00,0x26,0x07,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0x07,0x00,0x00,0x38,0x04,0x00,0x00,0x78,0x00,0x00,0x00,0x01,0x00,0x00,0x00)
@@ -366,7 +366,7 @@ foreach ($app in $selectedApps) {
                 $taskName = "WinMacMenu"
                 $exeFile = "WinMacMenu.ahk"
                 $exePath = "$pwd\config\ahk\"
-                $action = New-ScheduledTaskAction -Execute $exeFile -WorkingDirectory $ex4ePath
+                $action = New-ScheduledTaskAction -Execute $exeFile -WorkingDirectory $exePath
                 $trigger = New-ScheduledTaskTrigger -AtLogon
                 Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger
                 Write-Host "Configuring AutoHotkey completed." -ForegroundColor Green
