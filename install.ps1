@@ -109,19 +109,21 @@ else
     $promptSet = 'y'
 }
 
-$menuSet = Read-Host "Do you want to use WinMac Default or Classic start menu? (x/c)"
-if ($menuSet -eq 'x') {
-    Write-Host "Using WinMac start menu." -ForegroundColor Yellow
-}
-elseif ($menuSet -eq 'c')
-{ 
-    Write-Host "Using Classic start menu." -ForegroundColor Yellow
-}
-else
-{
-    Write-Host "Invalid input. Defaulting to WinMac start menu." -ForegroundColor Yellow
-    $menuSet = 'x'
-}
+if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
+    $menuSet = Read-Host "Do you want to use WinMac Default or Classic start menu? (x/c)"
+    if ($menuSet -eq 'x') {
+        Write-Host "Using WinMac start menu." -ForegroundColor Yellow
+    }
+    elseif ($menuSet -eq 'c')
+    { 
+        Write-Host "Using Classic start menu." -ForegroundColor Yellow
+    }
+    else
+    {
+        Write-Host "Invalid input. Defaulting to WinMac start menu." -ForegroundColor Yellow
+        $menuSet = 'x'
+    }
+} 
 
 Write-Host @"
 
@@ -364,7 +366,7 @@ foreach ($app in $selectedApps) {
                 $taskName = "WinMacMenu"
                 $exeFile = "WinMacMenu.ahk"
                 $exePath = "$pwd\config\ahk\"
-                $action = New-ScheduledTaskAction -Execute $exeFile -WorkingDirectory $exePath
+                $action = New-ScheduledTaskAction -Execute $exeFile -WorkingDirectory $ex4ePath
                 $trigger = New-ScheduledTaskTrigger -AtLogon
                 Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger
                 Write-Host "Configuring AutoHotkey completed." -ForegroundColor Green
