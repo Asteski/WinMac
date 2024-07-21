@@ -2,7 +2,7 @@ properties:
   resources:
     - resource: PowerToysConfigure
       directives:
-        description: Configure PowerToys Everything plugin
+        description: Configure PowerToys
       settings:
         PowerLauncher:        
           Enabled: true
@@ -13,7 +13,8 @@ properties:
           GenerateThumbnailsFromFiles: false
           TabSelectsContextButtons: true
           Position: "Focus"
-          Everything:
-            Enabled: true
-            ActivationMethod: "?"
+          Plugins:
+            - Name: "Everything"
+              Disabled: false
+              ActionKeyword: "?"
   configurationVersion: 0.2.0
