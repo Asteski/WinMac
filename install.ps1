@@ -110,7 +110,7 @@ else
 }
 
 if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
-    $menuSet = Read-Host "Do you want to use WinMac Default or Classic start menu? (x/c)"
+    $menuSet = Read-Host "Enter 'X' for WinMac start menu or 'C' for Classic start menu."
     if ($menuSet -eq 'x') {
         Write-Host "Using WinMac start menu." -ForegroundColor Yellow
     }
@@ -354,7 +354,7 @@ foreach ($app in $selectedApps) {
             if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0 }
             else { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 1 }
             Stop-Process -Name explorer -Force | Out-Null
-            Start-Sleep 3
+            Start-Sleep 2
             Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
         }
         "5" {
