@@ -46,11 +46,11 @@ set-alias -name fi -value ffind
 
 # Functions
 function psversion { $PSVersionTable }
-function l { Get-ChildItem $args | format-table -autosize }
-function ll { Get-ChildItem $args -Force | format-table -autosize }
-function la { Get-ChildItem $args -Force -Attributes !D | format-table -autosize }
-function ld { Get-ChildItem $args -Directory | format-table -autosize }
-function lls { (Get-ChildItem $args | ForEach-Object {
+function l { Get-ChildItem $args -ErrorAction SilentlyContinue | format-table -autosize }
+function ll { Get-ChildItem $args -Force -ErrorAction SilentlyContinue | format-table -autosize }
+function la { Get-ChildItem $args -Force -Attributes !D -ErrorAction SilentlyContinue | format-table -autosize }
+function ld { Get-ChildItem $args -Directory -ErrorAction SilentlyContinue | format-table -autosize }
+function lls { (Get-ChildItem $args -ErrorAction SilentlyContinue | ForEach-Object {
     if ($_.PSIsContainer) {
         Write-Host $_.Name "" -ForegroundColor Blue -NoNewline
     } else {
