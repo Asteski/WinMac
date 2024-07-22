@@ -13,8 +13,9 @@ StartOrb() {
 }
 
 StartCorner() {
-    MouseGetPos(&xpos, &ypos)
-	if (xpos <= 1) and (ypos <= 1)
+    MouseGetPos(&xpos, &ypos, &win)
+	class := WinGetClass("ahk_id " win)
+	if (xpos <= 1) and (ypos <= 1) and (class = "Shell_TrayWnd")
     	return true
 }
 
