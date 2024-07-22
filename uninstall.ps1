@@ -201,8 +201,8 @@ foreach ($app in $selectedApps) {
             Write-Host "Uninstalling AutoHotkey..." -ForegroundColor Yellow
             Stop-Process -Name "AutoHotkey*" -Force | Out-Null
             winget uninstall --id autohotkey.autohotkey --source winget --force | Out-Null
-            $ahkTask = Get-ScheduledTask -TaskName "WinMacMenu" -ErrorAction SilentlyContinue
             Unregister-ScheduledTask -TaskName "WinMacMenu" -Confirm:$false -ErrorAction SilentlyContinue
+            Unregister-ScheduledTask -TaskName "SameAppCycle" -Confirm:$false -ErrorAction SilentlyContinue
             Write-Host "Uninstalling AutoHotkey completed." -ForegroundColor Green
         }
         "6" {
