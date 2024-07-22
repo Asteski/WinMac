@@ -304,7 +304,8 @@ foreach ($app in $selectedApps) {
         "4" {
             ## StartAllBack
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
-            $sabLocal = ($env:AppData | Split-Path) + "\local\StartAllBack\Orbs"
+            # $sabLocal = ($env:AppData | Split-Path) + "\local\StartAllBack\Orbs"
+            $sabDir = $env:ProgramFiles + "\StartAllBack\Orbs"
             $sabRegPath = "HKCU:\Software\StartIsBack"
             Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
             # winget install --id "StartIsBack.StartAllBack" --source winget --silent | Out-Null
@@ -313,7 +314,7 @@ foreach ($app in $selectedApps) {
             $registryValueData = @(0x30,0x00,0x00,0x00,0xfe,0xff,0xff,0xff,0x02,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x5a,0x00,0x00,0x00,0x32,0x00,0x00,0x00,0x26,0x07,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0x07,0x00,0x00,0x38,0x04,0x00,0x00,0x78,0x00,0x00,0x00,0x01,0x00,0x00,0x00)
             New-Item -Path $registryPath -Force | Out-Null
             New-ItemProperty -Path $registryPath -Name $registryValueName -Value $registryValueData -PropertyType Binary | Out-Null
-            Copy-Item $pwd\config\taskbar\orbs\* $sabLocal -Force | Out-Null
+            Copy-Item $pwd\config\taskbar\orbs\* $sabDir -Force | Out-Null
             Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 1
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSizeMove" -Value 1
             Set-ItemProperty -Path $exRegPath\Advanced -Name "ShowStatusBar" -Value 0

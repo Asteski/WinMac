@@ -4,7 +4,7 @@
 
 ; Limitations
 ; • It does not work in Explorer app
-
+#NoTrayIcon
 SendMode("Input")
 SetWorkingDir(A_ScriptDir)
 
