@@ -260,9 +260,9 @@ foreach ($app in $selectedApps) {
             ## PowerToys
             # | Out-Null
             Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
-            winget install Microsoft.PowerToys --source winget --silent
-            winget install lin-ycv.EverythingPowerToys --source winget --silent
-            winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements
+            winget install Microsoft.PowerToys --source winget --silent | Out-Null
+            winget install lin-ycv.EverythingPowerToys --source winget --silent | Out-Null
+            winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
             Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force
             $ptDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Start-Process "$ptDir\PowerToys (Preview)\PowerToys (Preview).lnk" -WindowStyle Minimized
