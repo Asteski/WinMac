@@ -1,4 +1,5 @@
-﻿#HotIf HoveringStart() || CornerStart()
+﻿#NoTrayIcon
+#HotIf HoveringStart() || CornerStart()
 $LButton::MouseClick("right")
 Return
 #HotIf
