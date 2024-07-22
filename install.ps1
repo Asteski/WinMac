@@ -84,7 +84,7 @@ else
     Write-Host "Invalid input. Defaulting to full installation." -ForegroundColor Yellow
     $selectedApps = "1","2","3","4","5","6","7","8"
 }
-if ($selection -like '*3*') {
+if ($selectedApps -like '*3*') {
 Write-Host @"
 
 $([char]27)[93m$("You can choose between WinMac prompt or MacOS-like prompt.")$([char]27)[0m
@@ -137,7 +137,7 @@ Classic start menu replaces default menu with Enhanced Windows 7 menu.
     }
 }
 
-if ($selection -like '*4*') {
+if ($selectedApps -like '*4*') {
 Write-Host @"
 
 $([char]27)[93m$("You can choose between rounded or squared shell corners.")$([char]27)[0m
@@ -157,7 +157,7 @@ $([char]27)[93m$("You can choose between rounded or squared shell corners.")$([c
     }
 }
 
-if ($selection -like '*4*' -or $selection -like '*7*') {
+if ($selectedApps -like '*4*' -or $selectedApps -like '*7*') {
     Write-Host
     $lightOrDark = Read-Host "Enter 'L' for light themed or 'D' for dark themed Windows"
     if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
