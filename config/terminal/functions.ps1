@@ -39,28 +39,32 @@ set-alias -name random -value Get-RandomString
 set-alias -name user -value getuser
 set-alias -name pwd -value ppwd
 set-alias -name lnk -value run
-set-alias -name ld -value lld
 set-alias -name ls -value lls
-set-alias -name l -value lls
 set-alias -name stack -value stahky
 set-alias -name find -value ffind
 set-alias -name fi -value ffind
 
 # Functions
 function psversion { $PSVersionTable }
-function lls { Get-ChildItem | format-table -autosize }
-function ll { Get-ChildItem -Force | format-table -autosize }
-function la { Get-ChildItem -Force -Attributes !D | format-table -autosize }
-function lld { Get-ChildItem -Directory | format-table -autosize }
-# function wl { winget list } 
+function l { Get-ChildItem $args | format-table -autosize }
+function ll { Get-ChildItem $args -Force | format-table -autosize }
+function la { Get-ChildItem $args -Force -Attributes !D | format-table -autosize }
+function ld { Get-ChildItem $args -Directory | format-table -autosize }
+function lls { (Get-ChildItem $args | ForEach-Object {
+    if ($_.PSIsContainer) {
+        Write-Host $_.Name "" -ForegroundColor Green -NoNewline
+    } else {
+        Write-Host $_.Name "" -NoNewline
+    }
+})}
 function wl { $out = get-wingetpackage $args | Sort-Object name; if ($out) { $out } else { Write-Host "No package found" -ForegroundColor Red }}
+# function wl { winget list } 
 function wi { winget install $args }
 function wr { winget uninstall $args } 
 function ws { $appname = $args; winget search "$appname" }
 function wu { winget upgrade $args } 
 function ww { $appname = $args; winget show "$appname" }
 function ppwd { $pwd.path }
-function ld { Get-ChildItem -Directory }
 function c { Set-Location .. }
 function ffind { $filter = "*$args*"; if ($filter) {(Get-ChildItem -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -like $filter }).FullName} else {Write-Host "No filename provided." -ForegroundColor Red}}
 

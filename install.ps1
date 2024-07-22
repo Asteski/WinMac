@@ -288,7 +288,7 @@ foreach ($app in $selectedApps) {
                 "Vim.Vim",
                 "gsass1.NTop"
             )
-            foreach ($app in $winget) {winget install --id $app --source winget --silent | Out-Null .\.action}
+            foreach ($app in $winget) {winget install --id $app --source winget --silent | Out-Null }
             $vimParentPath = Join-Path $env:PROGRAMFILES Vim
             $latestSubfolder = Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -Property CreationTime -Descending | Select-Object -First 1
             $vimChildPath = $latestSubfolder.FullName
@@ -382,7 +382,7 @@ foreach ($app in $selectedApps) {
             Write-Host "Configuring TopNotify..." -ForegroundColor Yellow
             $exePath = ($env:AppData | Split-Path) + "\local\TopNotify"
             Get-Process TopNotify | Stop-Process -Force | Out-Null
-            if ($exePath){Remove-Item -Path $exePath -Recurse -Force | Out-Null}
+            if (Get-ChildItem $exePath -ErrorAction SilentlyContinue){Remove-Item -Path $exePath -Recurse -Force | Out-Null}
             winget install --id 9PFMDK0QHKQJ --silent --accept-package-agreements --accept-source-agreements | Out-Null
             $app = Get-AppxPackage *TopNotify*
             $pkgName = $app.PackageFamilyName
