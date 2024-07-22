@@ -373,16 +373,21 @@ foreach ($app in $selectedApps) {
                 $exePath = "$pwd\config\ahk"
                 $taskName1 = "WinMacMenu"
                 $exeFile1 = "WinMacMenu.ahk"
-                $taskName2 = "SameAppCycle"
-                $exeFile2 = "SameAppCycle.ahk"
+                $taskName2 = "WinMacWinKey"
+                $exeFile2 = "WinMacWinKey.ahk"
+                $taskName3 = "SameAppCycle"
+                $exeFile3 = "SameAppCycle.ahk"
                 winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
                 Start-Process -FilePath "$exePath\$exeFile1"
                 Start-Process -FilePath "$exePath\$exeFile2"
+                Start-Process -FilePath "$exePath\$exeFile3"
                 $action1 = New-ScheduledTaskAction -Execute $exeFile1 -WorkingDirectory $exePath
                 $action2 = New-ScheduledTaskAction -Execute $exeFile2 -WorkingDirectory $exePath
+                $action2 = New-ScheduledTaskAction -Execute $exeFile3 -WorkingDirectory $exePath
                 $trigger = New-ScheduledTaskTrigger -AtLogon
                 Register-ScheduledTask -TaskName $taskName1 -Action $action1 -Trigger $trigger  | Out-Null
                 Register-ScheduledTask -TaskName $taskName2 -Action $action2 -Trigger $trigger  | Out-Null
+                Register-ScheduledTask -TaskName $taskName3 -Action $action3 -Trigger $trigger  | Out-Null
                 Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force | Out-Null
                 Copy-Item -Path "$pwd\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force | Out-Null
                 Write-Host "Configuring AutoHotkey completed." -ForegroundColor Green
