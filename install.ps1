@@ -334,7 +334,7 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSmallIcons" -Value 1
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSi" -Value 0
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarAl" -Value 0
-            Set-ItemProperty -Path $exRegPath\Advanced -Name "UseCompactMode" -Value 1
+            Set-ItemProperty -Path $exRegPath\Advancedx -Name "UseCompactMode" -Value 1
             Set-ItemProperty -Path $sabRegPath -Name "WinBuild" -Value 22759
             Set-ItemProperty -Path $sabRegPath -Name "WinLangID" -Value 2064
             Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 0
@@ -408,7 +408,7 @@ foreach ($app in $selectedApps) {
             Start-Process Taskmgr
             while (!(Get-ItemProperty -Path "HKCU:Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\SystemAppData\$pkgName\$taskId" -Name State -ErrorAction SilentlyContinue)) {Start-Sleep -Seconds 1}
             Stop-Process -Name Taskmgr
-            $state = (Get-ItemProperty -Path "HKCU:Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\SystemAppData\$pkgName\$taskId" -Name State).State
+            # $state = (Get-ItemProperty -Path "HKCU:Software\Classes\Local Setting\Software\Microsoft\Windows\CurrentVersion\AppModel\SystemAppData\$pkgName\$taskId" -Name State).State
             $regKey = "HKCU:Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\SystemAppData\$pkgName\$taskId"
             Set-ItemProperty -Path $regKey -Name UserEnabledStartupOnce -Value 1
             Set-ItemProperty -Path $regKey -Name State -Value 2
