@@ -1,10 +1,10 @@
 ﻿#NoTrayIcon
-#HotIf HoveringStart() || CornerStart()
+#HotIf StartOrb() || StartCorner()
 $LButton::MouseClick("right")
 Return
 #HotIf
 
-HoveringStart() {
+StartOrb() {
     ; CoordMode, Mouse, Screen
     MouseGetPos(, , &win, &contr)
 	class := WinGetClass("ahk_id " win)
@@ -12,7 +12,7 @@ HoveringStart() {
     	return true
 }
 
-CornerStart() {
+StartCorner() {
     MouseGetPos(&xpos, &ypos)
 	if (xpos <= 1) and (ypos <= 1)
     	return true
