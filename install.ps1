@@ -109,6 +109,16 @@ else
     $promptSet = 'y'
 }
 
+Write-Host @"
+
+$([char]27)[93m$("You can choose between WinMac start menu or Classic start menu.")$([char]27)[0m
+
+WinMac start menu replaces standard Windows 11 Start Menu with WinX menu with customized shortcuts.
+
+Classic start menu replaces standard Windows 11 Start Menu with Enhanced Windows 7 Start Menu.
+
+"@
+
 if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
     $menuSet = Read-Host "Enter 'X' for WinMac start menu or 'C' for Classic start menu."
     if ($menuSet -eq 'x') {
