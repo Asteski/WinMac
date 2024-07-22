@@ -385,6 +385,7 @@ foreach ($app in $selectedApps) {
             if (Get-ChildItem $exePath -ErrorAction SilentlyContinue){Remove-Item -Path $exePath -Recurse -Force | Out-Null}
             winget install --id 9PFMDK0QHKQJ --silent --accept-package-agreements --accept-source-agreements | Out-Null
             $app = Get-AppxPackage *TopNotify*
+            Start-Process -FilePath TopNotify.exe -WorkingDirectory $app.InstallLocation
             $pkgName = $app.PackageFamilyName
             $startupTask = ($app | Get-AppxPackageManifest).Package.Applications.Application.Extensions.Extension | Where-Object -Property Category -Eq -Value windows.startupTask
             $taskId = $startupTask.StartupTask.TaskId
@@ -395,7 +396,6 @@ foreach ($app in $selectedApps) {
             $regKey = "HKCU:Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\SystemAppData\$pkgName\$taskId"
             Set-ItemProperty -Path $regKey -Name UserEnabledStartupOnce -Value 1
             Set-ItemProperty -Path $regKey -Name State -Value 2
-            Start-Process -FilePath TopNotify.exe -WorkingDirectory $app.InstallLocation
             Write-Host "Configuring TopNotify completed." -ForegroundColor Green
         }
         "7" {
