@@ -1,7 +1,10 @@
 #NoTrayIcon
 LWin up::
-If (A_PriorKey = "LWin") ; LWin was pressed alone
-    Send, #{x}
+{
+global
+If (A_PriorKey = "LWin")
+    Send("#{x}")
 return
+}
 
-<#d:: Send #d
+<#d::Send("#d")
