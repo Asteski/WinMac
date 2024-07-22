@@ -41,11 +41,11 @@ $fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom installation"
 if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
     Write-Host "Choosing full installation." -ForegroundColor Yellow
     $selectedApps = "1","2","3","4","5","6","7","8"
-}
-elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
+} elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
     Write-Host "Choosing custom installation." -ForegroundColor Yellow
     Start-Sleep 1
     $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="AutoHotkey"; "6"="TopNotify"; "7"="Stahky"; "8"="Other"}
+}
 Write-Host @"
 
 $([char]27)[93m$("Please select options you want to install:")$([char]27)[0m
@@ -83,7 +83,7 @@ else
     Write-Host "Invalid input. Defaulting to full installation." -ForegroundColor Yellow
     $selectedApps = "1","2","3","4","5","6","7","8"
 }
-#! only show if profiel selected
+if ($selection -like '*3*') {
 Write-Host @"
 
 $([char]27)[93m$("You can choose between WinMac prompt or MacOS-like prompt.")$([char]27)[0m
@@ -95,18 +95,19 @@ MacOS prompt:
 userName@computerName ~ % 
 
 "@
-$promptSet = Read-Host "Do you want to use WinMac prompt? (y/n)"
-if ($promptSet -eq 'y') {
-    Write-Host "Using WinMac prompt." -ForegroundColor Yellow
-}
-elseif ($promptSet -eq 'n')
-{ 
-    Write-Host "Using MacOS prompt." -ForegroundColor Yellow
-}
-else
-{
-    Write-Host "Invalid input. Defaulting to WinMac start menu." -ForegroundColor Yellow
-    $promptSet = 'y'
+    $promptSet = Read-Host "Do you want to use WinMac prompt? (y/n)"
+    if ($promptSet -eq 'y') {
+        Write-Host "Using WinMac prompt." -ForegroundColor Yellow
+    }
+    elseif ($promptSet -eq 'n')
+    { 
+        Write-Host "Using MacOS prompt." -ForegroundColor Yellow
+    }
+    else
+    {
+        Write-Host "Invalid input. Defaulting to WinMac start menu." -ForegroundColor Yellow
+        $promptSet = 'y'
+    }
 }
 
 if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
@@ -135,39 +136,42 @@ Classic start menu replaces default menu with Enhanced Windows 7 menu.
     }
 }
 
-#! only show if sab
+if ($selection -like '*4*') {
 Write-Host @"
 
 $([char]27)[93m$("You can choose between rounded or squared shell corners.")$([char]27)[0m
 
 "@
-$roundedOrSquared = Read-Host "Enter 'R' for rounded corners or 'S' for squared corners"
-if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') {
-    Write-Host "Using rounded corners." -ForegroundColor Yellow
+    $roundedOrSquared = Read-Host "Enter 'R' for rounded corners or 'S' for squared corners"
+    if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') {
+        Write-Host "Using rounded corners." -ForegroundColor Yellow
+    }
+    elseif ($roundedOrSquared -eq 'S' -or $roundedOrSquared -eq 's') {
+        Write-Host "Using squared corners." -ForegroundColor Yellow
+    }
+    else
+    {
+        Write-Host "Invalid input. Defaulting to rounded corners." -ForegroundColor Yellow
+        $roundedOrSquared = 'R'
+    }
 }
-elseif ($roundedOrSquared -eq 'S' -or $roundedOrSquared -eq 's') {
-    Write-Host "Using squared corners." -ForegroundColor Yellow
-}
-else
-{
-    Write-Host "Invalid input. Defaulting to rounded corners." -ForegroundColor Yellow
-    $roundedOrSquared = 'R'
-}
-#! only show if sab/stahky
-Write-Host
-$lightOrDark = Read-Host "Enter 'L' for light themed or 'D' for dark themed Windows"
-if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
-    $stackTheme = 'light'
-    $orbTheme = 'black.svg'
-    Write-Host "Using light theme." -ForegroundColor Yellow 
-} elseif ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
-    $stackTheme = 'dark'
-    $orbTheme = 'white.svg'
-    Write-Host "Using dark theme." -ForegroundColor Yellow
-} else {
-    $stackTheme = 'light'
-    $orbTheme = 'black.svg'
-    Write-Host "Invalid input. Defaulting to light theme." -ForegroundColor Yellow
+
+if ($selection -like '*4*' -or $selection -like '*7*') {
+    Write-Host
+    $lightOrDark = Read-Host "Enter 'L' for light themed or 'D' for dark themed Windows"
+    if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
+        $stackTheme = 'light'
+        $orbTheme = 'black.svg'
+        Write-Host "Using light theme." -ForegroundColor Yellow 
+    } elseif ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
+        $stackTheme = 'dark'
+        $orbTheme = 'white.svg'
+        Write-Host "Using dark theme." -ForegroundColor Yellow
+    } else {
+        $stackTheme = 'light'
+        $orbTheme = 'black.svg'
+        Write-Host "Invalid input. Defaulting to light theme." -ForegroundColor Yellow
+    }
 }
 
 Start-Sleep 1
