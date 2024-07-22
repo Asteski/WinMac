@@ -370,7 +370,7 @@ foreach ($app in $selectedApps) {
             ## AutoHotkey
             if ($menuSet -ne 'c') {
                 Write-Host "Configuring AutoHotkey..." -ForegroundColor Yellow  
-                $exePath = "$pwd\config\ahk\"
+                $exePath = "$pwd\config\ahk"
                 $taskName1 = "WinMacMenu"
                 $exeFile1 = "WinMacMenu.ahk"
                 $taskName2 = "SameAppCycle"
