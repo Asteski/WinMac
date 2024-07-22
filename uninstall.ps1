@@ -208,9 +208,7 @@ foreach ($app in $selectedApps) {
         "6" {
             # TopNotify
             Write-Host "Uninstalling TopNotify..." -ForegroundColor Yellow
-            $exePath = ($env:AppData | Split-Path) + "\local\TopNotify"
-            Get-Process TopNotify | Stop-Process -Force | Out-Null
-            Remove-Item -Path $exePath -Recurse -Force | Out-Null
+            winget uninstall --id 9PFMDK0QHKQJ --silent | Out-Null
             Write-Host "Uninstalling TopNotify completed." -ForegroundColor Green
         }
         "7" {
