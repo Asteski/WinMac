@@ -382,9 +382,11 @@ foreach ($app in $selectedApps) {
                 Start-Process -FilePath "$exePath\$exeFile2"
                 $action1 = New-ScheduledTaskAction -Execute $exeFile1 -WorkingDirectory $exePath
                 $action2 = New-ScheduledTaskAction -Execute $exeFile2 -WorkingDirectory $exePath
+                $action3 = New-ScheduledTaskAction -Execute $exeFile3 -WorkingDirectory $exePath
                 $trigger = New-ScheduledTaskTrigger -AtLogon
                 Register-ScheduledTask -TaskName $taskName1 -Action $action1 -Trigger $trigger  | Out-Null
                 Register-ScheduledTask -TaskName $taskName2 -Action $action2 -Trigger $trigger  | Out-Null
+                Register-ScheduledTask -TaskName $taskName2 -Action $action3 -Trigger $trigger  | Out-Null
                 Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force | Out-Null
                 Copy-Item -Path "$pwd\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force | Out-Null
                 Write-Host "Configuring AutoHotkey completed." -ForegroundColor Green
