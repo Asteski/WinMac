@@ -133,7 +133,7 @@ Classic start menu replaces default menu with Enhanced Windows 7 menu.
         Write-Host "Invalid input. Defaulting to WinMac start menu." -ForegroundColor Yellow
         $menuSet = 'x'
     }
-} 
+}
 
 Write-Host @"
 
