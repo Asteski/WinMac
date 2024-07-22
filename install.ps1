@@ -304,7 +304,6 @@ foreach ($app in $selectedApps) {
         "4" {
             ## StartAllBack
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
-            # $sabLocal = ($env:AppData | Split-Path) + "\local\StartAllBack\Orbs"
             $sabOrbs = $env:ProgramFiles + "\StartAllBack\Orbs"
             $sabRegPath = "HKCU:\Software\StartIsBack"
             Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
@@ -327,7 +326,7 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $exRegPath\Advanced -Name "UseCompactMode" -Value 1
             Set-ItemProperty -Path $sabRegPath -Name "WinBuild" -Value 22759
             Set-ItemProperty -Path $sabRegPath -Name "WinLangID" -Value 2064
-            Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1
+            Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 0
             Set-ItemProperty -Path $sabRegPath -Name "RestyleControls" -Value 1
             Set-ItemProperty -Path $sabRegPath -Name "WelcomeShown" -Value 3
             Set-ItemProperty -Path $sabRegPath -Name "UpdateCheck" -Value ([byte[]](160, 224, 8, 201, 49, 125, 218, 1))
