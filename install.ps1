@@ -113,9 +113,9 @@ Write-Host @"
 
 $([char]27)[93m$("You can choose between WinMac start menu or Classic start menu.")$([char]27)[0m
 
-WinMac start menu replaces standard Start Menu with WinX menu with customized shortcuts.
+WinMac start menu replaces default menu with customized WinX menu.
 
-Classic start menu replaces standard Start Menu with Enhanced Windows 7 menu.
+Classic start menu replaces default menu with Enhanced Windows 7 menu.
 
 "@
 
