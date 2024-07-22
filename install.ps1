@@ -380,11 +380,18 @@ foreach ($app in $selectedApps) {
         "6" {
             # TopNotify
             Write-Host "Configuring TopNotify..." -ForegroundColor Yellow
-            Invoke-WebRequest "https://github.com/SamsidParty/TopNotify/releases/download/2.3.1/TopNotify.zip" -OutFile ".\temp\TopNotify.zip"
-            $exePath = $env:AppData + "\TopNotify"
-            Expand-Archive .\temp\TopNotify.zip -DestinationPath $exePath -Force
-            Start-Process -FilePath $exePath\TopNotify.exe
-            Remove-Item -Path .\temp\TopNotify.zip -Force
+            $exePath = ($env:AppData | Split-Path) + "\local\TopNotify"
+            Get-Process TopNotify | Stop-Process -Force | Out-Null
+            if ($exePath){Remove-Item -Path $exePath -Recurse -Force | Out-Null}
+            winget install --id 9PFMDK0QHKQJ --silent --accept-package-agreements --accept-source-agreements | Out-Null
+            $app = Get-AppxPackage *TopNotify*
+            $pkgName = $app.PackageFamilyName
+            $startupTask = ($app | Get-AppxPackageManifest).Package.Applications.Application.Extensions.Extension | Where-Object -Property Category -Eq -Value windows.startupTask
+            $taskId = $startupTask.StartupTask.TaskId
+            $state = (Get-ItemProperty -Path "HKCU:Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\SystemAppData\$pkgName\$taskId" -Name State).State
+            $regKey = "HKCU:Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\SystemAppData\$pkgName\$taskId"
+            Set-ItemProperty -Path $regKey -Name UserEnabledStartupOnce -Value 1
+            Set-ItemProperty -Path $regKey -Name State -Value 2
             Write-Host "Configuring TopNotify completed." -ForegroundColor Green
         }
         "7" {
