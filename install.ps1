@@ -41,11 +41,12 @@ $fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom installation"
 if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
     Write-Host "Choosing full installation." -ForegroundColor Yellow
     $selectedApps = "1","2","3","4","5","6","7","8"
-} elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
+} 
+elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
     Write-Host "Choosing custom installation." -ForegroundColor Yellow
     Start-Sleep 1
     $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="AutoHotkey"; "6"="TopNotify"; "7"="Stahky"; "8"="Other"}
-}
+
 Write-Host @"
 
 $([char]27)[93m$("Please select options you want to install:")$([char]27)[0m
