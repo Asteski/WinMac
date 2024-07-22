@@ -12,7 +12,8 @@ HoveringStart() {
 }
 
 CornerStart() {
-    MouseGetPos &xpos, &ypos
+    MouseGetPos(&xpos, &ypos)
 	if (xpos <= 1) and (ypos <= 1)
     	return true
 }
+
