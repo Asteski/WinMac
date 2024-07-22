@@ -306,7 +306,7 @@ foreach ($app in $selectedApps) {
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             $sabLocal = ($env:AppData | Split-Path) + "\local\StartAllBack\Orbs"
             $sabRegPath = "HKCU:\Software\StartIsBack"
-            Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
+            # Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
             winget install --id "StartIsBack.StartAllBack" --source winget --silent | Out-Null
             $registryPath = "$exRegPath\StuckRectsLegacy"
             $registryValueName = "Settings"
@@ -359,14 +359,20 @@ foreach ($app in $selectedApps) {
             ## AutoHotkey
             if ($menuSet -ne 'c') {
                 Write-Host "Configuring AutoHotkey..." -ForegroundColor Yellow
-                $taskName = "WinMacMenu"
-                $exeFile = "WinMacMenu.ahk"
+                $taskName1 = "WinMacMenu"
+                $exeFile1 = "WinMacMenu.ahk"
+                $exePath = "$pwd\config\ahk\"
+                $taskName2 = "SameAppCycle"
+                $exeFile2 = "SameAppCycle.ahk"
                 $exePath = "$pwd\config\ahk\"
                 winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
-                Start-Process -FilePath "$exePath\$exeFile"
-                $action = New-ScheduledTaskAction -Execute $exeFile -WorkingDirectory $exePath
+                Start-Process -FilePath "$exePath\$exeFile1"
+                Start-Process -FilePath "$exePath\$exeFile2"
+                $action1 = New-ScheduledTaskAction -Execute $exeFile1 -WorkingDirectory $exePath
+                $action2 = New-ScheduledTaskAction -Execute $exeFile2 -WorkingDirectory $exePath
                 $trigger = New-ScheduledTaskTrigger -AtLogon
-                Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger  | Out-Null
+                Register-ScheduledTask -TaskName $taskName1 -Action $action1 -Trigger $trigger  | Out-Null
+                Register-ScheduledTask -TaskName $taskName2 -Action $action2 -Trigger $trigger  | Out-Null
                 Write-Host "Configuring AutoHotkey completed." -ForegroundColor Green
             }
         }
