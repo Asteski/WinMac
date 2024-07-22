@@ -109,6 +109,7 @@ else
     $promptSet = 'y'
 }
 
+if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
 Write-Host @"
 
 $([char]27)[93m$("You can choose between WinMac start menu or Classic start menu.")$([char]27)[0m
@@ -119,7 +120,6 @@ Classic start menu replaces default menu with Enhanced Windows 7 menu.
 
 "@
 
-if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
     $menuSet = Read-Host "Enter 'X' for WinMac start menu or 'C' for Classic start menu."
     if ($menuSet -eq 'x') {
         Write-Host "Using WinMac start menu." -ForegroundColor Yellow
