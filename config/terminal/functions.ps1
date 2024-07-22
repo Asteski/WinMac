@@ -52,7 +52,7 @@ function la { Get-ChildItem $args -Force -Attributes !D | format-table -autosize
 function ld { Get-ChildItem $args -Directory | format-table -autosize }
 function lls { (Get-ChildItem $args | ForEach-Object {
     if ($_.PSIsContainer) {
-        Write-Host $_.Name "" -ForegroundColor Green -NoNewline
+        Write-Host $_.Name "" -ForegroundColor Blue -NoNewline
     } else {
         Write-Host $_.Name "" -NoNewline
     }
