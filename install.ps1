@@ -85,6 +85,7 @@ else
     $selectedApps = "1","2","3","4","5","6","7","8"
 }
 
+if ($selectedApps -like '*4*') {
 Write-Host @"
 
 $([char]27)[93m$("You can choose between WinMac start menu or Classic start menu.")$([char]27)[0m
@@ -95,18 +96,19 @@ Classic start menu replaces default menu with Enhanced Windows 7 menu.
 
 "@
 
-$menuSet = Read-Host "Enter 'X' for WinMac start menu or 'C' for Classic start menu."
-if ($menuSet -eq 'x') {
-    Write-Host "Using WinMac start menu." -ForegroundColor Yellow
-}
-elseif ($menuSet -eq 'c')
-{ 
-    Write-Host "Using Classic start menu." -ForegroundColor Yellow
-}
-else
-{
-    Write-Host "Invalid input. Defaulting to WinMac start menu." -ForegroundColor Yellow
-    $menuSet = 'x'
+    $menuSet = Read-Host "Enter 'X' for WinMac start menu or 'C' for Classic start menu."
+    if ($menuSet -eq 'x') {
+        Write-Host "Using WinMac start menu." -ForegroundColor Yellow
+    }
+    elseif ($menuSet -eq 'c')
+    { 
+        Write-Host "Using Classic start menu." -ForegroundColor Yellow
+    }
+    else
+    {
+        Write-Host "Invalid input. Defaulting to WinMac start menu." -ForegroundColor Yellow
+        $menuSet = 'x'
+    }
 }
 
 if ($selectedApps -like '*3*') {
