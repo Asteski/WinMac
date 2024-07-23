@@ -98,11 +98,11 @@ Classic start menu replaces default menu with Enhanced Windows 7 menu.
 
     $menuSet = Read-Host "Enter 'X' for WinMac start menu or 'C' for Classic start menu."
     if ($menuSet -eq 'x') {
-        Write-Host "Using WinMac start menu." -ForegroundColor Yellow
+        Write-Host "Using WinMac start menu." -ForegroundColor Green
     }
     elseif ($menuSet -eq 'c')
     { 
-        Write-Host "Using Classic start menu." -ForegroundColor Yellow
+        Write-Host "Using Classic start menu." -ForegroundColor Green
     }
     else
     {
@@ -125,11 +125,11 @@ userName@computerName ~ %
 "@
     $promptSet = Read-Host "Do you want to use WinMac prompt? (y/n)"
     if ($promptSet -eq 'y') {
-        Write-Host "Using WinMac prompt." -ForegroundColor Yellow
+        Write-Host "Using WinMac prompt." -ForegroundColor Green
     }
     elseif ($promptSet -eq 'n')
     { 
-        Write-Host "Using MacOS prompt." -ForegroundColor Yellow
+        Write-Host "Using MacOS prompt." -ForegroundColor Green
     }
     else
     {
@@ -146,10 +146,10 @@ $([char]27)[93m$("You can choose between rounded or squared shell corners.")$([c
 "@
     $roundedOrSquared = Read-Host "Enter 'R' for rounded corners or 'S' for squared corners"
     if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') {
-        Write-Host "Using rounded corners." -ForegroundColor Yellow
+        Write-Host "Using rounded corners." -ForegroundColor Green
     }
     elseif ($roundedOrSquared -eq 'S' -or $roundedOrSquared -eq 's') {
-        Write-Host "Using squared corners." -ForegroundColor Yellow
+        Write-Host "Using squared corners." -ForegroundColor Green
     }
     else
     {
@@ -162,11 +162,11 @@ if ($selectedApps -like '*4*' -or $selectedApps -like '*7*') {
     Write-Host
     $lightOrDark = Read-Host "Enter 'L' for light themed or 'D' for dark themed Windows"
     if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
-        Write-Host "Using light theme." -ForegroundColor Yellow
+        Write-Host "Using light theme." -ForegroundColor Green
         $stackTheme = 'light'
         $orbTheme = 'black.svg'
     } elseif ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
-        Write-Host "Using dark theme." -ForegroundColor Yellow
+        Write-Host "Using dark theme." -ForegroundColor Green
         $stackTheme = 'dark'
         $orbTheme = 'white.svg'
     } else {
