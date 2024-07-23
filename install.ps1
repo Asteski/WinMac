@@ -161,17 +161,17 @@ if ($selectedApps -like '*4*' -or $selectedApps -like '*7*') {
     Write-Host
     $lightOrDark = Read-Host "Enter 'L' for light themed or 'D' for dark themed Windows"
     if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
+        Write-Host "Using light theme." -ForegroundColor Yellow
         $stackTheme = 'light'
         $orbTheme = 'black.svg'
-        Write-Host "Using light theme." -ForegroundColor Yellow 
     } elseif ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
+        Write-Host "Using dark theme." -ForegroundColor Yellow
         $stackTheme = 'dark'
         $orbTheme = 'white.svg'
-        Write-Host "Using dark theme." -ForegroundColor Yellow
     } else {
+        Write-Host "Invalid input. Defaulting to light theme." -ForegroundColor Yellow
         $stackTheme = 'light'
         $orbTheme = 'black.svg'
-        Write-Host "Invalid input. Defaulting to light theme." -ForegroundColor Yellow
     }
 }
 
@@ -385,7 +385,7 @@ foreach ($app in $selectedApps) {
             $trigger = New-ScheduledTaskTrigger -AtLogon
             Register-ScheduledTask -TaskName $taskName1 -Action $action1 -Trigger $trigger  | Out-Null
             Start-Process -FilePath "$exePath\$exeFile1"
-            if ($menuSet -ne 'c') {
+            if ($menuSet -ne 'c' -or $fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
                 $taskName2 = "WinMacMenu"
                 $exeFile2 = "WinMacMenu.ahk"
                 $taskName3 = "WinMacWinKey"
