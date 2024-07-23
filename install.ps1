@@ -217,42 +217,42 @@ if ($null -eq $wingetCheck) {
     Write-Host "$([char]27)[92m$("Winget is already installed.")$([char]27)[0m Version: $($wingetCheck)"
 }
 
-## Defintions
-Add-Type -AssemblyName System.Windows.Forms
-Add-Type -TypeDefinition @"
-using System;
-using System.Runtime.InteropServices;
+# ## Defintions
+# Add-Type -AssemblyName System.Windows.Forms
+# Add-Type -TypeDefinition @"
+# using System;
+# using System.Runtime.InteropServices;
 
-public class MouseInput
-{
-    [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
-    public static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint cButtons, uint dwExtraInfo);
+# public class MouseInput
+# {
+#     [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+#     public static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint cButtons, uint dwExtraInfo);
     
-    public const uint MOUSEEVENTF_LEFTDOWN = 0x02;
-    public const uint MOUSEEVENTF_LEFTUP = 0x04;
+#     public const uint MOUSEEVENTF_LEFTDOWN = 0x02;
+#     public const uint MOUSEEVENTF_LEFTUP = 0x04;
 
-    public static void HoldLeftMouseButton()
-    {
-        mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
-    }
+#     public static void HoldLeftMouseButton()
+#     {
+#         mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
+#     }
     
-    public static void ReleaseLeftMouseButton()
-    {
-        mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
-    }
-}
-"@
-Add-Type -TypeDefinition @"
-using System;
-using System.Runtime.InteropServices;
-public class Taskbar {
-    [DllImport("user32.dll", SetLastError = true)]
-    public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+#     public static void ReleaseLeftMouseButton()
+#     {
+#         mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+#     }
+# }
+# "@
+# Add-Type -TypeDefinition @"
+# using System;
+# using System.Runtime.InteropServices;
+# public class Taskbar {
+#     [DllImport("user32.dll", SetLastError = true)]
+#     public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
 
-    [DllImport("user32.dll", SetLastError = true)]
-    public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
-}
-"@
+#     [DllImport("user32.dll", SetLastError = true)]
+#     public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+# }
+# "@
 
 foreach ($app in $selectedApps) {
     switch ($app.Trim()) {
