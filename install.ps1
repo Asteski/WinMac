@@ -39,11 +39,11 @@ Start-Transcript -Path ".\temp\WinMac_install_log_$date.txt" -Append | Out-Null
 Write-Host
 $fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom installation"
 if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
-    Write-Host "Choosing full installation." -ForegroundColor Yellow
+    Write-Host "Choosing full installation." -ForegroundColor Green
     $selectedApps = "1","2","3","4","5","6","7","8"
 } 
 elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
-    Write-Host "Choosing custom installation." -ForegroundColor Yellow
+    Write-Host "Choosing custom installation." -ForegroundColor Green
     Start-Sleep 1
     $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="AutoHotkey"; "6"="TopNotify"; "7"="Stahky"; "8"="Other"}
 
@@ -133,7 +133,7 @@ userName@computerName ~ %
     }
     else
     {
-        Write-Host "Invalid input. Defaulting to WinMac start menu." -ForegroundColor Yellow
+        Write-Host "Invalid input. Defaulting to WinMac prompt." -ForegroundColor Yellow
         $promptSet = 'W'
     }
 }
