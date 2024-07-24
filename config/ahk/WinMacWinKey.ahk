@@ -1,3 +1,4 @@
+#NoTrayIcon
 ih := InputHook('L1')
 
 LWin Up::ih.Stop
