@@ -96,7 +96,7 @@ Classic start menu replaces default menu with Enhanced Windows 7 menu.
 
 "@
 
-    $menuSet = Read-Host "Enter 'X' for WinMac start menu or 'C' for Classic start menu."
+    $menuSet = Read-Host "Enter 'X' for WinMac start menu or 'C' for Classic start menu"
     if ($menuSet -eq 'x') {
         Write-Host "Using WinMac start menu." -ForegroundColor Green
     }
@@ -123,7 +123,7 @@ MacOS prompt:
 userName@computerName ~ % 
 
 "@
-    $promptSet = Read-Host "Enter 'W' for WinMac prompt or 'M' for MacOS prompt."
+    $promptSet = Read-Host "Enter 'W' for WinMac prompt or 'M' for MacOS prompt"
     if ($promptSet -eq 'W' -or $promptSet -eq 'w') {
         Write-Host "Using WinMac prompt." -ForegroundColor Green
     }
