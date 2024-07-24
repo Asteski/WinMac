@@ -348,7 +348,7 @@ foreach ($app in $selectedApps) {
             $trigger = New-ScheduledTaskTrigger -AtLogon
             Register-ScheduledTask -TaskName $taskName1 -Action $action1 -Trigger $trigger  | Out-Null
             Start-Process -FilePath "$destinationDirectory\$exeFile1"
-            if ($menuSet -ne 'c' or $menuSet -ne 'C') {
+            if ($menuSet -ne 'c' -or $menuSet -ne 'C') {
                 $taskName2 = "WinMacMenu"
                 $exeFile2 = "WinMacMenu.ahk"
                 $taskName3 = "WinMacWinKey"
