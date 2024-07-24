@@ -335,22 +335,28 @@ foreach ($app in $selectedApps) {
             ## AutoHotkey
             Write-Host "Configuring AutoHotkey..." -ForegroundColor Yellow  
             winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
-            $exePath = "$pwd\config\ahk"
+            $sourceDirectory = "$pwd\config\ahk"
+            $destinationDirectory = "$env:PROGRAMFILES\AutoHotkey\Scripts"
+            $files = Get-ChildItem -Path $sourceDirectory -File
+            New-Item -ItemType Directory -Path $destinationDirectory
+            foreach ($file in $files) {
+                Move-Item -Path $file.FullName -Destination $destinationDirectory
+            }
             $taskName1 = "SameAppCycle"
             $exeFile1 = "SameAppCycle.ahk"
-            $action1 = New-ScheduledTaskAction -Execute $exeFile1 -WorkingDirectory $exePath
+            $action1 = New-ScheduledTaskAction -Execute $exeFile1 -WorkingDirectory $destinationDirectory
             $trigger = New-ScheduledTaskTrigger -AtLogon
             Register-ScheduledTask -TaskName $taskName1 -Action $action1 -Trigger $trigger  | Out-Null
-            Start-Process -FilePath "$exePath\$exeFile1"
+            Start-Process -FilePath "$destinationDirectory\$exeFile1"
             if ($menuSet -ne 'c') {
                 $taskName2 = "WinMacMenu"
                 $exeFile2 = "WinMacMenu.ahk"
                 $taskName3 = "WinMacWinKey"
                 $exeFile3 = "WinMacWinKey.ahk"
-                Start-Process -FilePath "$exePath\$exeFile2"
-                Start-Process -FilePath "$exePath\$exeFile3"
-                $action2 = New-ScheduledTaskAction -Execute $exeFile2 -WorkingDirectory $exePath
-                $action3 = New-ScheduledTaskAction -Execute $exeFile3 -WorkingDirectory $exePath
+                Start-Process -FilePath "$destinationDirectory\$exeFile2"
+                Start-Process -FilePath "$destinationDirectory\$exeFile3"
+                $action2 = New-ScheduledTaskAction -Execute $exeFile2 -WorkingDirectory $destinationDirectory
+                $action3 = New-ScheduledTaskAction -Execute $exeFile3 -WorkingDirectory $destinationDirectory
                 Register-ScheduledTask -TaskName $taskName2 -Action $action2 -Trigger $trigger  | Out-Null
                 Register-ScheduledTask -TaskName $taskName3 -Action $action3 -Trigger $trigger  | Out-Null
                 Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force | Out-Null
