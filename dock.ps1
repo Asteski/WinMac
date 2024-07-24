@@ -90,9 +90,9 @@ elseif (($roundedOrSquared -ne "S" -or $roundedOrSquared -ne "s") -and ($lightOr
     $regFile = $modifiedFile
 }
 
-reg import $regFile
+reg import $regFile | Out-Null
 Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "DockLabelColorHotTrack1" | Out-Null
-Start-Sleep 2
+while (!(Get-Process nexus -ErrorAction SilentlyContinue)) { Start-Sleep 1 }
 Write-Host "Configuring Nexus Dock completed.`n" -ForegroundColor Green
 
 Write-Host "Clean up..." -ForegroundColor Yellow
