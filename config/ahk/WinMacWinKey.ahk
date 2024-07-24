@@ -1,10 +1,7 @@
-#NoTrayIcon
-LWin up::
-{
-global
-If (A_PriorKey = "LWin")
-    Send("#{x}")
-return
-}
+ih := InputHook('L1')
 
-<#d::Send("#d")
+LWin Up::ih.Stop
+LWin:: {
+ ih.Start(), ih.Wait()
+ Send '#' (ih.Input = '' ? 'x' : ih.Input)
+}
