@@ -159,8 +159,7 @@ $([char]27)[93m$("You can choose between rounded or squared shell corners.")$([c
 }
 
 if ($selectedApps -like '*4*' -or $selectedApps -like '*7*') {
-    Write-Host
-    $lightOrDark = Read-Host "Enter 'L' for light themed or 'D' for dark themed Windows"
+    $lightOrDark = Read-Host "`nEnter 'L' for light themed or 'D' for dark themed Windows"
     if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
         Write-Host "Using light theme." -ForegroundColor Green
         $stackTheme = 'light'
@@ -177,8 +176,7 @@ if ($selectedApps -like '*4*' -or $selectedApps -like '*7*') {
 }
 
 Start-Sleep 1
-Write-Host
-$installConfirmation = Read-Host "Are you sure you want to start the installation process (y/n)"
+$installConfirmation = Read-Host "`nAre you sure you want to start the installation process (y/n)"
 
 if ($installConfirmation -ne 'y') {
     Write-Host "Installation process aborted." -ForegroundColor Red
@@ -186,21 +184,18 @@ if ($installConfirmation -ne 'y') {
     exit
 }
 
-Write-Host
 Write-Host @"
+
 Please do not do anything while the script is running, as it may impact the installation process.
 "@ -ForegroundColor Red
 Start-Sleep 2
-Write-Host
-Write-Host "Starting installation process in..." -ForegroundColor Green
+Write-Host "`nStarting installation process in..." -ForegroundColor Green
 for ($a=3; $a -ge 0; $a--) {
     Write-Host -NoNewLine "`b$a" -ForegroundColor Green
     Start-Sleep 1
 }
 
-Write-Host
-Write-Host "-----------------------------------------------------------------------" -ForegroundColor Cyan
-Write-Host
+Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
 
 ## Winget
 Write-Host "Checking for Windows Package Manager (Winget)" -ForegroundColor Yellow
@@ -218,48 +213,10 @@ if ($null -eq $wingetCheck) {
     Write-Host "$([char]27)[92m$("Winget is already installed.")$([char]27)[0m Version: $($wingetCheck)"
 }
 
-# ## Defintions
-# Add-Type -AssemblyName System.Windows.Forms
-# Add-Type -TypeDefinition @"
-# using System;
-# using System.Runtime.InteropServices;
-
-# public class MouseInput
-# {
-#     [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
-#     public static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint cButtons, uint dwExtraInfo);
-    
-#     public const uint MOUSEEVENTF_LEFTDOWN = 0x02;
-#     public const uint MOUSEEVENTF_LEFTUP = 0x04;
-
-#     public static void HoldLeftMouseButton()
-#     {
-#         mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
-#     }
-    
-#     public static void ReleaseLeftMouseButton()
-#     {
-#         mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
-#     }
-# }
-# "@
-# Add-Type -TypeDefinition @"
-# using System;
-# using System.Runtime.InteropServices;
-# public class Taskbar {
-#     [DllImport("user32.dll", SetLastError = true)]
-#     public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-
-#     [DllImport("user32.dll", SetLastError = true)]
-#     public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
-# }
-# "@
-
 foreach ($app in $selectedApps) {
     switch ($app.Trim()) {
         "1" {
             ## PowerToys
-            # | Out-Null
             Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
             winget install Microsoft.PowerToys --source winget --silent | Out-Null
             winget install lin-ycv.EverythingPowerToys --source winget --silent | Out-Null
@@ -405,9 +362,6 @@ foreach ($app in $selectedApps) {
         "6" {
             # TopNotify
             Write-Host "Configuring TopNotify..." -ForegroundColor Yellow
-            $exePath = ($env:AppData | Split-Path) + "\local\TopNotify"
-            Get-Process TopNotify | Stop-Process -Force | Out-Null
-            if (Get-ChildItem $exePath -ErrorAction SilentlyContinue){Remove-Item -Path $exePath -Recurse -Force | Out-Null}
             winget install --id 9PFMDK0QHKQJ --silent --accept-package-agreements --accept-source-agreements | Out-Null
             $app = Get-AppxPackage *TopNotify*
             Start-Process -FilePath TopNotify.exe -WorkingDirectory $app.InstallLocation
@@ -610,8 +564,7 @@ Move-Item -Path "C:\Users\Public\Desktop\gVim*" -Destination $programsDir -Force
 Move-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Destination $programsDir -Force 
 Stop-Transcript
 
-Write-Host
-Write-Host "------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
+Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
 Write-Host @"
 
 Enjoy and support by giving feedback and contributing to the project!

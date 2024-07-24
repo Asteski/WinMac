@@ -11,25 +11,23 @@ This is Work in Progress. You're using this script at your own risk.
 
 -----------------------------------------------------------------------
 "@ -ForegroundColor Cyan
-Write-Host
-Write-Host "Configuring Nexus Dock..." -ForegroundColor Yellow
-Write-Host
+Write-Host "`nConfiguring Nexus Dock...`n" -ForegroundColor Yellow
 $roundedOrSquared = Read-Host "Enter 'R' for rounded dock or 'S' for squared dock"
 if ($roundedOrSquared -eq "R" -or $roundedOrSquared -eq "r") {
-    Write-Host "Using rounded dock." -ForegroundColor Yellow 
+    Write-Host "Using rounded dock.`n" -ForegroundColor Yellow 
 } elseif ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
-    Write-Host "Using squared dock." -ForegroundColor Yellow
+    Write-Host "Using squared dock.`n" -ForegroundColor Yellow
 } else {
-    Write-Host "Invalid input. Defaulting to rounded dock." -ForegroundColor Yellow
+    Write-Host "Invalid input. Defaulting to rounded dock.`n" -ForegroundColor Yellow
 }
 
 $lightOrDark = Read-Host "Enter 'L' for light themed dock or 'D' for dark themed dock"
 if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
-    Write-Host "Using light theme." -ForegroundColor Yellow 
+    Write-Host "Using light theme.`n" -ForegroundColor Yellow
 } elseif ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
-    Write-Host "Using dark theme." -ForegroundColor Yellow
+    Write-Host "Using dark theme.`n" -ForegroundColor Yellow
 } else {
-    Write-Host "Invalid input. Defaulting to light theme." -ForegroundColor Yellow
+    Write-Host "Invalid input. Defaulting to light theme.`n" -ForegroundColor Yellow
 }
 
 $downloadUrl = "https://www.winstep.net/nexus.zip"
@@ -95,7 +93,7 @@ elseif (($roundedOrSquared -ne "S" -or $roundedOrSquared -ne "s") -and ($lightOr
 reg import $regFile
 Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "DockLabelColorHotTrack1" | Out-Null
 Start-Sleep 2
-Write-Host "Configuring Nexus Dock completed." -ForegroundColor Green
+Write-Host "Configuring Nexus Dock completed.`n" -ForegroundColor Green
 
 Write-Host "Clean up..." -ForegroundColor Yellow
 $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
@@ -106,9 +104,8 @@ Remove-Item "$pwd\temp\*" -Recurse -Force -ErrorAction SilentlyContinue | Out-Nu
 Remove-Item .\dock.zip -Force | Out-Null
 Remove-Item .\ReadMe.txt -Force | Out-Null
 Remove-Item .\NexusSetup.exe -Force | Out-Null
-Write-Host "Clean up completed." -ForegroundColor Green
+Write-Host "Clean up completed.`n" -ForegroundColor Green
 
-Write-Host
 Write-Host "------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
 Write-Host @"
 
