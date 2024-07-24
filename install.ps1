@@ -123,18 +123,18 @@ MacOS prompt:
 userName@computerName ~ % 
 
 "@
-    $promptSet = Read-Host "Do you want to use WinMac prompt? (y/n)"
-    if ($promptSet -eq 'y') {
+    $promptSet = Read-Host "Enter 'W' for WinMac prompt or 'M' for MacOS prompt."
+    if ($promptSet -eq 'W' -or $promptSet -eq 'w') {
         Write-Host "Using WinMac prompt." -ForegroundColor Green
     }
-    elseif ($promptSet -eq 'n')
+    elseif ($promptSet -eq 'M' -or $promptSet -eq 'm')
     { 
         Write-Host "Using MacOS prompt." -ForegroundColor Green
     }
     else
     {
         Write-Host "Invalid input. Defaulting to WinMac start menu." -ForegroundColor Yellow
-        $promptSet = 'y'
+        $promptSet = 'W'
     }
 }
 
@@ -241,8 +241,8 @@ foreach ($app in $selectedApps) {
             Write-Host "Configuring PowerShell Profile..." -ForegroundColor Yellow
             $profilePath = $PROFILE | Split-Path | Split-Path
             $profileFile = $PROFILE | Split-Path -Leaf
-            if ($promptSet -eq 'y') { $prompt = Get-Content "$pwd\config\terminal\winmac-prompt.ps1" -Raw }
-            elseif ($promptSet -eq 'n' ) { $prompt = Get-Content "$pwd\config\terminal\macos-prompt.ps1" -Raw }
+            if ($promptSet -eq 'W' -or $promptSet -eq 'w') { $prompt = Get-Content "$pwd\config\terminal\winmac-prompt.ps1" -Raw }
+            elseif ($promptSet -eq 'M' -or $promptSet -eq 'm') { $prompt = Get-Content "$pwd\config\terminal\macos-prompt.ps1" -Raw }
             else { $prompt = Get-Content "$pwd\config\terminal\winmac-prompt.ps1" -Raw }
             $functions = Get-Content "$pwd\config\terminal\functions.ps1" -Raw
 
