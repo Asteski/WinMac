@@ -91,13 +91,13 @@ elseif (($roundedOrSquared -ne "S" -or $roundedOrSquared -ne "s") -and ($lightOr
 }
 
 reg import $regFile | Out-Null
-Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "DockLabelColorHotTrack1" | Out-Null
+Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "DockLabelColorHotTrack1" -ErrorAction SilentlyContinue | Out-Null
+Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe' | Out-Null
 while (!(Get-Process nexus -ErrorAction SilentlyContinue)) { Start-Sleep 1 }
 Write-Host "Configuring Nexus Dock completed.`n" -ForegroundColor Green
 
 Write-Host "Clean up..." -ForegroundColor Yellow
 $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
-Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe' | Out-Null
 Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Nexus.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
 Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\Nexus.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
 Remove-Item "$pwd\temp\*" -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
