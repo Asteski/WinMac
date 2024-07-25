@@ -221,21 +221,23 @@ foreach ($app in $selectedApps) {
             Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
             winget install Microsoft.PowerToys --source winget --silent | Out-Null
             winget install lin-ycv.EverythingPowerToys --source winget --silent | Out-Null
+            Write-Host "Configuring PowerToys..."  -ForegroundColor Yellow
             winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
             Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force
             $ptDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Start-Process "$ptDir\PowerToys (Preview)\PowerToys (Preview).lnk" -WindowStyle Minimized
-            Write-Host "Installing PowerToys completed." -ForegroundColor Green
+            Write-Host "Configuring PowerToys completed." -ForegroundColor Green
         }
         "2" {
             ## Everything
             Write-Host "Installing Everything..."  -ForegroundColor Yellow
             winget install --id "Voidtools.Everything" --source winget --silent | Out-Null
+            Write-Host "Configuring Everything..."  -ForegroundColor Yellow
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Move-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
             Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
             Start-Process -FilePath Everything.exe -WorkingDirectory $env:PROGRAMFILES\Everything -WindowStyle Hidden
-            Write-Host "Installing Everything completed." -ForegroundColor Green
+            Write-Host "Configuring Everything completed." -ForegroundColor Green
             }
         "3" {
             ## PowerShell Profile
@@ -280,11 +282,12 @@ foreach ($app in $selectedApps) {
         }
         "4" {
             ## StartAllBack
+            Write-Host "Installing StartAllBack..." -ForegroundColor Yellow
+            winget install --id "StartIsBack.StartAllBack" --source winget --silent | Out-Null
+            Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             $sabOrbs = $env:ProgramFiles + "\StartAllBack\Orbs"
             $sabRegPath = "HKCU:\Software\StartIsBack"
-            Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
-            winget install --id "StartIsBack.StartAllBack" --source winget --silent | Out-Null
             $registryPath = "$exRegPath\StuckRectsLegacy"
             $registryValueName = "Settings"
             $registryValueData = @(0x30,0x00,0x00,0x00,0xfe,0xff,0xff,0xff,0x02,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x5a,0x00,0x00,0x00,0x32,0x00,0x00,0x00,0x26,0x07,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0x07,0x00,0x00,0x38,0x04,0x00,0x00,0x78,0x00,0x00,0x00,0x01,0x00,0x00,0x00)
@@ -336,9 +339,10 @@ foreach ($app in $selectedApps) {
         "5" {
             ## Open-Shell
             if ($menuSet -eq 'X' -or $menuSet -eq 'x') {
+            Write-Host "Installing Open-Shell..." -ForegroundColor Yellow
+            winget install --id "Open-Shell.Open-Shell-Menu" --source winget --custom 'ADDLOCAL=StartMenu' --silent | Out-Null
             Write-Host "Configuring Open-Shell..." -ForegroundColor Yellow
             $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"
-            winget install --id "Open-Shell.Open-Shell-Menu" --source winget --custom 'ADDLOCAL=StartMenu' --silent | Out-Null
             $sourceDirectory = "$pwd\bin"
             $destinationDirectory = "$env:PROGRAMFILES\Open-Shell\Bin"
             $files = Get-ChildItem -Path $sourceDirectory -File
@@ -351,10 +355,6 @@ foreach ($app in $selectedApps) {
             New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell\Settings" -Force | Out-Null
             New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu\Settings" -Force | Out-Null
             Set-ItemProperty -Path "HKCU:\Software\OpenShell\OpenShell\Settings" -Name "Nightly" -Value 0x00000001
-            # Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu" -Name "ShowedStyle2" -Value 0x00000000
-            # Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu" -Name "CSettingsDlg" -Value ([byte[]](0xaf, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xe4, 0x02, 0x00, 0x00, 0xb4, 0x00, 0x00, 0x00, 0xd7, 0x0b, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00))
-            # Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "Version" -Value 0x040400bf
-            # Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "DisablePinExt" -Value 1
             Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "EnableContextMenu" -Value 0
             Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "MouseClick" -Value "Command"
             Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftClick" -Value "Command"
@@ -365,21 +365,18 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftClickCommand" -Value "$destinationDirectory\power.exe"
             Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftWinCommand" -Value "$destinationDirectory\power.exe"
             Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftRight" -Value 1
-            # Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "SearchBox" -Value "Hide"
-            # Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "SkinW7" -Value "Immersive"
-            # Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "SkinVariationW7" -Value ""
-            # Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "SkinOptionsW7" -Value ([byte[]](0x4c, 0x00, 0x49, 0x00, 0x47, 0x00, 0x48, 0x00, 0x54, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x44, 0x00, 0x41, 0x00, 0x52, 0x00, 0x4b, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x41, 0x00, 0x55, 0x00, 0x54, 0x00, 0x4f, 0x00, 0x3d, 0x00, 0x31, 0x00, 0x00, 0x00, 0x55, 0x00, 0x53, 0x00, 0x45, 0x00, 0x52, 0x00, 0x5f, 0x00, 0x49, 0x00, 0x4d, 0x00, 0x41, 0x00, 0x47, 0x00, 0x45, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x55, 0x00, 0x53, 0x00, 0x45, 0x00, 0x52, 0x00, 0x5f, 0x00, 0x4e, 0x00, 0x41, 0x00, 0x4d, 0x00, 0x45, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x43, 0x00, 0x45, 0x00, 0x4e, 0x00, 0x54, 0x00, 0x45, 0x00, 0x52, 0x00, 0x5f, 0x00, 0x4e, 0x00, 0x41, 0x00, 0x4d, 0x00, 0x45, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x53, 0x00, 0x4d, 0x00, 0x41, 0x00, 0x4c, 0x00, 0x4c, 0x00, 0x5f, 0x00, 0x49, 0x00, 0x43, 0x00, 0x4f, 0x00, 0x4e, 0x00, 0x53, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x4f, 0x00, 0x50, 0x00, 0x41, 0x00, 0x51, 0x00, 0x55, 0x00, 0x45, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x44, 0x00, 0x49, 0x00, 0x53, 0x00, 0x41, 0x00, 0x42, 0x00, 0x4c, 0x00, 0x45, 0x00, 0x5f, 0x00, 0x4d, 0x00, 0x41, 0x00, 0x53, 0x00, 0x4b, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x42, 0x00, 0x4c, 0x00, 0x41, 0x00, 0x43, 0x00, 0x4b, 0x00, 0x5f, 0x00, 0x54, 0x00, 0x45, 0x00, 0x58, 0x00, 0x54, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x42, 0x00, 0x4c, 0x00, 0x41, 0x00, 0x43, 0x00, 0x4b, 0x00, 0x5f, 0x00, 0x46, 0x00, 0x52, 0x00, 0x41, 0x00, 0x4d, 0x00, 0x45, 0x00, 0x53, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x54, 0x00, 0x52, 0x00, 0x41, 0x00, 0x4e, 0x00, 0x53, 0x00, 0x50, 0x00, 0x41, 0x00, 0x52, 0x00, 0x45, 0x00, 0x4e, 0x00, 0x54, 0x00, 0x5f, 0x00, 0x4c, 0x00, 0x45, 0x00, 0x53, 0x00, 0x53, 0x00, 0x3d, 0x00, 0x30, 0x00, 0x00, 0x00, 0x54, 0x00, 0x52, 0x00, 0x41, 0x00, 0x4e, 0x00, 0x53, 0x00, 0x50, 0x00, 0x41, 0x00, 0x52, 0x00, 0x45, 0x00, 0x4e, 0x00, 0x54, 0x00, 0x5f, 0x00, 0x4d, 0x00, 0x4f, 0x00, 0x52, 0x00, 0x45, 0x00, 0x3d, 0x00, 0x31, 0x00, 0x00, 0x00))
             Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
             Copy-Item -Path "$pwd\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
-            Start-Process Explorer
+            Stop-Process Explorer
             Start-Process $shellExePath
             Write-Host "Configuring Open-Shell completed." -ForegroundColor Green
             }
         }
         "6" {
             # TopNotify
-            Write-Host "Configuring TopNotify..." -ForegroundColor Yellow
+            Write-Host "Installing TopNotify..." -ForegroundColor Yellow
             winget install --id 9PFMDK0QHKQJ --silent --accept-package-agreements --accept-source-agreements | Out-Null
+            Write-Host "Configuring TopNotify..." -ForegroundColor Yellow
             $app = Get-AppxPackage *TopNotify*
             Start-Process -FilePath TopNotify.exe -WorkingDirectory $app.InstallLocation
             $pkgName = $app.PackageFamilyName
@@ -395,11 +392,11 @@ foreach ($app in $selectedApps) {
         }
         "7" {
             # Stahky
-            Write-Host "Configuring Stahky..." -ForegroundColor Yellow
+            Write-Host "Installing Stahky..." -ForegroundColor Yellow
             $url = "https://github.com/SamsidParty/TopNotify/archive/refs/tags/2.3.7.zip"
             $outputPath = "$pwd\stahky_U64_v2.3.7.zip"
             $exePath = "$env:LOCALAPPDATA\Stahky"
-            
+            Write-Host "Configuring Stahky..." -ForegroundColor Yellow
             New-Item -ItemType Directory -Path $exePath -Force | Out-Null
             New-Item -ItemType Directory -Path $exePath\config -Force | Out-Null
             Invoke-WebRequest -Uri $url -OutFile $outputPath
@@ -452,15 +449,15 @@ foreach ($app in $selectedApps) {
         }
         "8" {
             ## AutoHotkey
-            Write-Host "Configuring AutoHotkey..." -ForegroundColor Yellow  
+            Write-Host "Installing AutoHotkey..." -ForegroundColor Yellow  
             winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
+            Write-Host "Configuring AutoHotkey..." -ForegroundColor Yellow  
             $sourceDirectory = "$pwd\config\ahk"
             $destinationDirectory = "$env:PROGRAMFILES\AutoHotkey\Scripts"
             $files = Get-ChildItem -Path $sourceDirectory -File
             New-Item -ItemType Directory -Path $destinationDirectory | Out-Null
             foreach ($file in $files) { Move-Item -Path $file.FullName -Destination $destinationDirectory }
             $taskName1 = "SameAppCycle"
-            # $exeFile1 = "SameAppCycle.ahk"
             $action1 = New-ScheduledTaskAction -Execute "$taskName1.ahk" -WorkingDirectory $destinationDirectory
             $trigger = New-ScheduledTaskTrigger -AtLogon
             Register-ScheduledTask -TaskName $taskName1 -Action $action1 -Trigger $trigger  | Out-Null
