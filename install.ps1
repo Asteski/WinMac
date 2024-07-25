@@ -63,10 +63,10 @@ $([char]27)[93m$("Please select options you want to install:")$([char]27)[0m
     Write-Host @"
 9. Other:
     - black cursor
-    - pin folders
+    - pin Home and Programs folders to Quick access
     - remove shortcut arrows
     - remove recycle bin desktop icon
-    - add End Task
+    - add End Task option to taskbar
 "@
     Write-Host
     $selection = Read-Host "Enter the numbers of options you want to install (separated by commas)"
