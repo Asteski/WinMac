@@ -85,7 +85,6 @@ There are many dock customization you can find around the web, including [Devian
 
 ## Planned features
 
-- Windows 11 24H2 support,
 - Windows on ARM support,
 - Auto Dark Mode toggle theme script,
 - Stage Manager,
@@ -102,6 +101,7 @@ List of utilities and their creators, used with WinMac deployment script:
 - [Nexus](https://www.winstep.net/nexus.asp) by Winstep
 - [TopNotify](https://github.com/SamsidParty/TopNotify) by SamsidParty
 - [Stahky](https://github.com/joedf/stahky) by joedf
+- [AutoHotKey](https://www.autohotkey.com/) by AutoHotkey Foundation LLC
 - [PSTree](https://github.com/santisq/PSTree) by santisq
 - [ntop](https://github.com/gsass1/NTop) by gsass1
 
