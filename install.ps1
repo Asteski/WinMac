@@ -471,10 +471,10 @@ foreach ($app in $selectedApps) {
             foreach ($file in $files) { Move-Item -Path $file.FullName -Destination $destinationDirectory }
             $taskName1 = "SameAppCycle"
             # $exeFile1 = "SameAppCycle.ahk"
-            $action1 = New-ScheduledTaskAction -Execute "$taskName.ahk" -WorkingDirectory $destinationDirectory
+            $action1 = New-ScheduledTaskAction -Execute "$taskName1.ahk" -WorkingDirectory $destinationDirectory
             $trigger = New-ScheduledTaskTrigger -AtLogon
             Register-ScheduledTask -TaskName $taskName1 -Action $action1 -Trigger $trigger  | Out-Null
-            Start-Process -FilePath "$destinationDirectory\$taskName.ahk"
+            Start-Process -FilePath "$destinationDirectory\$taskName1.ahk"
             Write-Host "Configuring AutoHotkey completed." -ForegroundColor Green
         }
         "9" {
