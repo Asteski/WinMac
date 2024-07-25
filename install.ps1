@@ -416,7 +416,7 @@ foreach ($app in $selectedApps) {
             winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
             $sourceDirectory = "$pwd\config\ahk"
             $destinationDirectory = "$env:PROGRAMFILES\AutoHotkey\Scripts"
-            $files = Get-ChildItem -Path $sourceDirectory -File Same*
+            $files = Get-ChildItem -Path $sourceDirectory -File
             New-Item -ItemType Directory -Path $destinationDirectory | Out-Null
             foreach ($file in $files) { Move-Item -Path $file.FullName -Destination $destinationDirectory }
             $taskName1 = "SameAppCycle"
