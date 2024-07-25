@@ -87,7 +87,6 @@ There are many dock customization you can find around the web, including [Devian
 
 - Windows on ARM support,
 - Auto Dark Mode toggle theme script,
-- Stage Manager,
 - more functions.
 
 ## Credits to
