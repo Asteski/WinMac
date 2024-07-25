@@ -323,8 +323,8 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $sabRegPath -Name "SysTrayClockFormat" -Value 3
             Set-ItemProperty -Path $sabRegPath -Name "SysTrayInputSwitch" -Value 0
             Set-ItemProperty -Path $sabRegPath -Name "OrbBitmap" -Value "$($orbTheme)"
-            if ($menuSet -eq 'c'-or $menuSet -eq 'C'){ Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 0 }
-            else { Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1 }
+            if ($menuSet -eq 'X'-or $menuSet -eq 'x'){ Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1 }
+            else { Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 0 }
             Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "(default)" -Value 1
             Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
             if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0 }
