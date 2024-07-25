@@ -56,11 +56,12 @@ $([char]27)[93m$("Please select options you want to install:")$([char]27)[0m
     Write-Host "2. Everything"
     Write-Host "3. Powershell Profile"
     Write-Host "4. StartAllBack"
-    Write-Host "5. AutoHotkey"
+    Write-Host "5. Open-Shell"
     Write-Host "6. TopNotify"
     Write-Host "7. Stahky"
+    Write-Host "8. AutoHotkey"
     Write-Host @"
-8. Other:
+9. Other:
     - black cursor
     - pin folders
     - remove shortcut arrows
@@ -332,37 +333,7 @@ foreach ($app in $selectedApps) {
             Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
         }
         "5" {
-            ## AutoHotkey
-            Write-Host "Configuring AutoHotkey..." -ForegroundColor Yellow  
-            winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
-            $sourceDirectory = "$pwd\config\ahk"
-            $destinationDirectory = "$env:PROGRAMFILES\AutoHotkey\Scripts"
-            $files = Get-ChildItem -Path $sourceDirectory -File Same*
-            New-Item -ItemType Directory -Path $destinationDirectory | Out-Null
-            foreach ($file in $files) { Move-Item -Path $file.FullName -Destination $destinationDirectory }
-            $taskName1 = "SameAppCycle"
-            $exeFile1 = "SameAppCycle.ahk"
-            $action1 = New-ScheduledTaskAction -Execute $exeFile1 -WorkingDirectory $destinationDirectory
-            $trigger = New-ScheduledTaskTrigger -AtLogon
-            Register-ScheduledTask -TaskName $taskName1 -Action $action1 -Trigger $trigger  | Out-Null
-            Start-Process -FilePath "$destinationDirectory\$exeFile1"
-            if ($menuSet -ne 'c' -or $menuSet -ne 'C') {
-                $files = Get-ChildItem -Path $sourceDirectory -File Win*
-                foreach ($file in $files) { Move-Item -Path $file.FullName -Destination $destinationDirectory }
-                $taskName2 = "WinMacMenu"
-                $exeFile2 = "WinMacMenu.ahk"
-                $taskName3 = "WinMacWinKey"
-                $exeFile3 = "WinMacWinKey.ahk"
-                Start-Process -FilePath "$destinationDirectory\$exeFile2"
-                Start-Process -FilePath "$destinationDirectory\$exeFile3"
-                $action2 = New-ScheduledTaskAction -Execute $exeFile2 -WorkingDirectory $destinationDirectory
-                $action3 = New-ScheduledTaskAction -Execute $exeFile3 -WorkingDirectory $destinationDirectory
-                Register-ScheduledTask -TaskName $taskName2 -Action $action2 -Trigger $trigger  | Out-Null
-                Register-ScheduledTask -TaskName $taskName3 -Action $action3 -Trigger $trigger  | Out-Null
-                Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force | Out-Null
-                Copy-Item -Path "$pwd\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force | Out-Null
-            }
-            Write-Host "Configuring AutoHotkey completed." -ForegroundColor Green
+
         }
         "6" {
             # TopNotify
@@ -440,6 +411,23 @@ foreach ($app in $selectedApps) {
             $shortcut2.Save()
         }
         "8" {
+            ## AutoHotkey
+            Write-Host "Configuring AutoHotkey..." -ForegroundColor Yellow  
+            winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
+            $sourceDirectory = "$pwd\config\ahk"
+            $destinationDirectory = "$env:PROGRAMFILES\AutoHotkey\Scripts"
+            $files = Get-ChildItem -Path $sourceDirectory -File Same*
+            New-Item -ItemType Directory -Path $destinationDirectory | Out-Null
+            foreach ($file in $files) { Move-Item -Path $file.FullName -Destination $destinationDirectory }
+            $taskName1 = "SameAppCycle"
+            # $exeFile1 = "SameAppCycle.ahk"
+            $action1 = New-ScheduledTaskAction -Execute "$taskName.ahk" -WorkingDirectory $destinationDirectory
+            $trigger = New-ScheduledTaskTrigger -AtLogon
+            Register-ScheduledTask -TaskName $taskName1 -Action $action1 -Trigger $trigger  | Out-Null
+            Start-Process -FilePath "$destinationDirectory\$taskName.ahk"
+            Write-Host "Configuring AutoHotkey completed." -ForegroundColor Green
+        }
+        "9" {
             # Other
             ## Black Cursor
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
