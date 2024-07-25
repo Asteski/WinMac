@@ -85,6 +85,7 @@ There are many dock customization you can find around the web, including [Devian
 
 ## Planned features
 
+- Windows 11 24H2 support,
 - Windows on ARM support,
 - Auto Dark Mode toggle theme script,
 - Stage Manager,
