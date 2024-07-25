@@ -334,6 +334,7 @@ foreach ($app in $selectedApps) {
         }
         "5" {
             ## Open-Shell
+            if ($menuSet -eq 'X' -or $menuSet -eq 'x') {            
             Write-Host "Configuring Open-Shell..." -ForegroundColor Yellow
             $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"
             winget install --id "Open-Shell.Open-Shell-Menu" --source winget --custom 'ADDLOCAL=StartMenu' --silent | Out-Null
@@ -381,7 +382,8 @@ foreach ($app in $selectedApps) {
             Copy-Item -Path "$pwd\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
             Start-Process Explorer
             Start-Process $shellExePath
-            Write-Host "Configuring Open-Shell completed." -ForegroundColor Green            
+            Write-Host "Configuring Open-Shell completed." -ForegroundColor Green
+            }
         }
         "6" {
             # TopNotify
