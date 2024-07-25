@@ -98,17 +98,17 @@ Classic start menu replaces default menu with Enhanced Windows 7 menu.
 "@
 
     $menuSet = Read-Host "Enter 'X' for WinMac start menu or 'C' for Classic start menu"
-    if ($menuSet -eq 'x') {
+    if ($menuSet -eq 'x' -or $menuSet -eq 'X') {
         Write-Host "Using WinMac start menu." -ForegroundColor Green
     }
-    elseif ($menuSet -eq 'c')
+    elseif ($menuSet -eq 'c'-or $menuSet -eq 'C')
     { 
         Write-Host "Using Classic start menu." -ForegroundColor Green
     }
     else
     {
         Write-Host "Invalid input. Defaulting to WinMac start menu." -ForegroundColor Yellow
-        $menuSet = 'x'
+        $menuSet = 'X'
     }
 }
 
@@ -248,7 +248,7 @@ foreach ($app in $selectedApps) {
 
             if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell" | Out-Null } else { Remove-Item -Path "$profilePath\PowerShell\$profileFile" -Force | Out-Null }
             if (-not (Test-Path "$profilePath\WindowsPowerShell")) { New-Item -ItemType Directory -Path "$profilePath\WindowsPowerShell" | Out-Null } else { Remove-Item -Path "$profilePath\WindowsPowerShell\$profileFile" -Force | Out-Null }
-            if (-not (Test-Path "$profilePath\PowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\PowerShell\$profileFile" | Out-Null }
+            if (-not (Test-Path "$profilePath\PowerShell\$profileFiele")) { New-Item -ItemType File -Path "$profilePath\PowerShell\$profileFile" | Out-Null }
             if (-not (Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\WindowsPowerShell\$profileFile" | Out-Null }
 
             $progressPreference = 'silentlyContinue'
@@ -303,7 +303,6 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $exRegPath\Advancedx -Name "UseCompactMode" -Value 1
             Set-ItemProperty -Path $sabRegPath -Name "WinBuild" -Value 22759
             Set-ItemProperty -Path $sabRegPath -Name "WinLangID" -Value 2064
-            Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 0
             Set-ItemProperty -Path $sabRegPath -Name "RestyleControls" -Value 1
             Set-ItemProperty -Path $sabRegPath -Name "WelcomeShown" -Value 3
             Set-ItemProperty -Path $sabRegPath -Name "UpdateCheck" -Value ([byte[]](160, 224, 8, 201, 49, 125, 218, 1))
@@ -324,6 +323,8 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $sabRegPath -Name "SysTrayClockFormat" -Value 3
             Set-ItemProperty -Path $sabRegPath -Name "SysTrayInputSwitch" -Value 0
             Set-ItemProperty -Path $sabRegPath -Name "OrbBitmap" -Value "$($orbTheme)"
+            if ($menuSet -eq 'c'-or $menuSet -eq 'C'){ Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 0 }
+            else { Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1 }
             Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "(default)" -Value 1
             Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
             if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0 }
