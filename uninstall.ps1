@@ -38,13 +38,13 @@ Start-Transcript -Path ".\temp\WinMac_uninstall_log_$date.txt" -Append | Out-Nul
 
 $fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom uninstallation"
 if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
-    $selectedApps = "1","2","3","4","5","6","7","8","9"
+    $selectedApps = "1","2","3","4","5","6","7","8","9","10"
     Write-Host "Choosing full uninstallation." -ForegroundColor Yellow
 }
 elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
     Write-Host "Choosing custom uninstallation." -ForegroundColor Yellow
     Start-Sleep 1
-    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="Open-Shell"; "6"="TopNotify"; "7"="Nexus Dock"; "8"="Stahky"; "9"="Other"}
+    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="Open-Shell"; "6"="TopNotify"; "7"="Nexus Dock"; "8"="Stahky"; "9"="AutoHotkey"; "10"="Other"}
 Write-Host @"
 
 $([char]27)[93m$("Please select options you want to uninstall:")$([char]27)[0m
@@ -58,7 +58,8 @@ $([char]27)[93m$("Please select options you want to uninstall:")$([char]27)[0m
     Write-Host "6. TopNotify"
     Write-Host "7. Nexus Dock"
     Write-Host "8. Stahky"
-    Write-Host "9. Other"
+    Write-Host "9. AutoHotkey"
+    Write-Host "10. Other"
     $selection = Read-Host "Enter the numbers of options you want to uninstall (separated by commas)"
     $selectedApps = @()
     $selectedApps = $selection.Split(',')
@@ -72,7 +73,7 @@ $([char]27)[93m$("Please select options you want to uninstall:")$([char]27)[0m
 }
 else
 {
-    $selectedApps = "1","2","3","4","5","6","7","8","9"
+    $selectedApps = "1","2","3","4","5","6","7","8","9","10"
     Write-Host "Invalid input. Defaulting to full uninstallation." -ForegroundColor Yellow
 }
 Start-Sleep 1
@@ -152,7 +153,7 @@ public class Taskbar {
 foreach ($app in $selectedApps) {
     switch ($app.Trim()) {
         "1" {
-            ## PowerToys
+            # PowerToys
             Write-Host "Uninstalling PowerToys..."  -ForegroundColor Yellow
             Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force | Out-Null
             Start-Sleep 2
@@ -161,7 +162,7 @@ foreach ($app in $selectedApps) {
         }
 
         "2" {
-            ## Everything
+            # Everything
             Write-Host "Uninstalling Everything..."  -ForegroundColor Yellow
             winget uninstall --id Voidtools.Everything --source winget --force | Out-Null
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
@@ -169,7 +170,7 @@ foreach ($app in $selectedApps) {
             Write-Host "Uninstalling Everything completed." -ForegroundColor Green
             }
         "3" {
-            ## PowerShell Profile
+            # PowerShell Profile
             Write-Host "Uninstalling PowerShell Profile..." -ForegroundColor Yellow
             $profilePath = $PROFILE | Split-Path | Split-Path
             $profileFile = $PROFILE | Split-Path -Leaf
@@ -186,7 +187,7 @@ foreach ($app in $selectedApps) {
             Write-Host "Uninstalling PowerShell Profile completed." -ForegroundColor Green
         }
         "4" {
-            ## StartAllBack
+            # StartAllBack
             Write-Host "Uninstalling StartAllBack..." -ForegroundColor Yellow
             winget uninstall --id "StartIsBack.StartAllBack" --source winget --silent --force | Out-Null
             Set-ItemProperty -Path $exRegPath\Advanced -Name "UseCompactMode" -Value 0
@@ -197,14 +198,14 @@ foreach ($app in $selectedApps) {
             Start-Sleep 3
         }
         "5" {
-            ## AutoHotkey
-            Write-Host "Uninstalling AutoHotkey..." -ForegroundColor Yellow
-            Stop-Process -Name "AutoHotkey*" -Force | Out-Null
-            winget uninstall --id autohotkey.autohotkey --source winget --force | Out-Null
-            Unregister-ScheduledTask -TaskName "WinMacMenu" -Confirm:$false -ErrorAction SilentlyContinue
-            Unregister-ScheduledTask -TaskName "WinMacWinKey" -Confirm:$false -ErrorAction SilentlyContinue
-            Unregister-ScheduledTask -TaskName "SameAppCycle" -Confirm:$false -ErrorAction SilentlyContinue
-            Write-Host "Uninstalling AutoHotkey completed." -ForegroundColor Green
+            # Open-Shell
+            Write-Host "Uninstalling Open-Shell..." -ForegroundColor Yellow
+            Stop-Process -Name startmenu -Force | Out-Null
+            winget uninstall --id "Open-Shell.Open-Shell-Menu" --source winget --force | Out-Null
+            Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\winx" -Recurse -Force | Out-Null
+            Expand-Archive -Path "$pwd\config\WinX_default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
+            Stop-Process -n Explorer
+            Write-Host "Uninstalling Open-Shell completed." -ForegroundColor Green
         }
         "6" {
             # TopNotify
@@ -229,6 +230,14 @@ foreach ($app in $selectedApps) {
             Write-Host "Uninstalling Stahky completed." -ForegroundColor Green
         }
         "9" {
+            # AutoHotkey
+            Write-Host "Uninstalling AutoHotkey..." -ForegroundColor Yellow
+            Stop-Process -Name "AutoHotkey*" -Force | Out-Null
+            winget uninstall --id autohotkey.autohotkey --source winget --force | Out-Null
+            Unregister-ScheduledTask -TaskName "SameAppCycle" -Confirm:$false -ErrorAction SilentlyContinue
+            Write-Host "Uninstalling AutoHotkey completed." -ForegroundColor Green
+        }
+        "10" {
             # Other
             Write-Host "Uninstalling Other configurations..." -ForegroundColor Yellow
             Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 0
