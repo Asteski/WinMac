@@ -45,7 +45,7 @@ if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
 elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
     Write-Host "Choosing custom installation." -ForegroundColor Green
     Start-Sleep 1
-    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="AutoHotkey"; "6"="TopNotify"; "7"="Stahky"; "8"="AutoHotkey"; "8"="Other"}
+    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="AutoHotkey"; "6"="TopNotify"; "7"="Stahky"; "8"="AutoHotkey"; "9"="Other"}
 
 Write-Host @"
 
@@ -86,7 +86,7 @@ else
     $selectedApps = "1","2","3","4","5","6","7","8","9"
 }
 
-if ($selectedApps -like '*4*') {
+if ($selectedApps -like '*4*' -and ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c')) {
 Write-Host @"
 
 $([char]27)[93m$("You can choose between WinMac start menu or Classic start menu.")$([char]27)[0m
