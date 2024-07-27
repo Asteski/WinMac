@@ -460,20 +460,35 @@ function string-search {
 }
 
 function grep {
-    if($args.count -eq 0) { 
-        Write-Host -f Red "Error: " -Non; Write-Host "Please provide a RegEx argument to grep." 
-        Write-Host -f DarkYellow "Usage: grep <RegEx>"  
-    } 
-    else 
-    {
-        if ($args.count -eq 1) {
-            $files = Get-ChildItem 
-            string-search $args[0]
-            }
-        elseif (($args.count -eq 2) -and ($args[0] -eq '-r')){
-            $files = Get-ChildItem -Recurse
-            string-search $args[1]
-        }
+    $excludeFiles = @('*.dll', '*.lnk', '*.zip', '*.rar', '*.7zip', '*.png', '*.exe', '*.msi', '*.jpg', '*.jpeg', '*.gif', '*.bmp', '*.ico', '*.mp3', '*.mp4', '*.avi', '*.mkv', '*.flv', '*.mov', '*.wav', '*.wma', '*.wmv', '*.aac', '*.flac', '*.m4a', '*.ogg', '*.opus', '*.webm', '*.webp', '*.pdf')
+    if($args.Count -eq 0) { 
+        Write-Host -f Red "Error: " -Non; Write-Host "No arguments provided." 
+    }
+    elseif (($args.Count -eq 3 -and $args[1] -eq '-r' -and $args[2] -ne '-f' -and $args[2] -ne '-e')) {
+        Write-Host -f Red "Error: " -Non; Write-Host "Invalid arguments provided." 
+    }
+    elseif ($args.Count -eq 1) {
+        $files = Get-ChildItem -Exclude $excludeFiles
+        string-search $args[0]
+    }
+    elseif (($args[0] -eq '-r')) {
+        $files = Get-ChildItem -Recurse -Exclude $excludeFiles
+        string-search $args[1]
+    }
+    elseif (($args[1] -eq '-r')) {
+        $files = Get-ChildItem -Recurse -Exclude $excludeFiles
+        string-search $args[0]
+    }
+    elseif (($args.Count -eq 3 -and $args[1] -eq '-f')) {
+        $files = Get-ChildItem -File $args[2]
+        string-search $args[0]
+    }
+    elseif (($args.Count -eq 3 -and $args[1] -eq '-e')) {
+        $files = Get-ChildItem -Exclude $args[2]
+        string-search $args[0]
+    }
+    else {
+        Write-Host -f Red "Error: " -Non; Write-Host "Invalid arguments provided." 
     }
 }
 
