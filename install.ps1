@@ -93,7 +93,7 @@ $([char]27)[93m$("You can choose between WinMac start menu or Classic start menu
 
 WinMac start menu replaces default menu with customized WinX menu.
 
-Classic start menu replaces default menu with Enhanced Windows menu.
+Classic start menu replaces default menu with enhanced Windows menu.
 
 "@
 
@@ -140,12 +140,7 @@ userName@computerName ~ %
 }
 
 if ($selectedApps -like '*4*') {
-Write-Host @"
-
-$([char]27)[93m$("You can choose between rounded or squared shell corners.")$([char]27)[0m
-
-"@
-    $roundedOrSquared = Read-Host "Enter 'R' for rounded corners or 'S' for squared corners"
+    $roundedOrSquared = Read-Host "`nEnter 'R' for rounded or 'S' for squared shell corners"
     if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') {
         Write-Host "Using rounded corners." -ForegroundColor Green
     }
@@ -160,7 +155,7 @@ $([char]27)[93m$("You can choose between rounded or squared shell corners.")$([c
 }
 
 if ($selectedApps -like '*4*' -or $selectedApps -like '*7*') {
-    $lightOrDark = Read-Host "`nEnter 'L' for light themed or 'D' for dark themed Windows"
+    $lightOrDark = Read-Host "`nEnter 'L' for light or 'D' for dark themed Windows"
     if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
         Write-Host "Using light theme." -ForegroundColor Green
         $stackTheme = 'light'
