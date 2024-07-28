@@ -454,8 +454,9 @@ foreach ($app in $selectedApps) {
                 Move-Item -Path $file.FullName -Destination $destinationDirectory
                 $taskName = ($file.Name).replace('.ahk','')
                 $action = New-ScheduledTaskAction -Execute $file.Name -WorkingDirectory $destinationDirectory    
-                Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger  | Out-Null
-                Start-Process -FilePath "$destinationDirectory\$fileName"
+                $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
+                Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Principal $principal | Out-Null
+                Start-Process -FilePath $destinationDirectory\$file.Name
             }
             Write-Host "Configuring AutoHotkey completed." -ForegroundColor Green
         }
