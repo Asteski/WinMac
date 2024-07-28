@@ -45,7 +45,7 @@ if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
 elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
     Write-Host "Choosing custom installation." -ForegroundColor Green
     Start-Sleep 1
-    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="AutoHotkey"; "6"="TopNotify"; "7"="Stahky"; "8"="AutoHotkey"; "9"="Other"}
+    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="Open-Shell"; "6"="TopNotify"; "7"="Stahky"; "8"="AutoHotkey"; "9"="Other"}
 
 Write-Host @"
 
@@ -212,7 +212,7 @@ if ($null -eq $wingetCheck) {
 foreach ($app in $selectedApps) {
     switch ($app.Trim()) {
         "1" {
-            ## PowerToys
+            # PowerToys
             Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
             winget install Microsoft.PowerToys --source winget --silent | Out-Null
             winget install lin-ycv.EverythingPowerToys --source winget --silent | Out-Null
@@ -224,7 +224,7 @@ foreach ($app in $selectedApps) {
             Write-Host "Configuring PowerToys completed." -ForegroundColor Green
         }
         "2" {
-            ## Everything
+            # Everything
             Write-Host "Installing Everything..."  -ForegroundColor Yellow
             winget install --id "Voidtools.Everything" --source winget --silent | Out-Null
             Write-Host "Configuring Everything..."  -ForegroundColor Yellow
@@ -235,7 +235,7 @@ foreach ($app in $selectedApps) {
             Write-Host "Configuring Everything completed." -ForegroundColor Green
             }
         "3" {
-            ## PowerShell Profile
+            # PowerShell Profile
             Write-Host "Configuring PowerShell Profile..." -ForegroundColor Yellow
             $profilePath = $PROFILE | Split-Path | Split-Path
             $profileFile = $PROFILE | Split-Path -Leaf
@@ -276,7 +276,7 @@ foreach ($app in $selectedApps) {
             Write-Host "Configuring PowerShell Profile completed." -ForegroundColor Green
         }
         "4" {
-            ## StartAllBack
+            # StartAllBack
             Write-Host "Installing StartAllBack..." -ForegroundColor Yellow
             winget install --id "StartIsBack.StartAllBack" --source winget --silent | Out-Null
             Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
@@ -332,7 +332,7 @@ foreach ($app in $selectedApps) {
             Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
         }
         "5" {
-            ## Open-Shell
+            # Open-Shell
             if ($menuSet -eq 'X' -or $menuSet -eq 'x') {
             Write-Host "Installing Open-Shell..." -ForegroundColor Yellow
             winget install --id "Open-Shell.Open-Shell-Menu" --source winget --custom 'ADDLOCAL=StartMenu' --silent | Out-Null
@@ -441,7 +441,7 @@ foreach ($app in $selectedApps) {
             $shortcut2.Save()
         }
         "8" {
-            ## AutoHotkey
+            # AutoHotkey
             Write-Host "Installing AutoHotkey..." -ForegroundColor Yellow  
             winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
             Write-Host "Configuring AutoHotkey..." -ForegroundColor Yellow  
