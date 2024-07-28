@@ -86,7 +86,7 @@ else
     $selectedApps = "1","2","3","4","5","6","7","8","9"
 }
 
-if ($selectedApps -like '*4*') {
+if ($selectedApps -like '*4*' -and $fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f')) {
 Write-Host @"
 
 $([char]27)[93m$("You can choose between WinMac start menu or Classic start menu.")$([char]27)[0m
@@ -452,10 +452,10 @@ foreach ($app in $selectedApps) {
             New-Item -ItemType Directory -Path $destinationDirectory | Out-Null
             foreach ($file in $files) { 
                 Move-Item -Path $file.FullName -Destination $destinationDirectory
-                $taskName = $file.Name
-                $action = New-ScheduledTaskAction -Execute "$taskName.ahk" -WorkingDirectory $destinationDirectory    
-                Register-ScheduledTask -TaskName $taskName1 -Action $action -Trigger $trigger  | Out-Null
-                Start-Process -FilePath "$destinationDirectory\$taskName.ahk"
+                $taskName = ($file.Name).replace('.ahk','')
+                $action = New-ScheduledTaskAction -Execute $file.Name -WorkingDirectory $destinationDirectory    
+                Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger  | Out-Null
+                Start-Process -FilePath "$destinationDirectory\$fileName"
             }
             Write-Host "Configuring AutoHotkey completed." -ForegroundColor Green
         }
