@@ -445,16 +445,18 @@ foreach ($app in $selectedApps) {
             Write-Host "Installing AutoHotkey..." -ForegroundColor Yellow  
             winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
             Write-Host "Configuring AutoHotkey..." -ForegroundColor Yellow  
+            $trigger = New-ScheduledTaskTrigger -AtLogon
             $sourceDirectory = "$pwd\config\ahk"
             $destinationDirectory = "$env:PROGRAMFILES\AutoHotkey\Scripts"
             $files = Get-ChildItem -Path $sourceDirectory -File
             New-Item -ItemType Directory -Path $destinationDirectory | Out-Null
-            foreach ($file in $files) { Move-Item -Path $file.FullName -Destination $destinationDirectory }
-            $taskName1 = "SameAppCycle"
-            $action1 = New-ScheduledTaskAction -Execute "$taskName1.ahk" -WorkingDirectory $destinationDirectory
-            $trigger = New-ScheduledTaskTrigger -AtLogon
-            Register-ScheduledTask -TaskName $taskName1 -Action $action1 -Trigger $trigger  | Out-Null
-            Start-Process -FilePath "$destinationDirectory\$taskName1.ahk"
+            foreach ($file in $files) { 
+                Move-Item -Path $file.FullName -Destination $destinationDirectory
+                $taskName = $file.Name
+                $action = New-ScheduledTaskAction -Execute "$taskName.ahk" -WorkingDirectory $destinationDirectory    
+                Register-ScheduledTask -TaskName $taskName1 -Action $action -Trigger $trigger  | Out-Null
+                Start-Process -FilePath "$destinationDirectory\$taskName.ahk"
+            }
             Write-Host "Configuring AutoHotkey completed." -ForegroundColor Green
         }
         "9" {
