@@ -86,7 +86,7 @@ else
     $selectedApps = "1","2","3","4","5","6","7","8","9"
 }
 
-if ($selectedApps -like '*4*' -and $fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f')) {
+if ($selectedApps -like '*4*' -and $fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
 Write-Host @"
 
 $([char]27)[93m$("You can choose between WinMac start menu or Classic start menu.")$([char]27)[0m
