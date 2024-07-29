@@ -381,7 +381,6 @@ foreach ($app in $selectedApps) {
             Start-Process Explorer
             Start-Process $shellExePath
             Write-Host "Configuring Open-Shell completed." -ForegroundColor Green
-            }
         }
         "6" {
             # TopNotify
