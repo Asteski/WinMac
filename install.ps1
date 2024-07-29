@@ -333,17 +333,17 @@ foreach ($app in $selectedApps) {
         }
         "5" {
             #! FIXME Open-Shell
-            $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"
-            winget install --id "Open-Shell.Open-Shell-Menu" --source winget --custom 'ADDLOCAL=StartMenu' --silent | Out-Null
+            $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\StartMenu.exe"
+            winget install --id "Open-Shell.Open-Shell-Menu" --source winget --custom 'ADDLOCAL=StartMenu' --silent # | Out-Null
             Start-Sleep 5
-            Stop-Process -Name startmenu.exe -Force | Out-Null
-            New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force | Out-Null
-            New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force | Out-Null
-            New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu" -Force | Out-Null
-            New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\ClassicExplorer" -Force | Out-Null
-            New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell\Settings" -Force | Out-Null
-            New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu\Settings" -Force | Out-Null
-            New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\ClassicExplorer\Settings" -Force | Out-Null
+            Stop-Process -Name StartMenu.exe -Force # | Out-Null
+            New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force # | Out-Null
+            New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force # | Out-Null
+            New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu" -Force # | Out-Null
+            New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\ClassicExplorer" -Force # | Out-Null
+            New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell\Settings" -Force # | Out-Null
+            New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu\Settings" -Force # | Out-Null
+            New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\ClassicExplorer\Settings" -Force # | Out-Null
             Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "ShowedToolbar" -Value 0
             Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "NewLine" -Value 0
             Set-ItemProperty -Path "HKCU:\Software\OpenShell\ClassicExplorer" -Name "CSettingsDlg" -Value ([byte[]](0,0,0,0,103,0,0,0,0,0,0,0,0,0,0,0,170,15,0,0,1,0,185,115,0,0,0,0))
