@@ -333,11 +333,15 @@ foreach ($app in $selectedApps) {
         }
         "5" {
             #! FIXME Open-Shell
-            Write-Host "Configuring Open-Shell..." -ForegroundColor Yellow
-            $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\startmenu.exe"
+            Write-Host "Installing Open-Shell..." -ForegroundColor Yellow
+            $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell"
             winget install --id "Open-Shell.Open-Shell-Menu" --source winget --custom 'ADDLOCAL=StartMenu' --silent | Out-Null
-            Start-Sleep 5
-            Stop-Process -Name startmenu -Force | Out-Null
+            Write-Host "Configuring Open-Shell..." -ForegroundColor Yellow
+            # Stop-Process -Name startmenu -Force | Out-Null
+            $sourceDirectory = "$pwd\bin"
+            $files = Get-ChildItem -Path $sourceDirectory -File
+            New-Item -ItemType Directory -Path $shellExePath\bin | Out-Null
+            foreach ($file in $files) { Copy-Item -Path $file.FullName -Destination $shellExePath\bin }
             New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force | Out-Null
             New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force | Out-Null
             New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu" -Force | Out-Null
@@ -379,7 +383,7 @@ foreach ($app in $selectedApps) {
             Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
             Copy-Item -Path "$pwd\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
             Start-Process Explorer
-            Start-Process $shellExePath
+            # Start-Process $shellExePath
             Write-Host "Configuring Open-Shell completed." -ForegroundColor Green
         }
         "6" {
