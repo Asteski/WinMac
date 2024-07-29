@@ -1,5 +1,5 @@
 ﻿#NoTrayIcon
-^m::
+!m::
 {
     If Not WinActive("ahk_class Shell_TrayWnd")
     {

@@ -332,7 +332,7 @@ foreach ($app in $selectedApps) {
             Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
         }
         "5" {
-            # Open-Shell
+            #! FIXME Open-Shell
             if ($menuSet -eq 'X' -or $menuSet -eq 'x') {
             Write-Host "Installing Open-Shell..." -ForegroundColor Yellow
             winget install --id "Open-Shell.Open-Shell-Menu" --source winget --custom 'ADDLOCAL=StartMenu' --silent | Out-Null
