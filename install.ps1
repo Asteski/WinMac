@@ -296,11 +296,8 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSi" -Value 0
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarAl" -Value 0
             Set-ItemProperty -Path $exRegPath\Advancedx -Name "UseCompactMode" -Value 1
-            # Set-ItemProperty -Path $sabRegPath -Name "WinBuild" -Value 22759
-            # Set-ItemProperty -Path $sabRegPath -Name "WinLangID" -Value 2064
             Set-ItemProperty -Path $sabRegPath -Name "RestyleControls" -Value 1
             Set-ItemProperty -Path $sabRegPath -Name "WelcomeShown" -Value 3
-            # Set-ItemProperty -Path $sabRegPath -Name "UpdateCheck" -Value ([byte[]](160, 224, 8, 201, 49, 125, 218, 1))
             Set-ItemProperty -Path $sabRegPath -Name "SettingsVersion" -Value 5
             Set-ItemProperty -Path $sabRegPath -Name "ModernIconsColorized" -Value 0
             Set-ItemProperty -Path $sabRegPath -Name "FrameStyle" -Value 2
@@ -310,8 +307,6 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $sabRegPath -Name "TaskbarLargerIcons" -Value 0
             Set-ItemProperty -Path $sabRegPath -Name "TaskbarSpacierIcons" -Value (-1)
             Set-ItemProperty -Path $sabRegPath -Name "TaskbarControlCenter" -Value 1
-            # Set-ItemProperty -Path $sabRegPath -Name "UpdateInfo" -Value ([byte[]](60, 63, 120, 109, 108, 32, 118, 101, 114, 115, 105, 111, 110, 61, 34, 49, 46, 48, 34, 63, 62, 10, 60, 85, 112, 100, 97, 116, 101, 32, 78, 97, 109, 101, 61, 34, 83, 116, 97, 114, 116, 65, 108, 108, 66, 97, 99, 107, 32, 51, 46, 55, 46, 55, 34, 32, 68, 101, 115, 99, 114, 105, 112, 116, 105, 111, 110, 61, 34, 34, 32, 68, 111, 119, 110, 108, 111, 97, 100, 85, 82, 76, 61, 34, 104, 116, 116, 112, 115, 58, 47, 47, 115, 116, 97, 114, 116, 105, 115, 98, 97, 99, 107, 46, 115, 102, 111, 51, 46, 99, 100, 110, 46, 100, 105, 103, 105, 116, 97, 108, 111, 99, 101, 97, 110, 115, 112, 97, 99, 101, 115, 46, 99, 111, 109, 47, 83, 116, 97, 114, 116, 65, 108, 108, 66, 97, 99, 107, 95, 51, 46, 55, 46, 55, 95, 115, 101, 116, 117, 112, 46, 101, 120, 101, 34, 32, 76, 101, 97, 114, 110, 77, 111, 114, 101, 85, 82, 76, 61, 34, 104, 116, 116, 112, 115, 58, 47, 47, 119, 119, 119, 46, 115, 116, 97, 114, 116, 97, 108, 108, 98, 97, 99, 107, 46, 99, 111, 109, 47, 34, 47, 62, 10))
-            # Set-ItemProperty -Path $sabRegPath -Name "UpdateInfoHash" -Value 805441044
             Set-ItemProperty -Path $sabRegPath -Name "SysTrayStyle" -Value 1
             Set-ItemProperty -Path $sabRegPath -Name "SysTrayActionCenter" -Value 1
             Set-ItemProperty -Path $sabRegPath -Name "SysTraySpacierIcons" -Value 1
@@ -329,34 +324,39 @@ foreach ($app in $selectedApps) {
             Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
         }
         "5" {
-            Write-Host "Installing Open-Shell..." -ForegroundColor Yellow
-            $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\StartMenu.exe"
-            winget install --id "Open-Shell.Open-Shell-Menu" --source winget --custom 'ADDLOCAL=StartMenu' --silent | Out-Null
-            Write-Host "Configuring Open-Shell..." -ForegroundColor Yellow
-            Stop-Process -Name StartMenu -Force | Out-Null
-            New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force | Out-Null
-            New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force | Out-Null
-            New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu" -Force | Out-Null
-            New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell\Settings" -Force | Out-Null
-            New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu\Settings" -Force | Out-Null
-            Set-ItemProperty -Path "HKCU:\Software\OpenShell\OpenShell\Settings" -Name "Nightly" -Value 0x00000001
-            Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "Version" -Value 0x040400bf
-            Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "DisablePinExt" -Value 1
-            Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "EnableContextMenu" -Value 0
-            Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "MouseClick" -Value "Command"
-            Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftClick" -Value "Command"
-            Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "WinKey" -Value "Command"
-            Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "MouseClickCommand" -Value "$pwd\bin\start.exe"
-            Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftClickCommand" -Value "Nothing"
-            Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "WinKeyCommand" -Value "$pwd\bin\start.exe"
-            Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftWin" -Value "Nothing"
-            Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftRight" -Value 1
-            Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "SearchBox" -Value "Hide"
-            Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
-            Copy-Item -Path "$pwd\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
-            Stop-Process -Name Explorer
-            Start-Process $shellExePath
-            Write-Host "Configuring Open-Shell completed." -ForegroundColor Green
+            if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
+                Write-Host "Installing Open-Shell..." -ForegroundColor Yellow
+                $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\StartMenu.exe"
+                winget install --id "Open-Shell.Open-Shell-Menu" --source winget --custom 'ADDLOCAL=StartMenu' --silent | Out-Null
+                Write-Host "Configuring Open-Shell..." -ForegroundColor Yellow
+                Stop-Process -Name StartMenu -Force | Out-Null
+                New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force | Out-Null
+                New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force | Out-Null
+                New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu" -Force | Out-Null
+                New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell\Settings" -Force | Out-Null
+                New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu\Settings" -Force | Out-Null
+                Set-ItemProperty -Path "HKCU:\Software\OpenShell\OpenShell\Settings" -Name "Nightly" -Value 0x00000001
+                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "Version" -Value 0x040400bf
+                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "DisablePinExt" -Value 1
+                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "EnableContextMenu" -Value 0
+                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "MouseClick" -Value "Command"
+                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftClick" -Value "Command"
+                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "WinKey" -Value "Command"
+                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "MouseClickCommand" -Value "$pwd\bin\start.exe"
+                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftClickCommand" -Value "Nothing"
+                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "WinKeyCommand" -Value "$pwd\bin\start.exe"
+                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftWin" -Value "Nothing"
+                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftRight" -Value 1
+                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "SearchBox" -Value "Hide"
+                Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
+                Copy-Item -Path "$pwd\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
+                Stop-Process -Name Explorer
+                Start-Process $shellExePath
+                Write-Host "Configuring Open-Shell completed." -ForegroundColor Green
+            }
+            else {
+                Write-Host "Skipping Open-Shell installation." -ForegroundColor Yellow
+            }
         }
         "6" {
             # TopNotify
