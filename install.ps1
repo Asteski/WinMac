@@ -215,9 +215,6 @@ foreach ($app in $selectedApps) {
             # PowerToys
             Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
             winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
-            # $ptDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
-            # Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force
-            # Start-Process "$ptDir\PowerToys (Preview)\PowerToys (Preview).lnk" -WindowStyle Minimized
             Write-Host "Configuring PowerToys completed." -ForegroundColor Green
         }
         "2" {
@@ -355,7 +352,7 @@ foreach ($app in $selectedApps) {
                 Write-Host "Configuring Open-Shell completed." -ForegroundColor Green
             }
             else {
-                Write-Host "Skipping Open-Shell installation." -ForegroundColor Yellow
+                Write-Host "Skipping Open-Shell installation." -ForegroundColor Magenta
             }
         }
         "6" {
