@@ -86,7 +86,7 @@ else
     $selectedApps = "1","2","3","4","5","6","7","8","9"
 }
 
-if ($selectedApps -like '*4*' -and $selectedApps -like '*5*') {
+if ($selectedApps -like '*4*' -or $selectedApps -like '*5*') {
 Write-Host @"
 
 $([char]27)[93m$("You can choose between WinMac start menu or Classic start menu.")$([char]27)[0m
@@ -139,7 +139,7 @@ userName@computerName ~ %
     }
 }
 
-if ($selectedApps -like '*4*' -or $selectedApps -like '*5*') {
+if ($selectedApps -like '*4*') {
     $roundedOrSquared = Read-Host "`nEnter 'R' for rounded or 'S' for squared shell corners"
     if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') {
         Write-Host "Using rounded corners." -ForegroundColor Green
