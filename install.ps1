@@ -280,11 +280,11 @@ foreach ($app in $selectedApps) {
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             $sabOrbs = $env:ProgramFiles + "\StartAllBack\Orbs"
             $sabRegPath = "HKCU:\Software\StartIsBack"
-            $registryPath = "$exRegPath\StuckRectsLegacy"
-            $registryValueName = "Settings"
-            $registryValueData = @(0x30,0x00,0x00,0x00,0xfe,0xff,0xff,0xff,0x02,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x5a,0x00,0x00,0x00,0x32,0x00,0x00,0x00,0x26,0x07,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0x07,0x00,0x00,0x38,0x04,0x00,0x00,0x78,0x00,0x00,0x00,0x01,0x00,0x00,0x00)
-            New-Item -Path $registryPath -Force | Out-Null
-            New-ItemProperty -Path $registryPath -Name $registryValueName -Value $registryValueData -PropertyType Binary | Out-Null
+            $taskbarOnTopPath = "$exRegPath\StuckRectsLegacy"
+            $taskbarOnTopName = "Settings"
+            $taskbarOnTopValue = @(0x30,0x00,0x00,0x00,0xfe,0xff,0xff,0xff,0x02,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x5a,0x00,0x00,0x00,0x32,0x00,0x00,0x00,0x26,0x07,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0x07,0x00,0x00,0x38,0x04,0x00,0x00,0x78,0x00,0x00,0x00,0x01,0x00,0x00,0x00)
+            New-Item -Path $taskbarOnTopPath -Force | Out-Null
+            New-ItemProperty -Path $taskbarOnTopPath -Name $taskbarOnTopName -Value $taskbarOnTopValue -PropertyType Binary | Out-Null
             Copy-Item $pwd\config\taskbar\orbs\* $sabOrbs -Force | Out-Null
             Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 1
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSizeMove" -Value 1
@@ -296,11 +296,11 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSi" -Value 0
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarAl" -Value 0
             Set-ItemProperty -Path $exRegPath\Advancedx -Name "UseCompactMode" -Value 1
-            Set-ItemProperty -Path $sabRegPath -Name "WinBuild" -Value 22759
-            Set-ItemProperty -Path $sabRegPath -Name "WinLangID" -Value 2064
+            # Set-ItemProperty -Path $sabRegPath -Name "WinBuild" -Value 22759
+            # Set-ItemProperty -Path $sabRegPath -Name "WinLangID" -Value 2064
             Set-ItemProperty -Path $sabRegPath -Name "RestyleControls" -Value 1
             Set-ItemProperty -Path $sabRegPath -Name "WelcomeShown" -Value 3
-            Set-ItemProperty -Path $sabRegPath -Name "UpdateCheck" -Value ([byte[]](160, 224, 8, 201, 49, 125, 218, 1))
+            # Set-ItemProperty -Path $sabRegPath -Name "UpdateCheck" -Value ([byte[]](160, 224, 8, 201, 49, 125, 218, 1))
             Set-ItemProperty -Path $sabRegPath -Name "SettingsVersion" -Value 5
             Set-ItemProperty -Path $sabRegPath -Name "ModernIconsColorized" -Value 0
             Set-ItemProperty -Path $sabRegPath -Name "FrameStyle" -Value 2
@@ -310,8 +310,8 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $sabRegPath -Name "TaskbarLargerIcons" -Value 0
             Set-ItemProperty -Path $sabRegPath -Name "TaskbarSpacierIcons" -Value (-1)
             Set-ItemProperty -Path $sabRegPath -Name "TaskbarControlCenter" -Value 1
-            Set-ItemProperty -Path $sabRegPath -Name "UpdateInfo" -Value ([byte[]](60, 63, 120, 109, 108, 32, 118, 101, 114, 115, 105, 111, 110, 61, 34, 49, 46, 48, 34, 63, 62, 10, 60, 85, 112, 100, 97, 116, 101, 32, 78, 97, 109, 101, 61, 34, 83, 116, 97, 114, 116, 65, 108, 108, 66, 97, 99, 107, 32, 51, 46, 55, 46, 55, 34, 32, 68, 101, 115, 99, 114, 105, 112, 116, 105, 111, 110, 61, 34, 34, 32, 68, 111, 119, 110, 108, 111, 97, 100, 85, 82, 76, 61, 34, 104, 116, 116, 112, 115, 58, 47, 47, 115, 116, 97, 114, 116, 105, 115, 98, 97, 99, 107, 46, 115, 102, 111, 51, 46, 99, 100, 110, 46, 100, 105, 103, 105, 116, 97, 108, 111, 99, 101, 97, 110, 115, 112, 97, 99, 101, 115, 46, 99, 111, 109, 47, 83, 116, 97, 114, 116, 65, 108, 108, 66, 97, 99, 107, 95, 51, 46, 55, 46, 55, 95, 115, 101, 116, 117, 112, 46, 101, 120, 101, 34, 32, 76, 101, 97, 114, 110, 77, 111, 114, 101, 85, 82, 76, 61, 34, 104, 116, 116, 112, 115, 58, 47, 47, 119, 119, 119, 46, 115, 116, 97, 114, 116, 97, 108, 108, 98, 97, 99, 107, 46, 99, 111, 109, 47, 34, 47, 62, 10))
-            Set-ItemProperty -Path $sabRegPath -Name "UpdateInfoHash" -Value 805441044
+            # Set-ItemProperty -Path $sabRegPath -Name "UpdateInfo" -Value ([byte[]](60, 63, 120, 109, 108, 32, 118, 101, 114, 115, 105, 111, 110, 61, 34, 49, 46, 48, 34, 63, 62, 10, 60, 85, 112, 100, 97, 116, 101, 32, 78, 97, 109, 101, 61, 34, 83, 116, 97, 114, 116, 65, 108, 108, 66, 97, 99, 107, 32, 51, 46, 55, 46, 55, 34, 32, 68, 101, 115, 99, 114, 105, 112, 116, 105, 111, 110, 61, 34, 34, 32, 68, 111, 119, 110, 108, 111, 97, 100, 85, 82, 76, 61, 34, 104, 116, 116, 112, 115, 58, 47, 47, 115, 116, 97, 114, 116, 105, 115, 98, 97, 99, 107, 46, 115, 102, 111, 51, 46, 99, 100, 110, 46, 100, 105, 103, 105, 116, 97, 108, 111, 99, 101, 97, 110, 115, 112, 97, 99, 101, 115, 46, 99, 111, 109, 47, 83, 116, 97, 114, 116, 65, 108, 108, 66, 97, 99, 107, 95, 51, 46, 55, 46, 55, 95, 115, 101, 116, 117, 112, 46, 101, 120, 101, 34, 32, 76, 101, 97, 114, 110, 77, 111, 114, 101, 85, 82, 76, 61, 34, 104, 116, 116, 112, 115, 58, 47, 47, 119, 119, 119, 46, 115, 116, 97, 114, 116, 97, 108, 108, 98, 97, 99, 107, 46, 99, 111, 109, 47, 34, 47, 62, 10))
+            # Set-ItemProperty -Path $sabRegPath -Name "UpdateInfoHash" -Value 805441044
             Set-ItemProperty -Path $sabRegPath -Name "SysTrayStyle" -Value 1
             Set-ItemProperty -Path $sabRegPath -Name "SysTrayActionCenter" -Value 1
             Set-ItemProperty -Path $sabRegPath -Name "SysTraySpacierIcons" -Value 1
@@ -339,7 +339,6 @@ foreach ($app in $selectedApps) {
             New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu" -Force | Out-Null
             New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell\Settings" -Force | Out-Null
             New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu\Settings" -Force | Out-Null
-            # Set-ItemProperty -Path "HKCU:\Software\OpenShell\OpenShell" -Name "LastUpdateTime" -Value 0x161cde38
             Set-ItemProperty -Path "HKCU:\Software\OpenShell\OpenShell\Settings" -Name "Nightly" -Value 0x00000001
             Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "Version" -Value 0x040400bf
             Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "DisablePinExt" -Value 1
