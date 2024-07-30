@@ -139,7 +139,7 @@ userName@computerName ~ %
     }
 }
 
-if ($selectedApps -like '*4*') {
+if ($selectedApps -like '*4*' -or $selectedApps -like '*5*') {
     $roundedOrSquared = Read-Host "`nEnter 'R' for rounded or 'S' for squared shell corners"
     if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') {
         Write-Host "Using rounded corners." -ForegroundColor Green
