@@ -329,7 +329,6 @@ foreach ($app in $selectedApps) {
             Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
         }
         "5" {
-            #! FIXME Open-Shell
             Write-Host "Installing Open-Shell..." -ForegroundColor Yellow
             $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\StartMenu.exe"
             winget install --id "Open-Shell.Open-Shell-Menu" --source winget --custom 'ADDLOCAL=StartMenu' --silent | Out-Null
