@@ -374,11 +374,21 @@ function killall {
     if ($null -eq $procName -or $null -eq $process) 
     {
         Write-Host "Process is not running or not found" -ForegroundColor Red
+        Start-Sleep -Seconds 2
     } 
-    else 
+    elseif ($process.Count -gt 1)
+    {
+        Write-Host "Multiple processes found:" -ForegroundColor Yellow
+        $process | select-object -property ProcessName, Id | Format-Table -AutoSize
+        $process | Stop-Process -Force
+        Write-Host "All processes have been stopped." -ForegroundColor Green
+        Start-Sleep -Seconds 2
+    }
+    else
     {
         $process | Stop-Process -Force
-        Write-Host "Process $procName stopped" -ForegroundColor Green
+        Write-Host "Process $($process.Name) stopped" -ForegroundColor Green
+        Start-Sleep -Seconds 2
     }
 }
 
