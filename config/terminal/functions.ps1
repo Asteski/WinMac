@@ -373,22 +373,42 @@ function killall {
     $process = Get-Process | Where-Object { $_.ProcessName -like $procName }
     if ($null -eq $procName -or $null -eq $process) 
     {
-        Write-Host "Process is not running or not found" -ForegroundColor Red
-        Start-Sleep -Seconds 2
+        Write-Host "Process is not running or not found." -ForegroundColor Red
+        Start-Sleep -Seconds 1
     } 
     elseif ($process.Count -gt 1)
     {
-        Write-Host "Multiple processes found:" -ForegroundColor Yellow
-        $process | select-object -property ProcessName, Id | Format-Table -AutoSize
-        $process | Stop-Process -Force
-        Write-Host "All processes have been stopped." -ForegroundColor Green
-        Start-Sleep -Seconds 2
+        $failedProcesses = @()
+        foreach ($proc in $process)
+        {
+            try
+            {
+                $proc | Stop-Process -Force
+            }
+            catch
+            {
+                $failedProcesses += $proc
+            }
+        }
+
+        if ($failedProcesses.Count -gt 0)
+        {
+            Write-Host "Failed to stop the following processes:" -ForegroundColor Red
+            $failedProcesses | select-object -property ProcessName, Id | Format-Table -AutoSize
+        }
+        else
+        {
+            Write-Host "$($process.Name[0]) processes have been stopped." -ForegroundColor Green
+        }
     }
     else
     {
-        $process | Stop-Process -Force
-        Write-Host "Process $($process.Name) stopped" -ForegroundColor Green
-        Start-Sleep -Seconds 2
+        try {
+            $process | Stop-Process -Force
+            Write-Host "Process $($process.Name) stopped" -ForegroundColor Green
+        } catch {
+            Write-Host "Failed to stop process $($process.Name)" -ForegroundColor Red
+        }
     }
 }
 
