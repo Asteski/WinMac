@@ -20,7 +20,7 @@ Installation process is seperated into two parts: main install and dock.
 Main script must be run with admin privileges, while dock script 
 must be run in non-elevated pwsh session.
 
-PowerShell profile files will be removed and replaced with new ones. 
+PowerShell profile files will be removed and replaced with new ones. stat
 Please make sure to backup your current profiles if needed.
 
 "@ -ForegroundColor Yellow
@@ -275,7 +275,8 @@ foreach ($app in $selectedApps) {
             winget install --id "StartIsBack.StartAllBack" --source winget --silent | Out-Null
             Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
-            $sabOrbs = $env:ProgramFiles + "\StartAllBack\Orbs"
+            # $sabOrbs = $env:ProgramFiles + "\StartAllBack\Orbs"
+            $sabOrbs = $env:localAPPDATA + "\StartAllBack\Orbs"
             $sabRegPath = "HKCU:\Software\StartIsBack"
             $taskbarOnTopPath = "$exRegPath\StuckRectsLegacy"
             $taskbarOnTopName = "Settings"
