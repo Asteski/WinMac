@@ -370,7 +370,7 @@ function top {
 
 function killall {
     $procName = $args[0]
-    $process = Get-Process | Where-Object { $_.ProcessName -eq $procName }
+    $process = Get-Process | Where-Object { $_.ProcessName -like $procName }
     if ($null -eq $procName -or $null -eq $process) 
     {
         Write-Host "Process is not running or not found" -ForegroundColor Red
