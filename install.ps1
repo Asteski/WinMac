@@ -377,17 +377,17 @@ foreach ($app in $selectedApps) {
             # Stahky
             Write-Host "Installing Stahky..." -ForegroundColor Yellow
             $url = "https://github.com/joedf/stahky/releases/download/v0.1.0.8/stahky_U64_v0.1.0.8.zip"
-            $outputPath = "$pwd\stahky_U64_v2.3.7.zip"
+            $outputPath = "$pwd\stahky_U64.zip"
             $exePath = "$env:LOCALAPPDATA\Stahky"
-            Write-Host "Configuring Stahky..." -ForegroundColor Yellow
-            New-Item -ItemType Directory -Path $exePath -Force
-            New-Item -ItemType Directory -Path $exePath\config -Force
+            New-Item -ItemType Directory -Path $exePath -Force | Out-Null
+            New-Item -ItemType Directory -Path $exePath\config -Force | Out-Null
             Invoke-WebRequest -Uri $url -OutFile $outputPath
             if (Test-Path -Path "$exePath\stahky.exe") {
                 Write-Host "Stahky already exists."
             } else {
                 Expand-Archive -Path $outputPath -DestinationPath $exePath
             }
+            Write-Host "Configuring Stahky..." -ForegroundColor Yellow
             Copy-Item -Path $pwd\config\taskbar\stacks\* -Destination $exePath\config -Recurse -Force
             Copy-Item -Path $exePath\config\themes\stahky-$stackTheme.ini -Destination $exePath\stahky.ini
             $pathVarUser = [Environment]::GetEnvironmentVariable("Path", "User")
