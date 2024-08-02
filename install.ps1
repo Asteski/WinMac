@@ -358,7 +358,7 @@ foreach ($app in $selectedApps) {
         "6" {
             # TopNotify
             Write-Host "Installing TopNotify..." -ForegroundColor Yellow
-            winget install --id 9PFMDK0QHKQJ --silent --accept-package-agreements --accept-source-agreements | Out-Null
+            winget install --name TopNotify --silent --accept-package-agreements --accept-source-agreements
             Write-Host "Configuring TopNotify..." -ForegroundColor Yellow
             $app = Get-AppxPackage *TopNotify*
             Start-Process -FilePath TopNotify.exe -WorkingDirectory $app.InstallLocation
