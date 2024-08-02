@@ -66,7 +66,7 @@ function wu { winget upgrade $args }
 function ww { $appname = $args; winget show "$appname" }
 function ppwd { $pwd.path }
 function c { Set-Location .. }
-function ffind { $filter = "*$args*"; if ($filter) {(Get-ChildItem -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -like $filter }).FullName} else {Write-Host "No filename provided." -ForegroundColor Red}}
+function ffind { $filter = "*$args*"; if ($filter) {(Get-ChildItem -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -like $filter }).FullName} else {Write-Host "No filename provided" -ForegroundColor Red}}
 
 $stacks = "$env:LOCALAPPDATA\Stahky"
 function stahky { 
@@ -101,7 +101,7 @@ function run {
         Write-Host
         (($lnk | Select-Object -Property Name).Name).Replace(".lnk", "")
     } elseif ($lnk.Count -eq 0) {
-        Write-Host "No shortcut found." -ForegroundColor Red
+        Write-Host "No shortcut found" -ForegroundColor Red
     } else {
         Start-Process -FilePath $lnk.FullName
     }
@@ -122,7 +122,7 @@ function adduser {
     Import-Module microsoft.powershell.localaccounts -UseWindowsPowerShell -WarningAction SilentlyContinue
     $new = New-LocalUser "$userName" -NoPassword
     if ($new) {
-        Write-Host "User $userName created."
+        Write-Host "User $userName created"
     }
 }
 
@@ -141,10 +141,10 @@ function passwd {
     $plainPwd2 =[Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($securePwd2))
     
     if($plainPwd1 -NE $plainPwd2) {
-        Write-Host "Passwords do not match." -ForegroundColor Red
+        Write-Host "Passwords do not match" -ForegroundColor Red
     } else {
         Set-LocalUser -Name $userName -Password $securePwd1
-        Write-Host "Password changed for $userName." -ForegroundColor Green
+        Write-Host "Password changed for $userName" -ForegroundColor Green
     }
 }
 
@@ -162,10 +162,10 @@ function nohup {
         $job = Get-Job -Id $killJob -ErrorAction SilentlyContinue
         if ($job) {
             $job | Stop-Job -Force
-            Write-Host "Job with ID $killJob has been killed." -ForegroundColor Green
+            Write-Host "Job with ID $killJob has been killed" -ForegroundColor Green
         }
         else {
-            Write-Host "Job with ID $killJob not found." -ForegroundColor Red
+            Write-Host "Job with ID $killJob not found" -ForegroundColor Red
         }
     }
     else {
@@ -207,7 +207,7 @@ function Find-Service {
     $services = Get-Service -ErrorAction SilentlyContinue | Where-Object { $_.DisplayName -like "*$SearchString*" }
 
     if ($services.Count -eq 0) {
-        Write-Host "No services found matching '$SearchString'."
+        Write-Host "No services found matching '$SearchString'"
     } else {
         Write-Host "Services matching '$SearchString':"
         $services
@@ -222,7 +222,7 @@ function Find-Process {
     $processes = Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.ProcessName -like "*$SearchString*" }
 
     if ($processes.Count -eq 0) {
-        Write-Host "No processes found matching '$SearchString'."
+        Write-Host "No processes found matching '$SearchString'"
     } else {
         Write-Host "Processes matching '$SearchString':"
         $processes
@@ -239,7 +239,7 @@ function printenv {
             if ($envVar) {
                 $envVar.Value -split ';' | Sort-Object 
             } else {
-                Write-Host "Environment variable '$_' does not exist." -ForegroundColor Red
+                Write-Host "Environment variable '$_' does not exist" -ForegroundColor Red
             }
         }
     }
@@ -258,7 +258,7 @@ function rmenv {
         [Parameter(Mandatory = $true, Position=0)] [string] $name
     )
     if (-not (Test-Path "Env:\$name")) {
-        Write-Host "Environment variable '$name' does not exist." -ForegroundColor Red
+        Write-Host "Environment variable '$name' does not exist" -ForegroundColor Red
     } else {
         [Environment]::SetEnvironmentVariable($name, $null, "User")
     }
@@ -369,45 +369,30 @@ function top {
 }
 
 function killall {
-    $procName = $args[0]
+    param(
+        [string]$procName
+    )
     $process = Get-Process | Where-Object { $_.ProcessName -like $procName }
-    if ($null -eq $procName -or $null -eq $process) 
-    {
-        Write-Host "Process is not running or not found." -ForegroundColor Red
-        Start-Sleep -Seconds 1
+    
+    if ($null -eq $procName -or $null -eq $process) {
+        Write-Host "Process is not running or not found" -ForegroundColor Red
     } 
-    elseif ($process.Count -gt 1)
-    {
-        $failedProcesses = @()
-        foreach ($proc in $process)
-        {
-            try
-            {
-                $proc | Stop-Process -Force
-            }
-            catch
-            {
-                $failedProcesses += $proc
+    elseif ($process.Count -gt 1) {
+        ForEach ($proc in $process) {
+            try {
+                $proc | Stop-Process -Force -ErrorAction Stop
+                Write-Host "Process $($proc.Name) stopped" -ForegroundColor Green
+            } catch {
+                Write-Host $_ -ForegroundColor Red
             }
         }
-
-        if ($failedProcesses.Count -gt 0)
-        {
-            Write-Host "Failed to stop the following processes:" -ForegroundColor Red
-            $failedProcesses | select-object -property ProcessName, Id | Format-Table -AutoSize
-        }
-        else
-        {
-            Write-Host "$($process.Name[0]) processes have been stopped." -ForegroundColor Green
-        }
-    }
-    else
-    {
+    } 
+    else {
         try {
-            $process | Stop-Process -Force
+            $process | Stop-Process -Force -ErrorAction Stop
             Write-Host "Process $($process.Name) stopped" -ForegroundColor Green
         } catch {
-            Write-Host "Failed to stop process $($process.Name)" -ForegroundColor Red
+            Write-Host $_ -ForegroundColor Red
         }
     }
 }
@@ -492,10 +477,10 @@ function string-search {
 function grep {
     $excludeFiles = @('*.dll', '*.lnk', '*.zip', '*.rar', '*.7zip', '*.png', '*.exe', '*.msi', '*.jpg', '*.jpeg', '*.gif', '*.bmp', '*.ico', '*.mp3', '*.mp4', '*.avi', '*.mkv', '*.flv', '*.mov', '*.wav', '*.wma', '*.wmv', '*.aac', '*.flac', '*.m4a', '*.ogg', '*.opus', '*.webm', '*.webp', '*.pdf')
     if($args.Count -eq 0) { 
-        Write-Host -f Red "Error: " -Non; Write-Host "No arguments provided." 
+        Write-Host -f Red "Error: " -Non; Write-Host "No arguments provided"
     }
     elseif (($args.Count -eq 3 -and $args[1] -eq '-r' -and $args[2] -ne '-f' -and $args[2] -ne '-e')) {
-        Write-Host -f Red "Error: " -Non; Write-Host "Invalid arguments provided." 
+        Write-Host -f Red "Error: " -Non; Write-Host "Invalid arguments provided" 
     }
     elseif ($args.Count -eq 1) {
         $files = Get-ChildItem -Exclude $excludeFiles
@@ -518,7 +503,7 @@ function grep {
         string-search $args[0]
     }
     else {
-        Write-Host -f Red "Error: " -Non; Write-Host "Invalid arguments provided." 
+        Write-Host -f Red "Error: " -Non; Write-Host "Invalid arguments provided" 
     }
 }
 

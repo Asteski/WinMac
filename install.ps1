@@ -275,7 +275,6 @@ foreach ($app in $selectedApps) {
             winget install --id "StartIsBack.StartAllBack" --source winget --silent | Out-Null
             Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
-            # $sabOrbs = $env:ProgramFiles + "\StartAllBack\Orbs"
             $sabOrbs = $env:localAPPDATA + "\StartAllBack\Orbs"
             $sabRegPath = "HKCU:\Software\StartIsBack"
             $taskbarOnTopPath = "$exRegPath\StuckRectsLegacy"
