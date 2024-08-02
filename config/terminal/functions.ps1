@@ -381,7 +381,7 @@ function killall {
         ForEach ($proc in $process) {
             try {
                 $proc | Stop-Process -Force -ErrorAction Stop
-                Write-Host "Process $($proc.Name) stopped" -ForegroundColor Green
+                Write-Host "Process $($proc.ProcessName) stopped" -ForegroundColor Green
             } catch {
                 Write-Host $_ -ForegroundColor Red
             }
@@ -390,7 +390,7 @@ function killall {
     else {
         try {
             $process | Stop-Process -Force -ErrorAction Stop
-            Write-Host "Process $($process.Name) stopped" -ForegroundColor Green
+            Write-Host "Process $($process.ProcessName) stopped" -ForegroundColor Green
         } catch {
             Write-Host $_ -ForegroundColor Red
         }
