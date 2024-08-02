@@ -376,7 +376,7 @@ foreach ($app in $selectedApps) {
         "7" {
             # Stahky
             Write-Host "Installing Stahky..." -ForegroundColor Yellow
-            $url = ""
+            $url = "https://github.com/joedf/stahky/releases/download/v0.1.0.8/stahky_U64_v0.1.0.8.zip"
             $outputPath = "$pwd\stahky_U64_v2.3.7.zip"
             $exePath = "$env:LOCALAPPDATA\Stahky"
             Write-Host "Configuring Stahky..." -ForegroundColor Yellow
