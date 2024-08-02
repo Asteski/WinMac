@@ -358,8 +358,7 @@ foreach ($app in $selectedApps) {
         "6" {
             # TopNotify
             Write-Host "Installing TopNotify..." -ForegroundColor Yellow
-            # winget install --id 9PFMDK0QHKQJ --silent --accept-package-agreements --accept-source-agreements
-            winget install --id 9PFMDK0QHKQJ --accept-package-agreements --accept-source-agreements
+            winget install --id 9PFMDK0QHKQJ --silent --accept-package-agreements --accept-source-agreements | Out-Null
             Write-Host "Configuring TopNotify..." -ForegroundColor Yellow
             $app = Get-AppxPackage *TopNotify*
             Start-Process -FilePath TopNotify.exe -WorkingDirectory $app.InstallLocation
@@ -377,12 +376,12 @@ foreach ($app in $selectedApps) {
         "7" {
             # Stahky
             Write-Host "Installing Stahky..." -ForegroundColor Yellow
-            $url = "https://github.com/SamsidParty/TopNotify/archive/refs/tags/2.3.7.zip"
+            $url = ""
             $outputPath = "$pwd\stahky_U64_v2.3.7.zip"
             $exePath = "$env:LOCALAPPDATA\Stahky"
             Write-Host "Configuring Stahky..." -ForegroundColor Yellow
-            New-Item -ItemType Directory -Path $exePath -Force | Out-Null
-            New-Item -ItemType Directory -Path $exePath\config -Force | Out-Null
+            New-Item -ItemType Directory -Path $exePath -Force
+            New-Item -ItemType Directory -Path $exePath\config -Force
             Invoke-WebRequest -Uri $url -OutFile $outputPath
             if (Test-Path -Path "$exePath\stahky.exe") {
                 Write-Host "Stahky already exists."
