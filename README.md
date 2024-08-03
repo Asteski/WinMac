@@ -67,7 +67,7 @@ WinMac provides you with debloated prompt with addition of completion functions 
 
 - **macOS Keyboard Shortcuts**
 
-WinMac provides very useful keyboard shortcuts from macOS with use of AutoHotkey, which is an automation scripting language for Windows. Shortcuts include hiding/showing dock, minimizing all windows and cycling through windows of the same app.
+WinMac provides very useful keyboard shortcuts from macOS with use of AutoHotkey, which is an automation scripting language for Windows. Shortcuts include hiding/showing dock, minimizing all windows and cycling through windows of the same app. More details on Wiki page [Keyboard Shortcuts](https://github.com/Asteski/WinMac/wiki/Commands-cheat-sheet#keyboard-shortcuts).
 
 ## Benefits
 
