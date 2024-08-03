@@ -65,7 +65,7 @@ Stahky allows to create shortcuts for taskbar, that show custom context menus wh
 
 WinMac provides you with debloated prompt with addition of completion functions and most commonly used commands in macOS/Linux, like *vim, grep, touch, ditto, top, whatis, killall, ll, la, tree* with additional commands like *history, computerinfo, battery, backup, ntop, rcopy, brew* among ton of other functions! More details on Wiki page [Commands Cheat Sheet](https://github.com/Asteski/WinMac/wiki/Commands-Cheat-Sheet).
 
-- **macOS keyboard shortcuts**
+- **macOS Keyboard Shortcuts**
 
 WinMac provides very useful keyboard shortcuts from macOS with use of AutoHotkey, which is an automation scripting language for Windows. Shortcuts include hiding/showing dock, minimizing all windows and cycling through windows of the same app.
 
@@ -91,7 +91,7 @@ There are many dock customization you can find around the web, including [Devian
 
 - Windows on ARM support,
 - Auto Dark Mode toggle theme script,
-- more functions.
+- more and improved functions.
 
 ## Credits to
 
