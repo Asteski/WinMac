@@ -588,10 +588,6 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
     }
 }
 
-# Cleanup
-# Write-Host "Cleaning up..." -ForegroundColor Yellow
-# Move-Item -Path "C:\Users\Public\Desktop\gVim*" -Destination $programsDir -Force
-# Move-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Destination $programsDir -Force 
 Write-Host
 Stop-Transcript
 
