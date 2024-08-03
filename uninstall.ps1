@@ -226,7 +226,7 @@ foreach ($app in $selectedApps) {
             # Nexus Dock
             Write-Host "Uninstalling Nexus Dock..." -ForegroundColor Yellow
             Get-Process Nexus | Stop-Process -Force | Out-Null
-            winget uninstall --id "Winstep Xtreme_is1" --silent --force | Out-Null
+            winget uninstall --name Nexus --silent --force | Out-Null
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Remove-Item -Path "$programsDir\Nexus.lnk" -Force | Out-Null
             Write-Host "Uninstalling Nexus Dock completed." -ForegroundColor Green
@@ -243,7 +243,10 @@ foreach ($app in $selectedApps) {
             Write-Host "Uninstalling AutoHotkey..." -ForegroundColor Yellow
             Stop-Process -Name "AutoHotkey*" -Force | Out-Null
             winget uninstall --id autohotkey.autohotkey --source winget --force | Out-Null
-            Unregister-ScheduledTask -TaskName "SameAppCycle" -Confirm:$false -ErrorAction SilentlyContinue
+            $tasks = Get-ScheduledTask -TaskName "WinMac_*" -ErrorAction SilentlyContinue
+            foreach ($task in $tasks) {
+                Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false -ErrorAction SilentlyContinue
+            }
             Write-Host "Uninstalling AutoHotkey completed." -ForegroundColor Green
         }
         "10" {

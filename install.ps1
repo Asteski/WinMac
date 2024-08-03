@@ -448,7 +448,7 @@ foreach ($app in $selectedApps) {
             New-Item -ItemType Directory -Path $destinationDirectory | Out-Null
             foreach ($file in $files) { 
                 Copy-Item -Path $file.FullName -Destination $destinationDirectory
-                $taskName = ($file.Name).replace('.ahk','')
+                $taskName = "WinMac_" + ($file.Name).replace('.ahk','')
                 $action = New-ScheduledTaskAction -Execute $file.Name -WorkingDirectory $destinationDirectory    
                 $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
                 Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Principal $principal | Out-Null
