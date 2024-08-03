@@ -43,7 +43,7 @@ if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
 }
 
 ## Dock Installation
-
+Write-Host "`Installing Nexus Dock...`n" -ForegroundColor Yellow
 $downloadUrl = "https://www.winstep.net/nexus.zip"
 $downloadPath = "dock.zip"
 if (-not (Test-Path $downloadPath)) {
@@ -108,7 +108,7 @@ reg import $regFile > $null 2>&1
 Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "DockLabelColorHotTrack1" -ErrorAction SilentlyContinue | Out-Null
 Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe' | Out-Null
 while (!(Get-Process nexus -ErrorAction SilentlyContinue)) { Start-Sleep 1 }
-Write-Host "Configuring Nexus Dock completed.`n" -ForegroundColor Green
+Write-Host "Nexus Dock installation completed.`n" -ForegroundColor Green
 
 Write-Host "Clean up..." -ForegroundColor Yellow
 $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
