@@ -316,6 +316,14 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
             if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0 }
             else { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 1 }
+            $registryContent = Get-Content -Path ".\config\new-font.reg" -Raw
+            $fontRegPath = "HKCU:\Control Panel\Desktop\WindowMetrics"
+            Set-ItemProperty -Path $fontRegPath -Name "CaptionFont" -Value $registryContent.CaptionFont
+            Set-ItemProperty -Path $fontRegPath -Name "IconFont" -Value $registryContent.IconFont
+            Set-ItemProperty -Path $fontRegPath -Name "MenuFont" -Value $registryContent.MenuFont
+            Set-ItemProperty -Path $fontRegPath -Name "MessageFont" -Value $registryContent.MessageFont
+            Set-ItemProperty -Path $fontRegPath -Name "SmCaptionFont" -Value $registryContent.SmCaptionFont
+            Set-ItemProperty -Path $fontRegPath -Name "StatusFont" -Value $registryContent.StatusFont
             Stop-Process -Name explorer -Force | Out-Null
             Start-Sleep 2
             Write-Host "StartAllBack configuration completed." -ForegroundColor Green
