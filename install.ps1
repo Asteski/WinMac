@@ -224,18 +224,17 @@ foreach ($app in $selectedApps) {
             # PowerToys
             Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
             winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
-            Write-Host "PowerToys configuration completed." -ForegroundColor Green
+            Write-Host "PowerToys installation completed." -ForegroundColor Green
         }
         "2" {
             # Everything
             Write-Host "Installing Everything..."  -ForegroundColor Yellow
             winget install --id "Voidtools.Everything" --source winget --silent | Out-Null
-            Write-Host "Configuring Everything..."  -ForegroundColor Yellow
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Move-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
             Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
             Start-Process -FilePath Everything.exe -WorkingDirectory $env:PROGRAMFILES\Everything -WindowStyle Hidden
-            Write-Host "Everything configuration completed." -ForegroundColor Green
+            Write-Host "Everything installation completed." -ForegroundColor Green
             }
         "3" {
             # PowerShell Profile
@@ -285,7 +284,6 @@ foreach ($app in $selectedApps) {
             # StartAllBack
             Write-Host "Installing StartAllBack..." -ForegroundColor Yellow
             winget install --id "StartIsBack.StartAllBack" --source winget --silent | Out-Null
-            Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             $sabOrbs = $env:localAPPDATA + "\StartAllBack\Orbs"
             $sabRegPath = "HKCU:\Software\StartIsBack"
@@ -330,14 +328,13 @@ foreach ($app in $selectedApps) {
             else { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 1 }
             Stop-Process -Name explorer -Force | Out-Null
             Start-Sleep 2
-            Write-Host "StartAllBack configuration completed." -ForegroundColor Green
+            Write-Host "StartAllBack installation completed." -ForegroundColor Green
         }
         "5" {
             if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
                 Write-Host "Installing Open-Shell..." -ForegroundColor Yellow
                 $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\StartMenu.exe"
                 winget install --id "Open-Shell.Open-Shell-Menu" --source winget --custom 'ADDLOCAL=StartMenu' --silent | Out-Null
-                Write-Host "Configuring Open-Shell..." -ForegroundColor Yellow
                 Stop-Process -Name StartMenu -Force | Out-Null
                 New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force | Out-Null
                 New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force | Out-Null
@@ -361,7 +358,7 @@ foreach ($app in $selectedApps) {
                 Copy-Item -Path "$pwd\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
                 Stop-Process -Name Explorer
                 Start-Process $shellExePath
-                Write-Host "Open-Shell configuration completed." -ForegroundColor Green
+                Write-Host "Open-Shell installation completed." -ForegroundColor Green
             }
             else {
                 Write-Host "Skipping Open-Shell installation." -ForegroundColor Magenta
@@ -371,7 +368,6 @@ foreach ($app in $selectedApps) {
             # TopNotify
             Write-Host "Installing TopNotify..." -ForegroundColor Yellow
             winget install --name TopNotify --silent --accept-package-agreements --accept-source-agreements | Out-Null
-            Write-Host "Configuring TopNotify..." -ForegroundColor Yellow
             $app = Get-AppxPackage *TopNotify*
             Start-Process -FilePath TopNotify.exe -WorkingDirectory $app.InstallLocation
             $pkgName = $app.PackageFamilyName
@@ -383,7 +379,7 @@ foreach ($app in $selectedApps) {
             $regKey = "HKCU:Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\SystemAppData\$pkgName\$taskId"
             Set-ItemProperty -Path $regKey -Name UserEnabledStartupOnce -Value 1
             Set-ItemProperty -Path $regKey -Name State -Value 2
-            Write-Host "TopNotify configuration completed." -ForegroundColor Green
+            Write-Host "TopNotify installation completed." -ForegroundColor Green
         }
         "7" {
             # Stahky
@@ -399,7 +395,6 @@ foreach ($app in $selectedApps) {
             } else {
                 Expand-Archive -Path $outputPath -DestinationPath $exePath
             }
-            Write-Host "Configuring Stahky..." -ForegroundColor Yellow
             Copy-Item -Path $pwd\config\taskbar\stacks\* -Destination $exePath\config -Recurse -Force
             Copy-Item -Path $exePath\config\themes\stahky-$stackTheme.ini -Destination $exePath\stahky.ini
             $pathVarUser = [Environment]::GetEnvironmentVariable("Path", "User")
@@ -440,13 +435,12 @@ foreach ($app in $selectedApps) {
             $shortcut2.TargetPath = $newTargetPath
             $shortcut2.WorkingDirectory = $newWorkDir2
             $shortcut2.Save()
-            Write-Host "Stahky configuration completed." -ForegroundColor Green
+            Write-Host "Stahky installation completed." -ForegroundColor Green
         }
         "8" {
             # AutoHotkey
             Write-Host "Installing AutoHotkey..." -ForegroundColor Yellow  
             winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
-            Write-Host "Configuring AutoHotkey..." -ForegroundColor Yellow  
             $trigger = New-ScheduledTaskTrigger -AtLogon
             $sourceDirectory = "$pwd\config\ahk"
             $destinationDirectory = "$env:PROGRAMFILES\AutoHotkey\Scripts"
@@ -460,7 +454,7 @@ foreach ($app in $selectedApps) {
                 Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Principal $principal | Out-Null
                 Start-Process -FilePath $destinationDirectory\$($file.Name)
             }
-            Write-Host "AutoHotkey configuration completed." -ForegroundColor Green
+            Write-Host "AutoHotkey installation completed." -ForegroundColor Green
         }
         "9" {
             # Other
