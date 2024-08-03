@@ -65,6 +65,10 @@ Stahky allows to create shortcuts for taskbar, that show custom context menus wh
 
 WinMac provides you with debloated prompt with addition of completion functions and most commonly used commands in macOS/Linux, like *vim, grep, touch, ditto, top, whatis, killall, ll, la, tree* with additional commands like *history, computerinfo, battery, backup, ntop, rcopy, brew* among ton of other functions! More details on Wiki page [Commands Cheat Sheet](https://github.com/Asteski/WinMac/wiki/Commands-Cheat-Sheet).
 
+- **macOS Keyboard Shortcuts**
+
+WinMac provides very useful keyboard shortcuts from macOS with use of AutoHotkey, which is an automation scripting language for Windows. Shortcuts include hiding/showing dock, minimizing all windows and cycling through windows of the same app. More details on Wiki page [Keyboard Shortcuts](https://github.com/Asteski/WinMac/wiki/Commands-cheat-sheet#keyboard-shortcuts).
+
 ## Benefits
 
 - **Unified Computing Experience:** WinMac provides a cohesive blend of Windows and macOS elements, ensuring a smooth and efficient workflow for all users.
@@ -85,10 +89,9 @@ There are many dock customization you can find around the web, including [Devian
 
 ## Planned features
 
-- Windows 11 24H2 support,
 - Windows on ARM support,
 - Auto Dark Mode toggle theme script,
-- more functions.
+- more and improved functions.
 
 ## Credits to
 
@@ -101,6 +104,7 @@ List of utilities and their creators, used with WinMac deployment script:
 - [Nexus](https://www.winstep.net/nexus.asp) by Winstep
 - [TopNotify](https://github.com/SamsidParty/TopNotify) by SamsidParty
 - [Stahky](https://github.com/joedf/stahky) by joedf
+- [AutoHotKey](https://www.autohotkey.com/) by AutoHotkey Foundation LLC
 - [PSTree](https://github.com/santisq/PSTree) by santisq
 - [ntop](https://github.com/gsass1/NTop) by gsass1
 
