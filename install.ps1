@@ -282,7 +282,7 @@ foreach ($app in $selectedApps) {
             # StartAllBack
             Write-Host "Installing StartAllBack..." -ForegroundColor Yellow
             winget install --id "StartIsBack.StartAllBack" --source winget --silent | Out-Null
-            Write-Host -NoNewLine "`bConfiguring StartAllBack..." -ForegroundColor Yellow
+            Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             $sabOrbs = $env:localAPPDATA + "\StartAllBack\Orbs"
             $sabRegPath = "HKCU:\Software\StartIsBack"
@@ -325,16 +325,19 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
             if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0 }
             else { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 1 }
+            
+            reg import $pwd\config\newfont.reg | Out-Null
+
             Stop-Process -Name explorer -Force | Out-Null
             Start-Sleep 2
-            Write-Host -NoNewLine "`bStartAllBack configuration completed." -ForegroundColor Green
+            Write-Host "StartAllBack configuration completed." -ForegroundColor Green
         }
         "5" {
             if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
                 Write-Host "Installing Open-Shell..." -ForegroundColor Yellow
                 $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\StartMenu.exe"
                 winget install --id "Open-Shell.Open-Shell-Menu" --source winget --custom 'ADDLOCAL=StartMenu' --silent | Out-Null
-                Write-Host -NoNewLine "`bConfiguring Open-Shell..." -ForegroundColor Yellow
+                Write-Host "Configuring Open-Shell..." -ForegroundColor Yellow
                 Stop-Process -Name StartMenu -Force | Out-Null
                 New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force | Out-Null
                 New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force | Out-Null
@@ -358,7 +361,7 @@ foreach ($app in $selectedApps) {
                 Copy-Item -Path "$pwd\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
                 Stop-Process -Name Explorer
                 Start-Process $shellExePath
-                Write-Host -NoNewLine "`bOpen-Shell configuration completed." -ForegroundColor Green
+                Write-Host "Open-Shell configuration completed." -ForegroundColor Green
             }
             else {
                 Write-Host "Skipping Open-Shell installation." -ForegroundColor Magenta
