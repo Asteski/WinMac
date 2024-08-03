@@ -325,9 +325,6 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
             if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0 }
             else { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 1 }
-            
-            reg import $pwd\config\newfont.reg | Out-Null
-
             Stop-Process -Name explorer -Force | Out-Null
             Start-Sleep 2
             Write-Host "StartAllBack configuration completed." -ForegroundColor Green
