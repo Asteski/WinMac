@@ -41,8 +41,8 @@ if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
 } else {
     Write-Host "Invalid input. Defaulting to light theme.`n" -ForegroundColor Yellow
 }
-
 ## Dock Installation
+Start-Sleep 1
 Write-Host "`Installing Nexus Dock...`n" -ForegroundColor Yellow
 $downloadUrl = "https://www.winstep.net/nexus.zip"
 $downloadPath = "dock.zip"
