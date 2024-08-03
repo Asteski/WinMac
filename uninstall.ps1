@@ -22,6 +22,8 @@ your current profiles if needed.
 Vim and Nexus packages will show prompt to uninstall, please confirm the
 uninstallations manually.
 
+AutoHotkey option must be run in elevated mode to uninstall.
+
 "@ -ForegroundColor Yellow
 
 Write-Host "-----------------------------------------------------------------------" -ForegroundColor Cyan
@@ -67,7 +69,6 @@ $([char]27)[93m$("Please select options you want to uninstall:")$([char]27)[0m
     Write-Host "6. TopNotify"
     Write-Host "7. Nexus Dock"
     Write-Host "8. Stahky"
-    Write-Host "9. AutoHotkey"
     Write-Host "10. Other"
     $selection = Read-Host "Enter the numbers of options you want to uninstall (separated by commas)"
     $selectedApps = @()
