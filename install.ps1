@@ -215,7 +215,7 @@ foreach ($app in $selectedApps) {
             # PowerToys
             Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
             winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
-            Write-Host "Configuring PowerToys completed." -ForegroundColor Green
+            Write-Host "PowerToys configuration completed." -ForegroundColor Green
         }
         "2" {
             # Everything
@@ -226,7 +226,7 @@ foreach ($app in $selectedApps) {
             Move-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
             Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
             Start-Process -FilePath Everything.exe -WorkingDirectory $env:PROGRAMFILES\Everything -WindowStyle Hidden
-            Write-Host "Configuring Everything completed." -ForegroundColor Green
+            Write-Host "Everything configuration completed." -ForegroundColor Green
             }
         "3" {
             # PowerShell Profile
@@ -267,7 +267,7 @@ foreach ($app in $selectedApps) {
             Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $functions
             Add-Content -Path "$profilePath\WindowsPowerShell\$prompt" -Value $functions
             Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $functions
-            Write-Host "Configuring PowerShell Profile completed." -ForegroundColor Green
+            Write-Host "PowerShell Profile configuration completed." -ForegroundColor Green
         }
         "4" {
             # StartAllBack
@@ -318,7 +318,7 @@ foreach ($app in $selectedApps) {
             else { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 1 }
             Stop-Process -Name explorer -Force | Out-Null
             Start-Sleep 2
-            Write-Host "Configuring StartAllBack completed." -ForegroundColor Green
+            Write-Host "StartAllBack configuration completed." -ForegroundColor Green
         }
         "5" {
             if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
@@ -349,7 +349,7 @@ foreach ($app in $selectedApps) {
                 Copy-Item -Path "$pwd\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
                 Stop-Process -Name Explorer
                 Start-Process $shellExePath
-                Write-Host "Configuring Open-Shell completed." -ForegroundColor Green
+                Write-Host "Open-Shell configuration completed." -ForegroundColor Green
             }
             else {
                 Write-Host "Skipping Open-Shell installation." -ForegroundColor Magenta
@@ -358,7 +358,7 @@ foreach ($app in $selectedApps) {
         "6" {
             # TopNotify
             Write-Host "Installing TopNotify..." -ForegroundColor Yellow
-            winget install --name TopNotify --silent --accept-package-agreements --accept-source-agreements
+            winget install --name TopNotify --silent --accept-package-agreements --accept-source-agreements | Out-Null
             Write-Host "Configuring TopNotify..." -ForegroundColor Yellow
             $app = Get-AppxPackage *TopNotify*
             Start-Process -FilePath TopNotify.exe -WorkingDirectory $app.InstallLocation
@@ -371,7 +371,7 @@ foreach ($app in $selectedApps) {
             $regKey = "HKCU:Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\SystemAppData\$pkgName\$taskId"
             Set-ItemProperty -Path $regKey -Name UserEnabledStartupOnce -Value 1
             Set-ItemProperty -Path $regKey -Name State -Value 2
-            Write-Host "Configuring TopNotify completed." -ForegroundColor Green
+            Write-Host "TopNotify configuration completed." -ForegroundColor Green
         }
         "7" {
             # Stahky
@@ -406,8 +406,7 @@ foreach ($app in $selectedApps) {
             [Environment]::SetEnvironmentVariable("Path", $pathVar, "Machine")
             $pathVar = [Environment]::GetEnvironmentVariable("Path", "User") + ";$exePath"
             [Environment]::SetEnvironmentVariable("Path", $pathVar, "User")
-            Write-Host "Configuring Stahky completed." -ForegroundColor Green
-
+            
             $shortcutPath1 = "$env:LOCALAPPDATA\Stahky\config\shortcuts\Management.lnk"
             $shortcutPath2 = "$env:LOCALAPPDATA\Stahky\config\shortcuts\Favorites.lnk"
             $newTargetPath = "$env:LOCALAPPDATA\Stahky\Stahky.exe"
@@ -415,20 +414,21 @@ foreach ($app in $selectedApps) {
             $newArguments2 = '/stahky ' + "$env:LOCALAPPDATA\Stahky\config\favorites"
             $newWorkDir1 = "$env:LOCALAPPDATA\Stahky\config\management"
             $newWorkDir2 = "$env:LOCALAPPDATA\Stahky\config\favorites"
-
+            
             $shell1 = New-Object -ComObject WScript.Shell
             $shortcut1 = $shell1.CreateShortcut($shortcutPath1) 
             $shortcut1.Arguments = $newArguments1
             $shortcut1.TargetPath = $newTargetPath
             $shortcut1.WorkingDirectory = $newWorkDir1
             $shortcut1.Save()
-
+            
             $shell2 = New-Object -ComObject WScript.Shell
             $shortcut2 = $shell2.CreateShortcut($shortcutPath2) 
             $shortcut2.Arguments = $newArguments2
             $shortcut2.TargetPath = $newTargetPath
             $shortcut2.WorkingDirectory = $newWorkDir2
             $shortcut2.Save()
+            Write-Host "Stahky configuration completed." -ForegroundColor Green
         }
         "8" {
             # AutoHotkey
@@ -448,11 +448,12 @@ foreach ($app in $selectedApps) {
                 Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Principal $principal | Out-Null
                 Start-Process -FilePath $destinationDirectory\$($file.Name)
             }
-            Write-Host "Configuring AutoHotkey completed." -ForegroundColor Green
+            Write-Host "AutoHotkey configuration completed." -ForegroundColor Green
         }
         "9" {
             # Other
             ## Black Cursor
+            Write-Host "Configuring black cursor..." -ForegroundColor Yellow
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             $curSourceFolder = $pwd.Path + '\config\cursor'
             $curDestFolder = "C:\Windows\Cursors"
@@ -498,6 +499,7 @@ uint fWinIni);
             $CursorRefresh::SystemParametersInfo(0x0057,0,$null,0) | Out-Null
 
             ## Pin Home, Programs and Recycle Bin to Quick Access
+            write-host "Pinning Home, Programs and Recycle Bin to Quick Access..." -ForegroundColor Yellow
 $homeIni = @"
 [.ShellClassInfo]
 IconResource=C:\Windows\System32\SHELL32.dll,160
@@ -554,11 +556,13 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse | Out-Null
 
             ## Remove Shortcut Arrows
+            Write-Host "Removing shortcut arrows..." -ForegroundColor Yellow
             Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force
             New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
 
             ## Misc
+            Write-Host "Configuring miscellaneous settings..." -ForegroundColor Yellow
             Set-ItemProperty -Path "$exRegPath\Advanced" -Name "LaunchTO" -Value 1
             Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
             Set-ItemProperty -Path $exRegPath -Name "ShowRecent" -Value 0
@@ -576,7 +580,8 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
 Write-Host
 
 # Cleanup
-Move-Item -Path "C:\Users\Public\Desktop\gVim*" -Destination $programsDir -Force 
+Write-Host "Cleaning up..." -ForegroundColor Yellow
+Move-Item -Path "C:\Users\Public\Desktop\gVim*" -Destination $programsDir -Force
 Move-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Destination $programsDir -Force 
 Stop-Transcript
 
