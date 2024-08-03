@@ -272,6 +272,8 @@ foreach ($app in $selectedApps) {
             [Environment]::SetEnvironmentVariable("Path", $env:Path + ";$vimChildPath", [EnvironmentVariableTarget]::Machine) | Out-Null
             Install-Module PSTree -Force | Out-Null
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+            Move-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
+            Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
             Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $prompt
             Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $functions
             Add-Content -Path "$profilePath\WindowsPowerShell\$prompt" -Value $functions
@@ -571,7 +573,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
 
             ## Misc
-            Write-Host "Configuring miscellaneous settings..." -ForegroundColor Yellow
+            Write-Host "Configuring other settings..." -ForegroundColor Yellow
             Set-ItemProperty -Path "$exRegPath\Advanced" -Name "LaunchTO" -Value 1
             Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
             Set-ItemProperty -Path $exRegPath -Name "ShowRecent" -Value 0
@@ -586,11 +588,10 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
     }
 }
 
-
 # Cleanup
-Write-Host "Cleaning up..." -ForegroundColor Yellow
-Move-Item -Path "C:\Users\Public\Desktop\gVim*" -Destination $programsDir -Force
-Move-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Destination $programsDir -Force 
+# Write-Host "Cleaning up..." -ForegroundColor Yellow
+# Move-Item -Path "C:\Users\Public\Desktop\gVim*" -Destination $programsDir -Force
+# Move-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Destination $programsDir -Force 
 Write-Host
 Stop-Transcript
 
