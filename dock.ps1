@@ -42,6 +42,8 @@ if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
     Write-Host "Invalid input. Defaulting to light theme.`n" -ForegroundColor Yellow
 }
 
+## Dock Installation
+
 $downloadUrl = "https://www.winstep.net/nexus.zip"
 $downloadPath = "dock.zip"
 if (-not (Test-Path $downloadPath)) {
@@ -102,7 +104,7 @@ elseif (($roundedOrSquared -ne "S" -or $roundedOrSquared -ne "s") -and ($lightOr
     $regFile = $modifiedFile
 }
 
-reg import $regFile | Out-Null
+reg import $regFile > $null 2>&1
 Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "DockLabelColorHotTrack1" -ErrorAction SilentlyContinue | Out-Null
 Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe' | Out-Null
 while (!(Get-Process nexus -ErrorAction SilentlyContinue)) { Start-Sleep 1 }
