@@ -11,6 +11,18 @@ This is Work in Progress. You're using this script at your own risk.
 
 -----------------------------------------------------------------------
 "@ -ForegroundColor Cyan
+
+## Check if script is run from the correct directory
+
+$checkDir = Get-ChildItem
+if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir -like "*bin*")) {
+    Write-Host "WinMac directory not found. Please make sure to run the script from the correct directory." -ForegroundColor Red
+    Start-Sleep 2
+    exit
+}
+
+## Dock Configuration
+
 Write-Host "`nConfiguring Nexus Dock...`n" -ForegroundColor Yellow
 $roundedOrSquared = Read-Host "Enter 'R' for rounded dock or 'S' for squared dock"
 if ($roundedOrSquared -eq "R" -or $roundedOrSquared -eq "r") {

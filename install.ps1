@@ -282,7 +282,7 @@ foreach ($app in $selectedApps) {
             # StartAllBack
             Write-Host "Installing StartAllBack..." -ForegroundColor Yellow
             winget install --id "StartIsBack.StartAllBack" --source winget --silent | Out-Null
-            Write-Host "Configuring StartAllBack..." -ForegroundColor Yellow
+            Write-Host -NoNewLine "`bConfiguring StartAllBack..." -ForegroundColor Yellow
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             $sabOrbs = $env:localAPPDATA + "\StartAllBack\Orbs"
             $sabRegPath = "HKCU:\Software\StartIsBack"
@@ -327,14 +327,14 @@ foreach ($app in $selectedApps) {
             else { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 1 }
             Stop-Process -Name explorer -Force | Out-Null
             Start-Sleep 2
-            Write-Host "StartAllBack configuration completed." -ForegroundColor Green
+            Write-Host -NoNewLine "`bStartAllBack configuration completed." -ForegroundColor Green
         }
         "5" {
             if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
                 Write-Host "Installing Open-Shell..." -ForegroundColor Yellow
                 $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\StartMenu.exe"
                 winget install --id "Open-Shell.Open-Shell-Menu" --source winget --custom 'ADDLOCAL=StartMenu' --silent | Out-Null
-                Write-Host "Configuring Open-Shell..." -ForegroundColor Yellow
+                Write-Host -NoNewLine "`bConfiguring Open-Shell..." -ForegroundColor Yellow
                 Stop-Process -Name StartMenu -Force | Out-Null
                 New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force | Out-Null
                 New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force | Out-Null
@@ -358,7 +358,7 @@ foreach ($app in $selectedApps) {
                 Copy-Item -Path "$pwd\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
                 Stop-Process -Name Explorer
                 Start-Process $shellExePath
-                Write-Host "Open-Shell configuration completed." -ForegroundColor Green
+                Write-Host -NoNewLine "`bOpen-Shell configuration completed." -ForegroundColor Green
             }
             else {
                 Write-Host "Skipping Open-Shell installation." -ForegroundColor Magenta

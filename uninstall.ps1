@@ -27,6 +27,15 @@ uninstallations manually.
 Write-Host "-----------------------------------------------------------------------" -ForegroundColor Cyan
 Write-Host
 
+## Check if script is run from the correct directory
+
+$checkDir = Get-ChildItem
+if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir -like "*bin*")) {
+    Write-Host "WinMac directory not found. Please make sure to run the script from the correct directory." -ForegroundColor Red
+    Start-Sleep 2
+    exit
+}
+
 ## Start Logging
 
 $errorActionPreference="SilentlyContinue"
