@@ -342,13 +342,15 @@ foreach ($app in $selectedApps) {
                 New-Item -ItemType Directory -Path $winmacarmDir
                 New-Item -ItemType Directory -Path $ahkDir 
                 Copy-Item .\bin\winkey* $winmacarmDir | Out-Null
-                Copy-Item .\config\ahk\StartButton.ahk $ahkDir 
-                start-process "$winmacarm\winkey.exe"
+                Copy-Item .\config\ahk\StartButton.ahk $ahkDir
                 $trigger = New-ScheduledTaskTrigger -AtLogon
                 $taskName = "WinMac_" + ($fileName).replace('.ahk','')
                 $action = New-ScheduledTaskAction -Execute $fileName -WorkingDirectory $destinationDirectory    
                 $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
                 Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Principal $principal
+                Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
+                Copy-Item -Path "$pwd\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
+                Start-Process "$winmacarm\winkey.exe"
                 Start-Process -FilePath "$ahkDir\StartButton.ahk"
                 Write-Host "WinMacARM installation completed." -ForegroundColor Green
             }
