@@ -332,36 +332,26 @@ foreach ($app in $selectedApps) {
         }
         "5" {
             if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
-                Write-Host "Installing Open-Shell..." -ForegroundColor Yellow
-                $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\StartMenu.exe"
-                winget install --id "Open-Shell.Open-Shell-Menu" --source winget --custom 'ADDLOCAL=StartMenu' --silent | Out-Null
-                Stop-Process -Name StartMenu -Force | Out-Null
-                New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force | Out-Null
-                New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force | Out-Null
-                New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu" -Force | Out-Null
-                New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell\Settings" -Force | Out-Null
-                New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu\Settings" -Force | Out-Null
-                Set-ItemProperty -Path "HKCU:\Software\OpenShell\OpenShell\Settings" -Name "Nightly" -Value 0x00000001
-                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "Version" -Value 0x040400bf
-                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "DisablePinExt" -Value 1
-                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "EnableContextMenu" -Value 0
-                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "MouseClick" -Value "Command"
-                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftClick" -Value "Command"
-                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "WinKey" -Value "Command"
-                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "MouseClickCommand" -Value "$pwd\bin\start.exe"
-                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftClickCommand" -Value "Nothing"
-                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "WinKeyCommand" -Value "$pwd\bin\start.exe"
-                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftWin" -Value "Nothing"
-                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftRight" -Value 1
-                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "SearchBox" -Value "Hide"
-                Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
-                Copy-Item -Path "$pwd\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
-                Stop-Process -Name Explorer
-                Start-Process $shellExePath
-                Write-Host "Open-Shell installation completed." -ForegroundColor Green
+                Write-Host "Installing WinMacARM..." -ForegroundColor Yellow
+                winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
+                $winmacarmDir = "$env:PROGRAMFILES\WinMacARM"
+                $ahkDir = "$env:PROGRAMFILES\AutoHotkey\Scripts"
+                $fileName = "StartButton.ahk"
+                New-Item -ItemType Directory -Path $winmacarmDir | Out-Null
+                New-Item -ItemType Directory -Path $ahkDir | Out-Null
+                cp .\bin\winkey* $winmacarmDir | Out-Null
+                cp .\config\ahk\StartButton.ahk $ahkDir | Out-Null
+                start-process "$winmacarm\winkey.exe"
+                $trigger = New-ScheduledTaskTrigger -AtLogon
+                $taskName = "WinMac_" + ($fileName).replace('.ahk','')
+                $action = New-ScheduledTaskAction -Execute $fileName -WorkingDirectory $destinationDirectory    
+                $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
+                Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Principal $principal | Out-Null
+                Start-Process -FilePath "$ahkDir\StartButton.ahk"
+                Write-Host "WinMacARM installation completed." -ForegroundColor Green
             }
             else {
-                Write-Host "Skipping Open-Shell installation." -ForegroundColor Magenta
+                Write-Host "Skipping WinMacARM installation." -ForegroundColor Magenta
             }
         }
         "6" {
