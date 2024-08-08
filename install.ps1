@@ -333,14 +333,14 @@ foreach ($app in $selectedApps) {
         "5" {
             if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
                 Write-Host "Installing WinMacARM..." -ForegroundColor Yellow
-                winget install --id autohotkey.autohotkey --source winget --silent
-                winget install Microsoft.DotNet.DesktopRuntime.6 --silent
-                winget install Microsoft.DotNet.AspNetCore.6 --silent
+                winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
+                winget install Microsoft.DotNet.DesktopRuntime.6 --silent | Out-Null
+                winget install Microsoft.DotNet.AspNetCore.6 --silent | Out-Null
                 $winmacarmDir = "$env:PROGRAMFILES\WinMacARM"
                 $ahkDir = "$env:PROGRAMFILES\AutoHotkey\Scripts"
                 $fileName = "StartButton.ahk"
-                New-Item -ItemType Directory -Path $winmacarmDir
-                New-Item -ItemType Directory -Path $ahkDir 
+                New-Item -ItemType Directory -Path $winmacarmDir | Out-Null
+                New-Item -ItemType Directory -Path $ahkDir  | Out-Null
                 Copy-Item .\bin\winkey* $winmacarmDir | Out-Null
                 Copy-Item .\config\ahk\StartButton.ahk $ahkDir
                 $trigger = New-ScheduledTaskTrigger -AtLogon
@@ -350,7 +350,7 @@ foreach ($app in $selectedApps) {
                 Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Principal $principal
                 Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
                 Copy-Item -Path "$pwd\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
-                Start-Process "$winmacarm\winkey.exe"
+                Start-Process "$winmacarmDir\winkey.exe"
                 Start-Process -FilePath "$ahkDir\StartButton.ahk"
                 Write-Host "WinMacARM installation completed." -ForegroundColor Green
             }
