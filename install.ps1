@@ -333,20 +333,20 @@ foreach ($app in $selectedApps) {
         "5" {
             if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
                 Write-Host "Installing WinMacARM..." -ForegroundColor Yellow
-                winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
+                winget install --id autohotkey.autohotkey --source winget --silent
                 $winmacarmDir = "$env:PROGRAMFILES\WinMacARM"
                 $ahkDir = "$env:PROGRAMFILES\AutoHotkey\Scripts"
                 $fileName = "StartButton.ahk"
-                New-Item -ItemType Directory -Path $winmacarmDir | Out-Null
-                New-Item -ItemType Directory -Path $ahkDir | Out-Null
+                New-Item -ItemType Directory -Path $winmacarmDir
+                New-Item -ItemType Directory -Path $ahkDir 
                 cp .\bin\winkey* $winmacarmDir | Out-Null
-                cp .\config\ahk\StartButton.ahk $ahkDir | Out-Null
+                cp .\config\ahk\StartButton.ahk $ahkDir 
                 start-process "$winmacarm\winkey.exe"
                 $trigger = New-ScheduledTaskTrigger -AtLogon
                 $taskName = "WinMac_" + ($fileName).replace('.ahk','')
                 $action = New-ScheduledTaskAction -Execute $fileName -WorkingDirectory $destinationDirectory    
                 $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
-                Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Principal $principal | Out-Null
+                Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Principal $principal
                 Start-Process -FilePath "$ahkDir\StartButton.ahk"
                 Write-Host "WinMacARM installation completed." -ForegroundColor Green
             }
