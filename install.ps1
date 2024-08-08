@@ -334,13 +334,15 @@ foreach ($app in $selectedApps) {
             if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
                 Write-Host "Installing WinMacARM..." -ForegroundColor Yellow
                 winget install --id autohotkey.autohotkey --source winget --silent
+                winget install Microsoft.DotNet.DesktopRuntime.6 --silent
+                winget install Microsoft.DotNet.AspNetCore.6 --silent
                 $winmacarmDir = "$env:PROGRAMFILES\WinMacARM"
                 $ahkDir = "$env:PROGRAMFILES\AutoHotkey\Scripts"
                 $fileName = "StartButton.ahk"
                 New-Item -ItemType Directory -Path $winmacarmDir
                 New-Item -ItemType Directory -Path $ahkDir 
-                cp .\bin\winkey* $winmacarmDir | Out-Null
-                cp .\config\ahk\StartButton.ahk $ahkDir 
+                Copy-Item .\bin\winkey* $winmacarmDir | Out-Null
+                Copy-Item .\config\ahk\StartButton.ahk $ahkDir 
                 start-process "$winmacarm\winkey.exe"
                 $trigger = New-ScheduledTaskTrigger -AtLogon
                 $taskName = "WinMac_" + ($fileName).replace('.ahk','')
