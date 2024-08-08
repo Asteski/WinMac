@@ -98,7 +98,7 @@ There are many dock customization you can find around the web, including [Devian
 List of utilities and their creators, used with WinMac deployment script:
 
 - [PowerToys](https://learn.microsoft.com/en-us/windows/powertoys/) by Microsoft
-- [StartAllBack](https://www.startallback.com/) by Stanislav Zinukhov
+- [StartAllBack](https://www.startallback.com/) by Tihiy
 - [Open-Shell](https://open-shell.github.io/Open-Shell-Menu/) by Ivo Beltchev
 - [Everything](https://www.voidtools.com/) by David Carpenter
 - [Nexus](https://www.winstep.net/nexus.asp) by Winstep
