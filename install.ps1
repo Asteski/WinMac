@@ -336,22 +336,22 @@ foreach ($app in $selectedApps) {
                 winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
                 winget install Microsoft.DotNet.DesktopRuntime.6 --silent | Out-Null
                 winget install Microsoft.DotNet.AspNetCore.6 --silent | Out-Null
-                $winmacarmDir = "$env:PROGRAMFILES\WinMacARM"
-                $ahkDir = "$env:PROGRAMFILES\AutoHotkey\Scripts"
-                $fileName = "StartButton.ahk"
-                New-Item -ItemType Directory -Path $winmacarmDir | Out-Null
-                New-Item -ItemType Directory -Path $ahkDir  | Out-Null
-                Copy-Item .\bin\winkey* $winmacarmDir | Out-Null
-                Copy-Item .\config\ahk\StartButton.ahk $ahkDir
-                $trigger = New-ScheduledTaskTrigger -AtLogon
-                $taskName = "WinMac_" + ($fileName).replace('.ahk','')
-                $action = New-ScheduledTaskAction -Execute $fileName -WorkingDirectory $destinationDirectory    
+                $armDir = "$env:PROGRAMFILES\WinMacARM"
+                $actionStartButton = New-ScheduledTaskAction -Execute "StartButton.ahk" -WorkingDirectory $armDir
+                $actionWinKey = New-ScheduledTaskAction -Execute 'winkey.exe' -WorkingDirectory $armDir   
                 $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
-                Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Principal $principal
+                $trigger = New-ScheduledTaskTrigger -AtLogon
+                $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
+                # $TaskDescription = "This task runs even when on battery power."
+                # Register-ScheduledTask -Action $Action -Trigger $Trigger -Settings $Settings -User "NT AUTHORITY\SYSTEM" -Description $TaskDescription -TaskName $TaskName -RunLevel Highest
+                New-Item -ItemType Directory -Path $armDir | Out-Null
+                Copy-Item .\arm\* $armDir | Out-Null
+                Register-ScheduledTask -TaskName "WinMac_StartButton" -Action $actionStartButton -Trigger $trigger -Principal $principal -Settings $settings | Out-Null
+                Register-ScheduledTask -TaskName "WinMac_WinKey" -Action $actionWinKey -Trigger $trigger -Principal $principal -Settings $settings | Out-Null
                 Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
                 Copy-Item -Path "$pwd\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
-                Start-Process "$winmacarmDir\winkey.exe"
-                Start-Process -FilePath "$ahkDir\StartButton.ahk"
+                Start-Process "$armDir\winkey.exe"
+                Start-Process "$armDir\StartButton.ahk"
                 Write-Host "WinMacARM installation completed." -ForegroundColor Green
             }
             else {
@@ -436,6 +436,7 @@ foreach ($app in $selectedApps) {
             Write-Host "Installing AutoHotkey..." -ForegroundColor Yellow  
             winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
             $trigger = New-ScheduledTaskTrigger -AtLogon
+            # $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries $true -DontStopIfGoingOnBatteries $true -StartWhenAvailable $true
             $sourceDirectory = "$pwd\config\ahk"
             $destinationDirectory = "$env:PROGRAMFILES\AutoHotkey\Scripts"
             $files = Get-ChildItem -Path $sourceDirectory -File
