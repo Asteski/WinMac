@@ -358,7 +358,7 @@ foreach ($app in $selectedApps) {
                 $trigger = New-ScheduledTaskTrigger -AtLogon
                 $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
                 New-Item -ItemType Directory -Path "$env:PROGRAMFILES\WinMac\$triggerDir" #| Out-Null
-                Copy-Item .\arm\bin\$triggerDir\* "$env:PROGRAMFILES\WinMac\$triggerDir" #| Out-Null
+                Copy-Item .\bin\$triggerDir\* "$env:PROGRAMFILES\WinMac\$triggerDir" #| Out-Null
                 Register-ScheduledTask -TaskName "WinMac_StartButton" -Action $actionStartButton -Trigger $trigger -Principal $principal -Settings $settings #| Out-Null
                 Register-ScheduledTask -TaskName "WinMac_WinKey" -Action $actionWinKey -Trigger $trigger -Principal $principal -Settings $settings #| Out-Null
                 Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
