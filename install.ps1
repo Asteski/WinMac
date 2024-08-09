@@ -38,13 +38,13 @@ if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir 
 
 $platformType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
 if ($platformType -eq "x64-based PC") {
-    Write-Host "Platform type detected: x64"
+    Write-Host "`nPlatform type detected: x64" -ForegroundColor Green
     $platform = "x86"
 } elseif ($platformType -eq "ARM64-based PC") {
-    Write-Host "Platform type detected: ARM"
+    Write-Host "`nPlatform type detected: ARM" -ForegroundColor Green
     $platform = "arm"
 } else {
-    Write-Host "Unable to detect platform type. Defaulting to x86." -ForegroundColor Yellow
+    Write-Host "`nUnable to detect platform type. Defaulting to x86." -ForegroundColor Green
     $platform = "x86"
 }
 
