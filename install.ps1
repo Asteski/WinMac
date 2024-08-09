@@ -348,19 +348,19 @@ foreach ($app in $selectedApps) {
         "5" {
             if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
                 Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
-                winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
-                winget install Microsoft.DotNet.DesktopRuntime.6 --silent | Out-Null
-                winget install Microsoft.DotNet.AspNetCore.6 --silent | Out-Null
+                winget install --id autohotkey.autohotkey --source winget --silent #| Out-Null
+                winget install Microsoft.DotNet.DesktopRuntime.6 --silent #| Out-Null
+                winget install Microsoft.DotNet.AspNetCore.6 --silent #| Out-Null
                 if ($platform -ne "ARM") { $triggerDir = 'x86' } else { $triggerDir = 'arm' }
                 $actionStartButton = New-ScheduledTaskAction -Execute "StartButton.ahk" -WorkingDirectory "$env:PROGRAMFILES\WinMac\"
                 $actionWinKey = New-ScheduledTaskAction -Execute 'winkey.exe' -WorkingDirectory "$env:PROGRAMFILES\WinMac\$triggerDir"
                 $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
                 $trigger = New-ScheduledTaskTrigger -AtLogon
                 $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
-                New-Item -ItemType Directory -Path "$env:PROGRAMFILES\WinMac\$triggerDir" | Out-Null
-                Copy-Item .\arm\bin\$triggerDir\* "$env:PROGRAMFILES\WinMac\$triggerDir" | Out-Null
-                Register-ScheduledTask -TaskName "WinMac_StartButton" -Action $actionStartButton -Trigger $trigger -Principal $principal -Settings $settings | Out-Null
-                Register-ScheduledTask -TaskName "WinMac_WinKey" -Action $actionWinKey -Trigger $trigger -Principal $principal -Settings $settings | Out-Null
+                New-Item -ItemType Directory -Path "$env:PROGRAMFILES\WinMac\$triggerDir" #| Out-Null
+                Copy-Item .\arm\bin\$triggerDir\* "$env:PROGRAMFILES\WinMac\$triggerDir" #| Out-Null
+                Register-ScheduledTask -TaskName "WinMac_StartButton" -Action $actionStartButton -Trigger $trigger -Principal $principal -Settings $settings #| Out-Null
+                Register-ScheduledTask -TaskName "WinMac_WinKey" -Action $actionWinKey -Trigger $trigger -Principal $principal -Settings $settings #| Out-Null
                 Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
                 Copy-Item -Path "$pwd\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
                 Start-Process "$env:PROGRAMFILES\WinMac\$triggerDir\winkey.exe"
