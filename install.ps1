@@ -30,10 +30,22 @@ Write-Host "--------------------------------------------------------------------
 ## Check if script is run from the correct directory
 
 $checkDir = Get-ChildItem
-if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir -like "*arm*")) {
+if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir -like "*bin*")) {
     Write-Host "`nWinMac components not found. Please make sure to run the script from the correct directory." -ForegroundColor Red
     Start-Sleep 2
     exit
+}
+
+$platformType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
+if ($platformType -eq "x64-based PC") {
+    Write-Output "Platform type detected: x64"
+    $platform = "x86"
+} elseif ($platformType -eq "ARM64-based PC") {
+    Write-Output "Platform type detected: ARM"
+    $platform = "arm"
+} else {
+    Write-Host "Unable to detect platform type. Defaulting to x86." -ForegroundColor Yellow
+    $platform = "x86"
 }
 
 ## Start Logging
@@ -332,30 +344,28 @@ foreach ($app in $selectedApps) {
         }
         "5" {
             if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
-                Write-Host "Installing WinMacARM..." -ForegroundColor Yellow
+                Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
                 winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
                 winget install Microsoft.DotNet.DesktopRuntime.6 --silent | Out-Null
                 winget install Microsoft.DotNet.AspNetCore.6 --silent | Out-Null
-                $armDir = "$env:PROGRAMFILES\WinMacARM"
-                $actionStartButton = New-ScheduledTaskAction -Execute "StartButton.ahk" -WorkingDirectory $armDir
-                $actionWinKey = New-ScheduledTaskAction -Execute 'winkey.exe' -WorkingDirectory $armDir   
+                if ($platform -ne "ARM") { $triggerDir = 'x86' } else { $triggerDir = 'arm' }
+                $actionStartButton = New-ScheduledTaskAction -Execute "StartButton.ahk" -WorkingDirectory "$env:PROGRAMFILES\WinMac\"
+                $actionWinKey = New-ScheduledTaskAction -Execute 'winkey.exe' -WorkingDirectory "$env:PROGRAMFILES\WinMac\$triggerDir"
                 $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
                 $trigger = New-ScheduledTaskTrigger -AtLogon
                 $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
-                # $TaskDescription = "This task runs even when on battery power."
-                # Register-ScheduledTask -Action $Action -Trigger $Trigger -Settings $Settings -User "NT AUTHORITY\SYSTEM" -Description $TaskDescription -TaskName $TaskName -RunLevel Highest
-                New-Item -ItemType Directory -Path $armDir | Out-Null
-                Copy-Item .\arm\* $armDir | Out-Null
+                New-Item -ItemType Directory -Path "$env:PROGRAMFILES\WinMac\$triggerDir" | Out-Null
+                Copy-Item .\arm\bin\$triggerDir\* "$env:PROGRAMFILES\WinMac\$triggerDir" | Out-Null
                 Register-ScheduledTask -TaskName "WinMac_StartButton" -Action $actionStartButton -Trigger $trigger -Principal $principal -Settings $settings | Out-Null
                 Register-ScheduledTask -TaskName "WinMac_WinKey" -Action $actionWinKey -Trigger $trigger -Principal $principal -Settings $settings | Out-Null
                 Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
                 Copy-Item -Path "$pwd\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
-                Start-Process "$armDir\winkey.exe"
-                Start-Process "$armDir\StartButton.ahk"
-                Write-Host "WinMacARM installation completed." -ForegroundColor Green
+                Start-Process "$env:PROGRAMFILES\WinMac\$triggerDir\winkey.exe"
+                Start-Process "$triggerDir\StartButton.ahk"
+                Write-Host "WinMac Menu installation completed." -ForegroundColor Green
             }
             else {
-                Write-Host "Skipping WinMacARM installation." -ForegroundColor Magenta
+                Write-Host "Skipping WinMac Menu installation." -ForegroundColor Magenta
             }
         }
         "6" {
