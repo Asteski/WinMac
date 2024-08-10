@@ -25,7 +25,7 @@
 
 ## Features
 
-- **Spotlight-like quick launcher**
+- **Quick launcher**
 
 PowerToys brings a macOS Spotlight functionality to Windows with PowerToys Run. It allows users to quickly search for files, applications, and settings on your system. 
 
@@ -37,9 +37,9 @@ Winstep Nexus is a highly customizable and feature-rich dock application for Win
 
 By integrating WinStep Nexus into your WinMac modification, you can provide users with a visually appealing and functional dock that resembles the macOS style. This will enhance the overall user experience and make the transition between Windows and macOS seamless.
 
-- **Revamped and decluttered Start Menu**
+- **Start Menu**
 
-Open-Shell is a collection of os customization utilities, that allows to bring a customizable Start Menu replacement for Windows, to completely replace traditional Start Menu with customized WinX menu, to resemble MacOS main menu. 
+WinMac Menu is a collection of os customization utilities, that allows to bring a customizable Start Menu replacement for Windows, to completely replace traditional Start Menu with customized WinX menu, to resemble MacOS main menu. 
 
 It's accessible from both left and right mouse click on Start menu orb, as well as Win key.
 
