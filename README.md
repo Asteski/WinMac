@@ -98,13 +98,12 @@ There are many dock customization you can find around the web, including [Devian
 List of utilities and their creators, used with WinMac deployment script:
 
 - [PowerToys](https://learn.microsoft.com/en-us/windows/powertoys/) by Microsoft
-- [StartAllBack](https://www.startallback.com/) by Stanislav Zinukhov
-- [Open-Shell](https://open-shell.github.io/Open-Shell-Menu/) by Ivo Beltchev
 - [Everything](https://www.voidtools.com/) by David Carpenter
-- [Nexus](https://www.winstep.net/nexus.asp) by Winstep
+- [StartAllBack](https://www.startallback.com/) by Stanislav Zinukhov
 - [TopNotify](https://github.com/SamsidParty/TopNotify) by SamsidParty
 - [Stahky](https://github.com/joedf/stahky) by joedf
 - [AutoHotkey](https://www.autohotkey.com/) by AutoHotkey Foundation LLC
+- [Nexus](https://www.winstep.net/nexus.asp) by Winstep
 - [PSTree](https://github.com/santisq/PSTree) by santisq
 - [ntop](https://github.com/gsass1/NTop) by gsass1
 
