@@ -97,7 +97,7 @@ List of utilities and their creators, used with WinMac deployment script:
 
 - [PowerToys](https://learn.microsoft.com/en-us/windows/powertoys/) by Microsoft
 - [Everything](https://www.voidtools.com/) by David Carpenter
-- [StartAllBack](https://www.startallback.com/) by Stanislav Zinukhov
+- [StartAllBack](https://www.startallback.com/) by Tihiy
 - [TopNotify](https://github.com/SamsidParty/TopNotify) by SamsidParty
 - [Stahky](https://github.com/joedf/stahky) by joedf
 - [AutoHotkey](https://www.autohotkey.com/) by AutoHotkey Foundation
