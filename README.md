@@ -53,7 +53,7 @@ StartAllBack extends its enhancements beyond the Taskbar to the Windows Explorer
 
 Utility introduces features such as ribbons, tabs, customizable toolbar buttons, enhanced file previews, and improved navigation options. With StartAllBack and PowerToys, you can personalize your Explorer interface to better suit your workflow and access files and folders more efficiently.
 
-Additionally, deployment script includes pinning User folder and Start Menu\Programs folder to Quick Access.
+Additionally, deployment script includes pinning User folder and Start Menu Programs folder to Quick Access.
 
 - **Stacks Context Menus**
 
@@ -97,7 +97,7 @@ List of utilities and their creators, used with WinMac deployment script:
 
 - [PowerToys](https://learn.microsoft.com/en-us/windows/powertoys/) by Microsoft
 - [Everything](https://www.voidtools.com/) by David Carpenter
-- [StartAllBack](https://www.startallback.com/) by Stanislav Zinukhov
+- [StartAllBack](https://www.startallback.com/) by Tihiy
 - [TopNotify](https://github.com/SamsidParty/TopNotify) by SamsidParty
 - [Stahky](https://github.com/joedf/stahky) by joedf
 - [AutoHotkey](https://www.autohotkey.com/) by AutoHotkey Foundation
