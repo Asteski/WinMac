@@ -39,9 +39,11 @@ By integrating WinStep Nexus into your WinMac modification, you can provide user
 
 - **Start Menu**
 
-WinMac Menu is a collection of os customization utilities, that allows to bring a customizable Start Menu replacement for Windows, to completely replace traditional Start Menu with customized WinX menu, to resemble MacOS main menu. 
+WinMac Menu is a collection of os customization utilities, that allows to bring Start Menu replacement for Windows:
 
-It's accessible from both left and right mouse click on Start menu orb, as well as Win key.
+- replace traditional Start Menu with customized WinX menu, to resemble MacOS main menu,
+- or enable enhanced classic Start Menu.
+
 
 - **Enhanced Taskbar**
 
