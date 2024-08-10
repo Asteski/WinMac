@@ -335,6 +335,7 @@ foreach ($app in $selectedApps) {
             Write-Host "StartAllBack installation completed." -ForegroundColor Green
         }
         "5" {
+            # WinMac Menu
             if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
                 Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
                 winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
