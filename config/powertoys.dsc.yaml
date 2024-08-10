@@ -74,6 +74,9 @@ properties:
             - Name: "Everything"
               Disabled: false
               ActionKeyword: "?"
+            - Name: "Window Walker"
+              Disabled: false
+              ActionKeyword: ";"
             - Name: "History"
               Disabled: true
             - Name: "Windows Search"
@@ -89,8 +92,6 @@ properties:
             - Name: "Visual Studio Code Workspaces"
               Disabled: true
             - Name: "Windows Terminal"
-              Disabled: true
-            - Name: "Window Walker"
               Disabled: true
         ColorPicker:
           Enabled: true

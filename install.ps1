@@ -452,7 +452,7 @@ foreach ($app in $selectedApps) {
             $taskService.Connect()
             $rootFolder = $taskService.GetFolder("\")
             $existingFolder = $rootFolder.GetFolder($folderName)
-            if ($existingFolder -eq $null) {
+            if ($null -eq $existingFolder) {
                 $rootFolder.CreateFolder($folderName)
             }
             $taskFolder = "\" + $folderName
