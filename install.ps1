@@ -340,7 +340,6 @@ foreach ($app in $selectedApps) {
                 winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
                 winget install --id Microsoft.DotNet.DesktopRuntime.6 --silent | Out-Null
                 winget install --id Microsoft.DotNet.AspNetCore.6 --silent | Out-Null
-                
                 $folderName = "WinMac"
                 $taskService = New-Object -ComObject "Schedule.Service"
                 $taskService.Connect()
@@ -356,8 +355,8 @@ foreach ($app in $selectedApps) {
                 Copy-Item .\bin\StartButton.ahk $taskDir | Out-Null
                 $actionWinKey = New-ScheduledTaskAction -Execute 'winkey.exe' -WorkingDirectory $taskDir
                 $actionStartButton = New-ScheduledTaskAction -Execute "StartButton.ahk" -WorkingDirectory $taskDir
-                Register-ScheduledTask -TaskName "WinMac_StartButton" -Action $actionStartButton -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder | Out-Null
-                Register-ScheduledTask -TaskName "WinMac_WinKey" -Action $actionWinKey -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder | Out-Null
+                Register-ScheduledTask -TaskName "StartButton" -Action $actionStartButton -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder | Out-Null
+                Register-ScheduledTask -TaskName "WinKey" -Action $actionWinKey -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder | Out-Null
                 Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
                 Copy-Item -Path "$pwd\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
                 Start-Process "$taskDir\winkey.exe"
@@ -445,18 +444,27 @@ foreach ($app in $selectedApps) {
             # AutoHotkey
             Write-Host "Installing AutoHotkey..." -ForegroundColor Yellow  
             winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
-            $trigger = New-ScheduledTaskTrigger -AtLogon
-            # $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries $true -DontStopIfGoingOnBatteries $true -StartWhenAvailable $true
             $sourceDirectory = "$pwd\config\ahk"
             $destinationDirectory = "$env:PROGRAMFILES\AutoHotkey\Scripts"
+            $folderName = "WinMac"
+            $taskService = New-Object -ComObject "Schedule.Service"
+            $taskService.Connect()
+            $rootFolder = $taskService.GetFolder("\")
+            $existingFolder = $rootFolder.GetFolder($folderName)
+            if ($existingFolder -eq $null) {
+                $rootFolder.CreateFolder($folderName)
+            }
+            $taskFolder = "\" + $folderName
+            $trigger = New-ScheduledTaskTrigger -AtLogon
+            $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
             $files = Get-ChildItem -Path $sourceDirectory -File
             New-Item -ItemType Directory -Path $destinationDirectory | Out-Null
             foreach ($file in $files) { 
                 Copy-Item -Path $file.FullName -Destination $destinationDirectory
-                $taskName = "WinMac_" + ($file.Name).replace('.ahk','')
+                $taskName = ($file.Name).replace('.ahk','')
                 $action = New-ScheduledTaskAction -Execute $file.Name -WorkingDirectory $destinationDirectory    
                 $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
-                Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Principal $principal | Out-Null
+                Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings | Out-Null
                 Start-Process -FilePath $destinationDirectory\$($file.Name)
             }
             Write-Host "AutoHotkey installation completed." -ForegroundColor Green
