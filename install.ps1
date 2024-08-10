@@ -37,7 +37,7 @@ if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir 
 
 $platformType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
 if ($platformType -like "*ARM*") {$platform = "arm"} else {$platform = "x86"}
-Write-Host "$([char]27)[92m$("`nPlatform type detected:"p)$([char]27)[0m $platform"
+Write-Host "$([char]27)[92m$("`nPlatform type detected:")$([char]27)[0m $platform"
 Write-Host "`n-----------------------------------------------------------------------"  -ForegroundColor Cyan
 
 ## Start Logging
