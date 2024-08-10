@@ -25,7 +25,7 @@
 
 ## Features
 
-- **Quick launcher**
+- **Quick Launcher**
 
 PowerToys brings a macOS Spotlight functionality to Windows with PowerToys Run. It allows users to quickly search for files, applications, and settings on your system. 
 
