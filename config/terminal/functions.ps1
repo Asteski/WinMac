@@ -52,7 +52,11 @@ function la { Get-ChildItem $args -Force -Attributes !D -ErrorAction SilentlyCon
 function ld { Get-ChildItem $args -Directory -ErrorAction SilentlyContinue | format-table -autosize }
 function lls { (Get-ChildItem $args -ErrorAction SilentlyContinue | ForEach-Object {
     if ($_.PSIsContainer) {
-        Write-Host $_.Name "" -ForegroundColor Blue -NoNewline
+        if ($_.PSIsContainer -and $_.Name -match '\s') {
+            Write-Host "'$($_.Name)' " -ForegroundColor Blue -NoNewline
+        } else {
+            Write-Host $_.Name "" -ForegroundColor Blue -NoNewline
+        }
     } else {
         Write-Host $_.Name "" -NoNewline
     }
@@ -479,27 +483,35 @@ function grep {
     if($args.Count -eq 0) { 
         Write-Host -f Red "Error: " -Non; Write-Host "No arguments provided"
     }
-    elseif (($args.Count -eq 3 -and $args[1] -eq '-r' -and $args[2] -ne '-f' -and $args[2] -ne '-e')) {
+    elseif (($args.Count -eq 3 -and $args[1] -eq '-r' -and $args[2] -ne '-f' -and $args[2] -ne '-e' -and $args[1] -ne '-re' -and $args[1] -ne '-rf')) {
         Write-Host -f Red "Error: " -Non; Write-Host "Invalid arguments provided" 
     }
     elseif ($args.Count -eq 1) {
         $files = Get-ChildItem -Exclude $excludeFiles
         string-search $args[0]
     }
-    elseif (($args[0] -eq '-r')) {
+    elseif ($args[0] -eq '-r') {
         $files = Get-ChildItem -Recurse -Exclude $excludeFiles
         string-search $args[1]
     }
-    elseif (($args[1] -eq '-r')) {
+    elseif ($args[1] -eq '-r') {
         $files = Get-ChildItem -Recurse -Exclude $excludeFiles
         string-search $args[0]
     }
-    elseif (($args.Count -eq 3 -and $args[1] -eq '-f')) {
+    elseif ($args.Count -eq 3 -and $args[1] -eq '-f') {
         $files = Get-ChildItem -File $args[2]
         string-search $args[0]
     }
-    elseif (($args.Count -eq 3 -and $args[1] -eq '-e')) {
+    elseif ($args.Count -eq 3 -and $args[1] -eq '-e') {
         $files = Get-ChildItem -Exclude $args[2]
+        string-search $args[0]
+    }
+    elseif ($args.Count -eq 3 -and $args[1] -eq '-rf') {
+        $files = Get-ChildItem -File $args[2] -Recurse
+        string-search $args[0]
+    }
+    elseif ($args.Count -eq 3 -and $args[1] -eq '-re') {
+        $files = Get-ChildItem -Exclude $args[2] -Recurse
         string-search $args[0]
     }
     else {
