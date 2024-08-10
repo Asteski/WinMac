@@ -29,20 +29,17 @@
 
 PowerToys brings a macOS Spotlight functionality to Windows with PowerToys Run. It allows users to quickly search for files, applications, and settings on your system. 
 
-By pressing a customizable hotkey combination, a search bar appears, enabling users to type their query and quickly launch or access the desired item without navigating through menus or directories. Besides PowerToys Run, this utility allows for many OS customizations, like *FancyZones, Always On Top, Peek, File Explorer add-ons, Color Picker and Find My Mouse*, improving your workflow in many different ways.
+By pressing a customizable hotkey combination, a search bar appears, enabling users to type their query and quickly launch or access the desired item without navigating through menus or directories. Besides PowerToys Run, this utility allows for many OS customizations, like *FancyZones, Always On Top, Peek, Color Picker, Find My Mouse and File Explorer add-ons*, improving your workflow in many different ways.
 
 - **Dock**
 
 Winstep Nexus is a highly customizable and feature-rich dock application for Windows that can be used to achieve a macOS-like dock experience. It offers a wide range of customization options, including size, animations, sounds, auto-hide, transparency, different themes and icons.
 
-By integrating WinStep Nexus into your WinMac modification, you can provide users with a visually appealing and functional dock that resembles the macOS style. This will enhance the overall user experience and make the transition between Windows and macOS seamless.
+By integrating Winstep Nexus into your WinMac modification, you can provide users with a visually appealing and functional dock that resembles the macOS style. This will enhance the overall user experience and make the transition between Windows and macOS seamless.
 
 - **Start Menu**
 
-WinMac Menu is a collection of os customization utilities, that allows to bring Start Menu replacement for Windows:
-
-1. replace traditional Start Menu with customized WinX menu, to resemble MacOS main menu,
-2. or enable enhanced classic Start Menu.
+WinMac Menu is a collection of os customization utilities, that allows to bring Start Menu replacement for Windows. You can replace traditional Start Menu with customized WinX menu, to resemble MacOS main menu, or enable enhanced classic Start Menu.
 
 - **Enhanced Taskbar**
 
@@ -103,7 +100,7 @@ List of utilities and their creators, used with WinMac deployment script:
 - [StartAllBack](https://www.startallback.com/) by Stanislav Zinukhov
 - [TopNotify](https://github.com/SamsidParty/TopNotify) by SamsidParty
 - [Stahky](https://github.com/joedf/stahky) by joedf
-- [AutoHotkey](https://www.autohotkey.com/) by AutoHotkey Foundation LLC
+- [AutoHotkey](https://www.autohotkey.com/) by AutoHotkey Foundation
 - [Nexus](https://www.winstep.net/nexus.asp) by Winstep
 - [PSTree](https://github.com/santisq/PSTree) by santisq
 - [ntop](https://github.com/gsass1/NTop) by gsass1
