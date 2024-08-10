@@ -356,8 +356,8 @@ foreach ($app in $selectedApps) {
                 Copy-Item .\bin\StartButton.ahk $taskDir | Out-Null
                 $actionWinKey = New-ScheduledTaskAction -Execute 'winkey.exe' -WorkingDirectory $taskDir
                 $actionStartButton = New-ScheduledTaskAction -Execute "StartButton.ahk" -WorkingDirectory $taskDir
-                Register-ScheduledTask -TaskName "StartButton" -Action $actionStartButton -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder | Out-Null
-                Register-ScheduledTask -TaskName "WinKey" -Action $actionWinKey -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder | Out-Null
+                Register-ScheduledTask -TaskName "StartButton" -Action $actionStartButton -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -ErrorAction SilentlyContinue | Out-Null
+                Register-ScheduledTask -TaskName "WinKey" -Action $actionWinKey -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -ErrorAction SilentlyContinue | Out-Null
                 Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
                 Copy-Item -Path "$pwd\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
                 Start-Process "$taskDir\winkey.exe"
@@ -465,7 +465,7 @@ foreach ($app in $selectedApps) {
                 $taskName = ($file.Name).replace('.ahk','')
                 $action = New-ScheduledTaskAction -Execute $file.Name -WorkingDirectory $destinationDirectory    
                 $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
-                Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings | Out-Null
+                Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -ErrorAction SilentlyContinue | Out-Null
                 Start-Process -FilePath $destinationDirectory\$($file.Name)
             }
             Write-Host "AutoHotkey installation completed." -ForegroundColor Green
