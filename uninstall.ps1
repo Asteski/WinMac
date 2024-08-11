@@ -46,7 +46,7 @@ Start-Transcript -Path ".\temp\WinMac_uninstall_log_$date.txt" -Append | Out-Nul
 
 ## User Configuration
 
-$fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom uninstallation"
+$fullOrCustom = Read-Host "`nEnter 'F' for full or 'C' for custom uninstallation"
 if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
     $selectedApps = "1","2","3","4","5","6","7","8","9","10"
     Write-Host "Choosing full uninstallation." -ForegroundColor Yellow
