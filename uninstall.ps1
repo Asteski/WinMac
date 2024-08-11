@@ -69,6 +69,7 @@ $([char]27)[93m$("Please select options you want to uninstall:")$([char]27)[0m
     Write-Host "6. TopNotify"
     Write-Host "7. Nexus Dock"
     Write-Host "8. Stahky"
+    Write-Host "9. AutoHotkey"
     Write-Host "10. Other"
     $selection = Read-Host "Enter the numbers of options you want to uninstall (separated by commas)"
     $selectedApps = @()
@@ -170,7 +171,6 @@ foreach ($app in $selectedApps) {
             winget uninstall --id Microsoft.PowerToys --silent --force | Out-Null
             Write-Host "Uninstalling PowerToys completed." -ForegroundColor Green
         }
-
         "2" {
             # Everything
             Write-Host "Uninstalling Everything..."  -ForegroundColor Yellow
@@ -178,7 +178,7 @@ foreach ($app in $selectedApps) {
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Remove-Item -Path "$programsDir\Everything.lnk" -Force | Out-Null
             Write-Host "Uninstalling Everything completed." -ForegroundColor Green
-            }
+        }
         "3" {
             # PowerShell Profile
             Write-Host "Uninstalling PowerShell Profile..." -ForegroundColor Yellow
@@ -247,9 +247,7 @@ foreach ($app in $selectedApps) {
             Stop-Process -Name "AutoHotkey*" -Force | Out-Null
             winget uninstall --id autohotkey.autohotkey --source winget --force | Out-Null
             $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -notmatch 'startbutton|winkey' }
-            foreach ($task in $tasks) {
-                Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false -ErrorAction SilentlyContinue
-            }
+            foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false -ErrorAction SilentlyContinue }
             Write-Host "Uninstalling AutoHotkey completed." -ForegroundColor Green
         }
         "10" {
