@@ -24,15 +24,6 @@ PowerShell profile files will be removed and replaced with new ones. stat
 Please make sure to backup your current profiles if needed.
 "@ -ForegroundColor Yellow
 
-## Check if script is run from the correct directory
-
-$checkDir = Get-ChildItem
-if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir -like "*bin*")) {
-    Write-Host "`nWinMac components not found. Please make sure to run the script from the correct directory." -ForegroundColor Red
-    Start-Sleep 2
-    exit
-}
-
 ## Platform type detection
 $platform = "x86" # Set default for non-ARM based systems
 # $platformType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
@@ -40,15 +31,21 @@ $platform = "x86" # Set default for non-ARM based systems
 # Write-Host "$([char]27)[92m$("`nPlatform type detected:")$([char]27)[0m $platform"
 Write-Host "`n-----------------------------------------------------------------------"  -ForegroundColor Cyan
 
-## Start Logging
+## Check if script is run from the correct directory
+$checkDir = Get-ChildItem
+if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir -like "*bin*")) {
+    Write-Host "`nWinMac components not found. Please make sure to run the script from the correct directory." -ForegroundColor Red
+    Start-Sleep 2
+    exit
+}
 
+## Start Logging
 $errorActionPreference="SilentlyContinue"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 mkdir ./temp | Out-Null
 Start-Transcript -Path ".\temp\WinMac_install_log_$date.txt" -Append | Out-Null
 
 ## WinMac Configuration
-
 Write-Host
 $fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom installation"
 if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
