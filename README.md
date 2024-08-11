@@ -25,23 +25,21 @@
 
 ## Features
 
-- **Spotlight-like quick launcher**
+- **Quick Launcher**
 
 PowerToys brings a macOS Spotlight functionality to Windows with PowerToys Run. It allows users to quickly search for files, applications, and settings on your system. 
 
-By pressing a customizable hotkey combination, a search bar appears, enabling users to type their query and quickly launch or access the desired item without navigating through menus or directories. Besides PowerToys Run, this utility allows for many OS customizations, like *FancyZones, Always On Top, Peek, File Explorer add-ons, Color Picker and Find My Mouse*, improving your workflow in many different ways.
+By pressing a customizable hotkey combination, a search bar appears, enabling users to type their query and quickly launch or access the desired item without navigating through menus or directories. Besides PowerToys Run, this utility allows for many OS customizations, like *FancyZones, Always On Top, Peek, Color Picker, Find My Mouse and File Explorer add-ons*, improving your workflow in many different ways.
 
 - **Dock**
 
-Winstep Nexus is a highly customizable and feature-rich dock application for Windows that can be used to achieve a macOS-like dock experience. It offers a wide range of customization options, including different themes, icons, and animations.
+Winstep Nexus is a highly customizable and feature-rich dock application for Windows that can be used to achieve a macOS-like dock experience. It offers a wide range of customization options, including size, animations, sounds, auto-hide, transparency, different themes and icons.
 
-By integrating WinStep Nexus into your WinMac modification, you can provide users with a visually appealing and functional dock that resembles the macOS style. This will enhance the overall user experience and make the transition between Windows and macOS seamless.
+By integrating Winstep Nexus into your WinMac modification, you can provide users with a visually appealing and functional dock that resembles the macOS style. This will enhance the overall user experience and make the transition between Windows and macOS seamless.
 
-- **Revamped and decluttered Start Menu**
+- **Start Menu**
 
-Open-Shell is a collection of os customization utilities, that allows to bring a customizable Start Menu replacement for Windows, to completely replace traditional Start Menu with customized WinX menu, to resemble MacOS main menu. 
-
-It's accessible from both left and right mouse click on Start menu orb, as well as Win key.
+WinMac Menu is a collection of os customization utilities, that allows to bring Start Menu replacement for Windows. You can replace traditional Start Menu with customized WinX menu, to resemble MacOS main menu, or enable enhanced classic Start Menu.
 
 - **Enhanced Taskbar**
 
@@ -55,7 +53,7 @@ StartAllBack extends its enhancements beyond the Taskbar to the Windows Explorer
 
 Utility introduces features such as ribbons, tabs, customizable toolbar buttons, enhanced file previews, and improved navigation options. With StartAllBack and PowerToys, you can personalize your Explorer interface to better suit your workflow and access files and folders more efficiently.
 
-Additionally, deployment script includes pinning User folder and Start Menu\Programs folder to Quick Access.
+Additionally, deployment script includes pinning User folder and Start Menu Programs folder to Quick Access.
 
 - **Stacks Context Menus**
 
@@ -100,7 +98,6 @@ List of utilities and their creators, used with WinMac deployment script:
 - [PowerToys](https://learn.microsoft.com/en-us/windows/powertoys/) by Microsoft
 - [Everything](https://www.voidtools.com/) by David Carpenter
 - [StartAllBack](https://www.startallback.com/) by Tihiy
-- [Open-Shell](https://open-shell.github.io/Open-Shell-Menu/) by Ivo Beltchev
 - [TopNotify](https://github.com/SamsidParty/TopNotify) by SamsidParty
 - [Stahky](https://github.com/joedf/stahky) by joedf
 - [AutoHotkey](https://www.autohotkey.com/) by AutoHotkey Foundation

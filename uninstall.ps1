@@ -5,7 +5,7 @@ Write-Host @"
 Welcome to WinMac Deployment!
 
 Author: Asteski
-Version: 0.5.0
+Version: 0.5.1
 
 This is Work in Progress. You're using this script at your own risk.
 
@@ -27,7 +27,6 @@ AutoHotkey option must be run in elevated mode to uninstall.
 "@ -ForegroundColor Yellow
 
 Write-Host "-----------------------------------------------------------------------" -ForegroundColor Cyan
-Write-Host
 
 ## Check if script is run from the correct directory
 
@@ -47,7 +46,7 @@ Start-Transcript -Path ".\temp\WinMac_uninstall_log_$date.txt" -Append | Out-Nul
 
 ## User Configuration
 
-$fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom uninstallation"
+$fullOrCustom = Read-Host "`nEnter 'F' for full or 'C' for custom uninstallation"
 if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
     $selectedApps = "1","2","3","4","5","6","7","8","9","10"
     Write-Host "Choosing full uninstallation." -ForegroundColor Yellow
@@ -55,7 +54,7 @@ if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
 elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
     Write-Host "Choosing custom uninstallation." -ForegroundColor Yellow
     Start-Sleep 1
-    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="Open-Shell"; "6"="TopNotify"; "7"="Nexus Dock"; "8"="Stahky"; "9"="AutoHotkey"; "10"="Other"}
+    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Nexus Dock"; "8"="Stahky"; "9"="AutoHotkey"; "10"="Other"}
 Write-Host @"
 
 $([char]27)[93m$("Please select options you want to uninstall:")$([char]27)[0m
@@ -65,10 +64,11 @@ $([char]27)[93m$("Please select options you want to uninstall:")$([char]27)[0m
     Write-Host "2. Everything"
     Write-Host "3. Powershell Profile"
     Write-Host "4. StartAllBack"
-    Write-Host "5. Open-Shell"
+    Write-Host "5. WinMac Menu"
     Write-Host "6. TopNotify"
     Write-Host "7. Nexus Dock"
     Write-Host "8. Stahky"
+    Write-Host "9. AutoHotkey"
     Write-Host "10. Other"
     $selection = Read-Host "Enter the numbers of options you want to uninstall (separated by commas)"
     $selectedApps = @()
@@ -170,7 +170,6 @@ foreach ($app in $selectedApps) {
             winget uninstall --id Microsoft.PowerToys --silent --force | Out-Null
             Write-Host "Uninstalling PowerToys completed." -ForegroundColor Green
         }
-
         "2" {
             # Everything
             Write-Host "Uninstalling Everything..."  -ForegroundColor Yellow
@@ -178,7 +177,7 @@ foreach ($app in $selectedApps) {
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Remove-Item -Path "$programsDir\Everything.lnk" -Force | Out-Null
             Write-Host "Uninstalling Everything completed." -ForegroundColor Green
-            }
+        }
         "3" {
             # PowerShell Profile
             Write-Host "Uninstalling PowerShell Profile..." -ForegroundColor Yellow
@@ -208,14 +207,16 @@ foreach ($app in $selectedApps) {
             Start-Sleep 3
         }
         "5" {
-            # Open-Shell
-            Write-Host "Uninstalling Open-Shell..." -ForegroundColor Yellow
-            Stop-Process -Name startmenu -Force | Out-Null
-            winget uninstall --id "Open-Shell.Open-Shell-Menu" --source winget --force | Out-Null
+            # WinMac Menu
+            Write-Host "Uninstalling WinMac Menu..." -ForegroundColor Yellow
+            Stop-Process -Name WinKey -Force | Out-Null
+            $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -match 'startbutton|winkey' }
+            foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
+            Remove-Item -Path "$env:PROGRAMFILES\WinMac" -Recurse -Force
             Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\winx" -Recurse -Force | Out-Null
             Expand-Archive -Path "$pwd\config\WinX-default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
             Stop-Process -n Explorer
-            Write-Host "Uninstalling Open-Shell completed." -ForegroundColor Green
+            Write-Host "Uninstalling WinMac Menu completed." -ForegroundColor Green
         }
         "6" {
             # TopNotify
@@ -244,10 +245,8 @@ foreach ($app in $selectedApps) {
             Write-Host "Uninstalling AutoHotkey..." -ForegroundColor Yellow
             Stop-Process -Name "AutoHotkey*" -Force | Out-Null
             winget uninstall --id autohotkey.autohotkey --source winget --force | Out-Null
-            $tasks = Get-ScheduledTask -TaskName "WinMac_*" -ErrorAction SilentlyContinue
-            foreach ($task in $tasks) {
-                Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false -ErrorAction SilentlyContinue
-            }
+            $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -notmatch 'startbutton|winkey' }
+            foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false -ErrorAction SilentlyContinue }
             Write-Host "Uninstalling AutoHotkey completed." -ForegroundColor Green
         }
         "10" {

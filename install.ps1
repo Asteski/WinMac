@@ -5,7 +5,7 @@ Write-Host @"
 Welcome to WinMac Deployment!
 
 Author: Asteski
-Version: 0.5.0
+Version: 0.5.1
 
 This is Work in Progress. You're using this script at your own risk.
 
@@ -22,13 +22,16 @@ must be run in non-elevated pwsh session.
 
 PowerShell profile files will be removed and replaced with new ones. stat
 Please make sure to backup your current profiles if needed.
-
 "@ -ForegroundColor Yellow
 
-Write-Host "-----------------------------------------------------------------------"  -ForegroundColor Cyan
+## Platform type detection
+$platform = "x86" # Set default for non-ARM based systems
+# $platformType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
+# if ($platformType -like "*ARM*") {$platform = "arm"} else {$platform = "x86"}
+# Write-Host "$([char]27)[92m$("`nPlatform type detected:")$([char]27)[0m $platform"
+Write-Host "`n-----------------------------------------------------------------------"  -ForegroundColor Cyan
 
 ## Check if script is run from the correct directory
-
 $checkDir = Get-ChildItem
 if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir -like "*bin*")) {
     Write-Host "`nWinMac components not found. Please make sure to run the script from the correct directory." -ForegroundColor Red
@@ -37,14 +40,12 @@ if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir 
 }
 
 ## Start Logging
-
 $errorActionPreference="SilentlyContinue"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 mkdir ./temp | Out-Null
 Start-Transcript -Path ".\temp\WinMac_install_log_$date.txt" -Append | Out-Null
 
 ## WinMac Configuration
-
 Write-Host
 $fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom installation"
 if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
@@ -54,7 +55,7 @@ if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
 elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
     Write-Host "Choosing custom installation." -ForegroundColor Green
     Start-Sleep 1
-    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="Open-Shell"; "6"="TopNotify"; "7"="Stahky"; "8"="AutoHotkey"; "9"="Other"}
+    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="AutoHotkey"; "9"="Other"}
 
 Write-Host @"
 
@@ -65,7 +66,7 @@ $([char]27)[93m$("Please select options you want to install:")$([char]27)[0m
     Write-Host "2. Everything"
     Write-Host "3. Powershell Profile"
     Write-Host "4. StartAllBack"
-    Write-Host "5. Open-Shell"
+    Write-Host "5. WinMac Menu"
     Write-Host "6. TopNotify"
     Write-Host "7. Stahky"
     Write-Host "8. AutoHotkey"
@@ -331,37 +332,37 @@ foreach ($app in $selectedApps) {
             Write-Host "StartAllBack installation completed." -ForegroundColor Green
         }
         "5" {
+            # WinMac Menu
             if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
-                Write-Host "Installing Open-Shell..." -ForegroundColor Yellow
-                $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\StartMenu.exe"
-                winget install --id "Open-Shell.Open-Shell-Menu" --source winget --custom 'ADDLOCAL=StartMenu' --silent | Out-Null
-                Stop-Process -Name StartMenu -Force | Out-Null
-                New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force | Out-Null
-                New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force | Out-Null
-                New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu" -Force | Out-Null
-                New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell\Settings" -Force | Out-Null
-                New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu\Settings" -Force | Out-Null
-                Set-ItemProperty -Path "HKCU:\Software\OpenShell\OpenShell\Settings" -Name "Nightly" -Value 0x00000001
-                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "Version" -Value 0x040400bf
-                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "DisablePinExt" -Value 1
-                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "EnableContextMenu" -Value 0
-                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "MouseClick" -Value "Command"
-                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftClick" -Value "Command"
-                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "WinKey" -Value "Command"
-                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "MouseClickCommand" -Value "$pwd\bin\start.exe"
-                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftClickCommand" -Value "Nothing"
-                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "WinKeyCommand" -Value "$pwd\bin\start.exe"
-                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftWin" -Value "Nothing"
-                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftRight" -Value 1
-                Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "SearchBox" -Value "Hide"
+                Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
+                winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
+                winget install --id Microsoft.DotNet.DesktopRuntime.6 --silent | Out-Null
+                winget install --id Microsoft.DotNet.AspNetCore.6 --silent | Out-Null
+                $folderName = "WinMac"
+                $taskService = New-Object -ComObject "Schedule.Service"
+                $taskService.Connect()
+                $rootFolder = $taskService.GetFolder("\")
+                $rootFolder.CreateFolder($folderName)
+                $taskFolder = "\" + $folderName
+                $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
+                $trigger = New-ScheduledTaskTrigger -AtLogon
+                $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
+                if ($platform -like "*arm*") {$taskDir = "${env:PROGRAMFILES(ARM)}\WinMac\"} else {$taskDir = "$env:PROGRAMFILES\WinMac\"}
+                New-Item -ItemType Directory -Path $taskDir | Out-Null
+                Copy-Item .\bin\$platform\* $taskDir | Out-Null
+                Copy-Item .\bin\StartButton.ahk $taskDir | Out-Null
+                $actionWinKey = New-ScheduledTaskAction -Execute 'winkey.exe' -WorkingDirectory $taskDir
+                $actionStartButton = New-ScheduledTaskAction -Execute "StartButton.ahk" -WorkingDirectory $taskDir
+                Register-ScheduledTask -TaskName "StartButton" -Action $actionStartButton -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -ErrorAction SilentlyContinue | Out-Null
+                Register-ScheduledTask -TaskName "WinKey" -Action $actionWinKey -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -ErrorAction SilentlyContinue | Out-Null
                 Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
                 Copy-Item -Path "$pwd\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
-                Stop-Process -Name Explorer
-                Start-Process $shellExePath
-                Write-Host "Open-Shell installation completed." -ForegroundColor Green
+                Start-Process "$taskDir\winkey.exe"
+                Start-Process "$taskDir\StartButton.ahk"
+                Write-Host "WinMac Menu installation completed." -ForegroundColor Green
             }
             else {
-                Write-Host "Skipping Open-Shell installation." -ForegroundColor Magenta
+                Write-Host "Skipping WinMac Menu installation." -ForegroundColor Magenta
             }
         }
         "6" {
@@ -441,17 +442,27 @@ foreach ($app in $selectedApps) {
             # AutoHotkey
             Write-Host "Installing AutoHotkey..." -ForegroundColor Yellow  
             winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
-            $trigger = New-ScheduledTaskTrigger -AtLogon
             $sourceDirectory = "$pwd\config\ahk"
             $destinationDirectory = "$env:PROGRAMFILES\AutoHotkey\Scripts"
+            $folderName = "WinMac"
+            $taskService = New-Object -ComObject "Schedule.Service"
+            $taskService.Connect()
+            $rootFolder = $taskService.GetFolder("\")
+            $existingFolder = $rootFolder.GetFolder($folderName)
+            if ($null -eq $existingFolder) {
+                $rootFolder.CreateFolder($folderName)
+            }
+            $taskFolder = "\" + $folderName
+            $trigger = New-ScheduledTaskTrigger -AtLogon
+            $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
             $files = Get-ChildItem -Path $sourceDirectory -File
             New-Item -ItemType Directory -Path $destinationDirectory | Out-Null
             foreach ($file in $files) { 
                 Copy-Item -Path $file.FullName -Destination $destinationDirectory
-                $taskName = "WinMac_" + ($file.Name).replace('.ahk','')
+                $taskName = ($file.Name).replace('.ahk','')
                 $action = New-ScheduledTaskAction -Execute $file.Name -WorkingDirectory $destinationDirectory    
                 $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
-                Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Principal $principal | Out-Null
+                Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -ErrorAction SilentlyContinue | Out-Null
                 Start-Process -FilePath $destinationDirectory\$($file.Name)
             }
             Write-Host "AutoHotkey installation completed." -ForegroundColor Green
