@@ -34,10 +34,10 @@ if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir 
 }
 
 ## Platform type detection
-
-$platformType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
-if ($platformType -like "*ARM*") {$platform = "arm"} else {$platform = "x86"}
-Write-Host "$([char]27)[92m$("`nPlatform type detected:")$([char]27)[0m $platform"
+$platform = "x86" # Set default for non-ARM based systems
+# $platformType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
+# if ($platformType -like "*ARM*") {$platform = "arm"} else {$platform = "x86"}
+# Write-Host "$([char]27)[92m$("`nPlatform type detected:")$([char]27)[0m $platform"
 Write-Host "`n-----------------------------------------------------------------------"  -ForegroundColor Cyan
 
 ## Start Logging
