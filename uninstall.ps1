@@ -27,7 +27,6 @@ AutoHotkey option must be run in elevated mode to uninstall.
 "@ -ForegroundColor Yellow
 
 Write-Host "-----------------------------------------------------------------------" -ForegroundColor Cyan
-Write-Host
 
 ## Check if script is run from the correct directory
 
