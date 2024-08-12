@@ -431,6 +431,7 @@ foreach ($app in $selectedApps) {
             $shortcut2.TargetPath = $newTargetPath
             $shortcut2.WorkingDirectory = $newWorkDir2
             $shortcut2.Save()
+            Remove-Item $outputPath -Force
             Write-Host "Stahky installation completed." -ForegroundColor Green
         }
         "8" {
