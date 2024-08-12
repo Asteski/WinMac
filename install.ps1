@@ -332,7 +332,7 @@ foreach ($app in $selectedApps) {
                 Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
                 winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
                 winget install --id Microsoft.DotNet.AspNetCore.6 --silent | Out-Null
-                Invoke-WebRequest -Uri 'https://download.visualstudio.microsoft.com/download/pr/222a065f-5671-4aed-aba9-46a94f2705e2/2bbcbd8e1c304ed1f7cef2be5afdaf43/windowsdesktop-runtime-6.0.32-win-x64.exe' -Output 'windowsdesktop-runtime-6.0.32-win-x64.exe'
+                Invoke-WebRequest -Uri 'https://download.visualstudio.microsoft.com/download/pr/222a065f-5671-4aed-aba9-46a94f2705e2/2bbcbd8e1c304ed1f7cef2be5afdaf43/windowsdesktop-runtime-6.0.32-win-x64.exe' -OutFile 'windowsdesktop-runtime-6.0.32-win-x64.exe'
                 ./'windowsdesktop-runtime-6.0.32-win-x64.exe' /install /quiet /norestart
                 $folderName = "WinMac"
                 $taskService = New-Object -ComObject "Schedule.Service"
