@@ -5,7 +5,7 @@ Write-Host @"
 Welcome to WinMac Deployment!
 
 Author: Asteski
-Version: 0.5.1
+Version: 0.6.0
 
 This is Work in Progress. You're using this script at your own risk.
 
@@ -24,11 +24,6 @@ PowerShell profile files will be removed and replaced with new ones. stat
 Please make sure to backup your current profiles if needed.
 "@ -ForegroundColor Yellow
 
-## Platform type detection
-$platform = "x86" # Set default for non-ARM based systems
-# $platformType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
-# if ($platformType -like "*ARM*") {$platform = "arm"} else {$platform = "x86"}
-# Write-Host "$([char]27)[92m$("`nPlatform type detected:")$([char]27)[0m $platform"
 Write-Host "`n-----------------------------------------------------------------------"  -ForegroundColor Cyan
 
 ## Check if script is run from the correct directory
@@ -337,29 +332,27 @@ foreach ($app in $selectedApps) {
                 Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
                 winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
                 winget install --id Microsoft.DotNet.AspNetCore.6 --silent | Out-Null
-		Invoke-WebRequest -Uri 'https://download.visualstudio.microsoft.com/download/pr/222a065f-5671-4aed-aba9-46a94f2705e2/2bbcbd8e1c304ed1f7cef2be5afdaf43/windowsdesktop-runtime-6.0.32-win-x64.exe' -Output 'windowsdesktop-runtime-6.0.32-win-x64.exe'
-		./'windowsdesktop-runtime-6.0.32-win-x64.exe' /install /quiet /norestart
+                Invoke-WebRequest -Uri 'https://download.visualstudio.microsoft.com/download/pr/222a065f-5671-4aed-aba9-46a94f2705e2/2bbcbd8e1c304ed1f7cef2be5afdaf43/windowsdesktop-runtime-6.0.32-win-x64.exe' -Output 'windowsdesktop-runtime-6.0.32-win-x64.exe'
+                ./'windowsdesktop-runtime-6.0.32-win-x64.exe' /install /quiet /norestart
                 $folderName = "WinMac"
                 $taskService = New-Object -ComObject "Schedule.Service"
-                $taskService.Connect()RuntimeDesktop
+                $taskService.Connect()
                 $rootFolder = $taskService.GetFolder("\")
-                $rootFolder.CreateFolder($folderName)
+                $rootFolder.CreateFolder($folderName) | Out-Null
                 $taskFolder = "\" + $folderName
                 $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
                 $trigger = New-ScheduledTaskTrigger -AtLogon
                 $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
-                if ($platform -like "*arm*") {$taskDir = "${env:PROGRAMFILES(ARM)}\WinMac\"} else {$taskDir = "$env:PROGRAMFILES\WinMac\"}
-                New-Item -ItemType Directory -Path $taskDir | Out-Null
-                Copy-Item .\bin\$platform\* $taskDir | Out-Null
-                Copy-Item .\bin\StartButton.ahk $taskDir | Out-Null
-                $actionWinKey = New-ScheduledTaskAction -Execute 'winkey.exe' -WorkingDirectory $taskDir
-                $actionStartButton = New-ScheduledTaskAction -Execute "StartButton.ahk" -WorkingDirectory $taskDir
+                New-Item -ItemType Directory -Path "$env:PROGRAMFILES\WinMac\" | Out-Null
+                Copy-Item .\bin\* "$env:PROGRAMFILES\WinMac\" | Out-Null
+                $actionWinKey = New-ScheduledTaskAction -Execute 'WindowsKey.exe' -WorkingDirectory "$env:PROGRAMFILES\WinMac\"
+                $actionStartButton = New-ScheduledTaskAction -Execute "StartButton.ahk" -WorkingDirectory "$env:PROGRAMFILES\WinMac\"
                 Register-ScheduledTask -TaskName "StartButton" -Action $actionStartButton -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -ErrorAction SilentlyContinue | Out-Null
                 Register-ScheduledTask -TaskName "WinKey" -Action $actionWinKey -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -ErrorAction SilentlyContinue | Out-Null
                 Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
                 Copy-Item -Path "$pwd\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
-                Start-Process "$taskDir\winkey.exe"
-                Start-Process "$taskDir\StartButton.ahk"
+                Start-Process "$env:PROGRAMFILES\WinMac\WindowsKey.exe"
+                Start-Process "$env:PROGRAMFILES\WinMac\StartButton.ahk"
                 Write-Host "WinMac Menu installation completed." -ForegroundColor Green
             }
             else {
