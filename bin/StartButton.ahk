@@ -1,4 +1,5 @@
-﻿#NoTrayIcon
+﻿#SingleInstance Force
+#NoTrayIcon
 #HotIf WinX()
 $LButton::Send("#{x}")
 Return
