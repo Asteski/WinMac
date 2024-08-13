@@ -103,7 +103,7 @@ elseif (($roundedOrSquared -ne "S" -or $roundedOrSquared -ne "s") -and ($lightOr
     $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 | Out-Null
     $regFile = $modifiedFile
 }
-
+$modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "<<DOWNLOADS_PATH>>", "$env:USERPROFILE\Downloads" }
 reg import $regFile > $null 2>&1
 Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "DockLabelColorHotTrack1" -ErrorAction SilentlyContinue | Out-Null
 Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe' | Out-Null
