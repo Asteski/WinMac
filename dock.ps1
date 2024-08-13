@@ -73,12 +73,16 @@ New-Item -ItemType Directory -Path "$winStep\Sounds" -Force # | Out-Null
 Copy-Item -Path "config\dock\sounds\*" -Destination "$winStep\Sounds\" -Recurse -Force # | Out-Null
 New-Item -ItemType Directory -Path "$winStep\Icons" -Force # | Out-Null
 Copy-Item config\dock\icons "$winStep" -Recurse -Force # | Out-Null
+
+$regFile = "$pwd\config\dock\winstep.reg"
+$tempFolder = "$pwd\temp"
+$downloadsPath = ("$env:USERPROFILE\Downloads").Replace("\", "\\")
+$downloadsFolder = Get-Content $regFile | ForEach-Object { $_ -replace "<<DOWNLOADS_PATH>>", $downloadsPath }
+$downloadsFolder | Out-File -FilePath $regFile -Encoding UTF8 # | Out-Null
 $downloadsPath = "$env:USERPROFILE\Downloads"
 if (-not (Test-Path $downloadsPath)) {
     New-Item -ItemType Directory -Path $downloadsPath # | Out-Null
 }
-$regFile = "$pwd\config\dock\winstep.reg"
-$tempFolder = "$pwd\temp"
 $tempPath = Test-Path $tempFolder
     if (-not ($tempPath)) {
     New-Item -ItemType Directory -Path $tempFolder -Force # | Out-Null
@@ -106,7 +110,6 @@ elseif (($roundedOrSquared -ne "S" -or $roundedOrSquared -ne "s") -and ($lightOr
     $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 # | Out-Null
     $regFile = $modifiedFile
 }
-$modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "<<DOWNLOADS_PATH>>", $downloadsPath }
 reg import $regFile > $null 2>&1
 Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "DockLabelColorHotTrack1" -ErrorAction SilentlyContinue # | Out-Null
 Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe' # | Out-Null
