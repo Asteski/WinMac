@@ -76,7 +76,7 @@ Copy-Item config\dock\icons "$winStep" -Recurse -Force # | Out-Null
 
 $regFile = "$pwd\config\dock\winstep.reg"
 $tempFolder = "$pwd\temp"
-$downloadsPath = ("$env:USERPROFILE\Downloads").Replace("\", "\\")
+$downloadsPath = "$env:USERPROFILE\Downloads"
 $downloadsFolder = Get-Content $regFile | ForEach-Object { $_ -replace "<<DOWNLOADS_PATH>>", $downloadsPath }
 $downloadsFolder | Out-File -FilePath $regFile -Encoding UTF8 # | Out-Null
 $downloadsPath = "$env:USERPROFILE\Downloads"
