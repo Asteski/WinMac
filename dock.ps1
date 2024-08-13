@@ -77,16 +77,16 @@ Copy-Item config\dock\icons "$winStep" -Recurse -Force # | Out-Null
 $regFile = "$pwd\config\dock\winstep.reg"
 $tempFolder = "$pwd\temp"
 $downloadsPath = "$env:USERPROFILE\Downloads"
-$downloadsFolder = Get-Content $regFile | ForEach-Object { $_ -replace "<<DOWNLOADS_PATH>>", $downloadsPath }
-$downloadsFolder | Out-File -FilePath $regFile -Encoding UTF8 # | Out-Null
-$downloadsPath = "$env:USERPROFILE\Downloads"
 if (-not (Test-Path $downloadsPath)) {
     New-Item -ItemType Directory -Path $downloadsPath # | Out-Null
 }
 $tempPath = Test-Path $tempFolder
-    if (-not ($tempPath)) {
+if (-not ($tempPath)) {
     New-Item -ItemType Directory -Path $tempFolder -Force # | Out-Null
 }
+$downloadsFolder = Get-Content $regFile | ForEach-Object { $_ -replace "<<DOWNLOADS_PATH>>", $downloadsPath }
+$downloadsFolder | Out-File -FilePath $regFile -Encoding UTF8 # | Out-Null
+
 if ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
     $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "Rounded", "Squared" }
     $modifiedFile = "$pwd\temp\winstep.reg"
@@ -112,6 +112,7 @@ elseif (($roundedOrSquared -ne "S" -or $roundedOrSquared -ne "s") -and ($lightOr
 }
 reg import $regFile > $null 2>&1
 Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "DockLabelColorHotTrack1" -ErrorAction SilentlyContinue # | Out-Null
+Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type5" -ErrorAction SilentlyContinue # | Out-Null
 Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe' # | Out-Null
 while (!(Get-Process nexus -ErrorAction SilentlyContinue)) { Start-Sleep 1 }
 Write-Host "Nexus Dock installation completed.`n" -ForegroundColor Green
