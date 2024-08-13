@@ -84,7 +84,7 @@ $tempPath = Test-Path $tempFolder
 if (-not ($tempPath)) {
     New-Item -ItemType Directory -Path $tempFolder -Force # | Out-Null
 }
-$downloadsFolder = Get-Content $regFile | ForEach-Object { $_ -replace "<<DOWNLOADS_PATH>>", $downloadsPath }
+$downloadsFolder = Get-Content $regFile | ForEach-Object { $_ -replace "<<DOWNLOADS_PATH>>", "$downloadsPath" }
 $downloadsFolder | Out-File -FilePath $regFile -Encoding UTF8 # | Out-Null
 
 if ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
