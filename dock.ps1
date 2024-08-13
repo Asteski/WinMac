@@ -74,8 +74,8 @@ Copy-Item -Path "config\dock\sounds\*" -Destination "$winStep\Sounds\" -Recurse 
 New-Item -ItemType Directory -Path "$winStep\Icons" -Force # | Out-Null
 Copy-Item config\dock\icons "$winStep" -Recurse -Force # | Out-Null
 $downloadsPath = "$env:USERPROFILE\Downloads"
-if (-not (Test-Path $folderPath)) {
-    New-Item -ItemType Directory -Path $folderPath # | Out-Null
+if (-not (Test-Path $downloadsPath)) {
+    New-Item -ItemType Directory -Path $downloadsPath # | Out-Null
 }
 $regFile = "$pwd\config\dock\winstep.reg"
 $tempFolder = "$pwd\temp"
