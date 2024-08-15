@@ -336,7 +336,7 @@ foreach ($app in $selectedApps) {
                 Start-Process -FilePath '.\windowsdesktop-runtime-6.0.32-win-x64.exe' -ArgumentList '/install /quiet /norestart' -Wait
                 $folderName = "WinMac"
                 $taskService = New-Object -ComObject "Schedule.Service"
-                $taskService.Connect()
+                $taskService.Connect() | Out-Null
                 $rootFolder = $taskService.GetFolder("\")
                 $rootFolder.CreateFolder($folderName) | Out-Null
                 $taskFolder = "\" + $folderName
