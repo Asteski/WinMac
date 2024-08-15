@@ -98,7 +98,7 @@ $([char]27)[93m$("You can choose between WinMac start menu or Classic start menu
 
 WinMac start menu replaces default menu with customized WinX menu.
 
-Classic start menu replaces default menu with enhanced Windows menu.
+Classic start menu replaces default menu with enhanced Windows 7 start menu.
 
 "@
 
