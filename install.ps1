@@ -440,7 +440,7 @@ foreach ($app in $selectedApps) {
             Write-Host "Installing AutoHotkey..." -ForegroundColor Yellow  
             winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
             $sourceDirectory = "$pwd\config\ahk"
-            $destinationDirectory = "$env:PROGRAMFILES\AutoHotkey\Scripts"
+            $destinationDirectory = "$env:PROGRAMFILES\AutoHotkey\WinMac"
             $folderName = "WinMac"
             $taskService = New-Object -ComObject "Schedule.Service"
             $taskService.Connect() | Out-Null

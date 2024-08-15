@@ -22,11 +22,11 @@ your current profiles if needed.
 Vim and Nexus packages will show prompt to uninstall, please confirm the
 uninstallations manually.
 
-AutoHotkey option must be run in elevated mode to uninstall.
-
 "@ -ForegroundColor Yellow
 
-Write-Host "-----------------------------------------------------------------------" -ForegroundColor Cyan
+Write-Host "Script must be run in elevated mode." -ForegroundColor Red
+Write-Host "`n-----------------------------------------------------------------------" -ForegroundColor Cyan
+echo x
 
 ## Check if script is run from the correct directory
 
@@ -209,7 +209,7 @@ foreach ($app in $selectedApps) {
         "5" {
             # WinMac Menu
             Write-Host "Uninstalling WinMac Menu..." -ForegroundColor Yellow
-            Stop-Process -Name WinKey -Force | Out-Null
+            Stop-Process -Name WindowsKey -Force | Out-Null
             $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -match 'startbutton|winkey' }
             foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
             $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue
@@ -246,11 +246,12 @@ foreach ($app in $selectedApps) {
             # AutoHotkey
             Write-Host "Uninstalling AutoHotkey..." -ForegroundColor Yellow
             Stop-Process -Name "AutoHotkey*" -Force | Out-Null
-            winget uninstall --id autohotkey.autohotkey --source winget --force | Out-Null
+            Remove-Item "$env:PROGRAMFILES\AutoHotkey\WinMac" -Recurse -Force
             $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -notmatch 'startbutton|winkey' }
             foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false -ErrorAction SilentlyContinue }
             $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue
             if ($tasksFolder -eq $null) { Remove-Item -Path "$env:SYSTEMROOT\System32\Tasks\WinMac" -Force -Recurse -ErrorAction SilentlyContinue }
+            winget uninstall --id autohotkey.autohotkey --source winget --force | Out-Null
             Write-Host "Uninstalling AutoHotkey completed." -ForegroundColor Green
         }
         "10" {
