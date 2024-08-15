@@ -338,7 +338,8 @@ foreach ($app in $selectedApps) {
                 $taskService = New-Object -ComObject "Schedule.Service"
                 $taskService.Connect() | Out-Null
                 $rootFolder = $taskService.GetFolder("\")
-                $rootFolder.CreateFolder($folderName) | Out-Null
+                try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }                
+                if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
                 $taskFolder = "\" + $folderName
                 $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
                 $trigger = New-ScheduledTaskTrigger -AtLogon
@@ -442,12 +443,10 @@ foreach ($app in $selectedApps) {
             $destinationDirectory = "$env:PROGRAMFILES\AutoHotkey\Scripts"
             $folderName = "WinMac"
             $taskService = New-Object -ComObject "Schedule.Service"
-            $taskService.Connect()
+            $taskService.Connect() | Out-Null
             $rootFolder = $taskService.GetFolder("\")
-            $existingFolder = $rootFolder.GetFolder($folderName)
-            if ($null -eq $existingFolder) {
-                $rootFolder.CreateFolder($folderName)
-            }
+            try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }                
+            if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
             $taskFolder = "\" + $folderName
             $trigger = New-ScheduledTaskTrigger -AtLogon
             $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
