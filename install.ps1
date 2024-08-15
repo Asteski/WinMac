@@ -7,7 +7,7 @@ Welcome to WinMac Deployment!
 Author: Asteski
 Version: 0.5.2
 
-This is Work in Progress. You're using this script at your own risk.
+This is work in progress. You're using this script at your own risk.
 
 -----------------------------------------------------------------------
 "@ -ForegroundColor Cyan

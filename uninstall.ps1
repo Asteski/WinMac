@@ -7,7 +7,7 @@ Welcome to WinMac Deployment!
 Author: Asteski
 Version: 0.5.2
 
-This is Work in Progress. You're using this script at your own risk.
+This is work in progress. You're using this script at your own risk.
 
 -----------------------------------------------------------------------
 "@ -ForegroundColor Cyan
@@ -245,11 +245,11 @@ foreach ($app in $selectedApps) {
             # AutoHotkey
             Write-Host "Uninstalling AutoHotkey..." -ForegroundColor Yellow
             Stop-Process -Name "AutoHotkey*" -Force | Out-Null
-            Remove-Item "$env:PROGRAMFILES\AutoHotkey\WinMac" -Recurse -Force
             $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -notmatch 'startbutton|winkey' }
             foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false -ErrorAction SilentlyContinue }
             $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue
             if ($tasksFolder -eq $null) { Remove-Item -Path "$env:SYSTEMROOT\System32\Tasks\WinMac" -Force -Recurse -ErrorAction SilentlyContinue }
+            Remove-Item "$env:PROGRAMFILES\AutoHotkey\WinMac" -Recurse -Force
             winget uninstall --id autohotkey.autohotkey --source winget --force | Out-Null
             Write-Host "Uninstalling AutoHotkey completed." -ForegroundColor Green
         }
