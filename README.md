@@ -89,8 +89,8 @@ There are many dock customization you can find around the web, including [Devian
 
 ## Planned features
 
-- Windows on ARM support,
 - Auto Dark Mode toggle theme script,
+- more keyboard shortcuts,
 - more and improved functions.
 
 ## Credits to
