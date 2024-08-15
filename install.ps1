@@ -219,16 +219,16 @@ foreach ($app in $selectedApps) {
         "1" {
             # PowerToys
             Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
-            winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements # | Out-Null
+            winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
             Write-Host "PowerToys installation completed." -ForegroundColor Green
         }
         "2" {
             # Everything
             Write-Host "Installing Everything..."  -ForegroundColor Yellow
-            winget install --id "Voidtools.Everything" --source winget --silent # | Out-Null
+            winget install --id "Voidtools.Everything" --source winget --silent | Out-Null
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
-            Move-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue # | Out-Null
-            Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue # | Out-Null
+            Move-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
+            Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
             Start-Process -FilePath Everything.exe -WorkingDirectory $env:PROGRAMFILES\Everything -WindowStyle Hidden
             Write-Host "Everything installation completed." -ForegroundColor Green
             }
@@ -387,7 +387,7 @@ foreach ($app in $selectedApps) {
             New-Item -ItemType Directory -Path $exePath\config -Force | Out-Null
             Invoke-WebRequest -Uri $url -OutFile $outputPath
             if (Test-Path -Path "$exePath\stahky.exe") {
-                Write-Host "Stahky already exists."
+                Write-Output "Stahky already exists."
             } else {
                 Expand-Archive -Path $outputPath -DestinationPath $exePath
             }
