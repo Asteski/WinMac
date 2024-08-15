@@ -24,7 +24,8 @@ PowerShell profile files will be removed and replaced with new ones. stat
 Please make sure to backup your current profiles if needed.
 "@ -ForegroundColor Yellow
 
-Write-Host "`n-----------------------------------------------------------------------"  -ForegroundColor Cyan
+Write-Host "Script must be run in elevated session!" -ForegroundColor Red
+Write-Host "`n-----------------------------------------------------------------------" -ForegroundColor Cyan
 
 ## Check if script is run from the correct directory
 $checkDir = Get-ChildItem
