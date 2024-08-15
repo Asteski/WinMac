@@ -83,7 +83,7 @@ Please be informed that this is a beta version - you're deploying it at your own
 
 For the most reliable deployment process, I recommend to install latest version of [Powershell Core](https://github.com/PowerShell/PowerShell) and run *install.ps1* script from the script directory and run it as an Administrator. Everything else (except dock, which must be run separately in non-elevated pwsh session) will be deployed automatically for you (including Winget if not already installed).
 
-[Wiki page](https://github.com/Asteski/WinMac/wiki) have ton of very useful information, which can help you understand WinMac components capabilties, keyboard shortcuts, configuration, to modify them to your liking.
+[Wiki page](https://github.com/Asteski/WinMac/wiki) have ton of very useful information, which can help you understand WinMac components capabilities, keyboard shortcuts, configurations, to modify them to your liking.
 
 There are many dock customization you can find around the web, including [DeviantArt](https://www.deviantart.com/search?q=winstep+dock+windows).
 
