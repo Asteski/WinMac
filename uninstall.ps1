@@ -24,9 +24,8 @@ uninstallations manually.
 
 "@ -ForegroundColor Yellow
 
-Write-Host "Script must be run in elevated mode." -ForegroundColor Red
+Write-Host "Script must be run in elevated session!" -ForegroundColor Red
 Write-Host "`n-----------------------------------------------------------------------" -ForegroundColor Cyan
-echo x
 
 ## Check if script is run from the correct directory
 
