@@ -22,6 +22,7 @@ must be run in non-elevated pwsh session.
 
 PowerShell profile files will be removed and replaced with new ones. stat
 Please make sure to backup your current profiles if needed.
+
 "@ -ForegroundColor Yellow
 
 Write-Host "Script must be run in elevated session!" -ForegroundColor Red
