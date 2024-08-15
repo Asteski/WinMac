@@ -5,9 +5,9 @@ Write-Host @"
 Welcome to WinMac Deployment!
 
 Author: Asteski
-Version: 0.5.1
+Version: 0.5.2
 
-This is Work in Progress. You're using this script at your own risk.
+This is work in progress. You're using this script at your own risk.
 
 -----------------------------------------------------------------------
 "@ -ForegroundColor Cyan
@@ -22,11 +22,10 @@ your current profiles if needed.
 Vim and Nexus packages will show prompt to uninstall, please confirm the
 uninstallations manually.
 
-AutoHotkey option must be run in elevated mode to uninstall.
-
 "@ -ForegroundColor Yellow
 
-Write-Host "-----------------------------------------------------------------------" -ForegroundColor Cyan
+Write-Host "Script must be run in elevated session!" -ForegroundColor Red
+Write-Host "`n-----------------------------------------------------------------------" -ForegroundColor Cyan
 
 ## Check if script is run from the correct directory
 
@@ -209,10 +208,13 @@ foreach ($app in $selectedApps) {
         "5" {
             # WinMac Menu
             Write-Host "Uninstalling WinMac Menu..." -ForegroundColor Yellow
-            Stop-Process -Name WinKey -Force | Out-Null
+            Stop-Process -Name WindowsKey -Force | Out-Null
             $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -match 'startbutton|winkey' }
             foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
-            Remove-Item -Path "$env:PROGRAMFILES\WinMac" -Recurse -Force
+            $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue
+            if ($tasksFolder -eq $null) { Remove-Item -Path "$env:SYSTEMROOT\System32\Tasks\WinMac" -Force -Recurse -ErrorAction SilentlyContinue }
+            Remove-Item -Path "$env:PROGRAMFILES\WinMac" -Recurse -Force | Out-Null
+            Remove-Item -Path "$env:PROGRAMFILES\WinMac" -Force | Out-Null
             Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\winx" -Recurse -Force | Out-Null
             Expand-Archive -Path "$pwd\config\WinX-default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
             Stop-Process -n Explorer
@@ -244,9 +246,12 @@ foreach ($app in $selectedApps) {
             # AutoHotkey
             Write-Host "Uninstalling AutoHotkey..." -ForegroundColor Yellow
             Stop-Process -Name "AutoHotkey*" -Force | Out-Null
-            winget uninstall --id autohotkey.autohotkey --source winget --force | Out-Null
             $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -notmatch 'startbutton|winkey' }
             foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false -ErrorAction SilentlyContinue }
+            $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue
+            if ($tasksFolder -eq $null) { Remove-Item -Path "$env:SYSTEMROOT\System32\Tasks\WinMac" -Force -Recurse -ErrorAction SilentlyContinue }
+            winget uninstall --id autohotkey.autohotkey --source winget --force | Out-Null
+            Remove-Item "$env:PROGRAMFILES\AutoHotkey" -Recurse -Force | Out-Null
             Write-Host "Uninstalling AutoHotkey completed." -ForegroundColor Green
         }
         "10" {

@@ -5,12 +5,14 @@ Write-Host @"
 Welcome to WinMac Deployment!
 
 Author: Asteski
-Version: 0.5.1
+Version: 0.5.2
 
-This is Work in Progress. You're using this script at your own risk.
+This is work in progress. You're using this script at your own risk.
 
------------------------------------------------------------------------
-"@ -ForegroundColor Cyan
+"@ -ForegroundColor Yellow
+
+Write-Host "Script must be run in non-elevated session!" -ForegroundColor Red
+Write-Host "`n-----------------------------------------------------------------------" -ForegroundColor Cyan
 
 ## Check if script is run from the correct directory
 
@@ -22,7 +24,6 @@ if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir 
 }
 
 ## Dock Configuration
-
 Write-Host "`nConfiguring Nexus Dock...`n" -ForegroundColor Yellow
 $roundedOrSquared = Read-Host "Enter 'R' for rounded dock or 'S' for squared dock"
 if ($roundedOrSquared -eq "R" -or $roundedOrSquared -eq "r") {
@@ -41,6 +42,7 @@ if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
 } else {
     Write-Host "Invalid input. Defaulting to light theme.`n" -ForegroundColor Yellow
 }
+
 ## Dock Installation
 Start-Sleep 1
 Write-Host "`Installing Nexus Dock...`n" -ForegroundColor Yellow
@@ -73,11 +75,10 @@ New-Item -ItemType Directory -Path "$winStep\Sounds" -Force | Out-Null
 Copy-Item -Path "config\dock\sounds\*" -Destination "$winStep\Sounds\" -Recurse -Force | Out-Null
 New-Item -ItemType Directory -Path "$winStep\Icons" -Force | Out-Null
 Copy-Item config\dock\icons "$winStep" -Recurse -Force | Out-Null
-
 $regFile = "$pwd\config\dock\winstep.reg"
 $tempFolder = "$pwd\temp"
-$tempPath = Test-Path $tempFolder
-    if (-not ($tempPath)) {
+$downloadsPath = "$env:USERPROFILE\Downloads"
+if (-not (Test-Path $tempFolder)) {
     New-Item -ItemType Directory -Path $tempFolder -Force | Out-Null
 }
 if ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
@@ -103,13 +104,15 @@ elseif (($roundedOrSquared -ne "S" -or $roundedOrSquared -ne "s") -and ($lightOr
     $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 | Out-Null
     $regFile = $modifiedFile
 }
-
 reg import $regFile > $null 2>&1
 Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "DockLabelColorHotTrack1" -ErrorAction SilentlyContinue | Out-Null
+Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type6" -ErrorAction SilentlyContinue | Out-Null
+Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type7" -ErrorAction SilentlyContinue | Out-Null
+Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path6" -Value $downloadsPath
+Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path7" -Value "$env:APPDATA\Microsoft\Windows\Recent\"
 Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe' | Out-Null
 while (!(Get-Process nexus -ErrorAction SilentlyContinue)) { Start-Sleep 1 }
 Write-Host "Nexus Dock installation completed.`n" -ForegroundColor Green
-
 Write-Host "Clean up..." -ForegroundColor Yellow
 $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
 Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Nexus.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null

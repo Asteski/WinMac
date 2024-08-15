@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+      <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>WindowsKey</AssemblyName>
+    <Platforms>AnyCPU;x64</Platforms>
+    <PackageId>WinMacMenu</PackageId>
+    <Authors>Asteski</Authors>
+    <Product>WinMacMenu</Product>
+  </PropertyGroup>
+
+</Project>

@@ -1,4 +1,5 @@
-﻿#NoTrayIcon
+﻿#SingleInstance Force
+#NoTrayIcon
 ^!Esc::
 {
     If Not WinActive("ahk_exe explorer.exe") and Not WinActive("ahk_exe Nexus.exe")

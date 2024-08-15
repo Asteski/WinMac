@@ -1,7 +1,7 @@
-﻿#SingleInstance Force
+#SingleInstance Force
 #NoTrayIcon
 #HotIf WinX()
-$LButton::Send("#{x}")
+$MButton::Send("#{x}")
 Return
 #HotIf
 

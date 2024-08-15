@@ -2,6 +2,7 @@
 ; Original Source: https://gist.github.com/kamui/12c581c09288ac486faeb1095622c873
 ; Based on: https://gist.github.com/rbika/014fb3570beaef195db0bd53fa681037
 
+#SingleInstance Force
 #NoTrayIcon
 SendMode("Input")
 SetWorkingDir(A_ScriptDir)

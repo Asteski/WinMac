@@ -5,9 +5,9 @@ Write-Host @"
 Welcome to WinMac Deployment!
 
 Author: Asteski
-Version: 0.5.1
+Version: 0.5.2
 
-This is Work in Progress. You're using this script at your own risk.
+This is work in progress. You're using this script at your own risk.
 
 -----------------------------------------------------------------------
 "@ -ForegroundColor Cyan
@@ -22,14 +22,11 @@ must be run in non-elevated pwsh session.
 
 PowerShell profile files will be removed and replaced with new ones. stat
 Please make sure to backup your current profiles if needed.
+
 "@ -ForegroundColor Yellow
 
-## Platform type detection
-$platform = "x86" # Set default for non-ARM based systems
-# $platformType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
-# if ($platformType -like "*ARM*") {$platform = "arm"} else {$platform = "x86"}
-# Write-Host "$([char]27)[92m$("`nPlatform type detected:")$([char]27)[0m $platform"
-Write-Host "`n-----------------------------------------------------------------------"  -ForegroundColor Cyan
+Write-Host "Script must be run in elevated session!" -ForegroundColor Red
+Write-Host "`n-----------------------------------------------------------------------" -ForegroundColor Cyan
 
 ## Check if script is run from the correct directory
 $checkDir = Get-ChildItem
@@ -103,7 +100,7 @@ $([char]27)[93m$("You can choose between WinMac start menu or Classic start menu
 
 WinMac start menu replaces default menu with customized WinX menu.
 
-Classic start menu replaces default menu with enhanced Windows menu.
+Classic start menu replaces default menu with enhanced Windows 7 start menu.
 
 "@
 
@@ -336,29 +333,30 @@ foreach ($app in $selectedApps) {
             if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
                 Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
                 winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
-                winget install --id Microsoft.DotNet.DesktopRuntime.6 --silent | Out-Null
                 winget install --id Microsoft.DotNet.AspNetCore.6 --silent | Out-Null
+                Invoke-WebRequest -Uri 'https://download.visualstudio.microsoft.com/download/pr/222a065f-5671-4aed-aba9-46a94f2705e2/2bbcbd8e1c304ed1f7cef2be5afdaf43/windowsdesktop-runtime-6.0.32-win-x64.exe' -OutFile 'windowsdesktop-runtime-6.0.32-win-x64.exe'
+                Start-Process -FilePath '.\windowsdesktop-runtime-6.0.32-win-x64.exe' -ArgumentList '/install /quiet /norestart' -Wait
                 $folderName = "WinMac"
                 $taskService = New-Object -ComObject "Schedule.Service"
-                $taskService.Connect()
+                $taskService.Connect() | Out-Null
                 $rootFolder = $taskService.GetFolder("\")
-                $rootFolder.CreateFolder($folderName)
+                try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }                
+                if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
                 $taskFolder = "\" + $folderName
                 $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
                 $trigger = New-ScheduledTaskTrigger -AtLogon
                 $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
-                if ($platform -like "*arm*") {$taskDir = "${env:PROGRAMFILES(ARM)}\WinMac\"} else {$taskDir = "$env:PROGRAMFILES\WinMac\"}
-                New-Item -ItemType Directory -Path $taskDir | Out-Null
-                Copy-Item .\bin\$platform\* $taskDir | Out-Null
-                Copy-Item .\bin\StartButton.ahk $taskDir | Out-Null
-                $actionWinKey = New-ScheduledTaskAction -Execute 'winkey.exe' -WorkingDirectory $taskDir
-                $actionStartButton = New-ScheduledTaskAction -Execute "StartButton.ahk" -WorkingDirectory $taskDir
+                New-Item -ItemType Directory -Path "$env:PROGRAMFILES\WinMac\" | Out-Null
+                Copy-Item .\bin\* "$env:PROGRAMFILES\WinMac\" | Out-Null
+                $actionWinKey = New-ScheduledTaskAction -Execute 'WindowsKey.exe' -WorkingDirectory "$env:PROGRAMFILES\WinMac\"
+                $actionStartButton = New-ScheduledTaskAction -Execute "StartButton.ahk" -WorkingDirectory "$env:PROGRAMFILES\WinMac\"
                 Register-ScheduledTask -TaskName "StartButton" -Action $actionStartButton -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -ErrorAction SilentlyContinue | Out-Null
-                Register-ScheduledTask -TaskName "WinKey" -Action $actionWinKey -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -ErrorAction SilentlyContinue | Out-Null
+                Register-ScheduledTask -TaskName "WindowsKey" -Action $actionWinKey -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -ErrorAction SilentlyContinue | Out-Null
                 Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
+                Remove-Item .\windowsdesktop-runtime-6.0.32-win-x64.exe -Force
                 Copy-Item -Path "$pwd\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
-                Start-Process "$taskDir\winkey.exe"
-                Start-Process "$taskDir\StartButton.ahk"
+                Start-Process "$env:PROGRAMFILES\WinMac\WindowsKey.exe"
+                Start-Process "$env:PROGRAMFILES\WinMac\StartButton.ahk"
                 Write-Host "WinMac Menu installation completed." -ForegroundColor Green
             }
             else {
@@ -392,7 +390,7 @@ foreach ($app in $selectedApps) {
             New-Item -ItemType Directory -Path $exePath\config -Force | Out-Null
             Invoke-WebRequest -Uri $url -OutFile $outputPath
             if (Test-Path -Path "$exePath\stahky.exe") {
-                Write-Host "Stahky already exists."
+                Write-Output "Stahky already exists."
             } else {
                 Expand-Archive -Path $outputPath -DestinationPath $exePath
             }
@@ -436,6 +434,7 @@ foreach ($app in $selectedApps) {
             $shortcut2.TargetPath = $newTargetPath
             $shortcut2.WorkingDirectory = $newWorkDir2
             $shortcut2.Save()
+            Remove-Item $outputPath -Force
             Write-Host "Stahky installation completed." -ForegroundColor Green
         }
         "8" {
@@ -443,15 +442,13 @@ foreach ($app in $selectedApps) {
             Write-Host "Installing AutoHotkey..." -ForegroundColor Yellow  
             winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
             $sourceDirectory = "$pwd\config\ahk"
-            $destinationDirectory = "$env:PROGRAMFILES\AutoHotkey\Scripts"
+            $destinationDirectory = "$env:PROGRAMFILES\AutoHotkey\WinMac"
             $folderName = "WinMac"
             $taskService = New-Object -ComObject "Schedule.Service"
-            $taskService.Connect()
+            $taskService.Connect() | Out-Null
             $rootFolder = $taskService.GetFolder("\")
-            $existingFolder = $rootFolder.GetFolder($folderName)
-            if ($null -eq $existingFolder) {
-                $rootFolder.CreateFolder($folderName)
-            }
+            try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }                
+            if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
             $taskFolder = "\" + $folderName
             $trigger = New-ScheduledTaskTrigger -AtLogon
             $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew

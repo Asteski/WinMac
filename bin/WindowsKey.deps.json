@@ -6,15 +6,15 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v6.0": {
-      "winkey/1.0.0": {
+      "WindowsKey/1.0.0": {
         "runtime": {
-          "winkey.dll": {}
+          "WindowsKey.dll": {}
         }
       }
     }
   },
   "libraries": {
-    "winkey/1.0.0": {
+    "WindowsKey/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

@@ -35,11 +35,11 @@ By pressing a customizable hotkey combination, a search bar appears, enabling us
 
 Winstep Nexus is a highly customizable and feature-rich dock application for Windows that can be used to achieve a macOS-like dock experience. It offers a wide range of customization options, including size, animations, sounds, auto-hide, transparency, different themes and icons.
 
-By integrating Winstep Nexus into your WinMac modification, you can provide users with a visually appealing and functional dock that resembles the macOS style. This will enhance the overall user experience and make the transition between Windows and macOS seamless.
+By integrating Winstep Nexus into your WinMac modification, you can provide users with a visually appealing and functional dock that resembles the macOS style. This will enhance the overall user experience and make the transition between Windows and macOS seamless. 
 
 - **Start Menu**
 
-WinMac Menu is a collection of os customization utilities, that allows to bring Start Menu replacement for Windows. You can replace traditional Start Menu with customized WinX menu, to resemble MacOS main menu, or enable enhanced classic Start Menu.
+WinMac Menu is a collection of os customization utilities, that allows to bring Start Menu replacement for Windows. You can replace traditional Start Menu with customized WinX menu, to resemble MacOS main menu, or enable enhanced classic Start Menu. More details on Wiki page [Configuration](https://github.com/Asteski/WinMac/wiki/Configuration#winmac-menu).
 
 - **Enhanced Taskbar**
 
@@ -83,12 +83,14 @@ Please be informed that this is a beta version - you're deploying it at your own
 
 For the most reliable deployment process, I recommend to install latest version of [Powershell Core](https://github.com/PowerShell/PowerShell) and run *install.ps1* script from the script directory and run it as an Administrator. Everything else (except dock, which must be run separately in non-elevated pwsh session) will be deployed automatically for you (including Winget if not already installed).
 
+[Wiki page](https://github.com/Asteski/WinMac/wiki) have ton of very useful information, which can help you understand WinMac componenets capabiltiies and modify them to your liking.
+
 There are many dock customization you can find around the web, including [DeviantArt](https://www.deviantart.com/search?q=winstep+dock+windows).
 
 ## Planned features
 
-- Windows on ARM support,
 - Auto Dark Mode toggle theme script,
+- more keyboard shortcuts,
 - more and improved functions.
 
 ## Credits to
