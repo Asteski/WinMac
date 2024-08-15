@@ -213,7 +213,8 @@ foreach ($app in $selectedApps) {
             foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
             $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue
             if ($tasksFolder -eq $null) { Remove-Item -Path "$env:SYSTEMROOT\System32\Tasks\WinMac" -Force -Recurse -ErrorAction SilentlyContinue }
-            Remove-Item -Path "$env:PROGRAMFILES\WinMac" -Recurse -Force
+            Remove-Item -Path "$env:PROGRAMFILES\WinMac" -Recurse -Force | Out-Null
+            Remove-Item -Path "$env:PROGRAMFILES\WinMac" -Force | Out-Null
             Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\winx" -Recurse -Force | Out-Null
             Expand-Archive -Path "$pwd\config\WinX-default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
             Stop-Process -n Explorer
@@ -249,8 +250,8 @@ foreach ($app in $selectedApps) {
             foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false -ErrorAction SilentlyContinue }
             $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue
             if ($tasksFolder -eq $null) { Remove-Item -Path "$env:SYSTEMROOT\System32\Tasks\WinMac" -Force -Recurse -ErrorAction SilentlyContinue }
-            Remove-Item "$env:PROGRAMFILES\AutoHotkey\WinMac" -Recurse -Force
             winget uninstall --id autohotkey.autohotkey --source winget --force | Out-Null
+            Remove-Item "$env:PROGRAMFILES\AutoHotkey" -Recurse -Force | Out-Null
             Write-Host "Uninstalling AutoHotkey completed." -ForegroundColor Green
         }
         "10" {
