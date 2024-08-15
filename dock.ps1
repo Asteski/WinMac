@@ -9,8 +9,10 @@ Version: 0.5.2
 
 This is work in progress. You're using this script at your own risk.
 
------------------------------------------------------------------------
-"@ -ForegroundColor Cyan
+"@ -ForegroundColor Yellow
+
+Write-Host "Script must be run in non-elevated session!" -ForegroundColor Red
+Write-Host "`n-----------------------------------------------------------------------" -ForegroundColor Cyan
 
 ## Check if script is run from the correct directory
 
