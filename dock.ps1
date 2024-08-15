@@ -73,7 +73,6 @@ New-Item -ItemType Directory -Path "$winStep\Sounds" -Force | Out-Null
 Copy-Item -Path "config\dock\sounds\*" -Destination "$winStep\Sounds\" -Recurse -Force | Out-Null
 New-Item -ItemType Directory -Path "$winStep\Icons" -Force | Out-Null
 Copy-Item config\dock\icons "$winStep" -Recurse -Force | Out-Null
-
 $regFile = "$pwd\config\dock\winstep.reg"
 $tempFolder = "$pwd\temp"
 $downloadsPath = "$env:USERPROFILE\Downloads"
@@ -106,7 +105,9 @@ elseif (($roundedOrSquared -ne "S" -or $roundedOrSquared -ne "s") -and ($lightOr
 reg import $regFile > $null 2>&1
 Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "DockLabelColorHotTrack1" -ErrorAction SilentlyContinue | Out-Null
 Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type6" -ErrorAction SilentlyContinue | Out-Null
+Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type7" -ErrorAction SilentlyContinue | Out-Null
 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path6" -Value $downloadsPath
+Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path7" -Value "$env:APPDATA\Microsoft\Windows\Recent\"
 Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe' | Out-Null
 while (!(Get-Process nexus -ErrorAction SilentlyContinue)) { Start-Sleep 1 }
 Write-Host "Nexus Dock installation completed.`n" -ForegroundColor Green
