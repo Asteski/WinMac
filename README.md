@@ -45,7 +45,7 @@ WinMac Menu is a collection of customization utilities, that allows to bring Sta
 
 StartAllBack enhances the functionality of the Windows Taskbar by introducing features inspired by earlier versions of Windows, such as Windows 7 and Windows 10. It brings back familiar elements like colored title bars and customizable Start buttons. 
 
-Additionally, StartAllBack offers options for customizing the appearance and behavior of the Taskbar to suit individual user preferences.
+Additionally, StartAllBack offers options for customizing the appearance and behavior of the Taskbar to suit individual user preferences, including taskbar size, position, dynamic transparency, start menu orb and tasks alignment and tray icons spacing.
 
 - **Enhanced Explorer**
 
@@ -65,13 +65,7 @@ WinMac provides you with debloated prompt with addition of completion functions 
 
 - **Keyboard Shortcuts**
 
-WinMac provides very useful keyboard shortcuts from macOS with use of AutoHotkey, which is an automation scripting language for Windows. Shortcuts include hiding/showing dock, minimizing all windows and cycling through windows of the same app. More details on Wiki page [Keyboard Shortcuts](https://github.com/Asteski/WinMac/wiki/Commands-cheat-sheet#keyboard-shortcuts).
-
-## Benefits
-
-- **Unified Computing Experience:** WinMac provides a cohesive blend of Windows and macOS elements, ensuring a smooth and efficient workflow for all users.
-- **Enhanced Productivity:** Take advantage of the versatility and compatibility of WinMac to maximize productivity across various tasks and applications.
-- **Privacy and Security:** Rest assured knowing that your data is protected by the advanced security features as part of Windows 11 Defender Security services.
+WinMac provides very useful keyboard shortcuts from macOS with use of AutoHotkey, which is an automation scripting language for Windows. Shortcuts include hiding/showing dock, minimizing single or all windows and cycling through windows of the same app. More details on Wiki page [Keyboard Shortcuts](https://github.com/Asteski/WinMac/wiki/Commands-cheat-sheet#keyboard-shortcuts).
 
 ## Experience WinMac Today!
 
@@ -83,12 +77,13 @@ Please be informed that this is a beta version - you're deploying it at your own
 
 For the most reliable deployment process, I recommend to install latest version of [Powershell Core](https://github.com/PowerShell/PowerShell) and run *install.ps1* script from the script directory and run it as an Administrator. Everything else (except dock, which must be run separately in non-elevated pwsh session) will be deployed automatically for you (including Winget if not already installed).
 
-[Wiki page](https://github.com/Asteski/WinMac/wiki) have ton of very useful information, which can help you understand WinMac components capabilities, keyboard shortcuts, configurations, to modify them to your liking.
+[Wiki page](https://github.com/Asteski/WinMac/wiki) have ton of very useful information, which can help you understand WinMac components capabilities and configurations, keyboard shortcuts, to modify them to your liking.
 
 There are many dock customization you can find around the web, including [DeviantArt](https://www.deviantart.com/search?q=winstep+dock+windows).
 
 ## Planned features
 
+- Launchpad,
 - Auto Dark Mode toggle theme script,
 - more keyboard shortcuts,
 - more and improved functions.
