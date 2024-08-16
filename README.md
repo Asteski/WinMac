@@ -71,6 +71,8 @@ WinMac provides very useful keyboard shortcuts from macOS with use of AutoHotkey
 
 Discover the future of computing with WinMac, where the power of Windows meets the elegance of macOS in perfect harmony. Upgrade to WinMac and elevate your computing experience to new heights!
 
+WinMac supports both x64 and ARM based platforms.
+
 Please be informed that this is a beta version - you're deploying it at your own risk!!
 
 ## Recommendations
