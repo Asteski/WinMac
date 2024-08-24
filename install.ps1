@@ -468,7 +468,7 @@ foreach ($app in $selectedApps) {
         "9" {
             # WinLauncher
             Write-Host "Installing WinLauncher..." -ForegroundColor Yellow
-            Start-Process -FilePath "msiexec" -ArgumentList "/i WinLauncher.msi /quiet" -Wait
+            Start-Process -FilePath "msiexec" -ArgumentList "/i $($pwd)\bin\WinLauncher\WinLauncher.msi /quiet" -Wait
             Write-Host "AutoHotkey installation completed." -ForegroundColor Green
         }
         "10" {
