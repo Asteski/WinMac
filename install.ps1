@@ -349,7 +349,9 @@ foreach ($app in $selectedApps) {
                 $trigger = New-ScheduledTaskTrigger -AtLogon
                 $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
                 New-Item -ItemType Directory -Path "$env:PROGRAMFILES\WinMac\" | Out-Null
+                New-Item -ItemType Directory -Path "$env:PROGRAMFILES\WinMac\menu" | Out-Null
                 Copy-Item .\bin\* "$env:PROGRAMFILES\WinMac\" | Out-Null
+                Copy-Item .\bin\menu "$env:PROGRAMFILES\WinMac\menu" | Out-Null
                 $actionWinKey = New-ScheduledTaskAction -Execute 'WindowsKey.exe' -WorkingDirectory "$env:PROGRAMFILES\WinMac\"
                 $actionStartButton = New-ScheduledTaskAction -Execute "StartButton.ahk" -WorkingDirectory "$env:PROGRAMFILES\WinMac\"
                 Register-ScheduledTask -TaskName "StartButton" -Action $actionStartButton -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -ErrorAction SilentlyContinue | Out-Null
