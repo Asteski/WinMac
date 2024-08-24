@@ -16,6 +16,7 @@ Write-Host @"
 This script is responsible for installing all or specific WinMac 
 components.
 
+
 Installation process is seperated into two parts: main install and dock.
 Main script must be run with admin privileges, while dock script 
 must be run in non-elevated pwsh session.
@@ -47,12 +48,12 @@ Write-Host
 $fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom installation"
 if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
     Write-Host "Choosing full installation." -ForegroundColor Green
-    $selectedApps = "1","2","3","4","5","6","7","8","9"
+    $selectedApps = "1","2","3","4","5","6","7","8","9","10"
 } 
 elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
     Write-Host "Choosing custom installation." -ForegroundColor Green
     Start-Sleep 1
-    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="AutoHotkey"; "9"="Other"}
+    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="AutoHotkey"; "9"="WinLauncher"; "10"="Other"}
 
 Write-Host @"
 
@@ -67,8 +68,9 @@ $([char]27)[93m$("Please select options you want to install:")$([char]27)[0m
     Write-Host "6. TopNotify"
     Write-Host "7. Stahky"
     Write-Host "8. AutoHotkey"
+    Write-Host "9. WinLauncher"
     Write-Host @"
-9. Other:
+10. Other:
     - black cursor
     - pin Home and Programs folders to Quick access
     - remove shortcut arrows
@@ -90,7 +92,7 @@ $([char]27)[93m$("Please select options you want to install:")$([char]27)[0m
 else
 {
     Write-Host "Invalid input. Defaulting to full installation." -ForegroundColor Yellow
-    $selectedApps = "1","2","3","4","5","6","7","8","9"
+    $selectedApps = "1","2","3","4","5","6","7","8","9","10"
 }
 
 if ($selectedApps -like '*4*' -or $selectedApps -like '*5*') {
@@ -443,6 +445,7 @@ foreach ($app in $selectedApps) {
             winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
             $sourceDirectory = "$pwd\config\ahk"
             $destinationDirectory = "$env:PROGRAMFILES\AutoHotkey\WinMac"
+            $fileName = "winmac-keybindings.ahk"
             $folderName = "WinMac"
             $taskService = New-Object -ComObject "Schedule.Service"
             $taskService.Connect() | Out-Null
@@ -452,19 +455,21 @@ foreach ($app in $selectedApps) {
             $taskFolder = "\" + $folderName
             $trigger = New-ScheduledTaskTrigger -AtLogon
             $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
-            $files = Get-ChildItem -Path $sourceDirectory -File
-            New-Item -ItemType Directory -Path $destinationDirectory | Out-Null
-            foreach ($file in $files) { 
-                Copy-Item -Path $file.FullName -Destination $destinationDirectory
-                $taskName = ($file.Name).replace('.ahk','')
-                $action = New-ScheduledTaskAction -Execute $file.Name -WorkingDirectory $destinationDirectory    
-                $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
-                Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -ErrorAction SilentlyContinue | Out-Null
-                Start-Process -FilePath $destinationDirectory\$($file.Name)
-            }
+            Copy-Item -Path $sourceDirectory\* -Destination $destinationDirectory -Recurse -Force
+            $taskName = ($file.Name).replace('.ahk','')
+            $action = New-ScheduledTaskAction -Execute $file.Name -WorkingDirectory $destinationDirectory    
+            $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
+            Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -ErrorAction SilentlyContinue | Out-Null
+            Start-Process -FilePath $destinationDirectory\$($file.Name)
             Write-Host "AutoHotkey installation completed." -ForegroundColor Green
         }
         "9" {
+            # WinLauncher
+            Write-Host "Installing WinLauncher..." -ForegroundColor Yellow
+            Start-Process -FilePath "msiexec" -ArgumentList "/i WinLauncher.msi /quiet" -Wait
+            Write-Host "AutoHotkey installation completed." -ForegroundColor Green
+        }
+        "10" {
             # Other
             ## Black Cursor
             Write-Host "Configuring black cursor..." -ForegroundColor Yellow
