@@ -350,17 +350,17 @@ foreach ($app in $selectedApps) {
                 $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
                 New-Item -ItemType Directory -Path "$env:PROGRAMFILES\WinMac\" | Out-Null
                 New-Item -ItemType Directory -Path "$env:PROGRAMFILES\WinMac\menu" | Out-Null
-                Copy-Item .\bin\* "$env:PROGRAMFILES\WinMac\" | Out-Null
+                # Copy-Item .\bin\ "$env:PROGRAMFILES\WinMac\" | Out-Null
                 Copy-Item .\bin\menu "$env:PROGRAMFILES\WinMac\menu" | Out-Null
-                $actionWinKey = New-ScheduledTaskAction -Execute 'WindowsKey.exe' -WorkingDirectory "$env:PROGRAMFILES\WinMac\"
-                $actionStartButton = New-ScheduledTaskAction -Execute "StartButton.ahk" -WorkingDirectory "$env:PROGRAMFILES\WinMac\"
+                $actionWinKey = New-ScheduledTaskAction -Execute 'WindowsKey.exe' -WorkingDirectory "$env:PROGRAMFILES\WinMac\menu"
+                $actionStartButton = New-ScheduledTaskAction -Execute "StartButton.ahk" -WorkingDirectory "$env:PROGRAMFILES\WinMac\menu"
                 Register-ScheduledTask -TaskName "StartButton" -Action $actionStartButton -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -ErrorAction SilentlyContinue | Out-Null
                 Register-ScheduledTask -TaskName "WindowsKey" -Action $actionWinKey -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -ErrorAction SilentlyContinue | Out-Null
                 Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
                 Remove-Item .\windowsdesktop-runtime-6.0.32-win-x64.exe -Force
                 Copy-Item -Path "$pwd\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
-                Start-Process "$env:PROGRAMFILES\WinMac\WindowsKey.exe"
-                Start-Process "$env:PROGRAMFILES\WinMac\StartButton.ahk"
+                Start-Process "$env:PROGRAMFILES\WinMac\menu\WindowsKey.exe"
+                Start-Process "$env:PROGRAMFILES\WinMac\menu\StartButton.ahk"
                 Write-Host "WinMac Menu installation completed." -ForegroundColor Green
             }
             else {
@@ -446,23 +446,23 @@ foreach ($app in $selectedApps) {
             Write-Host "Installing AutoHotkey..." -ForegroundColor Yellow  
             winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
             $sourceDirectory = "$pwd\config\ahk"
-            $destinationDirectory = "$env:PROGRAMFILES\AutoHotkey\WinMac"
+            $destinationDirectory = "$env:PROGRAMFILES\AutoHotkey\Scripts"
             $fileName = "winmac-keybindings.ahk"
             $folderName = "WinMac"
             $taskService = New-Object -ComObject "Schedule.Service"
             $taskService.Connect() | Out-Null
             $rootFolder = $taskService.GetFolder("\")
-            try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }                
-            if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
             $taskFolder = "\" + $folderName
             $trigger = New-ScheduledTaskTrigger -AtLogon
             $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
+            try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }                
+            if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
             Copy-Item -Path $sourceDirectory\* -Destination $destinationDirectory -Recurse -Force
-            $taskName = ($file.Name).replace('.ahk','')
-            $action = New-ScheduledTaskAction -Execute $file.Name -WorkingDirectory $destinationDirectory    
+            $taskName = ($fileName).replace('.ahk','')
+            $action = New-ScheduledTaskAction -Execute $fileName -WorkingDirectory $destinationDirectory    
             $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
             Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -ErrorAction SilentlyContinue | Out-Null
-            Start-Process -FilePath $destinationDirectory\$($file.Name)
+            Start-Process -FilePath $destinationDirectory\$($fileName)
             Write-Host "AutoHotkey installation completed." -ForegroundColor Green
         }
         "9" {

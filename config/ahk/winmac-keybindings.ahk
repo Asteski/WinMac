@@ -41,7 +41,7 @@ WinX() {
     }
 }
 
-; Hotkey: Ctrl + Alt + M - Minimizes all windows unless the active window is Explorer or Nexus
+; Hotkey: Ctrl + Alt + M - Minimizes all windows unless the active window is Nexus
 ^!m::
 {
     If Not WinActive("ahk_class Shell_TrayWnd") and Not WinActive("ahk_exe Nexus.exe")
@@ -50,7 +50,7 @@ WinX() {
     }
 }
 
-; Hotkey: Alt + M - Minimizes the active window unless it's Explorer or Nexus
+; Hotkey: Alt + M - Minimizes the active window unless it's Nexus
 !m::
 {
     If Not WinActive("ahk_class Shell_TrayWnd") and Not WinActive("ahk_exe Nexus.exe")
