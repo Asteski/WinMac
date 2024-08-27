@@ -209,7 +209,7 @@ foreach ($app in $selectedApps) {
             # WinMac Menu
             Write-Host "Uninstalling WinMac Menu..." -ForegroundColor Yellow
             Stop-Process -Name WindowsKey -Force | Out-Null
-            $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -match 'startbutton|winkey' }
+            $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -match 'startbutton|windowskey' }
             foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
             $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue
             if ($tasksFolder -eq $null) { Remove-Item -Path "$env:SYSTEMROOT\System32\Tasks\WinMac" -Force -Recurse -ErrorAction SilentlyContinue }
@@ -246,7 +246,7 @@ foreach ($app in $selectedApps) {
             # AutoHotkey
             Write-Host "Uninstalling AutoHotkey..." -ForegroundColor Yellow
             Stop-Process -Name "AutoHotkey*" -Force | Out-Null
-            $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -notmatch 'startbutton|winkey' }
+            $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -notmatch 'startbutton|windowskey' }
             foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false -ErrorAction SilentlyContinue }
             $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue
             if ($tasksFolder -eq $null) { Remove-Item -Path "$env:SYSTEMROOT\System32\Tasks\WinMac" -Force -Recurse -ErrorAction SilentlyContinue }

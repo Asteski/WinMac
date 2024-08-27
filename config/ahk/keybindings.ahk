@@ -1,13 +1,12 @@
 ; Single Instance to prevent multiple instances of the script from running
 #SingleInstance Force
-
 ; No tray icon for a cleaner experience
 #NoTrayIcon
 
-; Hotkey: Ctrl + Esc - Sends Win + X
+; Hotkey: Ctrl + Esc - Sends WinMac Menu
 ^Esc::Send("#{x}")
 
-; Hotkey: Ctrl + Alt + Esc - Closes the active window unless it's Explorer or Nexus
+; Hotkey: Ctrl + Alt + Esc - Closes the active window
 ^!Esc::
 {
     ; Check if the active window is not Explorer or Nexus
@@ -21,7 +20,7 @@
     }
 }
 
-; Hotkey: Middle Mouse Button - Sends Win + X only when WinX() condition is true
+; Hotkey: Middle Mouse Button - Sends WinMac Menu
 #HotIf WinX()
 $MButton::Send("#{x}")
 #HotIf
@@ -41,16 +40,7 @@ WinX() {
     }
 }
 
-; Hotkey: Ctrl + Alt + M - Minimizes all windows unless the active window is Nexus
-^!m::
-{
-    If Not WinActive("ahk_class Shell_TrayWnd") and Not WinActive("ahk_exe Nexus.exe")
-    {
-        WinMinimizeAll
-    }
-}
-
-; Hotkey: Alt + M - Minimizes the active window unless it's Nexus
+; Hotkey: Alt + M - Minimizes the active window
 !m::
 {
     If Not WinActive("ahk_class Shell_TrayWnd") and Not WinActive("ahk_exe Nexus.exe")
@@ -59,12 +49,19 @@ WinX() {
     }
 }
 
+; Hotkey: Ctrl + Alt + M - Minimizes all windows
+^!m::
+{
+    If Not WinActive("ahk_class Shell_TrayWnd") and Not WinActive("ahk_exe Nexus.exe")
+    {
+        WinMinimizeAll
+    }
+}
+
 ; Cycle between windows of the same app like in macOS - Alt+backtick.
 ; Original Source: https://gist.github.com/kamui/12c581c09288ac486faeb1095622c873
 ; Based on: https://gist.github.com/rbika/014fb3570beaef195db0bd53fa681037
 
-#SingleInstance Force
-#NoTrayIcon
 SendMode("Input")
 SetWorkingDir(A_ScriptDir)
 

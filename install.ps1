@@ -447,7 +447,7 @@ foreach ($app in $selectedApps) {
             winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
             $sourceDirectory = "$pwd\config\ahk"
             $destinationDirectory = "$env:PROGRAMFILES\AutoHotkey\Scripts"
-            $fileName = "winmac-keybindings.ahk"
+            $fileName = "Keybindings.ahk"
             $folderName = "WinMac"
             $taskService = New-Object -ComObject "Schedule.Service"
             $taskService.Connect() | Out-Null
