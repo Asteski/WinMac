@@ -334,10 +334,10 @@ foreach ($app in $selectedApps) {
             if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
                 Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
                 winget install --id Microsoft.DotNet.DesktopRuntime.6 --silent | Out-Null
-                New-Item -ItemType Directory -Path "$env:PROGRAMFILES\WinMac\" | Out-Null
-                Get-Item -Path .\bin\* | Where-Object { $_.Name -ne "keybindings.exe" } | Copy-Item -Destination "$env:PROGRAMFILES\WinMac\" -Recurse -Force | Out-Null
-                $exeKeyPath = "$env:PROGRAMFILES\WinMac\windowskey.exe"
-                $exeStartPath = "$env:PROGRAMFILES\WinMac\startbutton.exe"
+                New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" | Out-Null
+                Get-Item -Path .\bin\* | Where-Object { $_.Name -ne "keybindings.exe" } | Copy-Item -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force | Out-Null
+                $exeKeyPath = "$env:LOCALAPPDATA\WinMac\windowskey.exe"
+                $exeStartPath = "$env:LOCALAPPDATA\WinMac\startbutton.exe"
                 $regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
                 $regKeyName = "WinMac Menu Windows Key"
                 $regStartName = "WinMac Menu Start Button"
@@ -345,8 +345,8 @@ foreach ($app in $selectedApps) {
                 Copy-Item -Path "$pwd\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
                 Set-ItemProperty -Path $regPath -Name $regKeyName -Value $exeKeyPath
                 Set-ItemProperty -Path $regPath -Name $regStartName -Value $exeStartPath
-                Start-Process "$env:PROGRAMFILES\WinMac\windowskey.exe"
-                Start-Process "$env:PROGRAMFILES\WinMac\startbutton.exe"
+                Start-Process "$env:LOCALAPPDATA\WinMac\windowskey.exe"
+                Start-Process "$env:LOCALAPPDATA\WinMac\startbutton.exe"
                 Write-Host "WinMac Menu installation completed." -ForegroundColor Green
             }
             else {
@@ -430,13 +430,13 @@ foreach ($app in $selectedApps) {
         "8" {
             # WinMac Keybindings
             Write-Host "Installing WinMac Keybindings..." -ForegroundColor Yellow
-            New-Item -ItemType Directory -Path "$env:PROGRAMFILES\WinMac\" | Out-Null
-            Copy-Item .\bin\keybindings.exe "$env:PROGRAMFILES\WinMac\" | Out-Null
-            $exeBindingsPath = "$env:PROGRAMFILES\WinMac\keybindings.exe"
+            New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" | Out-Null
+            Copy-Item .\bin\keybindings.exe "$env:LOCALAPPDATA\WinMac\" | Out-Null
+            $exeBindingsPath = "$env:LOCALAPPDATA\WinMac\keybindings.exe"
             $regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
             $regBindingsName = "WinMac Keybindings"
             Set-ItemProperty -Path $regPath -Name $regBindingsName -Value $exeBindingsPath
-            Start-Process "$env:PROGRAMFILES\WinMac\keybindings.exe"
+            Start-Process "$env:LOCALAPPDATA\WinMac\keybindings.exe"
             Write-Host "WinMac Keybindings installation completed." -ForegroundColor Green
         }
         "9" {
