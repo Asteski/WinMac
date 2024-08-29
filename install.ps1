@@ -272,7 +272,7 @@ foreach ($app in $selectedApps) {
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $prompt
             Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $functions
-            Add-Content -Path "$profilePath\WindowsPowerShell\$prompt" -Value $functions
+            Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $functions
             Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $functions
             Move-Item -Path "C:\Users\Public\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
             Move-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
@@ -442,7 +442,7 @@ foreach ($app in $selectedApps) {
         "9" {
             # WinLauncher
             Write-Host "Installing WinLauncher..." -ForegroundColor Yellow
-            Start-Process -FilePath "msiexec" -ArgumentList "/i $($pwd)\bin\WinLauncher\WinLauncher.msi /quiet" -Wait
+            
             Write-Host "WinMac Keybindings installation completed." -ForegroundColor Green
         }
         "10" {
