@@ -430,18 +430,28 @@ foreach ($app in $selectedApps) {
         "8" {
             # WinMac Keybindings
             Write-Host "Installing WinMac Keybindings..." -ForegroundColor Yellow
+            $fileName = 'keybindings.exe'
+            $fileDirectory = "$env:LOCALAPPDATA\WinMac"
             $user = [Security.Principal.WindowsIdentity]::GetCurrent();
             $adminTest = (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
+            $folderName = "WinMac"
+            $taskService = New-Object -ComObject "Schedule.Service"
+            $taskService.Connect() | Out-Null
+            $rootFolder = $taskService.GetFolder("\")
+            try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }                
+            if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
+            $taskFolder = "\" + $folderName
+            $trigger = New-ScheduledTaskTrigger -AtLogon
+            $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
+            $taskName = ($fileName).replace('.exe','')
+            $action = New-ScheduledTaskAction -Execute $fileName -WorkingDirectory $fileDirectory
             New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" | Out-Null
-            Copy-Item .\bin\keybindings.exe "$env:LOCALAPPDATA\WinMac\" | Out-Null
+            Copy-Item .\bin\$fileName "$env:LOCALAPPDATA\WinMac\" | Out-Null
             if (-not $adminTest) {
-                $regBindingsName = "WinMac Keybindings"
-                $exeBindingsPath = "$env:LOCALAPPDATA\WinMac\keybindings.exe"
-                $regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
-                Set-ItemProperty -Path $regPath -Name $regBindingsName -Value $exeBindingsPath
-            }
-            else {
-                
+                Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -TaskPath $taskFolder -Settings $settings # -ErrorAction SilentlyContinue | Out-Null
+            } else {
+                $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
+                Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings # -ErrorAction SilentlyContinue | Out-Null
             }
             Start-Process "$env:LOCALAPPDATA\WinMac\keybindings.exe"
             Write-Host "WinMac Keybindings installation completed." -ForegroundColor Green
