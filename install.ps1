@@ -430,12 +430,19 @@ foreach ($app in $selectedApps) {
         "8" {
             # WinMac Keybindings
             Write-Host "Installing WinMac Keybindings..." -ForegroundColor Yellow
+            $user = [Security.Principal.WindowsIdentity]::GetCurrent();
+            $adminTest = (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
             New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" | Out-Null
             Copy-Item .\bin\keybindings.exe "$env:LOCALAPPDATA\WinMac\" | Out-Null
-            $exeBindingsPath = "$env:LOCALAPPDATA\WinMac\keybindings.exe"
-            $regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
-            $regBindingsName = "WinMac Keybindings"
-            Set-ItemProperty -Path $regPath -Name $regBindingsName -Value $exeBindingsPath
+            if (-not $adminTest) {
+                $regBindingsName = "WinMac Keybindings"
+                $exeBindingsPath = "$env:LOCALAPPDATA\WinMac\keybindings.exe"
+                $regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
+                Set-ItemProperty -Path $regPath -Name $regBindingsName -Value $exeBindingsPath
+            }
+            else {
+                
+            }
             Start-Process "$env:LOCALAPPDATA\WinMac\keybindings.exe"
             Write-Host "WinMac Keybindings installation completed." -ForegroundColor Green
         }
