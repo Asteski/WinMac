@@ -336,8 +336,7 @@ foreach ($app in $selectedApps) {
                 Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
                 winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
                 winget install --id Microsoft.DotNet.AspNetCore.6 --silent | Out-Null
-                Invoke-WebRequest -Uri 'https://download.visualstudio.microsoft.com/download/pr/222a065f-5671-4aed-aba9-46a94f2705e2/2bbcbd8e1c304ed1f7cef2be5afdaf43/windowsdesktop-runtime-6.0.32-win-x64.exe' -OutFile 'windowsdesktop-runtime-6.0.32-win-x64.exe'
-                Start-Process -FilePath '.\windowsdesktop-runtime-6.0.32-win-x64.exe' -ArgumentList '/install /quiet /norestart' -Wait
+                winget install --id Microsoft.DotNet.DesktopRuntime.6 --silent
                 $folderName = "WinMac"
                 $taskService = New-Object -ComObject "Schedule.Service"
                 $taskService.Connect() | Out-Null
@@ -351,16 +350,16 @@ foreach ($app in $selectedApps) {
                 New-Item -ItemType Directory -Path "$env:PROGRAMFILES\WinMac\" | Out-Null
                 New-Item -ItemType Directory -Path "$env:PROGRAMFILES\WinMac\menu" | Out-Null
                 # Copy-Item .\bin\ "$env:PROGRAMFILES\WinMac\" | Out-Null
-                Copy-Item .\bin\menu "$env:PROGRAMFILES\WinMac\menu" | Out-Null
-                $actionWinKey = New-ScheduledTaskAction -Execute 'WindowsKey.exe' -WorkingDirectory "$env:PROGRAMFILES\WinMac\menu"
-                $actionStartButton = New-ScheduledTaskAction -Execute "StartButton.ahk" -WorkingDirectory "$env:PROGRAMFILES\WinMac\menu"
+                Copy-Item .\bin\* "$env:PROGRAMFILES\WinMac\" | Out-Null
+                $actionWinKey = New-ScheduledTaskAction -Execute 'WindowsKey.exe' -WorkingDirectory "$env:PROGRAMFILES\WinMac\"
+                $actionStartButton = New-ScheduledTaskAction -Execute "StartButton.ahk" -WorkingDirectory "$env:PROGRAMFILES\WinMac\"
                 Register-ScheduledTask -TaskName "StartButton" -Action $actionStartButton -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -ErrorAction SilentlyContinue | Out-Null
                 Register-ScheduledTask -TaskName "WindowsKey" -Action $actionWinKey -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -ErrorAction SilentlyContinue | Out-Null
                 Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
                 Remove-Item .\windowsdesktop-runtime-6.0.32-win-x64.exe -Force
                 Copy-Item -Path "$pwd\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
-                Start-Process "$env:PROGRAMFILES\WinMac\menu\WindowsKey.exe"
-                Start-Process "$env:PROGRAMFILES\WinMac\menu\StartButton.ahk"
+                Start-Process "$env:PROGRAMFILES\WinMac\menu\windowskey.exe"
+                Start-Process "$env:PROGRAMFILES\WinMac\menu\startbutton.exe"
                 Write-Host "WinMac Menu installation completed." -ForegroundColor Green
             }
             else {
