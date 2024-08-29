@@ -18,19 +18,15 @@ Write-Host @"
 This script is responsible for installing all or specific WinMac 
 components.
 
-Installation process is seperated into two parts: main install and dock.
-Main script must be run with admin privileges, while dock script 
-must be run in non-elevated pwsh session.
-
 PowerShell profile files will be removed and replaced with new ones. stat
 Please make sure to backup your current profiles if needed.
 
 "@ -ForegroundColor Yellow
 if (-not $adminTest) {
-    Write-Host "Script is not running in elevated session." -ForegroundColor Red
+    Write-Host "Script is not running in elevated session." -ForegroundColor Cyan
 }
 else {
-    Write-Host "Script is running in elevated session." -ForegroundColor Green
+    Write-Host "Script is running in elevated session." -ForegroundColor Cyan
 }
 Write-Host "`n-----------------------------------------------------------------------" -ForegroundColor Cyan
 
@@ -74,7 +70,7 @@ $([char]27)[93m$("Please select options you want to install:")$([char]27)[0m
     Write-Host "7. Stahky"
     Write-Host "8. WinMac Keybindings"
     Write-Host "9. WinLauncher"
-    Write-Host "9. Nexus Dock"
+    Write-Host "10. Nexus Dock"
     Write-Host @"
 11. Other:
     - black cursor
@@ -473,7 +469,7 @@ foreach ($app in $selectedApps) {
         "10" {
             ## Nexus Dock
             if ($adminTest) {
-                Write-Host "`nWinstep Nexus requires non-administrator privileges. Please run the script as a standard user.`n" -ForegroundColor Red
+                Write-Host "`nWinstep Nexus requires non-administrator privileges. Please run the script as a standard user." -ForegroundColor Red
             }
             else {
                 Write-Host "`nInstalling Nexus Dock...`n" -ForegroundColor Yellow
