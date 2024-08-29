@@ -448,6 +448,7 @@ foreach ($app in $selectedApps) {
             New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" | Out-Null
             Copy-Item .\bin\$fileName "$env:LOCALAPPDATA\WinMac\" | Out-Null
             if (-not $adminTest) {
+                $principal = New-ScheduledTaskPrincipal -UserId "LOCALSERVICE" -LogonType ServiceAccount
                 Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -TaskPath $taskFolder -Settings $settings # -ErrorAction SilentlyContinue | Out-Null
             } else {
                 $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
