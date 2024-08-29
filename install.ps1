@@ -464,7 +464,7 @@ foreach ($app in $selectedApps) {
             # WinLauncher
             Write-Host "Installing WinLauncher..." -ForegroundColor Yellow
             
-            Write-Host "WinMac Keybindings installation completed." -ForegroundColor Green
+            Write-Host "WinLauncher installation completed." -ForegroundColor Green
         }
         "10" {
             ## Nexus Dock
@@ -473,25 +473,6 @@ foreach ($app in $selectedApps) {
             }
             else {
                 Write-Host "`nInstalling Nexus Dock...`n" -ForegroundColor Yellow
-                $roundedOrSquared = Read-Host "Enter 'R' for rounded dock or 'S' for squared dock"
-                if ($roundedOrSquared -eq "R" -or $roundedOrSquared -eq "r") {
-                    Write-Host "Using rounded dock.`n" -ForegroundColor Green 
-                } elseif ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
-                    Write-Host "Using squared dock.`n" -ForegroundColor Green
-                } else {
-                    Write-Host "Invalid input. Defaulting to rounded dock.`n" -ForegroundColor Yellow
-                }
-
-                $lightOrDark = Read-Host "Enter 'L' for light themed dock or 'D' for dark themed dock"
-                if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
-                    Write-Host "Using light theme.`n" -ForegroundColor Green
-                } elseif ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
-                    Write-Host "Using dark theme.`n" -ForegroundColor Green
-                } else {
-                    Write-Host "Invalid input. Defaulting to light theme.`n" -ForegroundColor Yellow
-                }
-                Start-Sleep 1
-                Write-Host "`Installing Nexus Dock...`n" -ForegroundColor Yellow
                 $downloadUrl = "https://www.winstep.net/nexus.zip"
                 $downloadPath = "dock.zip"
                 if (-not (Test-Path $downloadPath)) {
