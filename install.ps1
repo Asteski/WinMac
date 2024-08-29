@@ -453,7 +453,8 @@ foreach ($app in $selectedApps) {
                 schtasks.exe /create /tn $taskName `
                 /tr "`"$fileDirectory\$fileName`"" `
                 /sc onlogon `
-                /ru "$logonDomain\$logonUser" `
+                /ru "$logonDomain\$logonUser"
+                /RL LIMITED `
                 /f
                 Write-Host "Task '$taskName' registered successfully."
                 # $principal = New-ScheduledTaskPrincipal -UserId "LOCALSERVICE" -LogonType ServiceAccount
