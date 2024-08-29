@@ -18,7 +18,7 @@ Write-Host @"
 This script is responsible for installing all or specific WinMac 
 components.
 
-PowerShell profile files will be removed and replaced with new ones. stat
+PowerShell profile files will be removed and replaced with new ones.
 Please make sure to backup your current profiles if needed.
 
 "@ -ForegroundColor Yellow
