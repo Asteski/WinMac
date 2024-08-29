@@ -16,7 +16,6 @@ Write-Host @"
 This script is responsible for installing all or specific WinMac 
 components.
 
-
 Installation process is seperated into two parts: main install and dock.
 Main script must be run with admin privileges, while dock script 
 must be run in non-elevated pwsh session.
@@ -53,7 +52,7 @@ if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
 elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
     Write-Host "Choosing custom installation." -ForegroundColor Green
     Start-Sleep 1
-    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="AutoHotkey"; "9"="WinLauncher"; "10"="Other"}
+    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="WinMac Keybindings"; "9"="WinLauncher"; "10"="Other"}
 
 Write-Host @"
 
@@ -67,7 +66,7 @@ $([char]27)[93m$("Please select options you want to install:")$([char]27)[0m
     Write-Host "5. WinMac Menu"
     Write-Host "6. TopNotify"
     Write-Host "7. Stahky"
-    Write-Host "8. AutoHotkey"
+    Write-Host "8. WinMac Keybindings"
     Write-Host "9. WinLauncher"
     Write-Host @"
 10. Other:
@@ -437,13 +436,14 @@ foreach ($app in $selectedApps) {
             $regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
             $regBindingsName = "WinMac Keybindings"
             Set-ItemProperty -Path $regPath -Name $regBindingsName -Value $exeBindingsPath
+            Start-Process "$env:PROGRAMFILES\WinMac\keybindings.exe"
             Write-Host "WinMac Keybindings installation completed." -ForegroundColor Green
         }
         "9" {
             # WinLauncher
             Write-Host "Installing WinLauncher..." -ForegroundColor Yellow
             Start-Process -FilePath "msiexec" -ArgumentList "/i $($pwd)\bin\WinLauncher\WinLauncher.msi /quiet" -Wait
-            Write-Host "AutoHotkey installation completed." -ForegroundColor Green
+            Write-Host "WinMac Keybindings installation completed." -ForegroundColor Green
         }
         "10" {
             # Other
