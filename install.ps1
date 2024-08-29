@@ -1,4 +1,6 @@
 Clear-Host
+$user = [Security.Principal.WindowsIdentity]::GetCurrent();
+$adminTest = (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
 Write-Host @"
 -----------------------------------------------------------------------
 
@@ -24,8 +26,12 @@ PowerShell profile files will be removed and replaced with new ones. stat
 Please make sure to backup your current profiles if needed.
 
 "@ -ForegroundColor Yellow
-
-Write-Host "Script must be run in elevated session!" -ForegroundColor Red
+if (-not $adminTest) {
+    Write-Host "Script is not running in elevated session." -ForegroundColor Red
+}
+else {
+    Write-Host "Script is running in elevated session." -ForegroundColor Green
+}
 Write-Host "`n-----------------------------------------------------------------------" -ForegroundColor Cyan
 
 ## Check if script is run from the correct directory
@@ -432,8 +438,6 @@ foreach ($app in $selectedApps) {
             Write-Host "Installing WinMac Keybindings..." -ForegroundColor Yellow
             $fileName = 'keybindings.exe'
             $fileDirectory = "$env:LOCALAPPDATA\WinMac"
-            $user = [Security.Principal.WindowsIdentity]::GetCurrent();
-            $adminTest = (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
             New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" | Out-Null
             Copy-Item .\bin\$fileName "$env:LOCALAPPDATA\WinMac\" | Out-Null
             if (-not $adminTest) {
@@ -446,7 +450,7 @@ foreach ($app in $selectedApps) {
                 $taskService = New-Object -ComObject "Schedule.Service"
                 $taskService.Connect() | Out-Null
                 $rootFolder = $taskService.GetFolder("\")
-                try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }                
+                try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }              
                 if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
                 $taskFolder = "\" + $folderName
                 $trigger = New-ScheduledTaskTrigger -AtLogon
