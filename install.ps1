@@ -244,7 +244,6 @@ foreach ($app in $selectedApps) {
             if ($promptSet -eq 'W' -or $promptSet -eq 'w') { $prompt = Get-Content "$pwd\config\terminal\winmac-prompt.ps1" -Raw }
             elseif ($promptSet -eq 'M' -or $promptSet -eq 'm') { $prompt = Get-Content "$pwd\config\terminal\macos-prompt.ps1" -Raw }
             $functions = Get-Content "$pwd\config\terminal\functions.ps1" -Raw
-
             if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell" | Out-Null } else { Remove-Item -Path "$profilePath\PowerShell\$profileFile" -Force | Out-Null }
             if (-not (Test-Path "$profilePath\WindowsPowerShell")) { New-Item -ItemType Directory -Path "$profilePath\WindowsPowerShell" | Out-Null } else { Remove-Item -Path "$profilePath\WindowsPowerShell\$profileFile" -Force | Out-Null }
             if (-not (Test-Path "$profilePath\PowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\PowerShell\$profileFile" | Out-Null }
@@ -333,8 +332,11 @@ foreach ($app in $selectedApps) {
             if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
                 Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
                 winget install --id Microsoft.DotNet.DesktopRuntime.6 --silent | Out-Null
+                $sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
                 New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" | Out-Null
-                Get-Item -Path .\bin\* | Where-Object { $_.Name -ne "keybindings.exe" } | Copy-Item -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force | Out-Null
+                if ($sysType -like "*ARM*") {Copy-Item -Path .\bin\menu\arm64\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force | Out-Null}
+                else {Copy-Item -Path .\bin\menu\x64\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force | Out-Null}
+                Copy-Item -Path .\bin\menu\startbutton.exe -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force | Out-Null
                 $exeKeyPath = "$env:LOCALAPPDATA\WinMac\windowskey.exe"
                 $exeStartPath = "$env:LOCALAPPDATA\WinMac\startbutton.exe"
                 $regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
