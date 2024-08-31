@@ -23,14 +23,14 @@ Please make sure to backup your current profiles if needed.
 
 "@ -ForegroundColor Yellow
 if (-not $adminTest) {
-    Write-Host "Script is not running in elevated session." -ForegroundColor Cyan
+    Write-Host "Script is not running in elevated session." -ForegroundColor Red
 }
 else {
-    Write-Host "Script is running in elevated session." -ForegroundColor Cyan
+    Write-Host "Script is running in elevated session." -ForegroundColor Green
 }
 Write-Host "`n-----------------------------------------------------------------------" -ForegroundColor Cyan
 
-## Check if script is run from the correct directory
+# Check if script is run from the correct directory
 $checkDir = Get-ChildItem
 if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir -like "*bin*")) {
     Write-Host "`nWinMac components not found. Please make sure to run the script from the correct directory." -ForegroundColor Red
@@ -38,13 +38,13 @@ if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir 
     exit
 }
 
-## Start Logging
+# Start Logging
 $errorActionPreference="SilentlyContinue"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 mkdir ./temp | Out-Null
 Start-Transcript -Path ".\temp\WinMac_install_log_$date.txt" -Append | Out-Null
 
-## WinMac Configuration
+# WinMac Configuration
 Write-Host
 $fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom installation"
 if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
@@ -54,13 +54,14 @@ if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
 elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
     Write-Host "Choosing custom installation." -ForegroundColor Green
     Start-Sleep 1
-    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="WinMac Keybindings"; "9"="WinLauncher"; "10"="Nexus Dock"; "11"="Other"}
+    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="WinMac Keybindings"; "9"="WinLauncher"; "10"="Nexus Dock"; "11"="Black Cursor"; "12"="Cursor Shadow"; "13"="Pin Home, Programs and Recycle Bin to Quick Access"; "14"="Remove Shortcut Arrows"; "15"="Remove Recycle Bin from desktop"; "16"="Add End Task to context menu"}
 
 Write-Host @"
 
 $([char]27)[93m$("Please select options you want to install:")$([char]27)[0m
 
 "@
+    Write-Host "Main Components:"
     Write-Host "1. PowerToys"
     Write-Host "2. Everything"
     Write-Host "3. Powershell Profile"
@@ -71,14 +72,14 @@ $([char]27)[93m$("Please select options you want to install:")$([char]27)[0m
     Write-Host "8. WinMac Keybindings"
     Write-Host "9. WinLauncher"
     Write-Host "10. Nexus Dock"
-    Write-Host @"
-11. Other:
-    - black cursor
-    - pin Home and Programs folders to Quick access
-    - remove shortcut arrows
-    - remove recycle bin desktop icon
-    - add End Task option to taskbar
-"@
+    Write-Host 
+    Write-Host "Additonal Settings:"
+    Write-Host "11. Black Cursor"
+    Write-Host "12. Cursor Shadow"
+    Write-Host "13. Pin Home, Programs and Recycle Bin to Quick Access"
+    Write-Host "14. Remove Shortcut Arrows"
+    Write-Host "15. Remove Recycle Bin from desktop"
+    Write-Host "16. Add End Task to context menu"
     Write-Host
     $selection = Read-Host "Enter the numbers of options you want to install (separated by commas)"
     $selectedApps = @()
@@ -204,7 +205,7 @@ for ($a=3; $a -ge 0; $a--) {
 
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
 
-## Winget
+# Winget
 Write-Host "Checking for Windows Package Manager (Winget)" -ForegroundColor Yellow
 $wingetCheck = winget -v
 if ($null -eq $wingetCheck) {
@@ -222,14 +223,12 @@ if ($null -eq $wingetCheck) {
 
 foreach ($app in $selectedApps) {
     switch ($app.Trim()) {
-        "1" {
-            # PowerToys
+        "1" { # PowerToys
             Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
             winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
             Write-Host "PowerToys installation completed." -ForegroundColor Green
         }
-        "2" {
-            # Everything
+        "2" { # Everything
             Write-Host "Installing Everything..."  -ForegroundColor Yellow
             winget install --id "Voidtools.Everything" --source winget --silent | Out-Null
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
@@ -238,8 +237,7 @@ foreach ($app in $selectedApps) {
             Start-Process -FilePath Everything.exe -WorkingDirectory $env:PROGRAMFILES\Everything -WindowStyle Hidden
             Write-Host "Everything installation completed." -ForegroundColor Green
             }
-        "3" {
-            # PowerShell Profile
+        "3" { # PowerShell Profile
             Write-Host "Configuring PowerShell Profile..." -ForegroundColor Yellow
             $profilePath = $PROFILE | Split-Path | Split-Path
             $profileFile = $PROFILE | Split-Path -Leaf
@@ -282,8 +280,7 @@ foreach ($app in $selectedApps) {
             Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
             Write-Host "PowerShell Profile configuration completed." -ForegroundColor Green
         }
-        "4" {
-            # StartAllBack
+        "4" { # StartAllBack
             Write-Host "Installing StartAllBack..." -ForegroundColor Yellow
             winget install --id "StartIsBack.StartAllBack" --source winget --silent | Out-Null
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
@@ -332,8 +329,7 @@ foreach ($app in $selectedApps) {
             Start-Sleep 2
             Write-Host "StartAllBack installation completed." -ForegroundColor Green
         }
-        "5" {
-            # WinMac Menu
+        "5" { # WinMac Menu
             if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
                 Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
                 winget install --id Microsoft.DotNet.DesktopRuntime.6 --silent | Out-Null
@@ -356,8 +352,7 @@ foreach ($app in $selectedApps) {
                 Write-Host "Skipping WinMac Menu installation." -ForegroundColor Magenta
             }
         }
-        "6" {
-            # TopNotify
+        "6" { # TopNotify
             Write-Host "Installing TopNotify..." -ForegroundColor Yellow
             winget install --name TopNotify --silent --accept-package-agreements --accept-source-agreements | Out-Null
             $app = Get-AppxPackage *TopNotify*
@@ -373,8 +368,7 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $regKey -Name State -Value 2
             Write-Host "TopNotify installation completed." -ForegroundColor Green
         }
-        "7" {
-            # Stahky
+        "7" { # Stahky
             Write-Host "Installing Stahky..." -ForegroundColor Yellow
             $url = "https://github.com/joedf/stahky/releases/download/v0.1.0.8/stahky_U64_v0.1.0.8.zip"
             $outputPath = "$pwd\stahky_U64.zip"
@@ -430,8 +424,7 @@ foreach ($app in $selectedApps) {
             Remove-Item $outputPath -Force
             Write-Host "Stahky installation completed." -ForegroundColor Green
         }
-        "8" {
-            # WinMac Keybindings
+        "8" { # WinMac Keybindings
             Write-Host "Installing WinMac Keybindings..." -ForegroundColor Yellow
             $fileName = 'keybindings.exe'
             $fileDirectory = "$env:LOCALAPPDATA\WinMac"
@@ -460,14 +453,12 @@ foreach ($app in $selectedApps) {
             Start-Process "$env:LOCALAPPDATA\WinMac\keybindings.exe"
             Write-Host "WinMac Keybindings installation completed." -ForegroundColor Green
         }
-        "9" {
-            # WinLauncher
+        "9" { # WinLauncher
             Write-Host "Installing WinLauncher..." -ForegroundColor Yellow
             
             Write-Host "WinLauncher installation completed." -ForegroundColor Green
         }
-        "10" {
-            ## Nexus Dock
+        "10" { # Nexus Dock
             if ($adminTest) {
                 Write-Host "`nWinstep Nexus requires non-administrator privileges. Please run the script as a standard user." -ForegroundColor Red
             }
@@ -551,10 +542,8 @@ foreach ($app in $selectedApps) {
                 Write-Host "Nexus Dock installation completed." -ForegroundColor Green
             }
         }
-        "11" {
-            # Other
-            ## Black Cursor
-            Write-Host "Configuring black cursor..." -ForegroundColor Yellow
+        "11" { # Black Cursor
+            Write-Host "Configuring black cursor" -ForegroundColor Yellow
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             $curSourceFolder = $pwd.Path + '\config\cursor'
             $curDestFolder = "C:\Windows\Cursors"
@@ -598,9 +587,12 @@ uint fWinIni);
 '@
             $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
             $CursorRefresh::SystemParametersInfo(0x0057,0,$null,0) | Out-Null
+        }
+        "12" { # Cursor Shadow
 
-            ## Pin Home, Programs and Recycle Bin to Quick Access
-            write-host "Pinning Home, Programs and Recycle Bin to Quick Access..." -ForegroundColor Yellow
+        }
+        "13" { # Pin Home, Programs and Recycle Bin to Quick Access
+            Write-Host "Pinning Home, Programs and Recycle Bin to Quick Access" -ForegroundColor Yellow
 $homeIni = @"
 [.ShellClassInfo]
 IconResource=C:\Windows\System32\SHELL32.dll,160
@@ -653,27 +645,28 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             if (-not ($recycleBin.Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
                 $recycleBin.Self.InvokeVerb("PinToHome") | Out-Null
             }
-            
             Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse | Out-Null
-
-            ## Remove Shortcut Arrows
-            Write-Host "Removing shortcut arrows..." -ForegroundColor Yellow
+        }
+        "14" { # Remove Shortcut Arrows
+            Write-Host "Removing shortcut arrows" -ForegroundColor Yellow
             Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force
             New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
-
-            ## Misc
-            Write-Host "Configuring other settings..." -ForegroundColor Yellow
+        }
+        "15" { # Remove Recycle Bin from desktop
+            Write-Host "Remove Recycle Bin from desktop" -ForegroundColor Yellow
             Set-ItemProperty -Path "$exRegPath\Advanced" -Name "LaunchTO" -Value 1
             Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
             Set-ItemProperty -Path $exRegPath -Name "ShowRecent" -Value 0
             Set-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\Windows\Explorer" -Name "TaskbarNoMultimon" -Value 1
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer" -Name "TaskbarNoMultimon" -Value 1
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
+        }
+        "16" { # add End Task to context menu
+            Write-Host "Add End Task to context menu" -ForegroundColor Yellow
             $taskbarDevSettings = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
             if (-not (Test-Path $taskbarDevSettings)) { New-Item -Path $taskbarDevSettings -Force | Out-Null }
             New-ItemProperty -Path $taskbarDevSettings -Name "TaskbarEndTask" -Value 1 -PropertyType DWORD -Force | Out-Null
-            Stop-Process -n explorer
         }
     }
 }
