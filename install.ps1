@@ -336,7 +336,7 @@ foreach ($app in $selectedApps) {
                 winget install --id Microsoft.DotNet.DesktopRuntime.8 --silent | Out-Null
                 $sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
                 New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" | Out-Null
-                if ($sysType -like "*ARM*") {Copy-Item -Path .\bin\menu\arm\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force | Out-Null}
+                if ($sysType -like "*ARM*") {Copy-Item -Path .\bin\arm\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force | Out-Null}
                 else {Copy-Item -Path .\bin\x64\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force | Out-Null}
                 Copy-Item -Path .\bin\startbutton.exe -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force | Out-Null
                 $exeKeyPath = "$env:LOCALAPPDATA\WinMac\windowskey.exe"
