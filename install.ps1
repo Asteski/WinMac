@@ -333,12 +333,12 @@ foreach ($app in $selectedApps) {
             # WinMac Menu
             if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
                 Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
-                winget install --id Microsoft.DotNet.DesktopRuntime.6 --silent | Out-Null
+                winget install --id Microsoft.DotNet.DesktopRuntime.8 --silent | Out-Null
                 $sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
                 New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" | Out-Null
                 if ($sysType -like "*ARM*") {Copy-Item -Path .\bin\menu\arm64\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force | Out-Null}
-                else {Copy-Item -Path .\bin\menu\x64\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force | Out-Null}
-                Copy-Item -Path .\bin\menu\startbutton.exe -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force | Out-Null
+                else {Copy-Item -Path .\bin\x64\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force | Out-Null}
+                Copy-Item -Path .\bin\startbutton.exe -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force | Out-Null
                 $exeKeyPath = "$env:LOCALAPPDATA\WinMac\windowskey.exe"
                 $exeStartPath = "$env:LOCALAPPDATA\WinMac\startbutton.exe"
                 $regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
