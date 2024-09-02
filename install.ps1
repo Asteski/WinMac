@@ -40,7 +40,8 @@ if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir 
 $errorActionPreference="SilentlyContinue"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 mkdir ./temp | Out-Null
-Start-Transcript -Path ".\temp\WinMac_install_log_$date.txt" -Append | Out-Null
+mkdir ./logs | Out-Null
+Start-Transcript -Path ".\logs\WinMac_install_log_$date.txt" -Append | Out-Null
 
 ## WinMac Configuration
 Write-Host
