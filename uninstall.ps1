@@ -253,7 +253,6 @@ foreach ($app in $selectedApps) {
             $scheduleObject.connect()
             $rootFolder = $scheduleObject.GetFolder("\")
             $rootFolder.DeleteFolder("WinMac",$null)
-            powershellscheduled-tasks
             winget uninstall --id autohotkey.autohotkey --source winget --force | Out-Null
             Remove-Item "$env:PROGRAMFILES\AutoHotkey" -Recurse -Force | Out-Null
             Write-Host "Uninstalling AutoHotkey completed." -ForegroundColor Green
