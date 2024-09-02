@@ -37,9 +37,9 @@ set-alias -name stopproc -value Stop-Process
 set-alias -name less -value more
 set-alias -name random -value Get-RandomString
 set-alias -name user -value getuser
-set-alias -name pwd -value ppwd
+set-alias -name pwd -value ppwd -option AllScope
 set-alias -name lnk -value run
-set-alias -name ls -value lsx
+set-alias -name ls -value lsx -option AllScope
 set-alias -name stack -value stahky
 set-alias -name find -value ffind
 set-alias -name fi -value ffind
