@@ -39,7 +39,7 @@ set-alias -name random -value Get-RandomString
 set-alias -name user -value getuser
 set-alias -name pwd -value ppwd
 set-alias -name lnk -value run
-set-alias -name ls -value lls
+set-alias -name ls -value lsx
 set-alias -name stack -value stahky
 set-alias -name find -value ffind
 set-alias -name fi -value ffind
@@ -50,17 +50,36 @@ function l { Get-ChildItem $args -ErrorAction SilentlyContinue | format-table -a
 function ll { Get-ChildItem $args -Force -ErrorAction SilentlyContinue | format-table -autosize }
 function la { Get-ChildItem $args -Force -Attributes !D -ErrorAction SilentlyContinue | format-table -autosize }
 function ld { Get-ChildItem $args -Directory -ErrorAction SilentlyContinue | format-table -autosize }
-function lls { (Get-ChildItem $args -ErrorAction SilentlyContinue | ForEach-Object {
-    if ($_.PSIsContainer) {
-        if ($_.PSIsContainer -and $_.Name -match '\s') {
-            Write-Host "'$($_.Name)' " -ForegroundColor Blue -NoNewline
+function lsx { 
+    Get-ChildItem $args -ErrorAction SilentlyContinue | ForEach-Object {
+        if ($_.PSIsContainer) {
+            if ($_.PSIsContainer -and $_.Name -match '\s') {
+                Write-Host "'$($_.Name)' " -ForegroundColor Blue -NoNewline
+            } elseif ($_.PSIsContainer -and $_.Name -match '^\.') {
+                Write-Host $_.Name "" -ForegroundColor DarkBlue -NoNewline
+            } else {
+                Write-Host $_.Name "" -ForegroundColor Blue -NoNewline
+            }
         } else {
-            Write-Host $_.Name "" -ForegroundColor Blue -NoNewline
+            Write-Host $_.Name "" -NoNewline
         }
-    } else {
-        Write-Host $_.Name "" -NoNewline
     }
-})}
+}
+function lls { 
+    Get-ChildItem $args -Force -ErrorAction SilentlyContinue | ForEach-Object {
+        if ($_.PSIsContainer) {
+            if ($_.PSIsContainer -and $_.Name -match '\s') {
+                Write-Host "'$($_.Name)' " -ForegroundColor Blue -NoNewline
+            } elseif ($_.PSIsContainer -and $_.Name -match '^\.') {
+                Write-Host $_.Name "" -ForegroundColor DarkBlue -NoNewline
+            } else {
+                Write-Host $_.Name "" -ForegroundColor Blue -NoNewline
+            }
+        } else {
+            Write-Host $_.Name "" -NoNewline
+        }
+    }
+}
 function wl { $out = get-wingetpackage $args | Sort-Object name; if ($out) { $out } else { Write-Host "No package found" -ForegroundColor Red }}
 # function wl { winget list } 
 function wi { winget install $args }
