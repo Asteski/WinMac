@@ -209,12 +209,13 @@ foreach ($app in $selectedApps) {
             # WinMac Menu
             Write-Host "Uninstalling WinMac Menu..." -ForegroundColor Yellow
             Stop-Process -Name WindowsKey -Force | Out-Null
-            $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -match 'startbutton|winkey' }
-            foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
-            $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue
-            if ($tasksFolder -eq $null) { Remove-Item -Path "$env:SYSTEMROOT\System32\Tasks\WinMac" -Force -Recurse -ErrorAction SilentlyContinue }
-            Remove-Item -Path "$env:PROGRAMFILES\WinMac" -Recurse -Force | Out-Null
-            Remove-Item -Path "$env:PROGRAMFILES\WinMac" -Force | Out-Null
+            Stop-Process -Name StartButton -Force | Out-Null
+            Remove-Item -Path "$env:LOCALAPPDATA\WinMac" -Recurse -Force | Out-Null
+            $regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
+            $regKeyName = "WinMac Menu Windows Key"
+            $regStartName = "WinMac Menu Start Button"
+            Remove-ItemProperty -Path $regPath -Name $regKeyName
+            Remove-ItemProperty -Path $regPath -Name $regStartName
             Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\winx" -Recurse -Force | Out-Null
             Expand-Archive -Path "$pwd\config\WinX-default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
             Stop-Process -n Explorer
@@ -249,7 +250,7 @@ foreach ($app in $selectedApps) {
             $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -notmatch 'startbutton|winkey' }
             foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false -ErrorAction SilentlyContinue }
             $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue
-            if ($tasksFolder -eq $null) { Remove-Item -Path "$env:SYSTEMROOT\System32\Tasks\WinMac" -Force -Recurse -ErrorAction SilentlyContinue }
+            if ($null -eq $tasksFolder) { Remove-Item -Path "$env:SYSTEMROOT\System32\Tasks\WinMac" -Force -Recurse -ErrorAction SilentlyContinue }
             winget uninstall --id autohotkey.autohotkey --source winget --force | Out-Null
             Remove-Item "$env:PROGRAMFILES\AutoHotkey" -Recurse -Force | Out-Null
             Write-Host "Uninstalling AutoHotkey completed." -ForegroundColor Green
