@@ -5,7 +5,7 @@ Write-Host @"
 Welcome to WinMac Deployment!
 
 Author: Asteski
-Version: 0.5.2
+Version: 0.5.3
 
 This is work in progress. You're using this script at your own risk.
 
@@ -332,31 +332,23 @@ foreach ($app in $selectedApps) {
             # WinMac Menu
             if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
                 Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
-                winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
-                winget install --id Microsoft.DotNet.AspNetCore.6 --silent | Out-Null
-                Invoke-WebRequest -Uri 'https://download.visualstudio.microsoft.com/download/pr/222a065f-5671-4aed-aba9-46a94f2705e2/2bbcbd8e1c304ed1f7cef2be5afdaf43/windowsdesktop-runtime-6.0.32-win-x64.exe' -OutFile 'windowsdesktop-runtime-6.0.32-win-x64.exe'
-                Start-Process -FilePath '.\windowsdesktop-runtime-6.0.32-win-x64.exe' -ArgumentList '/install /quiet /norestart' -Wait
-                $folderName = "WinMac"
-                $taskService = New-Object -ComObject "Schedule.Service"
-                $taskService.Connect() | Out-Null
-                $rootFolder = $taskService.GetFolder("\")
-                try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }                
-                if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
-                $taskFolder = "\" + $folderName
-                $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
-                $trigger = New-ScheduledTaskTrigger -AtLogon
-                $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
-                New-Item -ItemType Directory -Path "$env:PROGRAMFILES\WinMac\" | Out-Null
-                Copy-Item .\bin\* "$env:PROGRAMFILES\WinMac\" | Out-Null
-                $actionWinKey = New-ScheduledTaskAction -Execute 'WindowsKey.exe' -WorkingDirectory "$env:PROGRAMFILES\WinMac\"
-                $actionStartButton = New-ScheduledTaskAction -Execute "StartButton.ahk" -WorkingDirectory "$env:PROGRAMFILES\WinMac\"
-                Register-ScheduledTask -TaskName "StartButton" -Action $actionStartButton -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -ErrorAction SilentlyContinue | Out-Null
-                Register-ScheduledTask -TaskName "WindowsKey" -Action $actionWinKey -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -ErrorAction SilentlyContinue | Out-Null
+                winget install --id Microsoft.DotNet.DesktopRuntime.6 --silent | Out-Null
+                $sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
+                New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" | Out-Null
+                if ($sysType -like "*ARM*") {Copy-Item -Path .\bin\menu\arm64\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force | Out-Null}
+                else {Copy-Item -Path .\bin\menu\x64\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force | Out-Null}
+                Copy-Item -Path .\bin\menu\startbutton.exe -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force | Out-Null
+                $exeKeyPath = "$env:LOCALAPPDATA\WinMac\windowskey.exe"
+                $exeStartPath = "$env:LOCALAPPDATA\WinMac\startbutton.exe"
+                $regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
+                $regKeyName = "WinMac Menu Windows Key"
+                $regStartName = "WinMac Menu Start Button"
                 Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
-                Remove-Item .\windowsdesktop-runtime-6.0.32-win-x64.exe -Force
                 Copy-Item -Path "$pwd\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
-                Start-Process "$env:PROGRAMFILES\WinMac\WindowsKey.exe"
-                Start-Process "$env:PROGRAMFILES\WinMac\StartButton.ahk"
+                Set-ItemProperty -Path $regPath -Name $regKeyName -Value $exeKeyPath
+                Set-ItemProperty -Path $regPath -Name $regStartName -Value $exeStartPath
+                Start-Process "$env:LOCALAPPDATA\WinMac\windowskey.exe"
+                Start-Process "$env:LOCALAPPDATA\WinMac\startbutton.exe"
                 Write-Host "WinMac Menu installation completed." -ForegroundColor Green
             }
             else {
