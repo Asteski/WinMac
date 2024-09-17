@@ -51,8 +51,6 @@ if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir 
     Start-Sleep 2
     exit
 }
-# Start-Transcript -Path ".\temp\WinMac_install_log_$date.txt" -Append | Out-Null
-
 # WinMac Configuration
 Write-Host
 $fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom installation"
@@ -239,7 +237,7 @@ foreach ($app in $selectedApps) {
     # Everything
     "2" {
         Write-Host "Installing Everything..." -ForegroundColor Yellow
-        Invoke-WithOutput { winget install --id "Voidtools.Everything" --source winget --silent }
+        Invoke-WithOutput { winget install --id "Voidtools.Everything" --source winget --silent --no-progress}
         $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
         Invoke-WithOutput { Move-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue }
         Invoke-WithOutput { Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue }
@@ -280,7 +278,7 @@ foreach ($app in $selectedApps) {
             "gsass1.NTop"
         )
         foreach ($app in $winget) {
-            Invoke-WithOutput { winget install --id $app --source winget --silent }
+            Invoke-WithOutput { winget install --id $app --source winget --silent --no-progress}
         }
         $vimParentPath = Join-Path $env:PROGRAMFILES Vim
         $latestSubfolder = Invoke-WithOutput { Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -Property CreationTime -Descending | Select-Object -First 1 }
