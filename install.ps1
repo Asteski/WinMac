@@ -37,14 +37,10 @@ mkdir ./temp | Out-Null
 mkdir ./logs | Out-Null
 $logFile = "WinMac_install_log_$date.txt"
 function Invoke-WithOutput {
-    param (
-        [scriptblock]$Command
-    )
+    param ([scriptblock]$Command)
     $output = & $Command 2>&1
     $output | Out-File -FilePath ".\logs\$logFile" -Append
-    if ($ShowOutput -and $output) {
-        $output
-    }
+    if ($ShowOutput -and $output) {$output}
 }
 
 # Check if script is run from the correct directory
