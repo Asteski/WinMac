@@ -31,15 +31,19 @@ else {
 Write-Host "`n-----------------------------------------------------------------------" -ForegroundColor Cyan
 
 # Show Output function toggle
-$ShowOutput = $true
+$errorActionPreference="SilentlyContinue"
+$date = Get-Date -Format "yy-MM-ddTHHmmss"
+mkdir ./temp | Out-Null
+mkdir ./logs | Out-Null
+$logFile = "WinMac_install_log_$date.txt"
 function Invoke-WithOutput {
     param (
         [scriptblock]$Command
     )
-    if ($ShowOutput) {
-        & $Command
-    } else {
-        $null = & $Command
+    $output = & $Command 2>&1
+    $output | Out-File -FilePath ".\logs\$logFile" -Append
+    if ($ShowOutput -and $output) {
+        $output
     }
 }
 
@@ -50,12 +54,7 @@ if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir 
     Start-Sleep 2
     exit
 }
-
-# Start Logging
-$errorActionPreference="SilentlyContinue"
-$date = Get-Date -Format "yy-MM-ddTHHmmss"
-mkdir ./temp | Out-Null
-Start-Transcript -Path ".\temp\WinMac_install_log_$date.txt" -Append | Out-Null
+# Start-Transcript -Path ".\temp\WinMac_install_log_$date.txt" -Append | Out-Null
 
 # WinMac Configuration
 Write-Host
@@ -698,7 +697,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
 }
 
 Write-Host
-Stop-Transcript
+# Stop-Transcript
 
 Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
 Write-Host @"
