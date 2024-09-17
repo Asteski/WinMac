@@ -334,10 +334,8 @@ foreach ($app in $selectedApps) {
             if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
                 Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
                 winget install --id Microsoft.DotNet.DesktopRuntime.6 --silent | Out-Null
-
-                'https://github.com/ModernFlyouts-Community/ModernFlyouts/releases/download/0.9.3/32669SamG.ModernFlyouts_0.9.3.0_neutral___pcy8vm99wrpcg.Msixbundle'
-                Invoke-WebRequest -Uri 'https://github.com/ModernFlyouts-Community/ModernFlyouts/releases/download/0.9.3/32669SamG.ModernFlyouts_0.9.3.0_neutral___pcy8vm99wrpcg.Msixbundle' -OutFile 'ModernFlyouts.msixbundle'
-                Add-AppxPackage -Path 'ModernFlyouts.msixbundle' -ForceApplicationShutdown -ForceTargetApplicationShutdown -DisableDevelopmentMode -AllowUnsigned
+                Invoke-WebRequest -Uri 'https://github.com/dongle-the-gadget/WinverUWP/releases/download/v2.1.0.0/2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle' -OutFile '2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
+                Add-AppxPackage -Path '2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'               
                 $sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
                 New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" | Out-Null
                 if ($sysType -like "*ARM*") {Copy-Item -Path .\bin\menu\arm64\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force | Out-Null}
