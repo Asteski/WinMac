@@ -30,6 +30,19 @@ else {
 }
 Write-Host "`n-----------------------------------------------------------------------" -ForegroundColor Cyan
 
+# Show Output function toggle
+$ShowOutput = $true
+function Invoke-WithOutput {
+    param (
+        [scriptblock]$Command
+    )
+    if ($ShowOutput) {
+        & $Command
+    } else {
+        $null = & $Command
+    }
+}
+
 # Check if script is run from the correct directory
 $checkDir = Get-ChildItem
 if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir -like "*bin*")) {
@@ -221,64 +234,72 @@ if ($null -eq $wingetCheck) {
 
 foreach ($app in $selectedApps) {
     switch ($app.Trim()) {
-        # PowerToys
-        "1" {
-            Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
-            winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
-            Write-Host "PowerToys installation completed." -ForegroundColor Green
+    # PowerToys
+    "1" {
+        Write-Host "Installing PowerToys..." -ForegroundColor Yellow
+        Invoke-WithOutput { winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements }
+        Write-Host "PowerToys installation completed." -ForegroundColor Green
+    }
+    # Everything
+    "2" {
+        Write-Host "Installing Everything..." -ForegroundColor Yellow
+        Invoke-WithOutput { winget install --id "Voidtools.Everything" --source winget --silent }
+        $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+        Invoke-WithOutput { Move-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue }
+        Invoke-WithOutput { Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue }
+        Invoke-WithOutput { Start-Process -FilePath Everything.exe -WorkingDirectory $env:PROGRAMFILES\Everything -WindowStyle Hidden }
+        Write-Host "Everything installation completed." -ForegroundColor Green
+    }
+    # PowerShell Profile
+    "3" {
+        Write-Host "Configuring PowerShell Profile..." -ForegroundColor Yellow
+        $profilePath = $PROFILE | Split-Path | Split-Path
+        $profileFile = $PROFILE | Split-Path -Leaf
+        if ($promptSet -eq 'W' -or $promptSet -eq 'w') { $prompt = Get-Content "$pwd\config\terminal\winmac-prompt.ps1" -Raw }
+        elseif ($promptSet -eq 'M' -or $promptSet -eq 'm') { $prompt = Get-Content "$pwd\config\terminal\macos-prompt.ps1" -Raw }
+        $functions = Get-Content "$pwd\config\terminal\functions.ps1" -Raw
+        
+        Invoke-WithOutput { 
+            if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell" } 
+            else { Remove-Item -Path "$profilePath\PowerShell\$profileFile" -Force } 
         }
-        # Everything
-        "2" {
-            Write-Host "Installing Everything..."  -ForegroundColor Yellow
-            winget install --id "Voidtools.Everything" --source winget --silent | Out-Null
-            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
-            Move-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
-            Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
-            Start-Process -FilePath Everything.exe -WorkingDirectory $env:PROGRAMFILES\Everything -WindowStyle Hidden
-            Write-Host "Everything installation completed." -ForegroundColor Green
-            }
-        # PowerShell Profile
-        "3" {
-            Write-Host "Configuring PowerShell Profile..." -ForegroundColor Yellow
-            $profilePath = $PROFILE | Split-Path | Split-Path
-            $profileFile = $PROFILE | Split-Path -Leaf
-            if ($promptSet -eq 'W' -or $promptSet -eq 'w') { $prompt = Get-Content "$pwd\config\terminal\winmac-prompt.ps1" -Raw }
-            elseif ($promptSet -eq 'M' -or $promptSet -eq 'm') { $prompt = Get-Content "$pwd\config\terminal\macos-prompt.ps1" -Raw }
-            $functions = Get-Content "$pwd\config\terminal\functions.ps1" -Raw
-            if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell" | Out-Null } else { Remove-Item -Path "$profilePath\PowerShell\$profileFile" -Force | Out-Null }
-            if (-not (Test-Path "$profilePath\WindowsPowerShell")) { New-Item -ItemType Directory -Path "$profilePath\WindowsPowerShell" | Out-Null } else { Remove-Item -Path "$profilePath\WindowsPowerShell\$profileFile" -Force | Out-Null }
-            if (-not (Test-Path "$profilePath\PowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\PowerShell\$profileFile" | Out-Null }
-            if (-not (Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\WindowsPowerShell\$profileFile" | Out-Null }
-            $progressPreference = 'silentlyContinue'
+        Invoke-WithOutput { 
+            if (-not (Test-Path "$profilePath\WindowsPowerShell")) { New-Item -ItemType Directory -Path "$profilePath\WindowsPowerShell" } 
+            else { Remove-Item -Path "$profilePath\WindowsPowerShell\$profileFile" -Force } 
+        }
+        Invoke-WithOutput { 
+            if (-not (Test-Path "$profilePath\PowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\PowerShell\$profileFile" } 
+        }
+        Invoke-WithOutput { 
+            if (-not (Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\WindowsPowerShell\$profileFile" } 
+        }
+        Invoke-WithOutput { 
             if (-not (Get-PackageProvider -ListAvailable | Where-Object {$_.Name -eq 'NuGet'})) {
-                Write-Information "Installing NuGet Provider..."
                 Install-PackageProvider -Name NuGet -Force
-                Write-Information "NuGet Provider installation completed."
             }
-            else {
-                Write-Information "NuGet Provider is already installed."
-            }
-            Install-Module -Name Microsoft.WinGet.Client -Force -ErrorAction SilentlyContinue | Out-Null
-            $winget = @(
-                "Vim.Vim",
-                "gsass1.NTop"
-            )
-            foreach ($app in $winget) {winget install --id $app --source winget --silent | Out-Null }
-            $vimParentPath = Join-Path $env:PROGRAMFILES Vim
-            $latestSubfolder = Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -Property CreationTime -Descending | Select-Object -First 1
-            $vimChildPath = $latestSubfolder.FullName
-            [Environment]::SetEnvironmentVariable("Path", $env:Path + ";$vimChildPath", [EnvironmentVariableTarget]::Machine) | Out-Null
-            Install-Module PSTree -Force | Out-Null
-            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
-            Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $prompt
-            Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $functions
-            Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $functions
-            Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $functions
-            Move-Item -Path "C:\Users\Public\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
-            Move-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
-            Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
-            Write-Host "PowerShell Profile configuration completed." -ForegroundColor Green
         }
+        Invoke-WithOutput { Install-Module -Name Microsoft.WinGet.Client -Force -ErrorAction SilentlyContinue }
+        $winget = @(
+            "Vim.Vim",
+            "gsass1.NTop"
+        )
+        foreach ($app in $winget) {
+            Invoke-WithOutput { winget install --id $app --source winget --silent }
+        }
+        $vimParentPath = Join-Path $env:PROGRAMFILES Vim
+        $latestSubfolder = Invoke-WithOutput { Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -Property CreationTime -Descending | Select-Object -First 1 }
+        $vimChildPath = $latestSubfolder.FullName
+        Invoke-WithOutput { [Environment]::SetEnvironmentVariable("Path", $env:Path + ";$vimChildPath", [EnvironmentVariableTarget]::Machine) }
+        Invoke-WithOutput { Install-Module PSTree -Force }
+        $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+        Invoke-WithOutput { Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $prompt }
+        Invoke-WithOutput { Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $functions }
+        Invoke-WithOutput { Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $functions }
+        Invoke-WithOutput { Move-Item -Path "C:\Users\Public\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue }
+        Invoke-WithOutput { Move-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue }
+        Invoke-WithOutput { Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue }
+        Write-Host "PowerShell Profile configuration completed." -ForegroundColor Green
+    }
         # StartAllBack
         "4" {
             Write-Host "Installing StartAllBack..." -ForegroundColor Yellow
@@ -469,7 +490,7 @@ foreach ($app in $selectedApps) {
                 Write-Host "`nWinstep Nexus requires non-administrative privileges. Please run the script as a standard user session. Skipping installation." -ForegroundColor Red
             }
             else {
-                Write-Host "`nInstalling Nexus Dock...`n" -ForegroundColor Yellow
+                Write-Host "`nInstalling Nexus Dock..." -ForegroundColor Yellow
                 $downloadUrl = "https://www.winstep.net/nexus.zip"
                 $downloadPath = "dock.zip"
                 if (-not (Test-Path $downloadPath)) {
@@ -536,8 +557,6 @@ foreach ($app in $selectedApps) {
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path7" -Value "$env:APPDATA\Microsoft\Windows\Recent\"
                 Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe' | Out-Null
                 while (!(Get-Process nexus -ErrorAction SilentlyContinue)) { Start-Sleep 1 }
-                Write-Host "Nexus Dock installation completed.`n" -ForegroundColor Green
-                Write-Host "Clean up..." -ForegroundColor Yellow
                 $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
                 Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Nexus.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
                 Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\Nexus.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
@@ -545,7 +564,7 @@ foreach ($app in $selectedApps) {
                 Remove-Item .\dock.zip -Force | Out-Null
                 Remove-Item .\ReadMe.txt -Force | Out-Null
                 Remove-Item .\NexusSetup.exe -Force | Out-Null
-                Write-Host "Nexus Dock installation completed." -ForegroundColor Green
+                Write-Host "`nNexus Dock installation completed." -ForegroundColor Green
             }
         }
         # Other
