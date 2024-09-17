@@ -73,13 +73,13 @@ $([char]27)[93m$("Please select options you want to install:")$([char]27)[0m
     Write-Host "9. WinLauncher"
     Write-Host "10. Nexus Dock"
     Write-Host 
-    Write-Host "Additonal Settings:"
-    Write-Host "11. Black Cursor"
-    Write-Host "12. Cursor Shadow"
-    Write-Host "13. Pin Home, Programs and Recycle Bin to Quick Access"
-    Write-Host "14. Remove Shortcut Arrows"
-    Write-Host "15. Remove Recycle Bin from desktop"
-    Write-Host "16. Add End Task to context menu"
+    Write-Host "11. Other Settings:"
+    Write-Host "- Black Cursor"
+    Write-Host "- Cursor Shadow"
+    Write-Host "- Pin Home, Programs and Recycle Bin to Quick Access"
+    Write-Host "- Remove Shortcut Arrows"
+    Write-Host "- Remove Recycle Bin from Desktop"••
+    Write-Host "- Add End Task to context menu"
     Write-Host
     $selection = Read-Host "Enter the numbers of options you want to install (separated by commas)"
     $selectedApps = @()
@@ -191,7 +191,6 @@ if ($installConfirmation -ne 'y') {
     Start-Sleep 2
     exit
 }
-
 Write-Host @"
 
 Please do not do anything while the script is running, as it may impact the installation process.
@@ -336,6 +335,7 @@ foreach ($app in $selectedApps) {
             if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
                 Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
                 winget install --id Microsoft.DotNet.DesktopRuntime.6 --silent | Out-Null
+                winget install --id 'MSIX\2505FireCubeStudios.WinverUWP_2.1.4.0_x64__k45w5yt88e21j' --silent | Out-Null
                 $sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
                 New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" | Out-Null
                 if ($sysType -like "*ARM*") {Copy-Item -Path .\bin\menu\arm64\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force | Out-Null}
@@ -393,7 +393,6 @@ foreach ($app in $selectedApps) {
             Copy-Item -Path $exePath\config\themes\stahky-$stackTheme.ini -Destination $exePath\stahky.ini
             $pathVarUser = [Environment]::GetEnvironmentVariable("Path", "User")
             $pathVarMachine = [Environment]::GetEnvironmentVariable("Path", "Machine")
-            
             if (-not ($pathVarUser -like "*$exePath*")) {
                 $pathVarUser += ";$exePath"
                 [Environment]::SetEnvironmentVariable("Path", $pathVarUser, "User")
@@ -402,7 +401,6 @@ foreach ($app in $selectedApps) {
                 $pathVarMachine += "; $exePath"
                 [Environment]::SetEnvironmentVariable("Path", $pathVarMachine, "Machine")
             }
-            
             $pathVar = [Environment]::GetEnvironmentVariable("Path", "Machine") + ";$exePath"
             [Environment]::SetEnvironmentVariable("Path", $pathVar, "Machine")
             $pathVar = [Environment]::GetEnvironmentVariable("Path", "User") + ";$exePath"
@@ -468,7 +466,7 @@ foreach ($app in $selectedApps) {
         # Nexus Dock
         "10" {
             if ($adminTest) {
-                Write-Host "`nWinstep Nexus requires non-administrator privileges. Please run the script as a standard user." -ForegroundColor Red
+                Write-Host "`nWinstep Nexus requires non-administrative privileges. Please run the script as a standard user session. Skipping installation." -ForegroundColor Red
             }
             else {
                 Write-Host "`nInstalling Nexus Dock...`n" -ForegroundColor Yellow
@@ -552,7 +550,8 @@ foreach ($app in $selectedApps) {
         }
         # Other
         "11" {
-            Write-Host "Configuring black cursor" -ForegroundColor Yellow
+            ## Black Cursor
+            Write-Host "Configuring black cursor..." -ForegroundColor Yellow
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             $curSourceFolder = $pwd.Path + '\config\cursor'
             $curDestFolder = "C:\Windows\Cursors"
@@ -589,8 +588,29 @@ uint fWinIni);
 '@
             $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
             $CursorRefresh::SystemParametersInfo(0x0057,0,$null,0) | Out-Null
-        }
-            Write-Host "Pinning Home, Programs and Recycle Bin to Quick Access" -ForegroundColor Yellow
+            ## Cursor shadow
+            # Define the remote computer name
+            $remoteComputer = $ENV:COMPUTERNAME
+            # Open the HKEY_CURRENT_USER hive on the remote machine
+            $hive = [Microsoft.Win32.RegistryHive]::CurrentUser
+            $remoteRegistryKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($hive, $remoteComputer)
+            # Open the "Control Panel\Cursors" subkey
+            $cursorKey = $remoteRegistryKey.OpenSubKey("Control Panel\Cursors", $true)
+            if ($cursorKey -ne $null) {
+                # Set the CursorShadow value to '1' (enable cursor shadow)
+                $cursorKey.SetValue("CursorShadow", 1, [Microsoft.Win32.RegistryValueKind]::String)
+                # Close the key after making changes
+                $cursorKey.Close()
+                Write-Output "Cursor shadow has been enabled on $remoteComputer."
+            } else {
+                Write-Output "Failed to access the Cursors subkey on $remoteComputer."
+            }
+            # Close the registry key object
+            $remoteRegistryKey.Close()
+
+
+            ## Pin Home, Programs and Recycle Bin to Quick Access
+            write-host "Pinning Home, Programs and Recycle Bin to Quick Access..." -ForegroundColor Yellow
 $homeIni = @"
 [.ShellClassInfo]
 IconResource=C:\Windows\System32\SHELL32.dll,160
@@ -615,16 +635,13 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
 "@
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             $programsIniFilePath = "$($programsDir)\desktop.ini"
-
             if (Test-Path $programsIniFilePath)  {
                 Remove-Item $programsIniFilePath -Force
                 New-Item -Path $programsIniFilePath -ItemType File -Force | Out-Null
             }
-
             Add-Content $programsIniFilePath -Value $programsIni
             (Get-Item $programsIniFilePath -Force).Attributes = 'Hidden, System, Archive'
             (Get-Item $programsDir -Force).Attributes = 'ReadOnly, Directory'
-
             $programsPin = new-object -com shell.application
             if (-not ($programsPin.Namespace($programsDir).Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
                 $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome") | Out-Null
@@ -640,21 +657,23 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
                 $recycleBin.Self.InvokeVerb("PinToHome") | Out-Null
             }
             Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse | Out-Null
-            Write-Host "Removing shortcut arrows" -ForegroundColor Yellow
+            ## Remove Shortcut Arrows
+            Write-Host "Removing shortcut arrows..." -ForegroundColor Yellow
             Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force
             New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
-            Write-Host "Remove Recycle Bin from desktop" -ForegroundColor Yellow
+            ## Misc
+            Write-Host "Configuring other settings..." -ForegroundColor Yellow
             Set-ItemProperty -Path "$exRegPath\Advanced" -Name "LaunchTO" -Value 1
             Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
             Set-ItemProperty -Path $exRegPath -Name "ShowRecent" -Value 0
             Set-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\Windows\Explorer" -Name "TaskbarNoMultimon" -Value 1
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer" -Name "TaskbarNoMultimon" -Value 1
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
-            Write-Host "Add End Task to context menu" -ForegroundColor Yellow
             $taskbarDevSettings = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
             if (-not (Test-Path $taskbarDevSettings)) { New-Item -Path $taskbarDevSettings -Force | Out-Null }
             New-ItemProperty -Path $taskbarDevSettings -Name "TaskbarEndTask" -Value 1 -PropertyType DWORD -Force | Out-Null
+            Stop-Process -n explorer
         }
     }
 }
