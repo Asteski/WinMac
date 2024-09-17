@@ -31,7 +31,7 @@ else {
 Write-Host "`n-----------------------------------------------------------------------" -ForegroundColor Cyan
 
 # Show Output function toggle
-$ShowOutput = $false
+$ShowOutput = $true
 function Invoke-WithOutput {
     param (
         [scriptblock]$Command
