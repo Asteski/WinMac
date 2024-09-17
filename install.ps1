@@ -223,12 +223,14 @@ if ($null -eq $wingetCheck) {
 
 foreach ($app in $selectedApps) {
     switch ($app.Trim()) {
-        "1" { # PowerToys
+        # PowerToys
+        "1" {
             Write-Host "Installing PowerToys..."  -ForegroundColor Yellow
             winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
             Write-Host "PowerToys installation completed." -ForegroundColor Green
         }
-        "2" { # Everything
+        # Everything
+        "2" {
             Write-Host "Installing Everything..."  -ForegroundColor Yellow
             winget install --id "Voidtools.Everything" --source winget --silent | Out-Null
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
@@ -237,7 +239,8 @@ foreach ($app in $selectedApps) {
             Start-Process -FilePath Everything.exe -WorkingDirectory $env:PROGRAMFILES\Everything -WindowStyle Hidden
             Write-Host "Everything installation completed." -ForegroundColor Green
             }
-        "3" { # PowerShell Profile
+        # PowerShell Profile
+        "3" {
             Write-Host "Configuring PowerShell Profile..." -ForegroundColor Yellow
             $profilePath = $PROFILE | Split-Path | Split-Path
             $profileFile = $PROFILE | Split-Path -Leaf
@@ -248,7 +251,6 @@ foreach ($app in $selectedApps) {
             if (-not (Test-Path "$profilePath\WindowsPowerShell")) { New-Item -ItemType Directory -Path "$profilePath\WindowsPowerShell" | Out-Null } else { Remove-Item -Path "$profilePath\WindowsPowerShell\$profileFile" -Force | Out-Null }
             if (-not (Test-Path "$profilePath\PowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\PowerShell\$profileFile" | Out-Null }
             if (-not (Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\WindowsPowerShell\$profileFile" | Out-Null }
-
             $progressPreference = 'silentlyContinue'
             if (-not (Get-PackageProvider -ListAvailable | Where-Object {$_.Name -eq 'NuGet'})) {
                 Write-Information "Installing NuGet Provider..."
@@ -279,7 +281,8 @@ foreach ($app in $selectedApps) {
             Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
             Write-Host "PowerShell Profile configuration completed." -ForegroundColor Green
         }
-        "4" { # StartAllBack
+        # StartAllBack
+        "4" {
             Write-Host "Installing StartAllBack..." -ForegroundColor Yellow
             winget install --id "StartIsBack.StartAllBack" --source winget --silent | Out-Null
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
@@ -328,7 +331,8 @@ foreach ($app in $selectedApps) {
             Start-Sleep 2
             Write-Host "StartAllBack installation completed." -ForegroundColor Green
         }
-        "5" { # WinMac Menu
+        # WinMac Menu
+        "5" {
             if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
                 Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
                 winget install --id Microsoft.DotNet.DesktopRuntime.6 --silent | Out-Null
@@ -354,7 +358,8 @@ foreach ($app in $selectedApps) {
                 Write-Host "Skipping WinMac Menu installation." -ForegroundColor Magenta
             }
         }
-        "6" { # TopNotify
+        # TopNotify
+        "6" {
             Write-Host "Installing TopNotify..." -ForegroundColor Yellow
             winget install --name TopNotify --silent --accept-package-agreements --accept-source-agreements | Out-Null
             $app = Get-AppxPackage *TopNotify*
@@ -370,7 +375,8 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $regKey -Name State -Value 2
             Write-Host "TopNotify installation completed." -ForegroundColor Green
         }
-        "7" { # Stahky
+        # Stahky
+        "7" {
             Write-Host "Installing Stahky..." -ForegroundColor Yellow
             $url = "https://github.com/joedf/stahky/releases/download/v0.1.0.8/stahky_U64_v0.1.0.8.zip"
             $outputPath = "$pwd\stahky_U64.zip"
@@ -401,7 +407,6 @@ foreach ($app in $selectedApps) {
             [Environment]::SetEnvironmentVariable("Path", $pathVar, "Machine")
             $pathVar = [Environment]::GetEnvironmentVariable("Path", "User") + ";$exePath"
             [Environment]::SetEnvironmentVariable("Path", $pathVar, "User")
-            
             $shortcutPath1 = "$env:LOCALAPPDATA\Stahky\config\shortcuts\Management.lnk"
             $shortcutPath2 = "$env:LOCALAPPDATA\Stahky\config\shortcuts\Favorites.lnk"
             $newTargetPath = "$env:LOCALAPPDATA\Stahky\Stahky.exe"
@@ -409,14 +414,12 @@ foreach ($app in $selectedApps) {
             $newArguments2 = '/stahky ' + "$env:LOCALAPPDATA\Stahky\config\favorites"
             $newWorkDir1 = "$env:LOCALAPPDATA\Stahky\config\management"
             $newWorkDir2 = "$env:LOCALAPPDATA\Stahky\config\favorites"
-            
             $shell1 = New-Object -ComObject WScript.Shell
             $shortcut1 = $shell1.CreateShortcut($shortcutPath1) 
             $shortcut1.Arguments = $newArguments1
             $shortcut1.TargetPath = $newTargetPath
             $shortcut1.WorkingDirectory = $newWorkDir1
             $shortcut1.Save()
-            
             $shell2 = New-Object -ComObject WScript.Shell
             $shortcut2 = $shell2.CreateShortcut($shortcutPath2) 
             $shortcut2.Arguments = $newArguments2
@@ -426,7 +429,8 @@ foreach ($app in $selectedApps) {
             Remove-Item $outputPath -Force
             Write-Host "Stahky installation completed." -ForegroundColor Green
         }
-        "8" { # WinMac Keybindings
+        # WinMac Keybindings
+        "8" {
             Write-Host "Installing WinMac Keybindings..." -ForegroundColor Yellow
             $fileName = 'keybindings.exe'
             $fileDirectory = "$env:LOCALAPPDATA\WinMac"
@@ -455,12 +459,14 @@ foreach ($app in $selectedApps) {
             Start-Process "$env:LOCALAPPDATA\WinMac\keybindings.exe"
             Write-Host "WinMac Keybindings installation completed." -ForegroundColor Green
         }
-        "9" { # WinLauncher
+        # WinLauncher
+        "9" {
             Write-Host "Installing WinLauncher..." -ForegroundColor Yellow
             
             Write-Host "WinLauncher installation completed." -ForegroundColor Green
         }
-        "10" { # Nexus Dock
+        # Nexus Dock
+        "10" {
             if ($adminTest) {
                 Write-Host "`nWinstep Nexus requires non-administrator privileges. Please run the script as a standard user." -ForegroundColor Red
             }
@@ -544,7 +550,8 @@ foreach ($app in $selectedApps) {
                 Write-Host "Nexus Dock installation completed." -ForegroundColor Green
             }
         }
-        "11" { # Black Cursor
+        # Other
+        "11" {
             Write-Host "Configuring black cursor" -ForegroundColor Yellow
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             $curSourceFolder = $pwd.Path + '\config\cursor'
@@ -573,27 +580,16 @@ foreach ($app in $selectedApps) {
             $RegCursors.Close()
             $RegConnect.Close()
 $CSharpSig = @'
-
 [DllImport("user32.dll", EntryPoint = "SystemParametersInfo")]
-
 public static extern bool SystemParametersInfo(
-
 uint uiAction,
-
 uint uiParam,
-
 uint pvParam,
-
 uint fWinIni);
-
 '@
             $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
             $CursorRefresh::SystemParametersInfo(0x0057,0,$null,0) | Out-Null
         }
-        "12" { # Cursor Shadow
-
-        }
-        "13" { # Pin Home, Programs and Recycle Bin to Quick Access
             Write-Host "Pinning Home, Programs and Recycle Bin to Quick Access" -ForegroundColor Yellow
 $homeIni = @"
 [.ShellClassInfo]
@@ -601,16 +597,13 @@ IconResource=C:\Windows\System32\SHELL32.dll,160
 "@
             $homeDir = "C:\Users\$env:USERNAME"
             $homeIniFilePath = "$($homeDir)\desktop.ini"
-
             if (Test-Path $homeIniFilePath)  {
                 Remove-Item $homeIniFilePath -Force
                 New-Item -Path $homeIniFilePath -ItemType File -Force | Out-Null
             }
-
             Add-Content $homeIniFilePath -Value $homeIni
             (Get-Item $homeIniFilePath -Force).Attributes = 'Hidden, System, Archive'
             (Get-Item $homeDir -Force).Attributes = 'ReadOnly, Directory'
-
             $homePin = new-object -com shell.application
             if (-not ($homePin.Namespace($homeDir).Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
                 $homePin.Namespace($homeDir).Self.InvokeVerb("pintohome") | Out-Null
@@ -636,7 +629,6 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             if (-not ($programsPin.Namespace($programsDir).Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
                 $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome") | Out-Null
             }
-
             $RBPath = 'HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\pintohome\command\'
             $name = "DelegateExecute"
             $value = "{b455f46e-e4af-4035-b0a4-cf18d2f6f28e}"
@@ -648,14 +640,10 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
                 $recycleBin.Self.InvokeVerb("PinToHome") | Out-Null
             }
             Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse | Out-Null
-        }
-        "14" { # Remove Shortcut Arrows
             Write-Host "Removing shortcut arrows" -ForegroundColor Yellow
             Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force
             New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
-        }
-        "15" { # Remove Recycle Bin from desktop
             Write-Host "Remove Recycle Bin from desktop" -ForegroundColor Yellow
             Set-ItemProperty -Path "$exRegPath\Advanced" -Name "LaunchTO" -Value 1
             Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
@@ -663,8 +651,6 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             Set-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\Windows\Explorer" -Name "TaskbarNoMultimon" -Value 1
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer" -Name "TaskbarNoMultimon" -Value 1
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
-        }
-        "16" { # add End Task to context menu
             Write-Host "Add End Task to context menu" -ForegroundColor Yellow
             $taskbarDevSettings = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
             if (-not (Test-Path $taskbarDevSettings)) { New-Item -Path $taskbarDevSettings -Force | Out-Null }
