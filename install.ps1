@@ -33,9 +33,10 @@ Write-Host "`n------------------------------------------------------------------
 # Show Output function toggle
 $errorActionPreference="SilentlyContinue"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
+$logFile = "WinMac_install_log_$date.txt"
+$ShowOutput = $true
 mkdir ./temp | Out-Null
 mkdir ./logs | Out-Null
-$logFile = "WinMac_install_log_$date.txt"
 function Invoke-WithOutput {
     param ([scriptblock]$Command)
     $output = & $Command 2>&1
