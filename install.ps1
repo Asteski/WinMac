@@ -54,7 +54,7 @@ if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
 elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
     Write-Host "Choosing custom installation." -ForegroundColor Green
     Start-Sleep 1
-    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="WinMac Keybindings"; "9"="WinLauncher"; "10"="Nexus Dock"; "11"="Black Cursor"; "12"="Cursor Shadow"; "13"="Pin Home, Programs and Recycle Bin to Quick Access"; "14"="Remove Shortcut Arrows"; "15"="Remove Recycle Bin from desktop"; "16"="Add End Task to context menu"}
+    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="WinMac Keybindings"; "9"="WinLauncher"; "10"="Nexus Dock"; "11"="Other Settings"}
 
 Write-Host @"
 
@@ -74,12 +74,11 @@ $([char]27)[93m$("Please select options you want to install:")$([char]27)[0m
     Write-Host "10. Nexus Dock"
     Write-Host 
     Write-Host "11. Other Settings:"
-    Write-Host "- Black Cursor"
-    Write-Host "- Cursor Shadow"
-    Write-Host "- Pin Home, Programs and Recycle Bin to Quick Access"
-    Write-Host "- Remove Shortcut Arrows"
-    Write-Host "- Remove Recycle Bin from Desktop"••
-    Write-Host "- Add End Task to context menu"
+    Write-Host "• Black Cursor"
+    Write-Host "• Pin Home, Programs and Recycle Bin to Quick Access"
+    Write-Host "• Remove Shortcut Arrows"
+    Write-Host "• Remove Recycle Bin from Desktop"
+    Write-Host "• Add End Task to context menu"
     Write-Host
     $selection = Read-Host "Enter the numbers of options you want to install (separated by commas)"
     $selectedApps = @()
@@ -335,7 +334,10 @@ foreach ($app in $selectedApps) {
             if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
                 Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
                 winget install --id Microsoft.DotNet.DesktopRuntime.6 --silent | Out-Null
-                winget install --id 'MSIX\2505FireCubeStudios.WinverUWP_2.1.4.0_x64__k45w5yt88e21j' --silent | Out-Null
+
+                'https://github.com/ModernFlyouts-Community/ModernFlyouts/releases/download/0.9.3/32669SamG.ModernFlyouts_0.9.3.0_neutral___pcy8vm99wrpcg.Msixbundle'
+                Invoke-WebRequest -Uri 'https://github.com/ModernFlyouts-Community/ModernFlyouts/releases/download/0.9.3/32669SamG.ModernFlyouts_0.9.3.0_neutral___pcy8vm99wrpcg.Msixbundle' -OutFile 'ModernFlyouts.msixbundle'
+                Add-AppxPackage -Path 'ModernFlyouts.msixbundle' -ForceApplicationShutdown -ForceTargetApplicationShutdown -DisableDevelopmentMode -AllowUnsigned
                 $sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
                 New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" | Out-Null
                 if ($sysType -like "*ARM*") {Copy-Item -Path .\bin\menu\arm64\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force | Out-Null}
