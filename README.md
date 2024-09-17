@@ -102,6 +102,7 @@ List of utilities and their creators, used with WinMac deployment script:
 - [Stahky](https://github.com/joedf/stahky) by joedf
 - [AutoHotkey](https://www.autohotkey.com/) by AutoHotkey Foundation LLC
 - [Nexus](https://www.winstep.net/nexus.asp) by Winstep
+- **[WIP]** [WinLaunch](https://github.com/jensroth-git/WinLaunch) by Jens Roth
 - [PSTree](https://github.com/santisq/PSTree) by santisq
 - [ntop](https://github.com/gsass1/NTop) by gsass1
 
