@@ -223,22 +223,38 @@ if ($null -eq $nugetProvider) {
 }
 # Winget
 Write-Host "Checking for Package Manager (Winget)" -ForegroundColor Yellow
+$wingetCliCheck = winget -v
+if ($null -eq $wingetCliCheck) {
+    $progressPreference = 'silentlyContinue'
+    Write-Information "Downloading Winget and its dependencies..."
+    Invoke-WebRequest -Uri https://aka.ms/getwinget -OutFile Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+    Invoke-WebRequest -Uri https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx -OutFile Microsoft.VCLibs.x64.14.00.Desktop.appx
+    Invoke-WebRequest -Uri https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.6/Microsoft.UI.Xaml.2.8.x64.appx -OutFile Microsoft.UI.Xaml.2.8.x64.appx
+    Add-AppxPackage Microsoft.VCLibs.x64.14.00.Desktop.appx
+    Add-AppxPackage Microsoft.UI.Xaml.2.8.x64.appx
+    Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+} else {
+    Write-Host "Winget CLI is already installed." -ForegroundColor Green
+}
 Import-Module -Name Microsoft.WinGet.Client -Force -ErrorAction SilentlyContinue
-$wingetCheck = Get-WinGetVersion -ErrorAction SilentlyContinue
-if ($null -eq $wingetCheck) {
-        Write-Host "Installing Winget..." -ForegroundColor Yellow
-        Install-Module -Name Microsoft.WinGet.Client -Force
-        Write-Host "Winget installation completed." -ForegroundColor Green
+$wingetClientCheck = Get-WinGetVersion -ErrorAction SilentlyContinue
+if ($null -eq $wingetClientCheck) {
+    Write-Host "Installing Winget..." -ForegroundColor Yellow
+    Install-Module -Name Microsoft.WinGet.Client -Force
+    Write-Host "Winget installation completed." -ForegroundColor Green
 } else {
     $wingetFind = Find-Module Microsoft.WinGet.Client
-    if ($wingetCheck -ne $wingetFind.Version) {
+    if ($wingetClientCheck -ne $wingetFind.Version) {
         Write-Host "Never version is available. Updating Winget..." -ForegroundColor Yellow
         Update-Module -Name Microsoft.WinGet.Client -Force
         Write-Host "Winget update completed." -ForegroundColor Green
     } else {
-    Write-Host "$([char]27)[92m$("Winget is already installed.")$([char]27)[0m Version: $($wingetCheck)"
+        Write-Host "$([char]27)[92m$("Winget is already installed.")$([char]27)[0m Version: $($wingetCheck)"
     }
 }
+Import-Module -Name Microsoft.WinGet.Client -Force -ErrorAction SilentlyContinue
+
+# Winget deployment
 foreach ($app in $selectedApps) {
     switch ($app.Trim()) {
     # PowerToys
