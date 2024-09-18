@@ -30,13 +30,13 @@ else {
 }
 Write-Host "`n-----------------------------------------------------------------------" -ForegroundColor Cyan
 # $errorActionPreference="SilentlyContinue"
-
 # Show Output function
 $ShowOutput = $false
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_install_log_$date.txt"
-mkdir ./temp | Out-Null
-mkdir ./logs | Out-Null
+# Create temp and logs directories if they don't exist
+if (-not (Test-Path -Path "./temp")) {New-Item -ItemType Directory -Path "./temp" | Out-Null}
+if (-not (Test-Path -Path "./logs")) {New-Item -ItemType Directory -Path "./logs" | Out-Null}
 function Invoke-WithOutput {
     param ([scriptblock]$Command)
     $output = & $Command 2>&1
