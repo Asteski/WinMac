@@ -326,7 +326,7 @@ foreach ($app in $selectedApps) {
         # StartAllBack
         "4" {
             Write-Host "Installing StartAllBack..." -ForegroundColor Yellow 
-            Invoke-WithOutput {Install-WinGetPackage -Id "StartIsBack.StartAllBack" | Select-Object -Property Id, Name, Status, InstallerErrorCode}
+            Invoke-WithOutput {Install-WinGetPackage -Id "StartIsBack.StartAllBack"}
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             $sabOrbs = $env:localAPPDATA + "\StartAllBack\Orbs"
             $sabRegPath = "HKCU:\Software\StartIsBack"
