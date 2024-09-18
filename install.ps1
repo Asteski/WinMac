@@ -217,7 +217,7 @@ $wingetCheck = Get-WinGetVersion
 if ($null -eq $wingetCheck) {
     $wingetFind = Find-Module Microsoft.WinGet.Client
     if ($wingetCheck -ne $wingetFind.Version) {
-        Write-Host "$([char]27)[92m$("Winget needs to be updated.")$([char]27)[0m Version: $($wingetCheck)"
+        Write-Host "Never version is available. Updating Winget..." -ForegroundColor Yellow
         Update-Module -Name Microsoft.WinGet.Client -Force
         Write-Host "Winget update completed." -ForegroundColor Green
     }
