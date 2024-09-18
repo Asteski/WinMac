@@ -1,7 +1,7 @@
 Clear-Host
 $user = [Security.Principal.WindowsIdentity]::GetCurrent();
 $adminTest = (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
-Import-Module .\modules\Microsoft.WinGet.Client -Verbose -Force
+Import-Module .\modules\Microsoft.WinGet.Client -Force
 # Install-Module -Name Microsoft.WinGet.Client -Force
 # Import-Module -Name Microsoft.WinGet.Client -Force
 Write-Host @"
@@ -301,7 +301,7 @@ foreach ($app in $selectedApps) {
         "4" {
             Write-Host "Installing StartAllBack..." -ForegroundColor Yellow
             # winget install --id "StartIsBack.StartAllBack" --source winget --silent | Out-Null
-            Invoke-WithOutput { Install-WinGetPackage -Id "StartIsBack.StartAllBack" -Silent }
+            Install-WinGetPackage -Id "StartIsBack.StartAllBack" -Silent
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             $sabOrbs = $env:localAPPDATA + "\StartAllBack\Orbs"
             $sabRegPath = "HKCU:\Software\StartIsBack"
