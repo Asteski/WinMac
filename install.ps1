@@ -1,9 +1,7 @@
 Clear-Host
+# $progressPreference = 'silentlyContinue'
 $user = [Security.Principal.WindowsIdentity]::GetCurrent();
 $adminTest = (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
-# Import-Module .\modules\Microsoft.WinGet.Client -Force
-Install-Module -Name Microsoft.WinGet.Client -Force
-Import-Module -Name Microsoft.WinGet.Client -Force
 Write-Host @"
 -----------------------------------------------------------------------
 
@@ -215,19 +213,35 @@ Write-Host "`n------------------------------------------------------------------
 
 # Winget
 Write-Host "Checking for Windows Package Manager (Winget)" -ForegroundColor Yellow
-$wingetCheck = winget -v
+$wingetCheck = Get-WinGetVersion
 if ($null -eq $wingetCheck) {
-    $progressPreference = 'silentlyContinue'
-    Write-Information "Downloading WinGet and its dependencies..."
-    Invoke-WebRequest -Uri https://aka.ms/getwinget -OutFile Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
-    Invoke-WebRequest -Uri https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx -OutFile Microsoft.VCLibs.x64.14.00.Desktop.appx
-    Invoke-WebRequest -Uri https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.6/Microsoft.UI.Xaml.2.8.x64.appx -OutFile Microsoft.UI.Xaml.2.8.x64.appx
-    Add-AppxPackage Microsoft.VCLibs.x64.14.00.Desktop.appx
-    Add-AppxPackage Microsoft.UI.Xaml.2.8.x64.appx
-    Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+    $wingetFind = Find-Module Microsoft.WinGet.Client
+    if ($wingetCheck -ne $wingetFind.Version) {
+        Write-Host "$([char]27)[92m$("Winget needs to be updated.")$([char]27)[0m Version: $($wingetCheck)"
+        Update-Module -Name Microsoft.WinGet.Client -Force
+        Write-Host "Winget update completed." -ForegroundColor Green
+    }
+    else {
+        Write-Host "Installing Winget..." -ForegroundColor Yellow
+        Install-Module -Name Microsoft.WinGet.Client -Force
+        Write-Host "Winget installation completed." -ForegroundColor Green
+    }
+    Import-Module -Name Microsoft.WinGet.Client -Force
 } else {
     Write-Host "$([char]27)[92m$("Winget is already installed.")$([char]27)[0m Version: $($wingetCheck)"
 }
+# if ($null -eq $wingetCheck) {
+#     $progressPreference = 'silentlyContinue'
+#     Write-Information "Downloading WinGet and its dependencies..."
+#     Invoke-WebRequest -Uri https://aka.ms/getwinget -OutFile Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+#     Invoke-WebRequest -Uri https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx -OutFile Microsoft.VCLibs.x64.14.00.Desktop.appx
+#     Invoke-WebRequest -Uri https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.6/Microsoft.UI.Xaml.2.8.x64.appx -OutFile Microsoft.UI.Xaml.2.8.x64.appx
+#     Add-AppxPackage Microsoft.VCLibs.x64.14.00.Desktop.appx
+#     Add-AppxPackage Microsoft.UI.Xaml.2.8.x64.appx
+#     Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+# } else {
+#     Write-Host "$([char]27)[92m$("Winget is already installed.")$([char]27)[0m Version: $($wingetCheck)"
+# }
 
 foreach ($app in $selectedApps) {
     switch ($app.Trim()) {
