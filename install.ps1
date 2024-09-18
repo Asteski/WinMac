@@ -1,9 +1,9 @@
 Clear-Host
 $user = [Security.Principal.WindowsIdentity]::GetCurrent();
 $adminTest = (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
-Import-Module .\modules\Microsoft.WinGet.Client -Force
-# Install-Module -Name Microsoft.WinGet.Client -Force
-# Import-Module -Name Microsoft.WinGet.Client -Force
+# Import-Module .\modules\Microsoft.WinGet.Client -Force
+Install-Module -Name Microsoft.WinGet.Client -Force
+Import-Module -Name Microsoft.WinGet.Client -Force
 Write-Host @"
 -----------------------------------------------------------------------
 
@@ -308,9 +308,9 @@ foreach ($app in $selectedApps) {
             $taskbarOnTopPath = "$exRegPath\StuckRectsLegacy"
             $taskbarOnTopName = "Settings"
             $taskbarOnTopValue = @(0x30,0x00,0x00,0x00,0xfe,0xff,0xff,0xff,0x02,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x5a,0x00,0x00,0x00,0x32,0x00,0x00,0x00,0x26,0x07,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0x07,0x00,0x00,0x38,0x04,0x00,0x00,0x78,0x00,0x00,0x00,0x01,0x00,0x00,0x00)
-            New-Item -Path $taskbarOnTopPath -Force | Out-Null
+            New-Item -Path $taskbarOnTopPath -Force
             New-ItemProperty -Path $taskbarOnTopPath -Name $taskbarOnTopName -Value $taskbarOnTopValue -PropertyType Binary
-            Copy-Item $pwd\config\taskbar\orbs\* $sabOrbs -Force
+            Copy-Item $pwd\config\taskbar\orbs\* $sabOrbs -Force | Out-Null
             Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 1
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSizeMove" -Value 1
             Set-ItemProperty -Path $exRegPath\Advanced -Name "ShowStatusBar" -Value 0
