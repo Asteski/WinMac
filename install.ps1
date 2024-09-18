@@ -1,5 +1,6 @@
 Clear-Host
 # $progressPreference = 'silentlyContinue'
+$ShowOutput = $true
 $user = [Security.Principal.WindowsIdentity]::GetCurrent();
 $adminTest = (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
 Write-Host @"
@@ -35,7 +36,6 @@ Write-Host "`n------------------------------------------------------------------
 $errorActionPreference="SilentlyContinue"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_install_log_$date.txt"
-$ShowOutput = $true
 mkdir ./temp | Out-Null
 mkdir ./logs | Out-Null
 function Invoke-WithOutput {
@@ -230,18 +230,6 @@ if ($null -eq $wingetCheck) {
 } else {
     Write-Host "$([char]27)[92m$("Winget is already installed.")$([char]27)[0m Version: $($wingetCheck)"
 }
-# if ($null -eq $wingetCheck) {
-#     $progressPreference = 'silentlyContinue'
-#     Write-Information "Downloading WinGet and its dependencies..."
-#     Invoke-WebRequest -Uri https://aka.ms/getwinget -OutFile Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
-#     Invoke-WebRequest -Uri https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx -OutFile Microsoft.VCLibs.x64.14.00.Desktop.appx
-#     Invoke-WebRequest -Uri https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.6/Microsoft.UI.Xaml.2.8.x64.appx -OutFile Microsoft.UI.Xaml.2.8.x64.appx
-#     Add-AppxPackage Microsoft.VCLibs.x64.14.00.Desktop.appx
-#     Add-AppxPackage Microsoft.UI.Xaml.2.8.x64.appx
-#     Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
-# } else {
-#     Write-Host "$([char]27)[92m$("Winget is already installed.")$([char]27)[0m Version: $($wingetCheck)"
-# }
 
 foreach ($app in $selectedApps) {
     switch ($app.Trim()) {
@@ -313,18 +301,19 @@ foreach ($app in $selectedApps) {
     }
         # StartAllBack
         "4" {
-            Write-Host "Installing StartAllBack..." -ForegroundColor Yellow
+            Write-Host "Installing StartAllBack..." -ForegroundColor Yellow 
             # winget install --id "StartIsBack.StartAllBack" --source winget --silent | Out-Null
-            Install-WinGetPackage -Id "StartIsBack.StartAllBack"
+            # Invoke-WithOutput {Install-WinGetPackage -Id "StartIsBack.StartAllBack"}
+            Invoke-WithOutput {Install-WinGetPackage -Id "StartIsBack.StartAllBack"}
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             $sabOrbs = $env:localAPPDATA + "\StartAllBack\Orbs"
             $sabRegPath = "HKCU:\Software\StartIsBack"
             $taskbarOnTopPath = "$exRegPath\StuckRectsLegacy"
             $taskbarOnTopName = "Settings"
             $taskbarOnTopValue = @(0x30,0x00,0x00,0x00,0xfe,0xff,0xff,0xff,0x02,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x5a,0x00,0x00,0x00,0x32,0x00,0x00,0x00,0x26,0x07,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0x07,0x00,0x00,0x38,0x04,0x00,0x00,0x78,0x00,0x00,0x00,0x01,0x00,0x00,0x00)
-            New-Item -Path $taskbarOnTopPath -Force
-            New-ItemProperty -Path $taskbarOnTopPath -Name $taskbarOnTopName -Value $taskbarOnTopValue -PropertyType Binary
-            Copy-Item $pwd\config\taskbar\orbs\* $sabOrbs -Force | Out-Null
+            Invoke-WithOutput {New-Item -Path $taskbarOnTopPath -Force}
+            Invoke-WithOutput {New-ItemProperty -Path $taskbarOnTopPath -Name $taskbarOnTopName -Value $taskbarOnTopValue -PropertyType Binary}
+            Invoke-WithOutput {Copy-Item $pwd\config\taskbar\orbs\* $sabOrbs -Force}
             Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 1
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSizeMove" -Value 1
             Set-ItemProperty -Path $exRegPath\Advanced -Name "ShowStatusBar" -Value 0
@@ -358,7 +347,7 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
             if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0 }
             else { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 1 }
-            Stop-Process -Name explorer -Force
+            Invoke-WithOutput {Stop-Process -Name explorer -Force}
             Start-Sleep 2
             Write-Host "StartAllBack installation completed." -ForegroundColor Green
         }
