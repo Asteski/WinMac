@@ -1,6 +1,4 @@
 Clear-Host
-# $progressPreference = 'silentlyContinue'
-$ShowOutput = $true
 $user = [Security.Principal.WindowsIdentity]::GetCurrent();
 $adminTest = (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
 Write-Host @"
@@ -31,9 +29,10 @@ else {
     Write-Host "Script is running in elevated session." -ForegroundColor Green
 }
 Write-Host "`n-----------------------------------------------------------------------" -ForegroundColor Cyan
+# $errorActionPreference="SilentlyContinue"
 
-# Show Output function toggle
-$errorActionPreference="SilentlyContinue"
+# Show Output function
+$ShowOutput = $false
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_install_log_$date.txt"
 mkdir ./temp | Out-Null
@@ -45,14 +44,15 @@ function Invoke-WithOutput {
     if ($ShowOutput -and $output) {$output}
 }
 
-# Check if script is run from the correct directory
+# Directory check
 $checkDir = Get-ChildItem
 if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir -like "*bin*")) {
     Write-Host "`nWinMac components not found. Please make sure to run the script from the correct directory." -ForegroundColor Red
     Start-Sleep 2
     exit
 }
-# WinMac Configuration
+
+# WinMac configuration
 Write-Host
 $fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom installation"
 if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
@@ -250,7 +250,16 @@ foreach ($app in $selectedApps) {
     # Everything
     "2" {
         Write-Host "Installing Everything..." -ForegroundColor Yellow
-        Invoke-WithOutput { winget install --id "Voidtools.Everything" --source winget --silent }
+        Invoke-WithOutput {
+            Install-WinGetPackage -Id "Voidtools.Everything" | 
+            Select-Object -Property Id, Name, Status, InstallerErrorCode |
+            ForEach-Object {
+                Write-Host "Id: $_.Id"
+                Write-Host "Name: $_.Name"
+                Write-Host "Status: $_.Status"
+                Write-Host "Error Code: $_.InstallerErrorCode"
+            }
+        }
         $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
         Invoke-WithOutput { Move-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue }
         Invoke-WithOutput { Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue }
@@ -265,34 +274,27 @@ foreach ($app in $selectedApps) {
         if ($promptSet -eq 'W' -or $promptSet -eq 'w') { $prompt = Get-Content "$pwd\config\terminal\winmac-prompt.ps1" -Raw }
         elseif ($promptSet -eq 'M' -or $promptSet -eq 'm') { $prompt = Get-Content "$pwd\config\terminal\macos-prompt.ps1" -Raw }
         $functions = Get-Content "$pwd\config\terminal\functions.ps1" -Raw
-        
         Invoke-WithOutput { 
             if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell" } 
             else { Remove-Item -Path "$profilePath\PowerShell\$profileFile" -Force } 
-        }
+            }
         Invoke-WithOutput { 
             if (-not (Test-Path "$profilePath\WindowsPowerShell")) { New-Item -ItemType Directory -Path "$profilePath\WindowsPowerShell" } 
             else { Remove-Item -Path "$profilePath\WindowsPowerShell\$profileFile" -Force } 
-        }
+            }
         Invoke-WithOutput { 
             if (-not (Test-Path "$profilePath\PowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\PowerShell\$profileFile" } 
-        }
+            }
         Invoke-WithOutput { 
             if (-not (Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\WindowsPowerShell\$profileFile" } 
-        }
-        Invoke-WithOutput { 
-            if (-not (Get-PackageProvider -ListAvailable | Where-Object {$_.Name -eq 'NuGet'})) {
-                Install-PackageProvider -Name NuGet -Force
             }
-        }
-        Invoke-WithOutput { Install-Module -Name Microsoft.WinGet.Client -Force -ErrorAction SilentlyContinue }
         $winget = @(
             "Vim.Vim",
             "gsass1.NTop"
-        )
+            )
         foreach ($app in $winget) {
             Invoke-WithOutput { winget install --id $app --source winget --silent }
-        }
+            }
         $vimParentPath = Join-Path $env:PROGRAMFILES Vim
         $latestSubfolder = Invoke-WithOutput { Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -Property CreationTime -Descending | Select-Object -First 1 }
         $vimChildPath = $latestSubfolder.FullName
@@ -306,13 +308,20 @@ foreach ($app in $selectedApps) {
         Invoke-WithOutput { Move-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue }
         Invoke-WithOutput { Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue }
         Write-Host "PowerShell Profile configuration completed." -ForegroundColor Green
-    }
+        }
         # StartAllBack
         "4" {
             Write-Host "Installing StartAllBack..." -ForegroundColor Yellow 
-            # winget install --id "StartIsBack.StartAllBack" --source winget --silent | Out-Null
-            Invoke-WithOutput {Install-WinGetPackage -Id "StartIsBack.StartAllBack"}
-            # Install-WinGetPackage -Id "StartIsBack.StartAllBack"
+            Invoke-WithOutput {
+                Install-WinGetPackage -Id "StartIsBack.StartAllBack" | 
+                Select-Object -Property Id, Name, Status, InstallerErrorCode |
+                ForEach-Object {
+                    Write-Host "Id: $_.Id"
+                    Write-Host "Name: $_.Name"
+                    Write-Host "Status: $_.Status"
+                    Write-Host "Error Code: $_.InstallerErrorCode"
+                }
+            }
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             $sabOrbs = $env:localAPPDATA + "\StartAllBack\Orbs"
             $sabRegPath = "HKCU:\Software\StartIsBack"
