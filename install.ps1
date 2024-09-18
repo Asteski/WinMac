@@ -309,8 +309,8 @@ foreach ($app in $selectedApps) {
             $taskbarOnTopName = "Settings"
             $taskbarOnTopValue = @(0x30,0x00,0x00,0x00,0xfe,0xff,0xff,0xff,0x02,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x5a,0x00,0x00,0x00,0x32,0x00,0x00,0x00,0x26,0x07,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0x07,0x00,0x00,0x38,0x04,0x00,0x00,0x78,0x00,0x00,0x00,0x01,0x00,0x00,0x00)
             New-Item -Path $taskbarOnTopPath -Force | Out-Null
-            New-ItemProperty -Path $taskbarOnTopPath -Name $taskbarOnTopName -Value $taskbarOnTopValue -PropertyType Binary | Out-Null
-            Copy-Item $pwd\config\taskbar\orbs\* $sabOrbs -Force | Out-Null
+            New-ItemProperty -Path $taskbarOnTopPath -Name $taskbarOnTopName -Value $taskbarOnTopValue -PropertyType Binary
+            Copy-Item $pwd\config\taskbar\orbs\* $sabOrbs -Force
             Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 1
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSizeMove" -Value 1
             Set-ItemProperty -Path $exRegPath\Advanced -Name "ShowStatusBar" -Value 0
@@ -344,7 +344,7 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
             if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0 }
             else { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 1 }
-            Stop-Process -Name explorer -Force | Out-Null
+            Stop-Process -Name explorer -Force
             Start-Sleep 2
             Write-Host "StartAllBack installation completed." -ForegroundColor Green
         }
