@@ -1,7 +1,7 @@
 Clear-Host
 $user = [Security.Principal.WindowsIdentity]::GetCurrent();
 $adminTest = (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
-Import-Module -Path .\modules\Microsoft.WinGet.Client\Microsoft.WinGet.Client.psm1 -Force
+Import-Module .\modules\Microsoft.WinGet.Client -Verbose -Force
 # Install-Module -Name Microsoft.WinGet.Client -Force
 # Import-Module -Name Microsoft.WinGet.Client -Force
 Write-Host @"
