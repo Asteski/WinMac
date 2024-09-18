@@ -212,9 +212,20 @@ for ($a=3; $a -ge 0; $a--) {
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
 
 # Winget
+Write-Host "Checking for Package Provider (Nuget)." -ForegroundColor Yellow
+$nugetProvider = Get-PackageProvider -Name NuGet -ErrorAction SilentlyContinue
+if ($null -eq $nugetProvider) {
+    Write-Host "NuGet Package Provider is not installed. Installing NuGet..." -ForegroundColor Yellow
+    Install-PackageProvider -Name NuGet -Force -Scope CurrentUser
+    Write-Host "NuGet Package Provider installation completed." -ForegroundColor Green
+} 
+else {
+    Write-Host "NuGet Package Provider is already installed." -ForegroundColor Green
+}
 Write-Host "Checking for Windows Package Manager (Winget)" -ForegroundColor Yellow
-$wingetCheck = Get-WinGetVersion
+$wingetCheck = Get-WinGetVersion -ErrorAction SilentlyContinue
 if ($null -eq $wingetCheck) {
+
     $wingetFind = Find-Module Microsoft.WinGet.Client
     if ($wingetCheck -ne $wingetFind.Version) {
         Write-Host "Never version is available. Updating Winget..." -ForegroundColor Yellow
