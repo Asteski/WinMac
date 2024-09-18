@@ -233,18 +233,16 @@ if ($null -eq $wingetCliCheck) {
     Add-AppxPackage Microsoft.VCLibs.x64.14.00.Desktop.appx
     Add-AppxPackage Microsoft.UI.Xaml.2.8.x64.appx
     Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
-} else {
-    Write-Host "Winget CLI is already installed." -ForegroundColor Green
 }
 Import-Module -Name Microsoft.WinGet.Client -Force -ErrorAction SilentlyContinue
-$wingetClientCheck = Get-WinGetVersion -ErrorAction SilentlyContinue
+$wingetCheck = Get-WinGetVersion -ErrorAction SilentlyContinue
 if ($null -eq $wingetClientCheck) {
     Write-Host "Installing Winget..." -ForegroundColor Yellow
     Install-Module -Name Microsoft.WinGet.Client -Force
     Write-Host "Winget installation completed." -ForegroundColor Green
 } else {
     $wingetFind = Find-Module Microsoft.WinGet.Client
-    if ($wingetClientCheck -ne $wingetFind.Version) {
+    if ($wingetCheck -ne $wingetFind.Version) {
         Write-Host "Never version is available. Updating Winget..." -ForegroundColor Yellow
         Update-Module -Name Microsoft.WinGet.Client -Force
         Write-Host "Winget update completed." -ForegroundColor Green
