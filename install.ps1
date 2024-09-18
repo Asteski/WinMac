@@ -210,7 +210,7 @@ for ($a=3; $a -ge 0; $a--) {
 }
 
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
-
+Start-Transcript -Path ".\logs\WinMac_install_log_$date.txt" -Append | Out-Null
 # Nuget
 Write-Host "Checking for Package Provider (Nuget)" -ForegroundColor Yellow
 $nugetProvider = Get-PackageProvider -Name NuGet -ErrorAction SilentlyContinue
@@ -326,16 +326,7 @@ foreach ($app in $selectedApps) {
         # StartAllBack
         "4" {
             Write-Host "Installing StartAllBack..." -ForegroundColor Yellow 
-            Invoke-WithOutput {
-                Install-WinGetPackage -Id "StartIsBack.StartAllBack" | 
-                Select-Object -Property Id, Name, Status, InstallerErrorCode |
-                ForEach-Object {
-                    Write-Host "Id: $_.Id"
-                    Write-Host "Name: $_.Name"
-                    Write-Host "Status: $_.Status"
-                    Write-Host "Error Code: $_.InstallerErrorCode"
-                }
-            }
+            Invoke-WithOutput {Install-WinGetPackage -Id "StartIsBack.StartAllBack" | Select-Object -Property Id, Name, Status, InstallerErrorCode}
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             $sabOrbs = $env:localAPPDATA + "\StartAllBack\Orbs"
             $sabRegPath = "HKCU:\Software\StartIsBack"
