@@ -211,37 +211,34 @@ for ($a=3; $a -ge 0; $a--) {
 
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
 
-# Winget
-Write-Host "Checking for Package Provider (Nuget)." -ForegroundColor Yellow
+# Nuget
+Write-Host "Checking for Package Provider (Nuget)" -ForegroundColor Yellow
 $nugetProvider = Get-PackageProvider -Name NuGet -ErrorAction SilentlyContinue
 if ($null -eq $nugetProvider) {
-    Write-Host "NuGet Package Provider is not installed. Installing NuGet..." -ForegroundColor Yellow
+    Write-Host "NuGet is not installed. Installing NuGet..." -ForegroundColor Yellow
     Install-PackageProvider -Name NuGet -Force -Scope CurrentUser
-    Write-Host "NuGet Package Provider installation completed." -ForegroundColor Green
-} 
-else {
-    Write-Host "NuGet Package Provider is already installed." -ForegroundColor Green
+    Write-Host "NuGet installation completed." -ForegroundColor Green
+} else {
+    Write-Host "NuGet is already installed." -ForegroundColor Green
 }
-Write-Host "Checking for Windows Package Manager (Winget)" -ForegroundColor Yellow
+# Winget
+Write-Host "Checking for Package Manager (Winget)" -ForegroundColor Yellow
+Import-Module -Name Microsoft.WinGet.Client -Force -ErrorAction SilentlyContinue
 $wingetCheck = Get-WinGetVersion -ErrorAction SilentlyContinue
 if ($null -eq $wingetCheck) {
-
+        Write-Host "Installing Winget..." -ForegroundColor Yellow
+        Install-Module -Name Microsoft.WinGet.Client -Force
+        Write-Host "Winget installation completed." -ForegroundColor Green
+} else {
     $wingetFind = Find-Module Microsoft.WinGet.Client
     if ($wingetCheck -ne $wingetFind.Version) {
         Write-Host "Never version is available. Updating Winget..." -ForegroundColor Yellow
         Update-Module -Name Microsoft.WinGet.Client -Force
         Write-Host "Winget update completed." -ForegroundColor Green
-    }
-    else {
-        Write-Host "Installing Winget..." -ForegroundColor Yellow
-        Install-Module -Name Microsoft.WinGet.Client -Force
-        Write-Host "Winget installation completed." -ForegroundColor Green
-    }
-    Import-Module -Name Microsoft.WinGet.Client -Force
-} else {
+    } else {
     Write-Host "$([char]27)[92m$("Winget is already installed.")$([char]27)[0m Version: $($wingetCheck)"
+    }
 }
-
 foreach ($app in $selectedApps) {
     switch ($app.Trim()) {
     # PowerToys
