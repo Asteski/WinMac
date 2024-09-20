@@ -504,10 +504,10 @@ foreach ($app in $selectedApps) {
         # WinLauncher
         "9" {
             Write-Host "Installing WinLauncher..." -ForegroundColor Yellow
-            $zipFilePath = ".\bin\WinLauncher.zip"
-            $extractPath = "$ENV:LOCALAPPDATA\WinMac\WinLauncher"
+            $zipFilePath = ".\bin\Launchpad.zip"
+            $extractPath = "$ENV:LOCALAPPDATA\WinMac\Launchpad"
             Expand-Archive -Path $zipFilePath -DestinationPath $extractPath -Force
-            Start-Process "$ENV:LOCALAPPDATA\WinMac\WinLauncher\WinLaunch.exe"
+            Start-Process "$ENV:LOCALAPPDATA\WinMac\Launchpad\WinLaunch.exe"
             Write-Host "WinLauncher installation completed." -ForegroundColor Green
         }
         # Nexus Dock
