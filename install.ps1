@@ -504,7 +504,7 @@ foreach ($app in $selectedApps) {
         # WinLauncher
         "9" {
             Write-Host "Installing WinLauncher..." -ForegroundColor Yellow
-            $zipFilePath = ".bin\WinLauncher.zip"
+            $zipFilePath = ".\bin\WinLauncher.zip"
             $extractPath = "$ENV:LOCALAPPDATA\WinMac\WinLauncher"
             Expand-Archive -Path $zipFilePath -DestinationPath $extractPath -Force
             Start-Process "$ENV:LOCALAPPDATA\WinMac\WinLauncher\WinLauncher.exe"
