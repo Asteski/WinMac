@@ -497,11 +497,11 @@ function string-search {
 
 function grep {
     $excludeFiles = @('*.dll', '*.lnk', '*.zip', '*.rar', '*.7zip', '*.png', '*.exe', '*.msi', '*.jpg', '*.jpeg', '*.gif', '*.bmp', '*.ico', '*.mp3', '*.mp4', '*.avi', '*.mkv', '*.flv', '*.mov', '*.wav', '*.wma', '*.wmv', '*.aac', '*.flac', '*.m4a', '*.ogg', '*.opus', '*.webm', '*.webp', '*.pdf')
-    if($args -eq 0 -or $null -eq $args[0] -or $null -eq $args[1]) { 
+    if($args -eq 0) { 
         Write-Host -f Red "Error: " -Non; Write-Host "No arguments provided"
     }
     elseif (($args.Count -eq 3 -and $args[1] -eq '-r' -and $args[2] -ne '-f' -and $args[2] -ne '-e' -and $args[1] -ne '-re' -and $args[1] -ne '-rf')) {
-        Write-Host -f Red "Error: " -Non; Write-Host "Invalid arguments provided" 
+        Write-Host -f Red "Error: " -Non; Write-Host "Invalid arguments provided"
     }
     elseif ($args.Count -eq 1) {
         $files = Get-ChildItem -Exclude $excludeFiles
