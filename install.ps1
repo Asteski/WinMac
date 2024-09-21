@@ -51,7 +51,6 @@ function Invoke-WithOutput {
     $output | Out-File -FilePath ".\logs\$logFile" -Append
     if ($ShowOutput -and $output) {$output}
 }
-
 # Directory check
 $checkDir = Get-ChildItem
 if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir -like "*bin*")) {
@@ -59,7 +58,6 @@ if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir 
     Start-Sleep 2
     exit
 }
-
 # WinMac configuration
 Write-Host
 $fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom installation"
@@ -70,8 +68,7 @@ if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
 elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
     Write-Host "Choosing custom installation." -ForegroundColor Green
     Start-Sleep 1
-    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keybindings"; "9"="Launchpad"; "10"="Nexus Dock"; "11"="Other Settings"}
-
+    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Launchpad"; "10"="Nexus Dock"; "11"="Other Settings"}
 Write-Host @"
 
 $([char]27)[93m$("Please select options you want to install:")$([char]27)[0m
@@ -86,10 +83,9 @@ Main Components:
  5. WinMac Menu
  6. TopNotify
  7. Stahky
- 8. Keybindings
+ 8. Keyboard Shortcuts
  9. Launchpad
 10. Dock
-
 11. Other Settings:
   • Black Cursor
   • Pin Home, Programs and Recycle Bin to Quick Access
@@ -242,8 +238,8 @@ if ($null -eq $wingetCliCheck) {
     Add-AppxPackage '.\temp\Microsoft.UI.Xaml.2.8.x64.appx'
     Add-AppxPackage '.\temp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
 }
-Import-Module -Name Microsoft.WinGet.Client -Force | Out-Null
-$wingetCheck = Get-WinGetVersion -ErrorAction SilentlyContinue
+Import-Module -Name Microsoft.WinGet.Client -Force -ErrorAction SilentlyContinue | Out-Null
+$wingetCheck = Get-WinGetVersion -ErrorAction SilentlyContinue | Out-Null
 if ($null -eq $wingetClientCheck) {
     Write-Host "Installing Winget..." -ForegroundColor Yellow
     Install-Module -Name Microsoft.WinGet.Client -Force
@@ -484,7 +480,7 @@ foreach ($app in $selectedApps) {
             Remove-Item $outputPath -Force
             Write-Host "Stahky installation completed." -ForegroundColor Green
         }
-        # Keybindings
+        # Keyboard Shortcuts
         "8" {
             if ($adminTest) {
                 Write-Host "Keyboard Shortcuts requires administrative privileges. Please run the script as an administrator. Skipping installation." -ForegroundColor Red
@@ -523,9 +519,6 @@ foreach ($app in $selectedApps) {
         # Nexus Dock
         "10" {
             if ($adminTest) {
-                Write-Host "Winstep Nexus requires non-administrative privileges. Please run the script as a standard user session. Skipping installation." -ForegroundColor Red
-            }
-            else {
                 Write-Host "Installing Nexus Dock..." -ForegroundColor Yellow
                 $downloadUrl = "https://www.winstep.net/nexus.zip"
                 $downloadPath = "dock.zip"
@@ -601,6 +594,10 @@ foreach ($app in $selectedApps) {
                 Remove-Item .\ReadMe.txt -Force | Out-Null
                 Remove-Item .\NexusSetup.exe -Force | Out-Null
                 Write-Host "Nexus Dock installation completed." -ForegroundColor Green
+
+            }
+            else {
+                Write-Host "Winstep Nexus requires non-administrative privileges. Please run the script as a standard user session. Skipping installation." -ForegroundColor Red
             }
         }
         # Other
@@ -629,8 +626,8 @@ foreach ($app in $selectedApps) {
             $RegCursors.SetValue("SizeWE","$curDestFolder\aero_black_ew.cur")
             $RegCursors.SetValue("UpArrow","$curDestFolder\aero_black_up.cur")
             $RegCursors.SetValue("Wait","$curDestFolder\aero_black_busy.ani")
-            $RegCursors.SetValue("Pin","$curDestFolder\aero_black_pin.ani")
-            $RegCursors.SetValue("Person","$curDestFolder\aero_black_person.ani")
+            $RegCursors.SetValue("Pin","$curDestFolder\aero_black_pin.cur")
+            $RegCursors.SetValue("Person","$curDestFolder\aero_black_person.cur")
             $RegCursors.Close()
             $RegConnect.Close()
 $CSharpSig = @'
@@ -700,12 +697,10 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             Set-ItemProperty -Path "$exRegPath\Advanced" -Name "LaunchTO" -Value 1
             Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
             Set-ItemProperty -Path $exRegPath -Name "ShowRecent" -Value 0
-            Set-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\Windows\Explorer" -Name "TaskbarNoMultimon" -Value 1
-            Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer" -Name "TaskbarNoMultimon" -Value 1
-            Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
+            Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value "" | Out-Null
             $taskbarDevSettings = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
             if (-not (Test-Path $taskbarDevSettings)) { New-Item -Path $taskbarDevSettings -Force | Out-Null }
-            New-ItemProperty -Path $taskbarDevSettings -Name "TaskbarEndTask" -Value 1 -PropertyType DWORD -Force | Out-Null
+            New-ItemProperty -Path $taskbarDevSettings -Name "TaskbarEndTask" -Value 1 -PropertyType DWORD -Force -ErrorAction SilentlyContinue | Out-Null
             Stop-Process -n explorer
         }
     }
