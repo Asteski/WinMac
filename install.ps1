@@ -78,17 +78,17 @@ Write-Host @"
 
 "@
 Write-Host @"
-Main Components:
- 1. `e[92mPowerToys`e[0m
- 2. `e[92mEverything`e[0m
- 3. `e[92mPowershell Profile`e[0m
- 4. `e[92mStartAllBack`e[0m
- 5. `e[92mWinMac Menu`e[0m
- 6. `e[92mTopNotify`e[0m
- 7. `e[92mStahky`e[0m
- 8. `e[92mKeyboard Shortcuts`e[0m
- 9. `e[92mLaunchpad`e[0m
-10. `e[92mDock`e[0m
+`e[92mMain Components:`e[0m
+ 1. PowerToys
+ 2. Everything
+ 3. Powershell Profile
+ 4. StartAllBack
+ 5. WinMac Menu
+ 6. TopNotify
+ 7. Stahky
+ 8. Keyboard Shortcuts
+ 9. Launchpad
+10. Dock
 11. `e[92mOther Settings:`e[0m
   • Black Cursor
   • Pin Home, Programs and Recycle Bin to Quick Access
