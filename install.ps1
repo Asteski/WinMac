@@ -532,7 +532,7 @@ foreach ($app in $selectedApps) {
                 if (-not (Test-Path $downloadPath)) {
                     Invoke-WebRequest -Uri $downloadUrl -OutFile $downloadPath
                 }
-                Expand-Archive -Path $downloadPath -DestinationPath $pwd -Force
+                Expand-Archive -Path $downloadPath -DestinationPath .\temp -Force
                 Start-Process -FilePath ".\temp\NexusSetup.exe" -ArgumentList "/silent"
                 Start-Sleep 10
                 $process1 = Get-Process -Name "NexusSetup" -ErrorAction SilentlyContinue
