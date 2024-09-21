@@ -330,7 +330,7 @@ foreach ($app in $selectedApps) {
         # StartAllBack
         "4" {
             Write-Host "Installing StartAllBack..." -ForegroundColor Yellow 
-            Invoke-WithOutput {Install-WinGetPackage -Id "StartIsBack.StartAllBack"}
+            Install-WinGetPackage -Id "StartIsBack.StartAllBack"
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             $sabOrbs = $env:localAPPDATA + "\StartAllBack\Orbs"
             $sabRegPath = "HKCU:\Software\StartIsBack"
@@ -339,7 +339,7 @@ foreach ($app in $selectedApps) {
             $taskbarOnTopValue = @(0x30,0x00,0x00,0x00,0xfe,0xff,0xff,0xff,0x02,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x5a,0x00,0x00,0x00,0x32,0x00,0x00,0x00,0x26,0x07,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0x07,0x00,0x00,0x38,0x04,0x00,0x00,0x78,0x00,0x00,0x00,0x01,0x00,0x00,0x00)
             Invoke-WithOutput {New-Item -Path $taskbarOnTopPath -Force}
             Invoke-WithOutput {New-ItemProperty -Path $taskbarOnTopPath -Name $taskbarOnTopName -Value $taskbarOnTopValue -PropertyType Binary}
-            Invoke-WithOutput {Copy-Item ..\config\taskbar\orbs\* $sabOrbs -Force}
+            Invoke-WithOutput {Copy-Item "..\config\taskbar\orbs\*" $sabOrbs -Force}
             Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 1
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSizeMove" -Value 1
             Set-ItemProperty -Path $exRegPath\Advanced -Name "ShowStatusBar" -Value 0
