@@ -505,31 +505,59 @@ function grep {
     }
     elseif ($args.Count -eq 1) {
         $files = Get-ChildItem -Exclude $excludeFiles
-        string-search $args[0]
+        try {
+            string-search $args[0]
+        } catch {
+            Write-Host "Error: $_" -ForegroundColor Red
+        }
     }
     elseif ($args[0] -eq '-r') {
         $files = Get-ChildItem -Recurse -Exclude $excludeFiles
-        string-search $args[1]
+        try {
+            string-search $args[1]
+        } catch {
+            Write-Host "Error: $_" -ForegroundColor Red
+        }
     }
     elseif ($args[1] -eq '-r') {
         $files = Get-ChildItem -Recurse -Exclude $excludeFiles
-        string-search $args[0]
+        try {
+            string-search $args[0]
+        } catch {
+            Write-Host "Error: $_" -ForegroundColor Red
+        }
     }
     elseif ($args.Count -eq 3 -and $args[1] -eq '-f') {
         $files = Get-ChildItem -File $args[2]
-        string-search $args[0]
+        try {
+            string-search $args[0]
+        } catch {
+            Write-Host "Error: $_" -ForegroundColor Red
+        }
     }
     elseif ($args.Count -eq 3 -and $args[1] -eq '-e') {
         $files = Get-ChildItem -Exclude $args[2]
-        string-search $args[0]
+        try {
+            string-search $args[0]
+        } catch {
+            Write-Host "Error: $_" -ForegroundColor Red
+        }
     }
     elseif ($args.Count -eq 3 -and $args[1] -eq '-rf') {
         $files = Get-ChildItem -File $args[2] -Recurse
-        string-search $args[0]
+        try {
+            string-search $args[0]
+        } catch {
+            Write-Host "Error: $_" -ForegroundColor Red
+        }
     }
     elseif ($args.Count -eq 3 -and $args[1] -eq '-re') {
         $files = Get-ChildItem -Exclude $args[2] -Recurse
-        string-search $args[0]
+        try {
+            string-search $args[0]
+        } catch {
+            Write-Host "Error: $_" -ForegroundColor Red
+        }
     }
     else {
         Write-Host -f Red "Error: " -Non; Write-Host "Invalid arguments provided" 
