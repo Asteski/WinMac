@@ -717,7 +717,7 @@ https://github.com/Asteski/WinMac
 
 If you have any questions or suggestions, please contact me on GitHub.
 
-"@ -ForegroundColor Green
+"@ -ForegroundColor Cyan
 
 Write-Host "-----------------------------------------------------------------------------"  -ForegroundColor Cyan
 Start-Sleep 2
