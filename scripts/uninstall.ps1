@@ -28,18 +28,21 @@ uninstallations manually.
 Write-Host "Script must be run in elevated session!" -ForegroundColor Red
 Write-Host "`n-----------------------------------------------------------------------" -ForegroundColor Cyan
 
-$date = Get-Date -Format "yy-MM-ddTHHmmss"
-$logFile = "WinMac_install_log_$date.txt"
-if (-not (Test-Path -Path "./temp")) {New-Item -ItemType Directory -Path "./temp" | Out-Null}
-if (-not (Test-Path -Path "./logs")) {New-Item -ItemType Directory -Path "./logs" | Out-Null}
-
 ## Check if script is run from the correct directory
-$checkDir = Get-ChildItem
+
+$checkDir = Get-ChildItem '..'
 if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir -like "*bin*")) {
     Write-Host "`nWinMac components not found. Please make sure to run the script from the correct directory." -ForegroundColor Red
     Start-Sleep 2
     exit
 }
+
+## Start Logging
+
+$errorActionPreference="SilentlyContinue"
+$date = Get-Date -Format "yy-MM-ddTHHmmss"
+mkdir ./temp | Out-Null
+
 ## User Configuration
 
 $fullOrCustom = Read-Host "`nEnter 'F' for full or 'C' for custom uninstallation"
@@ -228,8 +231,8 @@ foreach ($app in $selectedApps) {
             $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue
             if ($null -eq $tasksFolder) { schtasks /DELETE /TN \WinMac /F > $null 2>&1 }
             Remove-Item -Path "$env:PROGRAMFILES\WinMac" -Recurse -Force | Out-Null
-            Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force | Out-Null
-            Expand-Archive -Path "$pwd\config\WinX-default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
+            Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
+            Expand-Archive -Path "..\config\WinX-default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
             Stop-Process -n Explorer
             Write-Host "Uninstalling WinMac Menu completed." -ForegroundColor Green
         }
