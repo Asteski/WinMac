@@ -1,5 +1,5 @@
 @echo off
-cd scripts
+cd pwsh
 if "%1"=="" (
     pwsh -NoProfile -ExecutionPolicy Bypass -File "install.ps1"
 ) else if "%1"=="uninstall" (
