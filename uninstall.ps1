@@ -258,7 +258,7 @@ foreach ($app in $selectedApps) {
         }
         "10" {
             # Other
-            Write-Host "Uninstalling Other configurations..." -ForegroundColor Yellow
+            Write-Host "Uninstalling Other Settings..." -ForegroundColor Yellow
             Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 0
 
             $homeDir = "C:\Users\$env:USERNAME"
@@ -329,6 +329,7 @@ uint fWinIni);
             Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings" -Recurse | Out-Null
             Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarSmallIcons" | Out-Null
             Stop-Process -Name explorer -Force | Out-Null
+            Write-Host "Uninstalling Other Settings completed." -ForegroundColor Green
         }
     }
 }

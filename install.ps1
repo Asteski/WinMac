@@ -606,6 +606,7 @@ foreach ($app in $selectedApps) {
         # Other
         "11" {
             ## Black Cursor
+            Write-Host "Configuring Other Settings..." -ForegroundColor Yellow
             Write-Host "Configuring black cursor..." -ForegroundColor Yellow
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             $curSourceFolder = $pwd.Path + '\config\cursor'
@@ -705,6 +706,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             if (-not (Test-Path $taskbarDevSettings)) { New-Item -Path $taskbarDevSettings -Force | Out-Null }
             New-ItemProperty -Path $taskbarDevSettings -Name "TaskbarEndTask" -Value 1 -PropertyType DWORD -Force -ErrorAction SilentlyContinue | Out-Null
             Stop-Process -n explorer
+            Write-Host "Configuring Other Settings completed." -ForegroundColor Green
         }
     }
 }
