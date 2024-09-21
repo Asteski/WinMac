@@ -448,14 +448,8 @@ function ansi-reverse {
         [Parameter(Mandatory = $true, Position=0)] [string] $txt,   # raw text string
         [Parameter(Mandatory = $true, Position=1)] [string] $pat    # Pattern string
     )
-    
-    $ESC = "$([char] 27)"   # ANSI ESC (0x1b)
-    $RES = "`e[0m"          # ANSI Reset ()
-    $RON = "`e[7m"          # Reverse
-    $ROF = "`e[27m"         # ReverseOff
     $GRN = "`e[92m"         # BrightGreen
     $GRY = "`e[90m"         # BrightBlack / "DarkGray"
-
     # Replace text pattern with ANSI Reversed version (and using capture group for case preserve)
     # https://stackoverflow.com/a/40683667/1147688
     $txt = "$txt" -replace "($pat)", "$GRN`$1$GRY"      # Using: BrightRed
@@ -504,7 +498,7 @@ function string-search {
 
 function grep {
     $excludeFiles = @('*.dll', '*.lnk', '*.zip', '*.rar', '*.7zip', '*.png', '*.exe', '*.msi', '*.jpg', '*.jpeg', '*.gif', '*.bmp', '*.ico', '*.mp3', '*.mp4', '*.avi', '*.mkv', '*.flv', '*.mov', '*.wav', '*.wma', '*.wmv', '*.aac', '*.flac', '*.m4a', '*.ogg', '*.opus', '*.webm', '*.webp', '*.pdf')
-    if($args.Count -eq 0) { 
+    if($args -eq 0 -or $null -eq $args[0] -or $null -eq $args[1]) { 
         Write-Host -f Red "Error: " -Non; Write-Host "No arguments provided"
     }
     elseif (($args.Count -eq 3 -and $args[1] -eq '-r' -and $args[2] -ne '-f' -and $args[2] -ne '-e' -and $args[1] -ne '-re' -and $args[1] -ne '-rf')) {
