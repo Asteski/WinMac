@@ -69,8 +69,7 @@ Write-Host @"
     Write-Host " 7. Nexus Dock"
     Write-Host " 8. Stahky"
     Write-Host " 9. AutoHotkey"
-    Write-Host "10. Other"
-    $selection = ''
+    Write-Host "10. Other`n"
     do {
         $selection = Read-Host "Enter the numbers of options you want to uninstall (separated by commas)"
     } while ([string]::IsNullOrWhiteSpace($selection))

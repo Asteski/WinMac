@@ -95,6 +95,7 @@ Write-Host @"
   • Remove Recycle Bin from Desktop
   • Add End Task to context menu
 "@
+    Write-Host
     do {
         $selection = Read-Host "Enter the numbers of options you want to install (separated by commas)"
     } while ([string]::IsNullOrWhiteSpace($selection))
