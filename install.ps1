@@ -416,7 +416,7 @@ foreach ($app in $selectedApps) {
                     Write-Host "Skipping WinMac Menu installation." -ForegroundColor Magenta
                 }
             } else {                
-                Write-Host "WinMac Menu requires administrative privileges. Please run the script as an administrator. Skipping installation." -ForegroundColor Red
+                Write-Host "WinMac Menu requires elevated session. Please run the script as an administrator. Skipping installation." -ForegroundColor Red
             }
         }
         # TopNotify
@@ -512,7 +512,7 @@ foreach ($app in $selectedApps) {
                 Start-Process "$env:LOCALAPPDATA\WinMac\KeyShortcuts.exe"
                 Write-Host "Keyboard Shortcuts installation completed." -ForegroundColor Green
             } else {
-                Write-Host "Keyboard Shortcuts requires administrative privileges. Please run the script as an administrator. Skipping installation." -ForegroundColor Red
+                Write-Host "Keyboard Shortcuts requires elevated session. Please run the script as an administrator. Skipping installation." -ForegroundColor Red
             }
         }
         # WinLauncher
@@ -527,7 +527,7 @@ foreach ($app in $selectedApps) {
         # Nexus Dock
         "10" {
             if ($adminTest) {
-                Write-Host "Winstep Nexus requires non-administrative privileges. Please run the script in a default user session. Skipping installation." -ForegroundColor Red
+                Write-Host "Winstep Nexus requires non-elevated session. Please run the script in a default user session. Skipping installation." -ForegroundColor Red
             }
             else {
                 Write-Host "Installing Nexus Dock..." -ForegroundColor Yellow
