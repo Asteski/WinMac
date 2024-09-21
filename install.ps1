@@ -690,14 +690,14 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             ## Remove Shortcut Arrows
             Write-Host "Removing shortcut arrows..." -ForegroundColor Yellow
             Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force
-            New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
+            New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -ErrorAction SilentlyContinue
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
             ## Misc
             Write-Host "Configuring other settings..." -ForegroundColor Yellow
             Set-ItemProperty -Path "$exRegPath\Advanced" -Name "LaunchTO" -Value 1
             Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
             Set-ItemProperty -Path $exRegPath -Name "ShowRecent" -Value 0
-            Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value "" | Out-Null
+            Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value "" -ErrorAction SilentlyContinue
             $taskbarDevSettings = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
             if (-not (Test-Path $taskbarDevSettings)) { New-Item -Path $taskbarDevSettings -Force | Out-Null }
             New-ItemProperty -Path $taskbarDevSettings -Name "TaskbarEndTask" -Value 1 -PropertyType DWORD -Force -ErrorAction SilentlyContinue | Out-Null
