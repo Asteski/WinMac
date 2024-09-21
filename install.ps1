@@ -8,6 +8,7 @@ Welcome to WinMac Deployment!
 
 Author: Asteski
 Version: 0.6.0
+GitHub: https://github.com/Asteski
 
 This is work in progress. You're using this script at your own risk.
 
@@ -27,7 +28,9 @@ before proceeding with the installation process to ensure you can
 revert any changes if necessary.
 
 For guide on how to use the script, please refer to the Wiki page 
-on WinMac GitHub page.
+on WinMac GitHub page:
+
+https://github.com/Asteski/WinMac/wiki
 
 "@ -ForegroundColor Yellow
 if (-not $adminTest) {
@@ -372,8 +375,8 @@ foreach ($app in $selectedApps) {
                 if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
                     Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
                     winget install --id Microsoft.DotNet.DesktopRuntime.6 --silent | Out-Null
-                    Invoke-WebRequest -Uri 'https://github.com/dongle-the-gadget/WinverUWP/releases/download/v2.1.0.0/2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle' -OutFile '2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
-                    Add-AppxPackage -Path '2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
+                    Invoke-WebRequest -Uri 'https://github.com/dongle-the-gadget/WinverUWP/releases/download/v2.1.0.0/2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle' -OutFile '.\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
+                    Add-AppxPackage -Path '.\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
                     New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" -ErrorAction SilentlyContinue
                     $sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
                     $exeKeyPath = "$env:LOCALAPPDATA\WinMac\windowskey.exe"
@@ -525,12 +528,12 @@ foreach ($app in $selectedApps) {
             else {
                 Write-Host "Installing Nexus Dock..." -ForegroundColor Yellow
                 $downloadUrl = "https://www.winstep.net/nexus.zip"
-                $downloadPath = "dock.zip"
+                $downloadPath = ".\temp\Nexus.zip"
                 if (-not (Test-Path $downloadPath)) {
                     Invoke-WebRequest -Uri $downloadUrl -OutFile $downloadPath
                 }
                 Expand-Archive -Path $downloadPath -DestinationPath $pwd -Force
-                Start-Process -FilePath ".\NexusSetup.exe" -ArgumentList "/silent"
+                Start-Process -FilePath ".\temp\NexusSetup.exe" -ArgumentList "/silent"
                 Start-Sleep 10
                 $process1 = Get-Process -Name "NexusSetup" -ErrorAction SilentlyContinue
                 while ($process1) {
@@ -593,10 +596,6 @@ foreach ($app in $selectedApps) {
                 $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
                 Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Nexus.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
                 Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\Nexus.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
-                Remove-Item "$pwd\temp\*" -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
-                Remove-Item .\dock.zip -Force | Out-Null
-                Remove-Item .\ReadMe.txt -Force | Out-Null
-                Remove-Item .\NexusSetup.exe -Force | Out-Null
                 Write-Host "Nexus Dock installation completed." -ForegroundColor Green
             }
         }
@@ -705,6 +704,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
         }
     }
 }
+Remove-Item ".\temp\*" -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
 Write-Host
 Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
 Write-Host @"

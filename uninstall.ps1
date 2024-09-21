@@ -334,15 +334,9 @@ uint fWinIni);
 # Clean up
 Write-Host "Clean up..." -ForegroundColor Yellow
 $explorerProcess = Get-Process -Name explorer -ErrorAction SilentlyContinue
-if ($null -eq $explorerProcess) {
-    Start-Process -FilePath explorer.exe
-}
+if ($null -eq $explorerProcess) {Start-Process -FilePath explorer.exe}
 Write-Host "Clean up completed." -ForegroundColor Green
-Write-Host
-Stop-Transcript
-
-Write-Host
-Write-Host "------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
+Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
 Write-Host @"
 
 Enjoy and support by giving feedback and contributing to the project!
