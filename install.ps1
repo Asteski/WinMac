@@ -78,7 +78,6 @@ Write-Host @"
 
 "@
 Write-Host @"
-`e[92mMain Components:`e[0m
  1. PowerToys
  2. Everything
  3. Powershell Profile
@@ -89,7 +88,7 @@ Write-Host @"
  8. Keyboard Shortcuts
  9. Launchpad
 10. Dock
-11. `e[92mOther Settings:`e[0m
+11. Other Settings:
   • Black Cursor
   • Pin Home, Programs and Recycle Bin to Quick Access
   • Remove Shortcut Arrows

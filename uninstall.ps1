@@ -57,7 +57,7 @@ elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
     $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Nexus Dock"; "8"="Stahky"; "9"="AutoHotkey"; "10"="Other"}
 Write-Host @"
 
-$([char]27)[93m$("Please select options you want to uninstall:")$([char]27)[0m
+`e[93m$("Please select options you want to uninstall:")`e[0m
 
 "@
     Write-Host " 1. PowerToys"
@@ -71,7 +71,9 @@ $([char]27)[93m$("Please select options you want to uninstall:")$([char]27)[0m
     Write-Host " 9. AutoHotkey"
     Write-Host "10. Other"
     $selection = ''
-    while ($null -ne $selection) {$selection = Read-Host "Enter the numbers of options you want to uninstall (separated by commas)"}
+    do {
+        $selection = Read-Host "Enter the numbers of options you want to uninstall (separated by commas)"
+    } while ([string]::IsNullOrWhiteSpace($selection))
     $selectedApps = @()
     $selectedApps = $selection.Split(',')
     $selectedAppNames = @()
@@ -80,7 +82,7 @@ $([char]27)[93m$("Please select options you want to uninstall:")$([char]27)[0m
             $selectedAppNames += $appList[$appNumber]
         }
     }
-    Write-Host "$([char]27)[92m$("Selected options:")$([char]27)[0m $($selectedAppNames -join ', ')"
+    Write-Host "`e[92m$("Selected options:")`e[0m $($selectedAppNames -join ', ')"
 }
 else
 {
@@ -120,7 +122,7 @@ if ($null -eq $wingetCheck) {
 }
 else 
 {
-    Write-Host "$([char]27)[92m$("Winget is already installed.")$([char]27)[0m Version: $($wingetCheck)"
+    Write-Host "`e[92m$("Winget is already installed.")`e[0m Version: $($wingetCheck)"
 }
 
 ## Defintions
