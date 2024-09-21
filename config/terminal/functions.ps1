@@ -485,7 +485,11 @@ function string-search {
         [Parameter(Mandatory = $true, Position=0)] [string] $pattern
     )
     foreach ($file in $files) {
-        $A = Select-String -Path $file.FullName -AllMatches -Pattern $pattern
+        try {
+            $A = Select-String -Path $file.FullName -AllMatches -Pattern $pattern
+        } catch {
+            Write-Host "Error: $_" -ForegroundColor Red
+        }
         $A | Select-Object Path, LineNumber, Pattern, Line | ForEach-Object {
             # $i = $_.Filename
             $i = $_.Path.Substring(($pwd.Path).Length + 1)
