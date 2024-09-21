@@ -340,7 +340,8 @@ Write-Host @"
 
 Enjoy and support by giving feedback and contributing to the project!
 
-For more information please visit my GitHub page: https://github.com/Asteski/WinMac
+For more information please visit WinMac GitHub page:  
+https://github.com/Asteski/WinMac
 
 If you have any questions or suggestions, please contact me on GitHub.
 

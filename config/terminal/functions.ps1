@@ -453,12 +453,12 @@ function ansi-reverse {
     $RES = "`e[0m"          # ANSI Reset ()
     $RON = "`e[7m"          # Reverse
     $ROF = "`e[27m"         # ReverseOff
-    $RED = "`e[91m"         # BrightRed
+    $GRN = "`e[92m"         # BrightGreen
     $GRY = "`e[90m"         # BrightBlack / "DarkGray"
 
     # Replace text pattern with ANSI Reversed version (and using capture group for case preserve)
     # https://stackoverflow.com/a/40683667/1147688
-    $txt = "$txt" -replace "($pat)", "$RED`$1$GRY"      # Using: BrightRed
+    $txt = "$txt" -replace "($pat)", "$GRN`$1$GRY"      # Using: BrightRed
 
     Return "$txt"
 }
@@ -488,8 +488,9 @@ function string-search {
         try {
             $A = Select-String -Path $file.FullName -AllMatches -Pattern $pattern
         } catch {
-            Write-Host "Error: $_" -ForegroundColor Red
-            break
+            # Write-Host "Error: $_" -ForegroundColor Red
+            # break
+            $A = Select-String -Path $file.FullName -AllMatches -Pattern $pattern -SimpleMatch
         }
         $A | Select-Object Path, LineNumber, Pattern, Line | ForEach-Object {
             # $i = $_.Filename

@@ -241,9 +241,8 @@ if ($null -eq $wingetCliCheck) {
     Add-AppxPackage '.\temp\Microsoft.UI.Xaml.2.8.x64.appx'
     Add-AppxPackage '.\temp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
 }
-Import-Module -Name Microsoft.WinGet.Client -Force -ErrorAction SilentlyContinue | Out-Null
 try {
-    $wingetClientCheck = Get-WinGetVersion
+    $wingetFind = Find-Module Microsoft.WinGet.Client
 } catch {}
 if ($null -eq $wingetClientCheck) {
     Write-Host "Installing Winget..." -ForegroundColor Yellow
@@ -254,6 +253,7 @@ if ($null -eq $wingetClientCheck) {
     if ($wingetClientCheck -ne $wingetFind.Version) {
         Write-Host "Never version is available. Updating Winget..." -ForegroundColor Yellow
         Update-Module -Name Microsoft.WinGet.Client -Force -WarningAction SilentlyContinue
+        
         Write-Host "Winget update completed." -ForegroundColor Green
     } else {
         Write-Host "$([char]27)[92m$("Winget is already installed.")$([char]27)[0m Version: $($wingetClientCheck)"
@@ -393,8 +393,8 @@ foreach ($app in $selectedApps) {
                     $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
                     $trigger = New-ScheduledTaskTrigger -AtLogon
                     $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
-                    $actionWinKey = New-ScheduledTaskAction -Execute 'WindowsKey.exe' -WorkingDirectory "$env:PROGRAMFILES\WinMac\"
-                    $actionStartButton = New-ScheduledTaskAction -Execute "StartButton.exe" -WorkingDirectory "$env:PROGRAMFILES\WinMac\"
+                    $actionWinKey = New-ScheduledTaskAction -Execute 'WindowsKey.exe' -WorkingDirectory "$env:LOCALAPPDATA\WinMac\"
+                    $actionStartButton = New-ScheduledTaskAction -Execute "StartButton.exe" -WorkingDirectory "$env:LOCALAPPDATA\WinMac\"
                     $processes = @("windowskey", "startbutton")
                     foreach ($process in $processes) {
                         $runningProcess = Get-Process -Name $process -ErrorAction SilentlyContinue
@@ -707,13 +707,13 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
     }
 }
 Remove-Item ".\temp\*" -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
-Write-Host
 Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
 Write-Host @"
 
 Enjoy and support by giving feedback and contributing to the project!
 
-For more information please visit my GitHub page: github.com/Asteski/WinMac
+For more information please visit WinMac GitHub page: 
+https://github.com/Asteski/WinMac
 
 If you have any questions or suggestions, please contact me on GitHub.
 
