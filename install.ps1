@@ -379,8 +379,8 @@ foreach ($app in $selectedApps) {
                     Add-AppxPackage -Path '.\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
                     New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" -ErrorAction SilentlyContinue
                     $sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
-                    $exeKeyPath = "$env:LOCALAPPDATA\WinMac\windowskey.exe"
-                    $exeStartPath = "$env:LOCALAPPDATA\WinMac\startbutton.exe"
+                    $exeKeyPath = "$env:LOCALAPPDATA\WinMac\WindowsKey.exe"
+                    $exeStartPath = "$env:LOCALAPPDATA\WinMac\StartButton.exe"
                     $folderName = "WinMac"
                     $taskService = New-Object -ComObject "Schedule.Service"
                     $taskService.Connect() | Out-Null
@@ -392,7 +392,7 @@ foreach ($app in $selectedApps) {
                     $trigger = New-ScheduledTaskTrigger -AtLogon
                     $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
                     $actionWinKey = New-ScheduledTaskAction -Execute 'WindowsKey.exe' -WorkingDirectory "$env:PROGRAMFILES\WinMac\"
-                    $actionStartButton = New-ScheduledTaskAction -Execute "StartButton.ahk" -WorkingDirectory "$env:PROGRAMFILES\WinMac\"
+                    $actionStartButton = New-ScheduledTaskAction -Execute "StartButton.exe" -WorkingDirectory "$env:PROGRAMFILES\WinMac\"
                     $processes = @("windowskey", "startbutton")
                     foreach ($process in $processes) {
                         $runningProcess = Get-Process -Name $process -ErrorAction SilentlyContinue
@@ -488,7 +488,7 @@ foreach ($app in $selectedApps) {
         "8" {
             if ($adminTest) {
                 Write-Host "Installing Keyboard Shortcuts..." -ForegroundColor Yellow
-                $fileName = 'keybindings.exe'
+                $fileName = 'KeyShortcuts.exe'
                 $fileDirectory = "$env:LOCALAPPDATA\WinMac"
                 New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" -ErrorAction SilentlyContinue | Out-Null
                 Copy-Item .\bin\$fileName "$env:LOCALAPPDATA\WinMac\" | Out-Null
@@ -505,7 +505,7 @@ foreach ($app in $selectedApps) {
                 $action = New-ScheduledTaskAction -Execute $fileName -WorkingDirectory $fileDirectory
                 $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
                 Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -ErrorAction SilentlyContinue | Out-Null
-                Start-Process "$env:LOCALAPPDATA\WinMac\keybindings.exe"
+                Start-Process "$env:LOCALAPPDATA\WinMac\KeyShortcuts.exe"
                 Write-Host "Keyboard Shortcuts installation completed." -ForegroundColor Green
             } else {
                 Write-Host "Keyboard Shortcuts requires administrative privileges. Please run the script as an administrator. Skipping installation." -ForegroundColor Red
