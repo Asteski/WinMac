@@ -48,6 +48,7 @@ $logFile = "WinMac_install_log_$date.txt"
 # Create temp and logs directories if they don't exist
 if (-not (Test-Path -Path "./temp")) {New-Item -ItemType Directory -Path "./temp" | Out-Null}
 if (-not (Test-Path -Path "./logs")) {New-Item -ItemType Directory -Path "./logs" | Out-Null}
+New-Item -Name "WinMac_install_log_$date.txt" -Path 
 function Invoke-WithOutput {
     param ([scriptblock]$Command)
     $output = & $Command 2>&1

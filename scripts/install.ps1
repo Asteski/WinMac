@@ -46,8 +46,8 @@ $ShowOutput = $false
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_install_log_$date.txt"
 # Create temp and logs directories if they don't exist
-if (-not (Test-Path -Path "./temp")) {New-Item -ItemType Directory -Path "./temp" | Out-Null}
-if (-not (Test-Path -Path "./logs")) {New-Item -ItemType Directory -Path "./logs" | Out-Null}
+if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null}
+if (-not (Test-Path -Path "../logs")) {New-Item -ItemType Directory -Path "../logs" | Out-Null}
 function Invoke-WithOutput {
     param ([scriptblock]$Command)
     $output = & $Command 2>&1
@@ -55,7 +55,7 @@ function Invoke-WithOutput {
     if ($ShowOutput -and $output) {$output}
 }
 # Directory check
-$checkDir = Get-ChildItem
+$checkDir = Get-ChildItem '..'
 if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir -like "*bin*")) {
     Write-Host "`nWinMac components not found. Please make sure to run the script from the correct directory." -ForegroundColor Red
     Start-Sleep 2
