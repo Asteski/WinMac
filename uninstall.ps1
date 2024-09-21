@@ -72,8 +72,22 @@ Write-Host @"
     Write-Host "10. Other"
     Write-Host
     do {
-        $selection = Read-Host "Enter the numbers of options you want to uninstall (separated by commas)"
-    } while ([string]::IsNullOrWhiteSpace($selection))
+        $selection = Read-Host "Enter the numbers of options you want to install (separated by commas)"
+        $selection = $selection.Trim()
+        $selection = $selection -replace '\s*,\s*', ','
+        $valid = $selection -match '^([1-9]|10|11)(,([1-9]|10))*$'
+        if (!$valid) {
+            Write-Host "`e[91mInvalid input! Please enter numbers between 1 and 11, separated by commas.`e[0m`n"
+        }
+    } while ([string]::IsNullOrWhiteSpace($selection) -or !$valid)
+    $selectedApps = @()
+    $selectedApps = $selection.Split(',')
+    $selectedAppNames = @()
+    foreach ($appNumber in $selectedApps) {
+        if ($appList.ContainsKey($appNumber)) {
+            $selectedAppNames += $appList[$appNumber]
+        }
+    }
     $selectedApps = @()
     $selectedApps = $selection.Split(',')
     $selectedAppNames = @()
@@ -113,12 +127,12 @@ $wingetCheck = winget -v
 if ($null -eq $wingetCheck) {
     $progressPreference = 'silentlyContinue'
     Write-Information "Downloading WinGet and its dependencies..."
-    Invoke-WebRequest -Uri https://aka.ms/getwinget -OutFile Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
-    Invoke-WebRequest -Uri https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx -OutFile Microsoft.VCLibs.x64.14.00.Desktop.appx
-    Invoke-WebRequest -Uri https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.6/Microsoft.UI.Xaml.2.8.x64.appx -OutFile Microsoft.UI.Xaml.2.8.x64.appx
-    Add-AppxPackage Microsoft.VCLibs.x64.14.00.Desktop.appx
-    Add-AppxPackage Microsoft.UI.Xaml.2.8.x64.appx
-    Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+    Invoke-WebRequest -Uri 'https://aka.ms/getwinget' -OutFile 'Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
+    Invoke-WebRequest -Uri 'https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx' -OutFile 'Microsoft.VCLibs.x64.14.00.Desktop.appx'
+    Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.6/Microsoft.UI.Xaml.2.8.x64.appx' -OutFile 'Microsoft.UI.Xaml.2.8.x64.appx'
+    Add-AppxPackage 'Microsoft.VCLibs.x64.14.00.Desktop.appx'
+    Add-AppxPackage 'Microsoft.UI.Xaml.2.8.x64.appx'
+    Add-AppxPackage 'Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
 }
 else 
 {
