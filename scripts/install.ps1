@@ -556,11 +556,11 @@ foreach ($app in $selectedApps) {
                 New-Item -ItemType Directory -Path "$winStep\Icons" -Force | Out-Null
                 Copy-Item config\dock\icons "$winStep" -Recurse -Force | Out-Null
                 $regFile = "..\config\dock\winstep.reg"
-                $tempFolder = "..\temp"
                 $downloadsPath = "$env:USERPROFILE\Downloads"
-                if (-not (Test-Path $tempFolder)) {
-                    New-Item -ItemType Directory -Path $tempFolder -Force | Out-Null
-                }
+                # $tempFolder = "..\temp"
+                # if (-not (Test-Path $tempFolder)) {
+                #     New-Item -ItemType Directory -Path $tempFolder -Force | Out-Null
+                # }
                 if ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
                     $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "Rounded", "Squared" }
                     $modifiedFile = "..\temp\winstep.reg"
