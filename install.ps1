@@ -96,6 +96,7 @@ Main Components:
   • Remove Recycle Bin from Desktop
   • Add End Task to context menu
 '@
+    $selection = ''
     while ($null -ne $selection) {$selection = Read-Host "Enter the numbers of options you want to install (separated by commas)"}
     $selectedApps = @()
     $selectedApps = $selection.Split(',')

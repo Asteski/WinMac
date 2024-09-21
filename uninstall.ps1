@@ -60,16 +60,17 @@ Write-Host @"
 $([char]27)[93m$("Please select options you want to uninstall:")$([char]27)[0m
 
 "@
-    Write-Host "1. PowerToys"
-    Write-Host "2. Everything"
-    Write-Host "3. Powershell Profile"
-    Write-Host "4. StartAllBack"
-    Write-Host "5. WinMac Menu"
-    Write-Host "6. TopNotify"
-    Write-Host "7. Nexus Dock"
-    Write-Host "8. Stahky"
-    Write-Host "9. AutoHotkey"
+    Write-Host " 1. PowerToys"
+    Write-Host " 2. Everything"
+    Write-Host " 3. Powershell Profile"
+    Write-Host " 4. StartAllBack"
+    Write-Host " 5. WinMac Menu"
+    Write-Host " 6. TopNotify"
+    Write-Host " 7. Nexus Dock"
+    Write-Host " 8. Stahky"
+    Write-Host " 9. AutoHotkey"
     Write-Host "10. Other"
+    $selection = ''
     while ($null -ne $selection) {$selection = Read-Host "Enter the numbers of options you want to uninstall (separated by commas)"}
     $selectedApps = @()
     $selectedApps = $selection.Split(',')
