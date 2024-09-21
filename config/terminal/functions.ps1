@@ -446,7 +446,7 @@ function open {
 function ansi-reverse {
     param(
         [Parameter(Mandatory = $true, Position=0)] [string] $txt,   # raw text string
-        [Parameter(Mandatory = $false, Position=1)] [string] $pat    # Pattern string
+        [Parameter(Mandatory = $true, Position=1)] [string] $pat    # Pattern string
     )
     
     $ESC = "$([char] 27)"   # ANSI ESC (0x1b)
@@ -458,11 +458,7 @@ function ansi-reverse {
 
     # Replace text pattern with ANSI Reversed version (and using capture group for case preserve)
     # https://stackoverflow.com/a/40683667/1147688
-    if ($null -ne $pat) {
-        $txt = "$txt" -replace "($pat)", "$GRN`$1$GRY"  
-    } else {
-        $txt = "$txt", "$GRN`$1$GRY"
-    }
+    $txt = "$txt" -replace "($pat)", "$GRN`$1$GRY"      # Using: BrightRed
 
     Return "$txt"
 }
@@ -472,16 +468,12 @@ function print-color {
         [Parameter(Mandatory = $true, Position=0)] [string] $i,     # Filename
         [Parameter(Mandatory = $true, Position=1)] [string] $j,     # Linenumber
         [Parameter(Mandatory = $true, Position=2)] [string] $k,     # Line
-        [Parameter(Mandatory = $false, Position=3)] [string] $p      # Pattern
+        [Parameter(Mandatory = $true, Position=3)] [string] $p      # Pattern
     )
     
     $fn = " {0}  " -f $i
     $nn = ": {0,-5}: " -f $j
-    if ($null -ne $p) {
-        $ln = (ansi-reverse "$k" "$p")
-    } else {
-        $ln = (ansi-reverse "$k")
-    }
+    $ln = (ansi-reverse "$k" "$p")
     
     Write-Host -f DarkYellow "$fn" -non
     Write-Host -f Yellow "$nn" -non
@@ -495,25 +487,17 @@ function string-search {
     foreach ($file in $files) {
         try {
             $A = Select-String -Path $file.FullName -AllMatches -Pattern $pattern
-            $A | Select-Object Path, LineNumber, Pattern, Line | ForEach-Object {
-                $i = $_.Path.Substring(($pwd.Path).Length + 1)
-                # $i = ".\$_.Path.Substring(($pwd.Path).Length + 1)"
-                $j = $_.LineNumber
-                $k = $_.Line
-                $p = $_.Pattern
-                print-color "$i" "$j" "$k" "$p"
-            }
         } catch {
-            # Write-Host "Error: $_" -ForegroundColor Red
-            # break
-            $A = Select-String -Path $file.FullName -AllMatches -Pattern $pattern -SimpleMatch
-            $A | Select-Object Path, LineNumber, Pattern, Line | ForEach-Object {
-                $i = $_.Path.Substring(($pwd.Path).Length + 1)
-                # $i = ".\$_.Path.Substring(($pwd.Path).Length + 1)"
-                $j = $_.LineNumber
-                $k = $_.Line
-                print-color "$i" "$j" "$k"
-            }
+            Write-Host "Error: $_" -ForegroundColor Red
+            break
+        }
+        $A | Select-Object Path, LineNumber, Pattern, Line | ForEach-Object {
+            # $i = $_.Filename
+            $i = $_.Path.Substring(($pwd.Path).Length + 1)
+            $j = $_.LineNumber
+            $k = $_.Line
+            $p = $_.Pattern
+            print-color "$i" "$j" "$k" "$p"
         }
     }
 }
