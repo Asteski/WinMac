@@ -106,7 +106,7 @@ Write-Host @"
         $valid = $selection -match '^([1-9]|10|11)(\s*,\s*([1-9]|10|11))*$'
     
         if (!$valid) {
-            Write-Host "Invalid input! Please enter numbers between 1 and 11, separated by commas."
+            Write-Host "`e[91mInvalid input! Please enter numbers between 1 and 11.`e[0m"
         }
     } while ([string]::IsNullOrWhiteSpace($selection) -or !$valid)
     $selectedApps = @()
