@@ -557,7 +557,7 @@ foreach ($app in $selectedApps) {
                 New-Item -ItemType Directory -Path "$winStep\Sounds" -Force | Out-Null
                 Copy-Item -Path "..\config\dock\sounds\*" -Destination "$winStep\Sounds\" -Recurse -Force | Out-Null
                 New-Item -ItemType Directory -Path "$winStep\Icons" -Force | Out-Null
-                Copy-Item "..config\dock\icons" "$winStep" -Recurse -Force | Out-Null
+                Copy-Item "..\config\dock\icons" "$winStep" -Recurse -Force | Out-Null
                 $regFile = "..\config\dock\winstep.reg"
                 $downloadsPath = "$env:USERPROFILE\Downloads"
                 # $tempFolder = "..\temp"
