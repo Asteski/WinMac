@@ -496,7 +496,8 @@ function string-search {
         try {
             $A = Select-String -Path $file.FullName -AllMatches -Pattern $pattern
             $A | Select-Object Path, LineNumber, Pattern, Line | ForEach-Object {
-                $i = ".\$_.Path.Substring(($pwd.Path).Length + 1)"
+                $i = $_.Path.Substring(($pwd.Path).Length + 1)
+                # $i = ".\$_.Path.Substring(($pwd.Path).Length + 1)"
                 $j = $_.LineNumber
                 $k = $_.Line
                 $p = $_.Pattern
@@ -507,7 +508,8 @@ function string-search {
             # break
             $A = Select-String -Path $file.FullName -AllMatches -Pattern $pattern -SimpleMatch
             $A | Select-Object Path, LineNumber, Pattern, Line | ForEach-Object {
-                $i = ".\$_.Path.Substring(($pwd.Path).Length + 1)"
+                $i = $_.Path.Substring(($pwd.Path).Length + 1)
+                # $i = ".\$_.Path.Substring(($pwd.Path).Length + 1)"
                 $j = $_.LineNumber
                 $k = $_.Line
                 print-color "$i" "$j" "$k"
