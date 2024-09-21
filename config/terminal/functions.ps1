@@ -489,6 +489,7 @@ function string-search {
             $A = Select-String -Path $file.FullName -AllMatches -Pattern $pattern
         } catch {
             Write-Host "Error: $_" -ForegroundColor Red
+            break
         }
         $A | Select-Object Path, LineNumber, Pattern, Line | ForEach-Object {
             # $i = $_.Filename

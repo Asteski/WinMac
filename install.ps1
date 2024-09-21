@@ -166,7 +166,7 @@ userName@computerName ~ %
     }
 }
 
-if ($selectedApps -like '*4*') {
+if ($selectedApps -like '*4*' -or $selectedApps -like '*10*') {
     $roundedOrSquared = Read-Host "`nEnter 'R' for rounded or 'S' for squared shell corners"
     if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') {
         Write-Host "Using rounded corners." -ForegroundColor Green
@@ -181,7 +181,7 @@ if ($selectedApps -like '*4*') {
     }
 }
 
-if ($selectedApps -like '*4*' -or $selectedApps -like '*7*') {
+if ($selectedApps -like '*4*' -or $selectedApps -like '*7*' -or $selectedApps -like '*10*') {
     $lightOrDark = Read-Host "`nEnter 'L' for light or 'D' for dark themed Windows"
     if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
         Write-Host "Using light theme." -ForegroundColor Green
@@ -242,22 +242,24 @@ if ($null -eq $wingetCliCheck) {
     Add-AppxPackage '.\temp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
 }
 Import-Module -Name Microsoft.WinGet.Client -Force -ErrorAction SilentlyContinue | Out-Null
-$wingetCheck = Get-WinGetVersion -ErrorAction SilentlyContinue | Out-Null
+try {
+    $wingetClientCheck = Get-WinGetVersion
+} catch {}
 if ($null -eq $wingetClientCheck) {
     Write-Host "Installing Winget..." -ForegroundColor Yellow
-    Install-Module -Name Microsoft.WinGet.Client -Force
+    Install-Module -Name Microsoft.WinGet.Client -Force -WarningAction SilentlyContinue
     Write-Host "Winget installation completed." -ForegroundColor Green
 } else {
     $wingetFind = Find-Module Microsoft.WinGet.Client
-    if ($wingetCheck -ne $wingetFind.Version) {
+    if ($wingetClientCheck -ne $wingetFind.Version) {
         Write-Host "Never version is available. Updating Winget..." -ForegroundColor Yellow
-        Update-Module -Name Microsoft.WinGet.Client -Force
+        Update-Module -Name Microsoft.WinGet.Client -Force -WarningAction SilentlyContinue
         Write-Host "Winget update completed." -ForegroundColor Green
     } else {
-        Write-Host "$([char]27)[92m$("Winget is already installed.")$([char]27)[0m Version: $($wingetCheck)"
+        Write-Host "$([char]27)[92m$("Winget is already installed.")$([char]27)[0m Version: $($wingetClientCheck)"
     }
 }
-Import-Module -Name Microsoft.WinGet.Client -Force -ErrorAction SilentlyContinue
+Import-Module -Name Microsoft.WinGet.Client -Force
 
 # WinMac deployment
 foreach ($app in $selectedApps) {
