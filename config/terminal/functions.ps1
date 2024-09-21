@@ -486,7 +486,6 @@ function string-search {
             break
         }
         $A | Select-Object Path, LineNumber, Pattern, Line | ForEach-Object {
-            # $i = $_.Filename
             $i = $_.Path.Substring(($pwd.Path).Length + 1)
             $j = $_.LineNumber
             $k = $_.Line

@@ -74,28 +74,28 @@ elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
     $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Launchpad"; "10"="Nexus Dock"; "11"="Other Settings"}
 Write-Host @"
 
-$([char]27)[93m$("Please select options you want to install:")$([char]27)[0m
+`e[93m$("Please select options you want to install:")`e[0m
 
 "@
-Write-Host @'
+Write-Host @"
 Main Components:
- 1. PowerToys
- 2. Everything
- 3. Powershell Profile
- 4. StartAllBack
- 5. WinMac Menu
- 6. TopNotify
- 7. Stahky
- 8. Keyboard Shortcuts
- 9. Launchpad
-10. Dock
-11. Other Settings:
+ 1. `e[92mPowerToys`e[0m
+ 2. `e[92mEverything`e[0m
+ 3. `e[92mPowershell Profile`e[0m
+ 4. `e[92mStartAllBack`e[0m
+ 5. `e[92mWinMac Menu`e[0m
+ 6. `e[92mTopNotify`e[0m
+ 7. `e[92mStahky`e[0m
+ 8. `e[92mKeyboard Shortcuts`e[0m
+ 9. `e[92mLaunchpad`e[0m
+10. `e[92mDock`e[0m
+11. `e[92mOther Settings:`e[0m
   • Black Cursor
   • Pin Home, Programs and Recycle Bin to Quick Access
   • Remove Shortcut Arrows
   • Remove Recycle Bin from Desktop
   • Add End Task to context menu
-'@
+"@
     $selection = ''
     while ($null -ne $selection) {$selection = Read-Host "Enter the numbers of options you want to install (separated by commas)"}
     $selectedApps = @()
@@ -106,7 +106,7 @@ Main Components:
             $selectedAppNames += $appList[$appNumber]
         }
     }
-    Write-Host "$([char]27)[92m$("Selected options:")$([char]27)[0m $($selectedAppNames -join ', ')"
+    Write-Host "`e[92m$("Selected options:")`e[0m $($selectedAppNames -join ', ')"
 }
 else
 {
@@ -117,7 +117,7 @@ else
 if ($selectedApps -like '*4*' -or $selectedApps -like '*5*') {
 Write-Host @"
 
-$([char]27)[93m$("You can choose between WinMac start menu or Classic start menu.")$([char]27)[0m
+`e[93m$("You can choose between WinMac start menu or Classic start menu.")`e[0m
 
 WinMac start menu replaces default menu with customized WinX menu.
 
@@ -143,7 +143,7 @@ Classic start menu replaces default menu with enhanced Windows 7 start menu.
 if ($selectedApps -like '*3*') {
 Write-Host @"
 
-$([char]27)[93m$("You can choose between WinMac prompt or MacOS-like prompt.")$([char]27)[0m
+`e[93m$("You can choose between WinMac prompt or MacOS-like prompt.")`e[0m
 
 WinMac prompt: 
 12:35:06 userName @ ~ > 
@@ -257,7 +257,7 @@ if ($null -eq $wingetClientCheck) {
         
         Write-Host "Winget update completed." -ForegroundColor Green
     } else {
-        Write-Host "$([char]27)[92m$("Winget is already installed.")$([char]27)[0m Version: $($wingetClientCheck)"
+        Write-Host "`e[92m$("Winget is already installed.")`e[0m Version: $($wingetClientCheck)"
     }
 }
 Import-Module -Name Microsoft.WinGet.Client -Force
