@@ -53,7 +53,7 @@ if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
 elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
     Write-Host "Choosing custom uninstallation." -ForegroundColor Yellow
     Start-Sleep 1
-    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Nexus Dock"; "8"="Stahky"; "9"="Keyboard Shortcuts"; "10"="Other"}
+    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Other"}
 Write-Host @"
 
 `e[93m$("Please select options you want to uninstall:")`e[0m
@@ -65,9 +65,9 @@ Write-Host @"
     Write-Host " 4. StartAllBack"
     Write-Host " 5. WinMac Menu"
     Write-Host " 6. TopNotify"
-    Write-Host " 7. Nexus Dock"
-    Write-Host " 8. Stahky"
-    Write-Host " 9. Keyboard Shortcuts"
+    Write-Host " 7. Stahky"
+    Write-Host " 8. Keyboard Shortcuts"
+    Write-Host " 9. Nexus Dock"
     Write-Host "10. Other"
     Write-Host
     do {
@@ -243,22 +243,13 @@ foreach ($app in $selectedApps) {
             Write-Host "Uninstalling TopNotify completed." -ForegroundColor Green
         }
         "7" {
-            # Nexus Dock
-            Write-Host "Uninstalling Nexus Dock..." -ForegroundColor Yellow
-            Get-Process Nexus | Stop-Process -Force | Out-Null
-            winget uninstall --name Nexus --silent --force | Out-Null
-            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
-            Remove-Item -Path "$programsDir\Nexus.lnk" -Force | Out-Null
-            Write-Host "Uninstalling Nexus Dock completed." -ForegroundColor Green
-        }
-        "8" {
             # Stahky
             Write-Host "Uninstalling Stahky..." -ForegroundColor Yellow
             $exePath = "$env:LOCALAPPDATA\Stahky"
             Remove-Item -Path $exePath -Recurse -Force | Out-Null
             Write-Host "Uninstalling Stahky completed." -ForegroundColor Green
         }
-        "9" {
+        "8" {
             # Keyboard Shortcuts
             Write-Host "Uninstalling Keyboard Shortcuts..." -ForegroundColor Yellow
             Stop-Process -Name KeyShortcuts -Force | Out-Null
@@ -268,6 +259,15 @@ foreach ($app in $selectedApps) {
             if ($null -eq $tasksFolder) { schtasks /DELETE /TN \WinMac /F > $null 2>&1 }
             Remove-Item -Path "$env:PROGRAMFILES\WinMac" -Recurse -Force | Out-Null
             Write-Host "Uninstalling Keyboard Shortcuts completed." -ForegroundColor Green
+        }
+        "9" {
+            # Nexus Dock
+            Write-Host "Uninstalling Nexus Dock..." -ForegroundColor Yellow
+            Get-Process Nexus | Stop-Process -Force | Out-Null
+            winget uninstall --name Nexus --silent --force | Out-Null
+            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+            Remove-Item -Path "$programsDir\Nexus.lnk" -Force | Out-Null
+            Write-Host "Uninstalling Nexus Dock completed." -ForegroundColor Green
         }
         "10" {
             # Other

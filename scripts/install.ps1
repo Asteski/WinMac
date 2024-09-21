@@ -85,7 +85,7 @@ Write-Host @"
  6. TopNotify
  7. Stahky
  8. Keyboard Shortcuts
- 9. Dock
+ 9. Nexus Dock
 10. Other Settings:
   • Black Cursor
   • Pin Home, Programs and Recycle Bin to Quick Access
@@ -548,11 +548,11 @@ foreach ($app in $selectedApps) {
                 Get-Process -n Nexus | Stop-Process
                 $winStep = 'C:\Users\Public\Documents\WinStep'
                 Remove-Item -Path "$winStep\Themes\*" -Recurse -Force | Out-Null
-                Copy-Item -Path "config\dock\themes\*" -Destination "$winStep\Themes\" -Recurse -Force | Out-Null
+                Copy-Item -Path "..\config\dock\themes\*" -Destination "$winStep\Themes\" -Recurse -Force | Out-Null
                 Remove-Item -Path "$winStep\NeXus\Indicators\*" -Force -Recurse | Out-Null
-                Copy-Item -Path "config\dock\indicators\*" -Destination "$winStep\NeXus\Indicators\" -Recurse -Force | Out-Null
+                Copy-Item -Path "..\config\dock\indicators\*" -Destination "$winStep\NeXus\Indicators\" -Recurse -Force | Out-Null
                 New-Item -ItemType Directory -Path "$winStep\Sounds" -Force | Out-Null
-                Copy-Item -Path "config\dock\sounds\*" -Destination "$winStep\Sounds\" -Recurse -Force | Out-Null
+                Copy-Item -Path "..\config\dock\sounds\*" -Destination "$winStep\Sounds\" -Recurse -Force | Out-Null
                 New-Item -ItemType Directory -Path "$winStep\Icons" -Force | Out-Null
                 Copy-Item config\dock\icons "$winStep" -Recurse -Force | Out-Null
                 $regFile = "..\config\dock\winstep.reg"
