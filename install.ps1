@@ -98,15 +98,18 @@ Write-Host @"
     Write-Host
     do {
         $selection = Read-Host "Enter the numbers of options you want to install (separated by commas)"
-        
+    
         # Trim any leading/trailing spaces
         $selection = $selection.Trim()
     
+        # Normalize input by removing extra spaces around commas
+        $selection = $selection -replace '\s*,\s*', ','
+    
         # Regular expression to match numbers 1-11 separated by commas
-        $valid = $selection -match '^([1-9]|10|11)(\s*,\s*([1-9]|10|11))*$'
+        $valid = $selection -match '^([1-9]|10|11)(,([1-9]|10|11))*$'
     
         if (!$valid) {
-            Write-Host "`e[91mInvalid input! Please enter numbers between 1 and 11.`e[0m"
+            Write-Host "`e[91mInvalid input! Please enter numbers between 1 and 11, separated by commas and without spaces.`e[0m`n"
         }
     } while ([string]::IsNullOrWhiteSpace($selection) -or !$valid)
     $selectedApps = @()
