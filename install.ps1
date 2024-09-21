@@ -219,7 +219,6 @@ for ($a=3; $a -ge 0; $a--) {
 }
 
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
-Start-Transcript -Path ".\logs\WinMac_install_log_$date.txt" -Append | Out-Null
 # Nuget
 Write-Host "Checking for Package Provider (Nuget)" -ForegroundColor Yellow
 $nugetProvider = Get-PackageProvider -Name NuGet -ErrorAction SilentlyContinue
@@ -243,7 +242,7 @@ if ($null -eq $wingetCliCheck) {
     Add-AppxPackage '.\temp\Microsoft.UI.Xaml.2.8.x64.appx'
     Add-AppxPackage '.\temp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
 }
-Import-Module -Name Microsoft.WinGet.Client -Force -ErrorAction SilentlyContinue
+Import-Module -Name Microsoft.WinGet.Client -Force | Out-Null
 $wingetCheck = Get-WinGetVersion -ErrorAction SilentlyContinue
 if ($null -eq $wingetClientCheck) {
     Write-Host "Installing Winget..." -ForegroundColor Yellow
@@ -373,12 +372,15 @@ foreach ($app in $selectedApps) {
         }
         # WinMac Menu
         "5" {
+            if ($adminTest) {
+                Write-Host "WinMac Menu requires administrative privileges. Please run the script as an administrator. Skipping installation." -ForegroundColor Red
+            } else {
             if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
                 Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
                 winget install --id Microsoft.DotNet.DesktopRuntime.6 --silent | Out-Null
                 Invoke-WebRequest -Uri 'https://github.com/dongle-the-gadget/WinverUWP/releases/download/v2.1.0.0/2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle' -OutFile '2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
                 Add-AppxPackage -Path '2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
-                New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" | Out-Null
+                New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" -ErrorAction SilentlyContinue
                 $sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
                 $exeKeyPath = "$env:LOCALAPPDATA\WinMac\windowskey.exe"
                 $exeStartPath = "$env:LOCALAPPDATA\WinMac\startbutton.exe"
@@ -392,6 +394,7 @@ foreach ($app in $selectedApps) {
                 $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
                 $trigger = New-ScheduledTaskTrigger -AtLogon
                 $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
+                $actionWinKey = New-ScheduledTaskAction -Execute 'WindowsKey.exe' -WorkingDirectory "$env:PROGRAMFILES\WinMac\"
                 $actionStartButton = New-ScheduledTaskAction -Execute "StartButton.ahk" -WorkingDirectory "$env:PROGRAMFILES\WinMac\"
                 $processes = @("windowskey", "startbutton")
                 foreach ($process in $processes) {
@@ -405,13 +408,12 @@ foreach ($app in $selectedApps) {
                 Copy-Item -Path "$pwd\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force | Out-Null
                 Register-ScheduledTask -TaskName "StartButton" -Action $actionStartButton -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -ErrorAction SilentlyContinue | Out-Null
                 Register-ScheduledTask -TaskName "WindowsKey" -Action $actionWinKey -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -ErrorAction SilentlyContinue | Out-Null
-                Set-ItemProperty -Path $regPath -Name $regKeyName -Value $exeKeyPath
-                Set-ItemProperty -Path $regPath -Name $regStartName -Value $exeStartPath
                 Start-Process $exeKeyPath
                 Start-Process $exeStartPath
                 Write-Host "WinMac Menu installation completed." -ForegroundColor Green
             }
             else {Write-Host "Skipping WinMac Menu installation." -ForegroundColor Magenta}
+            }
         }
         # TopNotify
         "6" {
@@ -482,19 +484,16 @@ foreach ($app in $selectedApps) {
             Remove-Item $outputPath -Force
             Write-Host "Stahky installation completed." -ForegroundColor Green
         }
-        # WinMac Keybindings
+        # Keybindings
         "8" {
-            Write-Host "Installing WinMac Keybindings..." -ForegroundColor Yellow
-            $fileName = 'keybindings.exe'
-            $fileDirectory = "$env:LOCALAPPDATA\WinMac"
-            New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" | Out-Null
-            Copy-Item .\bin\$fileName "$env:LOCALAPPDATA\WinMac\" | Out-Null
-            if (-not $adminTest) {
-                $exeBindPath = "$env:LOCALAPPDATA\WinMac\keybindings.exe"
-                $regBindName = "WinMac Menu Key Bindings"
-                $regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
-                Set-ItemProperty -Path $regPath -Name $regBindName -Value $exeBindPath
+            if ($adminTest) {
+                Write-Host "Keyboard Shortcuts requires administrative privileges. Please run the script as an administrator. Skipping installation." -ForegroundColor Red
             } else {
+                Write-Host "Installing Keyboard Shortcuts..." -ForegroundColor Yellow
+                $fileName = 'keybindings.exe'
+                $fileDirectory = "$env:LOCALAPPDATA\WinMac"
+                New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" | Out-Null
+                Copy-Item .\bin\$fileName "$env:LOCALAPPDATA\WinMac\" | Out-Null
                 $folderName = "WinMac"
                 $taskService = New-Object -ComObject "Schedule.Service"
                 $taskService.Connect() | Out-Null
@@ -508,9 +507,9 @@ foreach ($app in $selectedApps) {
                 $action = New-ScheduledTaskAction -Execute $fileName -WorkingDirectory $fileDirectory
                 $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
                 Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -ErrorAction SilentlyContinue | Out-Null
+                Start-Process "$env:LOCALAPPDATA\WinMac\keybindings.exe"
+                Write-Host "Keyboard Shortcuts installation completed." -ForegroundColor Green
             }
-            Start-Process "$env:LOCALAPPDATA\WinMac\keybindings.exe"
-            Write-Host "WinMac Keybindings installation completed." -ForegroundColor Green
         }
         # WinLauncher
         "9" {
@@ -524,10 +523,10 @@ foreach ($app in $selectedApps) {
         # Nexus Dock
         "10" {
             if ($adminTest) {
-                Write-Host "`nWinstep Nexus requires non-administrative privileges. Please run the script as a standard user session. Skipping installation." -ForegroundColor Red
+                Write-Host "Winstep Nexus requires non-administrative privileges. Please run the script as a standard user session. Skipping installation." -ForegroundColor Red
             }
             else {
-                Write-Host "`nInstalling Nexus Dock..." -ForegroundColor Yellow
+                Write-Host "Installing Nexus Dock..." -ForegroundColor Yellow
                 $downloadUrl = "https://www.winstep.net/nexus.zip"
                 $downloadPath = "dock.zip"
                 if (-not (Test-Path $downloadPath)) {
@@ -601,7 +600,7 @@ foreach ($app in $selectedApps) {
                 Remove-Item .\dock.zip -Force | Out-Null
                 Remove-Item .\ReadMe.txt -Force | Out-Null
                 Remove-Item .\NexusSetup.exe -Force | Out-Null
-                Write-Host "`nNexus Dock installation completed." -ForegroundColor Green
+                Write-Host "Nexus Dock installation completed." -ForegroundColor Green
             }
         }
         # Other
