@@ -85,7 +85,7 @@ There are many dock customization you can find around the web, including [Devian
 
 ## Planned features
 
-- Launchpad,
+- custom WinMac theme,
 - Auto Dark Mode toggle theme script,
 - more keyboard shortcuts,
 - more and improved functions.
@@ -97,12 +97,10 @@ List of utilities and their creators, used with WinMac deployment script:
 - [PowerToys](https://learn.microsoft.com/en-us/windows/powertoys/) by Microsoft
 - [Everything](https://www.voidtools.com/) by David Carpenter
 - [StartAllBack](https://www.startallback.com/) by Tihiy
-- **[TBC]** [NewModernWinver](https://github.com/torchgm/NewModernWinver) by torchgm
+- [NewModernWinver](https://github.com/torchgm/NewModernWinver) by torchgm
 - [TopNotify](https://github.com/SamsidParty/TopNotify) by SamsidParty
 - [Stahky](https://github.com/joedf/stahky) by joedf
-- [AutoHotkey](https://www.autohotkey.com/) by AutoHotkey Foundation LLC
 - [Nexus](https://www.winstep.net/nexus.asp) by Winstep
-- **[WIP]** [WinLaunch](https://github.com/jensroth-git/WinLaunch) by Jens Roth
 - [PSTree](https://github.com/santisq/PSTree) by santisq
 - [ntop](https://github.com/gsass1/NTop) by gsass1
 
