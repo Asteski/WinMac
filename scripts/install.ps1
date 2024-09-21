@@ -276,7 +276,7 @@ foreach ($app in $selectedApps) {
             Invoke-WithOutput {winget configure ..\config\powertoys.dsc.yaml --accept-configuration-agreements}
             Write-Host "PowerToys installation completed." -ForegroundColor Green
         }
-        # Everything
+    # Everything
         "2" {
             Write-Host "Installing Everything..." -ForegroundColor Yellow
             Invoke-WithOutput {Install-WinGetPackage -Id "Voidtools.Everything"}
@@ -286,7 +286,7 @@ foreach ($app in $selectedApps) {
             Invoke-WithOutput { Start-Process -FilePath Everything.exe -WorkingDirectory $env:PROGRAMFILES\Everything -WindowStyle Hidden }
             Write-Host "Everything installation completed." -ForegroundColor Green
         }
-        # PowerShell Profile
+    # PowerShell Profile
         "3" {
             Write-Host "Configuring PowerShell Profile..." -ForegroundColor Yellow
             $profilePath = $PROFILE | Split-Path | Split-Path
@@ -327,10 +327,10 @@ foreach ($app in $selectedApps) {
             Invoke-WithOutput { Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue }
             Write-Host "PowerShell Profile configuration completed." -ForegroundColor Green
         }
-        # StartAllBack
+    # StartAllBack
         "4" {
             Write-Host "Installing StartAllBack..." -ForegroundColor Yellow 
-            Install-WinGetPackage -Id "StartIsBack.StartAllBack"
+            Invoke-WithOutput {Install-WinGetPackage -Id "StartIsBack.StartAllBack"}
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             $sabOrbs = $env:localAPPDATA + "\StartAllBack\Orbs"
             $sabRegPath = "HKCU:\Software\StartIsBack"
@@ -373,11 +373,14 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
             if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0 }
             else { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 1 }
+            Set-ItemProperty -Path "$exRegPath\Advanced" -Name "LaunchTO" -Value 1
+            Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
+            Set-ItemProperty -Path $exRegPath -Name "ShowRecent" -Value 0
             Invoke-WithOutput {Stop-Process -Name explorer -Force}
             Start-Sleep 2
             Write-Host "StartAllBack installation completed." -ForegroundColor Green
         }
-        # WinMac Menu
+    # WinMac Menu
         "5" {
             if ($adminTest) {
                 if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
@@ -385,7 +388,7 @@ foreach ($app in $selectedApps) {
                     winget install --id Microsoft.DotNet.DesktopRuntime.6 --silent | Out-Null
                     Invoke-WebRequest -Uri 'https://github.com/dongle-the-gadget/WinverUWP/releases/download/v2.1.0.0/2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle' -OutFile '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
                     Add-AppxPackage -Path '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
-                    New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" -ErrorAction SilentlyContinue
+                    New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" -ErrorAction SilentlyContinue | Out-Null
                     $sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
                     $exeKeyPath = "$env:LOCALAPPDATA\WinMac\WindowsKey.exe"
                     $exeStartPath = "$env:LOCALAPPDATA\WinMac\StartButton.exe"
@@ -423,7 +426,7 @@ foreach ($app in $selectedApps) {
                 Write-Host "WinMac Menu requires elevated session. Please run the script as an administrator. Skipping installation." -ForegroundColor Red
             }
         }
-        # TopNotify
+    # TopNotify
         "6" {
             Write-Host "Installing TopNotify..." -ForegroundColor Yellow
             winget install --name TopNotify --silent --accept-package-agreements --accept-source-agreements | Out-Null
@@ -440,7 +443,7 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $regKey -Name State -Value 2
             Write-Host "TopNotify installation completed." -ForegroundColor Green
         }
-        # Stahky
+    # Stahky
         "7" {
             Write-Host "Installing Stahky..." -ForegroundColor Yellow
             $url = "https://github.com/joedf/stahky/releases/download/v0.1.0.8/stahky_U64_v0.1.0.8.zip"
@@ -492,7 +495,7 @@ foreach ($app in $selectedApps) {
             Remove-Item $outputPath -Force
             Write-Host "Stahky installation completed." -ForegroundColor Green
         }
-        # Keyboard Shortcuts
+    # Keyboard Shortcuts
         "8" {
             if ($adminTest) {
                 Write-Host "Installing Keyboard Shortcuts..." -ForegroundColor Yellow
@@ -519,7 +522,7 @@ foreach ($app in $selectedApps) {
                 Write-Host "Keyboard Shortcuts requires elevated session. Please run the script as an administrator. Skipping installation." -ForegroundColor Red
             }
         }
-        # Nexus Dock
+    # Nexus Dock
         "9" {
             if ($adminTest) {
                 Write-Host "Winstep Nexus requires non-elevated session. Please run the script in a default user session. Skipping installation." -ForegroundColor Red
@@ -598,7 +601,7 @@ foreach ($app in $selectedApps) {
                 Write-Host "Nexus Dock installation completed." -ForegroundColor Green
             }
         }
-        # Other
+    # Other
         "10" {
             ## Black Cursor
             Write-Host "Configuring Other Settings..." -ForegroundColor Yellow
@@ -692,10 +695,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Force | Out-Null
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
             ## Misc
-            Write-Host "Configuring other settings..." -ForegroundColor Yellow
-            Set-ItemProperty -Path "$exRegPath\Advanced" -Name "LaunchTO" -Value 1
-            Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
-            Set-ItemProperty -Path $exRegPath -Name "ShowRecent" -Value 0
+            Write-Host "Adding End Task to context menu..." -ForegroundColor Yellow
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value "" -ErrorAction SilentlyContinue
             $taskbarDevSettings = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
             if (-not (Test-Path $taskbarDevSettings)) { New-Item -Path $taskbarDevSettings -Force | Out-Null }
