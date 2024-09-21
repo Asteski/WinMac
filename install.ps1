@@ -21,6 +21,14 @@ components.
 PowerShell profile files will be removed and replaced with new ones.
 Please make sure to backup your current profiles if needed.
 
+The author of this script is not responsible for any damage caused by 
+running it. It is highly recommended to create a system restore point 
+before proceeding with the installation process to ensure you can 
+revert any changes if necessary.
+
+For guide on how to use the script, please refer to the Wiki page 
+on WinMac GitHub page.
+
 "@ -ForegroundColor Yellow
 if (-not $adminTest) {
     Write-Host "Script is not running in elevated session." -ForegroundColor Red
@@ -62,32 +70,33 @@ if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
 elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
     Write-Host "Choosing custom installation." -ForegroundColor Green
     Start-Sleep 1
-    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="WinMac Keybindings"; "9"="WinLauncher"; "10"="Nexus Dock"; "11"="Other Settings"}
+    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keybindings"; "9"="Launchpad"; "10"="Nexus Dock"; "11"="Other Settings"}
 
 Write-Host @"
 
 $([char]27)[93m$("Please select options you want to install:")$([char]27)[0m
 
 "@
-    Write-Host "Main Components:"
-    Write-Host "1. PowerToys"
-    Write-Host "2. Everything"
-    Write-Host "3. Powershell Profile"
-    Write-Host "4. StartAllBack"
-    Write-Host "5. WinMac Menu"
-    Write-Host "6. TopNotify"
-    Write-Host "7. Stahky"
-    Write-Host "8. WinMac Keybindings"
-    Write-Host "9. WinLauncher"
-    Write-Host "10. Nexus Dock"
-    Write-Host 
-    Write-Host "11. Other Settings:"
-    Write-Host "• Black Cursor"
-    Write-Host "• Pin Home, Programs and Recycle Bin to Quick Access"
-    Write-Host "• Remove Shortcut Arrows"
-    Write-Host "• Remove Recycle Bin from Desktop"
-    Write-Host "• Add End Task to context menu"
-    Write-Host
+Write-Host @'
+Main Components:
+ 1. PowerToys
+ 2. Everything
+ 3. Powershell Profile
+ 4. StartAllBack
+ 5. WinMac Menu
+ 6. TopNotify
+ 7. Stahky
+ 8. Keybindings
+ 9. Launchpad
+10. Dock
+
+11. Other Settings:
+  • Black Cursor
+  • Pin Home, Programs and Recycle Bin to Quick Access
+  • Remove Shortcut Arrows
+  • Remove Recycle Bin from Desktop
+  • Add End Task to context menu
+'@
     $selection = Read-Host "Enter the numbers of options you want to install (separated by commas)"
     $selectedApps = @()
     $selectedApps = $selection.Split(',')
@@ -227,12 +236,12 @@ $wingetCliCheck = winget -v
 if ($null -eq $wingetCliCheck) {
     $progressPreference = 'silentlyContinue'
     Write-Information "Downloading Winget and its dependencies..."
-    Invoke-WebRequest -Uri https://aka.ms/getwinget -OutFile Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
-    Invoke-WebRequest -Uri https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx -OutFile Microsoft.VCLibs.x64.14.00.Desktop.appx
-    Invoke-WebRequest -Uri https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.6/Microsoft.UI.Xaml.2.8.x64.appx -OutFile Microsoft.UI.Xaml.2.8.x64.appx
-    Add-AppxPackage Microsoft.VCLibs.x64.14.00.Desktop.appx
-    Add-AppxPackage Microsoft.UI.Xaml.2.8.x64.appx
-    Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+    Invoke-WebRequest -Uri 'https://aka.ms/getwinget' -OutFile '.\temp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
+    Invoke-WebRequest -Uri 'https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx' -OutFile '.\temp\Microsoft.VCLibs.x64.14.00.Desktop.appx'
+    Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.6/Microsoft.UI.Xaml.2.8.x64.appx' -OutFile '.\temp\Microsoft.UI.Xaml.2.8.x64.appx'
+    Add-AppxPackage '.\temp\Microsoft.VCLibs.x64.14.00.Desktop.appx'
+    Add-AppxPackage '.\temp\Microsoft.UI.Xaml.2.8.x64.appx'
+    Add-AppxPackage '.\temp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
 }
 Import-Module -Name Microsoft.WinGet.Client -Force -ErrorAction SilentlyContinue
 $wingetCheck = Get-WinGetVersion -ErrorAction SilentlyContinue
@@ -252,76 +261,65 @@ if ($null -eq $wingetClientCheck) {
 }
 Import-Module -Name Microsoft.WinGet.Client -Force -ErrorAction SilentlyContinue
 
-# Winget deployment
+# WinMac deployment
 foreach ($app in $selectedApps) {
     switch ($app.Trim()) {
     # PowerToys
-    "1" {
-        Write-Host "Installing PowerToys..." -ForegroundColor Yellow
-        Invoke-WithOutput { winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements }
-        Write-Host "PowerToys installation completed." -ForegroundColor Green
-    }
-    # Everything
-    "2" {
-        Write-Host "Installing Everything..." -ForegroundColor Yellow
-        Invoke-WithOutput {
-            Install-WinGetPackage -Id "Voidtools.Everything" | 
-            Select-Object -Property Id, Name, Status, InstallerErrorCode |
-            ForEach-Object {
-                Write-Host "Id: $_.Id"
-                Write-Host "Name: $_.Name"
-                Write-Host "Status: $_.Status"
-                Write-Host "Error Code: $_.InstallerErrorCode"
-            }
+        "1" {
+            Write-Host "Installing PowerToys..." -ForegroundColor Yellow
+            Invoke-WithOutput {winget configure .\config\powertoys.dsc.yaml --accept-configuration-agreements}
+            Write-Host "PowerToys installation completed." -ForegroundColor Green
         }
-        $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
-        Invoke-WithOutput { Move-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue }
-        Invoke-WithOutput { Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue }
-        Invoke-WithOutput { Start-Process -FilePath Everything.exe -WorkingDirectory $env:PROGRAMFILES\Everything -WindowStyle Hidden }
-        Write-Host "Everything installation completed." -ForegroundColor Green
-    }
-    # PowerShell Profile
-    "3" {
-        Write-Host "Configuring PowerShell Profile..." -ForegroundColor Yellow
-        $profilePath = $PROFILE | Split-Path | Split-Path
-        $profileFile = $PROFILE | Split-Path -Leaf
-        if ($promptSet -eq 'W' -or $promptSet -eq 'w') { $prompt = Get-Content "$pwd\config\terminal\winmac-prompt.ps1" -Raw }
-        elseif ($promptSet -eq 'M' -or $promptSet -eq 'm') { $prompt = Get-Content "$pwd\config\terminal\macos-prompt.ps1" -Raw }
-        $functions = Get-Content "$pwd\config\terminal\functions.ps1" -Raw
-        Invoke-WithOutput { 
-            if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell" } 
-            else { Remove-Item -Path "$profilePath\PowerShell\$profileFile" -Force } 
-            }
-        Invoke-WithOutput { 
-            if (-not (Test-Path "$profilePath\WindowsPowerShell")) { New-Item -ItemType Directory -Path "$profilePath\WindowsPowerShell" } 
-            else { Remove-Item -Path "$profilePath\WindowsPowerShell\$profileFile" -Force } 
-            }
-        Invoke-WithOutput { 
-            if (-not (Test-Path "$profilePath\PowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\PowerShell\$profileFile" } 
-            }
-        Invoke-WithOutput { 
-            if (-not (Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\WindowsPowerShell\$profileFile" } 
-            }
-        $winget = @(
-            "Vim.Vim",
-            "gsass1.NTop"
-            )
-        foreach ($app in $winget) {
-            Invoke-WithOutput { winget install --id $app --source winget --silent }
-            }
-        $vimParentPath = Join-Path $env:PROGRAMFILES Vim
-        $latestSubfolder = Invoke-WithOutput { Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -Property CreationTime -Descending | Select-Object -First 1 }
-        $vimChildPath = $latestSubfolder.FullName
-        Invoke-WithOutput { [Environment]::SetEnvironmentVariable("Path", $env:Path + ";$vimChildPath", [EnvironmentVariableTarget]::Machine) }
-        Invoke-WithOutput { Install-Module PSTree -Force }
-        $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
-        Invoke-WithOutput { Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $prompt }
-        Invoke-WithOutput { Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $functions }
-        Invoke-WithOutput { Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $functions }
-        Invoke-WithOutput { Move-Item -Path "C:\Users\Public\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue }
-        Invoke-WithOutput { Move-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue }
-        Invoke-WithOutput { Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue }
-        Write-Host "PowerShell Profile configuration completed." -ForegroundColor Green
+        # Everything
+        "2" {
+            Write-Host "Installing Everything..." -ForegroundColor Yellow
+            Invoke-WithOutput {Install-WinGetPackage -Id "Voidtools.Everything"}
+            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+            Invoke-WithOutput { Move-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue }
+            Invoke-WithOutput { Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue }
+            Invoke-WithOutput { Start-Process -FilePath Everything.exe -WorkingDirectory $env:PROGRAMFILES\Everything -WindowStyle Hidden }
+            Write-Host "Everything installation completed." -ForegroundColor Green
+        }
+        # PowerShell Profile
+        "3" {
+            Write-Host "Configuring PowerShell Profile..." -ForegroundColor Yellow
+            $profilePath = $PROFILE | Split-Path | Split-Path
+            $profileFile = $PROFILE | Split-Path -Leaf
+            if ($promptSet -eq 'W' -or $promptSet -eq 'w') { $prompt = Get-Content "$pwd\config\terminal\winmac-prompt.ps1" -Raw }
+            elseif ($promptSet -eq 'M' -or $promptSet -eq 'm') { $prompt = Get-Content "$pwd\config\terminal\macos-prompt.ps1" -Raw }
+            $functions = Get-Content "$pwd\config\terminal\functions.ps1" -Raw
+            Invoke-WithOutput { 
+                if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell" } 
+                else { Remove-Item -Path "$profilePath\PowerShell\$profileFile" -Force } 
+                }
+            Invoke-WithOutput { 
+                if (-not (Test-Path "$profilePath\WindowsPowerShell")) { New-Item -ItemType Directory -Path "$profilePath\WindowsPowerShell" } 
+                else { Remove-Item -Path "$profilePath\WindowsPowerShell\$profileFile" -Force } 
+                }
+            Invoke-WithOutput { 
+                if (-not (Test-Path "$profilePath\PowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\PowerShell\$profileFile" } 
+                }
+            Invoke-WithOutput { 
+                if (-not (Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\WindowsPowerShell\$profileFile" } 
+                }
+            $winget = @(
+                "Vim.Vim",
+                "gsass1.NTop"
+                )
+            foreach ($app in $winget) {Invoke-WithOutput { winget install --id $app --source winget --silent }}
+            $vimParentPath = Join-Path $env:PROGRAMFILES Vim
+            $latestSubfolder = Invoke-WithOutput { Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -Property CreationTime -Descending | Select-Object -First 1 }
+            $vimChildPath = $latestSubfolder.FullName
+            Invoke-WithOutput { [Environment]::SetEnvironmentVariable("Path", $env:Path + ";$vimChildPath", [EnvironmentVariableTarget]::Machine) }
+            Invoke-WithOutput { Install-Module PSTree -Force }
+            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+            Invoke-WithOutput { Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $prompt }
+            Invoke-WithOutput { Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $functions }
+            Invoke-WithOutput { Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $functions }
+            Invoke-WithOutput { Move-Item -Path "C:\Users\Public\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue }
+            Invoke-WithOutput { Move-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue }
+            Invoke-WithOutput { Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\gVim*" -Destination $programsDir -Force -ErrorAction SilentlyContinue }
+            Write-Host "PowerShell Profile configuration completed." -ForegroundColor Green
         }
         # StartAllBack
         "4" {
@@ -379,28 +377,41 @@ foreach ($app in $selectedApps) {
                 Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
                 winget install --id Microsoft.DotNet.DesktopRuntime.6 --silent | Out-Null
                 Invoke-WebRequest -Uri 'https://github.com/dongle-the-gadget/WinverUWP/releases/download/v2.1.0.0/2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle' -OutFile '2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
-                Add-AppxPackage -Path '2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'               
-                $sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
+                Add-AppxPackage -Path '2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
                 New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" | Out-Null
+                $sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
+                $exeKeyPath = "$env:LOCALAPPDATA\WinMac\windowskey.exe"
+                $exeStartPath = "$env:LOCALAPPDATA\WinMac\startbutton.exe"
+                $folderName = "WinMac"
+                $taskService = New-Object -ComObject "Schedule.Service"
+                $taskService.Connect() | Out-Null
+                $rootFolder = $taskService.GetFolder("\")
+                try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }                
+                if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
+                $taskFolder = "\" + $folderName
+                $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
+                $trigger = New-ScheduledTaskTrigger -AtLogon
+                $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
+                $actionStartButton = New-ScheduledTaskAction -Execute "StartButton.ahk" -WorkingDirectory "$env:PROGRAMFILES\WinMac\"
+                $processes = @("windowskey", "startbutton")
+                foreach ($process in $processes) {
+                    $runningProcess = Get-Process -Name $process -ErrorAction SilentlyContinue
+                    if ($runningProcess) {Stop-Process -Name $process -Force}
+                }
                 if ($sysType -like "*ARM*") {Copy-Item -Path .\bin\menu\arm64\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force | Out-Null}
                 else {Copy-Item -Path .\bin\menu\x64\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force | Out-Null}
                 Copy-Item -Path .\bin\menu\startbutton.exe -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force | Out-Null
-                $exeKeyPath = "$env:LOCALAPPDATA\WinMac\windowskey.exe"
-                $exeStartPath = "$env:LOCALAPPDATA\WinMac\startbutton.exe"
-                $regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
-                $regKeyName = "WinMac Menu Windows Key"
-                $regStartName = "WinMac Menu Start Button"
                 Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
-                Copy-Item -Path "$pwd\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
+                Copy-Item -Path "$pwd\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force | Out-Null
+                Register-ScheduledTask -TaskName "StartButton" -Action $actionStartButton -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -ErrorAction SilentlyContinue | Out-Null
+                Register-ScheduledTask -TaskName "WindowsKey" -Action $actionWinKey -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -ErrorAction SilentlyContinue | Out-Null
                 Set-ItemProperty -Path $regPath -Name $regKeyName -Value $exeKeyPath
                 Set-ItemProperty -Path $regPath -Name $regStartName -Value $exeStartPath
-                Start-Process "$env:LOCALAPPDATA\WinMac\windowskey.exe"
-                Start-Process "$env:LOCALAPPDATA\WinMac\startbutton.exe"
+                Start-Process $exeKeyPath
+                Start-Process $exeStartPath
                 Write-Host "WinMac Menu installation completed." -ForegroundColor Green
             }
-            else {
-                Write-Host "Skipping WinMac Menu installation." -ForegroundColor Magenta
-            }
+            else {Write-Host "Skipping WinMac Menu installation." -ForegroundColor Magenta}
         }
         # TopNotify
         "6" {
@@ -633,27 +644,6 @@ uint fWinIni);
 '@
             $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
             $CursorRefresh::SystemParametersInfo(0x0057,0,$null,0) | Out-Null
-            ## Cursor shadow
-            # Define the remote computer name
-            $remoteComputer = $ENV:COMPUTERNAME
-            # Open the HKEY_CURRENT_USER hive on the remote machine
-            $hive = [Microsoft.Win32.RegistryHive]::CurrentUser
-            $remoteRegistryKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($hive, $remoteComputer)
-            # Open the "Control Panel\Cursors" subkey
-            $cursorKey = $remoteRegistryKey.OpenSubKey("Control Panel\Cursors", $true)
-            if ($cursorKey -ne $null) {
-                # Set the CursorShadow value to '1' (enable cursor shadow)
-                $cursorKey.SetValue("CursorShadow", 1, [Microsoft.Win32.RegistryValueKind]::String)
-                # Close the key after making changes
-                $cursorKey.Close()
-                Write-Output "Cursor shadow has been enabled on $remoteComputer."
-            } else {
-                Write-Output "Failed to access the Cursors subkey on $remoteComputer."
-            }
-            # Close the registry key object
-            $remoteRegistryKey.Close()
-
-
             ## Pin Home, Programs and Recycle Bin to Quick Access
             write-host "Pinning Home, Programs and Recycle Bin to Quick Access..." -ForegroundColor Yellow
 $homeIni = @"
@@ -673,7 +663,6 @@ IconResource=C:\Windows\System32\SHELL32.dll,160
             if (-not ($homePin.Namespace($homeDir).Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
                 $homePin.Namespace($homeDir).Self.InvokeVerb("pintohome") | Out-Null
             }
-            
 $programsIni = @"
 [.ShellClassInfo]
 IconResource=C:\WINDOWS\System32\imageres.dll,187
@@ -722,10 +711,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
         }
     }
 }
-
 Write-Host
-# Stop-Transcript
-
 Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
 Write-Host @"
 
@@ -738,13 +724,8 @@ If you have any questions or suggestions, please contact me on GitHub.
 "@ -ForegroundColor Green
 
 Write-Host "-----------------------------------------------------------------------------"  -ForegroundColor Cyan
-Write-Host @"
-
-To install Winstep Nexus Dock, please run the dock.ps1 script in a PowerShell session without administrative privileges.
-
-"@ -ForegroundColor Yellow
 Start-Sleep 2
-$restartConfirmation = Read-Host "Restart computer now? It's recommended to fully apply all the changes. (y/n)"
+$restartConfirmation = Read-Host "`nRestart computer now? It's recommended to fully apply all the changes. (y/n)"
 if ($restartConfirmation -eq "Y" -or $restartConfirmation -eq "y") {
     Write-Host "Restarting computer in" -ForegroundColor Red
     for ($a=9; $a -ge 0; $a--) {
