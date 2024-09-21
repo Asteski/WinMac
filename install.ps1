@@ -510,16 +510,19 @@ foreach ($app in $selectedApps) {
         }
         # WinLauncher
         "9" {
-            Write-Host "Installing WinLauncher..." -ForegroundColor Yellow
-            $zipFilePath = ".\bin\Launchpad.zip"
-            $extractPath = "$ENV:LOCALAPPDATA\WinMac\Launchpad"
-            Expand-Archive -Path $zipFilePath -DestinationPath $extractPath -Force
-            Start-Process "$ENV:LOCALAPPDATA\WinMac\Launchpad\WinLaunch.exe"
-            Write-Host "WinLauncher installation completed." -ForegroundColor Green
+            Write-Host "Installing Launchpad..." -ForegroundColor Yellow
+            # $zipFilePath = ".\bin\Launchpad.zip"
+            # $extractPath = "$ENV:LOCALAPPDATA\WinMac\Launchpad"
+            # Expand-Archive -Path $zipFilePath -DestinationPath $extractPath -Force
+            # Start-Process "$ENV:LOCALAPPDATA\WinMac\Launchpad\WinLaunch.exe"
+            Write-Host "Launchpad installation completed." -ForegroundColor Green
         }
         # Nexus Dock
         "10" {
             if ($adminTest) {
+                Write-Host "Winstep Nexus requires non-administrative privileges. Please run the script as a standard user session. Skipping installation." -ForegroundColor Red
+            }
+            else {
                 Write-Host "Installing Nexus Dock..." -ForegroundColor Yellow
                 $downloadUrl = "https://www.winstep.net/nexus.zip"
                 $downloadPath = "dock.zip"
@@ -595,10 +598,6 @@ foreach ($app in $selectedApps) {
                 Remove-Item .\ReadMe.txt -Force | Out-Null
                 Remove-Item .\NexusSetup.exe -Force | Out-Null
                 Write-Host "Nexus Dock installation completed." -ForegroundColor Green
-
-            }
-            else {
-                Write-Host "Winstep Nexus requires non-administrative privileges. Please run the script as a standard user session. Skipping installation." -ForegroundColor Red
             }
         }
         # Other
