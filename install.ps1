@@ -6,9 +6,9 @@ Write-Host @"
 
 Welcome to WinMac Deployment!
 
-Author: Asteski
 Version: 0.6.0
-GitHub: https://github.com/Asteski
+Author: Asteski
+GitHub: https://github.com/Asteski/WinMac
 
 This is work in progress. You're using this script at your own risk.
 
@@ -523,7 +523,7 @@ foreach ($app in $selectedApps) {
         # Nexus Dock
         "10" {
             if ($adminTest) {
-                Write-Host "Winstep Nexus requires non-administrative privileges. Please run the script as a standard user session. Skipping installation." -ForegroundColor Red
+                Write-Host "Winstep Nexus requires non-administrative privileges. Please run the script in a default user session. Skipping installation." -ForegroundColor Red
             }
             else {
                 Write-Host "Installing Nexus Dock..." -ForegroundColor Yellow
@@ -689,7 +689,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             ## Remove Shortcut Arrows
             Write-Host "Removing shortcut arrows..." -ForegroundColor Yellow
             Copy-Item -Path "$pwd\config\blank.ico" -Destination "C:\Windows" -Force
-            New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -ErrorAction SilentlyContinue
+            New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Force | Out-Null
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
             ## Misc
             Write-Host "Configuring other settings..." -ForegroundColor Yellow
