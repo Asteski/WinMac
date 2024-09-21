@@ -604,7 +604,7 @@ foreach ($app in $selectedApps) {
             Write-Host "Configuring Other Settings..." -ForegroundColor Yellow
             Write-Host "Configuring black cursor..." -ForegroundColor Yellow
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
-            $curSourceFolder = $pwd.Path + '\config\cursor'
+            $curSourceFolder = (Get-Item -Path "..\config\cursor").FullName
             $curDestFolder = "C:\Windows\Cursors"
             Copy-Item -Path $curSourceFolder\* -Destination $curDestFolder -Recurse -Force
             $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
