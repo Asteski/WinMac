@@ -221,8 +221,8 @@ $btnInstall.Add_Click({
 $ShowOutput = $false
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_install_log_$date.txt"
-if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null}
-if (-not (Test-Path -Path "../logs")) {New-Item -ItemType Directory -Path "../logs" | Out-Null}
+if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" }#| Out-Null}
+if (-not (Test-Path -Path "../logs")) {New-Item -ItemType Directory -Path "../logs" }#| Out-Null}
 function Invoke-WithOutput {
     param ([scriptblock]$Command)
     $output = & $Command 2>&1
@@ -397,19 +397,19 @@ foreach ($app in $selectedApps) {
             if ($adminTest) {
                 if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
                     Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
-                    winget install --id Microsoft.DotNet.DesktopRuntime.6 --silent | Out-Null
+                    winget install --id Microsoft.DotNet.DesktopRuntime.6 --silent #| Out-Null
                     Invoke-WebRequest -Uri 'https://github.com/dongle-the-gadget/WinverUWP/releases/download/v2.1.0.0/2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle' -OutFile '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
                     Add-AppxPackage -Path '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
-                    New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" -ErrorAction SilentlyContinue | Out-Null
+                    New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" -ErrorAction SilentlyContinue #| Out-Null
                     $sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
                     $exeKeyPath = "$env:LOCALAPPDATA\WinMac\WindowsKey.exe"
                     $exeStartPath = "$env:LOCALAPPDATA\WinMac\StartButton.exe"
                     $folderName = "WinMac"
                     $taskService = New-Object -ComObject "Schedule.Service"
-                    $taskService.Connect() | Out-Null
+                    $taskService.Connect() #| Out-Null
                     $rootFolder = $taskService.GetFolder("\")
                     try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }                
-                    if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
+                    if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) }#| Out-Null}
                     $taskFolder = "\" + $folderName
                     $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
                     $trigger = New-ScheduledTaskTrigger -AtLogon
@@ -421,13 +421,13 @@ foreach ($app in $selectedApps) {
                         $runningProcess = Get-Process -Name $process -ErrorAction SilentlyContinue
                         if ($runningProcess) {Stop-Process -Name $process -Force}
                     }
-                    if ($sysType -like "*ARM*") {Copy-Item -Path ..\bin\menu\arm64\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force | Out-Null}
-                    else {Copy-Item -Path ..\bin\menu\x64\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force | Out-Null}
-                    Copy-Item -Path ..\bin\menu\startbutton.exe -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force | Out-Null
+                    if ($sysType -like "*ARM*") {Copy-Item -Path ..\bin\menu\arm64\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force }#| Out-Null}
+                    else {Copy-Item -Path ..\bin\menu\x64\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force }#| Out-Null}
+                    Copy-Item -Path ..\bin\menu\startbutton.exe -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force #| Out-Null
                     Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
-                    Copy-Item -Path "..\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force | Out-Null
-                    Register-ScheduledTask -TaskName "StartButton" -Action $actionStartButton -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -ErrorAction SilentlyContinue | Out-Null
-                    Register-ScheduledTask -TaskName "WindowsKey" -Action $actionWinKey -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -ErrorAction SilentlyContinue | Out-Null
+                    Copy-Item -Path "..\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force #| Out-Null
+                    Register-ScheduledTask -TaskName "StartButton" -Action $actionStartButton -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -ErrorAction SilentlyContinue #| Out-Null
+                    Register-ScheduledTask -TaskName "WindowsKey" -Action $actionWinKey -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -ErrorAction SilentlyContinue #| Out-Null
                     Start-Process $exeKeyPath
                     Start-Process $exeStartPath
                     Write-Host "WinMac Menu installation completed." -ForegroundColor Green
@@ -441,7 +441,7 @@ foreach ($app in $selectedApps) {
     # TopNotify
         "6" {
             Write-Host "Installing TopNotify..." -ForegroundColor Yellow
-            winget install --name TopNotify --silent --accept-package-agreements --accept-source-agreements | Out-Null
+            winget install --name TopNotify --silent --accept-package-agreements --accept-source-agreements #| Out-Null
             $app = Get-AppxPackage *TopNotify*
             Start-Process -FilePath TopNotify.exe -WorkingDirectory $app.InstallLocation
             $pkgName = $app.PackageFamilyName
@@ -461,8 +461,8 @@ foreach ($app in $selectedApps) {
             $url = "https://github.com/joedf/stahky/releases/download/v0.1.0.8/stahky_U64_v0.1.0.8.zip"
             $outputPath = "..\stahky_U64.zip"
             $exePath = "$env:LOCALAPPDATA\Stahky"
-            New-Item -ItemType Directory -Path $exePath -Force | Out-Null
-            New-Item -ItemType Directory -Path $exePath\config -Force | Out-Null
+            New-Item -ItemType Directory -Path $exePath -Force #| Out-Null
+            New-Item -ItemType Directory -Path $exePath\config -Force #| Out-Null
             Invoke-WebRequest -Uri $url -OutFile $outputPath
             if (Test-Path -Path "$exePath\stahky.exe") {
                 Write-Output "Stahky already exists."
@@ -513,21 +513,21 @@ foreach ($app in $selectedApps) {
                 Write-Host "Installing Keyboard Shortcuts..." -ForegroundColor Yellow
                 $fileName = 'KeyShortcuts.exe'
                 $fileDirectory = "$env:LOCALAPPDATA\WinMac"
-                New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" -ErrorAction SilentlyContinue | Out-Null
-                Copy-Item ..\bin\$fileName "$env:LOCALAPPDATA\WinMac\" | Out-Null
+                New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" -ErrorAction SilentlyContinue #| Out-Null
+                Copy-Item ..\bin\$fileName "$env:LOCALAPPDATA\WinMac\" #| Out-Null
                 $folderName = "WinMac"
                 $taskService = New-Object -ComObject "Schedule.Service"
-                $taskService.Connect() | Out-Null
+                $taskService.Connect() #| Out-Null
                 $rootFolder = $taskService.GetFolder("\")
                 try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }              
-                if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
+                if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) }#| Out-Null}
                 $taskFolder = "\" + $folderName
                 $trigger = New-ScheduledTaskTrigger -AtLogon
                 $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
                 $taskName = ($fileName).replace('.exe','')
                 $action = New-ScheduledTaskAction -Execute $fileName -WorkingDirectory $fileDirectory
                 $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
-                Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -ErrorAction SilentlyContinue | Out-Null
+                Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -ErrorAction SilentlyContinue #| Out-Null
                 Start-Process "$env:LOCALAPPDATA\WinMac\KeyShortcuts.exe"
                 Write-Host "Keyboard Shortcuts installation completed." -ForegroundColor Green
             } else {
@@ -562,24 +562,24 @@ foreach ($app in $selectedApps) {
                 } else { Start-Sleep 10 }
                 Get-Process -n Nexus | Stop-Process
                 $winStep = 'C:\Users\Public\Documents\WinStep'
-                Remove-Item -Path "$winStep\Themes\*" -Recurse -Force | Out-Null
-                Copy-Item -Path "..\config\dock\themes\*" -Destination "$winStep\Themes\" -Recurse -Force | Out-Null
-                Remove-Item -Path "$winStep\NeXus\Indicators\*" -Force -Recurse | Out-Null
-                Copy-Item -Path "..\config\dock\indicators\*" -Destination "$winStep\NeXus\Indicators\" -Recurse -Force | Out-Null
-                New-Item -ItemType Directory -Path "$winStep\Sounds" -Force | Out-Null
-                Copy-Item -Path "..\config\dock\sounds\*" -Destination "$winStep\Sounds\" -Recurse -Force | Out-Null
-                New-Item -ItemType Directory -Path "$winStep\Icons" -Force | Out-Null
-                Copy-Item "..\config\dock\icons" "$winStep" -Recurse -Force | Out-Null
+                Remove-Item -Path "$winStep\Themes\*" -Recurse -Force #| Out-Null
+                Copy-Item -Path "..\config\dock\themes\*" -Destination "$winStep\Themes\" -Recurse -Force #| Out-Null
+                Remove-Item -Path "$winStep\NeXus\Indicators\*" -Force -Recurse #| Out-Null
+                Copy-Item -Path "..\config\dock\indicators\*" -Destination "$winStep\NeXus\Indicators\" -Recurse -Force #| Out-Null
+                New-Item -ItemType Directory -Path "$winStep\Sounds" -Force #| Out-Null
+                Copy-Item -Path "..\config\dock\sounds\*" -Destination "$winStep\Sounds\" -Recurse -Force #| Out-Null
+                New-Item -ItemType Directory -Path "$winStep\Icons" -Force #| Out-Null
+                Copy-Item "..\config\dock\icons" "$winStep" -Recurse -Force #| Out-Null
                 $regFile = "..\config\dock\winstep.reg"
                 $downloadsPath = "$env:USERPROFILE\Downloads"
                 # $tempFolder = "..\temp"
                 # if (-not (Test-Path $tempFolder)) {
-                #     New-Item -ItemType Directory -Path $tempFolder -Force | Out-Null
+                #     New-Item -ItemType Directory -Path $tempFolder -Force #| Out-Null
                 # }
                 if ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
                     $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "Rounded", "Squared" }
                     $modifiedFile = "..\temp\winstep.reg"
-                    $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 | Out-Null
+                    $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 #| Out-Null
                     $regFile = $modifiedFile
                     if ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
                         $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "Light", "Dark" }
@@ -587,7 +587,7 @@ foreach ($app in $selectedApps) {
                         $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "1644825", "15658734" }
                         $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "16119283", "2563870" }
                         $modifiedFile = "..\temp\winstep.reg"
-                        $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 | Out-Null
+                        $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 #| Out-Null
                     }
                 }
                 elseif (($roundedOrSquared -ne "S" -or $roundedOrSquared -ne "s") -and ($lightOrDark -eq "D" -or $lightOrDark -eq "d")) {
@@ -596,20 +596,20 @@ foreach ($app in $selectedApps) {
                     $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "1644825", "15658734" }
                     $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "16119283", "2563870" }
                     $modifiedFile = "..\temp\winstep.reg"
-                    $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 | Out-Null
+                    $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 #| Out-Null
                     $regFile = $modifiedFile
                 }
                 reg import $regFile > $null 2>&1
-                Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "DockLabelColorHotTrack1" -ErrorAction SilentlyContinue | Out-Null
-                Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type6" -ErrorAction SilentlyContinue | Out-Null
-                Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type7" -ErrorAction SilentlyContinue | Out-Null
+                Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "DockLabelColorHotTrack1" -ErrorAction SilentlyContinue #| Out-Null
+                Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type6" -ErrorAction SilentlyContinue #| Out-Null
+                Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type7" -ErrorAction SilentlyContinue #| Out-Null
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path6" -Value $downloadsPath
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path7" -Value "$env:APPDATA\Microsoft\Windows\Recent\"
-                Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe' | Out-Null
+                Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe' #| Out-Null
                 while (!(Get-Process nexus -ErrorAction SilentlyContinue)) { Start-Sleep 1 }
                 $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
-                Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Nexus.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
-                Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\Nexus.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue | Out-Null
+                Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Nexus.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue #| Out-Null
+                Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\Nexus.lnk" -Destination $programsDir -Force -ErrorAction SilentlyContinue #| Out-Null
                 Write-Host "Nexus Dock installation completed." -ForegroundColor Green
             }
         }
@@ -653,7 +653,7 @@ uint pvParam,
 uint fWinIni);
 '@
             $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
-            $CursorRefresh::SystemParametersInfo(0x0057,0,$null,0) | Out-Null
+            $CursorRefresh::SystemParametersInfo(0x0057,0,$null,0) #| Out-Null
             ## Pin Home, Programs and Recycle Bin to Quick Access
             write-host "Pinning Home, Programs and Recycle Bin to Quick Access..." -ForegroundColor Yellow
 $homeIni = @"
@@ -664,14 +664,14 @@ IconResource=C:\Windows\System32\SHELL32.dll,160
             $homeIniFilePath = "$($homeDir)\desktop.ini"
             if (Test-Path $homeIniFilePath)  {
                 Remove-Item $homeIniFilePath -Force
-                New-Item -Path $homeIniFilePath -ItemType File -Force | Out-Null
+                New-Item -Path $homeIniFilePath -ItemType File -Force #| Out-Null
             }
             Add-Content $homeIniFilePath -Value $homeIni
             (Get-Item $homeIniFilePath -Force).Attributes = 'Hidden, System, Archive'
             (Get-Item $homeDir -Force).Attributes = 'ReadOnly, Directory'
             $homePin = new-object -com shell.application
             if (-not ($homePin.Namespace($homeDir).Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
-                $homePin.Namespace($homeDir).Self.InvokeVerb("pintohome") | Out-Null
+                $homePin.Namespace($homeDir).Self.InvokeVerb("pintohome") #| Out-Null
             }
 $programsIni = @"
 [.ShellClassInfo]
@@ -681,43 +681,43 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             $programsIniFilePath = "$($programsDir)\desktop.ini"
             if (Test-Path $programsIniFilePath)  {
                 Remove-Item $programsIniFilePath -Force
-                New-Item -Path $programsIniFilePath -ItemType File -Force | Out-Null
+                New-Item -Path $programsIniFilePath -ItemType File -Force #| Out-Null
             }
             Add-Content $programsIniFilePath -Value $programsIni
             (Get-Item $programsIniFilePath -Force).Attributes = 'Hidden, System, Archive'
             (Get-Item $programsDir -Force).Attributes = 'ReadOnly, Directory'
             $programsPin = new-object -com shell.application
             if (-not ($programsPin.Namespace($programsDir).Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
-                $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome") | Out-Null
+                $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome") #| Out-Null
             }
             $RBPath = 'HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\pintohome\command\'
             $name = "DelegateExecute"
             $value = "{b455f46e-e4af-4035-b0a4-cf18d2f6f28e}"
-            New-Item -Path $RBPath -Force | Out-Null
-            New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force | Out-Null
+            New-Item -Path $RBPath -Force #| Out-Null
+            New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force #| Out-Null
             $oShell = New-Object -ComObject Shell.Application
             $recycleBin = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
             if (-not ($recycleBin.Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
-                $recycleBin.Self.InvokeVerb("PinToHome") | Out-Null
+                $recycleBin.Self.InvokeVerb("PinToHome") #| Out-Null
             }
-            Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse | Out-Null
+            Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse #| Out-Null
             ## Remove Shortcut Arrows
             Write-Host "Removing shortcut arrows..." -ForegroundColor Yellow
             Copy-Item -Path "..\config\blank.ico" -Destination "C:\Windows" -Force
-            New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Force | Out-Null
+            New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Force #| Out-Null
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
             ## Misc
             Write-Host "Adding End Task to context menu..." -ForegroundColor Yellow
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value "" -ErrorAction SilentlyContinue
             $taskbarDevSettings = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
-            if (-not (Test-Path $taskbarDevSettings)) { New-Item -Path $taskbarDevSettings -Force | Out-Null }
-            New-ItemProperty -Path $taskbarDevSettings -Name "TaskbarEndTask" -Value 1 -PropertyType DWORD -Force -ErrorAction SilentlyContinue | Out-Null
+            if (-not (Test-Path $taskbarDevSettings)) { New-Item -Path $taskbarDevSettings -Force }#| Out-Null}
+            New-ItemProperty -Path $taskbarDevSettings -Name "TaskbarEndTask" -Value 1 -PropertyType DWORD -Force -ErrorAction SilentlyContinue #| Out-Null
             Stop-Process -n explorer
             Write-Host "Configuring Other Settings completed." -ForegroundColor Green
         }
     }
 }
-Remove-Item "..\temp\*" -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
+Remove-Item "..\temp\*" -Recurse -Force -ErrorAction SilentlyContinue #| Out-Null
 Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
 Write-Host @"
 
@@ -753,4 +753,4 @@ $btnCancel.Add_Click({
     $window.Close()
 })
 
-$window.ShowDialog() | Out-Null
+$window.ShowDialog() #| Out-Null
