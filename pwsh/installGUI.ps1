@@ -197,6 +197,7 @@ $customInstall.Add_Checked({
 $btnInstall.Add_Click({
     $installType = if ($fullInstall.IsChecked) { "F" } else { "C" }
     $selectedApps = @()
+    [string]$selection = ''
     
     if ($chkPowerToys.IsChecked) { $selection += "1," }
     if ($chkEverything.IsChecked) { $selection += "2," }
