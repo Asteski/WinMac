@@ -1,4 +1,5 @@
 @echo off
+cd /d "%~dp0"
 cd pwsh
 if "%1"=="" (
     pwsh -NoProfile -ExecutionPolicy Bypass -File "installGUI.ps1"
