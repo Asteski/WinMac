@@ -210,9 +210,8 @@ $btnInstall.Add_Click({
     if ($chkOther.IsChecked) { $selectedApps += "10" }
 
     $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Other Settings"}
-    $selectedApps = $selectedApps.Split(',')
+    # $selectedApps = $selectedApps.Split(',')
     $selectedAppNames = @()
-
     foreach ($appNumber in $selectedApps) {
         if ($appList.ContainsKey($appNumber)) {
             $selectedAppNames += $appList[$appNumber] + "`n"
