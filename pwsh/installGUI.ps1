@@ -1,6 +1,8 @@
 Add-Type -AssemblyName PresentationFramework
 Add-Type -AssemblyName System.Windows.Forms
-
+Clear-Host
+$user = [Security.Principal.WindowsIdentity]::GetCurrent();
+$adminTest = (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
 function Get-WindowsTheme {
     try {
         $key = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"
@@ -15,7 +17,6 @@ function Get-WindowsTheme {
         return "Light"
     }
 }
-
 $windowsTheme = Get-WindowsTheme
 
 # Define colors based on theme
@@ -24,8 +25,6 @@ $foregroundColor = if ($windowsTheme -eq "Dark") { "#FFFFFF" } else { "#000000" 
 $accentColor = if ($windowsTheme -eq "Dark") { "#0078D4" } else { "#0078D4" }
 $secondaryBackgroundColor = if ($windowsTheme -eq "Dark") { "#2D2D2D" } else { "#F0F0F0" }
 $borderColor = "#FFFFFF"  # Greyish border color
-$borderThickness = "1"  # Thinner border
-
 [xml]$xaml = @"
 <Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -169,19 +168,10 @@ $chkStahky = $window.FindName("chkStahky")
 $chkKeyboardShortcuts = $window.FindName("chkKeyboardShortcuts")
 $chkNexusDock = $window.FindName("chkNexusDock")
 $chkOther = $window.FindName("chkOther")
-
-$startMenuWinMac = $window.FindName("startMenuWinMac")
-$startMenuClassic = $window.FindName("startMenuClassic")
-
-$promptStyleWinMac = $window.FindName("promptStyleWinMac")
-$promptStyleMacOS = $window.FindName("promptStyleMacOS")
-
-$shellCornerRounded = $window.FindName("shellCornerRounded")
-$shellCornerSquared = $window.FindName("shellCornerSquared")
-
-$themeLight = $window.FindName("themeLight")
-$themeDark = $window.FindName("themeDark")
-
+$startMenu = $window.FindName("startMenuWinMac")
+$promptStyle = $window.FindName("promptStyleWinMac")
+$shellCorner = $window.FindName("shellCornerRounded")
+$theme = $window.FindName("themeLight")
 $btnInstall = $window.FindName("btnInstall")
 $btnCancel = $window.FindName("btnCancel")
 
@@ -196,9 +186,7 @@ $customInstall.Add_Checked({
 # Event handler for the Install button
 $btnInstall.Add_Click({
     $installType = if ($fullInstall.IsChecked) { "F" } else { "C" }
-    $selectedApps = @()
-    [string]$selection = ''
-    
+    $selectedApps = @()  
     if ($chkPowerToys.IsChecked) { $selection += "1," }
     if ($chkEverything.IsChecked) { $selection += "2," }
     if ($chkPowershellProfile.IsChecked) { $selection += "3," }
@@ -218,10 +206,10 @@ $btnInstall.Add_Click({
             $selectedAppNames += $appList[$appNumber] + "`n"
         }
     }
-    $startMenu = if ($startMenuWinMac.IsChecked) { "X"; $startMenuInfo = 'WinMac Menu' } else { "C"; $startMenuInfo = 'Classic Menu' }
-    $promptSet = if ($promptStyleWinMac.IsChecked) { "W";$promptSetInfo = 'WinMac Prompt' } else { "M"; $promptSetInfo = 'macOS Prompt' }
-    $shellCorners = if ($shellCornerRounded.IsChecked) { "R"; $shellCornersInfo = 'Rounded Shell Corners' } else { "S"; $shellCornersInfo = 'Squared Shell Corners' }
-    $themeStyle = if ($themeLight.IsChecked) { "L"; $themeStyleInfo = 'Light Theme' } else { "D"; $themeStyleInfo = 'Dark Theme' }
+    $menuSet = if ($startMenu.IsChecked) { "X"; $startMenuInfo = 'WinMac Menu' } else { "C"; $startMenuInfo = 'Classic Menu' }
+    $promptSet = if ($promptStyle.IsChecked) { "W";$promptSetInfo = 'WinMac Prompt' } else { "M"; $promptSetInfo = 'macOS Prompt' }
+    $roundedOrSquared = if ($shellCorner.IsChecked) { "R"; $shellCornersInfo = 'Rounded Shell Corners' } else { "S"; $shellCornersInfo = 'Squared Shell Corners' }
+    $lightOrDark = if ($theme.IsChecked) { "L"; $themeStyleInfo = 'Light Theme' } else { "D"; $themeStyleInfo = 'Dark Theme' }
 
     if ($installType -eq 'F'){ [
         System.Windows.MessageBox]::Show("Installation Type: Full`n`nConfiguration:`nStart Menu: $startMenuInfo`nPrompt Style: $promptSetInfo`nShell Corners: $shellCornersInfo`nTheme Style: $themeStyleInfo", "Installation Summary", [System.Windows.MessageBoxButton]::OKCancel, [System.Windows.MessageBoxImage]::Information) 
