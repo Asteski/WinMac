@@ -1,6 +1,5 @@
 @echo off
-cd /d "%~dp0"
-cd pwsh
+cd /d "%~dp0/pwsh"
 if "%1"=="" (
     pwsh -NoProfile -ExecutionPolicy Bypass -File "installGUI.ps1"
 ) else if "%1"=="-uninstall" (
