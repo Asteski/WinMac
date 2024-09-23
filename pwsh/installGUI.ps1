@@ -241,17 +241,6 @@ function Invoke-WithOutput {
     $output | Out-File -FilePath "..\logs\$logFile" -Append
     if ($ShowOutput -and $output) {$output}
 }
-$ShowOutput = $false
-$date = Get-Date -Format "yy-MM-ddTHHmmss"
-$logFile = "WinMac_install_log_$date.txt"
-if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null}
-if (-not (Test-Path -Path "../logs")) {New-Item -ItemType Directory -Path "../logs" | Out-Null}
-function Invoke-WithOutput {
-    param ([scriptblock]$Command)
-    $output = & $Command 2>&1
-    $output | Out-File -FilePath "..\logs\$logFile" -Append
-    if ($ShowOutput -and $output) {$output}
-}
 Write-Host "Starting installation process in..." -ForegroundColor Green
 for ($a=3; $a -ge 0; $a--) {
     Write-Host -NoNewLine "`b$a" -ForegroundColor Green
