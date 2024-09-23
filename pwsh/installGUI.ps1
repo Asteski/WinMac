@@ -198,27 +198,27 @@ $btnInstall.Add_Click({
     $installType = if ($fullInstall.IsChecked) { "F" } else { "C" }
     $selectedApps = @()
     
-    if ($chkPowerToys.IsChecked) { $selectedApps += "1," }
-    if ($chkEverything.IsChecked) { $selectedApps += "2," }
-    if ($chkPowershellProfile.IsChecked) { $selectedApps += "3," }
-    if ($chkStartAllBack.IsChecked) { $selectedApps += "4," }
-    if ($chkWinMacMenu.IsChecked) { $selectedApps += "5," }
-    if ($chkTopNotify.IsChecked) { $selectedApps += "6," }
-    if ($chkStahky.IsChecked) { $selectedApps += "7," }
-    if ($chkKeyboardShortcuts.IsChecked) { $selectedApps += "8," }
-    if ($chkNexusDock.IsChecked) { $selectedApps += "9," }
-    if ($chkOther.IsChecked) { $selectedApps += "10" }
+    if ($chkPowerToys.IsChecked) { $selection += "1," }
+    if ($chkEverything.IsChecked) { $selection += "2," }
+    if ($chkPowershellProfile.IsChecked) { $selection += "3," }
+    if ($chkStartAllBack.IsChecked) { $selection += "4," }
+    if ($chkWinMacMenu.IsChecked) { $selection += "5," }
+    if ($chkTopNotify.IsChecked) { $selection += "6," }
+    if ($chkStahky.IsChecked) { $selection += "7," }
+    if ($chkKeyboardShortcuts.IsChecked) { $selection += "8," }
+    if ($chkNexusDock.IsChecked) { $selection += "9," }
+    if ($chkOther.IsChecked) { $selection += "10" }
 
     $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Other Settings"}
-    # $selectedApps = $selectedApps.Split(',')
+    $selectedApps = $selection.Split(',')
     $selectedAppNames = @()
-    foreach ($appNumber in $selectedApps) {
+    foreach ($appNumber in $selection) {
         if ($appList.ContainsKey($appNumber)) {
             $selectedAppNames += $appList[$appNumber] + "`n"
         }
     }
     $startMenu = if ($startMenuWinMac.IsChecked) { "X"; $startMenuInfo = 'WinMac Menu' } else { "C"; $startMenuInfo = 'Classic Menu' }
-    $promptSet = if ($promptStyleWinMac.IsChecked) { "W";$promptSetInfo = 'WinMac Prompt' } else { "M"; $promptSetInfo = 'MacOs Prompt' }
+    $promptSet = if ($promptStyleWinMac.IsChecked) { "W";$promptSetInfo = 'WinMac Prompt' } else { "M"; $promptSetInfo = 'macOS Prompt' }
     $shellCorners = if ($shellCornerRounded.IsChecked) { "R"; $shellCornersInfo = 'Rounded Shell Corners' } else { "S"; $shellCornersInfo = 'Squared Shell Corners' }
     $themeStyle = if ($themeLight.IsChecked) { "L"; $themeStyleInfo = 'Light Theme' } else { "D"; $themeStyleInfo = 'Dark Theme' }
 
