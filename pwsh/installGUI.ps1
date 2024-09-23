@@ -1,8 +1,9 @@
-Add-Type -AssemblyName PresentationFramework
-Add-Type -AssemblyName System.Windows.Forms
 Clear-Host
 $user = [Security.Principal.WindowsIdentity]::GetCurrent();
 $adminTest = (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
+Add-Type -AssemblyName PresentationFramework
+Add-Type -AssemblyName System.Windows.Forms
+
 function Get-WindowsTheme {
     try {
         $key = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"
@@ -197,7 +198,6 @@ $btnInstall.Add_Click({
     if ($chkKeyboardShortcuts.IsChecked) { $selection += "8," }
     if ($chkNexusDock.IsChecked) { $selection += "9," }
     if ($chkOther.IsChecked) { $selection += "10" }
-
     $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Other Settings"}
     $selectedApps = $selection.Split(',')
     $selectedAppNames = @()
@@ -209,8 +209,7 @@ $btnInstall.Add_Click({
     $menuSet = if ($startMenu.IsChecked) { "X"; $startMenuInfo = 'WinMac Menu' } else { "C"; $startMenuInfo = 'Classic Menu' }
     $promptSet = if ($promptStyle.IsChecked) { "W";$promptSetInfo = 'WinMac Prompt' } else { "M"; $promptSetInfo = 'macOS Prompt' }
     $roundedOrSquared = if ($shellCorner.IsChecked) { "R"; $shellCornersInfo = 'Rounded Shell Corners' } else { "S"; $shellCornersInfo = 'Squared Shell Corners' }
-    $lightOrDark = if ($theme.IsChecked) { "L"; $themeStyleInfo = 'Light Theme' } else { "D"; $themeStyleInfo = 'Dark Theme' }
-
+    $lightOrDark = if ($theme.IsChecked) { "L"; $stackTheme = 'light'; $orbTheme = 'black.svg'; $themeStyleInfo = 'Light Theme' } else { "D"; stackTheme = 'dark'; $orbTheme = 'white.svg'; $themeStyleInfo = 'Dark Theme' }
     if ($installType -eq 'F'){ [
         System.Windows.MessageBox]::Show("Installation Type: Full`n`nConfiguration:`nStart Menu: $startMenuInfo`nPrompt Style: $promptSetInfo`nShell Corners: $shellCornersInfo`nTheme Style: $themeStyleInfo", "Installation Summary", [System.Windows.MessageBoxButton]::OKCancel, [System.Windows.MessageBoxImage]::Information) 
     } else {
@@ -744,13 +743,12 @@ if ($restartConfirmation -eq "Y" -or $restartConfirmation -eq "y") {
     Write-Host "Computer will not be restarted." -ForegroundColor Green
 }
 
-#EOF
 })
-
 
 # Event handler for the Cancel button
 $btnCancel.Add_Click({
     $window.Close()
 })
 
-$window.ShowDialog() #| Out-Null
+$window.ShowDialog() | Out-Null
+#EOF
