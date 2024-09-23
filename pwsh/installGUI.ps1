@@ -209,7 +209,7 @@ $btnInstall.Add_Click({
     $menuSet = if ($startMenu.IsChecked) { "X"; $startMenuInfo = 'WinMac Menu' } else { "C"; $startMenuInfo = 'Classic Menu' }
     $promptSet = if ($promptStyle.IsChecked) { "W";$promptSetInfo = 'WinMac Prompt' } else { "M"; $promptSetInfo = 'macOS Prompt' }
     $roundedOrSquared = if ($shellCorner.IsChecked) { "R"; $shellCornersInfo = 'Rounded Shell Corners' } else { "S"; $shellCornersInfo = 'Squared Shell Corners' }
-    $lightOrDark = if ($theme.IsChecked) { "L"; $stackTheme = 'light'; $orbTheme = 'black.svg'; $themeStyleInfo = 'Light Theme' } else { "D"; stackTheme = 'dark'; $orbTheme = 'white.svg'; $themeStyleInfo = 'Dark Theme' }
+    $lightOrDark = if ($theme.IsChecked) { "L"; $stackTheme = 'light'; $orbTheme = 'black.svg'; $themeStyleInfo = 'Light Theme' } else { "D"; $stackTheme = 'dark'; $orbTheme = 'white.svg'; $themeStyleInfo = 'Dark Theme' }
     if ($installType -eq 'F'){ [
         System.Windows.MessageBox]::Show("Installation Type: Full`n`nConfiguration:`nStart Menu: $startMenuInfo`nPrompt Style: $promptSetInfo`nShell Corners: $shellCornersInfo`nTheme Style: $themeStyleInfo", "Installation Summary", [System.Windows.MessageBoxButton]::OKCancel, [System.Windows.MessageBoxImage]::Information) 
     } else {
