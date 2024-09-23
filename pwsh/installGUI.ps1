@@ -166,7 +166,7 @@ $chkStartAllBack = $window.FindName("chkStartAllBack")
 $chkWinMacMenu = $window.FindName("chkWinMacMenu")
 $chkTopNotify = $window.FindName("chkTopNotify")
 $chkStahky = $window.FindName("chkStahky")
-$chkKeyboardShortcuts = $window.FindName("KchkeyboardShortcuts")
+$chkKeyboardShortcuts = $window.FindName("chkKeyboardShortcuts")
 $chkNexusDock = $window.FindName("chkNexusDock")
 $chkOther = $window.FindName("chkOther")
 
