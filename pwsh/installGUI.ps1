@@ -1,7 +1,6 @@
-param(
-    [string]$noGUI
-)
-
+# param(
+#     [string]$noGUI
+# )
 $user = [Security.Principal.WindowsIdentity]::GetCurrent()
 $adminTest = (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
 Add-Type -AssemblyName PresentationFramework
@@ -21,7 +20,7 @@ function Get-WindowsTheme {
 }
 $windowsTheme = Get-WindowsTheme
 
-if ($noGUI -ne '-nogui') {
+if ($args[0] -ne '-nogui') {
     $backgroundColor = if ($windowsTheme -eq "Dark") { "#1E1E1E" } else { "#eff4f9" }
     $foregroundColor = if ($windowsTheme -eq "Dark") { "#f3f3f3" } else { "#1b1b1b" }
     $accentColor = if ($windowsTheme -eq "Dark") { "#0078D4" } else { "#fcfcfc" }
@@ -216,13 +215,6 @@ https://github.com/Asteski/WinMac/wiki
         if ($chkKeyboardShortcuts.IsChecked) { $selection += "8," }
         if ($chkNexusDock.IsChecked) { $selection += "9," }
         if ($chkOther.IsChecked) { $selection += "10" }
-        $global:selectedApps = @()
-        $global:menuSet = $null
-        $global:promptSet = $null
-        $global:roundedOrSquared = $null
-        $global:lightOrDark = $null
-        $global:stackTheme = $null
-        $global:orbTheme = $null
         $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Other Settings"}
         $selectedApps = $selection.Split(',')
         $selectedAppNames = @()
