@@ -208,7 +208,7 @@ $btnInstall.Add_Click({
     }
     $menuSet = if ($startMenu.IsChecked) { "X"; $startMenuInfo = 'WinMac Menu' } else { "C"; $startMenuInfo = 'Classic Menu' }
     $promptSet = if ($promptStyle.IsChecked) { "W";$promptSetInfo = 'WinMac Prompt' } else { "M"; $promptSetInfo = 'macOS Prompt' }
-    $roundedOrSquared = if ($shellCorner.IsChecked) { "R"; $shellCornersInfo = 'Rounded Shell Corners' } else { "S"; $shellCornersInfo = 'Squared Shell Corners' }
+    $roundedOrSquared = if ($shellCorner.IsChecked) { "R"; $shellCornersInfo = 'Rounded' } else { "S"; $shellCornersInfo = 'Squared' }
     $lightOrDark = if ($theme.IsChecked) { "L"; $stackTheme = 'light'; $orbTheme = 'black.svg'; $themeStyleInfo = 'Light Theme' } else { "D"; $stackTheme = 'dark'; $orbTheme = 'white.svg'; $themeStyleInfo = 'Dark Theme' }
     if ($installType -eq 'F'){ [
         System.Windows.MessageBox]::Show("Installation Type: Full`n`nConfiguration:`nStart Menu: $startMenuInfo`nPrompt Style: $promptSetInfo`nShell Corners: $shellCornersInfo`nTheme Style: $themeStyleInfo", "Installation Summary", [System.Windows.MessageBoxButton]::OKCancel, [System.Windows.MessageBoxImage]::Information) 
@@ -510,10 +510,10 @@ foreach ($app in $selectedApps) {
         "8" {
             if ($adminTest) {
                 Write-Host "Installing Keyboard Shortcuts..." -ForegroundColor Yellow
-                $fileName = 'KeyShortcuts.exe'
+                $fileName = 'keyshortcuts.exe'
                 $fileDirectory = "$env:LOCALAPPDATA\WinMac"
                 New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" -ErrorAction SilentlyContinue #| Out-Null
-                if (Get-Process KeyShortcuts) { Stop-Process -Name KeyShortcuts -Force }
+                if (Get-Process keyshortcuts) { Stop-Process -Name keyshortcuts -Force -ErrorAction SilentlyContinue }
                 Copy-Item ..\bin\$fileName "$env:LOCALAPPDATA\WinMac\" #| Out-Null
                 $folderName = "WinMac"
                 $taskService = New-Object -ComObject "Schedule.Service"
@@ -528,7 +528,7 @@ foreach ($app in $selectedApps) {
                 $action = New-ScheduledTaskAction -Execute $fileName -WorkingDirectory $fileDirectory
                 $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
                 Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -ErrorAction SilentlyContinue #| Out-Null
-                Start-Process "$env:LOCALAPPDATA\WinMac\KeyShortcuts.exe"
+                Start-Process "$env:LOCALAPPDATA\WinMac\keyshortcuts.exe"
                 Write-Host "Keyboard Shortcuts installation completed." -ForegroundColor Green
             } else {
                 Write-Host "Keyboard Shortcuts requires elevated session. Please run the script as an administrator. Skipping installation." -ForegroundColor Red
