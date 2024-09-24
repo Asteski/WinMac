@@ -1,6 +1,4 @@
-# param(
-#     [string]$noGUI
-# )
+$version = "0.6.0"
 $user = [Security.Principal.WindowsIdentity]::GetCurrent()
 $adminTest = (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
 Add-Type -AssemblyName PresentationFramework
@@ -20,7 +18,227 @@ function Get-WindowsTheme {
 }
 $windowsTheme = Get-WindowsTheme
 
-if ($args[0] -ne '-nogui') {
+if ($args -eq '-nogui') {
+    Clear-Host
+Write-Host @"
+-----------------------------------------------------------------------
+
+Welcome to WinMac Deployment!
+
+Version: $version
+Author: Asteski
+GitHub: https://github.com/Asteski/WinMac
+
+This is work in progress. You're using this script at your own risk.
+
+-----------------------------------------------------------------------
+"@ -ForegroundColor Cyan
+Write-Host @"
+
+This script is responsible for installing all or specific WinMac 
+components.
+
+PowerShell profile files will be removed and replaced with new ones.
+Please make sure to backup your current profiles if needed.
+
+The author of this script is not responsible for any damage caused by 
+running it. It is highly recommended to create a system restore point 
+before proceeding with the installation process to ensure you can 
+revert any changes if necessary.
+
+For guide on how to use the script, please refer to the Wiki page 
+on WinMac GitHub page:
+
+https://github.com/Asteski/WinMac/wiki
+
+"@ -ForegroundColor Yellow
+if (-not $adminTest) {
+    Write-Host "Script is not running in elevated session." -ForegroundColor Red
+}
+else {
+    Write-Host "Script is running in elevated session." -ForegroundColor Green
+}
+Write-Host "`n-----------------------------------------------------------------------" -ForegroundColor Cyan
+# $errorActionPreference="SilentlyContinue"
+# Show Output function
+$ShowOutput = $false
+$date = Get-Date -Format "yy-MM-ddTHHmmss"
+$logFile = "WinMac_install_log_$date.txt"
+if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null}
+if (-not (Test-Path -Path "../logs")) {New-Item -ItemType Directory -Path "../logs" | Out-Null}
+function Invoke-WithOutput {
+    param ([scriptblock]$Command)
+    $output = & $Command 2>&1
+    $output | Out-File -FilePath "..\logs\$logFile" -Append
+    if ($ShowOutput -and $output) {$output}
+}
+# Directory check
+$checkDir = Get-ChildItem '..'
+if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir -like "*bin*")) {
+    Write-Host "`nWinMac components not found. Please make sure to run the script from the correct directory." -ForegroundColor Red
+    Start-Sleep 2
+    exit
+}
+# WinMac configuration
+Write-Host
+$fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom installation"
+if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
+    Write-Host "Choosing full installation." -ForegroundColor Green
+    $selectedApps = "1","2","3","4","5","6","7","8","9","10"
+} 
+elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
+    Write-Host "Choosing custom installation." -ForegroundColor Green
+    Start-Sleep 1
+    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Other Settings"}
+Write-Host @"
+
+`e[93m$("Please select options you want to install:")`e[0m
+
+"@
+Write-Host @"
+1. PowerToys
+2. Everything
+3. Powershell Profile
+4. StartAllBack
+5. WinMac Menu
+6. TopNotify
+7. Stahky
+8. Keyboard Shortcuts
+9. Nexus Dock
+10. Other Settings:
+    • Black Cursor
+    • Pin Home, Programs and Recycle Bin to Quick Access
+    • Remove Shortcut Arrows
+    • Remove Recycle Bin from Desktop
+    • Add End Task to context menu
+"@
+    Write-Host
+    do {
+        $selection = Read-Host "Enter the numbers of options you want to install (separated by commas)"
+        $selection = $selection.Trim()
+        $selection = $selection -replace '\s*,\s*', ','
+        $valid = $selection -match '^([1-9]|10)(,([1-9]|10))*$'
+        if (!$valid) {
+            Write-Host "`e[91mInvalid input! Please enter numbers between 1 and 10, separated by commas.`e[0m`n"
+        }
+    } while ([string]::IsNullOrWhiteSpace($selection) -or !$valid)
+    $selectedApps = @()
+    $selectedApps = $selection.Split(',')
+    $selectedAppNames = @()
+    foreach ($appNumber in $selectedApps) {
+        if ($appList.ContainsKey($appNumber)) {
+            $selectedAppNames += $appList[$appNumber]
+        }
+    }
+    Write-Host "`e[92m$("Selected options:")`e[0m $($selectedAppNames -join ', ')"
+}
+else
+{
+    Write-Host "Invalid input. Defaulting to full installation." -ForegroundColor Yellow
+    $selectedApps = "1","2","3","4","5","6","7","8","9","10"
+}
+
+if ($selectedApps -like '*4*' -or $selectedApps -like '*5*') {
+Write-Host @"
+
+`e[93m$("You can choose between WinMac start menu or Classic start menu.")`e[0m
+
+WinMac start menu replaces default menu with customized WinX menu.
+
+Classic start menu replaces default menu with enhanced Windows 7 start menu.
+
+"@
+
+    $menuSet = Read-Host "Enter 'X' for WinMac start menu or 'C' for Classic start menu"
+    if ($menuSet -eq 'x' -or $menuSet -eq 'X') {
+        Write-Host "Using WinMac start menu." -ForegroundColor Green
+    }
+    elseif ($menuSet -eq 'c'-or $menuSet -eq 'C')
+    { 
+        Write-Host "Using Classic start menu." -ForegroundColor Green
+    }
+    else
+    {
+        Write-Host "Invalid input. Defaulting to WinMac start menu." -ForegroundColor Yellow
+        $menuSet = 'X'
+    }
+}
+
+if ($selectedApps -like '*3*') {
+Write-Host @"
+
+`e[93m$("You can choose between WinMac prompt or MacOS-like prompt.")`e[0m
+
+WinMac prompt: 
+12:35:06 userName @ ~ > 
+
+MacOS prompt:
+userName@computerName ~ % 
+
+"@
+    $promptSet = Read-Host "Enter 'W' for WinMac prompt or 'M' for MacOS prompt"
+    if ($promptSet -eq 'W' -or $promptSet -eq 'w') {
+        Write-Host "Using WinMac prompt." -ForegroundColor Green
+    }
+    elseif ($promptSet -eq 'M' -or $promptSet -eq 'm')
+    { 
+        Write-Host "Using MacOS prompt." -ForegroundColor Green
+    }
+    else
+    {
+        Write-Host "Invalid input. Defaulting to WinMac prompt." -ForegroundColor Yellow
+        $promptSet = 'W'
+    }
+}
+
+if ($selectedApps -like '*4*' -or $selectedApps -like '*9*') {
+    $roundedOrSquared = Read-Host "`nEnter 'R' for rounded or 'S' for squared shell corners"
+    if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') {
+        Write-Host "Using rounded corners." -ForegroundColor Green
+    }
+    elseif ($roundedOrSquared -eq 'S' -or $roundedOrSquared -eq 's') {
+        Write-Host "Using squared corners." -ForegroundColor Green
+    }
+    else
+    {
+        Write-Host "Invalid input. Defaulting to rounded corners." -ForegroundColor Yellow
+        $roundedOrSquared = 'R'
+    }
+}
+
+if ($selectedApps -like '*4*' -or $selectedApps -like '*7*' -or $selectedApps -like '*9*') {
+    $lightOrDark = Read-Host "`nEnter 'L' for light or 'D' for dark themed Windows"
+    if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
+        Write-Host "Using light theme." -ForegroundColor Green
+        $stackTheme = 'light'
+        $orbTheme = 'black.svg'
+    } elseif ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
+        Write-Host "Using dark theme." -ForegroundColor Green
+        $stackTheme = 'dark'
+        $orbTheme = 'white.svg'
+    } else {
+        Write-Host "Invalid input. Defaulting to light theme." -ForegroundColor Yellow
+        $stackTheme = 'light'
+        $orbTheme = 'black.svg'
+    }
+}
+
+Start-Sleep 1
+$installConfirmation = Read-Host "`nAre you sure you want to start the installation process (y/n)"
+
+if ($installConfirmation -ne 'y') {
+    Write-Host "Installation process aborted." -ForegroundColor Red
+    Start-Sleep 2
+    exit
+}
+Write-Host @"
+
+Please do not do anything while the script is running, as it may impact the installation process.
+
+"@ -ForegroundColor Red
+
+}
+else {
     $backgroundColor = if ($windowsTheme -eq "Dark") { "#1E1E1E" } else { "#eff4f9" }
     $foregroundColor = if ($windowsTheme -eq "Dark") { "#f3f3f3" } else { "#1b1b1b" }
     $accentColor = if ($windowsTheme -eq "Dark") { "#0078D4" } else { "#fcfcfc" }
@@ -241,225 +459,7 @@ https://github.com/Asteski/WinMac/wiki
     })
     $window.ShowDialog() | Out-Null
 }
-else {
-Clear-Host
-Write-Host @"
------------------------------------------------------------------------
 
-Welcome to WinMac Deployment!
-
-Version: 0.6.0
-Author: Asteski
-GitHub: https://github.com/Asteski/WinMac
-
-This is work in progress. You're using this script at your own risk.
-
------------------------------------------------------------------------
-"@ -ForegroundColor Cyan
-Write-Host @"
-
-This script is responsible for installing all or specific WinMac 
-components.
-
-PowerShell profile files will be removed and replaced with new ones.
-Please make sure to backup your current profiles if needed.
-
-The author of this script is not responsible for any damage caused by 
-running it. It is highly recommended to create a system restore point 
-before proceeding with the installation process to ensure you can 
-revert any changes if necessary.
-
-For guide on how to use the script, please refer to the Wiki page 
-on WinMac GitHub page:
-
-https://github.com/Asteski/WinMac/wiki
-
-"@ -ForegroundColor Yellow
-if (-not $adminTest) {
-    Write-Host "Script is not running in elevated session." -ForegroundColor Red
-}
-else {
-    Write-Host "Script is running in elevated session." -ForegroundColor Green
-}
-Write-Host "`n-----------------------------------------------------------------------" -ForegroundColor Cyan
-# $errorActionPreference="SilentlyContinue"
-# Show Output function
-$ShowOutput = $false
-$date = Get-Date -Format "yy-MM-ddTHHmmss"
-$logFile = "WinMac_install_log_$date.txt"
-if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null}
-if (-not (Test-Path -Path "../logs")) {New-Item -ItemType Directory -Path "../logs" | Out-Null}
-function Invoke-WithOutput {
-    param ([scriptblock]$Command)
-    $output = & $Command 2>&1
-    $output | Out-File -FilePath "..\logs\$logFile" -Append
-    if ($ShowOutput -and $output) {$output}
-}
-# Directory check
-$checkDir = Get-ChildItem '..'
-if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir -like "*bin*")) {
-    Write-Host "`nWinMac components not found. Please make sure to run the script from the correct directory." -ForegroundColor Red
-    Start-Sleep 2
-    exit
-}
-# WinMac configuration
-Write-Host
-$fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom installation"
-if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
-    Write-Host "Choosing full installation." -ForegroundColor Green
-    $selectedApps = "1","2","3","4","5","6","7","8","9","10"
-} 
-elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
-    Write-Host "Choosing custom installation." -ForegroundColor Green
-    Start-Sleep 1
-    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Other Settings"}
-Write-Host @"
-
-`e[93m$("Please select options you want to install:")`e[0m
-
-"@
-Write-Host @"
-1. PowerToys
-2. Everything
-3. Powershell Profile
-4. StartAllBack
-5. WinMac Menu
-6. TopNotify
-7. Stahky
-8. Keyboard Shortcuts
-9. Nexus Dock
-10. Other Settings:
-    • Black Cursor
-    • Pin Home, Programs and Recycle Bin to Quick Access
-    • Remove Shortcut Arrows
-    • Remove Recycle Bin from Desktop
-  • Add End Task to context menu
-"@
-    Write-Host
-    do {
-        $selection = Read-Host "Enter the numbers of options you want to install (separated by commas)"
-        $selection = $selection.Trim()
-        $selection = $selection -replace '\s*,\s*', ','
-        $valid = $selection -match '^([1-9]|10)(,([1-9]|10))*$'
-        if (!$valid) {
-            Write-Host "`e[91mInvalid input! Please enter numbers between 1 and 10, separated by commas.`e[0m`n"
-        }
-    } while ([string]::IsNullOrWhiteSpace($selection) -or !$valid)
-    $selectedApps = @()
-    $selectedApps = $selection.Split(',')
-    $selectedAppNames = @()
-    foreach ($appNumber in $selectedApps) {
-        if ($appList.ContainsKey($appNumber)) {
-            $selectedAppNames += $appList[$appNumber]
-        }
-    }
-    Write-Host "`e[92m$("Selected options:")`e[0m $($selectedAppNames -join ', ')"
-}
-else
-{
-    Write-Host "Invalid input. Defaulting to full installation." -ForegroundColor Yellow
-    $selectedApps = "1","2","3","4","5","6","7","8","9","10"
-}
-
-if ($selectedApps -like '*4*' -or $selectedApps -like '*5*') {
-Write-Host @"
-
-`e[93m$("You can choose between WinMac start menu or Classic start menu.")`e[0m
-
-WinMac start menu replaces default menu with customized WinX menu.
-
-Classic start menu replaces default menu with enhanced Windows 7 start menu.
-
-"@
-
-    $menuSet = Read-Host "Enter 'X' for WinMac start menu or 'C' for Classic start menu"
-    if ($menuSet -eq 'x' -or $menuSet -eq 'X') {
-        Write-Host "Using WinMac start menu." -ForegroundColor Green
-    }
-    elseif ($menuSet -eq 'c'-or $menuSet -eq 'C')
-    { 
-        Write-Host "Using Classic start menu." -ForegroundColor Green
-    }
-    else
-    {
-        Write-Host "Invalid input. Defaulting to WinMac start menu." -ForegroundColor Yellow
-        $menuSet = 'X'
-    }
-}
-
-if ($selectedApps -like '*3*') {
-Write-Host @"
-
-`e[93m$("You can choose between WinMac prompt or MacOS-like prompt.")`e[0m
-
-WinMac prompt: 
-12:35:06 userName @ ~ > 
-
-MacOS prompt:
-userName@computerName ~ % 
-
-"@
-    $promptSet = Read-Host "Enter 'W' for WinMac prompt or 'M' for MacOS prompt"
-    if ($promptSet -eq 'W' -or $promptSet -eq 'w') {
-        Write-Host "Using WinMac prompt." -ForegroundColor Green
-    }
-    elseif ($promptSet -eq 'M' -or $promptSet -eq 'm')
-    { 
-        Write-Host "Using MacOS prompt." -ForegroundColor Green
-    }
-    else
-    {
-        Write-Host "Invalid input. Defaulting to WinMac prompt." -ForegroundColor Yellow
-        $promptSet = 'W'
-    }
-}
-
-if ($selectedApps -like '*4*' -or $selectedApps -like '*9*') {
-    $roundedOrSquared = Read-Host "`nEnter 'R' for rounded or 'S' for squared shell corners"
-    if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') {
-        Write-Host "Using rounded corners." -ForegroundColor Green
-    }
-    elseif ($roundedOrSquared -eq 'S' -or $roundedOrSquared -eq 's') {
-        Write-Host "Using squared corners." -ForegroundColor Green
-    }
-    else
-    {
-        Write-Host "Invalid input. Defaulting to rounded corners." -ForegroundColor Yellow
-        $roundedOrSquared = 'R'
-    }
-}
-
-if ($selectedApps -like '*4*' -or $selectedApps -like '*7*' -or $selectedApps -like '*9*') {
-    $lightOrDark = Read-Host "`nEnter 'L' for light or 'D' for dark themed Windows"
-    if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
-        Write-Host "Using light theme." -ForegroundColor Green
-        $stackTheme = 'light'
-        $orbTheme = 'black.svg'
-    } elseif ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
-        Write-Host "Using dark theme." -ForegroundColor Green
-        $stackTheme = 'dark'
-        $orbTheme = 'white.svg'
-    } else {
-        Write-Host "Invalid input. Defaulting to light theme." -ForegroundColor Yellow
-        $stackTheme = 'light'
-        $orbTheme = 'black.svg'
-    }
-}
-
-Start-Sleep 1
-$installConfirmation = Read-Host "`nAre you sure you want to start the installation process (y/n)"
-
-if ($installConfirmation -ne 'y') {
-    Write-Host "Installation process aborted." -ForegroundColor Red
-    Start-Sleep 2
-    exit
-}
-Write-Host @"
-
-Please do not do anything while the script is running, as it may impact the installation process.
-
-"@ -ForegroundColor Red
-}
 $ShowOutput = $false
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_install_log_$date.txt"
