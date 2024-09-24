@@ -10,13 +10,13 @@ function prompt {
     $userName = $env:USERNAME
     $folder = Split-Path -Leaf $pwd
     $date = Get-Date -f HH:mm:ss
-    if (Test-Admin -eq $true) { $userName = "$([char]27)[91m$($userName)$([char]27)[0m" } else { $userName = "$([char]27)[93m$($userName)$([char]27)[0m" }
+    if (Test-Admin -eq $true) { $userName = "`e[91m$($userName)`e[0m" } else { $userName = "`e[93m$($userName)`e[0m" }
     if ($folder -eq $env:USERNAME)
     {
-        "$([char]27)[92m$($date)$([char]27)[0m" + ' ' + $userName + ' @ ~' + "$([char]27)[93m$(' > ')$([char]27)[0m"
+        "`e[92m$($date)`e[0m" + ' ' + $userName + ' @ ~' + "`e[93m$(' > ')`e[0m"
     }
     else
     {
-        "$([char]27)[92m$($date)$([char]27)[0m" + ' ' + $userName + ' @ ' + $folder + "$([char]27)[93m$(' > ')$([char]27)[0m"
+        "`e[92m$($date)`e[0m" + ' ' + $userName + ' @ ' + $folder + "`e[93m$(' > ')`e[0m"
     }
 }
