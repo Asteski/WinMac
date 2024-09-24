@@ -5,9 +5,9 @@ if "%1"=="" (
 ) else if /i "%1"=="-uninstall" (
     pwsh -NoProfile -ExecutionPolicy Bypass -File "uninstallGUI.ps1"
 ) else if /i "%1"=="-nogui" (
-    pwsh -NoProfile -ExecutionPolicy Bypass -File "installGUI.ps1" -ArgumentList "-nogui"
+    pwsh -NoProfile -ExecutionPolicy Bypass -File "installGUI.ps1" -ArgumentList '-nogui'
 ) else if /i "%1"=="-uninstallnogui" (
-    pwsh -NoProfile -ExecutionPolicy Bypass -File "uninstall.ps1" -ArgumentList "-nogui"
+    pwsh -NoProfile -ExecutionPolicy Bypass -File "uninstall.ps1" -ArgumentList '-nogui'
 ) else (
     echo [31mInvalid argument.[0m
 )
