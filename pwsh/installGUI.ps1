@@ -8,6 +8,8 @@ $menuSet = $null                  # Initialize as null
 $promptSet = $null             # Initialize as null
 $roundedOrSquared = $null         # Initialize as null
 $lightOrDark = $null              # Initialize as null
+$stackTheme = $null              # Initialize as null
+$orbTheme = $null                 # Initialize as null
 function Get-WindowsTheme {
     try {
         $key = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"
