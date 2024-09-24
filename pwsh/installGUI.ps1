@@ -245,6 +245,7 @@ https://github.com/Asteski/WinMac/wiki
     })
     $btnCancel.Add_Click({
         $window.Close()
+        exit
     })
     $window.ShowDialog() | Out-Null
 }
