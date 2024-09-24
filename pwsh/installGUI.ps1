@@ -468,7 +468,7 @@ https://github.com/Asteski/WinMac/wiki
 Write-Host "Selected Apps: $selectedApps"
 Write-Host "Menu Set Value: $menuSet"
 Write-Host "Prompt Set Value: $promptSet"
-Write-Host "Shell Corner Value: $roundedOrSquare"
+Write-Host "Shell Corner Value: $roundedOrSquared"
 Write-Host "Theme Value: $lightOrDark"
 $ShowOutput = $false
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
