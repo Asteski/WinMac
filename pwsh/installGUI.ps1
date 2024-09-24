@@ -1,9 +1,7 @@
-Clear-Host
 $user = [Security.Principal.WindowsIdentity]::GetCurrent();
 $adminTest = (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
 Add-Type -AssemblyName PresentationFramework
 Add-Type -AssemblyName System.Windows.Forms
-
 function Get-WindowsTheme {
     try {
         $key = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"
@@ -18,9 +16,8 @@ function Get-WindowsTheme {
         return "Light"
     }
 }
-$windowsTheme = Get-WindowsTheme
 
-# Define colors based on theme
+$windowsTheme = Get-WindowsTheme
 $backgroundColor = if ($windowsTheme -eq "Dark") { "#1E1E1E" } else { "#FFFFFF" }
 $foregroundColor = if ($windowsTheme -eq "Dark") { "#FFFFFF" } else { "#000000" }
 $accentColor = if ($windowsTheme -eq "Dark") { "#0078D4" } else { "#0078D4" }
@@ -153,12 +150,9 @@ $borderColor = "#FFFFFF"  # Greyish border color
 
 $reader = New-Object System.Xml.XmlNodeReader $xaml
 $window = [Windows.Markup.XamlReader]::Load($reader)
-
-# References to UI elements
 $fullInstall = $window.FindName("fullInstall")
 $customInstall = $window.FindName("customInstall")
 $componentSelection = $window.FindName("componentSelection")
-
 $chkPowerToys = $window.FindName("chkPowerToys")
 $chkEverything = $window.FindName("chkEverything")
 $chkPowershellProfile = $window.FindName("chkPowershellProfile")
@@ -175,16 +169,12 @@ $shellCorner = $window.FindName("shellCornerRounded")
 $theme = $window.FindName("themeLight")
 $btnInstall = $window.FindName("btnInstall")
 $btnCancel = $window.FindName("btnCancel")
-
-# Enable/Disable component selection based on install type
 $fullInstall.Add_Checked({
     $componentSelection.IsEnabled = $false
 })
 $customInstall.Add_Checked({
     $componentSelection.IsEnabled = $true
 })
-
-# Event handler for the Install button
 $btnInstall.Add_Click({
     $installType = if ($fullInstall.IsChecked) { "F" } else { "C" }
     $selectedApps = @()  
@@ -233,9 +223,7 @@ for ($a=3; $a -ge 0; $a--) {
     Write-Host -NoNewLine "`b$a" -ForegroundColor Green
     Start-Sleep 1
 }
-
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
-# Nuget
 Write-Host "Checking for Package Provider (Nuget)" -ForegroundColor Yellow
 $nugetProvider = Get-PackageProvider -Name NuGet -ErrorAction SilentlyContinue
 if ($null -eq $nugetProvider) {
@@ -245,7 +233,6 @@ if ($null -eq $nugetProvider) {
 } else {
     Write-Host "NuGet is already installed." -ForegroundColor Green
 }
-# Winget
 Write-Host "Checking for Package Manager (Winget)" -ForegroundColor Yellow
 $wingetCliCheck = winget -v
 if ($null -eq $wingetCliCheck) {
@@ -277,7 +264,6 @@ if ($null -eq $wingetClientCheck) {
     }
 }
 Import-Module -Name Microsoft.WinGet.Client -Force
-
 # WinMac deployment
 foreach ($app in $selectedApps) {
     switch ($app.Trim()) {
@@ -513,7 +499,7 @@ foreach ($app in $selectedApps) {
                 $fileName = 'keyshortcuts.exe'
                 $fileDirectory = "$env:LOCALAPPDATA\WinMac"
                 New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" -ErrorAction SilentlyContinue #| Out-Null
-                if (Get-Process keyshortcuts) { Stop-Process -Name keyshortcuts -Force -ErrorAction SilentlyContinue }
+                # if (Get-Process keyshortcuts) { Stop-Process -Name keyshortcuts -ErrorAction SilentlyContinue }
                 Copy-Item ..\bin\$fileName "$env:LOCALAPPDATA\WinMac\" #| Out-Null
                 $folderName = "WinMac"
                 $taskService = New-Object -ComObject "Schedule.Service"
@@ -528,7 +514,7 @@ foreach ($app in $selectedApps) {
                 $action = New-ScheduledTaskAction -Execute $fileName -WorkingDirectory $fileDirectory
                 $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
                 Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -ErrorAction SilentlyContinue #| Out-Null
-                Start-Process "$env:LOCALAPPDATA\WinMac\keyshortcuts.exe"
+                Start-Process -FilePath "$env:LOCALAPPDATA\WinMac\keyshortcuts.exe" -WorkingDirectory $env:LOCALAPPDATA\WinMac
                 Write-Host "Keyboard Shortcuts installation completed." -ForegroundColor Green
             } else {
                 Write-Host "Keyboard Shortcuts requires elevated session. Please run the script as an administrator. Skipping installation." -ForegroundColor Red
@@ -572,10 +558,6 @@ foreach ($app in $selectedApps) {
                 Copy-Item "..\config\dock\icons" "$winStep" -Recurse -Force #| Out-Null
                 $regFile = "..\config\dock\winstep.reg"
                 $downloadsPath = "$env:USERPROFILE\Downloads"
-                # $tempFolder = "..\temp"
-                # if (-not (Test-Path $tempFolder)) {
-                #     New-Item -ItemType Directory -Path $tempFolder -Force #| Out-Null
-                # }
                 if ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
                     $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "Rounded", "Squared" }
                     $modifiedFile = "..\temp\winstep.reg"
@@ -743,13 +725,9 @@ if ($restartConfirmation -eq "Y" -or $restartConfirmation -eq "y") {
 } else {
     Write-Host "Computer will not be restarted." -ForegroundColor Green
 }
-
 })
-
-# Event handler for the Cancel button
 $btnCancel.Add_Click({
     $window.Close()
 })
-
 $window.ShowDialog() | Out-Null
 #EOF
