@@ -523,7 +523,7 @@ if ($null -eq $wingetClientCheck) {
         Update-Module -Name Microsoft.WinGet.Client -Force -WarningAction SilentlyContinue
         Write-Host "Winget update completed." -ForegroundColor Green
     } else {
-        Write-Host "Winget is already installed. Version: $($wingetClientCheck.Version)" -ForegroundColor Green
+        Write-Host "Winget is already installed." -ForegroundColor Green
     }
 }
 Import-Module -Name Microsoft.WinGet.Client -Force
