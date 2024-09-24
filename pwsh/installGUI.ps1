@@ -508,22 +508,22 @@ if ($null -eq $wingetCliCheck) {
     Add-AppxPackage '..\temp\Microsoft.UI.Xaml.2.8.x64.appx'
     Add-AppxPackage '..\temp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
 }
-try {
-    $wingetFind = Find-Module Microsoft.WinGet.Client
-} catch {}
+# Check if the module is installed locally
+$wingetClientCheck = Get-InstalledModule -Name Microsoft.WinGet.Client -ErrorAction SilentlyContinue
 if ($null -eq $wingetClientCheck) {
-    Write-Host "Installing Winget..." -ForegroundColor Yellow
+    # If not installed, install the module
+    Write-Host "Winget is not installed. Installing Winget..." -ForegroundColor Yellow
     Install-Module -Name Microsoft.WinGet.Client -Force -WarningAction SilentlyContinue
     Write-Host "Winget installation completed." -ForegroundColor Green
 } else {
-    $wingetFind = Find-Module Microsoft.WinGet.Client
-    if ($wingetClientCheck -ne $wingetFind.Version) {
-        Write-Host "Never version is available. Updating Winget..." -ForegroundColor Yellow
+    # If installed, check if there's a newer version available
+    $wingetFind = Find-Module -Name Microsoft.WinGet.Client
+    if ($wingetFind.Version -gt $wingetClientCheck.Version) {
+        Write-Host "A newer version of Winget is available. Updating Winget..." -ForegroundColor Yellow
         Update-Module -Name Microsoft.WinGet.Client -Force -WarningAction SilentlyContinue
-        
         Write-Host "Winget update completed." -ForegroundColor Green
     } else {
-        Write-Host "`e[92m$("Winget is already installed.")`e[0m Version: $($wingetClientCheck)"
+        Write-Host "Winget is already installed. Version: $($wingetClientCheck.Version)" -ForegroundColor Green
     }
 }
 Import-Module -Name Microsoft.WinGet.Client -Force
