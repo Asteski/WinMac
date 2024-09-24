@@ -111,7 +111,7 @@ $borderColor = "#FFFFFF"  # Greyish border color
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <RadioButton x:Name="promptStyleWinMac" Content="WinMac Prompt" IsChecked="True" Grid.Row="0" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <RadioButton x:Name="promptStyleMacOS" Content="MacOS Prompt" Grid.Row="0" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <RadioButton x:Name="promptStylemacOS" Content="macOS Prompt" Grid.Row="0" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                     </Grid>
                 </GroupBox>
 
@@ -513,6 +513,7 @@ foreach ($app in $selectedApps) {
                 $fileName = 'KeyShortcuts.exe'
                 $fileDirectory = "$env:LOCALAPPDATA\WinMac"
                 New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" -ErrorAction SilentlyContinue #| Out-Null
+                if (Get-Process KeyShortcuts) { Stop-Process -Name KeyShortcuts -Force }
                 Copy-Item ..\bin\$fileName "$env:LOCALAPPDATA\WinMac\" #| Out-Null
                 $folderName = "WinMac"
                 $taskService = New-Object -ComObject "Schedule.Service"
