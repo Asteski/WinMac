@@ -1,13 +1,13 @@
 @echo off
-cd /d "%~dp0/pwsh"
+cd /d "%~dp0\pwsh"
 if "%1"=="" (
     pwsh -NoProfile -ExecutionPolicy Bypass -File "installGUI.ps1"
-) else if "%1"=="-uninstall" (
+) else if /i "%1"=="-uninstall" (
     pwsh -NoProfile -ExecutionPolicy Bypass -File "uninstallGUI.ps1"
-) else if "%1"=="-nogui" (
+) else if /i "%1"=="-nogui" (
     pwsh -NoProfile -ExecutionPolicy Bypass -File "installGUI.ps1" -ArgumentList "-nogui"
-) else if "%1"=="-uninstallnogui" (
-    pwsh -NoProfile -ExecutionPolicy Bypass -File "uninstall.ps1  -ArgumentList "-nogui"
+) else if /i "%1"=="-uninstallnogui" (
+    pwsh -NoProfile -ExecutionPolicy Bypass -File "uninstall.ps1" -ArgumentList "-nogui"
 ) else (
     echo [31mInvalid argument.[0m
 )
