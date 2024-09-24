@@ -499,7 +499,7 @@ foreach ($app in $selectedApps) {
                 $fileName = 'keyshortcuts.exe'
                 $fileDirectory = "$env:LOCALAPPDATA\WinMac"
                 New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" -ErrorAction SilentlyContinue #| Out-Null
-                # if (Get-Process keyshortcuts) { Stop-Process -Name keyshortcuts -ErrorAction SilentlyContinue }
+                if (Get-Process keyshortcuts) { Stop-Process -Name keyshortcuts -ErrorAction SilentlyContinue }
                 Copy-Item ..\bin\$fileName "$env:LOCALAPPDATA\WinMac\" #| Out-Null
                 $folderName = "WinMac"
                 $taskService = New-Object -ComObject "Schedule.Service"
