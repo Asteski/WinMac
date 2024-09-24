@@ -466,10 +466,10 @@ https://github.com/Asteski/WinMac/wiki
     $window.ShowDialog() | Out-Null
 }
 Write-Host "Selected Apps: $selectedApps"
-Write-Host "Menu Set Value: $menuSetValue"
-Write-Host "Prompt Set Value: $promptSetVarValue"
-Write-Host "Shell Corner Value: $roundedOrSquaredValue"
-Write-Host "Theme Value: $lightOrDarkValue"
+Write-Host "Menu Set Value: $menuSet"
+Write-Host "Prompt Set Value: $promptSet"
+Write-Host "Shell Corner Value: $roundedOrSquare"
+Write-Host "Theme Value: $lightOrDark"
 $ShowOutput = $false
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_install_log_$date.txt"
