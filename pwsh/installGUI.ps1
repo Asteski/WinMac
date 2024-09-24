@@ -227,7 +227,7 @@ if ($selectedApps -like '*4*' -or $selectedApps -like '*7*' -or $selectedApps -l
         Write-Host "Invalid input. Defaulting to light theme." -ForegroundColor Yellow
         $stackTheme = 'light'
         $orbTheme = 'black.svg'
-        $lightOrDark = 'L'
+        $lightOrDark = "L"
     }
 }
 
