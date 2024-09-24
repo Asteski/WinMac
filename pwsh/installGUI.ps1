@@ -1,8 +1,13 @@
+Add-Type -AssemblyName PresentationFramework
+Add-Type -AssemblyName System.Windows.Forms
 $version = "0.6.0"
 $user = [Security.Principal.WindowsIdentity]::GetCurrent()
 $adminTest = (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
-Add-Type -AssemblyName PresentationFramework
-Add-Type -AssemblyName System.Windows.Forms
+$selectedApps = @()                    # Initialize as an empty array
+$menuSet = $null                  # Initialize as null
+$promptSet = $null             # Initialize as null
+$roundedOrSquared = $null         # Initialize as null
+$lightOrDark = $null              # Initialize as null
 function Get-WindowsTheme {
     try {
         $key = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"
@@ -434,7 +439,7 @@ https://github.com/Asteski/WinMac/wiki
         if ($chkNexusDock.IsChecked) { $selection += "9," }
         if ($chkOther.IsChecked) { $selection += "10" }
         $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Other Settings"}
-        $selectedApps = $selection.Split(',')
+        $selectedApps = $selection.Split(',').TrimEnd(',')
         $selectedAppNames = @()
         foreach ($appNumber in $selection) {
             if ($appList.ContainsKey($appNumber)) {
@@ -442,7 +447,7 @@ https://github.com/Asteski/WinMac/wiki
             }
         }
         $menuSet = if ($startMenu.IsChecked) { "X"; $startMenuInfo = 'WinMac Menu' } else { "C"; $startMenuInfo = 'Classic Menu' }
-        $promptSet = if ($promptStyle.IsChecked) { "W";$promptSetInfo = 'WinMac Prompt' } else { "M"; $promptSetInfo = 'macOS Prompt' }
+        $promptSetVar = if ($promptStyle.IsChecked) { "W";$promptSetInfo = 'WinMac Prompt' } else { "M"; $promptSetInfo = 'macOS Prompt' }
         $roundedOrSquared = if ($shellCorner.IsChecked) { "R"; $shellCornersInfo = 'Rounded' } else { "S"; $shellCornersInfo = 'Squared' }
         $lightOrDark = if ($theme.IsChecked) { "L"; $stackTheme = 'light'; $orbTheme = 'black.svg'; $themeStyleInfo = 'Light Theme' } else { "D"; $stackTheme = 'dark'; $orbTheme = 'white.svg'; $themeStyleInfo = 'Dark Theme' }
         if ($installType -eq 'F'){ [
@@ -451,7 +456,6 @@ https://github.com/Asteski/WinMac/wiki
             [System.Windows.MessageBox]::Show("Installation Type: Custom`n`nSelected Components:`n$selectedAppNames`nConfiguration:`nStart Menu: $startMenuInfo`nPrompt Style: $promptSetInfo`nShell Corners: $shellCornersInfo`nTheme Style: $themeStyleInfo", "Installation Summary", [System.Windows.MessageBoxButton]::OKCancel, [System.Windows.MessageBoxImage]::Information) 
         }
         $window.Close()
-
     })
     $btnCancel.Add_Click({
         $window.Close()
