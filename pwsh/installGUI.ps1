@@ -18,7 +18,7 @@ function Get-WindowsTheme {
 }
 $windowsTheme = Get-WindowsTheme
 
-if ($args -eq '-nogui') {
+if ($args[0] -eq '-nogui') {
     Clear-Host
 Write-Host @"
 -----------------------------------------------------------------------
