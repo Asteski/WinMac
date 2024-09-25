@@ -258,7 +258,7 @@ https://github.com/Asteski/WinMac/wiki
     $window.ShowDialog() | Out-Null
 }
 else {
-    Clear-Host
+    # Clear-Host
 Write-Host @"
 -----------------------------------------------------------------------
 
@@ -546,7 +546,7 @@ foreach ($app in $selectedApps) {
                 "Vim.Vim",
                 "gsass1.NTop"
                 )
-            foreach ($app in $winget) {Invoke-Output { winget install --id $app --source winget --silent }}
+            foreach ($app in $winget) {Invoke-Output { Install-WinGetPackage -id $app -source winget }}
             $vimParentPath = Join-Path $env:PROGRAMFILES Vim
             $latestSubfolder = Invoke-Output { Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -Property CreationTime -Descending | Select-Object -First 1 }
             $vimChildPath = $latestSubfolder.FullName
@@ -619,7 +619,7 @@ foreach ($app in $selectedApps) {
             if ($adminTest) {
                 if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
                     Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
-                    Invoke-Output {winget install --id Microsoft.DotNet.DesktopRuntime.6 --silent}
+                    Invoke-Output {Install-WinGetPackage -id Microsoft.DotNet.DesktopRuntime.6}
                     Invoke-WebRequest -Uri 'https://github.com/dongle-the-gadget/WinverUWP/releases/download/v2.1.0.0/2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle' -OutFile '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
                     Add-AppxPackage -Path '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
                     Invoke-Output {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\"}
@@ -663,7 +663,7 @@ foreach ($app in $selectedApps) {
     # TopNotify
         "6" {
             Write-Host "Installing TopNotify..." -ForegroundColor Yellow
-            Invoke-Output {winget install --name TopNotify --silent --accept-package-agreements --accept-source-agreements}
+            Invoke-Output {Install-WinGetPackage -name TopNotify -Force}#--accept-package-agreements --accept-source-agreements}
             $app = Get-AppxPackage *TopNotify*
             Start-Process -FilePath TopNotify.exe -WorkingDirectory $app.InstallLocation
             $pkgName = $app.PackageFamilyName
