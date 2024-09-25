@@ -24,7 +24,8 @@ if ($args[0] -ne '-nogui') {
     $accentColor = if ($windowsTheme -eq "Dark") { "#0078D4" } else { "#fcfcfc" }
     $secondaryBackgroundColor = if ($windowsTheme -eq "Dark") { "#2D2D2D" } else { "#fcfcfc" }
     $borderColor = if ($windowsTheme -eq "Dark") { "#2D2D2D" } else { "#e5e5e5" }
-    $icon = "C:\Users\Adams\OneDrive\Documents\Git\WinMac\config\gui.ico"
+    $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+    $icon = Join-Path $scriptDir "config\gui.ico"
     $topTextBlock = "PowerShell Deployment Tool for Windows and macOS hybrid"
 $bottomTextBlock = @"
 PowerShell profile files will be removed and replaced with new ones.
@@ -267,12 +268,7 @@ on WinMac GitHub page:
 https://github.com/Asteski/WinMac/wiki
 
 "@ -ForegroundColor Yellow
-if (-not $adminTest) {
-    Write-Host "Script is not running in elevated session." -ForegroundColor Red
-}
-else {
-    Write-Host "Script is running in elevated session." -ForegroundColor Green
-}
+if (-not $adminTest) {Write-Host "Script is not running in elevated session." -ForegroundColor Red} else {Write-Host "Script is running in elevated session." -ForegroundColor Green}
 Write-Host "`n-----------------------------------------------------------------------" -ForegroundColor Cyan
 # $errorActionPreference="SilentlyContinue"
 # Show Output function
