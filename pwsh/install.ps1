@@ -505,7 +505,7 @@ foreach ($app in $selectedApps) {
     # PowerToys
         "1" {
             Write-Host "Installing PowerToys..." -ForegroundColor Yellow
-            Invoke-Output {winget configure ..\config\powertoys.dsc.yaml --accept-configuration-agreements}
+            winget configure ..\config\powertoys.dsc.yaml --accept-configuration-agreement | Out-Null
             Write-Host "PowerToys installation completed." -ForegroundColor Green
         }
     # Everything
@@ -617,7 +617,7 @@ foreach ($app in $selectedApps) {
             if ($adminTest) {
                 if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
                     Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
-                    Invoke-Output {Install-WinGetPackage -id Microsoft.DotNet.DesktopRuntime.6}
+                    Invoke-Output {Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.6'}
                     Invoke-WebRequest -Uri 'https://github.com/dongle-the-gadget/WinverUWP/releases/download/v2.1.0.0/2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle' -OutFile '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
                     Add-AppxPackage -Path '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
                     Invoke-Output {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\"}
