@@ -8,7 +8,7 @@ Add-Type -AssemblyName System.Windows.Forms
 if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null}
 if (-not (Test-Path -Path "../logs")) {New-Item -ItemType Directory -Path "../logs" | Out-Null}
 $version = "0.6.0"
-# $ShowOutput = $true
+if ($debug) {$ShowOutput = $true} else {$ShowOutput = $false}
 $errorActionPreference="SilentlyContinue"
 $WarningPreference="SilentlyContinue"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
@@ -25,7 +25,7 @@ function Invoke-Output {
     param ([scriptblock]$Command)
     $output = & $Command 2>&1
     $output | Out-File -FilePath "..\logs\$logFile" -Append
-    if ($debug -and $output) {$output}
+    if ($ShowOutput -and $output) {$output}
 }
 function Get-WindowsTheme {
     try {
