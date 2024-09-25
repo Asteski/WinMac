@@ -24,8 +24,7 @@ if ($args[0] -ne '-nogui') {
     $accentColor = if ($windowsTheme -eq "Dark") { "#0078D4" } else { "#fcfcfc" }
     $secondaryBackgroundColor = if ($windowsTheme -eq "Dark") { "#2D2D2D" } else { "#fcfcfc" }
     $borderColor = if ($windowsTheme -eq "Dark") { "#2D2D2D" } else { "#e5e5e5" }
-    $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-    $icon = Join-Path $scriptDir "config\gui.ico"
+    $icon = ".\config\gui.ico"
     $topTextBlock = "PowerShell Deployment Tool for Windows and macOS hybrid"
 $bottomTextBlock = @"
 PowerShell profile files will be removed and replaced with new ones.
