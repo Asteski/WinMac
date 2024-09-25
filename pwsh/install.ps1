@@ -2,13 +2,11 @@ param (
     [switch]$noGUI,
     [switch]$debug
 )
-
 Add-Type -AssemblyName PresentationFramework
 Add-Type -AssemblyName System.Windows.Forms
 if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null}
 if (-not (Test-Path -Path "../logs")) {New-Item -ItemType Directory -Path "../logs" | Out-Null}
 $version = "0.6.0"
-if ($debug) {$ShowOutput = $true} else {$ShowOutput = $false}
 $errorActionPreference="SilentlyContinue"
 $WarningPreference="SilentlyContinue"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
@@ -25,7 +23,7 @@ function Invoke-Output {
     param ([scriptblock]$Command)
     $output = & $Command 2>&1
     $output | Out-File -FilePath "..\logs\$logFile" -Append
-    if ($ShowOutput -and $output) {$output}
+    if ($debug -and $output) {$output}
 }
 function Get-WindowsTheme {
     try {
@@ -258,7 +256,7 @@ https://github.com/Asteski/WinMac/wiki
     $window.ShowDialog() | Out-Null
 }
 else {
-    # Clear-Host
+    Clear-Host
 Write-Host @"
 -----------------------------------------------------------------------
 
