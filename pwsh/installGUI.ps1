@@ -462,6 +462,7 @@ if ($result){
 $ShowOutput = $false
 $errorActionPreference="SilentlyContinue"
 $WarningPreference="SilentlyContinue"
+$OutputPreference = 'SilentlyContinue'
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_install_log_$date.txt"
 if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null }
