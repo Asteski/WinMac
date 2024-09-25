@@ -3,13 +3,7 @@ Add-Type -AssemblyName System.Windows.Forms
 $version = "0.6.0"
 $user = [Security.Principal.WindowsIdentity]::GetCurrent()
 $adminTest = (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
-$selectedApps = @()                    # Initialize as an empty array
-$menuSet = $null                  # Initialize as null
-$promptSet = $null             # Initialize as null
-$roundedOrSquared = $null         # Initialize as null
-$lightOrDark = $null              # Initialize as null
-$stackTheme = $null              # Initialize as null
-$orbTheme = $null                 # Initialize as null
+
 function Get-WindowsTheme {
     try {
         $key = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"
@@ -24,8 +18,222 @@ function Get-WindowsTheme {
     }
 }
 $windowsTheme = Get-WindowsTheme
+if ($args[0] -ne '-nogui') {
+    $backgroundColor = if ($windowsTheme -eq "Dark") { "#1E1E1E" } else { "#eff4f9" }
+    $foregroundColor = if ($windowsTheme -eq "Dark") { "#f3f3f3" } else { "#1b1b1b" }
+    $accentColor = if ($windowsTheme -eq "Dark") { "#0078D4" } else { "#fcfcfc" }
+    $secondaryBackgroundColor = if ($windowsTheme -eq "Dark") { "#2D2D2D" } else { "#fcfcfc" }
+    $borderColor = if ($windowsTheme -eq "Dark") { "#2D2D2D" } else { "#e5e5e5" }
+    $icon = "C:\Users\Adams\OneDrive\Documents\Git\WinMac\config\gui.ico"
+    $topTextBlock = "PowerShell Deployment Tool for Windows and macOS hybrid"
+$bottomTextBlock = @"
+PowerShell profile files will be removed and replaced with new ones.
+Please make sure to backup your current profiles if needed.
 
-if ($args[0] -eq '-nogui') {
+The author of this script is not responsible for any damage caused by
+running it. It is highly recommended to create a system restore point
+before proceeding with the installation process to ensure you can
+revert any changes if necessary.
+
+For a guide on how to use the script, please refer to the Wiki page
+on WinMac GitHub page:
+
+https://github.com/Asteski/WinMac/wiki
+"@
+[xml]$xaml = @"
+<Window
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="WinMac Deployment" Height="700" Width="480" WindowStartupLocation="CenterScreen" Background="$backgroundColor" Icon="$icon">
+    <Window.Resources>
+        <SolidColorBrush x:Key="BackgroundBrush" Color="$backgroundColor"/>
+        <SolidColorBrush x:Key="ForegroundBrush" Color="$foregroundColor"/>
+        <SolidColorBrush x:Key="AccentBrush" Color="$accentColor"/>
+        <SolidColorBrush x:Key="SecondaryBackgroundBrush" Color="$secondaryBackgroundColor"/>
+        <SolidColorBrush x:Key="BorderBrush" Color="$borderColor"/>
+        <Thickness x:Key="BorderThickness">0</Thickness>  <!-- Corrected Thickness -->
+    </Window.Resources>
+
+    <Grid Background="{StaticResource BackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Title -->
+        <StackPanel Grid.Row="0" HorizontalAlignment="Center">
+            <TextBlock FontSize="20" FontWeight="Bold" Text="WinMac Deployment" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="0,10,0,10"/>
+            
+            <!-- Static TextBlock below the title -->
+            <TextBlock Text="$topTextBlock" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="0,5,0,10" TextWrapping="Wrap"/>
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel VerticalAlignment="Top">
+                <!-- Installation Type -->
+                <GroupBox Header="Select Installation Type" Margin="0,5,0,5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
+                    <Grid Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <RadioButton x:Name="fullInstall" Content="Full Installation" IsChecked="True" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <RadioButton x:Name="customInstall" Content="Custom Installation" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                    </Grid>
+                </GroupBox>
+
+                <!-- Component Selection -->
+                <GroupBox Header="Choose Components" Margin="0,5,0,5" Padding="5,5,5,5" x:Name="componentSelection" IsEnabled="False" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
+                    <Grid Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <CheckBox x:Name="chkPowerToys" Content="PowerToys" IsChecked="True" Grid.Row="0" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkEverything" Content="Everything" IsChecked="True" Grid.Row="0" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkPowershellProfile" Content="PowerShell Profile" IsChecked="True" Grid.Row="1" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkStartAllBack" Content="StartAllBack" IsChecked="True" Grid.Row="1" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkWinMacMenu" Content="WinMac Menu" IsChecked="True" Grid.Row="2" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkTopNotify" Content="TopNotify" IsChecked="True" Grid.Row="2" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkStahky" Content="Stahky" IsChecked="True" Grid.Row="3" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkKeyboardShortcuts" Content="Keyboard Shortcuts" IsChecked="True" Grid.Row="3" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkNexusDock" Content="Nexus Dock" IsChecked="True" Grid.Row="4" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkOther" Content="Other" IsChecked="True" Grid.Row="4" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                    </Grid>
+                </GroupBox>
+
+                <!-- 2x2 GroupBox Layout -->
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto"/> <!-- For the TextBlock -->
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Additional Settings: Start Menu -->
+                    <GroupBox Grid.Row="0" Grid.Column="0" Header="Start Menu Options" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
+                        <StackPanel>
+                            <RadioButton x:Name="startMenuWinMac" Content="WinMac Start Menu" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                            <RadioButton x:Name="startMenuClassic" Content="Classic Start Menu" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <!-- Additional Settings: Prompt Style -->
+                    <GroupBox Grid.Row="0" Grid.Column="1" Header="Prompt Style Options" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
+                        <StackPanel>
+                            <RadioButton x:Name="promptStyleWinMac" Content="WinMac Prompt" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                            <RadioButton x:Name="promptStylemacOS" Content="macOS Prompt" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <!-- Additional Settings: Shell Corner Style -->
+                    <GroupBox Grid.Row="1" Grid.Column="0" Header="Shell Corner Style" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
+                        <StackPanel>
+                            <RadioButton x:Name="shellCornerRounded" Content="Rounded" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                            <RadioButton x:Name="shellCornerSquared" Content="Squared" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <!-- Additional Settings: Theme Style -->
+                    <GroupBox Grid.Row="1" Grid.Column="1" Header="Theme Style" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
+                        <StackPanel>
+                            <RadioButton x:Name="themeLight" Content="Light" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                            <RadioButton x:Name="themeDark" Content="Dark" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <!-- TextBlock below the last row of GroupBoxes -->
+                    <TextBlock Grid.Row="2" Grid.ColumnSpan="2" Margin="5" Foreground="{StaticResource ForegroundBrush}" Text="$bottomTextBlock" TextWrapping="Wrap"/>
+                </Grid>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Buttons -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button x:Name="btnInstall" Content="Install" Width="100" Height="30" Margin="10" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource AccentBrush}"/>
+            <Button x:Name="btnCancel" Content="Cancel" Width="100" Height="30" Margin="10" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}"/>
+        </StackPanel>
+    </Grid>
+</Window>
+"@
+    $reader = New-Object System.Xml.XmlNodeReader $xaml
+    $window = [Windows.Markup.XamlReader]::Load($reader)
+    $fullInstall = $window.FindName("fullInstall")
+    $customInstall = $window.FindName("customInstall")
+    $componentSelection = $window.FindName("componentSelection")
+    $chkPowerToys = $window.FindName("chkPowerToys")
+    $chkEverything = $window.FindName("chkEverything")
+    $chkPowershellProfile = $window.FindName("chkPowershellProfile")
+    $chkStartAllBack = $window.FindName("chkStartAllBack")
+    $chkWinMacMenu = $window.FindName("chkWinMacMenu")
+    $chkTopNotify = $window.FindName("chkTopNotify")
+    $chkStahky = $window.FindName("chkStahky")
+    $chkKeyboardShortcuts = $window.FindName("chkKeyboardShortcuts")
+    $chkNexusDock = $window.FindName("chkNexusDock")
+    $chkOther = $window.FindName("chkOther")
+    $startMenu = $window.FindName("startMenuWinMac")
+    $promptStyle = $window.FindName("promptStyleWinMac")
+    $shellCorner = $window.FindName("shellCornerRounded")
+    $theme = $window.FindName("themeLight")
+    $btnInstall = $window.FindName("btnInstall")
+    $btnCancel = $window.FindName("btnCancel")
+    $fullInstall.Add_Checked({$componentSelection.IsEnabled = $false})
+    $customInstall.Add_Checked({$componentSelection.IsEnabled = $true})
+    $result = @{}
+    $btnInstall.Add_Click({
+        $installType = if ($fullInstall.IsChecked) { "F" } else { "C" }
+        if ($chkPowerToys.IsChecked) { $selection += "1," }
+        if ($chkEverything.IsChecked) { $selection += "2," }
+        if ($chkPowershellProfile.IsChecked) { $selection += "3," }
+        if ($chkStartAllBack.IsChecked) { $selection += "4," }
+        if ($chkWinMacMenu.IsChecked) { $selection += "5," }
+        if ($chkTopNotify.IsChecked) { $selection += "6," }
+        if ($chkStahky.IsChecked) { $selection += "7," }
+        if ($chkKeyboardShortcuts.IsChecked) { $selection += "8," }
+        if ($chkNexusDock.IsChecked) { $selection += "9," }
+        if ($chkOther.IsChecked) { $selection += "10" }
+        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Other Settings"}
+        $result["selectedApps"] = $selection.Split(',').TrimEnd(',')
+        $selectedAppNames = @()
+        foreach ($appNumber in $selection) {
+            if ($appList.ContainsKey($appNumber)) {
+                $selectedAppNames += $appList[$appNumber] + "`n"
+            }
+        }
+        $result["menuSet"] = if ($startMenu.IsChecked) { "X"; $startMenuInfo = 'WinMac Menu' } else { "C"; $startMenuInfo = 'Classic Menu' }
+        $result["promptSetVar"] = if ($promptStyle.IsChecked) { "W";$promptSetInfo = 'WinMac Prompt' } else { "M"; $promptSetInfo = 'macOS Prompt' }
+        $result["roundedOrSquared"] = if ($shellCorner.IsChecked) { "R"; $shellCornersInfo = 'Rounded' } else { "S"; $shellCornersInfo = 'Squared' }
+        $result["lightOrDark"] = if ($theme.IsChecked) { "L"; $result["stackTheme"] = 'light'; $result["orbTheme"] = 'black.svg'; $themeStyleInfo = 'Light Theme' } else { "D"; $result["stackTheme"] = 'dark'; $result["orbTheme"] = 'white.svg'; $themeStyleInfo = 'Dark Theme' }
+        if ($installType -eq 'F'){ 
+            $result = [System.Windows.MessageBox]::Show("Installation Type: Full`n`nConfiguration:`nStart Menu: $startMenuInfo`nPrompt Style: $promptSetInfo`nShell Corners: $shellCornersInfo`nTheme Style: $themeStyleInfo", "Installation Summary", [System.Windows.MessageBoxButton]::OKCancel, [System.Windows.MessageBoxImage]::Information) 
+        } else {
+            $result = [System.Windows.MessageBox]::Show("Installation Type: Custom`n`nSelected Components:`n$selectedAppNames`nConfiguration:`nStart Menu: $startMenuInfo`nPrompt Style: $promptSetInfo`nShell Corners: $shellCornersInfo`nTheme Style: $themeStyleInfo", "Installation Summary", [System.Windows.MessageBoxButton]::OKCancel, [System.Windows.MessageBoxImage]::Information) 
+        }
+        if ($result -eq 'OK') {
+            $window.Close()
+        }
+    })
+    $btnCancel.Add_Click({
+        $window.Close()
+        exit
+    })
+    $window.ShowDialog() | Out-Null
+}
+else {
     Clear-Host
 Write-Host @"
 -----------------------------------------------------------------------
@@ -246,231 +454,15 @@ Please do not do anything while the script is running, as it may impact the inst
 "@ -ForegroundColor Red
 
 }
-else {
-    $backgroundColor = if ($windowsTheme -eq "Dark") { "#1E1E1E" } else { "#eff4f9" }
-    $foregroundColor = if ($windowsTheme -eq "Dark") { "#f3f3f3" } else { "#1b1b1b" }
-    $accentColor = if ($windowsTheme -eq "Dark") { "#0078D4" } else { "#fcfcfc" }
-    $secondaryBackgroundColor = if ($windowsTheme -eq "Dark") { "#2D2D2D" } else { "#fcfcfc" }
-    $borderColor = if ($windowsTheme -eq "Dark") { "#2D2D2D" } else { "#e5e5e5" }
-$topTextBlock = @"
-PowerShell Deployment Tool for WinMac.
-This script installs several tools and modifies system settings.
-"@
-$bottomTextBlock = @"
-PowerShell profile files will be removed and replaced with new ones.
-Please make sure to backup your current profiles if needed.
-
-The author of this script is not responsible for any damage caused by
-running it. It is highly recommended to create a system restore point
-before proceeding with the installation process to ensure you can
-revert any changes if necessary.
-
-For a guide on how to use the script, please refer to the Wiki page
-on WinMac GitHub page:
-
-https://github.com/Asteski/WinMac/wiki
-"@
-
-[xml]$xaml = @"
-<Window
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="WinMac Deployment" Height="700" Width="480" WindowStartupLocation="CenterScreen" Background="$backgroundColor">
-    <Window.Resources>
-        <SolidColorBrush x:Key="BackgroundBrush" Color="$backgroundColor"/>
-        <SolidColorBrush x:Key="ForegroundBrush" Color="$foregroundColor"/>
-        <SolidColorBrush x:Key="AccentBrush" Color="$accentColor"/>
-        <SolidColorBrush x:Key="SecondaryBackgroundBrush" Color="$secondaryBackgroundColor"/>
-        <SolidColorBrush x:Key="BorderBrush" Color="$borderColor"/>
-        <Thickness x:Key="BorderThickness">0</Thickness>  <!-- Corrected Thickness -->
-    </Window.Resources>
-
-    <Grid Background="{StaticResource BackgroundBrush}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        
-        <!-- Title -->
-        <StackPanel Grid.Row="0" HorizontalAlignment="Center">
-            <TextBlock FontSize="20" FontWeight="Bold" Text="WinMac Deployment" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="0,10,0,10"/>
-            
-            <!-- Static TextBlock below the title -->
-            <TextBlock Text="$topTextBlock" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" HorizontalAlignment="Center" Margin="0,5,0,10" TextWrapping="Wrap"/>
-        </StackPanel>
-
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-            <StackPanel VerticalAlignment="Top">
-                <!-- Installation Type -->
-                <GroupBox Header="Select Installation Type" Margin="0,5,0,5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
-                    <Grid Margin="5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <RadioButton x:Name="fullInstall" Content="Full Installation" IsChecked="True" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <RadioButton x:Name="customInstall" Content="Custom Installation" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                    </Grid>
-                </GroupBox>
-
-                <!-- Component Selection -->
-                <GroupBox Header="Choose Components" Margin="0,5,0,5" Padding="5,5,5,5" x:Name="componentSelection" IsEnabled="False" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
-                    <Grid Margin="5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-
-                        <CheckBox x:Name="chkPowerToys" Content="PowerToys" IsChecked="True" Grid.Row="0" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="chkEverything" Content="Everything" IsChecked="True" Grid.Row="0" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="chkPowershellProfile" Content="PowerShell Profile" IsChecked="True" Grid.Row="1" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="chkStartAllBack" Content="StartAllBack" IsChecked="True" Grid.Row="1" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="chkWinMacMenu" Content="WinMac Menu" IsChecked="True" Grid.Row="2" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="chkTopNotify" Content="TopNotify" IsChecked="True" Grid.Row="2" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="chkStahky" Content="Stahky" IsChecked="True" Grid.Row="3" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="chkKeyboardShortcuts" Content="Keyboard Shortcuts" IsChecked="True" Grid.Row="3" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="chkNexusDock" Content="Nexus Dock" IsChecked="True" Grid.Row="4" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="chkOther" Content="Other" IsChecked="True" Grid.Row="4" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                    </Grid>
-                </GroupBox>
-
-                <!-- 2x2 GroupBox Layout -->
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="Auto"/> <!-- For the TextBlock -->
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <!-- Additional Settings: Start Menu -->
-                    <GroupBox Grid.Row="0" Grid.Column="0" Header="Start Menu Options" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
-                        <StackPanel>
-                            <RadioButton x:Name="startMenuWinMac" Content="WinMac Start Menu" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                            <RadioButton x:Name="startMenuClassic" Content="Classic Start Menu" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        </StackPanel>
-                    </GroupBox>
-
-                    <!-- Additional Settings: Prompt Style -->
-                    <GroupBox Grid.Row="0" Grid.Column="1" Header="Prompt Style Options" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
-                        <StackPanel>
-                            <RadioButton x:Name="promptStyleWinMac" Content="WinMac Prompt" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                            <RadioButton x:Name="promptStylemacOS" Content="macOS Prompt" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        </StackPanel>
-                    </GroupBox>
-
-                    <!-- Additional Settings: Shell Corner Style -->
-                    <GroupBox Grid.Row="1" Grid.Column="0" Header="Shell Corner Style" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
-                        <StackPanel>
-                            <RadioButton x:Name="shellCornerRounded" Content="Rounded" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                            <RadioButton x:Name="shellCornerSquared" Content="Squared" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        </StackPanel>
-                    </GroupBox>
-
-                    <!-- Additional Settings: Theme Style -->
-                    <GroupBox Grid.Row="1" Grid.Column="1" Header="Theme Style" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
-                        <StackPanel>
-                            <RadioButton x:Name="themeLight" Content="Light" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                            <RadioButton x:Name="themeDark" Content="Dark" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        </StackPanel>
-                    </GroupBox>
-
-                    <!-- TextBlock below the last row of GroupBoxes -->
-                    <TextBlock Grid.Row="2" Grid.ColumnSpan="2" Margin="5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" Text="$bottomTextBlock" TextWrapping="Wrap"/>
-                </Grid>
-
-            </StackPanel>
-        </ScrollViewer>
-
-        <!-- Buttons -->
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button x:Name="btnInstall" Content="Install" Width="100" Height="30" Margin="10" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource AccentBrush}"/>
-            <Button x:Name="btnCancel" Content="Cancel" Width="100" Height="30" Margin="10" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}"/>
-        </StackPanel>
-    </Grid>
-</Window>
-"@
-    $reader = New-Object System.Xml.XmlNodeReader $xaml
-    $window = [Windows.Markup.XamlReader]::Load($reader)
-    $fullInstall = $window.FindName("fullInstall")
-    $customInstall = $window.FindName("customInstall")
-    $componentSelection = $window.FindName("componentSelection")
-    $chkPowerToys = $window.FindName("chkPowerToys")
-    $chkEverything = $window.FindName("chkEverything")
-    $chkPowershellProfile = $window.FindName("chkPowershellProfile")
-    $chkStartAllBack = $window.FindName("chkStartAllBack")
-    $chkWinMacMenu = $window.FindName("chkWinMacMenu")
-    $chkTopNotify = $window.FindName("chkTopNotify")
-    $chkStahky = $window.FindName("chkStahky")
-    $chkKeyboardShortcuts = $window.FindName("chkKeyboardShortcuts")
-    $chkNexusDock = $window.FindName("chkNexusDock")
-    $chkOther = $window.FindName("chkOther")
-    $startMenu = $window.FindName("startMenuWinMac")
-    $promptStyle = $window.FindName("promptStyleWinMac")
-    $shellCorner = $window.FindName("shellCornerRounded")
-    $theme = $window.FindName("themeLight")
-    $btnInstall = $window.FindName("btnInstall")
-    $btnCancel = $window.FindName("btnCancel")
-    $fullInstall.Add_Checked({
-        $componentSelection.IsEnabled = $false
-    })
-    $customInstall.Add_Checked({
-        $componentSelection.IsEnabled = $true
-    })
-    $btnInstall.Add_Click({
-        $installType = if ($fullInstall.IsChecked) { "F" } else { "C" }
-        # $selectedApps = @()
-        if ($chkPowerToys.IsChecked) { $selection += "1," }
-        if ($chkEverything.IsChecked) { $selection += "2," }
-        if ($chkPowershellProfile.IsChecked) { $selection += "3," }
-        if ($chkStartAllBack.IsChecked) { $selection += "4," }
-        if ($chkWinMacMenu.IsChecked) { $selection += "5," }
-        if ($chkTopNotify.IsChecked) { $selection += "6," }
-        if ($chkStahky.IsChecked) { $selection += "7," }
-        if ($chkKeyboardShortcuts.IsChecked) { $selection += "8," }
-        if ($chkNexusDock.IsChecked) { $selection += "9," }
-        if ($chkOther.IsChecked) { $selection += "10" }
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Other Settings"}
-        $selectedApps = $selection.Split(',').TrimEnd(',')
-        $selectedAppNames = @()
-        foreach ($appNumber in $selection) {
-            if ($appList.ContainsKey($appNumber)) {
-                $selectedAppNames += $appList[$appNumber] + "`n"
-            }
-        }
-        $menuSet = if ($startMenu.IsChecked) { "X"; $startMenuInfo = 'WinMac Menu' } else { "C"; $startMenuInfo = 'Classic Menu' }
-        $promptSetVar = if ($promptStyle.IsChecked) { "W";$promptSetInfo = 'WinMac Prompt' } else { "M"; $promptSetInfo = 'macOS Prompt' }
-        $roundedOrSquared = if ($shellCorner.IsChecked) { "R"; $shellCornersInfo = 'Rounded' } else { "S"; $shellCornersInfo = 'Squared' }
-        $lightOrDark = if ($theme.IsChecked) { "L"; $stackTheme = 'light'; $orbTheme = 'black.svg'; $themeStyleInfo = 'Light Theme' } else { "D"; $stackTheme = 'dark'; $orbTheme = 'white.svg'; $themeStyleInfo = 'Dark Theme' }
-        if ($installType -eq 'F'){ [
-            System.Windows.MessageBox]::Show("Installation Type: Full`n`nConfiguration:`nStart Menu: $startMenuInfo`nPrompt Style: $promptSetInfo`nShell Corners: $shellCornersInfo`nTheme Style: $themeStyleInfo", "Installation Summary", [System.Windows.MessageBoxButton]::OKCancel, [System.Windows.MessageBoxImage]::Information) 
-        } else {
-            [System.Windows.MessageBox]::Show("Installation Type: Custom`n`nSelected Components:`n$selectedAppNames`nConfiguration:`nStart Menu: $startMenuInfo`nPrompt Style: $promptSetInfo`nShell Corners: $shellCornersInfo`nTheme Style: $themeStyleInfo", "Installation Summary", [System.Windows.MessageBoxButton]::OKCancel, [System.Windows.MessageBoxImage]::Information) 
-        }
-        $window.Close()
-    })
-    $btnCancel.Add_Click({
-        $window.Close()
-        exit
-    })
-    $window.ShowDialog() | Out-Null
+if ($result){
+    $selectedApps = $result["selectedApps"]
+    $menuSet = $result["menuSet"]
+    $promptSet = $result["promptSetVar"]
+    $roundedOrSquared = $result["roundedOrSquared"]
+    $lightOrDark = $result["lightOrDark"]
+    $stackTheme = $result["stackTheme"]
+    $orbTheme = $result["orbTheme"]
 }
-Write-Host "Selected Apps: $selectedApps"
-Write-Host "Menu Set Value: $menuSet"
-Write-Host "Prompt Set Value: $promptSet"
-Write-Host "Shell Corner Value: $roundedOrSquared"
-Write-Host "Theme Value: $lightOrDark"
 $ShowOutput = $false
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_install_log_$date.txt"
@@ -488,6 +480,7 @@ for ($a=3; $a -ge 0; $a--) {
     Start-Sleep 1
 }
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
+# Nuget check
 Write-Host "Checking for Package Provider (Nuget)" -ForegroundColor Yellow
 $nugetProvider = Get-PackageProvider -Name NuGet -ErrorAction SilentlyContinue
 if ($null -eq $nugetProvider) {
@@ -497,6 +490,7 @@ if ($null -eq $nugetProvider) {
 } else {
     Write-Host "NuGet is already installed." -ForegroundColor Green
 }
+# Winget check
 Write-Host "Checking for Package Manager (Winget)" -ForegroundColor Yellow
 $wingetCliCheck = winget -v
 if ($null -eq $wingetCliCheck) {
@@ -509,15 +503,12 @@ if ($null -eq $wingetCliCheck) {
     Add-AppxPackage '..\temp\Microsoft.UI.Xaml.2.8.x64.appx'
     Add-AppxPackage '..\temp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
 }
-# Check if the module is installed locally
 $wingetClientCheck = Get-InstalledModule -Name Microsoft.WinGet.Client -ErrorAction SilentlyContinue
 if ($null -eq $wingetClientCheck) {
-    # If not installed, install the module
     Write-Host "Winget is not installed. Installing Winget..." -ForegroundColor Yellow
     Install-Module -Name Microsoft.WinGet.Client -Force -WarningAction SilentlyContinue
     Write-Host "Winget installation completed." -ForegroundColor Green
 } else {
-    # If installed, check if there's a newer version available
     $wingetFind = Find-Module -Name Microsoft.WinGet.Client
     if ($wingetFind.Version -gt $wingetClientCheck.Version) {
         Write-Host "A newer version of Winget is available. Updating Winget..." -ForegroundColor Yellow
@@ -861,7 +852,7 @@ foreach ($app in $selectedApps) {
         }
     # Other
         "10" {
-            ## Black Cursor
+        ## Black Cursor
             Write-Host "Configuring Other Settings..." -ForegroundColor Yellow
             Write-Host "Configuring black cursor..." -ForegroundColor Yellow
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
@@ -900,7 +891,7 @@ uint fWinIni);
 '@
             $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
             $CursorRefresh::SystemParametersInfo(0x0057,0,$null,0) #| Out-Null
-            ## Pin Home, Programs and Recycle Bin to Quick Access
+        ## Pin Home, Programs and Recycle Bin to Quick Access
             write-host "Pinning Home, Programs and Recycle Bin to Quick Access..." -ForegroundColor Yellow
 $homeIni = @"
 [.ShellClassInfo]
@@ -947,12 +938,12 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
                 $recycleBin.Self.InvokeVerb("PinToHome") #| Out-Null
             }
             Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse #| Out-Null
-            ## Remove Shortcut Arrows
+        ## Remove Shortcut Arrows
             Write-Host "Removing shortcut arrows..." -ForegroundColor Yellow
             Copy-Item -Path "..\config\blank.ico" -Destination "C:\Windows" -Force
             New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Force #| Out-Null
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
-            ## Misc
+        ## Misc
             Write-Host "Adding End Task to context menu..." -ForegroundColor Yellow
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value "" -ErrorAction SilentlyContinue
             $taskbarDevSettings = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
