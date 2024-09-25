@@ -6,9 +6,9 @@ Add-Type -AssemblyName PresentationFramework
 Add-Type -AssemblyName System.Windows.Forms
 if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null}
 if (-not (Test-Path -Path "../logs")) {New-Item -ItemType Directory -Path "../logs" | Out-Null}
+if ($debug) {$errorActionPreference="Continue";$WarningPreference="Continue"}
+else {$errorActionPreference="SilentlyContinue";$WarningPreference="SilentlyContinue"}
 $version = "0.6.0"
-$errorActionPreference="SilentlyContinue"
-$WarningPreference="SilentlyContinue"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_install_log_$date.txt"
 $user = [Security.Principal.WindowsIdentity]::GetCurrent()
