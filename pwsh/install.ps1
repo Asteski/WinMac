@@ -548,7 +548,7 @@ foreach ($app in $selectedApps) {
                 )
             foreach ($app in $winget) {Invoke-Output { Install-WinGetPackage -id $app -source winget }}
             $vimParentPath = Join-Path $env:PROGRAMFILES Vim
-            $latestSubfolder = Invoke-Output { Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -Property CreationTime -Descending | Select-Object -First 1 }
+            $latestSubfolder = Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -Property CreationTime -Descending | Select-Object -First 1
             $vimChildPath = $latestSubfolder.FullName
             Invoke-Output { [Environment]::SetEnvironmentVariable("Path", $env:Path + ";$vimChildPath", [EnvironmentVariableTarget]::Machine) }
             Invoke-Output { Install-Module PSTree -Force }
