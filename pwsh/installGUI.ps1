@@ -24,7 +24,8 @@ if ($args[0] -ne '-nogui') {
     $accentColor = if ($windowsTheme -eq "Dark") { "#0078D4" } else { "#fcfcfc" }
     $secondaryBackgroundColor = if ($windowsTheme -eq "Dark") { "#2D2D2D" } else { "#fcfcfc" }
     $borderColor = if ($windowsTheme -eq "Dark") { "#2D2D2D" } else { "#e5e5e5" }
-    $icon = ".\config\gui.ico"
+    #! $icon = "..\config\gui.ico"
+    #! Icon="$icon"
     $topTextBlock = "PowerShell Deployment Tool for Windows and macOS hybrid"
 $bottomTextBlock = @"
 PowerShell profile files will be removed and replaced with new ones.
@@ -44,7 +45,7 @@ https://github.com/Asteski/WinMac/wiki
 <Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="WinMac Deployment" Height="700" Width="480" WindowStartupLocation="CenterScreen" Background="$backgroundColor" Icon="$icon">
+    Title="WinMac Deployment" Height="700" Width="480" WindowStartupLocation="CenterScreen" Background="$backgroundColor">
     <Window.Resources>
         <SolidColorBrush x:Key="BackgroundBrush" Color="$backgroundColor"/>
         <SolidColorBrush x:Key="ForegroundBrush" Color="$foregroundColor"/>
@@ -63,7 +64,7 @@ https://github.com/Asteski/WinMac/wiki
         
         <!-- Title -->
         <StackPanel Grid.Row="0" HorizontalAlignment="Center">
-            <TextBlock FontSize="20" FontWeight="Bold" Text="WinMac Deployment" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="0,10,0,10"/>
+            <TextBlock FontSize="20" FontWeight="Bold" Text="WinMac" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="0,10,0,10"/>
             
             <!-- Static TextBlock below the title -->
             <TextBlock Text="$topTextBlock" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="0,5,0,10" TextWrapping="Wrap"/>
@@ -501,7 +502,7 @@ if ($null -eq $wingetCliCheck) {
 $wingetClientCheck = Get-InstalledModule -Name Microsoft.WinGet.Client -ErrorAction SilentlyContinue
 if ($null -eq $wingetClientCheck) {
     Write-Host "Winget is not installed. Installing Winget..." -ForegroundColor Yellow
-    Install-Module -Name Microsoft.WinGet.Client -Force -WarningAction SilentlyContinue
+    Install-Module -Name Microsoft.WinGet.Client -WarningAction SilentlyContinue
     Write-Host "Winget installation completed." -ForegroundColor Green
 } else {
     $wingetFind = Find-Module -Name Microsoft.WinGet.Client
