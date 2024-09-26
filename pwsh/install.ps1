@@ -766,36 +766,25 @@ foreach ($app in $selectedApps) {
                 Write-Host "Installing Nexus Dock..." -ForegroundColor Yellow
                 $downloadUrl = "https://www.winstep.net/nexus.zip"
                 $downloadPath = "..\temp\Nexus.zip"
-                echo 0
                 if (-not (Test-Path $downloadPath)) {
                     Invoke-WebRequest -Uri $downloadUrl -OutFile $downloadPath
                 }
-                echo 1
                 Expand-Archive -Path $downloadPath -DestinationPath ..\temp -Force
-                echo 2
                 Start-Process -FilePath "..\temp\NexusSetup.exe" -ArgumentList "/silent"
-                echo 3
                 Start-Sleep 10
-                echo 4
                 $process1 = Get-Process -Name "NexusSetup"
-                echo 5
                 while ($process1) {
                     Start-Sleep 5
                     $process1 = Get-Process -Name "NexusSetup"
                 }
-                echo 6
                 Start-Sleep 10
-                echo 7
                 $process2 = Get-Process -Name "Nexus"
-                echo 8
                 if (!($process2)) {
                     Start-Sleep 5
                     $process2 = Get-Process -Name "Nexus"
                 } else { Start-Sleep 10 }
-                echo 9
                 Get-Process -n Nexus | Stop-Process
                 $winStep = 'C:\Users\Public\Documents\WinStep'
-                echo 10
                 Remove-Item -Path "$winStep\Themes\*" -Recurse -Force 
                 Copy-Item -Path "..\config\dock\themes\*" -Destination "$winStep\Themes\" -Recurse -Force 
                 Remove-Item -Path "$winStep\NeXus\Indicators\*" -Force -Recurse 
@@ -829,22 +818,15 @@ foreach ($app in $selectedApps) {
                     $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 
                     $regFile = $modifiedFile
                 }
-                echo 11
                 reg import $regFile > $null 2>&1
-                echo 12
                 Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "DockLabelColorHotTrack1" 
                 Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type6" 
                 Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type7" 
-                echo 13
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path6" -Value $downloadsPath
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path7" -Value "$env:APPDATA\Microsoft\Windows\Recent\"
-                echo 14
                 Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe' 
-                echo 15
                 while (!(Get-Process "nexus")) { Start-Sleep 1 }
-                echo 16
                 $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
-                echo 17
                 Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Nexus.lnk" -Destination $programsDir -Force 
                 Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\Nexus.lnk" -Destination $programsDir -Force 
                 Write-Host "Nexus Dock installation completed." -ForegroundColor Green
