@@ -4,10 +4,11 @@ param (
 )
 Add-Type -AssemblyName PresentationFramework
 Add-Type -AssemblyName System.Windows.Forms
+$errorActionPreference="SilentlyContinue"
+$WarningPreference="SilentlyContinue"
 if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null}
 if (-not (Test-Path -Path "../logs")) {New-Item -ItemType Directory -Path "../logs" | Out-Null}
 if ($debug) {$errorActionPreference="Continue";$WarningPreference="Continue"}
-else {$errorActionPreference="SilentlyContinue";$WarningPreference="SilentlyContinue"}
 $version = "0.6.0"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_install_log_$date.txt"
@@ -15,7 +16,7 @@ $user = [Security.Principal.WindowsIdentity]::GetCurrent()
 $adminTest = (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
 $checkDir = Get-ChildItem '..'
 if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir -like "*bin*" -and $checkDir -like "*pwsh*")) {
-    Write-Host "`nWinMac components not found. Please make sure to run the script from the correct directory." -ForegroundColor Red
+    Write-Host "WinMac components not found. Please make sure to run the script from the correct directory." -ForegroundColor Red
     Start-Sleep 2
     exit
 }
@@ -650,7 +651,7 @@ foreach ($app in $selectedApps) {
                     Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
                     #! modify about windwos shortcut path dynamically
                     $WinverUWP = (Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP).InstallLocation
-                    $shortcutPath = "$pwd\config\winx\Group2\8 - System.lnk"
+                    $shortcutPath = "..\config\winx\Group2\8 - System.lnk"
                     $newTargetPath = "$WinverUWP\WinverUWP.exe"
                     $WScriptShell = New-Object -ComObject WScript.Shell
                     $shortcut = $WScriptShell.CreateShortcut($shortcutPath)
