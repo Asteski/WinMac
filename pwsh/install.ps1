@@ -647,8 +647,15 @@ foreach ($app in $selectedApps) {
                     if ($sysType -like "*ARM*") {Copy-Item -Path ..\bin\menu\arm64\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force }
                     else {Copy-Item -Path ..\bin\menu\x64\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force }
                     Copy-Item -Path ..\bin\menu\startbutton.exe -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force 
-                    #! modify about windwos shortcut path dynamically
                     Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
+                    #! modify about windwos shortcut path dynamically
+                    $WinverUWP = (Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP).InstallLocation
+                    $shortcutPath = ".\config\winx\Group2\8 - System.lnk"
+                    $newTargetPath = "$WinverUWP\WinverUWP.exe"
+                    $WScriptShell = New-Object -ComObject WScript.Shell
+                    $shortcut = $WScriptShell.CreateShortcut($shortcutPath)
+                    $shortcut.TargetPath = $newTargetPath
+                    $shortcut.Save()
                     Copy-Item -Path "..\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force 
                     ####!
                     Invoke-Output {Register-ScheduledTask -TaskName "StartButton" -Action $actionStartButton -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder}
