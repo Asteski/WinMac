@@ -631,10 +631,8 @@ foreach ($app in $selectedApps) {
                     $taskService = New-Object -ComObject "Schedule.Service"
                     $taskService.Connect() 
                     $rootFolder = $taskService.GetFolder("\")
-                    echo 5
                     try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }                
                     if ($null -eq $existingFolder) { Invoke-Output {$rootFolder.CreateFolder($folderName)} }
-                    echo 6
                     $taskFolder = "\" + $folderName
                     $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
                     $trigger = New-ScheduledTaskTrigger -AtLogon
