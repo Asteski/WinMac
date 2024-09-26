@@ -46,6 +46,9 @@ if (!($noGUI)) {
     $accentColor = if ($windowsTheme -eq "Dark") { "#0078D4" } else { "#fcfcfc" }
     $secondaryBackgroundColor = if ($windowsTheme -eq "Dark") { "#2D2D2D" } else { "#fcfcfc" }
     $borderColor = if ($windowsTheme -eq "Dark") { "#2D2D2D" } else { "#e5e5e5" }
+    $parentDirectory = Split-Path -Path $PSScriptRoot -Parent
+    $iconFolderName = "config"
+    $iconFolderPath = Join-Path -Path $parentDirectory -ChildPath $iconFolderName
     #! $icon = "..\config\gui.ico"
     #! Icon="$icon"
     $topTextBlock = "PowerShell Deployment Tool for Windows and macOS hybrid"
@@ -67,7 +70,7 @@ https://github.com/Asteski/WinMac/wiki
 <Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="WinMac Deployment" Height="700" Width="480" WindowStartupLocation="CenterScreen" Background="$backgroundColor">
+    Title="WinMac Deployment" Height="700" Width="480" WindowStartupLocation="CenterScreen" Background="$backgroundColor" Icon="$iconFolderPath\gui.ico">
     <Window.Resources>
         <SolidColorBrush x:Key="BackgroundBrush" Color="$backgroundColor"/>
         <SolidColorBrush x:Key="ForegroundBrush" Color="$foregroundColor"/>
