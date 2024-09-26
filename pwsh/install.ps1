@@ -509,7 +509,7 @@ foreach ($app in $selectedApps) {
     # PowerToys
         "1" {
             Write-Host "Installing PowerToys..." -ForegroundColor Yellow
-            winget configure ..\config\powertoys.dsc.yaml --accept-configuration-agreement | Out-Null
+            winget configure ..\config\powertoys.dsc.yaml --accept-configuration-agreements
             Write-Host "PowerToys installation completed." -ForegroundColor Green
         }
     # Everything
@@ -650,6 +650,28 @@ foreach ($app in $selectedApps) {
                     Copy-Item -Path ..\bin\menu\startbutton.exe -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force 
                     Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
                     #! modify about windwos shortcut path dynamically
+                    # Get the directory where the script is running
+                    $scriptDirectory = $PSScriptRoot
+
+                    # Define the subfolder name (modify this to the actual folder name you want to target)
+                    $subFolderName = "config"
+
+                    # Construct the path to the subfolder
+                    $subFolderPath = Join-Path -Path $scriptDirectory -ChildPath $subFolderName
+
+                    # Check if the subfolder exists
+                    if (Test-Path -Path $subFolderPath) {
+                        # Retrieve all files within the subfolder
+                        $files = Get-ChildItem -Path $subFolderPath -File
+
+                        # Output each file's full path
+                        foreach ($file in $files) {
+                            $file.FullName
+                        }
+                    } else {
+                        Write-Host "The folder '$subFolderName' does not exist."
+                    }
+
                     echo pwd
                     $pwd.path
                     echo root
