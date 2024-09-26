@@ -655,20 +655,12 @@ foreach ($app in $selectedApps) {
                     $parentDirectory = Split-Path -Path $PSScriptRoot -Parent
                     $winxFolderName = "config\winx\Group2"
                     $winxFolderPath = Join-Path -Path $parentDirectory -ChildPath $winxFolderName
-                    if (Test-Path -Path $winxFolderPath) {
-                        $files = Get-ChildItem -Path $winxFolderPath
-                        foreach ($file in $files) {
-                            $file.FullName
-                        }
-                    }
                     $WinverUWP = (Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP).InstallLocation
-                    # if ($currentDir -eq 'pwsh') {$shortcutPath = ".\config\winx\Group2\8 - System.lnk"} else {$shortcutPath = ".\config\winx\Group2\8 - System.lnk"}
                     $shortcutPath = "$winxFolderPath\8 - System.lnk"
                     $newTargetPath = "$WinverUWP\WinverUWP.exe"
                     $WScriptShell = New-Object -ComObject WScript.Shell
                     $shortcut = $WScriptShell.CreateShortcut($shortcutPath)
                     $shortcut.TargetPath = $newTargetPath
-                    $shortcut
                     $shortcut.Save()
                     Copy-Item -Path "..\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force 
                     ####!
