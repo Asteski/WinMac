@@ -6,15 +6,15 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v8.0": {
-      "WinMacMenu/1.0.0": {
+      "WindowsKey/1.0.0": {
         "runtime": {
-          "WinMacMenu.dll": {}
+          "WindowsKey.dll": {}
         }
       }
     }
   },
   "libraries": {
-    "WinMacMenu/1.0.0": {
+    "WindowsKey/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
