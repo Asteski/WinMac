@@ -651,47 +651,23 @@ foreach ($app in $selectedApps) {
                     Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
                     #! modify about windwos shortcut path dynamically
                     # Get the directory where the script is running
-                    $scriptDirectory = $PSScriptRoot
-
-                    # Define the subfolder name (modify this to the actual folder name you want to target)
-                    $subFolderName = "config"
-
-                    # Construct the path to the subfolder
-                    $subFolderPath = Join-Path -Path $scriptDirectory -ChildPath $subFolderName
-
-                    # Check if the subfolder exists
-                    if (Test-Path -Path $subFolderPath) {
-                        # Retrieve all files within the subfolder
-                        $files = Get-ChildItem -Path $subFolderPath -File
-
-                        # Output each file's full path
+                    # Get the parent directory of the folder where the script is running
+                    $parentDirectory = Split-Path -Path $PSScriptRoot -Parent
+                    $winxFolderName = "config\winx\Group2"
+                    $winxFolderPath = Join-Path -Path $parentDirectory -ChildPath $winxFolderName
+                    if (Test-Path -Path $winxFolderPath) {
+                        $files = Get-ChildItem -Path $winxFolderPath
                         foreach ($file in $files) {
                             $file.FullName
                         }
-                    } else {
-                        Write-Host "The folder '$subFolderName' does not exist."
                     }
-
-                    echo pwd
-                    $pwd.path
-                    echo root
-                    $PSScriptRoot
-                    echo 0
                     $WinverUWP = (Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP).InstallLocation
-                    echo $WinverUWP
-                    echo 1
-                    $currentDir = Split-Path $pwd.Path -Leaf
-                    echo $currentDir
-                    echo 2
-                    if ($currentDir -eq 'pwsh') {$shortcutPath = ".\config\winx\Group2\8 - System.lnk"} else {$shortcutPath = ".\config\winx\Group2\8 - System.lnk"}
-                    echo $shortcutPath
+                    # if ($currentDir -eq 'pwsh') {$shortcutPath = ".\config\winx\Group2\8 - System.lnk"} else {$shortcutPath = ".\config\winx\Group2\8 - System.lnk"}
+                    $shortcutPath = "$winxFolderPath\8 - System.lnk"
                     $newTargetPath = "$WinverUWP\WinverUWP.exe"
                     $WScriptShell = New-Object -ComObject WScript.Shell
                     $shortcut = $WScriptShell.CreateShortcut($shortcutPath)
-                    echo 3
-                    echo $shortcut
                     $shortcut.TargetPath = $newTargetPath
-                    echo 4
                     $shortcut
                     $shortcut.Save()
                     Copy-Item -Path "..\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force 
