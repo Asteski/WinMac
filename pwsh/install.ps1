@@ -650,13 +650,23 @@ foreach ($app in $selectedApps) {
                     Copy-Item -Path ..\bin\menu\startbutton.exe -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force 
                     Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
                     #! modify about windwos shortcut path dynamically
+                    echo 0
                     $WinverUWP = (Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP).InstallLocation
+                    echo $WinverUWP
+                    echo 1
                     $currentDir = Split-Path $pwd.Path -Leaf
+                    echo $currentDir
+                    echo 2
                     if ($currentDir -eq 'pwsh') {$shortcutPath = "..\config\winx\Group2\8 - System.lnk"} else {$shortcutPath = ".\config\winx\Group2\8 - System.lnk"}
+                    echo $shortcutPath
                     $newTargetPath = "$WinverUWP\WinverUWP.exe"
                     $WScriptShell = New-Object -ComObject WScript.Shell
                     $shortcut = $WScriptShell.CreateShortcut($shortcutPath)
+                    echo 3
+                    echo $shortcut
                     $shortcut.TargetPath = $newTargetPath
+                    echo 4
+                    $shortcut
                     $shortcut.Save()
                     Copy-Item -Path "..\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force 
                     ####!
