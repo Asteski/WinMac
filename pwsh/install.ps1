@@ -657,7 +657,8 @@ foreach ($app in $selectedApps) {
                     $currentDir = Split-Path $pwd.Path -Leaf
                     echo $currentDir
                     echo 2
-                    if ($currentDir -eq 'pwsh') {$shortcutPath = "..\config\winx\Group2\8 - System.lnk"} else {$shortcutPath = ".\config\winx\Group2\8 - System.lnk"}
+                    # if ($currentDir -eq 'pwsh') {$shortcutPath = "..\config\winx\Group2\8 - System.lnk"} else {$shortcutPath = ".\config\winx\Group2\8 - System.lnk"}
+                    $shortcutPath = "..\config\winx\Group2\8 - System.lnk"
                     echo $shortcutPath
                     $newTargetPath = "$WinverUWP\WinverUWP.exe"
                     $WScriptShell = New-Object -ComObject WScript.Shell
