@@ -8,7 +8,7 @@ $errorActionPreference="SilentlyContinue"
 $WarningPreference="SilentlyContinue"
 if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null}
 if (-not (Test-Path -Path "../logs")) {New-Item -ItemType Directory -Path "../logs" | Out-Null}
-if ($debug) {$errorActionPreference="Continue";$WarningPreference="Continue"}
+# if ($debug) {$errorActionPreference="Continue";$WarningPreference="Continue"}
 $version = "0.6.0"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_install_log_$date.txt"
