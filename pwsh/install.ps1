@@ -644,8 +644,10 @@ foreach ($app in $selectedApps) {
                     if ($sysType -like "*ARM*") {Copy-Item -Path ..\bin\menu\arm64\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force }
                     else {Copy-Item -Path ..\bin\menu\x64\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force }
                     Copy-Item -Path ..\bin\menu\startbutton.exe -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force 
+                    #! modify about windwos shortcut path dynamically
                     Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
                     Copy-Item -Path "..\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force 
+                    ####!
                     Invoke-Output {Register-ScheduledTask -TaskName "StartButton" -Action $actionStartButton -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder}
                     Invoke-Output {Register-ScheduledTask -TaskName "WindowsKey" -Action $actionWinKey -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder}
                     Start-Process $exeKeyPath
@@ -834,11 +836,16 @@ foreach ($app in $selectedApps) {
         "10" {
         ## Black Cursor
             Write-Host "Configuring Other Settings..." -ForegroundColor Yellow
-            Write-Host "Configuring black cursor..." -ForegroundColor Yellow
+            Write-Host "Black cursor..." -ForegroundColor Yellow
+            echo 0
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
+            echo 1
             $curSourceFolder = (Get-Item -Path "..\config\cursor").FullName
+            echo 2
             $curDestFolder = "C:\Windows\Cursors"
+            echo 3
             Copy-Item -Path $curSourceFolder\* -Destination $curDestFolder -Recurse -Force
+            echo 4
             $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
             $RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
             $RegCursors.SetValue("","Windows Black")
@@ -859,9 +866,11 @@ foreach ($app in $selectedApps) {
             $RegCursors.SetValue("Wait","$curDestFolder\aero_black_busy.ani")
             $RegCursors.SetValue("Pin","$curDestFolder\aero_black_pin.cur")
             $RegCursors.SetValue("Person","$curDestFolder\aero_black_person.cur")
+            echo 5
             $RegCursors.Close()
+            echo 6
             $RegConnect.Close()
-$CSharpSig = @'
+            $CSharpSig = @'
 [DllImport("user32.dll", EntryPoint = "SystemParametersInfo")]
 public static extern bool SystemParametersInfo(
 uint uiAction,
@@ -869,7 +878,9 @@ uint uiParam,
 uint pvParam,
 uint fWinIni);
 '@
+            echo 7
             $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
+            echo 8
             $CursorRefresh::SystemParametersInfo(0x0057,0,$null,0) 
         ## Pin Home, Programs and Recycle Bin to Quick Access
             write-host "Pinning Home, Programs and Recycle Bin to Quick Access..." -ForegroundColor Yellow
