@@ -617,7 +617,7 @@ foreach ($app in $selectedApps) {
             if ($adminTest) {
                 if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
                     Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
-                    Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.6'
+                    Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8'
                     Invoke-WebRequest -Uri 'https://github.com/dongle-the-gadget/WinverUWP/releases/download/v2.1.0.0/2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle' -OutFile '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
                     Add-AppxPackage -Path '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
                     Invoke-Output {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\"}
