@@ -687,7 +687,7 @@ foreach ($app in $selectedApps) {
             Invoke-Output {New-Item -ItemType Directory -Path $exePath\config -Force}
             Invoke-WebRequest -Uri $url -OutFile $outputPath
             if (Test-Path -Path "$exePath\stahky.exe") {
-                Write-Output "Stahky already exists."
+                Invoke-Output {Write-Output "Stahky already exists."}
             } else {
                 Expand-Archive -Path $outputPath -DestinationPath $exePath
             }
