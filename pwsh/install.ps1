@@ -652,6 +652,8 @@ foreach ($app in $selectedApps) {
                     #! modify about windwos shortcut path dynamically
                     echo pwd
                     $pwd.path
+                    echo root
+                    $PSScriptRoot
                     echo 0
                     $WinverUWP = (Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP).InstallLocation
                     echo $WinverUWP
