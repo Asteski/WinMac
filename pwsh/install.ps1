@@ -217,17 +217,18 @@ https://github.com/Asteski/WinMac/wiki
     $customInstall.Add_Checked({$componentSelection.IsEnabled = $true})
     $result = @{}
     $btnInstall.Add_Click({
-        $installType = if ($fullInstall.IsChecked) { "F" } else { "C" }
-        if ($chkPowerToys.IsChecked) { $selection += "1," }
-        if ($chkEverything.IsChecked) { $selection += "2," }
-        if ($chkPowershellProfile.IsChecked) { $selection += "3," }
-        if ($chkStartAllBack.IsChecked) { $selection += "4," }
-        if ($chkWinMacMenu.IsChecked) { $selection += "5," }
-        if ($chkTopNotify.IsChecked) { $selection += "6," }
-        if ($chkStahky.IsChecked) { $selection += "7," }
-        if ($chkKeyboardShortcuts.IsChecked) { $selection += "8," }
-        if ($chkNexusDock.IsChecked) { $selection += "9," }
-        if ($chkOther.IsChecked) { $selection += "10" }
+        $installType = if ($fullInstall.IsChecked) { "F" } else { "C"
+            if ($chkPowerToys.IsChecked) { $selection += "1," }
+            if ($chkEverything.IsChecked) { $selection += "2," }
+            if ($chkPowershellProfile.IsChecked) { $selection += "3," }
+            if ($chkStartAllBack.IsChecked) { $selection += "4," }
+            if ($chkWinMacMenu.IsChecked) { $selection += "5," }
+            if ($chkTopNotify.IsChecked) { $selection += "6," }
+            if ($chkStahky.IsChecked) { $selection += "7," }
+            if ($chkKeyboardShortcuts.IsChecked) { $selection += "8," }
+            if ($chkNexusDock.IsChecked) { $selection += "9," }
+            if ($chkOther.IsChecked) { $selection += "10" }
+        }
         $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Other Settings"}
         $result["selectedApps"] = $selection.Split(',').TrimEnd(',')
         $selectedAppNames = @()
@@ -617,15 +618,10 @@ foreach ($app in $selectedApps) {
             if ($adminTest) {
                 if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
                     Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
-                    echo 0
                     Invoke-Output {Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8'}
-                    echo 1
                     Invoke-WebRequest -Uri 'https://github.com/dongle-the-gadget/WinverUWP/releases/download/v2.1.0.0/2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle' -OutFile '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
-                    echo 2
                     Add-AppxPackage -Path '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
-                    echo 3
                     Invoke-Output {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\"}
-                    echo 4
                     $sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
                     $exeKeyPath = "$env:LOCALAPPDATA\WinMac\WindowsKey.exe"
                     $exeStartPath = "$env:LOCALAPPDATA\WinMac\StartButton.exe"
@@ -635,38 +631,28 @@ foreach ($app in $selectedApps) {
                     $rootFolder = $taskService.GetFolder("\")
                     echo 5
                     try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }                
-                    if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) }
+                    if ($null -eq $existingFolder) { Invoke-Output {$rootFolder.CreateFolder($folderName)} }
                     echo 6
                     $taskFolder = "\" + $folderName
-                    echo 7
                     $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
-                    echo 8
                     $trigger = New-ScheduledTaskTrigger -AtLogon
-                    echo 9
                     $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
-                    echo 10
                     $actionWinKey = New-ScheduledTaskAction -Execute 'WindowsKey.exe' -WorkingDirectory "$env:LOCALAPPDATA\WinMac\"
-                    echo 11
                     $actionStartButton = New-ScheduledTaskAction -Execute "StartButton.exe" -WorkingDirectory "$env:LOCALAPPDATA\WinMac\"
                     $processes = @("windowskey", "startbutton")
-                    echo 12
                     foreach ($process in $processes) {
                         $runningProcess = Get-Process -Name $process
                         if ($runningProcess) {Stop-Process -Name $process -Force}
                     }
                     if ($sysType -like "*ARM*") {Copy-Item -Path ..\bin\menu\arm64\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force }
-                    echo 14
                     else {Copy-Item -Path ..\bin\menu\x64\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force }
                     Copy-Item -Path ..\bin\menu\startbutton.exe -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force 
-                    echo 16
                     #! modify about windwos shortcut path dynamically
                     Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
-                    echo 17
                     Copy-Item -Path "..\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force 
                     ####!
                     Invoke-Output {Register-ScheduledTask -TaskName "StartButton" -Action $actionStartButton -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder}
                     Invoke-Output {Register-ScheduledTask -TaskName "WindowsKey" -Action $actionWinKey -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder}
-                    echo 19
                     Start-Process $exeKeyPath
                     Start-Process $exeStartPath
                     Write-Host "WinMac Menu installation completed." -ForegroundColor Green
