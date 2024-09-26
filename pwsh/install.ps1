@@ -770,7 +770,7 @@ foreach ($app in $selectedApps) {
                     Invoke-WebRequest -Uri $downloadUrl -OutFile $downloadPath
                 }
                 Expand-Archive -Path $downloadPath -DestinationPath ..\temp -Force
-                if (Get-Process -n Nexus) { Stop-Process Nexus }
+                if (Get-Process -n Nexus) { Stop-Process -n Nexus }
                 Start-Process -FilePath "..\temp\NexusSetup.exe" -ArgumentList "/silent"
                 Start-Sleep 10
                 $process1 = Get-Process -Name "NexusSetup"
@@ -786,23 +786,14 @@ foreach ($app in $selectedApps) {
                 } else { Start-Sleep 10 }
                 Get-Process -n Nexus | Stop-Process
                 $winStep = 'C:\Users\Public\Documents\WinStep'
-                echo 1
                 Remove-Item -Path "$winStep\Themes\*" -Recurse -Force 
-                echo 2
                 Copy-Item -Path "..\config\dock\themes\*" -Destination "$winStep\Themes\" -Recurse -Force 
-                echo 3
                 Remove-Item -Path "$winStep\NeXus\Indicators\*" -Force -Recurse 
-                echo 4
                 Copy-Item -Path "..\config\dock\indicators\*" -Destination "$winStep\NeXus\Indicators\" -Recurse -Force 
-                echo 5
-                New-Item -ItemType Directory -Path "$winStep\Sounds" -Force 
-                echo 6
-                Copy-Item -Path "..\config\dock\sounds\*" -Destination "$winStep\Sounds\" -Recurse -Force 
-                echo 7
-                New-Item -ItemType Directory -Path "$winStep\Icons" -Force 
-                echo 8
+                Invoke-Output {New-Item -ItemType Directory -Path "$winStep\Sounds" -Force}
+                Copy-Item -Path "..\config\dock\sounds\*" -Destination "$winStep\Sounds\" -Recurse -Force
+                Invoke-Output {New-Item -ItemType Directory -Path "$winStep\Icons" -Force}
                 Copy-Item "..\config\dock\icons" "$winStep" -Recurse -Force 
-                echo 9
                 $regFile = "..\config\dock\winstep.reg"
                 $downloadsPath = "$env:USERPROFILE\Downloads"
                 if ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
