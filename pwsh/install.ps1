@@ -650,7 +650,7 @@ foreach ($app in $selectedApps) {
                     Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
                     #! modify about windwos shortcut path dynamically
                     $WinverUWP = (Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP).InstallLocation
-                    $shortcutPath = ".\config\winx\Group2\8 - System.lnk"
+                    $shortcutPath = "$pwd\config\winx\Group2\8 - System.lnk"
                     $newTargetPath = "$WinverUWP\WinverUWP.exe"
                     $WScriptShell = New-Object -ComObject WScript.Shell
                     $shortcut = $WScriptShell.CreateShortcut($shortcutPath)
