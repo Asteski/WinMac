@@ -247,13 +247,73 @@ https://github.com/Asteski/WinMac/wiki
         $result["promptSetVar"] = if ($promptStyle.IsChecked) { "W";$promptSetInfo = 'WinMac Prompt' } else { "M"; $promptSetInfo = 'macOS Prompt' }
         $result["roundedOrSquared"] = if ($shellCorner.IsChecked) { "R"; $shellCornersInfo = 'Rounded' } else { "S"; $shellCornersInfo = 'Squared' }
         $result["lightOrDark"] = if ($theme.IsChecked) { "L"; $result["stackTheme"] = 'light'; $result["orbTheme"] = 'black.svg'; $themeStyleInfo = 'Light Theme' } else { "D"; $result["stackTheme"] = 'dark'; $result["orbTheme"] = 'white.svg'; $themeStyleInfo = 'Dark Theme' }
-        if ($installType -eq 'F'){ 
-            $result = [System.Windows.MessageBox]::Show("Installation Type: Full`n`nConfiguration:`nStart Menu: $startMenuInfo`nPrompt Style: $promptSetInfo`nShell Corners: $shellCornersInfo`nTheme Style: $themeStyleInfo", "Installation Summary", [System.Windows.MessageBoxButton]::OKCancel, [System.Windows.MessageBoxImage]::Information) 
-        } else {
-            $result = [System.Windows.MessageBox]::Show("Installation Type: Custom`n`nSelected Components:`n$selectedAppNames`nConfiguration:`nStart Menu: $startMenuInfo`nPrompt Style: $promptSetInfo`nShell Corners: $shellCornersInfo`nTheme Style: $themeStyleInfo", "Installation Summary", [System.Windows.MessageBoxButton]::OKCancel, [System.Windows.MessageBoxImage]::Information) 
+        # if ($installType -eq 'F'){ 
+        #     $result = [System.Windows.MessageBox]::Show("Installation Type: Full`n`nConfiguration:`nStart Menu: $startMenuInfo`nPrompt Style: $promptSetInfo`nShell Corners: $shellCornersInfo`nTheme Style: $themeStyleInfo", "Installation Summary", [System.Windows.MessageBoxButton]::OKCancel, [System.Windows.MessageBoxImage]::Information) 
+        # } else {
+        #     $result = [System.Windows.MessageBox]::Show("Installation Type: Custom`n`nSelected Components:`n$selectedAppNames`nConfiguration:`nStart Menu: $startMenuInfo`nPrompt Style: $promptSetInfo`nShell Corners: $shellCornersInfo`nTheme Style: $themeStyleInfo", "Installation Summary", [System.Windows.MessageBoxButton]::OKCancel, [System.Windows.MessageBoxImage]::Information) 
+        # }
+        # if ($result -eq 'OK') {
+        #     $window.Close()
+        # }
+        function Show-CustomMessageBox {
+            param (
+                [string]$message = "This is a custom message.",
+                [string]$title = "Custom MessageBox"
+            )
+        
+            [xml]$xaml = @"
+        <Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                Title="$title" Height="150" Width="300" WindowStartupLocation="CenterScreen" Background="$backgroundColor">
+            <Grid Background="$backgroundColor">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+        
+                <!-- Message Content -->
+                <TextBlock Text="$message" Foreground="$foregroundColor" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10" Grid.Row="1"/>
+        
+                <!-- Buttons -->
+                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+                    <Button x:Name="OkButton" Content="OK" Width="80" Margin="5" Foreground="$foregroundColor" Background="$accentColor"/>
+                    <Button x:Name="CancelButton" Content="Cancel" Width="80" Margin="5" Foreground="$foregroundColor" Background="$secondaryBackgroundColor"/>
+                </StackPanel>
+            </Grid>
+        </Window>
+        "@
+        
+            # Load the XAML into a WPF window
+            $reader = [System.Xml.XmlReader]::Create([System.IO.StringReader]$xaml)
+            $window = [Windows.Markup.XamlReader]::Load($reader)
+        
+            # Event Handlers for Buttons
+            $okButton = $window.FindName("OkButton")
+            $cancelButton = $window.FindName("CancelButton")
+        
+            $okButton.Add_Click({
+                $window.DialogResult = $true
+                $window.Close()
+            })
+        
+            $cancelButton.Add_Click({
+                $window.DialogResult = $false
+                $window.Close()
+            })
+        
+            # Show the window and return the result
+            $result = $window.ShowDialog()
+            return $result
         }
-        if ($result -eq 'OK') {
-            $window.Close()
+        
+        # Example usage of the custom message box
+        $result = Show-CustomMessageBox -message "Do you want to continue with the installation?" -title "Installation Confirmation"
+        
+        if ($result -eq $true) {
+            Write-Host "User clicked OK"
+        } else {
+            Write-Host "User clicked Cancel"
         }
     })
     $btnCancel.Add_Click({
