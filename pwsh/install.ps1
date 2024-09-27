@@ -220,9 +220,8 @@ https://github.com/Asteski/WinMac/wiki
     $customInstall.Add_Checked({$componentSelection.IsEnabled = $true})
     $result = @{}
     $btnInstall.Add_Click({
-        $installType = if ($fullInstall.IsChecked) { "F"
-            $selection = "1","2","3","4","5","6","7","8","9","10"
-        } else { "C"
+        if ($fullInstall.IsChecked) { $selection = "1","2","3","4","5","6","7","8","9","10" } 
+        else {
             if ($chkPowerToys.IsChecked) { $selection += "1," }
             if ($chkEverything.IsChecked) { $selection += "2," }
             if ($chkPowershellProfile.IsChecked) { $selection += "3," }
