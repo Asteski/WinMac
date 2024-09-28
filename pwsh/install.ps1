@@ -48,8 +48,6 @@ if (!($noGUI)) {
     $parentDirectory = Split-Path -Path $PSScriptRoot -Parent
     $iconFolderName = "config"
     $iconFolderPath = Join-Path -Path $parentDirectory -ChildPath $iconFolderName
-    #! $icon = "..\config\gui.ico"
-    #! Icon="$icon"
     $topTextBlock = "PowerShell Deployment Tool for Windows and macOS hybrid"
 $bottomTextBlock = @"
 PowerShell profile files will be removed and replaced with new ones.
@@ -247,11 +245,6 @@ https://github.com/Asteski/WinMac/wiki
         $result["roundedOrSquared"] = if ($shellCorner.IsChecked) { "R" } else { "S" }
         $result["lightOrDark"] = if ($theme.IsChecked) { "L"; $result["stackTheme"] = 'light'; $result["orbTheme"] = 'black.svg' } else { "D"; $result["stackTheme"] = 'dark'; $result["orbTheme"] = 'white.svg' }
         $result = [System.Windows.MessageBox]::Show("Do you wish to continue installation?", "WinMac Deployment", [System.Windows.MessageBoxButton]::OKCancel, [System.Windows.MessageBoxImage]::Information) 
-        # if ($installType -eq 'F'){ 
-        #     $result = [System.Windows.MessageBox]::Show("Installation Type: Full`n`nConfiguration:`nStart Menu: $startMenuInfo`nPrompt Style: $promptSetInfo`nShell Corners: $shellCornersInfo`nTheme Style: $themeStyleInfo", "Installation Summary", [System.Windows.MessageBoxButton]::OKCancel, [System.Windows.MessageBoxImage]::Information) 
-        # } else {
-        #     $result = [System.Windows.MessageBox]::Show("Installation Type: Custom`n`nSelected Components:`n$selectedAppNames`nConfiguration:`nStart Menu: $startMenuInfo`nPrompt Style: $promptSetInfo`nShell Corners: $shellCornersInfo`nTheme Style: $themeStyleInfo", "Installation Summary", [System.Windows.MessageBoxButton]::OKCancel, [System.Windows.MessageBoxImage]::Information) 
-        # }
         if ($result -eq 'OK') {
             $window.Close()
         }
@@ -296,19 +289,19 @@ on WinMac GitHub page:
 https://github.com/Asteski/WinMac/wiki
 
 "@ -ForegroundColor Yellow
-if (-not $adminTest) {Write-Host "Script is not running in elevated session." -ForegroundColor Red} else {Write-Host "Script is running in elevated session." -ForegroundColor Green}
-Write-Host "`n-----------------------------------------------------------------------" -ForegroundColor Cyan
-# WinMac configuration
-Write-Host
-$fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom installation"
-if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
-    Write-Host "Choosing full installation." -ForegroundColor Green
-    $selectedApps = "1","2","3","4","5","6","7","8","9","10"
-} 
-elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
-    Write-Host "Choosing custom installation." -ForegroundColor Green
-    Start-Sleep 1
-    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Other Settings"}
+    if (-not $adminTest) {Write-Host "Script is not running in elevated session." -ForegroundColor Red} else {Write-Host "Script is running in elevated session." -ForegroundColor Green}
+    Write-Host "`n-----------------------------------------------------------------------" -ForegroundColor Cyan
+    # WinMac configuration
+    Write-Host
+    $fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom installation"
+    if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
+        Write-Host "Choosing full installation." -ForegroundColor Green
+        $selectedApps = "1","2","3","4","5","6","7","8","9","10"
+    } 
+    elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
+        Write-Host "Choosing custom installation." -ForegroundColor Green
+        Start-Sleep 1
+        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Other"}
 Write-Host @"
 
 `e[93m$("Please select options you want to install:")`e[0m

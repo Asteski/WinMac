@@ -1,10 +1,229 @@
-Clear-Host
+param (
+    [switch]$noGUI,
+    [switch]$debug
+)
+$version = "0.6.0"
+$date = Get-Date -Format "yy-MM-ddTHHmmss"
+$logFile = "WinMac_uninstall_log_$date.txt"
+$errorActionPreference="SilentlyContinue"
+$WarningPreference="SilentlyContinue"
+Add-Type -AssemblyName PresentationFramework
+Add-Type -AssemblyName System.Windows.Forms
+if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null}
+if (-not (Test-Path -Path "../logs")) {New-Item -ItemType Directory -Path "../logs" | Out-Null}
+$user = [Security.Principal.WindowsIdentity]::GetCurrent()
+$adminTest = (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
+$checkDir = Get-ChildItem '..'
+if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir -like "*bin*" -and $checkDir -like "*pwsh*")) {
+    Write-Host "WinMac components not found. Please make sure to run the script from the correct directory." -ForegroundColor Red
+    Start-Sleep 2
+    exit
+}
+function Invoke-Output {
+    param ([scriptblock]$Command)
+    $output = & $Command 2>&1
+    $output | Out-File -FilePath "..\logs\$logFile" -Append
+    if ($debug -and $output) {$output}
+}
+function Get-WindowsTheme {
+    try {
+        $key = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"
+        $appsUseLightTheme = Get-ItemProperty -Path $key -Name AppsUseLightTheme
+        if ($appsUseLightTheme.AppsUseLightTheme -eq 0) {
+            return "Dark"
+        } else {
+            return "Light" 
+        }
+    } catch {
+        return "Light"
+    }
+}
+$windowsTheme = Get-WindowsTheme
+if (!($noGUI)) {
+    $backgroundColor = if ($windowsTheme -eq "Dark") { "#1E1E1E" } else { "#eff4f9" }
+    $foregroundColor = if ($windowsTheme -eq "Dark") { "#f3f3f3" } else { "#1b1b1b" }
+    $accentColor = if ($windowsTheme -eq "Dark") { "#0078D4" } else { "#fcfcfc" }
+    $secondaryBackgroundColor = if ($windowsTheme -eq "Dark") { "#2D2D2D" } else { "#fcfcfc" }
+    $borderColor = if ($windowsTheme -eq "Dark") { "#2D2D2D" } else { "#e5e5e5" }
+    $parentDirectory = Split-Path -Path $PSScriptRoot -Parent
+    $iconFolderName = "config"
+    $iconFolderPath = Join-Path -Path $parentDirectory -ChildPath $iconFolderName
+    $topTextBlock = "PowerShell Uninstall Tool for Windows and macOS hybrid"
+$bottomTextBlock = @"
+PowerShell profile files will be removed, please make sure to backup 
+your current profiles if needed.
+
+Vim and Nexus packages will show prompt to uninstall, please confirm the
+uninstallations manually.
+
+The author of this script is not responsible for any damage caused by 
+running it.
+
+For guide on how to use the script, please refer to the Wiki page 
+on WinMac GitHub page:
+
+https://github.com/Asteski/WinMac/wiki
+"@
+[xml]$xaml = @"
+<Window
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="WinMac Uninstallation" Height="540" Width="480" WindowStartupLocation="CenterScreen" Background="$backgroundColor" Icon="$iconFolderPath\gui.ico">
+    <Window.Resources>
+        <SolidColorBrush x:Key="BackgroundBrush" Color="$backgroundColor"/>
+        <SolidColorBrush x:Key="ForegroundBrush" Color="$foregroundColor"/>
+        <SolidColorBrush x:Key="AccentBrush" Color="$accentColor"/>
+        <SolidColorBrush x:Key="SecondaryBackgroundBrush" Color="$secondaryBackgroundColor"/>
+        <SolidColorBrush x:Key="BorderBrush" Color="$borderColor"/>
+        <Thickness x:Key="BorderThickness">0</Thickness>  <!-- Corrected Thickness -->
+    </Window.Resources>
+
+    <Grid Background="{StaticResource BackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Title -->
+        <StackPanel Grid.Row="0" HorizontalAlignment="Center">
+            <TextBlock FontSize="20" FontWeight="Bold" Text="WinMac" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="0,10,0,10"/>
+            
+            <!-- Static TextBlock below the title -->
+            <TextBlock Text="$topTextBlock" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="0,5,0,10" TextWrapping="Wrap"/>
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel VerticalAlignment="Top">
+                <!-- Uninstalltion Type -->
+                <GroupBox Header="Select Uninstalltion Type" Margin="0,5,0,5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
+                    <Grid Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <RadioButton x:Name="fullUninstall" Content="Full Uninstalltion" IsChecked="True" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <RadioButton x:Name="customUninstall" Content="Custom Uninstalltion" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                    </Grid>
+                </GroupBox>
+
+                <!-- Component Selection -->
+                <GroupBox Header="Choose Components" Margin="0,5,0,5" Padding="5,5,5,5" x:Name="componentSelection" IsEnabled="False" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
+                    <Grid Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <CheckBox x:Name="chkPowerToys" Content="PowerToys" IsChecked="True" Grid.Row="0" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkEverything" Content="Everything" IsChecked="True" Grid.Row="0" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkPowershellProfile" Content="PowerShell Profile" IsChecked="True" Grid.Row="1" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkStartAllBack" Content="StartAllBack" IsChecked="True" Grid.Row="1" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkWinMacMenu" Content="WinMac Menu" IsChecked="True" Grid.Row="2" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkTopNotify" Content="TopNotify" IsChecked="True" Grid.Row="2" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkStahky" Content="Stahky" IsChecked="True" Grid.Row="3" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkKeyboardShortcuts" Content="Keyboard Shortcuts" IsChecked="True" Grid.Row="3" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkNexusDock" Content="Nexus Dock" IsChecked="True" Grid.Row="4" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkOther" Content="Other" IsChecked="True" Grid.Row="4" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                    </Grid>
+                </GroupBox>
+
+                <!-- 2x2 GroupBox Layout -->
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto"/> <!-- For the TextBlock -->
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- TextBlock below the last row of GroupBoxes -->
+                    <TextBlock Grid.Row="2" Grid.ColumnSpan="2" Margin="5" Foreground="{StaticResource ForegroundBrush}" Text="$bottomTextBlock" TextWrapping="Wrap"/>
+                </Grid>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Buttons -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button x:Name="btnUninstall" Content="Uninstall" Width="100" Height="30" Margin="10" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource AccentBrush}"/>
+            <Button x:Name="btnCancel" Content="Cancel" Width="100" Height="30" Margin="10" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}"/>
+        </StackPanel>
+    </Grid>
+</Window>
+"@
+    $reader = New-Object System.Xml.XmlNodeReader $xaml
+    $window = [Windows.Markup.XamlReader]::Load($reader)
+    $fullUninstall = $window.FindName("fullUninstall")
+    $customUninstall = $window.FindName("customUninstall")
+    $componentSelection = $window.FindName("componentSelection")
+    $chkPowerToys = $window.FindName("chkPowerToys")
+    $chkEverything = $window.FindName("chkEverything")
+    $chkPowershellProfile = $window.FindName("chkPowershellProfile")
+    $chkStartAllBack = $window.FindName("chkStartAllBack")
+    $chkWinMacMenu = $window.FindName("chkWinMacMenu")
+    $chkTopNotify = $window.FindName("chkTopNotify")
+    $chkStahky = $window.FindName("chkStahky")
+    $chkKeyboardShortcuts = $window.FindName("chkKeyboardShortcuts")
+    $chkNexusDock = $window.FindName("chkNexusDock")
+    $chkOther = $window.FindName("chkOther")
+    $btnUninstall = $window.FindName("btnUninstall")
+    $btnCancel = $window.FindName("btnCancel")
+    $fullUninstall.Add_Checked({$componentSelection.IsEnabled = $false})
+    $customUninstall.Add_Checked({$componentSelection.IsEnabled = $true})
+    $result = @{}
+    $btnUninstall.Add_Click({
+        if ($fullUninstall.IsChecked) { $selection = "1","2","3","4","5","6","7","8","9","10" } 
+        else {
+            if ($chkPowerToys.IsChecked) { $selection += "1," }
+            if ($chkEverything.IsChecked) { $selection += "2," }
+            if ($chkPowershellProfile.IsChecked) { $selection += "3," }
+            if ($chkStartAllBack.IsChecked) { $selection += "4," }
+            if ($chkWinMacMenu.IsChecked) { $selection += "5," }
+            if ($chkTopNotify.IsChecked) { $selection += "6," }
+            if ($chkStahky.IsChecked) { $selection += "7," }
+            if ($chkKeyboardShortcuts.IsChecked) { $selection += "8," }
+            if ($chkNexusDock.IsChecked) { $selection += "9," }
+            if ($chkOther.IsChecked) { $selection += "10" }
+        }
+        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Other Settings"}
+        $result["selectedApps"] = $selection.Split(',').TrimEnd(',')
+        $selectedAppNames = @()
+        foreach ($appNumber in $selection) {
+            if ($appList.ContainsKey($appNumber)) {
+                # $selectedAppNames += $appList[$appNumber] + "`n"
+                $selectedAppNames += $appList[$appNumber]
+            }
+        }
+        $result = [System.Windows.MessageBox]::Show("Do you wish to continue uninstallation?", "WinMac Uninstall", [System.Windows.MessageBoxButton]::OKCancel, [System.Windows.MessageBoxImage]::Information) 
+        if ($result -eq 'OK') {
+            $window.Close()
+        }
+    })
+    $btnCancel.Add_Click({
+        $window.Close()
+        exit
+    })
+    $window.ShowDialog() | Out-Null
+}
+else {
+    Clear-Host
 Write-Host @"
 -----------------------------------------------------------------------
 
 Welcome to WinMac Deployment!
 
-Version: 0.6.0
+Version: $version
 Author: Asteski
 GitHub: https://github.com/Asteski/WinMac
 
@@ -23,159 +242,136 @@ your current profiles if needed.
 Vim and Nexus packages will show prompt to uninstall, please confirm the
 uninstallations manually.
 
+The author of this script is not responsible for any damage caused by 
+running it. It is highly recommended to create a system restore point 
+before proceeding with the installation process to ensure you can 
+revert any changes if necessary.
+
+For guide on how to use the script, please refer to the Wiki page 
+on WinMac GitHub page:
+
+https://github.com/Asteski/WinMac/wiki
+
 "@ -ForegroundColor Yellow
-
-Write-Host "Script must be run in elevated session!" -ForegroundColor Red
-Write-Host "`n-----------------------------------------------------------------------" -ForegroundColor Cyan
-
-## Check if script is run from the correct directory
-
-$checkDir = Get-ChildItem '..'
-if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir -like "*bin*")) {
-    Write-Host "`nWinMac components not found. Please make sure to run the script from the correct directory." -ForegroundColor Red
-    Start-Sleep 2
-    exit
-}
-
-## Start Logging
-
-$errorActionPreference="SilentlyContinue"
-$date = Get-Date -Format "yy-MM-ddTHHmmss"
-mkdir ./temp | Out-Null
-
-## User Configuration
-
-$fullOrCustom = Read-Host "`nEnter 'F' for full or 'C' for custom uninstallation"
-if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
-    $selectedApps = "1","2","3","4","5","6","7","8","9","10"
-    Write-Host "Choosing full uninstallation." -ForegroundColor Yellow
-}
-elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
-    Write-Host "Choosing custom uninstallation." -ForegroundColor Yellow
-    Start-Sleep 1
-    $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Other"}
+    if (-not $adminTest) {Write-Host "Script is not running in elevated session." -ForegroundColor Red} else {Write-Host "Script is running in elevated session." -ForegroundColor Green}
+    Write-Host "`n-----------------------------------------------------------------------" -ForegroundColor Cyan
+    # WinMac configuration
+    $fullOrCustom = Read-Host "`nEnter 'F' for full or 'C' for custom uninstallation"
+    if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
+        $selectedApps = "1","2","3","4","5","6","7","8","9","10"
+        Write-Host "Choosing full uninstallation." -ForegroundColor Yellow
+    }
+    elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
+        Write-Host "Choosing custom uninstallation." -ForegroundColor Yellow
+        Start-Sleep 1
+        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Other"}
 Write-Host @"
 
 `e[93m$("Please select options you want to uninstall:")`e[0m
 
 "@
-    Write-Host " 1. PowerToys"
-    Write-Host " 2. Everything"
-    Write-Host " 3. Powershell Profile"
-    Write-Host " 4. StartAllBack"
-    Write-Host " 5. WinMac Menu"
-    Write-Host " 6. TopNotify"
-    Write-Host " 7. Stahky"
-    Write-Host " 8. Keyboard Shortcuts"
-    Write-Host " 9. Nexus Dock"
-    Write-Host "10. Other"
+        Write-Host "1. PowerToys"
+        Write-Host "2. Everything"
+        Write-Host "3. Powershell Profile"
+        Write-Host "4. StartAllBack"
+        Write-Host "5. WinMac Menu"
+        Write-Host "6. TopNotify"
+        Write-Host "7. Stahky"
+        Write-Host "8. Keyboard Shortcuts"
+        Write-Host "9. Nexus Dock"
+        Write-Host "10. Other Settings"
+        Write-Host
+        do {
+            $selection = Read-Host "Enter the numbers of options you want to uninstall (separated by commas)"
+            $selection = $selection.Trim()
+            $selection = $selection -replace '\s*,\s*', ','
+            $valid = $selection -match '^([1-9]|10)(,([1-9]|10))*$'
+            if (!$valid) {
+                Write-Host "`e[91mInvalid input! Please enter numbers between 1 and 10, separated by commas.`e[0m`n"
+            }
+        } while ([string]::IsNullOrWhiteSpace($selection) -or !$valid)
+        $selectedApps = @()
+        $selectedApps = $selection.Split(',')
+        $selectedAppNames = @()
+        foreach ($appNumber in $selectedApps) {
+            if ($appList.ContainsKey($appNumber)) {
+                $selectedAppNames += $appList[$appNumber]
+            }
+        }
+        $selectedApps = @()
+        $selectedApps = $selection.Split(',')
+        $selectedAppNames = @()
+        foreach ($appNumber in $selectedApps) {
+            if ($appList.ContainsKey($appNumber)) {
+                $selectedAppNames += $appList[$appNumber]
+            }
+        }
+        Write-Host "`e[92m$("Selected options:")`e[0m $($selectedAppNames -join ', ')"
+    }
+    else
+    {
+        $selectedApps = "1","2","3","4","5","6","7","8","9","10"
+        Write-Host "Invalid input. Defaulting to full uninstallation." -ForegroundColor Yellow
+    }
+    Start-Sleep 1
     Write-Host
-    do {
-        $selection = Read-Host "Enter the numbers of options you want to install (separated by commas)"
-        $selection = $selection.Trim()
-        $selection = $selection -replace '\s*,\s*', ','
-        $valid = $selection -match '^([1-9]|10)(,([1-9]|10))*$'
-        if (!$valid) {
-            Write-Host "`e[91mInvalid input! Please enter numbers between 1 and 10, separated by commas.`e[0m`n"
-        }
-    } while ([string]::IsNullOrWhiteSpace($selection) -or !$valid)
-    $selectedApps = @()
-    $selectedApps = $selection.Split(',')
-    $selectedAppNames = @()
-    foreach ($appNumber in $selectedApps) {
-        if ($appList.ContainsKey($appNumber)) {
-            $selectedAppNames += $appList[$appNumber]
-        }
-    }
-    $selectedApps = @()
-    $selectedApps = $selection.Split(',')
-    $selectedAppNames = @()
-    foreach ($appNumber in $selectedApps) {
-        if ($appList.ContainsKey($appNumber)) {
-            $selectedAppNames += $appList[$appNumber]
-        }
-    }
-    Write-Host "`e[92m$("Selected options:")`e[0m $($selectedAppNames -join ', ')"
-}
-else
-{
-    $selectedApps = "1","2","3","4","5","6","7","8","9","10"
-    Write-Host "Invalid input. Defaulting to full uninstallation." -ForegroundColor Yellow
-}
-Start-Sleep 1
-Write-Host
-$installConfirmation = Read-Host "Are you sure you want to start the uninstallation process (y/n)"
+    $installConfirmation = Read-Host "Are you sure you want to start the uninstallation process (y/n)"
 
-if ($installConfirmation -ne 'y') {
-    Write-Host "Uninstallation process aborted." -ForegroundColor Red
-    Start-Sleep 2
-    exit
+    if ($installConfirmation -ne 'y') {
+        Write-Host "Uninstallation process aborted." -ForegroundColor Red
+        Start-Sleep 2
+        exit
+    }
 }
-Write-Host "Starting uninstallation process in..." -ForegroundColor Red
+if ($result){
+    $selectedApps = $result["selectedApps"]
+}
+Write-Host "Starting uninstallation process in..." -ForegroundColor Green
 for ($a=3; $a -ge 0; $a--) {
-    Write-Host -NoNewLine "`b$a" -ForegroundColor Red
+    Write-Host -NoNewLine "`b$a" -ForegroundColor Green
     Start-Sleep 1
 }
-
-Write-Host
-Write-Host "-----------------------------------------------------------------------" -ForegroundColor Cyan
-Write-Host
-
-## Winget
-$wingetCheck = winget -v
-if ($null -eq $wingetCheck) {
+Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
+# Nuget check
+Write-Host "Checking for Package Provider (Nuget)" -ForegroundColor Yellow
+$nugetProvider = Get-PackageProvider -Name NuGet
+if ($null -eq $nugetProvider) {
+    Write-Host "NuGet is not installed. Installing NuGet..." -ForegroundColor Yellow
+    Install-PackageProvider -Name NuGet -Force -Scope CurrentUser
+    Write-Host "NuGet installation completed." -ForegroundColor Green
+} else {
+    Write-Host "NuGet is already installed." -ForegroundColor Green
+}
+# Winget check
+Write-Host "Checking for Package Manager (Winget)" -ForegroundColor Yellow
+$wingetCliCheck = winget -v
+if ($null -eq $wingetCliCheck) {
     $progressPreference = 'silentlyContinue'
-    Write-Information "Downloading WinGet and its dependencies..."
-    Invoke-WebRequest -Uri 'https://aka.ms/getwinget' -OutFile 'Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
-    Invoke-WebRequest -Uri 'https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx' -OutFile 'Microsoft.VCLibs.x64.14.00.Desktop.appx'
-    Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.6/Microsoft.UI.Xaml.2.8.x64.appx' -OutFile 'Microsoft.UI.Xaml.2.8.x64.appx'
-    Add-AppxPackage 'Microsoft.VCLibs.x64.14.00.Desktop.appx'
-    Add-AppxPackage 'Microsoft.UI.Xaml.2.8.x64.appx'
-    Add-AppxPackage 'Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
+    Write-Information "Downloading Winget and its dependencies..."
+    Invoke-WebRequest -Uri 'https://aka.ms/getwinget' -OutFile '..\temp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
+    Invoke-WebRequest -Uri 'https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx' -OutFile '..\temp\Microsoft.VCLibs.x64.14.00.Desktop.appx'
+    Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.6/Microsoft.UI.Xaml.2.8.x64.appx' -OutFile '..\temp\Microsoft.UI.Xaml.2.8.x64.appx'
+    Add-AppxPackage '..\temp\Microsoft.VCLibs.x64.14.00.Desktop.appx'
+    Add-AppxPackage '..\temp\Microsoft.UI.Xaml.2.8.x64.appx'
+    Add-AppxPackage '..\temp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
 }
-else 
-{
-    Write-Host "`e[92m$("Winget is already installed.")`e[0m Version: $($wingetCheck)"
-}
-
-## Defintions
-$exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
-Add-Type -AssemblyName System.Windows.Forms
-Add-Type -TypeDefinition @"
-using System;
-using System.Runtime.InteropServices;
-
-public class MouseInput
-{
-    [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
-    public static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint cButtons, uint dwExtraInfo);
-    
-    public const uint MOUSEEVENTF_LEFTDOWN = 0x02;
-    public const uint MOUSEEVENTF_LEFTUP = 0x04;
-
-    public static void HoldLeftMouseButton()
-    {
-        mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
-    }
-    
-    public static void ReleaseLeftMouseButton()
-    {
-        mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+$wingetClientCheck = Get-InstalledModule -Name Microsoft.WinGet.Client -ErrorAction SilentlyContinue
+if ($null -eq $wingetClientCheck) {
+    Write-Host "Winget is not installed. Installing Winget..." -ForegroundColor Yellow
+    Install-Module -Name Microsoft.WinGet.Client -Force
+    Write-Host "Winget installation completed." -ForegroundColor Green
+} else {
+    $wingetFind = Find-Module -Name Microsoft.WinGet.Client
+    if ($wingetFind.Version -gt $wingetClientCheck.Version) {
+        Write-Host "A newer version of Winget is available. Updating Winget..." -ForegroundColor Yellow
+        Update-Module -Name Microsoft.WinGet.Client -Force
+        Write-Host "Winget update completed." -ForegroundColor Green
+    } else {
+        Write-Host "Winget is already installed." -ForegroundColor Green
     }
 }
-"@
-Add-Type -TypeDefinition @"
-using System;
-using System.Runtime.InteropServices;
-public class Taskbar {
-    [DllImport("user32.dll", SetLastError = true)]
-    public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-
-    [DllImport("user32.dll", SetLastError = true)]
-    public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
-}
-"@
-
+Import-Module -Name Microsoft.WinGet.Client -Force
+# WinMac deployment
 foreach ($app in $selectedApps) {
     switch ($app.Trim()) {
         "1" {
@@ -346,12 +542,9 @@ uint fWinIni);
         }
     }
 }
-
 # Clean up
-Write-Host "Clean up..." -ForegroundColor Yellow
 $explorerProcess = Get-Process -Name explorer -ErrorAction SilentlyContinue
 if ($null -eq $explorerProcess) {Start-Process -FilePath explorer.exe}
-Write-Host "Clean up completed." -ForegroundColor Green
 Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
 Write-Host @"
 
