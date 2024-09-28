@@ -379,7 +379,7 @@ foreach ($app in $selectedApps) {
             Write-Host "Uninstalling PowerToys..."  -ForegroundColor Yellow
             Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force
             Start-Sleep 2
-            Uninstall-WinGetPackage --id Microsoft.PowerToys
+            Uninstall-WinGetPackage -id Microsoft.PowerToys
             Write-Host "Uninstalling PowerToys completed." -ForegroundColor Green
         }
     # Everything
@@ -399,7 +399,7 @@ foreach ($app in $selectedApps) {
                 "Vim.Vim",
                 "gsass1.NTop"
             )
-            foreach ($app in $winget) {Uninstall-WinGetPackage --id $app }
+            foreach ($app in $winget) {Uninstall-WinGetPackage -id $app }
             Uninstall-Module PSTree -Force
             if ((Test-Path "$profilePath\PowerShell\$profileFile")) { Remove-Item -Path "$profilePath\PowerShell\$profileFile" }
             if ((Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { Remove-Item -Path "$profilePath\WindowsPowerShell\$profileFile" }
@@ -410,7 +410,8 @@ foreach ($app in $selectedApps) {
     # StartAllBack
         "4" {
             Write-Host "Uninstalling StartAllBack..." -ForegroundColor Yellow
-            Uninstall-WinGetPackage --id "StartIsBack.StartAllBack"
+            # Get-WingetPackage -Name "StartAllBack" | Uninstall-WinGetPackage
+            Uninstall-WinGetPackage -Name "StartIsBack.StartAllBack"
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             Set-ItemProperty -Path $exRegPath\Advanced -Name "UseCompactMode" -Value 0
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarAl" -Value 1
@@ -437,7 +438,8 @@ foreach ($app in $selectedApps) {
     # TopNotify
         "6" {
             Write-Host "Uninstalling TopNotify..." -ForegroundColor Yellow
-            Uninstall-WinGetPackage --name TopNotify
+            # Get-WinGetPackage -name TopNotify | Uninstall-WinGetPackage
+            Uninstall-WinGetPackage -name TopNotify
             Write-Host "Uninstalling TopNotify completed." -ForegroundColor Green
         }
     # Stahky
