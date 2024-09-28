@@ -413,6 +413,7 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $exRegPath\Advanced -Name "UseCompactMode" -Value 0
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarAl" -Value 1
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarGlomLevel" -Value 0
+            Set-ItemProperty -Path $exRegPath\Advanced -Name "LaunchTO" -Value 0
             Stop-Process -Name explorer -Force
             Write-Host "Uninstalling StartAllBack completed." -ForegroundColor Green
             Start-Sleep 3
