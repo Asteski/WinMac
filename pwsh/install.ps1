@@ -50,7 +50,7 @@ if (!($noGUI)) {
     $parentDirectory = Split-Path -Path $PSScriptRoot -Parent
     $iconFolderName = "config"
     $iconFolderPath = Join-Path -Path $parentDirectory -ChildPath $iconFolderName
-    $topTextBlock = "PowerShell Deployment Tool for Windows and macOS hybrid"
+    $topTextBlock = "PowerShell deployment tool for Windows and macOS hybrid"
 $bottomTextBlock = @"
 PowerShell profile files will be removed and replaced with new ones.
 Please make sure to backup your current profiles if needed.

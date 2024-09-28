@@ -50,7 +50,7 @@ if (!($noGUI)) {
     $parentDirectory = Split-Path -Path $PSScriptRoot -Parent
     $iconFolderName = "config"
     $iconFolderPath = Join-Path -Path $parentDirectory -ChildPath $iconFolderName
-    $topTextBlock = "PowerShell Uninstall Tool for Windows and macOS hybrid"
+    $topTextBlock = "PowerShell uninstall tool for Windows and macOS hybrid"
 $bottomTextBlock = @"
 PowerShell profile files will be removed, please make sure to backup 
 your current profiles if needed.
@@ -408,7 +408,7 @@ foreach ($app in $selectedApps) {
     # StartAllBack
         "4" {
             Write-Host "Uninstalling StartAllBack..." -ForegroundColor Yellow
-            Invoke-Output { Uninstall-WinGetPackage -Name "StartIsBack.StartAllBack" }
+            Invoke-Output { Uninstall-WinGetPackage -id "StartIsBack.StartAllBack" }
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             Set-ItemProperty -Path $exRegPath\Advanced -Name "UseCompactMode" -Value 0
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarAl" -Value 1
