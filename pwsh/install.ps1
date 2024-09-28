@@ -320,11 +320,11 @@ Write-Host @"
 8. Keyboard Shortcuts
 9. Nexus Dock
 10. Other Settings:
-    • Black Cursor
-    • Pin Home, Programs and Recycle Bin to Quick Access
-    • Remove Shortcut Arrows
-    • Remove Recycle Bin from Desktop
-    • Add End Task to context menu
+  • Black Cursor
+  • Pin Home, Programs and Recycle Bin to Quick Access
+  • Remove Shortcut Arrows
+  • Remove Recycle Bin from Desktop
+  • Add End Task to context menu
 "@
     Write-Host
     do {
