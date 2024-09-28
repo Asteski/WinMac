@@ -540,7 +540,7 @@ uint fWinIni);
 # Clean up
 $explorerProcess = Get-Process -Name explorer -ErrorAction SilentlyContinue
 if ($null -eq $explorerProcess) {Start-Process -FilePath explorer.exe}
-Stop-Transcript
+Stop-Transcript | Out-Null
 Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
 Write-Host @"
 
