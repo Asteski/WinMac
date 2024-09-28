@@ -609,7 +609,6 @@ foreach ($app in $selectedApps) {
             else { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 1 }
             Set-ItemProperty -Path "$exRegPath\Advanced" -Name "LaunchTO" -Value 1
             Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
-            Set-ItemProperty -Path $exRegPath -Name "ShowRecent" -Value 0
             Invoke-Output {Stop-Process -Name explorer -Force}
             Start-Sleep 2
             Write-Host "StartAllBack installation completed." -ForegroundColor Green
