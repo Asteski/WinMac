@@ -472,10 +472,10 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 0
             $homeDir = "C:\Users\$env:USERNAME"
             $homeIniFilePath = "$($homeDir)\desktop.ini"
-            Remove-Item -Path $homeIniFilePath -Force
+            Invoke-Output { Remove-Item -Path $homeIniFilePath -Force }
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             $programsIniFilePath = "$($programsDir)\desktop.ini"
-            Remove-Item -Path $programsIniFilePath -Force
+            Invoke-Output { Remove-Item -Path $programsIniFilePath -Force }
             $curDestFolder = "C:\Windows\Cursors"
             $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
             $RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
@@ -509,25 +509,25 @@ uint pvParam,
 uint fWinIni);
 '@
             $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
-            $CursorRefresh::SystemParametersInfo(0x0057,0,$null,0)
+            Invoke-Output { $CursorRefresh::SystemParametersInfo(0x0057,0,$null,0) }
             $homeDir = "C:\Users\$env:USERNAME"
             $homePin = new-object -com shell.application
-            $homePin.Namespace($homeDir).Self.InvokeVerb("pintohome")
+            Invoke-Output { $homePin.Namespace($homeDir).Self.InvokeVerb("pintohome") }
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             $programsPin = new-object -com shell.application
-            $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome")
+            Invoke-Output { $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome") }
             $RBPath = 'HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\pintohome\command\'
             $name = "DelegateExecute"
             $value = "{b455f46e-e4af-4035-b0a4-cf18d2f6f28e}"
-            New-Item -Path $RBPath -Force
-            New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force
+            Invoke-Output { New-Item -Path $RBPath -Force }
+            Invoke-Output { New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force }
             $oShell = New-Object -ComObject Shell.Application
             $recycleBin = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
-            $recycleBin.Self.InvokeVerb("PinToHome")
-            Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse
-            Remove-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons"
-            Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings" -Recurse
-            Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarSmallIcons"
+            Invoke-Output { $recycleBin.Self.InvokeVerb("PinToHome") }
+            Invoke-Output { Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse }
+            Invoke-Output { Remove-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" }
+            Invoke-Output { Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings" -Recurse }
+            Invoke-Output { Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarSmallIcons" }
             Stop-Process -Name explorer -Force
             Write-Host "Uninstalling Other Settings completed." -ForegroundColor Green
         }
