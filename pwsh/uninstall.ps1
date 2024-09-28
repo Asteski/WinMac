@@ -211,11 +211,14 @@ https://github.com/Asteski/WinMac/wiki
             $window.Close()
         }
     })
+    $window.Add_Closed({
+        Stop-Process -Id $PID
+    })
     $btnCancel.Add_Click({
         $window.Close()
         exit
     })
-    $window.ShowDialog()
+    $window.ShowDialog() | Out-Null
 }
 else {
     Clear-Host
