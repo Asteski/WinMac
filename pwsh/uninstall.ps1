@@ -433,7 +433,7 @@ foreach ($app in $selectedApps) {
             foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
             $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue
             if ($null -eq $tasksFolder) { schtasks /DELETE /TN \WinMac /F > $null 2>&1 }
-            Remove-Item -Path "$env:PROGRAMFILES\WinMac" -Recurse -Force
+            Get-ChildItem "$env:LOCALAPPDATA\WinMac" | Where-Object { $.name -match 'startbutton|windowskey' } | Remove-Item -Recurse -Force
             Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
             Expand-Archive -Path "..\config\WinX-default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
             Stop-Process -n Explorer
@@ -460,7 +460,7 @@ foreach ($app in $selectedApps) {
             foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
             $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue
             if ($null -eq $tasksFolder) { schtasks /DELETE /TN \WinMac /F > $null 2>&1 }
-            Remove-Item -Path "$env:PROGRAMFILES\WinMac" -Recurse -Force
+            Get-ChildItem "$env:LOCALAPPDATA\WinMac" | Where-Object { $.name -match 'KeyShortcuts' } | Remove-Item -Recurse -Force
             Write-Host "Uninstalling Keyboard Shortcuts completed." -ForegroundColor Green
         }
     # Nexus Dock
@@ -541,6 +541,7 @@ uint fWinIni);
     }
 }
 # Clean up
+if ((Get-ChildItem -Path "$env:LOCALAPPDATA\WinMac" -Recurse | Measure-Object).Count -eq 0) { Remove-Item -Path "$env:LOCALAPPDATA\WinMac" -Force }
 $explorerProcess = Get-Process -Name explorer -ErrorAction SilentlyContinue
 if ($null -eq $explorerProcess) {Start-Process -FilePath explorer.exe}
 Stop-Transcript | Out-Null
