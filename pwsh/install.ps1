@@ -247,16 +247,20 @@ https://github.com/Asteski/WinMac/wiki
         $result["lightOrDark"] = if ($theme.IsChecked) { "L"; $result["stackTheme"] = 'light'; $result["orbTheme"] = 'black.svg' } else { "D"; $result["stackTheme"] = 'dark'; $result["orbTheme"] = 'white.svg' }
         $result = [System.Windows.MessageBox]::Show("Do you wish to continue installation?", "WinMac Deployment", [System.Windows.MessageBoxButton]::OKCancel, [System.Windows.MessageBoxImage]::Information) 
         if ($result -eq 'OK') {
+            $isInstallCompleted = $true
             $window.Close()
         }
     })
     $window.Add_Closed({
-        Stop-Process -Id $PID
+        if (-not $isInstallCompleted) {
+            Stop-Process -Id $PID
+        }
     })
     $btnCancel.Add_Click({
         $window.Close()
         exit
     })
+
     $window.ShowDialog() | Out-Null
 }
 else {

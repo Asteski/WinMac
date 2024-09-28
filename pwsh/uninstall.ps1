@@ -208,11 +208,14 @@ https://github.com/Asteski/WinMac/wiki
         }
         $result = [System.Windows.MessageBox]::Show("Do you wish to continue uninstallation?", "WinMac Uninstall", [System.Windows.MessageBoxButton]::OKCancel, [System.Windows.MessageBoxImage]::Information) 
         if ($result -eq 'OK') {
+            $isUninstallCompleted = $true
             $window.Close()
         }
     })
     $window.Add_Closed({
-        Stop-Process -Id $PID
+        if (-not $isUninstallCompleted) {
+            Stop-Process -Id $PID
+        }
     })
     $btnCancel.Add_Click({
         $window.Close()
