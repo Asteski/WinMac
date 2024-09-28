@@ -12,7 +12,7 @@ Add-Type -AssemblyName PresentationFramework
 Add-Type -AssemblyName System.Windows.Forms
 if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null }
 if (-not (Test-Path -Path "../logs")) {New-Item -ItemType Directory -Path "../logs" | Out-Null }
-Start-Transcript -Path ../logs/$transcriptFile -Append #| Out-Null
+Start-Transcript -Path ../logs/$transcriptFile -Append | Out-Null
 $user = [Security.Principal.WindowsIdentity]::GetCurrent()
 $adminTest = (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
 $checkDir = Get-ChildItem '..'
@@ -245,9 +245,7 @@ Vim and Nexus packages will show prompt to uninstall, please confirm the
 uninstallations manually.
 
 The author of this script is not responsible for any damage caused by 
-running it. It is highly recommended to create a system restore point 
-before proceeding with the installation process to ensure you can 
-revert any changes if necessary.
+running it.
 
 For guide on how to use the script, please refer to the Wiki page 
 on WinMac GitHub page:
