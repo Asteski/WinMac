@@ -953,7 +953,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
         }
     }
 }
-Remove-Item "..\temp\*" -Recurse -Force
+Remove-Item "..\temp" -Recurse -Force
 Stop-Transcript | Out-Null
 Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
 Write-Host @"
