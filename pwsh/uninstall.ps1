@@ -12,7 +12,7 @@ Add-Type -AssemblyName PresentationFramework
 Add-Type -AssemblyName System.Windows.Forms
 if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null}
 if (-not (Test-Path -Path "../logs")) {New-Item -ItemType Directory -Path "../logs" | Out-Null}
-Start-Transcript ../logs/$transcriptFile -Append
+Start-Transcript -Path ../logs/$transcriptFile -Append
 $user = [Security.Principal.WindowsIdentity]::GetCurrent()
 $adminTest = (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
 $checkDir = Get-ChildItem '..'
@@ -376,24 +376,24 @@ Import-Module -Name Microsoft.WinGet.Client -Force
 # WinMac deployment
 foreach ($app in $selectedApps) {
     switch ($app.Trim()) {
+    # PowerToys
         "1" {
-            # PowerToys
             Write-Host "Uninstalling PowerToys..."  -ForegroundColor Yellow
             Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force | Out-Null
             Start-Sleep 2
             winget uninstall --id Microsoft.PowerToys --silent --force | Out-Null
             Write-Host "Uninstalling PowerToys completed." -ForegroundColor Green
         }
+    # Everything
         "2" {
-            # Everything
             Write-Host "Uninstalling Everything..."  -ForegroundColor Yellow
             winget uninstall --id Voidtools.Everything --source winget --force | Out-Null
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Remove-Item -Path "$programsDir\Everything.lnk" -Force | Out-Null
             Write-Host "Uninstalling Everything completed." -ForegroundColor Green
         }
+    # PowerShell Profile
         "3" {
-            # PowerShell Profile
             Write-Host "Uninstalling PowerShell Profile..." -ForegroundColor Yellow
             $profilePath = $PROFILE | Split-Path | Split-Path
             $profileFile = $PROFILE | Split-Path -Leaf
@@ -409,8 +409,8 @@ foreach ($app in $selectedApps) {
             Remove-Item -Path "$programsDir\gVim*" -Force | Out-Null
             Write-Host "Uninstalling PowerShell Profile completed." -ForegroundColor Green
         }
+    # StartAllBack
         "4" {
-            # StartAllBack
             Write-Host "Uninstalling StartAllBack..." -ForegroundColor Yellow
             winget uninstall --id "StartIsBack.StartAllBack" --source winget --silent --force | Out-Null
             Set-ItemProperty -Path $exRegPath\Advanced -Name "UseCompactMode" -Value 0
@@ -420,10 +420,11 @@ foreach ($app in $selectedApps) {
             Write-Host "Uninstalling StartAllBack completed." -ForegroundColor Green
             Start-Sleep 3
         }
+    # WinMac Menu
         "5" {
-            # WinMac Menu
             Write-Host "Uninstalling WinMac Menu..." -ForegroundColor Yellow
             Stop-Process -Name WindowsKey -Force | Out-Null
+            Stop-Process -Name StartButton -Force | Out-Null
             $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -match 'startbutton|windowskey' }
             foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
             $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue
@@ -434,21 +435,21 @@ foreach ($app in $selectedApps) {
             Stop-Process -n Explorer
             Write-Host "Uninstalling WinMac Menu completed." -ForegroundColor Green
         }
+    # TopNotify
         "6" {
-            # TopNotify
             Write-Host "Uninstalling TopNotify..." -ForegroundColor Yellow
             winget uninstall --name TopNotify --silent | Out-Null
             Write-Host "Uninstalling TopNotify completed." -ForegroundColor Green
         }
+    # Stahky
         "7" {
-            # Stahky
             Write-Host "Uninstalling Stahky..." -ForegroundColor Yellow
             $exePath = "$env:LOCALAPPDATA\Stahky"
             Remove-Item -Path $exePath -Recurse -Force | Out-Null
             Write-Host "Uninstalling Stahky completed." -ForegroundColor Green
         }
+    # Keyboard Shortcuts
         "8" {
-            # Keyboard Shortcuts
             Write-Host "Uninstalling Keyboard Shortcuts..." -ForegroundColor Yellow
             Stop-Process -Name KeyShortcuts -Force | Out-Null
             $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -match 'keyshortcuts' }
@@ -458,8 +459,8 @@ foreach ($app in $selectedApps) {
             Remove-Item -Path "$env:PROGRAMFILES\WinMac" -Recurse -Force | Out-Null
             Write-Host "Uninstalling Keyboard Shortcuts completed." -ForegroundColor Green
         }
+    # Nexus Dock
         "9" {
-            # Nexus Dock
             Write-Host "Uninstalling Nexus Dock..." -ForegroundColor Yellow
             Get-Process Nexus | Stop-Process -Force | Out-Null
             winget uninstall --name Nexus --silent --force | Out-Null
@@ -467,18 +468,16 @@ foreach ($app in $selectedApps) {
             Remove-Item -Path "$programsDir\Nexus.lnk" -Force | Out-Null
             Write-Host "Uninstalling Nexus Dock completed." -ForegroundColor Green
         }
+    # Other
         "10" {
-            # Other
             Write-Host "Uninstalling Other Settings..." -ForegroundColor Yellow
             Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 0
-
             $homeDir = "C:\Users\$env:USERNAME"
             $homeIniFilePath = "$($homeDir)\desktop.ini"
             Remove-Item -Path $homeIniFilePath -Force | Out-Null
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             $programsIniFilePath = "$($programsDir)\desktop.ini"
             Remove-Item -Path $programsIniFilePath -Force | Out-Null
-
             $curDestFolder = "C:\Windows\Cursors"
             $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
             $RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
@@ -519,14 +518,12 @@ uint fWinIni);
 '@
             $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
             $CursorRefresh::SystemParametersInfo(0x0057,0,$null,0) | Out-Null
-
             $homeDir = "C:\Users\$env:USERNAME"
             $homePin = new-object -com shell.application
             $homePin.Namespace($homeDir).Self.InvokeVerb("pintohome") | Out-Null
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             $programsPin = new-object -com shell.application
             $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome") | Out-Null
-
             $RBPath = 'HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\pintohome\command\'
             $name = "DelegateExecute"
             $value = "{b455f46e-e4af-4035-b0a4-cf18d2f6f28e}"
@@ -547,6 +544,7 @@ uint fWinIni);
 # Clean up
 $explorerProcess = Get-Process -Name explorer -ErrorAction SilentlyContinue
 if ($null -eq $explorerProcess) {Start-Process -FilePath explorer.exe}
+Stop-Transcript
 Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
 Write-Host @"
 
@@ -572,5 +570,4 @@ if ($restartConfirmation -eq "Y" -or $restartConfirmation -eq "y") {
 } else {
     Write-Host "Computer will not be restarted." -ForegroundColor Green
 }
-
 #EOF
