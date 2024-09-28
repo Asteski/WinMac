@@ -5,12 +5,14 @@ param (
 $version = "0.6.0"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_uninstall_log_$date.txt"
+$transcriptFile = "WinMac_uninstall_transcript_$date.txt"
 $errorActionPreference="SilentlyContinue"
 $WarningPreference="SilentlyContinue"
 Add-Type -AssemblyName PresentationFramework
 Add-Type -AssemblyName System.Windows.Forms
 if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null}
 if (-not (Test-Path -Path "../logs")) {New-Item -ItemType Directory -Path "../logs" | Out-Null}
+Start-Transcript ../logs/$transcriptFile -Append
 $user = [Security.Principal.WindowsIdentity]::GetCurrent()
 $adminTest = (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
 $checkDir = Get-ChildItem '..'

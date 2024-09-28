@@ -5,12 +5,14 @@ param (
 $version = "0.6.0"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_install_log_$date.txt"
+$transcriptFile = "WinMac_install_transcript_$date.txt"
 $errorActionPreference="SilentlyContinue"
 $WarningPreference="SilentlyContinue"
 Add-Type -AssemblyName PresentationFramework
 Add-Type -AssemblyName System.Windows.Forms
 if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null}
 if (-not (Test-Path -Path "../logs")) {New-Item -ItemType Directory -Path "../logs" | Out-Null}
+Start-Transcript ../logs/$transcriptFile -Append
 $user = [Security.Principal.WindowsIdentity]::GetCurrent()
 $adminTest = (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
 $checkDir = Get-ChildItem '..'
@@ -588,6 +590,7 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $sabRegPath -Name "ModernIconsColorized" -Value 0
             Set-ItemProperty -Path $sabRegPath -Name "FrameStyle" -Value 2
             Set-ItemProperty -Path $sabRegPath -Name "TaskbarOneSegment" -Value 0
+            Set-ItemProperty -Path $sabRegPath -Name "TaskbarGrouping" -Value 0
             Set-ItemProperty -Path $sabRegPath -Name "TaskbarCenterIcons" -Value 1
             Set-ItemProperty -Path $sabRegPath -Name "TaskbarTranslucentEffect" -Value 0
             Set-ItemProperty -Path $sabRegPath -Name "TaskbarLargerIcons" -Value 0
@@ -945,7 +948,8 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
         }
     }
 }
-Remove-Item "..\temp\*" -Recurse -Force 
+Remove-Item "..\temp\*" -Recurse -Force
+Stop-Transcript
 Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
 Write-Host @"
 
