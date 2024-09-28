@@ -607,7 +607,7 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
             if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0 }
             else { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 1 }
-            Set-ItemProperty -Path "$exRegPath\Advanced" -Name "LaunchTO" -Value 1
+            Set-ItemProperty -Path $exRegPath\Advanced -Name "LaunchTO" -Value 1
             Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
             Invoke-Output {Stop-Process -Name explorer -Force}
             Start-Sleep 2
