@@ -238,7 +238,6 @@ https://github.com/Asteski/WinMac/wiki
         $selectedAppNames = @()
         foreach ($appNumber in $selection) {
             if ($appList.ContainsKey($appNumber)) {
-                # $selectedAppNames += $appList[$appNumber] + "`n"
                 $selectedAppNames += $appList[$appNumber]
             }
         }

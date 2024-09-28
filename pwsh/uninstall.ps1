@@ -203,7 +203,6 @@ https://github.com/Asteski/WinMac/wiki
         $selectedAppNames = @()
         foreach ($appNumber in $selection) {
             if ($appList.ContainsKey($appNumber)) {
-                # $selectedAppNames += $appList[$appNumber] + "`n"
                 $selectedAppNames += $appList[$appNumber]
             }
         }
@@ -378,14 +377,13 @@ foreach ($app in $selectedApps) {
         "1" {
             Write-Host "Uninstalling PowerToys..."  -ForegroundColor Yellow
             Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force
-            Start-Sleep 2
-            Uninstall-WinGetPackage -id Microsoft.PowerToys
+            Invoke-Output { Uninstall-WinGetPackage -id Microsoft.PowerToys }
             Write-Host "Uninstalling PowerToys completed." -ForegroundColor Green
         }
     # Everything
         "2" {
             Write-Host "Uninstalling Everything..."  -ForegroundColor Yellow
-            Uninstall-WinGetPackage --id Voidtools.Everything
+            Invoke-Output { Uninstall-WinGetPackage --id Voidtools.Everything }
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Remove-Item -Path "$programsDir\Everything.lnk" -Force
             Write-Host "Uninstalling Everything completed." -ForegroundColor Green
@@ -399,7 +397,7 @@ foreach ($app in $selectedApps) {
                 "Vim.Vim",
                 "gsass1.NTop"
             )
-            foreach ($app in $winget) {Uninstall-WinGetPackage -id $app }
+            foreach ($app in $winget) {Invoke-Output { Uninstall-WinGetPackage -id $app }}
             Uninstall-Module PSTree -Force
             if ((Test-Path "$profilePath\PowerShell\$profileFile")) { Remove-Item -Path "$profilePath\PowerShell\$profileFile" }
             if ((Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { Remove-Item -Path "$profilePath\WindowsPowerShell\$profileFile" }
@@ -410,8 +408,7 @@ foreach ($app in $selectedApps) {
     # StartAllBack
         "4" {
             Write-Host "Uninstalling StartAllBack..." -ForegroundColor Yellow
-            # Get-WingetPackage -Name "StartAllBack" | Uninstall-WinGetPackage
-            Uninstall-WinGetPackage -Name "StartIsBack.StartAllBack"
+            Invoke-Output { Uninstall-WinGetPackage -Name "StartIsBack.StartAllBack" }
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             Set-ItemProperty -Path $exRegPath\Advanced -Name "UseCompactMode" -Value 0
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarAl" -Value 1
@@ -438,8 +435,7 @@ foreach ($app in $selectedApps) {
     # TopNotify
         "6" {
             Write-Host "Uninstalling TopNotify..." -ForegroundColor Yellow
-            # Get-WinGetPackage -name TopNotify | Uninstall-WinGetPackage
-            Uninstall-WinGetPackage -name TopNotify
+            Invoke-Output { Uninstall-WinGetPackage -name TopNotify }
             Write-Host "Uninstalling TopNotify completed." -ForegroundColor Green
         }
     # Stahky
@@ -464,7 +460,7 @@ foreach ($app in $selectedApps) {
         "9" {
             Write-Host "Uninstalling Nexus Dock..." -ForegroundColor Yellow
             Get-Process Nexus | Stop-Process -Force
-            Uninstall-WinGetPackage --name Nexus --silent --force
+            Invoke-Output { Uninstall-WinGetPackage --name Nexus }
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Remove-Item -Path "$programsDir\Nexus.lnk" -Force
             Write-Host "Uninstalling Nexus Dock completed." -ForegroundColor Green
