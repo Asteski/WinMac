@@ -86,7 +86,7 @@ There are many dock customization you can find around the web, including [Devian
 ## Planned features
 
 - custom WinMac theme,
-- Auto Dark Mode toggle theme script,
+- toggle theme script,
 - more keyboard shortcuts,
 - more and improved functions.
 

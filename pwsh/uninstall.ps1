@@ -50,27 +50,16 @@ if (!($noGUI)) {
     $parentDirectory = Split-Path -Path $PSScriptRoot -Parent
     $iconFolderName = "config"
     $iconFolderPath = Join-Path -Path $parentDirectory -ChildPath $iconFolderName
-    $topTextBlock = "PowerShell uninstall tool for Windows and macOS hybrid"
-$bottomTextBlock = @"
-PowerShell profile files will be removed, please make sure to backup 
-your current profiles if needed.
-
-Vim and Nexus packages will show prompt to uninstall, please confirm the
-uninstallations manually.
-
-The author of this script is not responsible for any damage caused by 
-running it.
-
-For guide on how to use the script, please refer to the Wiki page 
-on WinMac GitHub page:
-
-https://github.com/Asteski/WinMac/wiki
-"@
+    $topTextBlock = "PowerShell uninstaller wizard for Windows and macOS hybrid"
+    $bottomTextBlock1 = 'Important Notes:'
+    $bottomTextBlock2 = 'PowerShell profile files will be removed, please make sure to backup your current profiles if needed.'
+    $bottomTextBlock3 = 'Vim and Nexus packages will show prompt to uninstall, please confirm the uninstallations manually.'
+    $bottomTextBlock4 = 'For guide on how to use the script, please refer to the Wiki page on WinMac GitHub page: https://github.com/Asteski/WinMac/wiki'
 [xml]$xaml = @"
 <Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="WinMac Uninstallation" Height="540" Width="480" WindowStartupLocation="CenterScreen" Background="$backgroundColor" Icon="$iconFolderPath\gui.ico">
+    Title="WinMac Uninstaller Wizard" Height="600" Width="480" WindowStartupLocation="CenterScreen" Background="$backgroundColor" Icon="$iconFolderPath\wizard.ico">
     <Window.Resources>
         <SolidColorBrush x:Key="BackgroundBrush" Color="$backgroundColor"/>
         <SolidColorBrush x:Key="ForegroundBrush" Color="$foregroundColor"/>
@@ -89,7 +78,10 @@ https://github.com/Asteski/WinMac/wiki
         
         <!-- Title -->
         <StackPanel Grid.Row="0" HorizontalAlignment="Center">
-            <TextBlock FontSize="20" FontWeight="Bold" Text="WinMac" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="0,10,0,10"/>
+            <TextBlock FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,10,0,10">
+                <Run Text="Win" Foreground="#0174cf"/>
+                <Run Text="Mac" Foreground="#a6a6a6"/>
+            </TextBlock>
             
             <!-- Static TextBlock below the title -->
             <TextBlock Text="$topTextBlock" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="0,5,0,10" TextWrapping="Wrap"/>
@@ -98,14 +90,14 @@ https://github.com/Asteski/WinMac/wiki
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <StackPanel VerticalAlignment="Top">
                 <!-- Uninstalltion Type -->
-                <GroupBox Header="Select Uninstalltion Type" Margin="0,5,0,5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
+                <GroupBox Header="Select Uninstaller Type" Margin="0,5,0,5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
                     <Grid Margin="5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <RadioButton x:Name="fullUninstall" Content="Full Uninstalltion" IsChecked="True" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <RadioButton x:Name="customUninstall" Content="Custom Uninstalltion" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <RadioButton x:Name="fullUninstall" Content="Full" IsChecked="True" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <RadioButton x:Name="customUninstall" Content="Custom" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                     </Grid>
                 </GroupBox>
 
@@ -148,10 +140,12 @@ https://github.com/Asteski/WinMac/wiki
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-
-                    <!-- TextBlock below the last row of GroupBoxes -->
-                    <TextBlock Grid.Row="2" Grid.ColumnSpan="2" Margin="5" Foreground="{StaticResource ForegroundBrush}" Text="$bottomTextBlock" TextWrapping="Wrap"/>
                 </Grid>
+                    <!-- TextBlock below the last row of GroupBoxes -->
+                    <TextBlock FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" Margin="10" Text="$bottomTextBlock1" TextWrapping="Wrap"/>
+                    <TextBlock Margin="10" Text="$bottomTextBlock2" TextWrapping="Wrap"/>
+                    <TextBlock Margin="10" Text="$bottomTextBlock3" TextWrapping="Wrap"/>
+                    <TextBlock Margin="10" Text="$bottomTextBlock4" TextWrapping="Wrap"/>
 
             </StackPanel>
         </ScrollViewer>

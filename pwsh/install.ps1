@@ -50,26 +50,16 @@ if (!($noGUI)) {
     $parentDirectory = Split-Path -Path $PSScriptRoot -Parent
     $iconFolderName = "config"
     $iconFolderPath = Join-Path -Path $parentDirectory -ChildPath $iconFolderName
-    $topTextBlock = "PowerShell deployment tool for Windows and macOS hybrid"
-$bottomTextBlock = @"
-PowerShell profile files will be removed and replaced with new ones.
-Please make sure to backup your current profiles if needed.
-
-The author of this script is not responsible for any damage caused by
-running it. It is highly recommended to create a system restore point
-before proceeding with the installation process to ensure you can
-revert any changes if necessary.
-
-For a guide on how to use the script, please refer to the Wiki page
-on WinMac GitHub page:
-
-https://github.com/Asteski/WinMac/wiki
-"@
+    $topTextBlock = "PowerShell deployment wizard for Windows and macOS hybrid"
+    $bottomTextBlock1 = 'Important Notes:'
+    $bottomTextBlock2 = 'PowerShell profile files will be removed and replaced with new ones. Please make sure to backup your current profiles if needed.'
+    $bottomTextBlock3 = 'The author of this script is not responsible for any damage caused by running it. Highly recommended to create a system restore point before proceeding with the installation process to ensure you can revert any changes if necessary.'
+    $bottomTextBlock4 = 'For guide on how to use the script, please refer to the Wiki page on WinMac GitHub page: https://github.com/Asteski/WinMac/wiki'
 [xml]$xaml = @"
 <Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="WinMac Deployment" Height="700" Width="480" WindowStartupLocation="CenterScreen" Background="$backgroundColor" Icon="$iconFolderPath\gui.ico">
+    Title="WinMac Deployment Wizard" Height="790" Width="480" WindowStartupLocation="CenterScreen" Background="$backgroundColor" Icon="$iconFolderPath\wizard.ico">
     <Window.Resources>
         <SolidColorBrush x:Key="BackgroundBrush" Color="$backgroundColor"/>
         <SolidColorBrush x:Key="ForegroundBrush" Color="$foregroundColor"/>
@@ -88,8 +78,11 @@ https://github.com/Asteski/WinMac/wiki
         
         <!-- Title -->
         <StackPanel Grid.Row="0" HorizontalAlignment="Center">
-            <TextBlock FontSize="20" FontWeight="Bold" Text="WinMac" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="0,10,0,10"/>
-            
+            <TextBlock FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,10,0,10">
+                <Run Text="Win" Foreground="#0174cf"/>
+                <Run Text="Mac" Foreground="#a6a6a6"/>
+            </TextBlock>
+                        
             <!-- Static TextBlock below the title -->
             <TextBlock Text="$topTextBlock" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="0,5,0,10" TextWrapping="Wrap"/>
         </StackPanel>
@@ -103,8 +96,8 @@ https://github.com/Asteski/WinMac/wiki
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <RadioButton x:Name="fullInstall" Content="Full Installation" IsChecked="True" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <RadioButton x:Name="customInstall" Content="Custom Installation" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <RadioButton x:Name="fullInstall" Content="Full" IsChecked="True" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <RadioButton x:Name="customInstall" Content="Custom" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                     </Grid>
                 </GroupBox>
 
@@ -179,10 +172,12 @@ https://github.com/Asteski/WinMac/wiki
                             <RadioButton x:Name="themeDark" Content="Dark" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         </StackPanel>
                     </GroupBox>
-
-                    <!-- TextBlock below the last row of GroupBoxes -->
-                    <TextBlock Grid.Row="2" Grid.ColumnSpan="2" Margin="5" Foreground="{StaticResource ForegroundBrush}" Text="$bottomTextBlock" TextWrapping="Wrap"/>
                 </Grid>
+                    <!-- TextBlock below the last row of GroupBoxes -->
+                    <TextBlock FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" Margin="10" Text="$bottomTextBlock1" TextWrapping="Wrap"/>
+                    <TextBlock Margin="10" Text="$bottomTextBlock2" TextWrapping="Wrap"/>
+                    <TextBlock Margin="10" Text="$bottomTextBlock3" TextWrapping="Wrap"/>
+                    <TextBlock Margin="10" Text="$bottomTextBlock4" TextWrapping="Wrap"/>
 
             </StackPanel>
         </ScrollViewer>
