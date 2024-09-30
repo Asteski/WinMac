@@ -53,7 +53,7 @@ if (!($noGUI)) {
     $topTextBlock = "PowerShell deployment wizard for Windows and macOS hybrid"
     $bottomTextBlock1 = 'Important Notes:'
     $bottomTextBlock2 = 'PowerShell profile files will be removed and replaced with new ones. Please make sure to backup your current profiles if needed.'
-    $bottomTextBlock3 = 'The author of this script is not responsible for any damage caused by running it. Highly recommended to create a system restore point before proceeding with the installation process to ensure you can revert any changes if necessary.'
+    $bottomTextBlock3 = 'The author of this script is not responsible for any damage caused by running it. Highly recommend to create a system restore point before proceeding with the installation process to ensure you can revert any changes if necessary.'
     $bottomTextBlock4 = 'For guide on how to use the script, please refer to the Wiki page on WinMac GitHub page: https://github.com/Asteski/WinMac/wiki'
 [xml]$xaml = @"
 <Window
@@ -174,10 +174,10 @@ if (!($noGUI)) {
                     </GroupBox>
                 </Grid>
                     <!-- TextBlock below the last row of GroupBoxes -->
-                    <TextBlock FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" Margin="10" Text="$bottomTextBlock1" TextWrapping="Wrap"/>
-                    <TextBlock Margin="10" Text="$bottomTextBlock2" TextWrapping="Wrap"/>
-                    <TextBlock Margin="10" Text="$bottomTextBlock3" TextWrapping="Wrap"/>
-                    <TextBlock Margin="10" Text="$bottomTextBlock4" TextWrapping="Wrap"/>
+                    <TextBlock FontSize="14" FontWeight="Bold" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="10" Text="$bottomTextBlock1" TextWrapping="Wrap"/>
+                    <TextBlock Margin="10" Foreground="{StaticResource ForegroundBrush}" Text="$bottomTextBlock2" TextWrapping="Wrap"/>
+                    <TextBlock Margin="10" Foreground="{StaticResource ForegroundBrush}" Text="$bottomTextBlock3" TextWrapping="Wrap"/>
+                    <TextBlock Margin="10" Foreground="{StaticResource ForegroundBrush}" Text="$bottomTextBlock4" TextWrapping="Wrap"/>
 
             </StackPanel>
         </ScrollViewer>
@@ -282,7 +282,7 @@ PowerShell profile files will be removed and replaced with new ones.
 Please make sure to backup your current profiles if needed.
 
 The author of this script is not responsible for any damage caused by 
-running it. It is highly recommended to create a system restore point 
+running it. Highly recommend to create a system restore point 
 before proceeding with the installation process to ensure you can 
 revert any changes if necessary.
 

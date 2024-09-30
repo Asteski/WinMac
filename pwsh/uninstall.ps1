@@ -383,7 +383,7 @@ foreach ($app in $selectedApps) {
     # Everything
         "2" {
             Write-Host "Uninstalling Everything..."  -ForegroundColor Yellow
-            Invoke-Output { Uninstall-WinGetPackage --id Voidtools.Everything }
+            Invoke-Output { Uninstall-WinGetPackage -id Voidtools.Everything }
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Remove-Item -Path "$programsDir\Everything.lnk" -Force
             Write-Host "Uninstalling Everything completed." -ForegroundColor Green
@@ -461,7 +461,7 @@ foreach ($app in $selectedApps) {
         "9" {
             Write-Host "Uninstalling Nexus Dock..." -ForegroundColor Yellow
             Get-Process Nexus | Stop-Process -Force
-            Invoke-Output { Uninstall-WinGetPackage --name Nexus }
+            Invoke-Output { Uninstall-WinGetPackage -name Nexus }
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Remove-Item -Path "$programsDir\Nexus.lnk" -Force
             Write-Host "Uninstalling Nexus Dock completed." -ForegroundColor Green
