@@ -142,10 +142,10 @@ if (!($noGUI)) {
                     </Grid.ColumnDefinitions>
                 </Grid>
                     <!-- TextBlock below the last row of GroupBoxes -->
-                    <TextBlock FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" Margin="10" Text="$bottomTextBlock1" TextWrapping="Wrap"/>
-                    <TextBlock Margin="10" Text="$bottomTextBlock2" TextWrapping="Wrap"/>
-                    <TextBlock Margin="10" Text="$bottomTextBlock3" TextWrapping="Wrap"/>
-                    <TextBlock Margin="10" Text="$bottomTextBlock4" TextWrapping="Wrap"/>
+                    <TextBlock FontSize="14" Foreground="{StaticResource ForegroundBrush}" FontWeight="Bold" HorizontalAlignment="Center" Margin="10" Text="$bottomTextBlock1" TextWrapping="Wrap"/>
+                    <TextBlock Margin="10" Foreground="{StaticResource ForegroundBrush}" Text="$bottomTextBlock2" TextWrapping="Wrap"/>
+                    <TextBlock Margin="10" Foreground="{StaticResource ForegroundBrush}" Text="$bottomTextBlock3" TextWrapping="Wrap"/>
+                    <TextBlock Margin="10" Foreground="{StaticResource ForegroundBrush}" Text="$bottomTextBlock4" TextWrapping="Wrap"/>
 
             </StackPanel>
         </ScrollViewer>
