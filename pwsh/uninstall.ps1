@@ -423,6 +423,7 @@ foreach ($app in $selectedApps) {
             Write-Host "Uninstalling WinMac Menu..." -ForegroundColor Yellow
             Stop-Process -Name WindowsKey -Force
             Stop-Process -Name StartButton -Force
+            Invoke-Output { Uninstall-WinGetPackage -name "Winver UWP" }
             $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -match 'startbutton|windowskey' }
             foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
             $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue
