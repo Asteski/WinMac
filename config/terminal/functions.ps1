@@ -89,7 +89,13 @@ function wu { winget upgrade $args }
 function ww { $appname = $args; winget show "$appname" }
 function ppwd { $pwd.path }
 function c { Set-Location .. }
-function ffind { $filter = "*$args*"; if ($filter) {(Get-ChildItem -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -like $filter }).FullName} else {Write-Host "No filename provided" -ForegroundColor Red}}
+
+function ffind { $filter = "*$args*"; if ($filter) {
+    (Get-ChildItem -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -like $filter }).FullName.Replace($pwd,'.')
+    } else {
+        Write-Host "No filename provided" -ForegroundColor Red
+    }
+}
 
 $stacks = "$env:LOCALAPPDATA\Stahky"
 function stahky { 
@@ -465,7 +471,7 @@ function print-color {
         [Parameter(Mandatory = $true, Position=3)] [string] $p      # Pattern
     )
     
-    $fn = " {0}  " -f $i
+    $fn = "{0}  " -f $i
     $nn = ": {0,-5}: " -f $j
     $ln = (ansi-reverse "$k" "$p")
     
@@ -486,7 +492,7 @@ function string-search {
             break
         }
         $A | Select-Object Path, LineNumber, Pattern, Line | ForEach-Object {
-            $i = $_.Path.Substring(($pwd.Path).Length + 1)
+            $i = '.\' + $_.Path.Substring(($pwd.Path).Length + 1)
             $j = $_.LineNumber
             $k = $_.Line
             $p = $_.Pattern
