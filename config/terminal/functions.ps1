@@ -90,8 +90,30 @@ function ww { $appname = $args; winget show "$appname" }
 function ppwd { $pwd.path }
 function c { Set-Location .. }
 
-function ffind { $filter = "*$args*"; if ($filter) {
-    (Get-ChildItem -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -like $filter }).FullName.Replace($pwd,'.')
+function ffind {
+    param (
+        [string]$Name,                    # The string to search for in file names
+        [Alias('r')][switch]$Recurse      # The -Recurse switch (with alias -r) to enable recursive search
+    )
+    if ($Name) {
+        $filter = "*$Name*"
+        if ($Recurse) {
+            $items = Get-ChildItem -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -like $filter }
+        } else {
+            $items = Get-ChildItem -ErrorAction SilentlyContinue | Where-Object { $_.Name -like $filter }
+        }
+        if ($items) {
+            foreach ($item in $items) {
+                $fullName = $item.FullName.Replace($pwd, '.')
+                $fileName = $item.Name
+                $beforeMatch, $match, $afterMatch = $fileName -split "($Name)", 3, 'IgnoreCase'
+                Write-Host "$($fullName.Substring(0, $fullName.Length - $fileName.Length))$beforeMatch" -NoNewline -ForegroundColor DarkGray
+                Write-Host "$match" -ForegroundColor Green -NoNewline
+                Write-Host "$afterMatch" -ForegroundColor DarkGray
+            }
+        } else {
+            Write-Host "No files found" -ForegroundColor Yellow
+        }
     } else {
         Write-Host "No filename provided" -ForegroundColor Red
     }
