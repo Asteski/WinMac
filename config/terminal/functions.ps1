@@ -43,6 +43,7 @@ set-alias -name ls -value lsx
 set-alias -name stack -value stahky
 set-alias -name find -value ffind
 set-alias -name fi -value ffind
+set-alias -name ss -value select-string
 
 # Functions
 function psversion { $PSVersionTable }
