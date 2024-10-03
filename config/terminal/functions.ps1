@@ -109,7 +109,7 @@ function ffind {
                 $fileName = $item.Name
                 $beforeMatch, $match, $afterMatch = $fileName -split "($Name)", 3, 'IgnoreCase'
                 Write-Host "$($fullName.Substring(0, $fullName.Length - $fileName.Length))$beforeMatch" -NoNewline -ForegroundColor DarkGray
-                Write-Host "$match" -ForegroundColor Green -NoNewline
+                Write-Host "$match" -ForegroundColor Red -NoNewline
                 Write-Host "$afterMatch" -ForegroundColor DarkGray
             }
         } else {
@@ -477,12 +477,11 @@ function ansi-reverse {
         [Parameter(Mandatory = $true, Position=0)] [string] $txt,   # raw text string
         [Parameter(Mandatory = $true, Position=1)] [string] $pat    # Pattern string
     )
-    $GRN = "`e[92m"         # BrightGreen
-    $GRY = "`e[90m"         # BrightBlack / "DarkGray"
+    $RED = "`e[91m"
+    $GRY = "`e[90m"
     # Replace text pattern with ANSI Reversed version (and using capture group for case preserve)
     # https://stackoverflow.com/a/40683667/1147688
-    $txt = "$txt" -replace "($pat)", "$GRN`$1$GRY"      # Using: BrightRed
-
+    $txt = "$txt" -replace "($pat)", "$RED`$1$GRY"
     Return "$txt"
 }
 
@@ -529,67 +528,43 @@ function grep {
     if($args -eq 0) { 
         Write-Host -f Red "Error: " -Non; Write-Host "No arguments provided"
     }
-    elseif (($args.Count -eq 3 -and $args[1] -eq '-r' -and $args[2] -ne '-f' -and $args[2] -ne '-e' -and $args[1] -ne '-re' -and $args[1] -ne '-rf')) {
-        Write-Host -f Red "Error: " -Non; Write-Host "Invalid arguments provided"
+    $searchTerms = $args -split ' ' | Where-Object { $_ -NotLike '-*' }
+    if ($searchTerms.Count -gt 1) {
+        $searchTerm = $searchTerms[0]
+        $secondarySearchTerms = $searchTerms[1..($searchTerms.Count - 1)]
+    } else {
+        $searchTerm = $searchTerms
     }
-    elseif ($args.Count -eq 1) {
-        $files = Get-ChildItem -Exclude $excludeFiles
-        try {
-            string-search $args[0]
-        } catch {
-            Write-Host "Error: $_" -ForegroundColor Red
+    $params = $args -split ' ' | Where-Object { $_ -like '-*' }
+    $paramsJoined = (($params -join '').Replace('-', '')).ToCharArray() | Sort-Object
+    $paramsSorted = "-"+($paramsJoined -join '')
+    switch ($paramsSorted){
+        '-' {
+            $files = Get-ChildItem -Exclude $excludeFiles
+        }
+        '-e' {
+            $files = Get-ChildItem -Exclude $secondarySearchTerms
+        }
+        '-f' {
+            $files = Get-ChildItem -File $secondarySearchTerms
+        }
+        '-r' {
+            $files = Get-ChildItem -Recurse -Exclude $excludeFiles
+        }
+        '-er' {
+            $files = Get-ChildItem -Exclude $secondarySearchTerms -Recurse
+        }
+        '-fr' {
+            $files = Get-ChildItem -File $secondarySearchTerms -Recurse
+        }
+        default {
+            Write-Host -f Red "Error: " -Non; Write-Host "Invalid arguments provided"
         }
     }
-    elseif ($args[0] -eq '-r') {
-        $files = Get-ChildItem -Recurse -Exclude $excludeFiles
-        try {
-            string-search $args[1]
-        } catch {
-            Write-Host "Error: $_" -ForegroundColor Red
-        }
-    }
-    elseif ($args[1] -eq '-r') {
-        $files = Get-ChildItem -Recurse -Exclude $excludeFiles
-        try {
-            string-search $args[0]
-        } catch {
-            Write-Host "Error: $_" -ForegroundColor Red
-        }
-    }
-    elseif ($args.Count -eq 3 -and $args[1] -eq '-f') {
-        $files = Get-ChildItem -File $args[2]
-        try {
-            string-search $args[0]
-        } catch {
-            Write-Host "Error: $_" -ForegroundColor Red
-        }
-    }
-    elseif ($args.Count -eq 3 -and $args[1] -eq '-e') {
-        $files = Get-ChildItem -Exclude $args[2]
-        try {
-            string-search $args[0]
-        } catch {
-            Write-Host "Error: $_" -ForegroundColor Red
-        }
-    }
-    elseif ($args.Count -eq 3 -and $args[1] -eq '-rf') {
-        $files = Get-ChildItem -File $args[2] -Recurse
-        try {
-            string-search $args[0]
-        } catch {
-            Write-Host "Error: $_" -ForegroundColor Red
-        }
-    }
-    elseif ($args.Count -eq 3 -and $args[1] -eq '-re') {
-        $files = Get-ChildItem -Exclude $args[2] -Recurse
-        try {
-            string-search $args[0]
-        } catch {
-            Write-Host "Error: $_" -ForegroundColor Red
-        }
-    }
-    else {
-        Write-Host -f Red "Error: " -Non; Write-Host "Invalid arguments provided" 
+    try {
+        string-search $searchTerm
+    } catch {
+        Write-Host "Error: $_" -ForegroundColor Red
     }
 }
 
