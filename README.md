@@ -17,7 +17,7 @@
 ![winmac_light_01](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_01.jpg)
 
 ![winmac_light_02](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_02.jpg)
-
+st
 ![winmac_light_03](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_03.png)
 
 ![winmac_light_04](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_04.png)
@@ -77,16 +77,16 @@ Please be informed that this is a beta version - you're deploying it at your own
 
 ## Recommendations
 
-For the most reliable deployment process, it's mandatory to install the latest version of [Powershell Core](https://github.com/PowerShell/PowerShell) and run *install.ps1* script from the script directory as an Administrator. Everything else (except dock, which must be run separately in non-elevated powershell session) will be deployed automatically for you once selected at the configuration part of a script (including Winget if not already installed).
+For the most reliable deployment process, I recommend to check [Installation Guide wiki page](https://github.com/Asteski/WinMac/wiki/Installation-Guide).
 
-[Wiki page](https://github.com/Asteski/WinMac/wiki) have ton of very useful information, which can help you understand WinMac components capabilities and configurations, keyboard shortcuts, to modify them to your liking.
+[Wiki](https://github.com/Asteski/WinMac/wiki) have ton of very useful information, which can help you understand WinMac components capabilities and configuration to modify them to your liking.
 
 There are many dock customization you can find around the web, including [DeviantArt](https://www.deviantart.com/search?q=winstep+dock+windows).
 
 ## Planned features
 
-- Launchpad,
-- Auto Dark Mode toggle theme script,
+- custom WinMac theme,
+- toggle theme script,
 - more keyboard shortcuts,
 - more and improved functions.
 
@@ -101,6 +101,7 @@ List of utilities and their creators, used with WinMac deployment script:
 - [Stahky](https://github.com/joedf/stahky) by joedf
 - [AutoHotkey](https://www.autohotkey.com/) by AutoHotkey Foundation
 - [Nexus](https://www.winstep.net/nexus.asp) by Winstep
+- [NewModernWinver](https://github.com/torchgm/NewModernWinver) by torchgm
 - [PSTree](https://github.com/santisq/PSTree) by santisq
 - [ntop](https://github.com/gsass1/NTop) by gsass1
 

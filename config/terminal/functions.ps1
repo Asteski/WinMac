@@ -39,10 +39,15 @@ set-alias -name random -value Get-RandomString
 set-alias -name user -value getuser
 set-alias -name pwd -value ppwd -option AllScope
 set-alias -name lnk -value run
+<<<<<<< HEAD
+set-alias -name ls -value lsx
+=======
 set-alias -name ls -value lsx -option AllScope
+>>>>>>> main
 set-alias -name stack -value stahky
 set-alias -name find -value ffind
 set-alias -name fi -value ffind
+set-alias -name ss -value Select-String
 
 # Functions
 function psversion { $PSVersionTable }
@@ -89,7 +94,35 @@ function wu { winget upgrade $args }
 function ww { $appname = $args; winget show "$appname" }
 function ppwd { $pwd.path }
 function c { Set-Location .. }
-function ffind { $filter = "*$args*"; if ($filter) {(Get-ChildItem -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -like $filter }).FullName} else {Write-Host "No filename provided" -ForegroundColor Red}}
+
+function ffind {
+    param (
+        [string]$Name,                    # The string to search for in file names
+        [Alias('r')][switch]$Recurse      # The -Recurse switch (with alias -r) to enable recursive search
+    )
+    if ($Name) {
+        $filter = "*$Name*"
+        if ($Recurse) {
+            $items = Get-ChildItem -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -like $filter }
+        } else {
+            $items = Get-ChildItem -ErrorAction SilentlyContinue | Where-Object { $_.Name -like $filter }
+        }
+        if ($items) {
+            foreach ($item in $items) {
+                $fullName = $item.FullName.Replace($pwd, '.')
+                $fileName = $item.Name
+                $beforeMatch, $match, $afterMatch = $fileName -split "($Name)", 3, 'IgnoreCase'
+                Write-Host "$($fullName.Substring(0, $fullName.Length - $fileName.Length))$beforeMatch" -NoNewline -ForegroundColor DarkGray
+                Write-Host "$match" -ForegroundColor Red -NoNewline
+                Write-Host "$afterMatch" -ForegroundColor DarkGray
+            }
+        } else {
+            Write-Host "No files found" -ForegroundColor Yellow
+        }
+    } else {
+        Write-Host "No filename provided" -ForegroundColor Red
+    }
+}
 
 $stacks = "$env:LOCALAPPDATA\Stahky"
 function stahky { 
@@ -448,18 +481,11 @@ function ansi-reverse {
         [Parameter(Mandatory = $true, Position=0)] [string] $txt,   # raw text string
         [Parameter(Mandatory = $true, Position=1)] [string] $pat    # Pattern string
     )
-    
-    $ESC = "$([char] 27)"   # ANSI ESC (0x1b)
-    $RES = "`e[0m"          # ANSI Reset ()
-    $RON = "`e[7m"          # Reverse
-    $ROF = "`e[27m"         # ReverseOff
-    $RED = "`e[91m"         # BrightRed
-    $GRY = "`e[90m"         # BrightBlack / "DarkGray"
-
+    $RED = "`e[91m"
+    $GRY = "`e[90m"
     # Replace text pattern with ANSI Reversed version (and using capture group for case preserve)
     # https://stackoverflow.com/a/40683667/1147688
-    $txt = "$txt" -replace "($pat)", "$RED`$1$GRY"      # Using: BrightRed
-
+    $txt = "$txt" -replace "($pat)", "$RED`$1$GRY"
     Return "$txt"
 }
 
@@ -471,7 +497,7 @@ function print-color {
         [Parameter(Mandatory = $true, Position=3)] [string] $p      # Pattern
     )
     
-    $fn = " {0}  " -f $i
+    $fn = "{0}  " -f $i
     $nn = ": {0,-5}: " -f $j
     $ln = (ansi-reverse "$k" "$p")
     
@@ -485,10 +511,14 @@ function string-search {
         [Parameter(Mandatory = $true, Position=0)] [string] $pattern
     )
     foreach ($file in $files) {
-        $A = Select-String -Path $file.FullName -AllMatches -Pattern $pattern
+        try {
+            $A = Select-String -Path $file.FullName -AllMatches -Pattern $pattern
+        } catch {
+            Write-Host "Error: $_" -ForegroundColor Red
+            break
+        }
         $A | Select-Object Path, LineNumber, Pattern, Line | ForEach-Object {
-            # $i = $_.Filename
-            $i = $_.Path.Substring(($pwd.Path).Length + 1)
+            $i = '.\' + $_.Path.Substring(($pwd.Path).Length + 1)
             $j = $_.LineNumber
             $k = $_.Line
             $p = $_.Pattern
@@ -499,42 +529,46 @@ function string-search {
 
 function grep {
     $excludeFiles = @('*.dll', '*.lnk', '*.zip', '*.rar', '*.7zip', '*.png', '*.exe', '*.msi', '*.jpg', '*.jpeg', '*.gif', '*.bmp', '*.ico', '*.mp3', '*.mp4', '*.avi', '*.mkv', '*.flv', '*.mov', '*.wav', '*.wma', '*.wmv', '*.aac', '*.flac', '*.m4a', '*.ogg', '*.opus', '*.webm', '*.webp', '*.pdf')
-    if($args.Count -eq 0) { 
+    if($args -eq 0) { 
         Write-Host -f Red "Error: " -Non; Write-Host "No arguments provided"
     }
-    elseif (($args.Count -eq 3 -and $args[1] -eq '-r' -and $args[2] -ne '-f' -and $args[2] -ne '-e' -and $args[1] -ne '-re' -and $args[1] -ne '-rf')) {
-        Write-Host -f Red "Error: " -Non; Write-Host "Invalid arguments provided" 
+    $searchTerms = $args -split ' ' | Where-Object { $_ -NotLike '-*' }
+    if ($searchTerms.Count -gt 1) {
+        $searchTerm = $searchTerms[0]
+        $secondarySearchTerms = $searchTerms[1..($searchTerms.Count - 1)]
+    } else {
+        $searchTerm = $searchTerms
     }
-    elseif ($args.Count -eq 1) {
-        $files = Get-ChildItem -Exclude $excludeFiles
-        string-search $args[0]
+    $params = $args -split ' ' | Where-Object { $_ -like '-*' }
+    $paramsJoined = (($params -join '').Replace('-', '')).ToCharArray() | Sort-Object
+    $paramsSorted = "-"+($paramsJoined -join '')
+    switch ($paramsSorted){
+        '-' {
+            $files = Get-ChildItem -Exclude $excludeFiles
+        }
+        '-e' {
+            $files = Get-ChildItem -Exclude $secondarySearchTerms
+        }
+        '-f' {
+            $files = Get-ChildItem -File $secondarySearchTerms
+        }
+        '-r' {
+            $files = Get-ChildItem -Recurse -Exclude $excludeFiles
+        }
+        '-er' {
+            $files = Get-ChildItem -Exclude $secondarySearchTerms -Recurse
+        }
+        '-fr' {
+            $files = Get-ChildItem -File $secondarySearchTerms -Recurse
+        }
+        default {
+            Write-Host -f Red "Error: " -Non; Write-Host "Invalid arguments provided"
+        }
     }
-    elseif ($args[0] -eq '-r') {
-        $files = Get-ChildItem -Recurse -Exclude $excludeFiles
-        string-search $args[1]
-    }
-    elseif ($args[1] -eq '-r') {
-        $files = Get-ChildItem -Recurse -Exclude $excludeFiles
-        string-search $args[0]
-    }
-    elseif ($args.Count -eq 3 -and $args[1] -eq '-f') {
-        $files = Get-ChildItem -File $args[2]
-        string-search $args[0]
-    }
-    elseif ($args.Count -eq 3 -and $args[1] -eq '-e') {
-        $files = Get-ChildItem -Exclude $args[2]
-        string-search $args[0]
-    }
-    elseif ($args.Count -eq 3 -and $args[1] -eq '-rf') {
-        $files = Get-ChildItem -File $args[2] -Recurse
-        string-search $args[0]
-    }
-    elseif ($args.Count -eq 3 -and $args[1] -eq '-re') {
-        $files = Get-ChildItem -Exclude $args[2] -Recurse
-        string-search $args[0]
-    }
-    else {
-        Write-Host -f Red "Error: " -Non; Write-Host "Invalid arguments provided" 
+    try {
+        string-search $searchTerm
+    } catch {
+        Write-Host "Error: $_" -ForegroundColor Red
     }
 }
 
