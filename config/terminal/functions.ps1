@@ -39,11 +39,7 @@ set-alias -name random -value Get-RandomString
 set-alias -name user -value getuser
 set-alias -name pwd -value ppwd -option AllScope
 set-alias -name lnk -value run
-<<<<<<< HEAD
-set-alias -name ls -value lsx
-=======
 set-alias -name ls -value lsx -option AllScope
->>>>>>> main
 set-alias -name stack -value stahky
 set-alias -name find -value ffind
 set-alias -name fi -value ffind
