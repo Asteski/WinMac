@@ -319,12 +319,7 @@ Write-Host @"
 7. Stahky
 8. Keyboard Shortcuts
 9. Nexus Dock
-10. Other Settings:
-  • Black Cursor
-  • Pin Home, Programs and Recycle Bin to Quick Access
-  • Remove Shortcut Arrows
-  • Remove Recycle Bin from Desktop
-  • Add End Task to context menu
+10. Other Settings
 "@
     Write-Host
     do {
