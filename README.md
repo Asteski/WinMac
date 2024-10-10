@@ -1,6 +1,6 @@
 # WinMac: The Ultimate Windows and macOS Hybrid
 
-**WinMac** is a revolutionary modification that brings together the best of both Windows and macOS operating systems, offering users a unique and seamless computing experience.
+**WinMac** is a revolutionary customization project that brings together the best of both Windows and macOS operating systems, offering users a unique and seamless computing experience.
 
 ## Dark
 
