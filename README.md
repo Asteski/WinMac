@@ -92,7 +92,7 @@ There are many dock customization you can find around the web, including [Devian
 
 ## Credits to
 
-List of utilities and their creators, used with WinMac deployment script:
+List of utilities and their creators used in WinMac:
 
 - [PowerToys](https://learn.microsoft.com/en-us/windows/powertoys/) by Microsoft
 - [Everything](https://www.voidtools.com/) by David Carpenter
