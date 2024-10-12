@@ -14,7 +14,7 @@
 
 ## Light
 
-![winmac_light_01](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_01.jpg)
+![winmac_light_01](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_01.jp1g)
 
 ![winmac_light_02](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_02.png)
 
