@@ -4,11 +4,11 @@ function Test-Admin
     (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)  
 }
 
-function Set-Title 
+function Set-Title
 {
     if (Get-Command git -ErrorAction SilentlyContinue) {
+        $repo = git rev-parse --show-toplevel 2>$null
         if ($LASTEXITCODE -eq 0) {
-            $repo = git rev-parse --show-toplevel 2>$null
             $repo = Split-Path -Leaf $repo
             $title = $repo + '@' + (git rev-parse --abbrev-ref HEAD 2>$null)
         } else {
