@@ -543,7 +543,14 @@ foreach ($app in $selectedApps) {
                 "Vim.Vim",
                 "gsass1.NTop"
                 )
-            foreach ($app in $winget) {Invoke-Output { Install-WinGetPackage -id $app -source winget }}
+            foreach ($app in $winget) {
+                $package = Get-WinGetPackage -Id $app -ErrorAction SilentlyContinue
+                if ($null -eq $package) {
+                    Invoke-Output { Install-WinGetPackage -id $app -source winget }
+                } else {
+                    Write-Host "$app is already installed." -ForegroundColor Green
+                }
+            }
             $vimParentPath = Join-Path $env:PROGRAMFILES Vim
             $latestSubfolder = Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -Property CreationTime -Descending | Select-Object -First 1
             $vimChildPath = $latestSubfolder.FullName
