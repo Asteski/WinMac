@@ -532,7 +532,6 @@ foreach ($app in $selectedApps) {
     # PowerShell Profile
         "3" {
             Write-Host "Configuring PowerShell Profile..." -ForegroundColor Yellow
-            $gitProfile = $true
             $profilePath = $PROFILE | Split-Path | Split-Path
             $profileFile = $PROFILE | Split-Path -Leaf
             if ($gitProfile -eq $true) { 
