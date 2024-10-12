@@ -548,14 +548,19 @@ foreach ($app in $selectedApps) {
                 if ($null -eq $package) {
                     Invoke-Output { Install-WinGetPackage -id $app -source winget }
                 } else {
-                    Write-Host "$app is already installed." -ForegroundColor Green
+                    Write-Host "$($app.split(".")[1]) is already installed." -ForegroundColor Green
                 }
+            }
+            $pstreeModule = Get-InstalledModule -Name PSTree -ErrorAction SilentlyContinue
+            if ($null -eq $pstreeModule) {
+                Invoke-Output { Install-Module PSTree -Force }
+            } else {
+                Write-Host "PSTree module is already installed." -ForegroundColor Green
             }
             $vimParentPath = Join-Path $env:PROGRAMFILES Vim
             $latestSubfolder = Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -Property CreationTime -Descending | Select-Object -First 1
             $vimChildPath = $latestSubfolder.FullName
             Invoke-Output { [Environment]::SetEnvironmentVariable("Path", $env:Path + ";$vimChildPath", [EnvironmentVariableTarget]::Machine) }
-            Invoke-Output { Install-Module PSTree -Force }
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Invoke-Output { Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $prompt }
             Invoke-Output { Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $functions }
