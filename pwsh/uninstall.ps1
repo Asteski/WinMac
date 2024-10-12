@@ -554,7 +554,7 @@ If you have any questions or suggestions, please contact me on GitHub.
 
 Write-Host "-----------------------------------------------------------------------------"  -ForegroundColor Cyan
 Write-Host
-$restartConfirmation = Read-Host "Restart computer now? It's recommended to fully apply all the changes. (y/n)"
+$restartConfirmation = Read-Host "Restart computer now? It's recommended to fully apply all the changes (y/n)"
 if ($restartConfirmation -eq "Y" -or $restartConfirmation -eq "y") {
     Write-Host "Restarting computer in" -ForegroundColor Red
     for ($a=9; $a -ge 0; $a--) {

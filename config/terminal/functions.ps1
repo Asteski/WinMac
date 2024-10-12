@@ -97,8 +97,8 @@ function wl { $out = get-wingetpackage $args | Sort-Object name; if ($out) { $ou
 # function wl { winget list } 
 function wi { winget install $args }
 function wr { winget uninstall $args } 
-function ws { $appname = $args; winget search "$appname" }
-function wu { if ($null -eq $args[0]) {winget upgrade} else {winget upgrade $args} }
+function ws { if ($null -eq $args[0]) {winget search} else {winget search $args} }
+function wu { winget upgrade $args }
 function ww { $appname = $args; winget show "$appname" }
 function ppwd { $pwd.path }
 function c { Set-Location .. }
