@@ -398,6 +398,17 @@ userName@computerName ~ %
         Write-Host "Invalid input. Defaulting to WinMac prompt." -ForegroundColor Yellow
         $promptSet = 'W'
     }
+    $gitProfile = Read-Host "Install Git profile (y/n)"
+    if ($gitProfile -eq 'y') {
+        $gitProfile = $true
+    }
+    elseif ($gitProfile -eq 'n') {
+        $gitProfile = $false
+    }
+    else {
+        Write-Host "Invalid input. Defaulting to not installing Git profile." -ForegroundColor Yellow
+        $gitProfile = $false
+    }
 }
 
 if ($selectedApps -like '*4*' -or $selectedApps -like '*9*') {
