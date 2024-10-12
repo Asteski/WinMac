@@ -524,7 +524,7 @@ foreach ($app in $selectedApps) {
             $profilePath = $PROFILE | Split-Path | Split-Path
             $profileFile = $PROFILE | Split-Path -Leaf
             if ($gitProfile -eq $true) { 
-                $git = Get-Content "..\config\terminal\find-gitroot.ps1" -Raw
+                $git = Get-Content "..\config\terminal\git-profile.ps1" -Raw
                 if ($promptSet -eq 'W' -or $promptSet -eq 'w') { $prompt = Get-Content "..\config\terminal\winmac-prompt-git.ps1" -Raw }
                 elseif ($promptSet -eq 'M' -or $promptSet -eq 'm') { $prompt = Get-Content "..\config\terminal\macOS-prompt-git.ps1" -Raw }
             }
@@ -571,15 +571,12 @@ foreach ($app in $selectedApps) {
             $vimChildPath = $latestSubfolder.FullName
             Invoke-Output { [Environment]::SetEnvironmentVariable("Path", $env:Path + ";$vimChildPath", [EnvironmentVariableTarget]::Machine) }
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
-
             Invoke-Output { Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $prompt }
             if ($gitProfile -eq $true) { Invoke-Output { Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $git } }
             Invoke-Output { Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $functions }
-
             Invoke-Output { Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $prompt }
             if ($gitProfile -eq $true) { Invoke-Output { Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $git } }
             Invoke-Output { Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $functions }
-
             Invoke-Output { Move-Item -Path "C:\Users\Public\Desktop\gVim*" -Destination $programsDir -Force }
             Invoke-Output { Move-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Destination $programsDir -Force }
             Invoke-Output { Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\gVim*" -Destination $programsDir -Force }
