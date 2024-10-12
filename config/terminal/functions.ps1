@@ -102,7 +102,6 @@ function wu { winget upgrade $args }
 function ww { $appname = $args; winget show "$appname" }
 function ppwd { $pwd.path }
 function c { Set-Location .. }
-
 function ffind {
     param (
         [string]$Name,                    # The string to search for in file names
