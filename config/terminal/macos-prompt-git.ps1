@@ -12,7 +12,7 @@ function prompt {
     }
     elseif (Find-GitRoot)
     {
-        "$userName@$computerName $folder `e[95m$(' git::[')`e[96m$(git rev-parse --abbrev-ref HEAD 2>$null)`e[95m$(']')`e[0m% "
+        "$userName@$computerName $folder `e[95m$('git::[')`e[96m$(git rev-parse --abbrev-ref HEAD 2>$null)`e[95m$(']')`e[0m% "
     }
     else
     {
