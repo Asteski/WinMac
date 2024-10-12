@@ -522,8 +522,15 @@ foreach ($app in $selectedApps) {
             Write-Host "Configuring PowerShell Profile..." -ForegroundColor Yellow
             $profilePath = $PROFILE | Split-Path | Split-Path
             $profileFile = $PROFILE | Split-Path -Leaf
-            if ($promptSet -eq 'W' -or $promptSet -eq 'w') { $prompt = Get-Content "..\config\terminal\winmac-prompt.ps1" -Raw }
-            elseif ($promptSet -eq 'M' -or $promptSet -eq 'm') { $prompt = Get-Content "..\config\terminal\macOS-prompt.ps1" -Raw }
+            if ($gitProfile -eq $true) { 
+                $git = Get-Content "..\config\terminal\find-gitroot.ps1" -Raw
+                if ($promptSet -eq 'W' -or $promptSet -eq 'w') { $prompt = Get-Content "..\config\terminal\winmac-prompt-git.ps1" -Raw }
+                elseif ($promptSet -eq 'M' -or $promptSet -eq 'm') { $prompt = Get-Content "..\config\terminal\macOS-prompt-git.ps1" -Raw }
+            }
+            else {
+                if ($promptSet -eq 'W' -or $promptSet -eq 'w') { $prompt = Get-Content "..\config\terminal\winmac-prompt.ps1" -Raw }
+                elseif ($promptSet -eq 'M' -or $promptSet -eq 'm') { $prompt = Get-Content "..\config\terminal\macOS-prompt.ps1" -Raw }
+            }
             $functions = Get-Content "..\config\terminal\functions.ps1" -Raw
             Invoke-Output { 
                 if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell" } 
@@ -543,6 +550,7 @@ foreach ($app in $selectedApps) {
                 "Vim.Vim",
                 "gsass1.NTop"
                 )
+            if ($gitProfile -eq $true) { $winget += "Git.Git" }
             foreach ($app in $winget) {
                 $package = Get-WinGetPackage -Id $app -ErrorAction SilentlyContinue
                 if ($null -eq $package) {
@@ -562,9 +570,15 @@ foreach ($app in $selectedApps) {
             $vimChildPath = $latestSubfolder.FullName
             Invoke-Output { [Environment]::SetEnvironmentVariable("Path", $env:Path + ";$vimChildPath", [EnvironmentVariableTarget]::Machine) }
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+
             Invoke-Output { Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $prompt }
+            if ($gitProfile -eq $true) { Invoke-Output { Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $git } }
             Invoke-Output { Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $functions }
+
+            Invoke-Output { Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $prompt }
+            if ($gitProfile -eq $true) { Invoke-Output { Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $git } }
             Invoke-Output { Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $functions }
+
             Invoke-Output { Move-Item -Path "C:\Users\Public\Desktop\gVim*" -Destination $programsDir -Force }
             Invoke-Output { Move-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Destination $programsDir -Force }
             Invoke-Output { Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\gVim*" -Destination $programsDir -Force }
