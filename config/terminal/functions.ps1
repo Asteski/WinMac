@@ -7,7 +7,7 @@ function Test-Admin
 function Set-Title 
 {
     $repo = git rev-parse --show-toplevel 2>$null
-    if ($repo) {
+    if ($LASTEXITCODE -eq 0) {
         $repo = Split-Path -Leaf $repo
         $title = $repo + '@' + (git rev-parse --abbrev-ref HEAD 2>$null)
     } else {
