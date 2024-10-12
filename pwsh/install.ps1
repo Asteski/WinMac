@@ -555,7 +555,7 @@ foreach ($app in $selectedApps) {
             if ($null -eq $pstreeModule) {
                 Invoke-Output { Install-Module PSTree -Force }
             } else {
-                Write-Host "PSTree module is already installed." -ForegroundColor Green
+                Write-Host "PSTree is already installed." -ForegroundColor Green
             }
             $vimParentPath = Join-Path $env:PROGRAMFILES Vim
             $latestSubfolder = Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -Property CreationTime -Descending | Select-Object -First 1
