@@ -6,13 +6,7 @@ function Test-Admin
 
 function Set-Title 
 {
-    $repo = git rev-parse --show-toplevel 2>$null
-    if ($LASTEXITCODE -eq 0) {
-        $repo = Split-Path -Leaf $repo
-        $title = $repo + '@' + (git rev-parse --abbrev-ref HEAD 2>$null)
-    } else {
-        $title = Split-Path -Leaf (Get-Location)
-    }
+    $title = Split-Path -Leaf (Get-Location)
     if (Test-Admin -eq $true) { $title = 'Admin: ' + $title }
     $host.UI.RawUI.WindowTitle = $title
 }
@@ -68,7 +62,7 @@ function psversion { $PSVersionTable }
 function l { Get-ChildItem $args -ErrorAction SilentlyContinue | format-table -autosize }
 function ll { Get-ChildItem $args -Force -ErrorAction SilentlyContinue | format-table -autosize }
 function la { Get-ChildItem $args -Force -Attributes !D -ErrorAction SilentlyContinue | format-table -autosize }
-function ld { Get-ChildItem $args -Directory -ErrorAction SilentlyContinue | format-table -autosize }
+function ld { Get-ChildItem $args -Force -Directory -ErrorAction SilentlyContinue | format-table -autosize }
 function lsx { 
     Get-ChildItem $args -ErrorAction SilentlyContinue | ForEach-Object {
         if ($_.PSIsContainer) {
