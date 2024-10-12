@@ -1,6 +1,13 @@
 
 # WinMac prompt
 
+function Set-Title
+{
+    $title = Split-Path -Leaf (Get-Location)
+    if (Test-Admin -eq $true) { $title = 'Admin: ' + $title }
+    $host.UI.RawUI.WindowTitle = $title
+}
+
 function prompt {
     $userName = $env:USERNAME
     $folder = Split-Path -Leaf $pwd

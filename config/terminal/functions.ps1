@@ -4,23 +4,6 @@ function Test-Admin
     (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)  
 }
 
-function Set-Title
-{
-    if (Get-Command git -ErrorAction SilentlyContinue) {
-        $repo = git rev-parse --show-toplevel 2>$null
-        if ($LASTEXITCODE -eq 0) {
-            $repo = Split-Path -Leaf $repo
-            $title = $repo + '@' + (git rev-parse --abbrev-ref HEAD 2>$null)
-        } else {
-            $title = Split-Path -Leaf (Get-Location)
-        }
-    } else {
-        $title = Split-Path -Leaf (Get-Location)
-    }
-    if (Test-Admin -eq $true) { $title = 'Admin: ' + $title }
-    $host.UI.RawUI.WindowTitle = $title
-}
-
 # Completion settings
 Set-PSReadlineKeyHandler -Chord Tab -Function MenuComplete
 Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
