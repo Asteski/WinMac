@@ -643,9 +643,23 @@ foreach ($app in $selectedApps) {
             if ($adminTest) {
                 if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
                     Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
-                    Invoke-Output {Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8'}
-                    Invoke-WebRequest -Uri 'https://github.com/dongle-the-gadget/WinverUWP/releases/download/v2.1.0.0/2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle' -OutFile '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
-                    Add-AppxPackage -Path '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
+                    $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.8' -ErrorAction SilentlyContinue
+                    if ($null -eq $dotNetRuntime) {
+                        Write-Host "Installing .NET Desktop Runtime 8..." -ForegroundColor Yellow
+                        Invoke-Output {Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8'}
+                        Write-Host ".NET Desktop Runtime 8 installation completed." -ForegroundColor Green
+                    } else {
+                        Write-Host ".NET Desktop Runtime 8 is already installed." -ForegroundColor Green
+                    }
+
+                    $winverUWP = Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP -ErrorAction SilentlyContinue
+                    if ($null -eq $winverUWP) {
+                        Write-Host "Installing WinverUWP..." -ForegroundColor Yellow
+                        Invoke-WebRequest -Uri 'https://github.com/dongle-the-gadget/WinverUWP/releases/download/v2.1.0.0/2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle' -OutFile '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
+                        Add-AppxPackage -Path '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
+                    } else {
+                        Write-Host "WinverUWP is already installed." -ForegroundColor Green
+                    }
                     Invoke-Output {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\"}
                     $sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
                     $exeKeyPath = "$env:LOCALAPPDATA\WinMac\WindowsKey.exe"
