@@ -58,7 +58,7 @@ if (!($noGUI)) {
 <Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="WinMac Deployment Wizard" Height="790" Width="480" WindowStartupLocation="CenterScreen" Background="$backgroundColor" Icon="$iconFolderPath\wizard.ico">
+    Title="WinMac Deployment Wizard" Height="820" Width="480" WindowStartupLocation="CenterScreen" Background="$backgroundColor" Icon="$iconFolderPath\wizard.ico">
     <Window.Resources>
         <SolidColorBrush x:Key="BackgroundBrush" Color="$backgroundColor"/>
         <SolidColorBrush x:Key="ForegroundBrush" Color="$foregroundColor"/>
@@ -113,6 +113,7 @@ if (!($noGUI)) {
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
                         <CheckBox x:Name="chkPowerToys" Content="PowerToys" IsChecked="True" Grid.Row="0" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
@@ -124,7 +125,8 @@ if (!($noGUI)) {
                         <CheckBox x:Name="chkStahky" Content="Stahky" IsChecked="True" Grid.Row="3" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkKeyboardShortcuts" Content="Keyboard Shortcuts" IsChecked="True" Grid.Row="3" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkNexusDock" Content="Nexus Dock" IsChecked="True" Grid.Row="4" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="chkOther" Content="Other" IsChecked="True" Grid.Row="4" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkGitProfile" Content="Git Profile" IsChecked="True" Grid.Row="4" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkOther" Content="Other" IsChecked="True" Grid.Row="5" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                     </Grid>
                 </GroupBox>
 
@@ -203,6 +205,7 @@ if (!($noGUI)) {
     $chkStahky = $window.FindName("chkStahky")
     $chkKeyboardShortcuts = $window.FindName("chkKeyboardShortcuts")
     $chkNexusDock = $window.FindName("chkNexusDock")
+    $chkGitProfile = $window.FindName("chkGitProfile")
     $chkOther = $window.FindName("chkOther")
     $startMenu = $window.FindName("startMenuWinMac")
     $promptStyle = $window.FindName("promptStyleWinMac")
@@ -239,9 +242,10 @@ if (!($noGUI)) {
         $result["promptSetVar"] = if ($promptStyle.IsChecked) { "W"} else { "M" }
         $result["roundedOrSquared"] = if ($shellCorner.IsChecked) { "R" } else { "S" }
         $result["lightOrDark"] = if ($theme.IsChecked) { "L"; $result["stackTheme"] = 'light'; $result["orbTheme"] = 'black.svg' } else { "D"; $result["stackTheme"] = 'dark'; $result["orbTheme"] = 'white.svg' }
+        $result["gitProfile"] = if ($chkGitProfile.IsChecked) { $true } else { $false }
         $result = [System.Windows.MessageBox]::Show("Do you wish to continue installation?", "WinMac Deployment", [System.Windows.MessageBoxButton]::OKCancel, [System.Windows.MessageBoxImage]::Information) 
         if ($result -eq 'OK') {
-            $isInstallCompleted = $true
+            # $isInstallCompleted = $true
             $window.Close()
         }
     })
@@ -398,7 +402,7 @@ userName@computerName ~ %
         Write-Host "Invalid input. Defaulting to WinMac prompt." -ForegroundColor Yellow
         $promptSet = 'W'
     }
-    $gitProfile = Read-Host "Install Git profile (y/n)"
+    $gitProfile = Read-Host "`nInstall Git profile (y/n)"
     if ($gitProfile -eq 'y') {
         Write-Host "Installing Git Profile." -ForegroundColor Green
         $gitProfile = $true
@@ -462,6 +466,7 @@ if ($result){
     $lightOrDark = $result["lightOrDark"]
     $stackTheme = $result["stackTheme"]
     $orbTheme = $result["orbTheme"]
+    $gitProfile = $result["gitProfile"]
 }
 Write-Host "Starting installation process in..." -ForegroundColor Green
 for ($a=3; $a -ge 0; $a--) {
