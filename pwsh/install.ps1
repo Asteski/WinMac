@@ -245,7 +245,7 @@ if (!($noGUI)) {
         $result["gitProfile"] = if ($chkGitProfile.IsChecked) { $true } else { $false }
         $result = [System.Windows.MessageBox]::Show("Do you wish to continue installation?", "WinMac Deployment", [System.Windows.MessageBoxButton]::OKCancel, [System.Windows.MessageBoxImage]::Information) 
         if ($result -eq 'OK') {
-            # $isInstallCompleted = $true
+            $isInstallCompleted = $true
             $window.Close()
         }
     })
