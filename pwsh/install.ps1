@@ -400,6 +400,7 @@ userName@computerName ~ %
     }
     $gitProfile = Read-Host "Install Git profile (y/n)"
     if ($gitProfile -eq 'y') {
+        Write-Host "Installing Git Profile." -ForegroundColor Green
         $gitProfile = $true
     }
     elseif ($gitProfile -eq 'n') {
