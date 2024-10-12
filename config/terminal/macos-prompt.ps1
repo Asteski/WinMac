@@ -1,5 +1,5 @@
 
-# MacOS prompt
+# macOS prompt
 
 function prompt {
     $userName = $env:USERNAME

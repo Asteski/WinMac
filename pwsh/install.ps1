@@ -376,22 +376,22 @@ Classic start menu replaces default menu with enhanced Windows 7 start menu.
 if ($selectedApps -like '*3*') {
 Write-Host @"
 
-`e[93m$("You can choose between WinMac prompt or MacOS-like prompt.")`e[0m
+`e[93m$("You can choose between WinMac prompt or macOS-like prompt.")`e[0m
 
 WinMac prompt: 
 12:35:06 userName @ ~ > 
 
-MacOS prompt:
+macOS prompt:
 userName@computerName ~ % 
 
 "@
-    $promptSet = Read-Host "Enter 'W' for WinMac prompt or 'M' for MacOS prompt"
+    $promptSet = Read-Host "Enter 'W' for WinMac prompt or 'M' for macOS prompt"
     if ($promptSet -eq 'W' -or $promptSet -eq 'w') {
         Write-Host "Using WinMac prompt." -ForegroundColor Green
     }
     elseif ($promptSet -eq 'M' -or $promptSet -eq 'm')
     { 
-        Write-Host "Using MacOS prompt." -ForegroundColor Green
+        Write-Host "Using macOS prompt." -ForegroundColor Green
     }
     else
     {
@@ -523,7 +523,7 @@ foreach ($app in $selectedApps) {
             $profilePath = $PROFILE | Split-Path | Split-Path
             $profileFile = $PROFILE | Split-Path -Leaf
             if ($promptSet -eq 'W' -or $promptSet -eq 'w') { $prompt = Get-Content "..\config\terminal\winmac-prompt.ps1" -Raw }
-            elseif ($promptSet -eq 'M' -or $promptSet -eq 'm') { $prompt = Get-Content "..\config\terminal\macos-prompt.ps1" -Raw }
+            elseif ($promptSet -eq 'M' -or $promptSet -eq 'm') { $prompt = Get-Content "..\config\terminal\macOS-prompt.ps1" -Raw }
             $functions = Get-Content "..\config\terminal\functions.ps1" -Raw
             Invoke-Output { 
                 if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell" } 
