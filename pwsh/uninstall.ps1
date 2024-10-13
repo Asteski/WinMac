@@ -431,6 +431,8 @@ foreach ($app in $selectedApps) {
             Get-ChildItem "$env:LOCALAPPDATA\WinMac" | Where-Object { $_.Name -match 'startbutton|windowskey' } | Remove-Item -Recurse -Force
             Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
             Expand-Archive -Path "..\config\WinX-default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
+            $sabRegPath = "HKCU:\Software\StartIsBack"
+            Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1 -ErrorAction SilentlyContinue
             Stop-Process -n Explorer
             Write-Host "Uninstalling WinMac Menu completed." -ForegroundColor Green
         }
