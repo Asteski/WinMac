@@ -1025,6 +1025,8 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
         }
     }
 }
+$explorerProcess = Get-Process -Name explorer -ErrorAction SilentlyContinue
+if ($null -eq $explorerProcess) {Start-Process -FilePath explorer.exe}
 Remove-Item "..\temp" -Recurse -Force
 Stop-Transcript | Out-Null
 Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
