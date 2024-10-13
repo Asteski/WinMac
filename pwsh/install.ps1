@@ -649,16 +649,15 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $sabRegPath -Name "OrbBitmap" -Value "$($orbTheme)"
             if ($menuSet -eq 'X' -or $menuSet -eq 'x') {
                 Write-Host 1
-                $menuSet
                 Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1
             }
-            if ($menuSet -eq 'C' -or $menuSet -eq 'c') {
+            # if ($menuSet -eq 'C' -or $menuSet -eq 'c') {
+            else {
                 Write-Host 2
-                $menuSet
                 Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 0
-                if (Get-Process -Name WindowsKey -ErrorAction SilentlyContinue -or Get-Process -Name StartButton -ErrorAction SilentlyContinue) {
+                $isWinXMenuActive = (Get-Process -Name WindowsKey -ErrorAction SilentlyContinue) -or (Get-Process -Name StartButton -ErrorAction SilentlyContinue)
+                if ($isWinXMenuActive ) {
                     Write-Host 3
-                    $menuSet
                     Stop-Process -Name WindowsKey -Force
                     Stop-Process -Name StartButton -Force
                     Invoke-Output { Uninstall-WinGetPackage -name "Winver UWP" }
