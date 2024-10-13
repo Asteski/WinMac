@@ -408,6 +408,7 @@ userName@computerName ~ %
         $gitProfile = $true
     }
     elseif ($gitProfile -eq 'n') {
+        Write-Host "Skipping Git Profile." -ForegroundColor Yellow
         $gitProfile = $false
     }
     else {
