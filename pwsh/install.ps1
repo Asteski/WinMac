@@ -661,11 +661,9 @@ foreach ($app in $selectedApps) {
                     if ($null -eq $dotNetRuntime) {
                         Write-Host "Installing .NET Desktop Runtime 8..." -ForegroundColor Yellow
                         Invoke-Output {Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8'}
-                        Write-Host ".NET Desktop Runtime 8 installation completed." -ForegroundColor Green
                     } else {
                         Write-Host ".NET Desktop Runtime 8 is already installed." -ForegroundColor Green
                     }
-
                     $winverUWP = Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP -ErrorAction SilentlyContinue
                     if ($null -eq $winverUWP) {
                         Write-Host "Installing WinverUWP..." -ForegroundColor Yellow
