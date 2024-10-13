@@ -640,8 +640,24 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $sabRegPath -Name "SysTrayClockFormat" -Value 3
             Set-ItemProperty -Path $sabRegPath -Name "SysTrayInputSwitch" -Value 0
             Set-ItemProperty -Path $sabRegPath -Name "OrbBitmap" -Value "$($orbTheme)"
-            if ($menuSet -eq 'X'-or $menuSet -eq 'x'){ Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1 }
-            else { Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 0 }
+            if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
+                Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1
+            }
+            else {
+                Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 0
+                if (Get-Process -Name WindowsKey -ErrorAction SilentlyContinue -or Get-Process -Name StartButton -ErrorAction SilentlyContinue) {
+                    Stop-Process -Name WindowsKey -Force
+                    Stop-Process -Name StartButton -Force
+                    Invoke-Output { Uninstall-WinGetPackage -name "Winver UWP" }
+                    $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -match 'startbutton|windowskey' }
+                    foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
+                    $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue
+                    if ($null -eq $tasksFolder) { schtasks /DELETE /TN \WinMac /F > $null 2>&1 }
+                    Get-ChildItem "$env:LOCALAPPDATA\WinMac" | Where-Object { $_.Name -match 'startbutton|windowskey' } | Remove-Item -Recurse -Force
+                    Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
+                    Expand-Archive -Path "..\config\WinX-default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
+                }
+            }
             Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "(default)" -Value 1
             Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
             if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0 }
