@@ -648,12 +648,9 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $sabRegPath -Name "SysTrayInputSwitch" -Value 0
             Set-ItemProperty -Path $sabRegPath -Name "OrbBitmap" -Value "$($orbTheme)"
             if ($menuSet -eq 'X' -or $menuSet -eq 'x') {
-                Write-Host 1
                 Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1
             }
-            # if ($menuSet -eq 'C' -or $menuSet -eq 'c') {
             else {
-                Write-Host 2
                 Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 0
                 $isWinXMenuActive = (Get-Process -Name WindowsKey -ErrorAction SilentlyContinue) -or (Get-Process -Name StartButton -ErrorAction SilentlyContinue)
                 if ($isWinXMenuActive ) {
@@ -701,6 +698,7 @@ foreach ($app in $selectedApps) {
                         Write-Host "WinverUWP is already installed." -ForegroundColor Green
                     }
                     Invoke-Output {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\"}
+                    if ((Get-ItemProperty -Path $sabRegPath -ErrorAction SilentlyContinue).WinKeyFunction -eq 0) {Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1}
                     $sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
                     $exeKeyPath = "$env:LOCALAPPDATA\WinMac\WindowsKey.exe"
                     $exeStartPath = "$env:LOCALAPPDATA\WinMac\StartButton.exe"
