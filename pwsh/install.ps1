@@ -1052,5 +1052,4 @@ if ($restartConfirmation -eq "Y" -or $restartConfirmation -eq "y") {
 } else {
     Write-Host "Computer will not be restarted." -ForegroundColor Green
 }
-
 #EOF
