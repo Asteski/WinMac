@@ -653,8 +653,7 @@ foreach ($app in $selectedApps) {
             else {
                 Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 0
                 $isWinXMenuActive = (Get-Process -Name WindowsKey -ErrorAction SilentlyContinue) -or (Get-Process -Name StartButton -ErrorAction SilentlyContinue)
-                if ($isWinXMenuActive ) {
-                    Write-Host 3
+                if ($isWinXMenuActive) {
                     Stop-Process -Name WindowsKey -Force
                     Stop-Process -Name StartButton -Force
                     Invoke-Output { Uninstall-WinGetPackage -name "Winver UWP" }
