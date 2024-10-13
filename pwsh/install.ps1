@@ -653,9 +653,11 @@ foreach ($app in $selectedApps) {
                 Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1
             }
             if ($menuSet -eq 'C' -or $menuSet -eq 'c') {
+                Write-Host 2
+                $menuSet
                 Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 0
                 if (Get-Process -Name WindowsKey -ErrorAction SilentlyContinue -or Get-Process -Name StartButton -ErrorAction SilentlyContinue) {
-                    Write-Host 2
+                    Write-Host 3
                     $menuSet
                     Stop-Process -Name WindowsKey -Force
                     Stop-Process -Name StartButton -Force
