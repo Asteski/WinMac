@@ -404,11 +404,11 @@ userName@computerName ~ %
     }
     $gitProfile = Read-Host "`nInstall Git profile (y/n)"
     if ($gitProfile -eq 'y') {
-        Write-Host "Using Git Profile." -ForegroundColor Green
+        Write-Host "Using Git profile." -ForegroundColor Green
         $gitProfile = $true
     }
     elseif ($gitProfile -eq 'n') {
-        Write-Host "Skipping Git Profile." -ForegroundColor Yellow
+        Write-Host "Skipping Git profile." -ForegroundColor Yellow
         $gitProfile = $false
     }
     else {
