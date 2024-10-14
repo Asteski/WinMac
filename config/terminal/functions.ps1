@@ -44,7 +44,7 @@ set-alias -name random -value Get-RandomString
 set-alias -name user -value getuser
 set-alias -name pwd -value ppwd -option AllScope
 set-alias -name lnk -value run
-set-alias -name ls -value lsx -option AllScope
+set-alias -name ls -value lls -option AllScope
 set-alias -name stack -value stahky
 set-alias -name find -value ffind
 set-alias -name fi -value ffind
@@ -56,51 +56,65 @@ function l { Get-ChildItem $args -ErrorAction SilentlyContinue | format-table -a
 function ll { Get-ChildItem $args -Force -ErrorAction SilentlyContinue | format-table -autosize }
 function la { Get-ChildItem $args -Force -Attributes !D -ErrorAction SilentlyContinue | format-table -autosize }
 function ld { Get-ChildItem $args -Force -Directory -ErrorAction SilentlyContinue | format-table -autosize }
-function lsx { 
-    Get-ChildItem $args -ErrorAction SilentlyContinue | ForEach-Object {
-        if ($_.PSIsContainer) {
-            if ($_.PSIsContainer -and $_.Name -match '\s') {
-                Write-Host "'$($_.Name)' " -ForegroundColor Blue -NoNewline
-            } elseif ($_.PSIsContainer -and $_.Name -match '^\.') {
-                Write-Host $_.Name "" -ForegroundColor DarkBlue -NoNewline
+function lls {
+    param (
+        [string]$Path = ".",
+        [switch][alias("-l")]$Long
+    )
+    $terminalWidth = $Host.UI.RawUI.WindowSize.Width
+    if (!($Long)) {
+        $items = Get-ChildItem $Path -ErrorAction SilentlyContinue
+    } 
+    else {
+        $items = Get-ChildItem $Path -Force -ErrorAction SilentlyContinue
+    }
+    if (-not $items) {
+        Write-Host "No items found in $Path"
+        return
+    }
+    # Find the length of the longest file or folder name
+    $maxItemWidth = ($items | ForEach-Object { $_.Name.Length } | Measure-Object -Maximum).Maximum
+    if ($maxItemWidth -gt 32) {
+        $maxItemWidth = 32
+    }
+    # $maxItemWidth = ($items | ForEach-Object { $_.Name.Length } | Measure-Object -Maximum).Maximum
+
+    # Add some padding to the maxItemWidth (adjust as needed)
+    $maxItemWidth += 2
+
+    # Calculate how many columns can fit in the terminal
+    $columns = [math]::floor($terminalWidth / ($maxItemWidth + 2))
+
+    # Prepare formatted output
+    $output = @()
+    foreach ($item in $items) {
+        $name = $item.Name
+
+        # Calculate padding, ensuring non-negative values
+        $padding = [math]::Max(0, $maxItemWidth - $name.Length)
+
+        if ($item.PSIsContainer) {
+            # Color folders in blue
+           if ($name -match '^\.') {
+            # if ($name -match '\s') {
+            #     $output += "'$name'" + " " * $padding
+            # } elseif ($name -match '^\.') {
+                $output += "`e[94m$name" + " " * $padding
             } else {
-                Write-Host $_.Name "" -ForegroundColor Blue -NoNewline
+                $output += "`e[94m$name" + " " * $padding
             }
         } else {
-            Write-Host $_.Name "" -NoNewline
+            # Color files normally
+            $output += "`e[0m$name" + " " * $padding
         }
     }
-}
-function lls { 
-    Get-ChildItem $args -Force -ErrorAction SilentlyContinue | ForEach-Object {
-        if ($_.PSIsContainer) {
-            if ($_.PSIsContainer -and $_.Name -match '\s') {
-                Write-Host "'$($_.Name)' " -ForegroundColor Blue -NoNewline
-            } elseif ($_.PSIsContainer -and $_.Name -match '^\.') {
-                Write-Host $_.Name "" -ForegroundColor DarkBlue -NoNewline
-            } else {
-                Write-Host $_.Name "" -ForegroundColor Blue -NoNewline
-            }
-        } else {
-            Write-Host $_.Name "" -NoNewline
-        }
+
+    # Print the output in columns
+    for ($i = 0; $i -lt $output.Count; $i += $columns) {
+        $line = $output[$i..([math]::Min($i + $columns - 1, $output.Count - 1))]
+        $line -join "  "  # Print each line with two spaces between columns
     }
 }
-# function lls { 
-#     Get-ChildItem $args -Force -ErrorAction SilentlyContinue | ForEach-Object {
-#         if ($_.PSIsContainer) {
-#             if ($_.PSIsContainer -and $_.Name -match '\s') {
-#                 Write-Host "'$($_.Name)' " -ForegroundColor Blue -NoNewline
-#             } elseif ($_.PSIsContainer -and $_.Name -match '^\.') {
-#                 Write-Host $_.Name "" -ForegroundColor DarkBlue -NoNewline
-#             } else {
-#                 Write-Host $_.Name "" -ForegroundColor Blue -NoNewline
-#             }
-#         } else {
-#             Write-Host $_.Name "" -NoNewline
-#         }
-#     }
-# }
 function wl { $out = get-wingetpackage $args | Sort-Object name; if ($out) { $out } else { Write-Host "No package found" -ForegroundColor Red }}
 # function wl { winget list } 
 function wi { winget install $args }
