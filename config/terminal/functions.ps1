@@ -105,8 +105,8 @@ function lsx {
     }
     $maxItemWidth += 2
     $columns = [math]::floor($terminalWidth / ($maxItemWidth + 2))
-    $archiveExtensions = @('.zip', '.tar', '.gz', '.rar', '.7z', '.bz2', '.xz')
-    $executableExtensions = @('.exe', '.ps1', '.bat', '.cmd', '.sh', '.msi')
+    $archiveExtensions = @('.zip', '.tar', '.gz', '.rar', '.7z', '.bz2', '.xz', '.arj', '.cab')
+    $executableExtensions = @('.exe', '.ps1', '.bat', '.cmd', '.sh', '.msi', '.cpl', '.msc', '.com', '.vbs')
     $output = @()
     foreach ($item in $items) {
         $name = $item.Name
@@ -120,10 +120,10 @@ function lsx {
         } else {
             $fileExtension = [System.IO.Path]::GetExtension($name).ToLower()
             if ($executableExtensions -contains $fileExtension) {
-                $coloredName = "`e[92m$name`e[0m"
+                $coloredName = "`e[1m`e[32m$name`e[0m"
             }
             elseif ($archiveExtensions -contains $fileExtension) {
-                $coloredName = "`e[91m$name`e[0m"
+                $coloredName = "`e[1m`e[31m$name`e[0m"
             } else {
                 $coloredName = "`e[0m$name`e[0m"
             }
