@@ -53,18 +53,14 @@ set-alias -name ss -value Select-String
 set-alias -name alias -value Set-Alias
 
 # Functions
-function c { Set-Location .. }
-function cc { Set-Location ../.. }
-function ccc { Set-Location ../../.. }
-function cccc { Set-Location ../../../.. }
-function ccccc { Set-Location ../../../../.. }
-set-alias -name .. -value c
-set-alias -name ... -value cc
-set-alias -name .... -value ccc
-set-alias -name ..... -value cccc
-set-alias -name ...... -value ccccc
-set-alias -name '..4' -value cccc
-set-alias -name '..5' -value ccccc
+function .. { Set-Location .. }
+function ... { Set-Location ../.. }
+function .... { Set-Location ../../.. }
+function ..... { Set-Location ../../../.. }
+function ...... { Set-Location ../../../../.. }
+set-alias -name '..3' -value '....'
+set-alias -name '..4' -value '.....'
+set-alias -name '..5' -value '......'
 
 function l { Get-ChildItem $args -Force -ErrorAction SilentlyContinue | format-table -autosize }
 function ll { Get-ChildItem $args -ErrorAction SilentlyContinue | format-table -autosize }
