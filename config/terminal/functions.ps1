@@ -58,6 +58,8 @@ function ... { Set-Location ../.. }
 function .... { Set-Location ../../.. }
 function ..... { Set-Location ../../../.. }
 function ...... { Set-Location ../../../../.. }
+set-alias -name c -value '..'
+set-alias -name cc -value '...'
 set-alias -name '..3' -value '....'
 set-alias -name '..4' -value '.....'
 set-alias -name '..5' -value '......'
