@@ -103,6 +103,7 @@ function lsx {
     }
     $maxItemWidth += 2
     $columns = [math]::floor($terminalWidth / ($maxItemWidth + 2))
+    if ($columns -gt 5) {$columns = 5}
     $archiveExtensions = @('.zip', '.tar', '.gz', '.rar', '.7z', '.bz2', '.xz', '.arj', '.cab')
     $executableExtensions = @('.exe', '.ps1', '.bat', '.cmd', '.sh', '.msi', '.cpl', '.msc', '.com', '.vbs')
     $output = @()
