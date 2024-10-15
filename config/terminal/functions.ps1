@@ -104,7 +104,7 @@ function lsx {
     $columns = [math]::floor($terminalWidth / ($maxItemWidth + 2))
     if ($columns -gt $maxColumns) {$columns = $maxColumns}
     $archiveExtensions = @('.zip', '.tar', '.gz', '.rar', '.7z', '.bz2', '.xz', '.arj', '.cab')
-    $executableExtensions = @('.exe', '.ps1', '.bat', '.cmd', '.sh', '.msi', '.cpl', '.msc', '.com', '.vbs')
+    $executableExtensions = @('.exe', '.bat', '.cmd', '.sh', '.msi', '.cpl', '.msc', '.com', '.vbs')
     $output = @()
     foreach ($item in $items) {
         $name = $item.Name
