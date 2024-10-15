@@ -21,15 +21,15 @@ function prompt {
     if (Test-Admin -eq $true) { $userName = "`e[91m$($userName)`e[0m" } else { $userName = "`e[93m$($userName)`e[0m" }
     if ($folder -eq $env:USERNAME)
     {
-        "$($date)$($userName) @ ~`e[93m$(' > ')`e[0m"
+        "$($date)$($userName) @ ~`e[93m > `e[0m"
     }
     elseif (Find-GitRoot)
     {
-        "$($date)$($username) @ $folder `e[95m$('git:[')`e[96m$(git rev-parse --abbrev-ref HEAD 2>$null)`e[95m$(']')`e[93m$('> ')`e[0m"
+        "$($date)$($username) @ $folder `e[95mgit:(`e[96m$(git rev-parse --abbrev-ref HEAD 2>$null)`e[95m)`e[93m> `e[0m"
     }
     else
     {
-        "$($date)$($userName) @ $folder`e[93m$(' > ')`e[0m"
+        "$($date)$($userName) @ $folder`e[93m > `e[0m"
     }
     Set-Title
 }
