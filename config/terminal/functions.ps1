@@ -103,8 +103,8 @@ function lsx {
     $maxItemWidth += 2
     $columns = [math]::floor($terminalWidth / ($maxItemWidth + 2))
     if ($columns -gt $maxColumns) {$columns = $maxColumns}
-    $archiveExtensions = @('.zip', '.tar', '.gz', '.rar', '.7z', '.bz2', '.xz', '.arj', '.cab')
-    $executableExtensions = @('.exe', '.bat', '.cmd', '.sh', '.msi', '.cpl', '.msc', '.com', '.vbs')
+    $archiveExt = @('.zip', '.tar', '.gz', '.rar', '.7z', '.bz2', '.xz', '.arj', '.cab')
+    $executableExt = @('.exe', '.bat', '.cmd', '.sh', '.msi', '.cpl', '.msc', '.com', '.vbs')
     $output = @()
     foreach ($item in $items) {
         $name = $item.Name
@@ -117,9 +117,9 @@ function lsx {
             }
         } else {
             $fileExtension = [System.IO.Path]::GetExtension($name).ToLower()
-            if ($executableExtensions -contains $fileExtension) {
+            if ($executableExt -contains $fileExtension) {
                 $coloredName = "`e[1m`e[32m$name`e[0m"
-            } elseif ($archiveExtensions -contains $fileExtension) {
+            } elseif ($archiveExt -contains $fileExtension) {
                 $coloredName = "`e[1m`e[31m$name`e[0m"
             } elseif ($fileExtension -contains '.ps1') {
                 $coloredName = "`e[1m`e[93m$name`e[0m"
