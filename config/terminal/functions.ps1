@@ -46,6 +46,7 @@ set-alias -name fi -value ffind
 set-alias -name ss -value Select-String
 set-alias -name alias -value Set-Alias
 
+# Functions
 function c { Set-Location .. }
 function cc { Set-Location ../.. }
 function ccc { Set-Location ../../.. }
@@ -121,7 +122,6 @@ function lsx {
     }
 }
 
-function psversion { $PSVersionTable }
 function wl { $out = get-wingetpackage $args | Sort-Object name; if ($out) { $out } else { Write-Host "No package found" -ForegroundColor Red }}
 # function wl { winget list } 
 function wi { winget install $args }
@@ -129,6 +129,8 @@ function wr { winget uninstall $args }
 function ws { $appname = $args; winget search "$appname" }
 function wu { winget upgrade $args } 
 function ww { $appname = $args; winget show "$appname" }
+
+function psversion { $PSVersionTable }
 function ppwd { $pwd.path }
 function ffind {
     param (
