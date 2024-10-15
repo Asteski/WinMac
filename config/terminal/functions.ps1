@@ -107,6 +107,7 @@ function lsx {
     }
     $maxItemWidth += 2
     $columns = [math]::floor($terminalWidth / ($maxItemWidth + 2))
+    $archiveExtensions = @('.zip', '.tar', '.gz', '.rar', '.7z', '.bz2', '.xz')
     $output = @()
     foreach ($item in $items) {
         $name = $item.Name
@@ -118,8 +119,25 @@ function lsx {
                 $coloredName = "`e[1m`e[44m$name`e[0m"
             }
         } else {
-            $coloredName = "`e[0m$name`e[0m"
+            # Get file permissions mode
+            $mode = $item.Mode
+
+            # Check if the file is executable (Unix-like systems: check 'x' in mode)
+            if ($mode -match 'x') {
+                # Executable file (green color)
+                $coloredName = "`e[32m$name`e[0m"
+            }
+            # Check if the file is an archive (still based on extension for now)
+            elseif ($archiveExtensions -contains [System.IO.Path]::GetExtension($name).ToLower()) {
+                # Archive file (red color)
+                $coloredName = "`e[31m$name`e[0m"
+            } else {
+                # Regular file (no color or default text)
+                $coloredName = "`e[0m$name`e[0m"
+            }
         }
+        #     $coloredName = "`e[0m$name`e[0m"
+        # }
         $output += $coloredName + $padding
     }
     for ($i = 0; $i -lt $output.Count; $i += $columns) {
