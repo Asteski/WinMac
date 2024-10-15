@@ -1,8 +1,3 @@
-function Test-Admin
-{
-    $user = [Security.Principal.WindowsIdentity]::GetCurrent();
-    (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)  
-}
 
 # Completion settings
 Set-PSReadlineKeyHandler -Chord Tab -Function MenuComplete
@@ -20,6 +15,7 @@ set-alias -name whatis -value man
 set-alias -name backup -value wbadmin
 set-alias -name rcopy -value robocopy
 set-alias -name history -value hist -Option AllScope
+set-alias -name h -value hist -Option AllScope
 set-alias -name version -value psversion
 set-alias -name psver -value psversion
 set-alias -name htop -value ntop
@@ -44,86 +40,96 @@ set-alias -name random -value Get-RandomString
 set-alias -name user -value getuser
 set-alias -name pwd -value ppwd -option AllScope
 set-alias -name lnk -value run
-set-alias -name ls -value lls -option AllScope
 set-alias -name stack -value stahky
 set-alias -name find -value ffind
 set-alias -name fi -value ffind
 set-alias -name ss -value Select-String
+set-alias -name alias -value Set-Alias
 
-# Functions
-function psversion { $PSVersionTable }
-function l { Get-ChildItem $args -ErrorAction SilentlyContinue | format-table -autosize }
-function ll { Get-ChildItem $args -Force -ErrorAction SilentlyContinue | format-table -autosize }
-function la { Get-ChildItem $args -Force -Attributes !D -ErrorAction SilentlyContinue | format-table -autosize }
+function c { Set-Location .. }
+function cc { Set-Location ../.. }
+function ccc { Set-Location ../../.. }
+function cccc { Set-Location ../../../.. }
+function ccccc { Set-Location ../../../../.. }
+set-alias -name .. -value c
+set-alias -name ... -value cc
+set-alias -name .... -value ccc
+set-alias -name ..... -value cccc
+set-alias -name ...... -value ccccc
+set-alias -name '..4' -value cccc
+set-alias -name '..5' -value ccccc
+
+function l { Get-ChildItem $args -Force -ErrorAction SilentlyContinue | format-table -autosize }
+function ll { Get-ChildItem $args -ErrorAction SilentlyContinue | format-table -autosize }
 function ld { Get-ChildItem $args -Force -Directory -ErrorAction SilentlyContinue | format-table -autosize }
+function lf { Get-ChildItem $args -Force -Attributes !D -ErrorAction SilentlyContinue | format-table -autosize }
+set-alias -name ls -value lls
+set-alias -name la -value lla
 function lls {
     param (
-        [string]$Path = ".",
-        [switch][alias("-l")]$Long
+        [string]$Path = "."
+        )
+        $items = Get-ChildItem $Path -ErrorAction SilentlyContinue
+        if (-not $items) {
+            Write-Host "No items found in $Path"
+            return
+        }
+    lsx $items
+}
+
+function lla {
+    param (
+        [string]$Path = "."
+        )
+        $items = Get-ChildItem $Path -Force -ErrorAction SilentlyContinue
+        if (-not $items) {
+            Write-Host "No items found in $Path"
+            return
+        }
+    lsx $items
+}
+
+function lsx {
+    param (
+        [Object[]]$items
     )
     $terminalWidth = $Host.UI.RawUI.WindowSize.Width
-    if (!($Long)) {
-        $items = Get-ChildItem $Path -ErrorAction SilentlyContinue
-    } 
-    else {
-        $items = Get-ChildItem $Path -Force -ErrorAction SilentlyContinue
-    }
-    if (-not $items) {
-        Write-Host "No items found in $Path"
-        return
-    }
-    # Find the length of the longest file or folder name
     $maxItemWidth = ($items | ForEach-Object { $_.Name.Length } | Measure-Object -Maximum).Maximum
     if ($maxItemWidth -gt 32) {
         $maxItemWidth = 32
     }
-    # $maxItemWidth = ($items | ForEach-Object { $_.Name.Length } | Measure-Object -Maximum).Maximum
-
-    # Add some padding to the maxItemWidth (adjust as needed)
     $maxItemWidth += 2
-
-    # Calculate how many columns can fit in the terminal
     $columns = [math]::floor($terminalWidth / ($maxItemWidth + 2))
-
-    # Prepare formatted output
     $output = @()
     foreach ($item in $items) {
         $name = $item.Name
-
-        # Calculate padding, ensuring non-negative values
-        $padding = [math]::Max(0, $maxItemWidth - $name.Length)
-
+        $padding = " " * ([math]::Max(0, $maxItemWidth - $name.Length))
         if ($item.PSIsContainer) {
-            # Color folders in blue
-           if ($name -match '^\.') {
-            # if ($name -match '\s') {
-            #     $output += "'$name'" + " " * $padding
-            # } elseif ($name -match '^\.') {
-                $output += "`e[94m$name" + " " * $padding
+            if ($name -match '^\.') {
+                $coloredName = "`e[1m`e[44m$name`e[0m"
             } else {
-                $output += "`e[94m$name" + " " * $padding
+                $coloredName = "`e[1m`e[44m$name`e[0m"
             }
         } else {
-            # Color files normally
-            $output += "`e[0m$name" + " " * $padding
+            $coloredName = "`e[0m$name`e[0m"
         }
+        $output += $coloredName + $padding
     }
-
-    # Print the output in columns
     for ($i = 0; $i -lt $output.Count; $i += $columns) {
         $line = $output[$i..([math]::Min($i + $columns - 1, $output.Count - 1))]
-        $line -join "  "  # Print each line with two spaces between columns
+        $line -join "  "
     }
 }
+
+function psversion { $PSVersionTable }
 function wl { $out = get-wingetpackage $args | Sort-Object name; if ($out) { $out } else { Write-Host "No package found" -ForegroundColor Red }}
 # function wl { winget list } 
 function wi { winget install $args }
 function wr { winget uninstall $args } 
-function ws { if ($null -eq $args[0]) {winget search} else {winget search $args} }
-function wu { winget upgrade $args }
+function ws { $appname = $args; winget search "$appname" }
+function wu { winget upgrade $args } 
 function ww { $appname = $args; winget show "$appname" }
 function ppwd { $pwd.path }
-function c { Set-Location .. }
 function ffind {
     param (
         [string]$Name,                    # The string to search for in file names
@@ -298,6 +304,7 @@ function Find-Service {
         $services
     }
 }
+
 function Find-Process {
     param (
         [Parameter(Mandatory = $true, Position = 0)]
@@ -600,4 +607,5 @@ function grep {
         Write-Host "Error: $_" -ForegroundColor Red
     }
 }
+
 #EOF
