@@ -83,7 +83,6 @@ function lls {
         }
     lsx $items
 }
-
 function lla {
     param (
         [string]$Path = "."
@@ -95,7 +94,6 @@ function lla {
         }
     lsx $items
 }
-
 function lsx {
     param (
         [Object[]]$items
