@@ -96,14 +96,13 @@ function lsx {
     param (
         [Object[]]$items
     )
+    $maxColumns = 5
     $terminalWidth = $Host.UI.RawUI.WindowSize.Width
     $maxItemWidth = ($items | ForEach-Object { $_.Name.Length } | Measure-Object -Maximum).Maximum
-    if ($maxItemWidth -gt 32) {
-        $maxItemWidth = 32
-    }
+    if ($maxItemWidth -gt 32) {$maxItemWidth = 32}
     $maxItemWidth += 2
     $columns = [math]::floor($terminalWidth / ($maxItemWidth + 2))
-    if ($columns -gt 5) {$columns = 5}
+    if ($columns -gt $maxColumns) {$columns = $maxColumns}
     $archiveExtensions = @('.zip', '.tar', '.gz', '.rar', '.7z', '.bz2', '.xz', '.arj', '.cab')
     $executableExtensions = @('.exe', '.ps1', '.bat', '.cmd', '.sh', '.msi', '.cpl', '.msc', '.com', '.vbs')
     $output = @()
