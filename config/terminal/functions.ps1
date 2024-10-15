@@ -122,11 +122,10 @@ function lsx {
         } else {
             $fileExtension = [System.IO.Path]::GetExtension($name).ToLower()
             if ($executableExtensions -contains $fileExtension) {
-
-                $coloredName = "`e[32m$name`e[0m"
+                $coloredName = "`e[92m$name`e[0m"
             }
             elseif ($archiveExtensions -contains $fileExtension) {
-                $coloredName = "`e[31m$name`e[0m"
+                $coloredName = "`e[91m$name`e[0m"
             } else {
                 $coloredName = "`e[0m$name`e[0m"
             }
