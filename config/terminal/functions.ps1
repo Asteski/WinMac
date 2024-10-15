@@ -119,9 +119,10 @@ function lsx {
             $fileExtension = [System.IO.Path]::GetExtension($name).ToLower()
             if ($executableExtensions -contains $fileExtension) {
                 $coloredName = "`e[1m`e[32m$name`e[0m"
-            }
-            elseif ($archiveExtensions -contains $fileExtension) {
+            } elseif ($archiveExtensions -contains $fileExtension) {
                 $coloredName = "`e[1m`e[31m$name`e[0m"
+            } elseif ($fileExtension -contains '.ps1') {
+                $coloredName = "`e[1m`e[93m$name`e[0m"
             } else {
                 $coloredName = "`e[0m$name`e[0m"
             }
