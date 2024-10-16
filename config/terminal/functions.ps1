@@ -77,7 +77,7 @@ function lls {
         )
         $items = Get-ChildItem $Path -ErrorAction SilentlyContinue
         if (-not $items) {
-            Write-Host "No items found in $Path"
+            Write-Host "No items found in $Path" -ForegroundColor Red
             return
         }
     if ($vertical) {lsx $items -v} else {lsx $items}
@@ -89,7 +89,7 @@ function lla {
         )
         $items = Get-ChildItem $Path -Force -ErrorAction SilentlyContinue
         if (-not $items) {
-            Write-Host "No items found in $Path"
+            Write-Host "No items found in $Path" -ForegroundColor Red
             return
         }
     if ($vertical) {lsx $items -v} else {lsx $items}
