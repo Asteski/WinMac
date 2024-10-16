@@ -65,7 +65,7 @@ set-alias -name '..4' -value '.....'
 set-alias -name '..5' -value '......'
 
 function l { Get-ChildItem $args -Force -ErrorAction SilentlyContinue | format-table -autosize }
-function ll { Get-ChildItem $args -ErrorAction SilentlyContinue | format-table -autosize }
+function ll { Get-ChildItem $args -ErrorAction SilentlyContinue | Where-Object { $_.PSIsContainer -and $_.Name -notmatch '^\.' -or $_.PSIsContainer -eq $false } | format-table -autosize }
 function ld { Get-ChildItem $args -Force -Directory -ErrorAction SilentlyContinue | format-table -autosize }
 function lf { Get-ChildItem $args -Force -Attributes !D -ErrorAction SilentlyContinue | format-table -autosize }
 set-alias -name ls -value lls
