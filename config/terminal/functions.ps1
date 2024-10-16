@@ -72,7 +72,8 @@ set-alias -name ls -value lls
 set-alias -name la -value lla
 function lls {
     param (
-        [string]$Path = "."
+        [string]$Path = ".",
+        [Switch][alias('-v')]$vertical
         )
         $items = Get-ChildItem $Path -ErrorAction SilentlyContinue
         if (-not $items) {
@@ -83,7 +84,8 @@ function lls {
 }
 function lla {
     param (
-        [string]$Path = "."
+        [string]$Path = ".",
+        [Switch][alias('-v')]$vertical
         )
         $items = Get-ChildItem $Path -Force -ErrorAction SilentlyContinue
         if (-not $items) {
@@ -94,9 +96,10 @@ function lla {
 }
 function lsx {
     param (
-        [Object[]]$items
+        [Object[]]$items,
+        [Switch][alias('-v')]$vertical
     )
-    $maxColumns = 5
+    if ($vertical) {$maxColumns = 1} else {$maxColumns = 5}
     $terminalWidth = $Host.UI.RawUI.WindowSize.Width
     $maxItemWidth = ($items | ForEach-Object { $_.Name.Length } | Measure-Object -Maximum).Maximum
     if ($maxItemWidth -gt 32) {$maxItemWidth = 32}
@@ -134,7 +137,6 @@ function lsx {
         $line -join "  "
     }
 }
-
 function wl { $out = get-wingetpackage $args | Sort-Object name; if ($out) { $out } else { Write-Host "No package found" -ForegroundColor Red }}
 # function wl { winget list } 
 function wi { winget install $args }
