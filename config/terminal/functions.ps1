@@ -75,7 +75,7 @@ function lls {
         [string]$Path = ".",
         [Switch][alias('-v')]$vertical
         )
-        $items = Get-ChildItem $Path -ErrorAction SilentlyContinue
+        $items = Get-ChildItem $Path -ErrorAction SilentlyContinue | Where-Object { $_.PSIsContainer -and $_.Name -notmatch '^\.' -or $_.PSIsContainer -eq $false }
         if (-not $items) {
             Write-Host "No items found in $Path" -ForegroundColor Red
             return
@@ -143,7 +143,6 @@ function wr { winget uninstall $args }
 function ws { $appname = $args; winget search "$appname" }
 function wu { winget upgrade $args } 
 function ww { $appname = $args; winget show "$appname" }
-
 function psversion { $PSVersionTable }
 function ppwd { $pwd.path }
 function ffind {
