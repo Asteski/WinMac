@@ -80,7 +80,7 @@ function lls {
             Write-Host "No items found in $Path"
             return
         }
-    lsx $items
+    if (!($vertical)) {lsx $items} else {lsx $items -v}
 }
 function lla {
     param (
@@ -92,7 +92,7 @@ function lla {
             Write-Host "No items found in $Path"
             return
         }
-    lsx $items
+    if (!($vertical)) {lsx $items} else {lsx $items -v}
 }
 function lsx {
     param (
@@ -102,7 +102,7 @@ function lsx {
     if ($vertical) {$maxColumns = 1} else {$maxColumns = 5}
     $terminalWidth = $Host.UI.RawUI.WindowSize.Width
     $maxItemWidth = ($items | ForEach-Object { $_.Name.Length } | Measure-Object -Maximum).Maximum
-    if ($maxItemWidth -gt 32) {$maxItemWidth = 32}
+    # if ($maxItemWidth -gt 32) {$maxItemWidth = 32}
     $maxItemWidth += 2
     $columns = [math]::floor($terminalWidth / ($maxItemWidth + 2))
     if ($columns -gt $maxColumns) {$columns = $maxColumns}
