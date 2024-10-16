@@ -55,14 +55,11 @@ set-alias -name alias -value Set-Alias
 # Functions
 function .. { Set-Location .. }
 function ... { Set-Location ../.. }
-function .... { Set-Location ../../.. }
-function ..... { Set-Location ../../../.. }
-function ...... { Set-Location ../../../../.. }
+function ..3 { Set-Location ../../.. }
+function ..4 { Set-Location ../../../.. }
+function ..5 { Set-Location ../../../../.. }
 set-alias -name c -value '..'
 set-alias -name cc -value '...'
-set-alias -name '..3' -value '....'
-set-alias -name '..4' -value '.....'
-set-alias -name '..5' -value '......'
 
 function l { Get-ChildItem $args -Force -ErrorAction SilentlyContinue | format-table -autosize }
 function ll { Get-ChildItem $args -ErrorAction SilentlyContinue | Where-Object { $_.PSIsContainer -and $_.Name -notmatch '^\.' -or $_.PSIsContainer -eq $false } | format-table -autosize }
