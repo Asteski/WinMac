@@ -80,7 +80,7 @@ function lls {
             Write-Host "No items found in $Path"
             return
         }
-    if (!($vertical)) {lsx $items} else {lsx $items -v}
+    if ($vertical) {lsx $items -v} else {lsx $items}
 }
 function lla {
     param (
@@ -92,7 +92,7 @@ function lla {
             Write-Host "No items found in $Path"
             return
         }
-    if (!($vertical)) {lsx $items} else {lsx $items -v}
+    if ($vertical) {lsx $items -v} else {lsx $items}
 }
 function lsx {
     param (
