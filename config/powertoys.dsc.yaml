@@ -97,7 +97,7 @@ properties:
           Enabled: true
           ActivationShortcut: "Win+C"
         PowerRename:
-          Enabled: true
+          Enabled: false
           MRUEnabled: true
           MaxMRUSize: 5
           ExtendedContextMenuOnly: true
@@ -111,7 +111,7 @@ properties:
         EnvironmentVariables:
           Enabled: false
         FileLocksmith:
-          Enabled: true
+          Enabled: false
         MouseHighlighter:
           Enabled: false
         MouseJump:
