@@ -63,7 +63,10 @@ set-alias -name cc -value '..2'
 
 function l { Get-ChildItem $args -Force -ErrorAction SilentlyContinue | format-table -autosize }
 function ll { Get-ChildItem $args -ErrorAction SilentlyContinue | Where-Object { $_.PSIsContainer -and $_.Name -notmatch '^\.' -or $_.PSIsContainer -eq $false } | format-table -autosize }
-function ld { Get-ChildItem $args -Force -Directory -ErrorAction SilentlyContinue | format-table -autosize }
+function ld {
+    $out = Get-ChildItem $args -Force -Directory -ErrorAction SilentlyContinue
+    if ($out.mode -like '*a*') { Write-Host "Not a directory" -ForegroundColor Red } else { $out | format-table -autosize }
+}
 function lf { Get-ChildItem $args -Force -Attributes !D -ErrorAction SilentlyContinue | format-table -autosize }
 set-alias -name ls -value lls
 set-alias -name la -value lla
