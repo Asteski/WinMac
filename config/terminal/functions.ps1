@@ -98,8 +98,8 @@ function lsx {
     )
     $maxColumns = if ($vertical) { 1 } else { 5 }
     $terminalWidth = $Host.UI.RawUI.WindowSize.Width
-    $maxItemWidth = 48
-    # $maxItemWidth = ($items | ForEach-Object { $_.Name.Length } | Measure-Object -Maximum).Maximum
+    # $maxItemWidth = 48
+    $maxItemWidth = ($items | ForEach-Object { $_.Name.Length } | Measure-Object -Maximum).Maximum
     $maxItemWidth += 2
     $columns = [math]::floor($terminalWidth / ($maxItemWidth + 2))
     if ($columns -gt $maxColumns) {
