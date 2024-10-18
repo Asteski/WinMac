@@ -96,17 +96,26 @@ function lsx {
         [Object[]]$items,
         [Switch][alias('-v')]$vertical
     )
-    if ($vertical) {$maxColumns = 1} else {$maxColumns = 5}
+    if ($vertical) {
+        $maxColumns = 1
+    } else {
+        $maxColumns = 5
+    }
     $terminalWidth = $Host.UI.RawUI.WindowSize.Width
     $maxItemWidth = ($items | ForEach-Object { $_.Name.Length } | Measure-Object -Maximum).Maximum
     $maxItemWidth += 2
     $columns = [math]::floor($terminalWidth / ($maxItemWidth + 2))
-    if ($columns -gt $maxColumns) {$columns = $maxColumns}
+    if ($columns -gt $maxColumns) {
+        $columns = $maxColumns
+    }
     $archiveExt = @('.zip', '.tar', '.gz', '.rar', '.7z', '.bz2', '.xz', '.arj', '.cab')
     $executableExt = @('.exe', '.bat', '.cmd', '.sh', '.msi', '.cpl', '.msc', '.com', '.vbs')
     $output = @()
     foreach ($item in $items) {
         $name = $item.Name
+        if ($name.Length -gt $terminalWidth) {
+            $name = $name.Substring(0, $terminalWidth - 3) + '...'
+        }
         $padding = " " * ([math]::Max(0, $maxItemWidth - $name.Length))
         if ($item.PSIsContainer) {
             if ($name -match '^\.') {
