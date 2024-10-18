@@ -109,13 +109,14 @@ function lsx {
     $executableExt = @('.exe', '.bat', '.cmd', '.sh', '.msi', '.cpl', '.msc', '.com', '.vbs')
     $output = @()
     foreach ($item in $items) {
-        if ($item.name.Length -gt $terminalWidth - 5) {
-            $maxNameLength = [math]::Max(0, $terminalWidth - 18)
+        if ($item.name.Length -gt $terminalWidth - 20) {
+            $maxNameLength = [math]::Max(0, $terminalWidth - 6)
             $name = $name.Substring(0, $maxNameLength) + '...'
         }
         else {
             $name = $item.name
         }
+        $name = $item.name
         $padding = " " * ([math]::Max(0, $maxItemWidth - $name.Length))
         if ($item.PSIsContainer) {
             if ($name -match '^\.') {
