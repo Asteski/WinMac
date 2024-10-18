@@ -799,7 +799,7 @@ foreach ($app in $selectedApps) {
             $newWorkDir1 = "$env:LOCALAPPDATA\Stahky\config\management"
             $newWorkDir2 = "$env:LOCALAPPDATA\Stahky\config\favorites"
             $shell1 = New-Object -ComObject WScript.Shell
-            $shortcut1 = $shell1.CreateShortcut($shortcutPath1) 
+            $shortcut1 = $shell1.CreateShortcut($shortcutPath1)
             $shortcut1.Arguments = $newArguments1
             $shortcut1.TargetPath = $newTargetPath
             $shortcut1.WorkingDirectory = $newWorkDir1
