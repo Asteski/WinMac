@@ -166,7 +166,7 @@ function lsx {
     foreach ($item in $items) {
         $name = $item.Name
         if ($name.Length -gt $terminalWidth) {
-            $name = $name.Substring(0, $terminalWidth - 3) + '...'
+            $name = $name.Substring(0, 48) + '...'
         }
         $padding = " " * ([math]::Max(0, $maxItemWidth - $name.Length))
         if ($item.PSIsContainer) {
