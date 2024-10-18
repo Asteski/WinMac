@@ -68,8 +68,6 @@ function ld {
     if ($out.mode -like '*a*') { Write-Host "Not a directory" -ForegroundColor Red } else { $out | format-table -autosize }
 }
 function lf { Get-ChildItem $args -Force -Attributes !D -ErrorAction SilentlyContinue | format-table -autosize }
-set-alias -name ls -value lls
-set-alias -name la -value lla
 function lls {
     param (
         [string]$Path = ".",
@@ -146,7 +144,8 @@ function lsx {
         $line -join "  "
     }
 }
-
+set-alias -name ls -value lls
+set-alias -name la -value lla
 function wl { $out = get-wingetpackage $args | Sort-Object name; if ($out) { $out } else { Write-Host "No package found" -ForegroundColor Red }}
 # function wl { winget list } 
 function wi { winget install $args }
