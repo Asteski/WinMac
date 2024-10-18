@@ -95,22 +95,28 @@ function lsx {
     param (
         [Object[]]$items,
         [Switch][alias('-v')]$vertical
-        )
+    )
     $maxColumns = if ($vertical) { 1 } else { 5 }
     $terminalWidth = $Host.UI.RawUI.WindowSize.Width
     $maxItemWidth = ($items | ForEach-Object { $_.Name.Length } | Measure-Object -Maximum).Maximum
     $maxItemWidth += 2
-    $columns = [math]::floor($terminalWidth / ($maxItemWidth + 2))
-    if ($columns -gt $maxColumns) {$columns = $maxColumns}
+    if ($maxItemWidth -ge $terminalWidth) {
+        $columns = 1
+        $maxItemWidth = $terminalWidth - 2
+    } else {
+        $columns = [math]::floor($terminalWidth / ($maxItemWidth + 2))
+        if ($columns -gt $maxColumns) { $columns = $maxColumns }
+    }
     $archiveExtensions = @('.zip', '.tar', '.gz', '.rar', '.7z', '.bz2', '.xz', '.arj', '.cab')
     $executableExtensions = @('.exe', '.bat', '.cmd', '.sh', '.msi', '.cpl', '.msc', '.com', '.vbs')
     $output = @()
     foreach ($item in $items) {
         $name = $item.Name
         $length = $name.Length
-        # if ($length -ge $terminalWidth) { 
-        #     $name = $name.Substring(0, 3) + '...'
-        # }
+        if ($length -ge $maxItemWidth) {
+            $name = $name.Substring(0, $maxItemWidth) + ".."  # Truncate and add ellipsis
+            $length = $name.Length
+        }
         $padding = " " * ([math]::Max(0, $maxItemWidth - $length))
         if ($item.PSIsContainer) {
             if ($name -match '^\.') {
@@ -130,6 +136,7 @@ function lsx {
                 $coloredName = "`e[0m$name`e[0m"
             }
         }
+
         $output += $coloredName + $padding
     }
     for ($i = 0; $i -lt $output.Count; $i += $columns) {
