@@ -72,7 +72,7 @@ function lls {
         [string]$Path = ".",
         [Switch][alias('-v')]$vertical
         )
-        $items = (Get-ChildItem $Path -ErrorAction SilentlyContinue | Where-Object { $_.PSIsContainer -and $_.Name -notmatch '^\.' -or $_.PSIsContainer -eq $false }).Name
+        $items = Get-ChildItem $Path -ErrorAction SilentlyContinue | Where-Object { $_.PSIsContainer -and $_.Name -notmatch '^\.' -or $_.PSIsContainer -eq $false }
         if (-not $items) {
             Write-Host "No items found in $Path" -ForegroundColor Red
             return
@@ -84,7 +84,7 @@ function lla {
         [string]$Path = ".",
         [Switch][alias('-v')]$vertical
         )
-        $items = (Get-ChildItem $Path -Force -ErrorAction SilentlyContinue).Name
+        $items = Get-ChildItem $Path -Force -ErrorAction SilentlyContinue
         if (-not $items) {
             Write-Host "No items found in $Path" -ForegroundColor Red
             return
@@ -93,33 +93,20 @@ function lla {
 }
 function lsx {
     param (
-        [Array[]]$items,
-        # [Object[]]$items,
+        [Object[]]$items,
         [Switch][alias('-v')]$vertical
-    )
-    if ($vertical) {
-        $maxColumns = 1
-    } else {
-        $maxColumns = 5
-    }
+        )
+    if ($vertical) {$maxColumns = 1} else {$maxColumns = 5}
     $terminalWidth = $Host.UI.RawUI.WindowSize.Width
     $maxItemWidth = ($items | ForEach-Object { $_.Name.Length } | Measure-Object -Maximum).Maximum
     $maxItemWidth += 2
     $columns = [math]::floor($terminalWidth / ($maxItemWidth + 2))
-    if ($columns -gt $maxColumns) {
-        $columns = $maxColumns
-    }
-    $archiveExt = @('.zip', '.tar', '.gz', '.rar', '.7z', '.bz2', '.xz', '.arj', '.cab')
-    $executableExt = @('.exe', '.bat', '.cmd', '.sh', '.msi', '.cpl', '.msc', '.com', '.vbs')
+    if ($columns -gt $maxColumns) {$columns = $maxColumns}
+    $archiveExtensions = @('.zip', '.tar', '.gz', '.rar', '.7z', '.bz2', '.xz', '.arj', '.cab')
+    $executableExtensions = @('.exe', '.bat', '.cmd', '.sh', '.msi', '.cpl', '.msc', '.com', '.vbs')
     $output = @()
     foreach ($item in $items) {
-        if ($item.Length -gt $terminalWidth) {
-            $name = $item.Substring(0, 48) + '...'
-        }
-        else {
-            $name = $item
-        }
-    # }
+        $name = $item.Name
         $padding = " " * ([math]::Max(0, $maxItemWidth - $name.Length))
         if ($item.PSIsContainer) {
             if ($name -match '^\.') {
@@ -129,9 +116,9 @@ function lsx {
             }
         } else {
             $fileExtension = [System.IO.Path]::GetExtension($name).ToLower()
-            if ($executableExt -contains $fileExtension) {
+            if ($executableExtensions -contains $fileExtension) {
                 $coloredName = "`e[1m`e[32m$name`e[0m"
-            } elseif ($archiveExt -contains $fileExtension) {
+            } elseif ($archiveExtensions -contains $fileExtension) {
                 $coloredName = "`e[1m`e[31m$name`e[0m"
             } elseif ($fileExtension -contains '.ps1') {
                 $coloredName = "`e[1m`e[93m$name`e[0m"
@@ -146,6 +133,7 @@ function lsx {
         $line -join "  "
     }
 }
+
 function wl { $out = get-wingetpackage $args | Sort-Object name; if ($out) { $out } else { Write-Host "No package found" -ForegroundColor Red }}
 # function wl { winget list } 
 function wi { winget install $args }
