@@ -107,10 +107,11 @@ function lsx {
     $output = @()
     foreach ($item in $items) {
         $name = $item.Name
-        if ($name.Length -ge ($terminalWidth - 10)) { 
+        $length = $name.Length
+        if ($length -ge ($terminalWidth - 10)) { 
             $name = $name.Substring(0, 3) + '...'
         }
-        $padding = " " * ([math]::Max(0, $maxItemWidth - $name.Length))
+        $padding = " " * ([math]::Max(0, $maxItemWidth - $length))
         if ($item.PSIsContainer) {
             if ($name -match '^\.') {
                 $coloredName = "`e[1m`e[44m$name`e[0m"
