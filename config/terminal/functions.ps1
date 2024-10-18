@@ -110,8 +110,8 @@ function lsx {
     $output = @()
     foreach ($item in $items) {
         if ($item.name.Length -gt $terminalWidth - 20) {
-            $maxNameLength = [math]::Max(0, $terminalWidth - 6)
-            $name = $name.Substring(0, $maxNameLength) + '...'
+            # $maxNameLength = [math]::Max(0, $terminalWidth - 6)
+            $name = $name.Substring(0, $terminalWidth - 6) + '...'
         }
         else {
             $name = $item.name
