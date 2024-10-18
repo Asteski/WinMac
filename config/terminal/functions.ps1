@@ -136,7 +136,6 @@ function lsx {
                 $coloredName = "`e[0m$name`e[0m"
             }
         }
-
         $output += $coloredName + $padding
     }
     for ($i = 0; $i -lt $output.Count; $i += $columns) {
