@@ -99,7 +99,7 @@ function lsx {
     $maxColumns = if ($vertical) { 1 } else { 5 }
     $terminalWidth = $Host.UI.RawUI.WindowSize.Width
     $maxItemWidth = 48
-    $maxItemWidth = ($items | ForEach-Object { $_.Name.Length } | Measure-Object -Maximum).Maximum
+    # $maxItemWidth = ($items | ForEach-Object { $_.Name.Length } | Measure-Object -Maximum).Maximum
     $maxItemWidth += 2
     $columns = [math]::floor($terminalWidth / ($maxItemWidth + 2))
     if ($columns -gt $maxColumns) {
@@ -109,13 +109,13 @@ function lsx {
     $executableExt = @('.exe', '.bat', '.cmd', '.sh', '.msi', '.cpl', '.msc', '.com', '.vbs')
     $output = @()
     foreach ($item in $items) {
-        # if ($item.name.Length -gt $terminalWidth - 20) {
-        #     $maxNameLength = [math]::Max(0, $terminalWidth - 6)
-        #     $name = $name.Substring(0, $maxNameLength) + '...'
-        # }
-        # else {
-        #     $name = $item.name
-        # }
+        if ($item.name.Length -gt $terminalWidth - 20) {
+            $maxNameLength = [math]::Max(0, $terminalWidth - 6)
+            $name = $name.Substring(0, $maxNameLength) + '...'
+        }
+        else {
+            $name = $item.name
+        }
         $name = $item.name
         $padding = " " * ([math]::Max(0, $maxItemWidth - $name.Length))
         if ($item.PSIsContainer) {
