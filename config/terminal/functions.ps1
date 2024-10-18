@@ -130,7 +130,7 @@ function lsx {
                 $coloredName = "`e[0m$name`e[0m"
             }
         }
-        $output += $coloredName + $padding
+        $output += $coloredName
     }
     for ($i = 0; $i -lt $output.Count; $i += $columns) {
         $line = $output[$i..([math]::Min($i + $columns - 1, $output.Count - 1))]
