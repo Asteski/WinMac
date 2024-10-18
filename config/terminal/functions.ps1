@@ -89,7 +89,7 @@ function lla {
             Write-Host "No items found in $Path" -ForegroundColor Red
             return
         }
-    if ($vertical) {lsx $items -v} else {lsx $items}
+    if ($vertical) {lsx $items.name -v} else {lsx $items.name}
 }
 # function lsx {
 #     param (
@@ -145,7 +145,8 @@ function lla {
 # }
 function lsx {
     param (
-        [Object[]]$items,
+        [Array[]]$items,
+        # [Object[]]$items,
         [Switch][alias('-v')]$vertical
     )
     if ($vertical) {
@@ -164,13 +165,15 @@ function lsx {
     $executableExt = @('.exe', '.bat', '.cmd', '.sh', '.msi', '.cpl', '.msc', '.com', '.vbs')
     $output = @()
     foreach ($item in $items) {
-        # $name = $item.Name
-        if ($name.Length -gt $terminalWidth) {
+        if ($item.Length -gt $terminalWidth) {
             $name = $name.Substring(0, 48) + '...'
+            $name
         }
         else {
-            $name = $item.Name
+            $name = $item
+            $name
         }
+    # }
         $padding = " " * ([math]::Max(0, $maxItemWidth - $name.Length))
         if ($item.PSIsContainer) {
             if ($name -match '^\.') {
