@@ -168,6 +168,9 @@ function lsx {
         if ($name.Length -gt $terminalWidth) {
             $name = $name.Substring(0, 48) + '...'
         }
+        else {
+            $name = $item.Name
+        }
         $padding = " " * ([math]::Max(0, $maxItemWidth - $name.Length))
         if ($item.PSIsContainer) {
             if ($name -match '^\.') {
