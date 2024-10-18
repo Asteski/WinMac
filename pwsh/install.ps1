@@ -724,17 +724,14 @@ foreach ($app in $selectedApps) {
                     $parentDirectory = Split-Path -Path $PSScriptRoot -Parent
                     $winxFolderName = "config\winx\Group2"
                     $winxFolderPath = Join-Path -Path $parentDirectory -ChildPath $winxFolderName
-                    $tempFolderPath = Join-Path -Path $parentDirectory -ChildPath temp
                     $WinverUWP = (Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP).InstallLocation
-                    Copy-File "$winxFolderPath\8 - System.lnk" "$tempFolderPath\8 - System.lnk"
-                    $shortcutPath = "$tempFolderPath\8 - System.lnk"
+                    $shortcutPath = "$winxFolderPath\8 - System.lnk"
                     $newTargetPath = "$WinverUWP\WinverUWP.exe"
                     $WScriptShell = New-Object -ComObject WScript.Shell
                     $shortcut = $WScriptShell.CreateShortcut($shortcutPath)
                     $shortcut.TargetPath = $newTargetPath
                     $shortcut.Save()
-                    Copy-Item "..\config\winx\" "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force 
-                    Copy-Item "$tempFolderPath\8 - System.lnk" "$env:LOCALAPPDATA\Microsoft\Windows\winx\Group2" -Force
+                    Copy-Item -Path "..\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force 
                     Invoke-Output {Register-ScheduledTask -TaskName "StartButton" -Action $actionStartButton -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder}
                     Invoke-Output {Register-ScheduledTask -TaskName "WindowsKey" -Action $actionWinKey -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder}
                     Start-Process $exeKeyPath
@@ -1028,7 +1025,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
 if ((Get-ChildItem -Path "$env:LOCALAPPDATA\WinMac" -Recurse | Measure-Object).Count -eq 0) { Remove-Item -Path "$env:LOCALAPPDATA\WinMac" -Force }
 $explorerProcess = Get-Process -Name explorer -ErrorAction SilentlyContinue
 if ($null -eq $explorerProcess) {Start-Process -FilePath explorer.exe}
-# Remove-Item "..\temp" -Recurse -Force
+Remove-Item "..\temp" -Recurse -Force
 Stop-Transcript | Out-Null
 Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
 Write-Host @"
