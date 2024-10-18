@@ -115,7 +115,7 @@ function lsx {
         }
         else {
             $name = $item.name
-        }}
+        }
         $padding = " " * ([math]::Max(0, $maxItemWidth - $name.Length))
         if ($item.PSIsContainer) {
             if ($name -match '^\.') {
@@ -140,6 +140,7 @@ function lsx {
         $line = $output[$i..([math]::Min($i + $columns - 1, $output.Count - 1))]
         $line -join "  "
         }
+    }
 }
 # function lsx {
 #     param (
