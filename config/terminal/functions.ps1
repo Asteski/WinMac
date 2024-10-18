@@ -96,7 +96,7 @@ function lsx {
         [Object[]]$items,
         [Switch][alias('-v')]$vertical
         )
-    if ($vertical) {$maxColumns = 1} else {$maxColumns = 5}
+    $maxColumns = if ($vertical) { 1 } else { 5 }
     $terminalWidth = $Host.UI.RawUI.WindowSize.Width
     $maxItemWidth = ($items | ForEach-Object { $_.Name.Length } | Measure-Object -Maximum).Maximum
     $maxItemWidth += 2
@@ -107,6 +107,9 @@ function lsx {
     $output = @()
     foreach ($item in $items) {
         $name = $item.Name
+        if ($name.Length -ge ($terminalWidth - 10)) { 
+            $name = $name.Substring(0, 3) + '...'
+        }
         $padding = " " * ([math]::Max(0, $maxItemWidth - $name.Length))
         if ($item.PSIsContainer) {
             if ($name -match '^\.') {
