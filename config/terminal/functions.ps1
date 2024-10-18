@@ -114,7 +114,7 @@ function lsx {
     $output = @()
     foreach ($item in $items) {
         if ($item.Length -gt $terminalWidth) {
-            $name = $name.Substring(0, 48) + '...'
+            $name = $item.Substring(0, 48) + '...'
         }
         else {
             $name = $item
