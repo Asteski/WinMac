@@ -702,7 +702,7 @@ foreach ($app in $selectedApps) {
                     $exeStartPath = "$env:LOCALAPPDATA\WinMac\StartButton.exe"
                     $folderName = "WinMac"
                     $taskService = New-Object -ComObject "Schedule.Service"
-                    $taskService.Connect() 
+                    $taskService.Connect() | Out-Null
                     $rootFolder = $taskService.GetFolder("\")
                     try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }                
                     if ($null -eq $existingFolder) { Invoke-Output {$rootFolder.CreateFolder($folderName)} }
