@@ -164,7 +164,7 @@ function lsx {
     $executableExt = @('.exe', '.bat', '.cmd', '.sh', '.msi', '.cpl', '.msc', '.com', '.vbs')
     $output = @()
     foreach ($item in $items) {
-        $name = $item.Name
+        # $name = $item.Name
         if ($name.Length -gt $terminalWidth) {
             $name = $name.Substring(0, 48) + '...'
         }
