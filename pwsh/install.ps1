@@ -725,13 +725,15 @@ foreach ($app in $selectedApps) {
                     $winxFolderName = "config\winx\Group2"
                     $winxFolderPath = Join-Path -Path $parentDirectory -ChildPath $winxFolderName
                     $WinverUWP = (Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP).InstallLocation
-                    $shortcutPath = "$winxFolderPath\8 - System.lnk"
+                    Copy-File "$winxFolderPath\8 - System.lnk" ".\temp\8 - System.lnk"
+                    $shortcutPath = ".\temp\8 - System.lnk"
                     $newTargetPath = "$WinverUWP\WinverUWP.exe"
                     $WScriptShell = New-Object -ComObject WScript.Shell
                     $shortcut = $WScriptShell.CreateShortcut($shortcutPath)
                     $shortcut.TargetPath = $newTargetPath
                     $shortcut.Save()
-                    Copy-Item -Path "..\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force 
+                    Copy-Item "..\config\winx\" "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force 
+                    Copy-Item ".\temp\8 - System.lnk" "$env:LOCALAPPDATA\Microsoft\Windows\winx\Group2" -Force
                     Invoke-Output {Register-ScheduledTask -TaskName "StartButton" -Action $actionStartButton -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder}
                     Invoke-Output {Register-ScheduledTask -TaskName "WindowsKey" -Action $actionWinKey -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder}
                     Start-Process $exeKeyPath
