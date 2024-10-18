@@ -91,69 +91,14 @@ function lla {
         }
     if ($vertical) {lsx $items -v} else {lsx $items}
 }
-function lsx {
-    param (
-        [Object[]]$items,
-        [Switch][alias('-v')]$vertical
-    )
-    $maxColumns = if ($vertical) { 1 } else { 5 }
-    $terminalWidth = $Host.UI.RawUI.WindowSize.Width
-    # $maxItemWidth = 48
-    $maxItemWidth = ($items | ForEach-Object { $_.Name.Length } | Measure-Object -Maximum).Maximum
-    $maxItemWidth += 2
-    $columns = [math]::floor($terminalWidth / ($maxItemWidth + 2))
-    if ($columns -gt $maxColumns) {
-        $columns = $maxColumns
-    }
-    $archiveExt = @('.zip', '.tar', '.gz', '.rar', '.7z', '.bz2', '.xz', '.arj', '.cab')
-    $executableExt = @('.exe', '.bat', '.cmd', '.sh', '.msi', '.cpl', '.msc', '.com', '.vbs')
-    $output = @()
-    foreach ($item in $items) {
-        if ($item.name.Length -gt $terminalWidth - 20) {
-            # $maxNameLength = [math]::Max(0, $terminalWidth - 6)
-            $name = $name.Substring(0, $terminalWidth - 6) + '...'
-        }
-        else {
-            $name = $item.name
-        }
-        # $name = $item.name
-        $padding = " " * ([math]::Max(0, $maxItemWidth - $item.name.Length))
-        if ($item.PSIsContainer) {
-            if ($name -match '^\.') {
-                $coloredName = "`e[1m`e[44m$name`e[0m"
-            } else {
-                $coloredName = "`e[1m`e[44m$name`e[0m"
-            }
-        } else {
-            $fileExtension = [System.IO.Path]::GetExtension($name).ToLower()
-            if ($executableExt -contains $fileExtension) {
-                $coloredName = "`e[1m`e[32m$name`e[0m"
-            } elseif ($archiveExt -contains $fileExtension) {
-                $coloredName = "`e[1m`e[31m$name`e[0m"
-            } elseif ($fileExtension -contains '.ps1') {
-                $coloredName = "`e[1m`e[93m$name`e[0m"
-            } else {
-                $coloredName = "`e[0m$name`e[0m"
-            }
-        }
-        $output += $coloredName + $padding
-    for ($i = 0; $i -lt $output.Count; $i += $columns) {
-        $line = $output[$i..([math]::Min($i + $columns - 1, $output.Count - 1))]
-        $line -join "  "
-        }
-    }
-}
 # function lsx {
 #     param (
 #         [Object[]]$items,
 #         [Switch][alias('-v')]$vertical
 #     )
-#     if ($vertical) {
-#         $maxColumns = 1
-#     } else {
-#         $maxColumns = 5
-#     }
+#     $maxColumns = if ($vertical) { 1 } else { 5 }
 #     $terminalWidth = $Host.UI.RawUI.WindowSize.Width
+#     # $maxItemWidth = 48
 #     $maxItemWidth = ($items | ForEach-Object { $_.Name.Length } | Measure-Object -Maximum).Maximum
 #     $maxItemWidth += 2
 #     $columns = [math]::floor($terminalWidth / ($maxItemWidth + 2))
@@ -164,11 +109,15 @@ function lsx {
 #     $executableExt = @('.exe', '.bat', '.cmd', '.sh', '.msi', '.cpl', '.msc', '.com', '.vbs')
 #     $output = @()
 #     foreach ($item in $items) {
-#         $name = $item.Name
-#         if ($name.Length -gt $terminalWidth) {
-#             $name = $name.Substring(0, $terminalWidth - 3) + '...'
+#         if ($item.name.Length -gt $terminalWidth - 20) {
+#             # $maxNameLength = [math]::Max(0, $terminalWidth - 6)
+#             $name = $name.Substring(0, $terminalWidth - 6) + '...'
 #         }
-#         $padding = " " * ([math]::Max(0, $maxItemWidth - $name.Length))
+#         else {
+#             $name = $item.name
+#         }
+#         # $name = $item.name
+#         $padding = " " * ([math]::Max(0, $maxItemWidth - $item.name.Length))
 #         if ($item.PSIsContainer) {
 #             if ($name -match '^\.') {
 #                 $coloredName = "`e[1m`e[44m$name`e[0m"
@@ -188,12 +137,63 @@ function lsx {
 #             }
 #         }
 #         $output += $coloredName + $padding
-#     }
 #     for ($i = 0; $i -lt $output.Count; $i += $columns) {
 #         $line = $output[$i..([math]::Min($i + $columns - 1, $output.Count - 1))]
 #         $line -join "  "
+#         }
 #     }
 # }
+function lsx {
+    param (
+        [Object[]]$items,
+        [Switch][alias('-v')]$vertical
+    )
+    if ($vertical) {
+        $maxColumns = 1
+    } else {
+        $maxColumns = 5
+    }
+    $terminalWidth = $Host.UI.RawUI.WindowSize.Width
+    $maxItemWidth = ($items | ForEach-Object { $_.Name.Length } | Measure-Object -Maximum).Maximum
+    $maxItemWidth += 2
+    $columns = [math]::floor($terminalWidth / ($maxItemWidth + 2))
+    if ($columns -gt $maxColumns) {
+        $columns = $maxColumns
+    }
+    $archiveExt = @('.zip', '.tar', '.gz', '.rar', '.7z', '.bz2', '.xz', '.arj', '.cab')
+    $executableExt = @('.exe', '.bat', '.cmd', '.sh', '.msi', '.cpl', '.msc', '.com', '.vbs')
+    $output = @()
+    foreach ($item in $items) {
+        $name = $item.Name
+        if ($name.Length -gt $terminalWidth) {
+            $name = $name.Substring(0, $terminalWidth - 3) + '...'
+        }
+        $padding = " " * ([math]::Max(0, $maxItemWidth - $name.Length))
+        if ($item.PSIsContainer) {
+            if ($name -match '^\.') {
+                $coloredName = "`e[1m`e[44m$name`e[0m"
+            } else {
+                $coloredName = "`e[1m`e[44m$name`e[0m"
+            }
+        } else {
+            $fileExtension = [System.IO.Path]::GetExtension($name).ToLower()
+            if ($executableExt -contains $fileExtension) {
+                $coloredName = "`e[1m`e[32m$name`e[0m"
+            } elseif ($archiveExt -contains $fileExtension) {
+                $coloredName = "`e[1m`e[31m$name`e[0m"
+            } elseif ($fileExtension -contains '.ps1') {
+                $coloredName = "`e[1m`e[93m$name`e[0m"
+            } else {
+                $coloredName = "`e[0m$name`e[0m"
+            }
+        }
+        $output += $coloredName + $padding
+    }
+    for ($i = 0; $i -lt $output.Count; $i += $columns) {
+        $line = $output[$i..([math]::Min($i + $columns - 1, $output.Count - 1))]
+        $line -join "  "
+    }
+}
 function wl { $out = get-wingetpackage $args | Sort-Object name; if ($out) { $out } else { Write-Host "No package found" -ForegroundColor Red }}
 # function wl { winget list } 
 function wi { winget install $args }
