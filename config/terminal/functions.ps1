@@ -115,8 +115,6 @@ function lsx {
         else {
             $name = $item.name
         }
-    foreach ($item in $items) {
-        $name = $item.Name
         $padding = " " * ([math]::Max(0, $maxItemWidth - $name.Length))
         if ($item.PSIsContainer) {
             if ($name -match '^\.') {
