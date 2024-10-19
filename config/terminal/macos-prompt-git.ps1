@@ -1,9 +1,15 @@
 
 # macOS prompt
 
-function Set-Title 
+function Set-Title
 {
-    $title = Split-Path -Leaf (Get-Location)
+    $repo = git rev-parse --show-toplevel 2>$null
+    if ($LASTEXITCODE -eq 0) {
+    $repo = Split-Path -Leaf $repo
+            $title = $repo + '@' + (git rev-parse --abbrev-ref HEAD 2>$null)
+    } else {
+        $title = Split-Path -Leaf (Get-Location)
+    }
     if (Test-Admin -eq $true) { $title = 'Admin: ' + $title }
     $host.UI.RawUI.WindowTitle = $title
 }
@@ -16,6 +22,10 @@ function prompt {
     if ($folder -eq $env:USERNAME)
     {
         "$userName@$computerName ~ % "
+    }
+    elseif (Find-GitRoot)
+    {
+        "$userName@$computerName $folder `e[95mgit:(`e[96m$(git rev-parse --abbrev-ref HEAD 2>$null)`e[95m)`e[0m% "
     }
     else
     {

@@ -1,4 +1,10 @@
 
+function Test-Admin
+{
+    $user = [Security.Principal.WindowsIdentity]::GetCurrent();
+    (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)  
+}
+
 # Completion settings
 Set-PSReadlineKeyHandler -Chord Tab -Function MenuComplete
 Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
@@ -15,6 +21,7 @@ set-alias -name whatis -value man
 set-alias -name backup -value wbadmin
 set-alias -name rcopy -value robocopy
 set-alias -name history -value hist -Option AllScope
+set-alias -name h -value hist -Option AllScope
 set-alias -name version -value psversion
 set-alias -name psver -value psversion
 set-alias -name htop -value ntop
@@ -39,48 +46,106 @@ set-alias -name random -value Get-RandomString
 set-alias -name user -value getuser
 set-alias -name pwd -value ppwd -option AllScope
 set-alias -name lnk -value run
-set-alias -name ls -value lsx -option AllScope
 set-alias -name stack -value stahky
 set-alias -name find -value ffind
 set-alias -name fi -value ffind
 set-alias -name ss -value Select-String
+set-alias -name alias -value Set-Alias
 
 # Functions
-function psversion { $PSVersionTable }
-function l { Get-ChildItem $args -ErrorAction SilentlyContinue | format-table -autosize }
-function ll { Get-ChildItem $args -Force -ErrorAction SilentlyContinue | format-table -autosize }
-function la { Get-ChildItem $args -Force -Attributes !D -ErrorAction SilentlyContinue | format-table -autosize }
-function ld { Get-ChildItem $args -Directory -ErrorAction SilentlyContinue | format-table -autosize }
-function lsx { 
-    Get-ChildItem $args -ErrorAction SilentlyContinue | ForEach-Object {
-        if ($_.PSIsContainer) {
-            if ($_.PSIsContainer -and $_.Name -match '\s') {
-                Write-Host "'$($_.Name)' " -ForegroundColor Blue -NoNewline
-            } elseif ($_.PSIsContainer -and $_.Name -match '^\.') {
-                Write-Host $_.Name "" -ForegroundColor DarkBlue -NoNewline
+function .. { Set-Location .. }
+function ..2 { Set-Location ../.. }
+function ..3 { Set-Location ../../.. }
+function ..4 { Set-Location ../../../.. }
+function ..5 { Set-Location ../../../../.. }
+set-alias -name c -value '..'
+set-alias -name cc -value '..2'
+
+function l { Get-ChildItem $args -Force -ErrorAction SilentlyContinue | format-table -autosize }
+function ll { Get-ChildItem $args -ErrorAction SilentlyContinue | Where-Object { $_.PSIsContainer -and $_.Name -notmatch '^\.' -or $_.PSIsContainer -eq $false } | format-table -autosize }
+function ld {
+    $out = Get-ChildItem $args -Force -Directory -ErrorAction SilentlyContinue
+    if ($out.mode -like '*a*') { Write-Host "Not a directory" -ForegroundColor Red } else { $out | format-table -autosize }
+}
+function lf { Get-ChildItem $args -Force -Attributes !D -ErrorAction SilentlyContinue | format-table -autosize }
+function lls {
+    param (
+        [string]$Path = ".",
+        [Switch][alias('-v')]$vertical
+        )
+        $items = Get-ChildItem $Path -ErrorAction SilentlyContinue | Where-Object { $_.PSIsContainer -and $_.Name -notmatch '^\.' -or $_.PSIsContainer -eq $false }
+        if (-not $items) {
+            Write-Host "No items found in $Path" -ForegroundColor Red
+            return
+        }
+    if ($vertical) {lsx $items -v} else {lsx $items}
+}
+function lla {
+    param (
+        [string]$Path = ".",
+        [Switch][alias('-v')]$vertical
+        )
+        $items = Get-ChildItem $Path -Force -ErrorAction SilentlyContinue
+        if (-not $items) {
+            Write-Host "No items found in $Path" -ForegroundColor Red
+            return
+        }
+    if ($vertical) {lsx $items -v} else {lsx $items}
+}
+function lsx {
+    param (
+        [Object[]]$items,
+        [Switch][alias('-v')]$vertical
+    )
+    $maxColumns = if ($vertical) { 1 } else { 5 }
+    $terminalWidth = $Host.UI.RawUI.WindowSize.Width
+    $maxItemWidth = ($items | ForEach-Object { $_.Name.Length } | Measure-Object -Maximum).Maximum
+    $maxItemWidth += 2
+    if ($maxItemWidth -ge $terminalWidth) {
+        $columns = 1
+        $maxItemWidth = $terminalWidth - 2
+    } else {
+        $columns = [math]::floor($terminalWidth / ($maxItemWidth + 2))
+        if ($columns -gt $maxColumns) { $columns = $maxColumns }
+    }
+    $archiveExtensions = @('.zip', '.tar', '.gz', '.rar', '.7z', '.bz2', '.xz', '.arj', '.cab')
+    $executableExtensions = @('.exe', '.bat', '.cmd', '.sh', '.msi', '.cpl', '.msc', '.com', '.vbs')
+    $output = @()
+    foreach ($item in $items) {
+        $name = $item.Name
+        $length = $name.Length
+        if ($length -ge $maxItemWidth) {
+            $name = $name.Substring(0, $maxItemWidth) + ".."  # Truncate and add ellipsis
+            $length = $name.Length
+        }
+        $padding = " " * ([math]::Max(0, $maxItemWidth - $length))
+        if ($item.PSIsContainer) {
+            if ($name -match '^\.') {
+                $coloredName = "`e[1m`e[44m$name`e[0m"
             } else {
-                Write-Host $_.Name "" -ForegroundColor Blue -NoNewline
+                $coloredName = "`e[1m`e[44m$name`e[0m"
             }
         } else {
-            Write-Host $_.Name "" -NoNewline
-        }
-    }
-}
-function lls { 
-    Get-ChildItem $args -Force -ErrorAction SilentlyContinue | ForEach-Object {
-        if ($_.PSIsContainer) {
-            if ($_.PSIsContainer -and $_.Name -match '\s') {
-                Write-Host "'$($_.Name)' " -ForegroundColor Blue -NoNewline
-            } elseif ($_.PSIsContainer -and $_.Name -match '^\.') {
-                Write-Host $_.Name "" -ForegroundColor DarkBlue -NoNewline
+            $fileExtension = [System.IO.Path]::GetExtension($name).ToLower()
+            if ($executableExtensions -contains $fileExtension) {
+                $coloredName = "`e[1m`e[32m$name`e[0m"
+            } elseif ($archiveExtensions -contains $fileExtension) {
+                $coloredName = "`e[1m`e[31m$name`e[0m"
+            } elseif ($fileExtension -contains '.ps1') {
+                $coloredName = "`e[1m`e[93m$name`e[0m"
             } else {
-                Write-Host $_.Name "" -ForegroundColor Blue -NoNewline
+                $coloredName = "`e[0m$name`e[0m"
             }
-        } else {
-            Write-Host $_.Name "" -NoNewline
         }
+        $output += $coloredName + $padding
+    }
+    for ($i = 0; $i -lt $output.Count; $i += $columns) {
+        $line = $output[$i..([math]::Min($i + $columns - 1, $output.Count - 1))]
+        $line -join "  "
     }
 }
+set-alias -name ls -value lls
+set-alias -name la -value lla
 function wl { $out = get-wingetpackage $args | Sort-Object name; if ($out) { $out } else { Write-Host "No package found" -ForegroundColor Red }}
 # function wl { winget list } 
 function wi { winget install $args }
@@ -88,9 +153,8 @@ function wr { winget uninstall $args }
 function ws { $appname = $args; winget search "$appname" }
 function wu { winget upgrade $args } 
 function ww { $appname = $args; winget show "$appname" }
+function psversion { $PSVersionTable }
 function ppwd { $pwd.path }
-function c { Set-Location .. }
-
 function ffind {
     param (
         [string]$Name,                    # The string to search for in file names
@@ -265,6 +329,7 @@ function Find-Service {
         $services
     }
 }
+
 function Find-Process {
     param (
         [Parameter(Mandatory = $true, Position = 0)]

@@ -2,7 +2,7 @@ param (
     [switch]$noGUI,
     [switch]$debug
 )
-$version = "0.6.0"
+$version = "0.6.1"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_install_log_$date.txt"
 $transcriptFile = "WinMac_install_transcript_$date.txt"
@@ -58,7 +58,7 @@ if (!($noGUI)) {
 <Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="WinMac Deployment Wizard" Height="790" Width="480" WindowStartupLocation="CenterScreen" Background="$backgroundColor" Icon="$iconFolderPath\wizard.ico">
+    Title="WinMac Deployment Wizard" Height="820" Width="480" WindowStartupLocation="CenterScreen" Background="$backgroundColor" Icon="$iconFolderPath\wizard.ico">
     <Window.Resources>
         <SolidColorBrush x:Key="BackgroundBrush" Color="$backgroundColor"/>
         <SolidColorBrush x:Key="ForegroundBrush" Color="$foregroundColor"/>
@@ -113,6 +113,7 @@ if (!($noGUI)) {
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
                         <CheckBox x:Name="chkPowerToys" Content="PowerToys" IsChecked="True" Grid.Row="0" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
@@ -124,7 +125,8 @@ if (!($noGUI)) {
                         <CheckBox x:Name="chkStahky" Content="Stahky" IsChecked="True" Grid.Row="3" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkKeyboardShortcuts" Content="Keyboard Shortcuts" IsChecked="True" Grid.Row="3" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkNexusDock" Content="Nexus Dock" IsChecked="True" Grid.Row="4" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="chkOther" Content="Other" IsChecked="True" Grid.Row="4" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkGitProfile" Content="Git Profile" IsChecked="True" Grid.Row="4" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkOther" Content="Other" IsChecked="True" Grid.Row="5" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                     </Grid>
                 </GroupBox>
 
@@ -203,6 +205,7 @@ if (!($noGUI)) {
     $chkStahky = $window.FindName("chkStahky")
     $chkKeyboardShortcuts = $window.FindName("chkKeyboardShortcuts")
     $chkNexusDock = $window.FindName("chkNexusDock")
+    $chkGitProfile = $window.FindName("chkGitProfile")
     $chkOther = $window.FindName("chkOther")
     $startMenu = $window.FindName("startMenuWinMac")
     $promptStyle = $window.FindName("promptStyleWinMac")
@@ -239,6 +242,7 @@ if (!($noGUI)) {
         $result["promptSetVar"] = if ($promptStyle.IsChecked) { "W"} else { "M" }
         $result["roundedOrSquared"] = if ($shellCorner.IsChecked) { "R" } else { "S" }
         $result["lightOrDark"] = if ($theme.IsChecked) { "L"; $result["stackTheme"] = 'light'; $result["orbTheme"] = 'black.svg' } else { "D"; $result["stackTheme"] = 'dark'; $result["orbTheme"] = 'white.svg' }
+        $result["gitProfile"] = if ($chkGitProfile.IsChecked) { $true } else { $false }
         $result = [System.Windows.MessageBox]::Show("Do you wish to continue installation?", "WinMac Deployment", [System.Windows.MessageBoxButton]::OKCancel, [System.Windows.MessageBoxImage]::Information) 
         if ($result -eq 'OK') {
             $isInstallCompleted = $true
@@ -347,7 +351,7 @@ else
     $selectedApps = "1","2","3","4","5","6","7","8","9","10"
 }
 
-if ($selectedApps -like '*4*' -or $selectedApps -like '*5*') {
+if ($selectedApps -like '*4*' -and $selectedApps -like '*5*') {
 Write-Host @"
 
 `e[93m$("You can choose between WinMac start menu or Classic start menu.")`e[0m
@@ -362,7 +366,7 @@ Classic start menu replaces default menu with enhanced Windows 7 start menu.
     if ($menuSet -eq 'x' -or $menuSet -eq 'X') {
         Write-Host "Using WinMac start menu." -ForegroundColor Green
     }
-    elseif ($menuSet -eq 'c'-or $menuSet -eq 'C')
+    elseif ($menuSet -eq 'c' -or $menuSet -eq 'C')
     { 
         Write-Host "Using Classic start menu." -ForegroundColor Green
     }
@@ -372,31 +376,50 @@ Classic start menu replaces default menu with enhanced Windows 7 start menu.
         $menuSet = 'X'
     }
 }
+elseif ($selectedApps -like '*4*' -and $selectedApps -notlike '*5*'){
+    $menuSet = 'C'
+}
+elseif ($selectedApps -notlike '*4*' -and $selectedApps -like '*5*'){
+    $menuSet = 'X'
+}
 
 if ($selectedApps -like '*3*') {
 Write-Host @"
 
-`e[93m$("You can choose between WinMac prompt or MacOS-like prompt.")`e[0m
+`e[93m$("You can choose between WinMac prompt or macOS-like prompt.")`e[0m
 
 WinMac prompt: 
 12:35:06 userName @ ~ > 
 
-MacOS prompt:
+macOS prompt:
 userName@computerName ~ % 
 
 "@
-    $promptSet = Read-Host "Enter 'W' for WinMac prompt or 'M' for MacOS prompt"
+    $promptSet = Read-Host "Enter 'W' for WinMac prompt or 'M' for macOS prompt"
     if ($promptSet -eq 'W' -or $promptSet -eq 'w') {
         Write-Host "Using WinMac prompt." -ForegroundColor Green
     }
     elseif ($promptSet -eq 'M' -or $promptSet -eq 'm')
     { 
-        Write-Host "Using MacOS prompt." -ForegroundColor Green
+        Write-Host "Using macOS prompt." -ForegroundColor Green
     }
     else
     {
         Write-Host "Invalid input. Defaulting to WinMac prompt." -ForegroundColor Yellow
         $promptSet = 'W'
+    }
+    $gitProfile = Read-Host "`nInstall Git profile (y/n)"
+    if ($gitProfile -eq 'y') {
+        Write-Host "Enabling Git profile." -ForegroundColor Green
+        $gitProfile = $true
+    }
+    elseif ($gitProfile -eq 'n') {
+        Write-Host "Disabling Git profile." -ForegroundColor Yellow
+        $gitProfile = $false
+    }
+    else {
+        Write-Host "Invalid input. Defaulting to disable Git profile." -ForegroundColor Yellow
+        $gitProfile = $false
     }
 }
 
@@ -450,6 +473,7 @@ if ($result){
     $lightOrDark = $result["lightOrDark"]
     $stackTheme = $result["stackTheme"]
     $orbTheme = $result["orbTheme"]
+    $gitProfile = $result["gitProfile"]
 }
 Write-Host "Starting installation process in..." -ForegroundColor Green
 for ($a=3; $a -ge 0; $a--) {
@@ -522,8 +546,15 @@ foreach ($app in $selectedApps) {
             Write-Host "Configuring PowerShell Profile..." -ForegroundColor Yellow
             $profilePath = $PROFILE | Split-Path | Split-Path
             $profileFile = $PROFILE | Split-Path -Leaf
-            if ($promptSet -eq 'W' -or $promptSet -eq 'w') { $prompt = Get-Content "..\config\terminal\winmac-prompt.ps1" -Raw }
-            elseif ($promptSet -eq 'M' -or $promptSet -eq 'm') { $prompt = Get-Content "..\config\terminal\macos-prompt.ps1" -Raw }
+            if ($gitProfile -eq $true) { 
+                $git = Get-Content "..\config\terminal\git-profile.ps1" -Raw
+                if ($promptSet -eq 'W' -or $promptSet -eq 'w') { $prompt = Get-Content "..\config\terminal\winmac-prompt-git.ps1" -Raw }
+                elseif ($promptSet -eq 'M' -or $promptSet -eq 'm') { $prompt = Get-Content "..\config\terminal\macOS-prompt-git.ps1" -Raw }
+            }
+            else {
+                if ($promptSet -eq 'W' -or $promptSet -eq 'w') { $prompt = Get-Content "..\config\terminal\winmac-prompt.ps1" -Raw }
+                elseif ($promptSet -eq 'M' -or $promptSet -eq 'm') { $prompt = Get-Content "..\config\terminal\macOS-prompt.ps1" -Raw }
+            }
             $functions = Get-Content "..\config\terminal\functions.ps1" -Raw
             Invoke-Output { 
                 if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell" } 
@@ -543,15 +574,31 @@ foreach ($app in $selectedApps) {
                 "Vim.Vim",
                 "gsass1.NTop"
                 )
-            foreach ($app in $winget) {Invoke-Output { Install-WinGetPackage -id $app -source winget }}
+            if ($gitProfile -eq $true) { $winget += "Git.Git" }
+            foreach ($app in $winget) {
+                $package = Get-WinGetPackage -Id $app -ErrorAction SilentlyContinue
+                if ($null -eq $package) {
+                    Invoke-Output { Install-WinGetPackage -id $app -source winget }
+                } else {
+                    Write-Host "$($app.split(".")[1]) is already installed." -ForegroundColor Green
+                }
+            }
+            $pstreeModule = Get-InstalledModule -Name PSTree -ErrorAction SilentlyContinue
+            if ($null -eq $pstreeModule) {
+                Invoke-Output { Install-Module PSTree -Force }
+            } else {
+                Write-Host "PSTree is already installed." -ForegroundColor Green
+            }
             $vimParentPath = Join-Path $env:PROGRAMFILES Vim
             $latestSubfolder = Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -Property CreationTime -Descending | Select-Object -First 1
             $vimChildPath = $latestSubfolder.FullName
             Invoke-Output { [Environment]::SetEnvironmentVariable("Path", $env:Path + ";$vimChildPath", [EnvironmentVariableTarget]::Machine) }
-            Invoke-Output { Install-Module PSTree -Force }
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Invoke-Output { Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $prompt }
+            if ($gitProfile -eq $true) { Invoke-Output { Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $git } }
             Invoke-Output { Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $functions }
+            Invoke-Output { Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $prompt }
+            if ($gitProfile -eq $true) { Invoke-Output { Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $git } }
             Invoke-Output { Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $functions }
             Invoke-Output { Move-Item -Path "C:\Users\Public\Desktop\gVim*" -Destination $programsDir -Force }
             Invoke-Output { Move-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Destination $programsDir -Force }
@@ -560,7 +607,7 @@ foreach ($app in $selectedApps) {
         }
     # StartAllBack
         "4" {
-            Write-Host "Installing StartAllBack..." -ForegroundColor Yellow 
+            Write-Host "Installing StartAllBack..." -ForegroundColor Yellow
             Invoke-Output {Install-WinGetPackage -Id "StartIsBack.StartAllBack"}
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             $sabOrbs = $env:localAPPDATA + "\StartAllBack\Orbs"
@@ -599,8 +646,25 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $sabRegPath -Name "SysTrayClockFormat" -Value 3
             Set-ItemProperty -Path $sabRegPath -Name "SysTrayInputSwitch" -Value 0
             Set-ItemProperty -Path $sabRegPath -Name "OrbBitmap" -Value "$($orbTheme)"
-            if ($menuSet -eq 'X'-or $menuSet -eq 'x'){ Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1 }
-            else { Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 0 }
+            if ($menuSet -eq 'X' -or $menuSet -eq 'x') {
+                Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1
+            }
+            else {
+                Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 0
+                $isWinXMenuActive = (Get-Process -Name WindowsKey -ErrorAction SilentlyContinue) -or (Get-Process -Name StartButton -ErrorAction SilentlyContinue)
+                if ($isWinXMenuActive) {
+                    Stop-Process -Name WindowsKey -Force
+                    Stop-Process -Name StartButton -Force
+                    Invoke-Output { Uninstall-WinGetPackage -name "Winver UWP" }
+                    $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -match 'startbutton|windowskey' }
+                    foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
+                    $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue
+                    if ($null -eq $tasksFolder) { schtasks /DELETE /TN \WinMac /F > $null 2>&1 }
+                    Get-ChildItem "$env:LOCALAPPDATA\WinMac" | Where-Object { $_.Name -match 'startbutton|windowskey' } | Remove-Item -Recurse -Force
+                    Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
+                    Expand-Archive -Path "..\config\WinX-default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
+                }
+            }
             Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "(default)" -Value 1
             Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
             if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0 }
@@ -616,19 +680,32 @@ foreach ($app in $selectedApps) {
             if ($adminTest) {
                 if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
                     Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
-                    Invoke-Output {Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8'}
-                    Invoke-WebRequest -Uri 'https://github.com/dongle-the-gadget/WinverUWP/releases/download/v2.1.0.0/2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle' -OutFile '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
-                    Add-AppxPackage -Path '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
+                    $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.8' -ErrorAction SilentlyContinue
+                    if ($null -eq $dotNetRuntime) {
+                        Write-Host "Installing .NET Desktop Runtime 8..." -ForegroundColor Yellow
+                        Invoke-Output { Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8' }
+                    } else {
+                        Write-Host ".NET Desktop Runtime 8 is already installed." -ForegroundColor Green
+                    }
+                    $winverUWP = Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP -ErrorAction SilentlyContinue
+                    if ($null -eq $winverUWP) {
+                        Write-Host "Installing WinverUWP..." -ForegroundColor Yellow
+                        Invoke-WebRequest -Uri 'https://github.com/dongle-the-gadget/WinverUWP/releases/download/v2.1.0.0/2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle' -OutFile '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
+                        Add-AppxPackage -Path '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
+                    } else {
+                        Write-Host "WinverUWP is already installed." -ForegroundColor Green
+                    }
                     Invoke-Output {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\"}
+                    if ((Get-ItemProperty -Path $sabRegPath -ErrorAction SilentlyContinue).WinKeyFunction -eq 0) {Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1}
                     $sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
                     $exeKeyPath = "$env:LOCALAPPDATA\WinMac\WindowsKey.exe"
                     $exeStartPath = "$env:LOCALAPPDATA\WinMac\StartButton.exe"
                     $folderName = "WinMac"
                     $taskService = New-Object -ComObject "Schedule.Service"
-                    $taskService.Connect() 
+                    $taskService.Connect() | Out-Null
                     $rootFolder = $taskService.GetFolder("\")
                     try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }                
-                    if ($null -eq $existingFolder) { Invoke-Output {$rootFolder.CreateFolder($folderName)} }
+                    if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
                     $taskFolder = "\" + $folderName
                     $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
                     $trigger = New-ScheduledTaskTrigger -AtLogon
@@ -722,7 +799,7 @@ foreach ($app in $selectedApps) {
             $newWorkDir1 = "$env:LOCALAPPDATA\Stahky\config\management"
             $newWorkDir2 = "$env:LOCALAPPDATA\Stahky\config\favorites"
             $shell1 = New-Object -ComObject WScript.Shell
-            $shortcut1 = $shell1.CreateShortcut($shortcutPath1) 
+            $shortcut1 = $shell1.CreateShortcut($shortcutPath1)
             $shortcut1.Arguments = $newArguments1
             $shortcut1.TargetPath = $newTargetPath
             $shortcut1.WorkingDirectory = $newWorkDir1
@@ -742,15 +819,15 @@ foreach ($app in $selectedApps) {
                 Write-Host "Installing Keyboard Shortcuts..." -ForegroundColor Yellow
                 $fileName = 'keyshortcuts.exe'
                 $fileDirectory = "$env:LOCALAPPDATA\WinMac"
-                New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" 
+                New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" | Out-Null
                 if (Get-Process keyshortcuts) { Stop-Process -Name keyshortcuts }
                 Copy-Item ..\bin\$fileName "$env:LOCALAPPDATA\WinMac\" 
                 $folderName = "WinMac"
                 $taskService = New-Object -ComObject "Schedule.Service"
-                $taskService.Connect() 
-                $rootFolder = $taskService.GetFolder("\")
+                $taskService.Connect()
+                $rootFolder = $taskService.GetFolder("\") 
                 try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }              
-                if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) }
+                if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
                 $taskFolder = "\" + $folderName
                 $trigger = New-ScheduledTaskTrigger -AtLogon
                 $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
@@ -944,6 +1021,10 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
         }
     }
 }
+# Clean up
+if ((Get-ChildItem -Path "$env:LOCALAPPDATA\WinMac" -Recurse | Measure-Object).Count -eq 0) { Remove-Item -Path "$env:LOCALAPPDATA\WinMac" -Force }
+$explorerProcess = Get-Process -Name explorer -ErrorAction SilentlyContinue
+if ($null -eq $explorerProcess) {Start-Process -FilePath explorer.exe}
 Remove-Item "..\temp" -Recurse -Force
 Stop-Transcript | Out-Null
 Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
@@ -960,7 +1041,7 @@ If you have any questions or suggestions, please contact me on GitHub.
 
 Write-Host "-----------------------------------------------------------------------------"  -ForegroundColor Cyan
 Start-Sleep 2
-$restartConfirmation = Read-Host "`nRestart computer now? It's recommended to fully apply all the changes. (y/n)"
+$restartConfirmation = Read-Host "`nRestart computer now? It's recommended to fully apply all the changes (y/n)"
 if ($restartConfirmation -eq "Y" -or $restartConfirmation -eq "y") {
     Write-Host "Restarting computer in" -ForegroundColor Red
     for ($a=9; $a -ge 0; $a--) {
