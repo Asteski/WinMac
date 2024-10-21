@@ -443,15 +443,15 @@ if ($selectedApps -like '*4*' -or $selectedApps -like '*7*' -or $selectedApps -l
     if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
         Write-Host "Using light theme." -ForegroundColor Green
         $stackTheme = 'light'
-        $orbTheme = 'black.svg'
+        $orbTheme = 'black'
     } elseif ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
         Write-Host "Using dark theme." -ForegroundColor Green
         $stackTheme = 'dark'
-        $orbTheme = 'white.svg'
+        $orbTheme = 'white'
     } else {
         Write-Host "Invalid input. Defaulting to light theme." -ForegroundColor Yellow
         $stackTheme = 'light'
-        $orbTheme = 'black.svg'
+        $orbTheme = 'black'
         $lightOrDark = "L"
     }
 }
@@ -645,7 +645,6 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $sabRegPath -Name "SysTraySpacierIcons" -Value 1
             Set-ItemProperty -Path $sabRegPath -Name "SysTrayClockFormat" -Value 3
             Set-ItemProperty -Path $sabRegPath -Name "SysTrayInputSwitch" -Value 0
-            Set-ItemProperty -Path $sabRegPath -Name "OrbBitmap" -Value "$($orbTheme)"
             if ($menuSet -eq 'X' -or $menuSet -eq 'x') {
                 Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1
             }
@@ -667,8 +666,14 @@ foreach ($app in $selectedApps) {
             }
             Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "(default)" -Value 1
             Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
-            if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0 }
-            else { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 1 }
+            if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') {
+                Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0 
+                Set-ItemProperty -Path $sabRegPath -Name "OrbBitmap" -Value "$($orbTheme)-rounded.svg"
+            }
+            else { 
+                Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 1
+                Set-ItemProperty -Path $sabRegPath -Name "OrbBitmap" -Value "$($orbTheme)-squared.svg"
+            }
             Set-ItemProperty -Path $exRegPath\Advanced -Name "LaunchTO" -Value 1
             Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
             Invoke-Output {Stop-Process -Name explorer -Force}
