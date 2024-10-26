@@ -829,6 +829,7 @@ foreach ($app in $selectedApps) {
                 New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" | Out-Null
                 if (Get-Process keyshortcuts) { Stop-Process -Name keyshortcuts }
                 Copy-Item ..\bin\$fileName "$env:LOCALAPPDATA\WinMac\" 
+                $description = "WinMac Keyboard Shortcuts - custom keyboard shortcut described in Commands cheat sheet wiki page"
                 $folderName = "WinMac"
                 $taskService = New-Object -ComObject "Schedule.Service"
                 $taskService.Connect()
@@ -837,7 +838,6 @@ foreach ($app in $selectedApps) {
                 if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
                 $taskFolder = "\" + $folderName
                 $trigger = New-ScheduledTaskTrigger -AtLogon
-                $description = "WinMac Keyboard Shortcuts - custom keyboard shortcut described in Commands cheat sheet wiki page"
                 $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
                 $action = New-ScheduledTaskAction -Execute $fileName -WorkingDirectory $fileDirectory
                 $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
