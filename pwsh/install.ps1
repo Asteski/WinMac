@@ -726,11 +726,7 @@ foreach ($app in $selectedApps) {
                     else {Copy-Item -Path ..\bin\menu\x64\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force }
                     Copy-Item -Path ..\bin\menu\startbutton.exe -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force 
                     Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
-$descriptionsb = @"
-WinMac Menu Start button trigger - WinMac/Classic start menu call, using these keyboard shortcuts:
-- left, middle and right mouse buttons"
-- ctrl + esc, 
-"@
+                    $descriptionsb = "WinMac Menu Start button trigger - WinMac/Classic start menu call, using these keyboard shortcuts: ctrl + esc, left, middle and right mouse buttons"
                     $descriptionwk = "WinMac Menu Windows key trigger - C# program to trigger WinX menu using Win key, while keeping default and custom shortcuts with Win key supported."
                     $parentDirectory = Split-Path -Path $PSScriptRoot -Parent
                     $winxFolderName = "config\winx\Group2"
@@ -841,15 +837,7 @@ WinMac Menu Start button trigger - WinMac/Classic start menu call, using these k
                 if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
                 $taskFolder = "\" + $folderName
                 $trigger = New-ScheduledTaskTrigger -AtLogon
-$description = @"
-WinMac Keyboard Shortcuts - custom keyboard shortcuts:
-
-- alt + ` - switch forward between windows of currently focused app
-- alt + shift + ` - switch back between windows of currently focused app
-- alt + m - minimize currently focused window
-- ctrl + alt + m - minimize all windows
-- ctrl + alt + esc - end task(s) of currently focused app.
-"@
+                $description = "WinMac Keyboard Shortcuts - custom keyboard shortcut described in Commands cheat sheet wiki page"
                 $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
                 $action = New-ScheduledTaskAction -Execute $fileName -WorkingDirectory $fileDirectory
                 $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
