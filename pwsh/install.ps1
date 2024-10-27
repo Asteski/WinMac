@@ -726,8 +726,8 @@ foreach ($app in $selectedApps) {
                     else {Copy-Item -Path ..\bin\menu\x64\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force }
                     Copy-Item -Path ..\bin\menu\startbutton.exe -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force 
                     Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
-                    $descriptionsb = "WinMac Menu Start button trigger - WinMac/Classic start menu call, using these keyboard shortcuts: ctrl + esc, left, middle and right mouse buttons"
-                    $descriptionwk = "WinMac Menu Windows key trigger - C# program to trigger WinX menu using Win key, while keeping default and custom shortcuts with Win key supported."
+                    $descriptionSB = "WinMac Menu Start button trigger - WinMac/Classic start menu call, using these keyboard shortcuts: ctrl + esc, left, middle and right mouse buttons"
+                    $descriptionWK = "WinMac Menu Windows key trigger - C# program to trigger WinX menu using Win key, while keeping default and custom shortcuts with Win key supported."
                     $parentDirectory = Split-Path -Path $PSScriptRoot -Parent
                     $winxFolderName = "config\winx\Group2"
                     $winxFolderPath = Join-Path -Path $parentDirectory -ChildPath $winxFolderName
@@ -739,8 +739,8 @@ foreach ($app in $selectedApps) {
                     $shortcut.TargetPath = $newTargetPath
                     $shortcut.Save()
                     Copy-Item -Path "..\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force 
-                    Invoke-Output {Register-ScheduledTask -TaskName "Start Button" -Action $actionStartButton -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -Description $descriptionsb}
-                    Invoke-Output {Register-ScheduledTask -TaskName "Windows Key" -Action $actionWinKey -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -Description $descriptionwk}
+                    Invoke-Output {Register-ScheduledTask -TaskName "Start Button" -Action $actionStartButton -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -Description $descriptionSB}
+                    Invoke-Output {Register-ScheduledTask -TaskName "Windows Key" -Action $actionWinKey -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -Description $descriptionWK}
                     Start-Process $exeKeyPath
                     Start-Process $exeStartPath
                     Write-Host "WinMac Menu installation completed." -ForegroundColor Green
