@@ -726,7 +726,7 @@ foreach ($app in $selectedApps) {
                     else {Copy-Item -Path ..\bin\menu\x64\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force }
                     Copy-Item -Path ..\bin\menu\startbutton.exe -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force 
                     Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
-                    $descriptionSB = "WinMac Menu Start button trigger - WinMac/Classic start menu call, using these keyboard shortcuts: ctrl + esc, left, middle and right mouse buttons"
+                    $descriptionSB = "WinMac Menu Start button trigger - WinMac/Classic start menu trigger, using these keyboard shortcuts: ctrl + esc, left, middle and right mouse click on Start orb."
                     $descriptionWK = "WinMac Menu Windows key trigger - C# program to trigger WinX menu using Win key, while keeping default and custom shortcuts with Win key supported."
                     $parentDirectory = Split-Path -Path $PSScriptRoot -Parent
                     $winxFolderName = "config\winx\Group2"
@@ -824,12 +824,12 @@ foreach ($app in $selectedApps) {
         "8" {
             if ($adminTest) {
                 Write-Host "Installing Keyboard Shortcuts..." -ForegroundColor Yellow
-                $fileName = 'keyshortcuts.exe'
+                $fileName = 'KeyShortcuts.exe'
                 $fileDirectory = "$env:LOCALAPPDATA\WinMac"
                 New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" | Out-Null
                 if (Get-Process keyshortcuts) { Stop-Process -Name keyshortcuts }
                 Copy-Item ..\bin\$fileName "$env:LOCALAPPDATA\WinMac\" 
-                $description = "WinMac Keyboard Shortcuts - custom keyboard shortcut described in Commands cheat sheet wiki page"
+                $description = "WinMac Keyboard Shortcuts - custom keyboard shortcut described in Commands cheat sheet wiki page."
                 $folderName = "WinMac"
                 $taskService = New-Object -ComObject "Schedule.Service"
                 $taskService.Connect()
