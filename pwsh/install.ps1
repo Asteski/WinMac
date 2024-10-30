@@ -675,9 +675,7 @@ foreach ($app in $selectedApps) {
                 $unroundValue = 1
             }
             Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value $unroundValue
-            Get-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround"
             Set-ItemProperty -Path $sabRegPath -Name "OrbBitmap" -Value $orbBitmapValue
-            Get-ItemProperty -Path $sabRegPath -Name "OrbBitmap"
             Set-ItemProperty -Path $exRegPath\Advanced -Name "LaunchTO" -Value 1
             Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
             Invoke-Output {Stop-Process -Name explorer -Force}
