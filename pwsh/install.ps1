@@ -527,7 +527,7 @@ foreach ($app in $selectedApps) {
     # PowerToys
         "1" {
             Write-Host "Installing PowerToys..." -ForegroundColor Yellow
-            winget configure --enable
+            # winget configure --enable
             winget configure ..\config\powertoys.dsc.yaml --accept-configuration-agreements
             Write-Host "PowerToys installation completed." -ForegroundColor Green
         }
