@@ -241,7 +241,7 @@ if (!($noGUI)) {
         $result["menuSet"] = if ($startMenu.IsChecked) { "X" } else { "C" }
         $result["promptSetVar"] = if ($promptStyle.IsChecked) { "W"} else { "M" }
         $result["roundedOrSquared"] = if ($shellCorner.IsChecked) { "R" } else { "S" }
-        $result["lightOrDark"] = if ($theme.IsChecked) { "L"; $result["stackTheme"] = 'light'; $result["orbTheme"] = 'black.svg' } else { "D"; $result["stackTheme"] = 'dark'; $result["orbTheme"] = 'white.svg' }
+        $result["lightOrDark"] = if ($theme.IsChecked) { "L"; $result["stackTheme"] = 'light'; $result["orbTheme"] = 'black' } else { "D"; $result["stackTheme"] = 'dark'; $result["orbTheme"] = 'white' }
         $result["gitProfile"] = if ($chkGitProfile.IsChecked) { $true } else { $false }
         $result = [System.Windows.MessageBox]::Show("Do you wish to continue installation?", "WinMac Deployment", [System.Windows.MessageBoxButton]::OKCancel, [System.Windows.MessageBoxImage]::Information) 
         if ($result -eq 'OK') {
