@@ -674,15 +674,9 @@ foreach ($app in $selectedApps) {
                 $orbBitmapValue = "$orbTheme-squared.svg"
                 $unroundValue = 1
             }
-            echo 0
-            echo $unroundValue
             Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value $unroundValue
-            echo 1
             Get-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround"
-            echo 2
-            echo $orbBitmapValue
             Set-ItemProperty -Path $sabRegPath -Name "OrbBitmap" -Value $orbBitmapValue
-            echo 3
             Get-ItemProperty -Path $sabRegPath -Name "OrbBitmap"
             Set-ItemProperty -Path $exRegPath\Advanced -Name "LaunchTO" -Value 1
             Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
