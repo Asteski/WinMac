@@ -9,6 +9,8 @@ function Test-Admin
 Set-PSReadlineKeyHandler -Chord Tab -Function MenuComplete
 Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
 Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
+Set-PSReadLineKeyHandler -Chord 'Ctrl+f' -Function ForwardWord
+Set-PSReadLineKeyHandler -Chord 'Enter' -Function ValidateAndAcceptLine
 
 # Aliases
 set-alias -name vi -value vim
@@ -80,6 +82,7 @@ function lls {
         }
     if ($vertical) {lsx $items -v} else {lsx $items}
 }
+function lsv {lls $args -v}
 function lla {
     param (
         [string]$Path = ".",
@@ -90,8 +93,9 @@ function lla {
             Write-Host "No items found in $Path" -ForegroundColor Red
             return
         }
-    if ($vertical) {lsx $items -v} else {lsx $items}
-}
+        if ($vertical) {lsx $items -v} else {lsx $items}
+    }
+function lav {lls $args -v}
 function lsx {
     param (
         [Object[]]$items,
