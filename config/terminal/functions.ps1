@@ -60,7 +60,7 @@ function sed($file, $find, $replace) {
     (Get-Content $file).replace("$find", $replace) | Set-Content $file
 }
 function mkcd { param($dir) mkdir $dir -Force; Set-Location $dir }
-function cpy { Set-Clipboard $args[0] }
+function cpy { $string = "$args"; Set-Clipboard $string }
 function pst { Get-Clipboard }
 
 function .. { Set-Location .. }
