@@ -8,13 +8,6 @@ properties:
       settings:
         id: Microsoft.PowerToys
         source: winget
-    - resource: Microsoft.WinGet.DSC/WinGetPackage
-      directives:
-        description: Install Everything
-        allowPrerelease: true
-      settings:
-        id: lin-ycv.EverythingPowerToys
-        source: winget
     - resource: PowerToysConfigure
       directives:
         description: Configure PowerToys

@@ -9,6 +9,8 @@ function Test-Admin
 Set-PSReadlineKeyHandler -Chord Tab -Function MenuComplete
 Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
 Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
+Set-PSReadLineKeyHandler -Chord 'Ctrl+f' -Function ForwardWord
+Set-PSReadLineKeyHandler -Chord 'Enter' -Function ValidateAndAcceptLine
 
 # Aliases
 set-alias -name vi -value vim
@@ -53,6 +55,14 @@ set-alias -name ss -value Select-String
 set-alias -name alias -value Set-Alias
 
 # Functions
+function df { get-volume $args }
+function sed($file, $find, $replace) {
+    (Get-Content $file).replace("$find", $replace) | Set-Content $file
+}
+function mkcd { param($dir) mkdir $dir -Force; Set-Location $dir }
+function cpy { $string = "$args"; Set-Clipboard $string }
+function pst { Get-Clipboard }
+
 function .. { Set-Location .. }
 function ..2 { Set-Location ../.. }
 function ..3 { Set-Location ../../.. }
@@ -80,6 +90,7 @@ function lls {
         }
     if ($vertical) {lsx $items -v} else {lsx $items}
 }
+function lsv {lls $args -v}
 function lla {
     param (
         [string]$Path = ".",
@@ -90,8 +101,9 @@ function lla {
             Write-Host "No items found in $Path" -ForegroundColor Red
             return
         }
-    if ($vertical) {lsx $items -v} else {lsx $items}
-}
+        if ($vertical) {lsx $items -v} else {lsx $items}
+    }
+function lav {lls $args -v}
 function lsx {
     param (
         [Object[]]$items,
@@ -381,20 +393,40 @@ function rmenv {
     }
 }
 
-function Get-RandomString
-{
-    param([Parameter(ValueFromPipeline=$false)][ValidateRange(1,64)][Alias('l','length')][int]$PasswordLength = 10)
-
+function Get-RandomString {
+    param(
+        [Parameter(ValueFromPipeline=$false)]
+        [ValidateRange(1,256)]
+        [Alias('l','length')]
+        [int]$PasswordLength = 10
+    )
+    $terminalWidth = $Host.UI.RawUI.WindowSize.Width
+    $maxColumns = 5
+    $randomStrings = @()
     $CharacterSet = @{
-            Lowercase   = (97..122) | Get-Random -Count 20 | ForEach-Object {[char]$_}
-            Uppercase   = (65..90)  | Get-Random -Count 20 | ForEach-Object {[char]$_}
-            Numeric     = (48..57)  | Get-Random -Count 20 | ForEach-Object {[char]$_}
-            SpecialChar = (33..47)+(58..64)+(91..96)+(123..126) | Get-Random -Count 10 | ForEach-Object {[char]$_}
+        Lowercase   = (97..122) | ForEach-Object {[char]$_}
+        Uppercase   = (65..90)  | ForEach-Object {[char]$_}
+        Numeric     = (48..57)  | ForEach-Object {[char]$_}
+        SpecialChar = (33..47)+(58..64)+(91..96)+(123..126) | ForEach-Object {[char]$_}
     }
-
     $StringSet = $CharacterSet.Uppercase + $CharacterSet.Lowercase + $CharacterSet.Numeric + $CharacterSet.SpecialChar
-
-    -join(Get-Random -Count $PasswordLength -InputObject $StringSet)
+    for ($i = 1; $i -le 25; $i++) {
+        $randomString = -join (1..$PasswordLength | ForEach-Object { $StringSet | Get-Random })
+        $randomStrings += $randomString
+    }
+    if ($PasswordLength -gt $terminalWidth) {
+        $randomStrings | ForEach-Object { $_ }
+    } else {
+        $maxItemWidth = $PasswordLength + 2
+        $columns = [math]::floor($terminalWidth / ($maxItemWidth + 2))
+        if ($columns -gt $maxColumns) {
+            $columns = $maxColumns
+        }
+        for ($i = 0; $i -lt $randomStrings.Count; $i += $columns) {
+            $line = $randomStrings[$i..([math]::Min($i + $columns - 1, $randomStrings.Count - 1))]
+            $line -join "  "
+        }
+    }
 }
 
 function battery { 

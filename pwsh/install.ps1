@@ -2,7 +2,7 @@ param (
     [switch]$noGUI,
     [switch]$debug
 )
-$version = "0.6.1"
+$version = "0.6.2"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_install_log_$date.txt"
 $transcriptFile = "WinMac_install_transcript_$date.txt"
@@ -241,7 +241,7 @@ if (!($noGUI)) {
         $result["menuSet"] = if ($startMenu.IsChecked) { "X" } else { "C" }
         $result["promptSetVar"] = if ($promptStyle.IsChecked) { "W"} else { "M" }
         $result["roundedOrSquared"] = if ($shellCorner.IsChecked) { "R" } else { "S" }
-        $result["lightOrDark"] = if ($theme.IsChecked) { "L"; $result["stackTheme"] = 'light'; $result["orbTheme"] = 'black.svg' } else { "D"; $result["stackTheme"] = 'dark'; $result["orbTheme"] = 'white.svg' }
+        $result["lightOrDark"] = if ($theme.IsChecked) { "L"; $result["stackTheme"] = 'light'; $result["orbTheme"] = 'black' } else { "D"; $result["stackTheme"] = 'dark'; $result["orbTheme"] = 'white' }
         $result["gitProfile"] = if ($chkGitProfile.IsChecked) { $true } else { $false }
         $result = [System.Windows.MessageBox]::Show("Do you wish to continue installation?", "WinMac Deployment", [System.Windows.MessageBoxButton]::OKCancel, [System.Windows.MessageBoxImage]::Information) 
         if ($result -eq 'OK') {
@@ -443,15 +443,15 @@ if ($selectedApps -like '*4*' -or $selectedApps -like '*7*' -or $selectedApps -l
     if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
         Write-Host "Using light theme." -ForegroundColor Green
         $stackTheme = 'light'
-        $orbTheme = 'black.svg'
+        $orbTheme = 'black'
     } elseif ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
         Write-Host "Using dark theme." -ForegroundColor Green
         $stackTheme = 'dark'
-        $orbTheme = 'white.svg'
+        $orbTheme = 'white'
     } else {
         Write-Host "Invalid input. Defaulting to light theme." -ForegroundColor Yellow
         $stackTheme = 'light'
-        $orbTheme = 'black.svg'
+        $orbTheme = 'black'
         $lightOrDark = "L"
     }
 }
@@ -527,8 +527,8 @@ foreach ($app in $selectedApps) {
     # PowerToys
         "1" {
             Write-Host "Installing PowerToys..." -ForegroundColor Yellow
-            winget configure --enable | Out-Null
-            winget configure ..\config\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
+            # winget configure --enable
+            winget configure ..\config\powertoys.dsc.yaml --accept-configuration-agreements
             Write-Host "PowerToys installation completed." -ForegroundColor Green
         }
     # Everything
@@ -645,7 +645,6 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $sabRegPath -Name "SysTraySpacierIcons" -Value 1
             Set-ItemProperty -Path $sabRegPath -Name "SysTrayClockFormat" -Value 3
             Set-ItemProperty -Path $sabRegPath -Name "SysTrayInputSwitch" -Value 0
-            Set-ItemProperty -Path $sabRegPath -Name "OrbBitmap" -Value "$($orbTheme)"
             if ($menuSet -eq 'X' -or $menuSet -eq 'x') {
                 Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1
             }
@@ -667,8 +666,16 @@ foreach ($app in $selectedApps) {
             }
             Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "(default)" -Value 1
             Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
-            if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0 }
-            else { Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 1 }
+            if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') {
+                $orbBitmapValue = "$orbTheme-rounded.svg"
+                $unroundValue = 0
+            }
+            else { 
+                $orbBitmapValue = "$orbTheme-squared.svg"
+                $unroundValue = 1
+            }
+            Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value $unroundValue
+            Set-ItemProperty -Path $sabRegPath -Name "OrbBitmap" -Value $orbBitmapValue
             Set-ItemProperty -Path $exRegPath\Advanced -Name "LaunchTO" -Value 1
             Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
             Invoke-Output {Stop-Process -Name explorer -Force}
@@ -721,6 +728,8 @@ foreach ($app in $selectedApps) {
                     else {Copy-Item -Path ..\bin\menu\x64\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force }
                     Copy-Item -Path ..\bin\menu\startbutton.exe -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force 
                     Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
+                    $descriptionSB = "WinMac Menu Start button trigger - WinMac/Classic start menu trigger, using these keyboard shortcuts: ctrl + esc, left, middle and right mouse click on Start orb."
+                    $descriptionWK = "WinMac Menu Windows key trigger - C# program to trigger WinX menu using Win key, while keeping default and custom shortcuts with Win key supported."
                     $parentDirectory = Split-Path -Path $PSScriptRoot -Parent
                     $winxFolderName = "config\winx\Group2"
                     $winxFolderPath = Join-Path -Path $parentDirectory -ChildPath $winxFolderName
@@ -732,8 +741,8 @@ foreach ($app in $selectedApps) {
                     $shortcut.TargetPath = $newTargetPath
                     $shortcut.Save()
                     Copy-Item -Path "..\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force 
-                    Invoke-Output {Register-ScheduledTask -TaskName "StartButton" -Action $actionStartButton -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder}
-                    Invoke-Output {Register-ScheduledTask -TaskName "WindowsKey" -Action $actionWinKey -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder}
+                    Invoke-Output {Register-ScheduledTask -TaskName "Start Button" -Action $actionStartButton -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -Description $descriptionSB}
+                    Invoke-Output {Register-ScheduledTask -TaskName "Windows Key" -Action $actionWinKey -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -Description $descriptionWK}
                     Start-Process $exeKeyPath
                     Start-Process $exeStartPath
                     Write-Host "WinMac Menu installation completed." -ForegroundColor Green
@@ -817,11 +826,12 @@ foreach ($app in $selectedApps) {
         "8" {
             if ($adminTest) {
                 Write-Host "Installing Keyboard Shortcuts..." -ForegroundColor Yellow
-                $fileName = 'keyshortcuts.exe'
+                $fileName = 'KeyShortcuts.exe'
                 $fileDirectory = "$env:LOCALAPPDATA\WinMac"
                 New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" | Out-Null
                 if (Get-Process keyshortcuts) { Stop-Process -Name keyshortcuts }
                 Copy-Item ..\bin\$fileName "$env:LOCALAPPDATA\WinMac\" 
+                $description = "WinMac Keyboard Shortcuts - custom keyboard shortcut described in Commands cheat sheet wiki page."
                 $folderName = "WinMac"
                 $taskService = New-Object -ComObject "Schedule.Service"
                 $taskService.Connect()
@@ -831,11 +841,10 @@ foreach ($app in $selectedApps) {
                 $taskFolder = "\" + $folderName
                 $trigger = New-ScheduledTaskTrigger -AtLogon
                 $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
-                $taskName = ($fileName).replace('.exe','')
                 $action = New-ScheduledTaskAction -Execute $fileName -WorkingDirectory $fileDirectory
                 $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
-                Invoke-Output {Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings}
-                Start-Process -FilePath "$env:LOCALAPPDATA\WinMac\keyshortcuts.exe" -WorkingDirectory $env:LOCALAPPDATA\WinMac
+                Invoke-Output {Register-ScheduledTask -TaskName "Keyboard Shortcuts" -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -Description $description}
+                Start-Process -FilePath "$env:LOCALAPPDATA\WinMac\KeyShortcuts.exe" -WorkingDirectory $env:LOCALAPPDATA\WinMac
                 Write-Host "Keyboard Shortcuts installation completed." -ForegroundColor Green
             } else {
                 Write-Host "Keyboard Shortcuts requires elevated session. Please run the script as an administrator. Skipping installation." -ForegroundColor Red
