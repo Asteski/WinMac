@@ -55,6 +55,14 @@ set-alias -name ss -value Select-String
 set-alias -name alias -value Set-Alias
 
 # Functions
+function df { get-volume $args }
+function sed($file, $find, $replace) {
+    (Get-Content $file).replace("$find", $replace) | Set-Content $file
+}
+function mkcd { param($dir) mkdir $dir -Force; Set-Location $dir }
+function cpy { Set-Clipboard $args[0] }
+function pst { Get-Clipboard }
+
 function .. { Set-Location .. }
 function ..2 { Set-Location ../.. }
 function ..3 { Set-Location ../../.. }
