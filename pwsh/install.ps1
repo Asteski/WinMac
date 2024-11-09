@@ -985,7 +985,7 @@ IconResource=C:\Windows\System32\SHELL32.dll,160
             $homePin = new-object -com shell.application
             if (-not ($homePin.Namespace($homeDir).Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
                 $homePin.Namespace($homeDir).Self.InvokeVerb("pintohome") 
-            }
+            } 
 $programsIni = @"
 [.ShellClassInfo]
 IconResource=C:\WINDOWS\System32\imageres.dll,187
@@ -1030,10 +1030,6 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             if (-not (Test-Path $regPath)) {New-Item -Path $regPath -Force | Out-Null}
             Set-ItemProperty -Path $regPath -Name $regName -Value $regValue
             $keysToRemove = @(
-                "HKCR:\Folder\shellex\ContextMenuHandlers\PintoStartScreen",
-                "HKCR:\exefile\shellex\ContextMenuHandlers\PintoStartScreen",
-                "HKCR:\Microsoft.Website\ShellEx\ContextMenuHandlers\PintoStartScreen",
-                "HKCR:\mscfile\shellex\ContextMenuHandlers\PintoStartScreen",
                 "HKCR:\*\shellex\ContextMenuHandlers\EPP",
                 "HKCR:\CLSID\{09A47860-11B0-4DA5-AFA5-26D86198A780}",
                 "HKCR:\Directory\shellex\ContextMenuHandlers\EPP",
@@ -1057,6 +1053,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" -Name "NoPreviousVersionsPage" -ErrorAction SilentlyContinue
             Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\PreviousVersions" -Name "DisableLocalPage" -ErrorAction SilentlyContinue
             Remove-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\PreviousVersions" -Name "DisableLocalPage" -ErrorAction SilentlyContinue
+            #! Upgrade context menu
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
             $taskbarDevSettings = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
             Stop-Process -n explorer
