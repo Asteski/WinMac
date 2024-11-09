@@ -284,7 +284,7 @@ Write-Host @"
             $selection = Read-Host "Enter the numbers of options you want to uninstall (separated by commas)"
             $selection = $selection.Trim()
             $selection = $selection -replace '\s*,\s*', ','
-            $valid = $selection -match '^([1-9]|10)(,([1-9]|10))*$'
+            $valid = $selection -match '^([1-9]|10|11)(,([1-9]|10|11))*$'
             if (!$valid) {
                 Write-Host "`e[91mInvalid input! Please enter numbers between 1 and 10, separated by commas.`e[0m`n"
             }
@@ -470,8 +470,15 @@ foreach ($app in $selectedApps) {
             Remove-Item -Path "$programsDir\Nexus.lnk" -Force
             Write-Host "Uninstalling Nexus Dock completed." -ForegroundColor Green
         }
-    # Other
+        # Windhawk
         "10" {
+            Write-Host "Uninstalling Windhawk..." -ForegroundColor Yellow
+            Stop-Process -name windhawk -force
+            Invoke-Output {Uninstall-WinGetPackage -name Windhawk}
+            Write-Host "Uninstalling Windhawk completed." -ForegroundColor Green
+        }
+    # Other
+        "11" {
             Write-Host "Uninstalling Other Settings..." -ForegroundColor Yellow
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 0

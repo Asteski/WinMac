@@ -961,10 +961,10 @@ foreach ($app in $selectedApps) {
     # Windhawk
         "10" {
             Write-Host "Installing Windhawk..." -ForegroundColor Yellow
-            Install-WinGetPackage -name RamenSoftware.Windhawk
+            Invoke-Output {Install-WinGetPackage -name Windhawk}
             if (-not (Test-Path "$Env:ProgramData\Windhawk\Engine\Mods")) {New-Item -ItemType Directory -Path "$Env:ProgramData\Windhawk\Engine\Mods" -Force | Out-Null}
             if (-not (Test-Path "$Env:ProgramData\Windhawk\ModsSource")) {New-Item -ItemType Directory -Path "$Env:ProgramData\Windhawk\ModsSource" -Force | Out-Null}
-            Stop-Process windhawk.exe -Force
+            Stop-Process -name windhawk -force
             Copy-Item ..\config\windhawk\Mods\* "$Env:ProgramData\Windhawk\Engine\Mods" -Force
             Copy-Item ..\config\windhawk\ModsSource\* "$Env:ProgramData\Windhawk\ModsSource" -Force
             reg import ..\config\windhawk\settings.reg > $null 2>&1
