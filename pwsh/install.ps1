@@ -1021,18 +1021,13 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
             #! Upgrade context menu
             Write-Host "Upgrading context menu..." -ForegroundColor Yellow
-            Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
-            $taskbarDevSettings = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
             if (-not (Test-Path $taskbarDevSettings)) { Invoke-Output {New-Item -Path $taskbarDevSettings -Force} }
             Invoke-Output {New-ItemProperty -Path $taskbarDevSettings -Name "TaskbarEndTask" -Value 1 -PropertyType DWORD -Force}
-
-            Set-ItemProperty -Path $regPath -Name $regName -Value $regValue
             $regPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked"
             $regName = "{1d27f844-3a1f-4410-85ac-14651078412d}"
             $regValue = ""
-            if (-not (Test-Path $regPath)) {
-                New-Item -Path $regPath -Force | Out-Null
-            }
+            Set-ItemProperty -Path $regPath -Name $regName -Value $regValue
+            if (-not (Test-Path $regPath)) {New-Item -Path $regPath -Force | Out-Null}
             Set-ItemProperty -Path $regPath -Name $regName -Value $regValue
             $keysToRemove = @(
                 "HKCR:\Folder\shellex\ContextMenuHandlers\PintoStartScreen",
@@ -1062,7 +1057,8 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" -Name "NoPreviousVersionsPage" -ErrorAction SilentlyContinue
             Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\PreviousVersions" -Name "DisableLocalPage" -ErrorAction SilentlyContinue
             Remove-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\PreviousVersions" -Name "DisableLocalPage" -ErrorAction SilentlyContinue
-            Set-ItemProperty -Path $regPath -Name $regName -Value $regValue
+            Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
+            $taskbarDevSettings = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
             Stop-Process -n explorer
             Write-Host "Configuring Other Settings completed." -ForegroundColor Green
         }
