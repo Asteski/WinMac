@@ -604,7 +604,7 @@ foreach ($app in $selectedApps) {
             Invoke-Output { Move-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Destination $programsDir -Force }
             Invoke-Output { Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\gVim*" -Destination $programsDir -Force }
             Invoke-Output { Remove-Item -Path "Registry::HKEY_CLASSES_ROOT\*\shell\Edit with Vim" -Recurse -Force }
-            Invoke-Output { Remove-Item -Path "Registry::HKEY_CLASSES_ROOT\*\shellex\gvim" -Recurse -Force }
+            Invoke-Output { Remove-Item -Path "Registry::HKEY_CLASSES_ROOT\*\shellex\ContextMenuHandlers\gvim" -Recurse -Force }
             Invoke-Output { Remove-Item -Path "Registry::HKEY_CLASSES_ROOT\*\OpenWithList\gvim.exe" -Recurse -Force }
             Write-Host "PowerShell Profile configuration completed." -ForegroundColor Green
         }
