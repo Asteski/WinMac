@@ -206,7 +206,7 @@ if (!($noGUI)) {
     $chkStahky = $window.FindName("chkStahky")
     $chkKeyboardShortcuts = $window.FindName("chkKeyboardShortcuts")
     $chkNexusDock = $window.FindName("chkNexusDock")
-    $chkWindhawk = $window.FindName("Windhawk")
+    $chkWindhawk = $window.FindName("chkWindhawk")
     $chkGitProfile = $window.FindName("chkGitProfile")
     $chkOther = $window.FindName("chkOther")
     $startMenu = $window.FindName("startMenuWinMac")
