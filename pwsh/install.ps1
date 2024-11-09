@@ -603,9 +603,20 @@ foreach ($app in $selectedApps) {
             Invoke-Output { Move-Item -Path "C:\Users\Public\Desktop\gVim*" -Destination $programsDir -Force }
             Invoke-Output { Move-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Destination $programsDir -Force }
             Invoke-Output { Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\gVim*" -Destination $programsDir -Force }
-            Invoke-Output { Remove-Item -Path "Registry::HKEY_CLASSES_ROOT\*\shell\Edit with Vim" -Recurse -Force }
-            Invoke-Output { Remove-Item -Path "Registry::HKEY_CLASSES_ROOT\*\shellex\ContextMenuHandlers\gvim" -Recurse -Force }
-            Invoke-Output { Remove-Item -Path "Registry::HKEY_CLASSES_ROOT\*\OpenWithList\gvim.exe" -Recurse -Force }
+
+            $job = Start-Job -ScriptBlock {
+                Remove-Item -Path "Registry::HKEY_CLASSES_ROOT\*\shell\Edit with Vim" -Recurse -Force
+                Remove-Item -Path "Registry::HKEY_CLASSES_ROOT\*\shellex\ContextMenuHandlers\gvim" -Recurse -Force
+                Remove-Item -Path "Registry::HKEY_CLASSES_ROOT\*\OpenWithList\gvim.exe" -Recurse -Force
+            }
+            $job | Wait-Job -Timeout 60 | Out-Null
+            if ($job.State -eq 'Running') {
+                Stop-Job -Job $job
+                Write-Host "The registry removal job was canceled due to timeout." -ForegroundColor Yellow
+            } else {
+                Write-Host "Registry removal completed." -ForegroundColor Green
+            }
+            Remove-Job -Job $job
             Write-Host "PowerShell Profile configuration completed." -ForegroundColor Green
         }
     # StartAllBack
