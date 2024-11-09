@@ -814,7 +814,8 @@ foreach ($app in $selectedApps) {
                 $pathVarUser += ";$exePath"
                 [Environment]::SetEnvironmentVariable("Path", $pathVarUser, "User")
             }
-            if (-not ($pathVarMachine -like "* $exePath*")) {
+                        # Assuming $job contains a job ID or job object
+            $job | Get-Jobif (-not ($pathVarMachine -like "* $exePath*")) {
                 $pathVarMachine += "; $exePath"
                 [Environment]::SetEnvironmentVariable("Path", $pathVarMachine, "Machine")
             }
@@ -989,7 +990,7 @@ uint fWinIni);
 '@
             $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
             Invoke-Output {$CursorRefresh::SystemParametersInfo(0x0057,0,$null,0)}
-        ## Pin Home, Programs and Recycle Bin to Quick Access
+            ## Pin Home, Programs and Recycle Bin to Quick Access
             write-host "Pinning Home, Programs and Recycle Bin to Quick Access..." -ForegroundColor Yellow
 $homeIni = @"
 [.ShellClassInfo]
