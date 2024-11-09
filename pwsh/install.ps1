@@ -694,6 +694,14 @@ foreach ($app in $selectedApps) {
                     } else {
                         Write-Host ".NET Desktop Runtime 8 is already installed." -ForegroundColor Green
                     }
+                    $uiXaml = Get-AppxPackage -Name Microsoft.UI.Xaml.2.7 -ErrorAction SilentlyContinue
+                    if ($null -eq $uiXaml) {
+                        Write-Host "Microsoft.UI.Xaml.2.7 is not installed. Installing Microsoft.UI.Xaml.2.7..." -ForegroundColor Yellow
+                        Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.7.3/Microsoft.UI.Xaml.2.7.x64.appx' -OutFile '..\temp\Microsoft.UI.Xaml.2.7.x64.appx'
+                        Add-AppxPackage -Path '..\temp\Microsoft.UI.Xaml.2.7.x64.appx'
+                    } else {
+                        Write-Host "Microsoft.UI.Xaml.2.7 is already installed." -ForegroundColor Green
+                    }
                     $winverUWP = Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP -ErrorAction SilentlyContinue
                     if ($null -eq $winverUWP) {
                         Write-Host "Installing WinverUWP..." -ForegroundColor Yellow
@@ -1019,48 +1027,9 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             Copy-Item -Path "..\config\blank.ico" -Destination "C:\Windows" -Force
             Invoke-Output {New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Force}
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
-            #! Upgrade context menu
-            Write-Host "Upgrading context menu..." -ForegroundColor Yellow
+            ## Cleaning up context menus
+            Write-Host "Cleaning up context menus..." -ForegroundColor Yellow
             Get-ChildItem ..\config\contextmenu\remove\* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
-            #! a moze odpalac reg files zamiast tego?
-            # if (-not (Test-Path $taskbarDevSettings)) { Invoke-Output {New-Item -Path $taskbarDevSettings -Force}}
-            # Invoke-Output {New-ItemProperty -Path $taskbarDevSettings -Name "TaskbarEndTask" -Value 1 -PropertyType DWORD -Force}
-            # $regPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked"
-            # $regName = "{1d27f844-3a1f-4410-85ac-14651078412d}"
-            # $regValue = ""
-            # if (-not (Test-Path $regPath)) {New-Item -Path $regPath -Force} #! | Out-Null
-            # Set-ItemProperty -Path $regPath -Name $regName -Value $regValue
-            # $keysToRemove = @(
-            #     "HKCR:\*\shellex\ContextMenuHandlers\EPP",
-            #     "HKCR:\CLSID\{09A47860-11B0-4DA5-AFA5-26D86198A780}",
-            #     "HKCR:\Directory\shellex\ContextMenuHandlers\EPP",
-            #     "HKCR:\Drive\shellex\ContextMenuHandlers\EPP",
-            #     "HKCR:\*\shell\pintohomefile"
-            # )
-            # foreach ($key in $keysToRemove) {
-            #     if (Test-Path $key) {
-            #         Remove-Item -Path $key -Recurse -Force
-            #     }
-            # }            
-            # Remove-Item -Path "HKCR:\*\shellex\ContextMenuHandlers\Sharing" -Force #-ErrorAction SilentlyContinue
-            # Remove-Item -Path "HKCR:\Directory\Background\shellex\ContextMenuHandlers\Sharing" -Force #-ErrorAction SilentlyContinue
-            # Remove-Item -Path "HKCR:\Directory\shellex\ContextMenuHandlers\Sharing" -Force #-ErrorAction SilentlyContinue
-            # Remove-Item -Path "HKCR:\Drive\shellex\ContextMenuHandlers\Sharing" -Force #-ErrorAction SilentlyContinue
-            # Remove-Item -Path "HKCR:\LibraryFolder\background\shellex\ContextMenuHandlers\Sharing" -Force #-ErrorAction SilentlyContinue
-            # Remove-Item -Path "HKCR:\UserLibraryFolder\shellex\ContextMenuHandlers\Sharing" -Force #-ErrorAction SilentlyContinue
-            # Remove-Item -Path "HKCR:\AllFilesystemObjects\shellex\PropertySheetHandlers\{596AB062-B4D2-4215-9F74-E9109B0A8153}" -Force #-ErrorAction SilentlyContinue
-            # Remove-Item -Path "HKCR:\CLSID\{450D8FBA-AD25-11D0-98A8-0800361B1103}\shellex\PropertySheetHandlers\{596AB062-B4D2-4215-9F74-E9109B0A8153}" -Force #-ErrorAction SilentlyContinue
-            # Remove-Item -Path "HKCR:\Directory\shellex\PropertySheetHandlers\{596AB062-B4D2-4215-9F74-E9109B0A8153}" -Force #-ErrorAction SilentlyContinue
-            # Remove-Item -Path "HKCR:\Drive\shellex\PropertySheetHandlers\{596AB062-B4D2-4215-9F74-E9109B0A8153}" -Force #-ErrorAction SilentlyContinue
-            # Remove-Item -Path "HKCR:\AllFilesystemObjects\shellex\ContextMenuHandlers\{596AB062-B4D2-4215-9F74-E9109B0A8153}" -Force #-ErrorAction SilentlyContinue
-            # Remove-Item -Path "HKCR:\CLSID\{450D8FBA-AD25-11D0-98A8-0800361B1103}\shellex\ContextMenuHandlers\{596AB062-B4D2-4215-9F74-E9109B0A8153}" -Force #-ErrorAction SilentlyContinue
-            # Remove-Item -Path "HKCR:\Directory\shellex\ContextMenuHandlers\{596AB062-B4D2-4215-9F74-E9109B0A8153}" -Force #-ErrorAction SilentlyContinue
-            # Remove-Item -Path "HKCR:\Drive\shellex\ContextMenuHandlers\{596AB062-B4D2-4215-9F74-E9109B0A8153}" -Force #-ErrorAction SilentlyContinue
-            # Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer" -Name "NoPreviousVersionsPage" #-ErrorAction SilentlyContinue
-            # Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" -Name "NoPreviousVersionsPage" #-ErrorAction SilentlyContinue
-            # Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\PreviousVersions" -Name "DisableLocalPage" #-ErrorAction SilentlyContinue
-            # Remove-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\PreviousVersions" -Name "DisableLocalPage" #-ErrorAction SilentlyContinue
-            #! Upgrade context menu
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
             $taskbarDevSettings = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
             if (-not (Test-Path $taskbarDevSettings)) { Invoke-Output {New-Item -Path $taskbarDevSettings -Force} }
