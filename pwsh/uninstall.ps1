@@ -333,7 +333,7 @@ for ($a=3; $a -ge 0; $a--) {
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
 Start-Transcript -Path ../logs/$transcriptFile -Append | Out-Null
 # Nuget check
-Write-Host "Checking for Package Provider (Nuget)" -ForegroundColor Yellow
+Write-Host "Checking Package Provider (Nuget)" -ForegroundColor Yellow
 $nugetProvider = Get-PackageProvider -Name NuGet
 if ($null -eq $nugetProvider) {
     Write-Host "NuGet is not installed. Installing NuGet..." -ForegroundColor Yellow
@@ -343,7 +343,7 @@ if ($null -eq $nugetProvider) {
     Write-Host "NuGet is already installed." -ForegroundColor Green
 }
 # Winget check
-Write-Host "Checking for Package Manager (Winget)" -ForegroundColor Yellow
+Write-Host "Checking Package Manager (Winget)" -ForegroundColor Yellow
 $wingetCliCheck = winget -v
 if ($null -eq $wingetCliCheck) {
     $progressPreference = 'silentlyContinue'
@@ -470,7 +470,7 @@ foreach ($app in $selectedApps) {
             Remove-Item -Path "$programsDir\Nexus.lnk" -Force
             Write-Host "Uninstalling Nexus Dock completed." -ForegroundColor Green
         }
-        # Windhawk
+    # Windhawk
         "10" {
             Write-Host "Uninstalling Windhawk..." -ForegroundColor Yellow
             Stop-Process -name windhawk -force
