@@ -963,14 +963,16 @@ foreach ($app in $selectedApps) {
     # Windhawk
         "10" {
             Write-Host "Installing Windhawk..." -ForegroundColor Yellow
-            Invoke-Output {Install-WinGetPackage -name Windhawk}
             if (-not (Test-Path "$Env:ProgramData\Windhawk\Engine\Mods")) {New-Item -ItemType Directory -Path "$Env:ProgramData\Windhawk\Engine\Mods" -Force | Out-Null}
             if (-not (Test-Path "$Env:ProgramData\Windhawk\ModsSource")) {New-Item -ItemType Directory -Path "$Env:ProgramData\Windhawk\ModsSource" -Force | Out-Null}
-            Stop-Process -name windhawk -force
+            # Stop-Process -name windhawk -force
             Copy-Item ..\config\windhawk\Mods\* "$Env:ProgramData\Windhawk\Engine\Mods" -Recurse -Force
             Copy-Item ..\config\windhawk\ModsSource\* "$Env:ProgramData\Windhawk\ModsSource" -Recurse -Force
             reg import ..\config\windhawk\settings.reg > $null 2>&1
-            Start-Process -FilePath windhawk.exe -WorkingDirectory "$Env:ProgramFiles\Windhawk\"
+            Invoke-Output {Install-WinGetPackage -name Windhawk}
+            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+            Move-Item -Path "C:\Users\Public\Desktop\Windhawk.lnk" -Destination $programsDir -Force 
+            # Start-Process -FilePath windhawk.exe -WorkingDirectory "$Env:ProgramFiles\Windhawk\"
             Write-Host "Windhawk installation completed." -ForegroundColor Green
             
         }
