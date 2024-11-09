@@ -584,17 +584,6 @@ foreach ($app in $selectedApps) {
                 Set-ItemProperty -Path $vimRegPath -Name "select_startmenu" -Value 0
                 Set-ItemProperty -Path $vimRegPath -Name "select_editwith" -Value 0
                 Invoke-Output {Install-WinGetPackage -Id "Vim.Vim"}
-                # Set-ItemProperty -Path $vimRegPath -Name "vim_compat" -Value "all"
-                # Set-ItemProperty -Path $vimRegPath -Name "vim_keyremap" -Value "default"
-                # Set-ItemProperty -Path $vimRegPath -Name "vim_mouse" -Value "default"
-                # Set-ItemProperty -Path $vimRegPath -Name "select_console" -Value 1
-                # Set-ItemProperty -Path $vimRegPath -Name "select_batch" -Value 0
-                # Set-ItemProperty -Path $vimRegPath -Name "select_desktop" -Value 1
-                # Set-ItemProperty -Path $vimRegPath -Name "select_startmenu" -Value 0
-                # Set-ItemProperty -Path $vimRegPath -Name "select_editwith" -Value 0
-                # Set-ItemProperty -Path $vimRegPath -Name "select_vimrc" -Value 1
-                # Set-ItemProperty -Path $vimRegPath -Name "select_pluginhome" -Value 1
-                # Set-ItemProperty -Path $vimRegPath -Name "select_pluginvim" -Value 0
             } else {
                 Write-Host "Vim is already installed." -ForegroundColor Green
             }
