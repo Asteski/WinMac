@@ -970,7 +970,7 @@ foreach ($app in $selectedApps) {
             Stop-Process -Name Windhawk -Force
             Copy-Item ..\config\windhawk\Mods\* "$Env:ProgramData\Windhawk\Engine\Mods" -Recurse -Force
             Copy-Item ..\config\windhawk\ModsSource\* "$Env:ProgramData\Windhawk\ModsSource" -Recurse -Force
-            Copy-Item ..\config\windhawk\userprofile.json "$Env:ProgramData\Windhawk\userprofile.json" -Force
+            # Copy-Item ..\config\windhawk\userprofile.json "$Env:ProgramData\Windhawk\userprofile.json" -Force
             reg import ..\config\windhawk\settings.reg > $null 2>&1
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Move-Item -Path "C:\Users\Public\Desktop\Windhawk.lnk" -Destination $programsDir -Force
