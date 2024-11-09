@@ -576,6 +576,7 @@ foreach ($app in $selectedApps) {
                 }
             $vim = Get-WinGetPackage -Id Vim.Vim -ErrorAction SilentlyContinue
             if ($null -eq $vim) {
+                Invoke-Output {Install-WinGetPackage -Id "Vim.Vim"}
                 $vimVersion = (Find-WingetPackage Vim.Vim | Where-Object {$_.Id -notlike "*nightly*"}).Version
                 $vimVersion = ($vimVersion -split '\.')[0..1] -join '.'
                 $vimRegPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Vim $vimVersion"
