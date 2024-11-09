@@ -603,20 +603,21 @@ foreach ($app in $selectedApps) {
             Invoke-Output { Move-Item -Path "C:\Users\Public\Desktop\gVim*" -Destination $programsDir -Force }
             Invoke-Output { Move-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Destination $programsDir -Force }
             Invoke-Output { Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\gVim*" -Destination $programsDir -Force }
-
-            $job = Start-Job -ScriptBlock {
-                Remove-Item -Path "Registry::HKEY_CLASSES_ROOT\*\shell\Edit with Vim" -Recurse -Force
-                Remove-Item -Path "Registry::HKEY_CLASSES_ROOT\*\shellex\ContextMenuHandlers\gvim" -Recurse -Force
-                Remove-Item -Path "Registry::HKEY_CLASSES_ROOT\*\OpenWithList\gvim.exe" -Recurse -Force
+            $vimRegPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Vim 8.2"
+            if (-not (Test-Path $vimRegPath)) {
+                New-Item -Path $vimRegPath -Force | Out-Null
             }
-            $job | Wait-Job -Timeout 60 | Out-Null
-            if ($job.State -eq 'Running') {
-                Stop-Job -Job $job
-                Write-Host "The registry removal job was canceled due to timeout." -ForegroundColor Yellow
-            } else {
-                Write-Host "Registry removal completed." -ForegroundColor Green
-            }
-            Remove-Job -Job $job
+            Set-ItemProperty -Path $vimRegPath -Name "vim_compat" -Value "all"
+            Set-ItemProperty -Path $vimRegPath -Name "vim_keyremap" -Value "default"
+            Set-ItemProperty -Path $vimRegPath -Name "vim_mouse" -Value "default"
+            Set-ItemProperty -Path $vimRegPath -Name "select_console" -Value 1
+            Set-ItemProperty -Path $vimRegPath -Name "select_batch" -Value 0
+            Set-ItemProperty -Path $vimRegPath -Name "select_desktop" -Value 1
+            Set-ItemProperty -Path $vimRegPath -Name "select_startmenu" -Value 1
+            Set-ItemProperty -Path $vimRegPath -Name "select_editwith" -Value 0
+            Set-ItemProperty -Path $vimRegPath -Name "select_vimrc" -Value 1
+            Set-ItemProperty -Path $vimRegPath -Name "select_pluginhome" -Value 1
+            Set-ItemProperty -Path $vimRegPath -Name "select_pluginvim" -Value 0
             Write-Host "PowerShell Profile configuration completed." -ForegroundColor Green
         }
     # StartAllBack
