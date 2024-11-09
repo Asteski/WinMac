@@ -528,7 +528,7 @@ foreach ($app in $selectedApps) {
         "1" {
             Write-Host "Installing PowerToys..." -ForegroundColor Yellow
             winget configure --enable
-            winget configure ..\config\powertoys.dsc.yaml --accept-configuration-agreements --accept-package-agreements
+            winget configure ..\config\powertoys.dsc.yaml --disable-interactivity --accept-source-agreements
             Write-Host "PowerToys installation completed." -ForegroundColor Green
         }
     # Everything
@@ -1021,7 +1021,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
             #! Upgrade context menu
             Write-Host "Upgrading context menu..." -ForegroundColor Yellow
-            Get-ChildItem ..\config\contextmenu\remove\* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
+            Get-ChildItem ..\config\contextmenu\remove\* | ForEach-Object { reg import $_.FullName  }
             #! a moze odpalac reg files zamiast tego?
             # if (-not (Test-Path $taskbarDevSettings)) { Invoke-Output {New-Item -Path $taskbarDevSettings -Force}}
             # Invoke-Output {New-ItemProperty -Path $taskbarDevSettings -Name "TaskbarEndTask" -Value 1 -PropertyType DWORD -Force}
