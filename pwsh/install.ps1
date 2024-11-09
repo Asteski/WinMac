@@ -1014,17 +1014,55 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
                 $recycleBin.Self.InvokeVerb("PinToHome") 
             }
             Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse 
-        ## Remove Shortcut Arrows
+            ## Remove shortcut arrows
             Write-Host "Removing shortcut arrows..." -ForegroundColor Yellow
             Copy-Item -Path "..\config\blank.ico" -Destination "C:\Windows" -Force
             Invoke-Output {New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Force}
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
-        ## Misc
-            Write-Host "Adding End Task to context menu..." -ForegroundColor Yellow
+            #! Upgrade context menu
+            Write-Host "Upgrading context menu..." -ForegroundColor Yellow
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
             $taskbarDevSettings = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
             if (-not (Test-Path $taskbarDevSettings)) { Invoke-Output {New-Item -Path $taskbarDevSettings -Force} }
             Invoke-Output {New-ItemProperty -Path $taskbarDevSettings -Name "TaskbarEndTask" -Value 1 -PropertyType DWORD -Force}
+
+            Set-ItemProperty -Path $regPath -Name $regName -Value $regValue
+            $regPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked"
+            $regName = "{1d27f844-3a1f-4410-85ac-14651078412d}"
+            $regValue = ""
+            if (-not (Test-Path $regPath)) {
+                New-Item -Path $regPath -Force | Out-Null
+            }
+            Set-ItemProperty -Path $regPath -Name $regName -Value $regValue
+            $keysToRemove = @(
+                "HKCR:\Folder\shellex\ContextMenuHandlers\PintoStartScreen",
+                "HKCR:\exefile\shellex\ContextMenuHandlers\PintoStartScreen",
+                "HKCR:\Microsoft.Website\ShellEx\ContextMenuHandlers\PintoStartScreen",
+                "HKCR:\mscfile\shellex\ContextMenuHandlers\PintoStartScreen",
+                "HKCR:\*\shellex\ContextMenuHandlers\EPP",
+                "HKCR:\CLSID\{09A47860-11B0-4DA5-AFA5-26D86198A780}",
+                "HKCR:\Directory\shellex\ContextMenuHandlers\EPP",
+                "HKCR:\Drive\shellex\ContextMenuHandlers\EPP",
+                "HKCR:\*\shell\pintohomefile"
+            )
+            foreach ($key in $keysToRemove) {
+                if (Test-Path $key) {
+                    Remove-Item -Path $key -Recurse -Force
+                }
+            }
+            Remove-Item -Path "HKCR:\AllFilesystemObjects\shellex\PropertySheetHandlers\{596AB062-B4D2-4215-9F74-E9109B0A8153}" -Force -ErrorAction SilentlyContinue
+            Remove-Item -Path "HKCR:\CLSID\{450D8FBA-AD25-11D0-98A8-0800361B1103}\shellex\PropertySheetHandlers\{596AB062-B4D2-4215-9F74-E9109B0A8153}" -Force -ErrorAction SilentlyContinue
+            Remove-Item -Path "HKCR:\Directory\shellex\PropertySheetHandlers\{596AB062-B4D2-4215-9F74-E9109B0A8153}" -Force -ErrorAction SilentlyContinue
+            Remove-Item -Path "HKCR:\Drive\shellex\PropertySheetHandlers\{596AB062-B4D2-4215-9F74-E9109B0A8153}" -Force -ErrorAction SilentlyContinue
+            Remove-Item -Path "HKCR:\AllFilesystemObjects\shellex\ContextMenuHandlers\{596AB062-B4D2-4215-9F74-E9109B0A8153}" -Force -ErrorAction SilentlyContinue
+            Remove-Item -Path "HKCR:\CLSID\{450D8FBA-AD25-11D0-98A8-0800361B1103}\shellex\ContextMenuHandlers\{596AB062-B4D2-4215-9F74-E9109B0A8153}" -Force -ErrorAction SilentlyContinue
+            Remove-Item -Path "HKCR:\Directory\shellex\ContextMenuHandlers\{596AB062-B4D2-4215-9F74-E9109B0A8153}" -Force -ErrorAction SilentlyContinue
+            Remove-Item -Path "HKCR:\Drive\shellex\ContextMenuHandlers\{596AB062-B4D2-4215-9F74-E9109B0A8153}" -Force -ErrorAction SilentlyContinue
+            Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer" -Name "NoPreviousVersionsPage" -ErrorAction SilentlyContinue
+            Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" -Name "NoPreviousVersionsPage" -ErrorAction SilentlyContinue
+            Remove-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\PreviousVersions" -Name "DisableLocalPage" -ErrorAction SilentlyContinue
+            Remove-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\PreviousVersions" -Name "DisableLocalPage" -ErrorAction SilentlyContinue
+            Set-ItemProperty -Path $regPath -Name $regName -Value $regValue
             Stop-Process -n explorer
             Write-Host "Configuring Other Settings completed." -ForegroundColor Green
         }
