@@ -58,7 +58,7 @@ if (!($noGUI)) {
 <Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="WinMac Uninstaller Wizard" Height="600" Width="480" WindowStartupLocation="CenterScreen" Background="$backgroundColor" Icon="$iconFolderPath\wizard.ico">
+    Title="WinMac Uninstaller Wizard" Height="600" Width="500" WindowStartupLocation="CenterScreen" Background="$backgroundColor" Icon="$iconFolderPath\wizard.ico">
     <Window.Resources>
         <SolidColorBrush x:Key="BackgroundBrush" Color="$backgroundColor"/>
         <SolidColorBrush x:Key="ForegroundBrush" Color="$foregroundColor"/>
