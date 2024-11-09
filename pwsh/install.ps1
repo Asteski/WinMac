@@ -963,8 +963,8 @@ foreach ($app in $selectedApps) {
     # Windhawk
         "10" {
             Write-Host "Installing Windhawk..." -ForegroundColor Yellow
-            if (-not (Test-Path "$Env:ProgramData\Windhawk\ModsSource")) {New-Item -ItemType Directory -Path "$Env:ProgramData\Windhawk\ModsSource" -Force}# | Out-Null}
-            if (-not (Test-Path "$Env:ProgramData\Windhawk\Engine\Mods")) {New-Item -ItemType Directory -Path "$Env:ProgramData\Windhawk\Engine\Mods" -Force}# | Out-Null}
+            if (-not (Test-Path "$Env:ProgramData\Windhawk\ModsSource")) {New-Item -ItemType Directory -Path "$Env:ProgramData\Windhawk\ModsSource" -Force | Out-Null}
+            if (-not (Test-Path "$Env:ProgramData\Windhawk\Engine\Mods")) {New-Item -ItemType Directory -Path "$Env:ProgramData\Windhawk\Engine\Mods" -Force | Out-Null}
             Invoke-Output {Install-WinGetPackage -name Windhawk}
             Start-Sleep -Seconds 30
             Stop-Process -Name Windhawk -Force
