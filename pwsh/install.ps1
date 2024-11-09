@@ -577,22 +577,24 @@ foreach ($app in $selectedApps) {
                 }
             $vim = Get-WinGetPackage -Id Vim.Vim -ErrorAction SilentlyContinue
             if ($null -eq $vim) {
-                Invoke-Output {Install-WinGetPackage -Id "Vim.Vim"}
                 $vimVersion = (Find-WingetPackage Vim.Vim | Where-Object {$_.Id -notlike "*nightly*"}).Version
                 $vimVersion = ($vimVersion -split '\.')[0..1] -join '.'
                 $vimRegPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Vim $vimVersion"
                 if (-not (Test-Path $vimRegPath)) {New-Item -Path $vimRegPath -Force | Out-Null}
-                Set-ItemProperty -Path $vimRegPath -Name "vim_compat" -Value "all"
-                Set-ItemProperty -Path $vimRegPath -Name "vim_keyremap" -Value "default"
-                Set-ItemProperty -Path $vimRegPath -Name "vim_mouse" -Value "default"
-                Set-ItemProperty -Path $vimRegPath -Name "select_console" -Value 1
-                Set-ItemProperty -Path $vimRegPath -Name "select_batch" -Value 0
-                Set-ItemProperty -Path $vimRegPath -Name "select_desktop" -Value 1
                 Set-ItemProperty -Path $vimRegPath -Name "select_startmenu" -Value 0
                 Set-ItemProperty -Path $vimRegPath -Name "select_editwith" -Value 0
-                Set-ItemProperty -Path $vimRegPath -Name "select_vimrc" -Value 1
-                Set-ItemProperty -Path $vimRegPath -Name "select_pluginhome" -Value 1
-                Set-ItemProperty -Path $vimRegPath -Name "select_pluginvim" -Value 0
+                Invoke-Output {Install-WinGetPackage -Id "Vim.Vim"}
+                # Set-ItemProperty -Path $vimRegPath -Name "vim_compat" -Value "all"
+                # Set-ItemProperty -Path $vimRegPath -Name "vim_keyremap" -Value "default"
+                # Set-ItemProperty -Path $vimRegPath -Name "vim_mouse" -Value "default"
+                # Set-ItemProperty -Path $vimRegPath -Name "select_console" -Value 1
+                # Set-ItemProperty -Path $vimRegPath -Name "select_batch" -Value 0
+                # Set-ItemProperty -Path $vimRegPath -Name "select_desktop" -Value 1
+                # Set-ItemProperty -Path $vimRegPath -Name "select_startmenu" -Value 0
+                # Set-ItemProperty -Path $vimRegPath -Name "select_editwith" -Value 0
+                # Set-ItemProperty -Path $vimRegPath -Name "select_vimrc" -Value 1
+                # Set-ItemProperty -Path $vimRegPath -Name "select_pluginhome" -Value 1
+                # Set-ItemProperty -Path $vimRegPath -Name "select_pluginvim" -Value 0
             } else {
                 Write-Host "Vim is already installed." -ForegroundColor Green
             }
