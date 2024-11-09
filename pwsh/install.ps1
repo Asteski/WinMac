@@ -527,8 +527,8 @@ foreach ($app in $selectedApps) {
     # PowerToys
         "1" {
             Write-Host "Installing PowerToys..." -ForegroundColor Yellow
-            winget configure --enable
-            winget configure ..\config\powertoys.dsc.yaml --disable-interactivity --accept-source-agreements
+            winget configure --enable || Out-Null
+            winget configure ..\config\powertoys.dsc.yaml --disable-interactivity --accept-source-agreements | Out-Null
             Write-Host "PowerToys installation completed." -ForegroundColor Green
         }
     # Everything
@@ -604,6 +604,8 @@ foreach ($app in $selectedApps) {
             Invoke-Output { Move-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Destination $programsDir -Force }
             Invoke-Output { Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\gVim*" -Destination $programsDir -Force }
             Invoke-Output { Remove-Item -Path "Registry::HKEY_CLASSES_ROOT\*\shell\Edit with Vim" -Recurse -Force }
+            Invoke-Output { Remove-Item -Path "Registry::HKEY_CLASSES_ROOT\*\shellex\gvim" -Recurse -Force }
+            Invoke-Output { Remove-Item -Path "Registry::HKEY_CLASSES_ROOT\*\OpenWithList\gvim.exe" -Recurse -Force }
             Write-Host "PowerShell Profile configuration completed." -ForegroundColor Green
         }
     # StartAllBack
@@ -1035,6 +1037,9 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             $taskbarDevSettings = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
             if (-not (Test-Path $taskbarDevSettings)) { Invoke-Output {New-Item -Path $taskbarDevSettings -Force} }
             Invoke-Output {New-ItemProperty -Path $taskbarDevSettings -Name "TaskbarEndTask" -Value 1 -PropertyType DWORD -Force}
+            ## Windhawk explorer mods
+            Write-Host "Windhawk explorer mods..." -ForegroundColor Yellow
+            winget install RamenSoftware.Windhawk
             Stop-Process -n explorer
             Write-Host "Configuring Other Settings completed." -ForegroundColor Green
         }
