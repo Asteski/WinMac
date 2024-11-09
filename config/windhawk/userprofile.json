@@ -1,0 +1,21 @@
+{
+  "app": {
+    "latestVersion": "1.5.1",
+    "version": "1.5.1"
+  },
+  "id": "{2B0E40E6-C0FB-4791-97C8-4AD3C134FC63}",
+  "mods": {
+    "dot-hide": {
+      "latestVersion": "1.0.0",
+      "version": "1.0.0"
+    },
+    "explorer-details-better-file-sizes": {
+      "version": "1.4.2"
+    },
+    "explorer-name-windows": {
+      "version": "1.0",
+      "latestVersion": "1.0"
+    }
+  },
+  "os": "10.0.26100"
+}
