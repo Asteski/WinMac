@@ -603,6 +603,7 @@ foreach ($app in $selectedApps) {
             Invoke-Output { Move-Item -Path "C:\Users\Public\Desktop\gVim*" -Destination $programsDir -Force }
             Invoke-Output { Move-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Destination $programsDir -Force }
             Invoke-Output { Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\gVim*" -Destination $programsDir -Force }
+            Invoke-Output { Remove-Item -Path "Registry::HKEY_CLASSES_ROOT\*\shell\Edit with Vim" -Recurse -Force }
             Write-Host "PowerShell Profile configuration completed." -ForegroundColor Green
         }
     # StartAllBack
@@ -692,19 +693,19 @@ foreach ($app in $selectedApps) {
                         Write-Host "Installing .NET Desktop Runtime 8..." -ForegroundColor Yellow
                         Invoke-Output { Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8' }
                     } else {
-                        Write-Host ".NET Desktop Runtime 8 is already installed." -ForegroundColor Green
+                        Write-Host ".NET Desktop Runtime is already installed." -ForegroundColor Green
                     }
                     $uiXaml = Get-AppxPackage -Name Microsoft.UI.Xaml.2.7 -ErrorAction SilentlyContinue
                     if ($null -eq $uiXaml) {
-                        Write-Host "Microsoft.UI.Xaml.2.7 is not installed. Installing Microsoft.UI.Xaml.2.7..." -ForegroundColor Yellow
+                        Write-Host "Installing Microsoft.UI.Xaml 2.7..." -ForegroundColor Yellow
                         Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.7.3/Microsoft.UI.Xaml.2.7.x64.appx' -OutFile '..\temp\Microsoft.UI.Xaml.2.7.x64.appx'
                         Add-AppxPackage -Path '..\temp\Microsoft.UI.Xaml.2.7.x64.appx'
                     } else {
-                        Write-Host "Microsoft.UI.Xaml.2.7 is already installed." -ForegroundColor Green
+                        Write-Host "Microsoft.UI.Xaml is already installed." -ForegroundColor Green
                     }
                     $winverUWP = Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP -ErrorAction SilentlyContinue
                     if ($null -eq $winverUWP) {
-                        Write-Host "Installing WinverUWP..." -ForegroundColor Yellow
+                        Write-Host "Installing WinverUWP 2.1.4..." -ForegroundColor Yellow
                         Invoke-WebRequest -Uri 'https://github.com/dongle-the-gadget/WinverUWP/releases/download/v2.1.0.0/2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle' -OutFile '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
                         Add-AppxPackage -Path '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
                     } else {
