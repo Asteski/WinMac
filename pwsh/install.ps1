@@ -527,8 +527,8 @@ foreach ($app in $selectedApps) {
     # PowerToys
         "1" {
             Write-Host "Installing PowerToys..." -ForegroundColor Yellow
-            winget configure --enable | Out-Null
-            winget configure ..\config\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
+            winget configure --enable
+            winget configure ..\config\powertoys.dsc.yaml --accept-configuration-agreements
             Write-Host "PowerToys installation completed." -ForegroundColor Green
         }
     # Everything
@@ -1021,6 +1021,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
             #! Upgrade context menu
             Write-Host "Upgrading context menu..." -ForegroundColor Yellow
+            #! a moze odpalac reg files zamiast tego?
             if (-not (Test-Path $taskbarDevSettings)) { Invoke-Output {New-Item -Path $taskbarDevSettings -Force} }
             Invoke-Output {New-ItemProperty -Path $taskbarDevSettings -Name "TaskbarEndTask" -Value 1 -PropertyType DWORD -Force}
             $regPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked"
@@ -1040,7 +1041,13 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
                 if (Test-Path $key) {
                     Remove-Item -Path $key -Recurse -Force
                 }
-            }
+            }            
+            Remove-Item -Path "HKCR:\*\shellex\ContextMenuHandlers\Sharing" -Force -ErrorAction SilentlyContinue
+            Remove-Item -Path "HKCR:\Directory\Background\shellex\ContextMenuHandlers\Sharing" -Force -ErrorAction SilentlyContinue
+            Remove-Item -Path "HKCR:\Directory\shellex\ContextMenuHandlers\Sharing" -Force -ErrorAction SilentlyContinue
+            Remove-Item -Path "HKCR:\Drive\shellex\ContextMenuHandlers\Sharing" -Force -ErrorAction SilentlyContinue
+            Remove-Item -Path "HKCR:\LibraryFolder\background\shellex\ContextMenuHandlers\Sharing" -Force -ErrorAction SilentlyContinue
+            Remove-Item -Path "HKCR:\UserLibraryFolder\shellex\ContextMenuHandlers\Sharing" -Force -ErrorAction SilentlyContinue
             Remove-Item -Path "HKCR:\AllFilesystemObjects\shellex\PropertySheetHandlers\{596AB062-B4D2-4215-9F74-E9109B0A8153}" -Force -ErrorAction SilentlyContinue
             Remove-Item -Path "HKCR:\CLSID\{450D8FBA-AD25-11D0-98A8-0800361B1103}\shellex\PropertySheetHandlers\{596AB062-B4D2-4215-9F74-E9109B0A8153}" -Force -ErrorAction SilentlyContinue
             Remove-Item -Path "HKCR:\Directory\shellex\PropertySheetHandlers\{596AB062-B4D2-4215-9F74-E9109B0A8153}" -Force -ErrorAction SilentlyContinue
