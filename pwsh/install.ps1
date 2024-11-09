@@ -217,7 +217,7 @@ if (!($noGUI)) {
     $customInstall.Add_Checked({$componentSelection.IsEnabled = $true})
     $result = @{}
     $btnInstall.Add_Click({
-        if ($fullInstall.IsChecked) { $selection = "1","2","3","4","5","6","7","8","9","10" } 
+        if ($fullInstall.IsChecked) { $selection = "1","2","3","4","5","6","7","8","9","10","11" } 
         else {
             if ($chkPowerToys.IsChecked) { $selection += "1," }
             if ($chkEverything.IsChecked) { $selection += "2," }
@@ -302,12 +302,12 @@ https://github.com/Asteski/WinMac/wiki
     $fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom installation"
     if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
         Write-Host "Choosing full installation." -ForegroundColor Green
-        $selectedApps = "1","2","3","4","5","6","7","8","9","10"
+        $selectedApps = "1","2","3","4","5","6","7","8","9","10","11"
     } 
     elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
         Write-Host "Choosing custom installation." -ForegroundColor Green
         Start-Sleep 1
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Other"}
+        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Windhawk"; "11"="Other"}
 Write-Host @"
 
 `e[93m$("Please select options you want to install:")`e[0m
@@ -323,7 +323,8 @@ Write-Host @"
 7. Stahky
 8. Keyboard Shortcuts
 9. Nexus Dock
-10. Other Settings
+10. Windhawk
+11. Other Settings
 "@
     Write-Host
     do {
@@ -348,7 +349,7 @@ Write-Host @"
 else
 {
     Write-Host "Invalid input. Defaulting to full installation." -ForegroundColor Yellow
-    $selectedApps = "1","2","3","4","5","6","7","8","9","10"
+    $selectedApps = "1","2","3","4","5","6","7","8","9","10","11"
 }
 
 if ($selectedApps -like '*4*' -and $selectedApps -like '*5*') {
@@ -535,9 +536,12 @@ foreach ($app in $selectedApps) {
         "2" {
             Write-Host "Installing Everything..." -ForegroundColor Yellow
             Invoke-Output {Install-WinGetPackage -Id "Voidtools.Everything"}
+            Stop-Process -Name Everything.exe -ErrorAction SilentlyContinue
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Invoke-Output { Move-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Destination $programsDir -Force  }
             Invoke-Output { Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Destination $programsDir -Force }
+            $everythingIniPath = "$env:APPDATA\Everything\Everything.ini"
+            if (Test-Path $everythingIniPath) {(Get-Content $everythingIniPath) -replace 'index_folder_size=0', 'index_folder_size=1' | Set-Content $everythingIniPath -Force}
             Invoke-Output { Start-Process -FilePath Everything.exe -WorkingDirectory $env:PROGRAMFILES\Everything -WindowStyle Hidden }
             Write-Host "Everything installation completed." -ForegroundColor Green
         }
@@ -570,11 +574,30 @@ foreach ($app in $selectedApps) {
             Invoke-Output { 
                 if (-not (Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\WindowsPowerShell\$profileFile" } 
                 }
+            $vim = Get-WinGetPackage -Id Vim.Vim -ErrorAction SilentlyContinue
+            if ($null -eq $vim) {
+                $vimVersion = (Find-WingetPackage Vim.Vim | Where-Object {$_.Id -notlike "*nightly*"}).Version
+                $vimVersion = ($vimVersion -split '\.')[0..1] -join '.'
+                $vimRegPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Vim $vimVersion"
+                if (-not (Test-Path $vimRegPath)) {New-Item -Path $vimRegPath -Force | Out-Null}
+                Set-ItemProperty -Path $vimRegPath -Name "vim_compat" -Value "all"
+                Set-ItemProperty -Path $vimRegPath -Name "vim_keyremap" -Value "default"
+                Set-ItemProperty -Path $vimRegPath -Name "vim_mouse" -Value "default"
+                Set-ItemProperty -Path $vimRegPath -Name "select_console" -Value 1
+                Set-ItemProperty -Path $vimRegPath -Name "select_batch" -Value 0
+                Set-ItemProperty -Path $vimRegPath -Name "select_desktop" -Value 1
+                Set-ItemProperty -Path $vimRegPath -Name "select_startmenu" -Value 0
+                Set-ItemProperty -Path $vimRegPath -Name "select_editwith" -Value 0
+                Set-ItemProperty -Path $vimRegPath -Name "select_vimrc" -Value 1
+                Set-ItemProperty -Path $vimRegPath -Name "select_pluginhome" -Value 1
+                Set-ItemProperty -Path $vimRegPath -Name "select_pluginvim" -Value 0
+            } else {
+                Write-Host "Vim is already installed." -ForegroundColor Green
+            }
             $winget = @(
-                "Vim.Vim",
                 "gsass1.NTop"
                 )
-            if ($gitProfile -eq $true) { $winget += "Git.Git" }
+            if ($gitProfile -eq $true) { $winget += "Git.Git" }   
             foreach ($app in $winget) {
                 $package = Get-WinGetPackage -Id $app -ErrorAction SilentlyContinue
                 if ($null -eq $package) {
@@ -603,21 +626,6 @@ foreach ($app in $selectedApps) {
             Invoke-Output { Move-Item -Path "C:\Users\Public\Desktop\gVim*" -Destination $programsDir -Force }
             Invoke-Output { Move-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Destination $programsDir -Force }
             Invoke-Output { Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\gVim*" -Destination $programsDir -Force }
-            $vimRegPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Vim 8.2"
-            if (-not (Test-Path $vimRegPath)) {
-                New-Item -Path $vimRegPath -Force | Out-Null
-            }
-            Set-ItemProperty -Path $vimRegPath -Name "vim_compat" -Value "all"
-            Set-ItemProperty -Path $vimRegPath -Name "vim_keyremap" -Value "default"
-            Set-ItemProperty -Path $vimRegPath -Name "vim_mouse" -Value "default"
-            Set-ItemProperty -Path $vimRegPath -Name "select_console" -Value 1
-            Set-ItemProperty -Path $vimRegPath -Name "select_batch" -Value 0
-            Set-ItemProperty -Path $vimRegPath -Name "select_desktop" -Value 1
-            Set-ItemProperty -Path $vimRegPath -Name "select_startmenu" -Value 1
-            Set-ItemProperty -Path $vimRegPath -Name "select_editwith" -Value 0
-            Set-ItemProperty -Path $vimRegPath -Name "select_vimrc" -Value 1
-            Set-ItemProperty -Path $vimRegPath -Name "select_pluginhome" -Value 1
-            Set-ItemProperty -Path $vimRegPath -Name "select_pluginvim" -Value 0
             Write-Host "PowerShell Profile configuration completed." -ForegroundColor Green
         }
     # StartAllBack
@@ -950,8 +958,22 @@ foreach ($app in $selectedApps) {
                 Write-Host "Nexus Dock installation completed." -ForegroundColor Green
             }
         }
-    # Other
+    # Windhawk
         "10" {
+            Write-Host "Installing Windhawk..." -ForegroundColor Yellow
+            Install-WinGetPackage -name RamenSoftware.Windhawk
+            if (-not (Test-Path "$Env:ProgramData\Windhawk\Engine\Mods")) {New-Item -ItemType Directory -Path "$Env:ProgramData\Windhawk\Engine\Mods" -Force | Out-Null}
+            if (-not (Test-Path "$Env:ProgramData\Windhawk\ModsSource")) {New-Item -ItemType Directory -Path "$Env:ProgramData\Windhawk\ModsSource" -Force | Out-Null}
+            Stop-Process windhawk.exe -Force
+            Copy-Item ..\config\windhawk\Mods\* "$Env:ProgramData\Windhawk\Engine\Mods" -Force
+            Copy-Item ..\config\windhawk\ModsSource\* "$Env:ProgramData\Windhawk\ModsSource" -Force
+            reg import ..\config\windhawk\settings.reg > $null 2>&1
+            Start-Process -FilePath windhawk.exe -WorkingDirectory "$Env:ProgramFiles\Windhawk\"
+            Write-Host "Windhawk installation completed." -ForegroundColor Green
+            
+        }
+    # Other
+        "11" {
         ## Black Cursor
             Write-Host "Configuring Other Settings..." -ForegroundColor Yellow
             Write-Host "Black cursor..." -ForegroundColor Yellow
@@ -1051,8 +1073,6 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             if (-not (Test-Path $taskbarDevSettings)) { Invoke-Output {New-Item -Path $taskbarDevSettings -Force} }
             Invoke-Output {New-ItemProperty -Path $taskbarDevSettings -Name "TaskbarEndTask" -Value 1 -PropertyType DWORD -Force}
             ## Windhawk explorer mods
-            Write-Host "Windhawk explorer mods..." -ForegroundColor Yellow
-            winget install RamenSoftware.Windhawk
             Stop-Process -n explorer
             Write-Host "Configuring Other Settings completed." -ForegroundColor Green
         }

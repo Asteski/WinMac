@@ -178,7 +178,7 @@ if (!($noGUI)) {
     $customUninstall.Add_Checked({$componentSelection.IsEnabled = $true})
     $result = @{}
     $btnUninstall.Add_Click({
-        if ($fullUninstall.IsChecked) { $selection = "1","2","3","4","5","6","7","8","9","10" } 
+        if ($fullUninstall.IsChecked) { $selection = "1","2","3","4","5","6","7","8","9","10","11" } 
         else {
             if ($chkPowerToys.IsChecked) { $selection += "1," }
             if ($chkEverything.IsChecked) { $selection += "2," }
@@ -191,7 +191,7 @@ if (!($noGUI)) {
             if ($chkNexusDock.IsChecked) { $selection += "9," }
             if ($chkOther.IsChecked) { $selection += "10" }
         }
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Other Settings"}
+        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Windhawk"; "11"="Other Settings"}
         $result["selectedApps"] = $selection.Split(',').TrimEnd(',')
         $selectedAppNames = @()
         foreach ($appNumber in $selection) {
@@ -256,13 +256,13 @@ https://github.com/Asteski/WinMac/wiki
     # WinMac configuration
     $fullOrCustom = Read-Host "`nEnter 'F' for full or 'C' for custom uninstallation"
     if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
-        $selectedApps = "1","2","3","4","5","6","7","8","9","10"
+        $selectedApps = "1","2","3","4","5","6","7","8","9","10","11"
         Write-Host "Choosing full uninstallation." -ForegroundColor Yellow
     }
     elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
         Write-Host "Choosing custom uninstallation." -ForegroundColor Yellow
         Start-Sleep 1
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Other"}
+        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Windhawk"; "11"="Other"}
 Write-Host @"
 
 `e[93m$("Please select options you want to uninstall:")`e[0m
@@ -277,7 +277,8 @@ Write-Host @"
         Write-Host "7. Stahky"
         Write-Host "8. Keyboard Shortcuts"
         Write-Host "9. Nexus Dock"
-        Write-Host "10. Other Settings"
+        Write-Host "10. Windhawk"
+        Write-Host "11. Other Settings"
         Write-Host
         do {
             $selection = Read-Host "Enter the numbers of options you want to uninstall (separated by commas)"
@@ -308,7 +309,7 @@ Write-Host @"
     }
     else
     {
-        $selectedApps = "1","2","3","4","5","6","7","8","9","10"
+        $selectedApps = "1","2","3","4","5","6","7","8","9","10","11"
         Write-Host "Invalid input. Defaulting to full uninstallation." -ForegroundColor Yellow
     }
     Start-Sleep 1
@@ -532,6 +533,7 @@ uint fWinIni);
             Invoke-Output { Remove-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" }
             Invoke-Output { Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings" -Recurse }
             Invoke-Output { Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarSmallIcons" }
+            Get-ChildItem ..\config\contextmenu\add\* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
             Stop-Process -Name explorer -Force
             Write-Host "Uninstalling Other Settings completed." -ForegroundColor Green
         }
