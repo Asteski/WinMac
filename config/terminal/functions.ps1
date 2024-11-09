@@ -53,9 +53,9 @@ set-alias -name find -value ffind
 set-alias -name fi -value ffind
 set-alias -name ss -value Select-String
 set-alias -name alias -value Set-Alias
+set-alias -name df -value Get-Volume
 
 # Functions
-function df { get-volume $args }
 function sed($file, $find, $replace) {
     (Get-Content $file).replace("$find", $replace) | Set-Content $file
 }
