@@ -2,7 +2,7 @@ param (
     [switch]$noGUI,
     [switch]$debug
 )
-$version = "0.6.2"
+$version = "0.6.3"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_install_log_$date.txt"
 $transcriptFile = "WinMac_install_transcript_$date.txt"
@@ -125,8 +125,9 @@ if (!($noGUI)) {
                         <CheckBox x:Name="chkStahky" Content="Stahky" IsChecked="True" Grid.Row="3" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkKeyboardShortcuts" Content="Keyboard Shortcuts" IsChecked="True" Grid.Row="3" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkNexusDock" Content="Nexus Dock" IsChecked="True" Grid.Row="4" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="chkGitProfile" Content="Git Profile" IsChecked="True" Grid.Row="4" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="chkOther" Content="Other" IsChecked="True" Grid.Row="5" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkWindhawk" Content="Windhawk" IsChecked="True" Grid.Row="4" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkGitProfile" Content="Git Profile" IsChecked="True" Grid.Row="5" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkOther" Content="Other" IsChecked="True" Grid.Row="5" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                     </Grid>
                 </GroupBox>
 
@@ -205,6 +206,7 @@ if (!($noGUI)) {
     $chkStahky = $window.FindName("chkStahky")
     $chkKeyboardShortcuts = $window.FindName("chkKeyboardShortcuts")
     $chkNexusDock = $window.FindName("chkNexusDock")
+    $chkWindhawk = $window.FindName("chkWindhawk")
     $chkGitProfile = $window.FindName("chkGitProfile")
     $chkOther = $window.FindName("chkOther")
     $startMenu = $window.FindName("startMenuWinMac")
@@ -217,7 +219,7 @@ if (!($noGUI)) {
     $customInstall.Add_Checked({$componentSelection.IsEnabled = $true})
     $result = @{}
     $btnInstall.Add_Click({
-        if ($fullInstall.IsChecked) { $selection = "1","2","3","4","5","6","7","8","9","10" } 
+        if ($fullInstall.IsChecked) { $selection = "1","2","3","4","5","6","7","8","9","10","11" } 
         else {
             if ($chkPowerToys.IsChecked) { $selection += "1," }
             if ($chkEverything.IsChecked) { $selection += "2," }
@@ -228,9 +230,10 @@ if (!($noGUI)) {
             if ($chkStahky.IsChecked) { $selection += "7," }
             if ($chkKeyboardShortcuts.IsChecked) { $selection += "8," }
             if ($chkNexusDock.IsChecked) { $selection += "9," }
-            if ($chkOther.IsChecked) { $selection += "10" }
+            if ($chkWindhawk.IsChecked) { $selection += "10," }
+            if ($chkOther.IsChecked) { $selection += "11" }
         }
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Other Settings"}
+        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Windhawk"; "11"="Other Settings"}
         $result["selectedApps"] = $selection.Split(',').TrimEnd(',')
         $selectedAppNames = @()
         foreach ($appNumber in $selection) {
@@ -302,12 +305,12 @@ https://github.com/Asteski/WinMac/wiki
     $fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom installation"
     if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
         Write-Host "Choosing full installation." -ForegroundColor Green
-        $selectedApps = "1","2","3","4","5","6","7","8","9","10"
+        $selectedApps = "1","2","3","4","5","6","7","8","9","10","11"
     } 
     elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
         Write-Host "Choosing custom installation." -ForegroundColor Green
         Start-Sleep 1
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Other"}
+        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Windhawk"; "11"="Other"}
 Write-Host @"
 
 `e[93m$("Please select options you want to install:")`e[0m
@@ -323,16 +326,17 @@ Write-Host @"
 7. Stahky
 8. Keyboard Shortcuts
 9. Nexus Dock
-10. Other Settings
+10. Windhawk
+11. Other Settings
 "@
     Write-Host
     do {
         $selection = Read-Host "Enter the numbers of options you want to install (separated by commas)"
         $selection = $selection.Trim()
         $selection = $selection -replace '\s*,\s*', ','
-        $valid = $selection -match '^([1-9]|10)(,([1-9]|10))*$'
+        $valid = $selection -match '^([1-9]|10|11)(,([1-9]|10|11))*$'
         if (!$valid) {
-            Write-Host "`e[91mInvalid input! Please enter numbers between 1 and 10, separated by commas.`e[0m`n"
+            Write-Host "`e[91mInvalid input! Please enter numbers between 1 and 11, separated by commas.`e[0m`n"
         }
     } while ([string]::IsNullOrWhiteSpace($selection) -or !$valid)
     $selectedApps = @()
@@ -348,7 +352,7 @@ Write-Host @"
 else
 {
     Write-Host "Invalid input. Defaulting to full installation." -ForegroundColor Yellow
-    $selectedApps = "1","2","3","4","5","6","7","8","9","10"
+    $selectedApps = "1","2","3","4","5","6","7","8","9","10","11"
 }
 
 if ($selectedApps -like '*4*' -and $selectedApps -like '*5*') {
@@ -483,7 +487,7 @@ for ($a=3; $a -ge 0; $a--) {
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
 Start-Transcript -Path ../logs/$transcriptFile -Append | Out-Null
 # Nuget check
-Write-Host "Checking for Package Provider (Nuget)" -ForegroundColor Yellow
+Write-Host "Checking Package Provider (Nuget)" -ForegroundColor Yellow
 $nugetProvider = Get-PackageProvider -Name NuGet
 if ($null -eq $nugetProvider) {
     Write-Host "NuGet is not installed. Installing NuGet..." -ForegroundColor Yellow
@@ -493,7 +497,7 @@ if ($null -eq $nugetProvider) {
     Write-Host "NuGet is already installed." -ForegroundColor Green
 }
 # Winget check
-Write-Host "Checking for Package Manager (Winget)" -ForegroundColor Yellow
+Write-Host "Checking Package Manager (Winget)" -ForegroundColor Yellow
 $wingetCliCheck = winget -v
 if ($null -eq $wingetCliCheck) {
     $progressPreference = 'silentlyContinue'
@@ -527,17 +531,21 @@ foreach ($app in $selectedApps) {
     # PowerToys
         "1" {
             Write-Host "Installing PowerToys..." -ForegroundColor Yellow
-            winget configure --enable
-            winget configure ..\config\powertoys.dsc.yaml --accept-configuration-agreements
+            winget configure --enable || Out-Null
+            winget configure ..\config\powertoys.dsc.yaml --accept-source-agreements | Out-Null
             Write-Host "PowerToys installation completed." -ForegroundColor Green
         }
     # Everything
         "2" {
             Write-Host "Installing Everything..." -ForegroundColor Yellow
             Invoke-Output {Install-WinGetPackage -Id "Voidtools.Everything"}
+            Stop-Process -Name Everything.exe -ErrorAction SilentlyContinue
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Invoke-Output { Move-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Destination $programsDir -Force  }
             Invoke-Output { Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Destination $programsDir -Force }
+            $everythingIniPath = "$env:APPDATA\Everything"
+            if (-not (Test-Path -Path $everythingIniPath)) {New-Item -ItemType Directory -Path $everythingIniPath -Force | Out-Null}
+            Copy-Item -Path "..\config\Everything.ini" -Destination $everythingIniPath -Force
             Invoke-Output { Start-Process -FilePath Everything.exe -WorkingDirectory $env:PROGRAMFILES\Everything -WindowStyle Hidden }
             Write-Host "Everything installation completed." -ForegroundColor Green
         }
@@ -570,11 +578,22 @@ foreach ($app in $selectedApps) {
             Invoke-Output { 
                 if (-not (Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\WindowsPowerShell\$profileFile" } 
                 }
+            $vim = Get-WinGetPackage -Id Vim.Vim -ErrorAction SilentlyContinue
+            if ($null -eq $vim) {
+                $vimVersion = (Find-WingetPackage Vim.Vim | Where-Object {$_.Id -notlike "*nightly*"}).Version
+                $vimVersion = ($vimVersion -split '\.')[0..1] -join '.'
+                $vimRegPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Vim $vimVersion"
+                if (-not (Test-Path $vimRegPath)) {New-Item -Path $vimRegPath -Force | Out-Null}
+                Set-ItemProperty -Path $vimRegPath -Name "select_startmenu" -Value 0
+                Set-ItemProperty -Path $vimRegPath -Name "select_editwith" -Value 0
+                Invoke-Output {Install-WinGetPackage -Id "Vim.Vim"}
+            } else {
+                Write-Host "Vim is already installed." -ForegroundColor Green
+            }
             $winget = @(
-                "Vim.Vim",
                 "gsass1.NTop"
                 )
-            if ($gitProfile -eq $true) { $winget += "Git.Git" }
+            if ($gitProfile -eq $true) { $winget += "Git.Git" }   
             foreach ($app in $winget) {
                 $package = Get-WinGetPackage -Id $app -ErrorAction SilentlyContinue
                 if ($null -eq $package) {
@@ -692,11 +711,19 @@ foreach ($app in $selectedApps) {
                         Write-Host "Installing .NET Desktop Runtime 8..." -ForegroundColor Yellow
                         Invoke-Output { Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8' }
                     } else {
-                        Write-Host ".NET Desktop Runtime 8 is already installed." -ForegroundColor Green
+                        Write-Host ".NET Desktop Runtime is already installed." -ForegroundColor Green
+                    }
+                    $uiXaml = Get-AppxPackage -Name Microsoft.UI.Xaml.2.7 -ErrorAction SilentlyContinue
+                    if ($null -eq $uiXaml) {
+                        Write-Host "Installing Microsoft.UI.Xaml 2.7..." -ForegroundColor Yellow
+                        Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.7.3/Microsoft.UI.Xaml.2.7.x64.appx' -OutFile '..\temp\Microsoft.UI.Xaml.2.7.x64.appx'
+                        Add-AppxPackage -Path '..\temp\Microsoft.UI.Xaml.2.7.x64.appx'
+                    } else {
+                        Write-Host "Microsoft.UI.Xaml is already installed." -ForegroundColor Green
                     }
                     $winverUWP = Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP -ErrorAction SilentlyContinue
                     if ($null -eq $winverUWP) {
-                        Write-Host "Installing WinverUWP..." -ForegroundColor Yellow
+                        Write-Host "Installing WinverUWP 2.1.4..." -ForegroundColor Yellow
                         Invoke-WebRequest -Uri 'https://github.com/dongle-the-gadget/WinverUWP/releases/download/v2.1.0.0/2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle' -OutFile '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
                         Add-AppxPackage -Path '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
                     } else {
@@ -773,7 +800,7 @@ foreach ($app in $selectedApps) {
     # Stahky
         "7" {
             Write-Host "Installing Stahky..." -ForegroundColor Yellow
-            $url = "https://github.com/joedf/stahky/releases/download/v0.1.0.8/stahky_U64_v0.1.0.8.zip"
+            $url = "https://github.com/joedf/stahky/releases/download/v0.1.0.9/stahky_U64_v0.1.0.9.zip"
             $outputPath = "..\stahky_U64.zip"
             $exePath = "$env:LOCALAPPDATA\Stahky"
             Invoke-Output {New-Item -ItemType Directory -Path $exePath -Force}
@@ -792,7 +819,8 @@ foreach ($app in $selectedApps) {
                 $pathVarUser += ";$exePath"
                 [Environment]::SetEnvironmentVariable("Path", $pathVarUser, "User")
             }
-            if (-not ($pathVarMachine -like "* $exePath*")) {
+                        # Assuming $job contains a job ID or job object
+            $job | Get-Jobif (-not ($pathVarMachine -like "* $exePath*")) {
                 $pathVarMachine += "; $exePath"
                 [Environment]::SetEnvironmentVariable("Path", $pathVarMachine, "Machine")
             }
@@ -926,8 +954,24 @@ foreach ($app in $selectedApps) {
                 Write-Host "Nexus Dock installation completed." -ForegroundColor Green
             }
         }
-    # Other
+    # Windhawk
         "10" {
+            Write-Host "Installing Windhawk..." -ForegroundColor Yellow
+            if (-not (Test-Path "$Env:ProgramData\Windhawk\ModsSource")) {New-Item -ItemType Directory -Path "$Env:ProgramData\Windhawk\ModsSource" -Force | Out-Null}
+            if (-not (Test-Path "$Env:ProgramData\Windhawk\Engine\Mods")) {New-Item -ItemType Directory -Path "$Env:ProgramData\Windhawk\Engine\Mods" -Force | Out-Null}
+            Invoke-Output {Install-WinGetPackage -name Windhawk}
+            # Start-Sleep -Seconds 30
+            Stop-Process -Name Windhawk -Force
+            Copy-Item ..\config\windhawk\Mods\* "$Env:ProgramData\Windhawk\Engine\Mods" -Recurse -Force
+            Copy-Item ..\config\windhawk\ModsSource\* "$Env:ProgramData\Windhawk\ModsSource" -Recurse -Force
+            reg import ..\config\windhawk\settings.reg > $null 2>&1
+            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+            Move-Item -Path "C:\Users\Public\Desktop\Windhawk.lnk" -Destination $programsDir -Force
+            Start-Process "$Env:ProgramFiles\Windhawk\Windhawk.exe"
+            Write-Host "Windhawk installation completed." -ForegroundColor Green   
+        }
+    # Other
+        "11" {
         ## Black Cursor
             Write-Host "Configuring Other Settings..." -ForegroundColor Yellow
             Write-Host "Black cursor..." -ForegroundColor Yellow
@@ -967,7 +1011,7 @@ uint fWinIni);
 '@
             $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
             Invoke-Output {$CursorRefresh::SystemParametersInfo(0x0057,0,$null,0)}
-        ## Pin Home, Programs and Recycle Bin to Quick Access
+            ## Pin Home, Programs and Recycle Bin to Quick Access
             write-host "Pinning Home, Programs and Recycle Bin to Quick Access..." -ForegroundColor Yellow
 $homeIni = @"
 [.ShellClassInfo]
@@ -985,7 +1029,7 @@ IconResource=C:\Windows\System32\SHELL32.dll,160
             $homePin = new-object -com shell.application
             if (-not ($homePin.Namespace($homeDir).Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
                 $homePin.Namespace($homeDir).Self.InvokeVerb("pintohome") 
-            }
+            } 
 $programsIni = @"
 [.ShellClassInfo]
 IconResource=C:\WINDOWS\System32\imageres.dll,187
@@ -1014,17 +1058,19 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
                 $recycleBin.Self.InvokeVerb("PinToHome") 
             }
             Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse 
-        ## Remove Shortcut Arrows
+            ## Remove shortcut arrows
             Write-Host "Removing shortcut arrows..." -ForegroundColor Yellow
             Copy-Item -Path "..\config\blank.ico" -Destination "C:\Windows" -Force
             Invoke-Output {New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Force}
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
-        ## Misc
-            Write-Host "Adding End Task to context menu..." -ForegroundColor Yellow
+            ## Cleaning up context menus
+            Write-Host "Cleaning up context menus..." -ForegroundColor Yellow
+            Get-ChildItem ..\config\contextmenu\remove\* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
             $taskbarDevSettings = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
             if (-not (Test-Path $taskbarDevSettings)) { Invoke-Output {New-Item -Path $taskbarDevSettings -Force} }
             Invoke-Output {New-ItemProperty -Path $taskbarDevSettings -Name "TaskbarEndTask" -Value 1 -PropertyType DWORD -Force}
+            ## Windhawk explorer mods
             Stop-Process -n explorer
             Write-Host "Configuring Other Settings completed." -ForegroundColor Green
         }

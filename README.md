@@ -53,6 +53,8 @@ StartAllBack extends its enhancements beyond the Taskbar to the Windows Explorer
 
 Utility introduces features such as ribbons, tabs, customizable toolbar buttons, enhanced file previews, and improved navigation options. With StartAllBack and PowerToys, you can personalize your Explorer interface to better suit your workflow and access files and folders more efficiently.
 
+Windhawk introduces explorer mods, that enables to see folder size, hide dot files and folders, and set custom name for explorer windows.
+
 Additionally, deployment script includes pinning User folder, Start Menu Programs folder and Recycle Bin to Quick Access.
 
 - **Stacks Context Menus**
@@ -102,6 +104,7 @@ List of utilities and their creators used in WinMac:
 - [AutoHotkey](https://www.autohotkey.com/) by AutoHotkey Foundation
 - [Nexus](https://www.winstep.net/nexus.asp) by Winstep
 - [NewModernWinver](https://github.com/torchgm/NewModernWinver) by torchgm
+- [Windhawk](https://github.com/ramensoftware/windhawk) by Ramen Software
 - [PSTree](https://github.com/santisq/PSTree) by santisq
 - [ntop](https://github.com/gsass1/NTop) by gsass1
 

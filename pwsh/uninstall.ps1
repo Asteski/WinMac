@@ -2,7 +2,7 @@ param (
     [switch]$noGUI,
     [switch]$debug
 )
-$version = "0.6.2"
+$version = "0.6.3"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_uninstall_log_$date.txt"
 $transcriptFile = "WinMac_uninstall_transcript_$date.txt"
@@ -58,7 +58,7 @@ if (!($noGUI)) {
 <Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="WinMac Uninstaller Wizard" Height="600" Width="480" WindowStartupLocation="CenterScreen" Background="$backgroundColor" Icon="$iconFolderPath\wizard.ico">
+    Title="WinMac Uninstaller Wizard" Height="640" Width="480" WindowStartupLocation="CenterScreen" Background="$backgroundColor" Icon="$iconFolderPath\wizard.ico">
     <Window.Resources>
         <SolidColorBrush x:Key="BackgroundBrush" Color="$backgroundColor"/>
         <SolidColorBrush x:Key="ForegroundBrush" Color="$foregroundColor"/>
@@ -113,6 +113,7 @@ if (!($noGUI)) {
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
                         <CheckBox x:Name="chkPowerToys" Content="PowerToys" IsChecked="True" Grid.Row="0" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
@@ -124,7 +125,8 @@ if (!($noGUI)) {
                         <CheckBox x:Name="chkStahky" Content="Stahky" IsChecked="True" Grid.Row="3" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkKeyboardShortcuts" Content="Keyboard Shortcuts" IsChecked="True" Grid.Row="3" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkNexusDock" Content="Nexus Dock" IsChecked="True" Grid.Row="4" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="chkOther" Content="Other" IsChecked="True" Grid.Row="4" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkWindhawk" Content="Windhawk" IsChecked="True" Grid.Row="4" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkOther" Content="Other" IsChecked="True" Grid.Row="5" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                     </Grid>
                 </GroupBox>
 
@@ -171,6 +173,7 @@ if (!($noGUI)) {
     $chkStahky = $window.FindName("chkStahky")
     $chkKeyboardShortcuts = $window.FindName("chkKeyboardShortcuts")
     $chkNexusDock = $window.FindName("chkNexusDock")
+    $chkWindhawk = $window.FindName("chkWindhawk")
     $chkOther = $window.FindName("chkOther")
     $btnUninstall = $window.FindName("btnUninstall")
     $btnCancel = $window.FindName("btnCancel")
@@ -178,7 +181,7 @@ if (!($noGUI)) {
     $customUninstall.Add_Checked({$componentSelection.IsEnabled = $true})
     $result = @{}
     $btnUninstall.Add_Click({
-        if ($fullUninstall.IsChecked) { $selection = "1","2","3","4","5","6","7","8","9","10" } 
+        if ($fullUninstall.IsChecked) { $selection = "1","2","3","4","5","6","7","8","9","10","11" } 
         else {
             if ($chkPowerToys.IsChecked) { $selection += "1," }
             if ($chkEverything.IsChecked) { $selection += "2," }
@@ -189,9 +192,10 @@ if (!($noGUI)) {
             if ($chkStahky.IsChecked) { $selection += "7," }
             if ($chkKeyboardShortcuts.IsChecked) { $selection += "8," }
             if ($chkNexusDock.IsChecked) { $selection += "9," }
-            if ($chkOther.IsChecked) { $selection += "10" }
+            if ($chkWindhawk.IsChecked) { $selection += "10," }
+            if ($chkOther.IsChecked) { $selection += "11" }
         }
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Other Settings"}
+        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Windhawk"; "11"="Other Settings"}
         $result["selectedApps"] = $selection.Split(',').TrimEnd(',')
         $selectedAppNames = @()
         foreach ($appNumber in $selection) {
@@ -256,13 +260,13 @@ https://github.com/Asteski/WinMac/wiki
     # WinMac configuration
     $fullOrCustom = Read-Host "`nEnter 'F' for full or 'C' for custom uninstallation"
     if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
-        $selectedApps = "1","2","3","4","5","6","7","8","9","10"
+        $selectedApps = "1","2","3","4","5","6","7","8","9","10","11"
         Write-Host "Choosing full uninstallation." -ForegroundColor Yellow
     }
     elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
         Write-Host "Choosing custom uninstallation." -ForegroundColor Yellow
         Start-Sleep 1
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Other"}
+        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Windhawk"; "11"="Other"}
 Write-Host @"
 
 `e[93m$("Please select options you want to uninstall:")`e[0m
@@ -277,13 +281,14 @@ Write-Host @"
         Write-Host "7. Stahky"
         Write-Host "8. Keyboard Shortcuts"
         Write-Host "9. Nexus Dock"
-        Write-Host "10. Other Settings"
+        Write-Host "10. Windhawk"
+        Write-Host "11. Other Settings"
         Write-Host
         do {
             $selection = Read-Host "Enter the numbers of options you want to uninstall (separated by commas)"
             $selection = $selection.Trim()
             $selection = $selection -replace '\s*,\s*', ','
-            $valid = $selection -match '^([1-9]|10)(,([1-9]|10))*$'
+            $valid = $selection -match '^([1-9]|10|11)(,([1-9]|10|11))*$'
             if (!$valid) {
                 Write-Host "`e[91mInvalid input! Please enter numbers between 1 and 10, separated by commas.`e[0m`n"
             }
@@ -308,7 +313,7 @@ Write-Host @"
     }
     else
     {
-        $selectedApps = "1","2","3","4","5","6","7","8","9","10"
+        $selectedApps = "1","2","3","4","5","6","7","8","9","10","11"
         Write-Host "Invalid input. Defaulting to full uninstallation." -ForegroundColor Yellow
     }
     Start-Sleep 1
@@ -332,7 +337,7 @@ for ($a=3; $a -ge 0; $a--) {
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
 Start-Transcript -Path ../logs/$transcriptFile -Append | Out-Null
 # Nuget check
-Write-Host "Checking for Package Provider (Nuget)" -ForegroundColor Yellow
+Write-Host "Checking Package Provider (Nuget)" -ForegroundColor Yellow
 $nugetProvider = Get-PackageProvider -Name NuGet
 if ($null -eq $nugetProvider) {
     Write-Host "NuGet is not installed. Installing NuGet..." -ForegroundColor Yellow
@@ -342,7 +347,7 @@ if ($null -eq $nugetProvider) {
     Write-Host "NuGet is already installed." -ForegroundColor Green
 }
 # Winget check
-Write-Host "Checking for Package Manager (Winget)" -ForegroundColor Yellow
+Write-Host "Checking Package Manager (Winget)" -ForegroundColor Yellow
 $wingetCliCheck = winget -v
 if ($null -eq $wingetCliCheck) {
     $progressPreference = 'silentlyContinue'
@@ -469,8 +474,15 @@ foreach ($app in $selectedApps) {
             Remove-Item -Path "$programsDir\Nexus.lnk" -Force
             Write-Host "Uninstalling Nexus Dock completed." -ForegroundColor Green
         }
-    # Other
+    # Windhawk
         "10" {
+            Write-Host "Uninstalling Windhawk..." -ForegroundColor Yellow
+            Stop-Process -name windhawk -force
+            Invoke-Output {Uninstall-WinGetPackage -name Windhawk}
+            Write-Host "Uninstalling Windhawk completed." -ForegroundColor Green
+        }
+    # Other
+        "11" {
             Write-Host "Uninstalling Other Settings..." -ForegroundColor Yellow
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 0
@@ -532,6 +544,7 @@ uint fWinIni);
             Invoke-Output { Remove-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" }
             Invoke-Output { Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings" -Recurse }
             Invoke-Output { Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarSmallIcons" }
+            Get-ChildItem ..\config\contextmenu\add\* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
             Stop-Process -Name explorer -Force
             Write-Host "Uninstalling Other Settings completed." -ForegroundColor Green
         }
