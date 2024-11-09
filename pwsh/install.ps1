@@ -331,7 +331,7 @@ Write-Host @"
         $selection = Read-Host "Enter the numbers of options you want to install (separated by commas)"
         $selection = $selection.Trim()
         $selection = $selection -replace '\s*,\s*', ','
-        $valid = $selection -match '^([1-9]|10)(,([1-9]|10))*$'
+        $valid = $selection -match '^([1-9]|11)(,([1-9]|11))*$'
         if (!$valid) {
             Write-Host "`e[91mInvalid input! Please enter numbers between 1 and 10, separated by commas.`e[0m`n"
         }
