@@ -3,9 +3,7 @@
 **WinMac** is a revolutionary customization project that brings together the best of both Windows and macOS operating systems, offering users a unique and seamless computing experience.
 
 ## Dark
-<details>
-    <summary>Image 1</summary>
-    <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_01.png" alt="winmac_dark_01">
+![winmac_dark_01](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_01.png)
 </details>
 <details>
     <summary>Image 2</summary>
@@ -21,9 +19,8 @@
 </details>
 
 ## Light
-<details>
-    <summary>Image 1</summary>
-    <img src="!https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_01.jpg" alt="winmac_light_01">
+
+![winmac_light_01](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_01.jpg)
 </details>
 <details>
     <summary>Image 2</summary>
@@ -37,6 +34,8 @@
     <summary>Image 4</summary>
     <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_04.png" alt="winmac_light_04">
 </details>
+
+
 
 ## Features
 
