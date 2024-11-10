@@ -957,13 +957,22 @@ foreach ($app in $selectedApps) {
     # Windhawk
         "10" {
             Write-Host "Installing Windhawk..." -ForegroundColor Yellow
+            Invoke-Output {Install-WinGetPackage -name Windhawk}
             if (-not (Test-Path "$Env:ProgramData\Windhawk\ModsSource")) {New-Item -ItemType Directory -Path "$Env:ProgramData\Windhawk\ModsSource" -Force | Out-Null}
             if (-not (Test-Path "$Env:ProgramData\Windhawk\Engine\Mods")) {New-Item -ItemType Directory -Path "$Env:ProgramData\Windhawk\Engine\Mods" -Force | Out-Null}
-            Invoke-Output {Install-WinGetPackage -name Windhawk}
-            # Start-Sleep -Seconds 30
             Stop-Process -Name Windhawk -Force
             Copy-Item ..\config\windhawk\Mods\* "$Env:ProgramData\Windhawk\Engine\Mods" -Recurse -Force
-            Copy-Item ..\config\windhawk\ModsSource\* "$Env:ProgramData\Windhawk\ModsSource" -Recurse -Force
+            $urls = @(
+                "https://raw.githubusercontent.com/m417z/my-windhawk-mods/main/mods/explorer-details-better-file-sizes.wh.cpp",
+                "https://raw.githubusercontent.com/m417z/my-windhawk-mods/main/mods/explorer-name-windows.wh.cpp",
+                "https://raw.githubusercontent.com/realgam3/dot-hide-wh/main/dot-hide.wh.cpp"
+            )
+            $destinationPath = "$Env:ProgramData\Windhawk\ModsSource"
+            foreach ($url in $urls) {
+                $fileName = [System.IO.Path]::GetFileName($url)
+                $outputPath = Join-Path -Path $destinationPath -ChildPath $fileName
+                Invoke-WebRequest -Uri $url -OutFile $outputPath
+            }
             reg import ..\config\windhawk\settings.reg > $null 2>&1
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Move-Item -Path "C:\Users\Public\Desktop\Windhawk.lnk" -Destination $programsDir -Force
