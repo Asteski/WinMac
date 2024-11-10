@@ -3,25 +3,40 @@
 **WinMac** is a revolutionary customization project that brings together the best of both Windows and macOS operating systems, offering users a unique and seamless computing experience.
 
 ## Dark
-
-![winmac_dark_01](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_01.png)
-
-![winmac_dark_02](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_02.png)
-
-![winmac_dark_03](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_03.png)
-
-![winmac_dark_04](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_04.png)
+<details>
+    <summary>Image 1</summary>
+    <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_01.png" alt="winmac_dark_01">
+</details>
+<details>
+    <summary>Image 2</summary>
+    <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_02.png" alt="winmac_dark_02">
+</details>
+<details>
+    <summary>Image 3</summary>
+    <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_03.png" alt="winmac_dark_03">
+</details>
+<details>
+    <summary>Image 4</summary>
+    <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_04.png" alt="winmac_dark_04">
+</details>
 
 ## Light
-
-![winmac_light_01](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_01.jpg)
-
-![winmac_light_02](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_02.png)
-
-![winmac_light_03](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_03.png)
-
-![winmac_light_04](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_04.png)
-
+<details>
+    <summary>Image 1</summary>
+    <img src="!https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_01.jpg" alt="winmac_light_01">
+</details>
+<details>
+    <summary>Image 2</summary>
+    <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_02.png" alt="winmac_light_02">
+</details>
+<details>
+    <summary>Image 3</summary>
+    <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_03.png" alt="winmac_light_03">
+</details>
+<details>
+    <summary>Image 4</summary>
+    <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_04.png" alt="winmac_light_04">
+</details>
 
 ## Features
 
