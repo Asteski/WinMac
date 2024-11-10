@@ -1075,11 +1075,11 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             ## Cleaning up context menus
             Write-Host "Cleaning up context menus..." -ForegroundColor Yellow
             Get-ChildItem ..\config\contextmenu\remove\* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
+            ## End Task
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
             $taskbarDevSettings = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
             if (-not (Test-Path $taskbarDevSettings)) { Invoke-Output {New-Item -Path $taskbarDevSettings -Force} }
             Invoke-Output {New-ItemProperty -Path $taskbarDevSettings -Name "TaskbarEndTask" -Value 1 -PropertyType DWORD -Force}
-            ## Windhawk explorer mods
             Stop-Process -n explorer
             Write-Host "Configuring Other Settings completed." -ForegroundColor Green
         }
