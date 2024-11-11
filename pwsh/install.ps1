@@ -1020,7 +1020,7 @@ uint fWinIni);
 '@
             $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
             Invoke-Output {$CursorRefresh::SystemParametersInfo(0x0057,0,$null,0)}
-            ## Pin Home, Programs and Recycle Bin to Quick Access
+        ## Pin Home, Programs and Recycle Bin to Quick Access
             write-host "Pinning Home, Programs and Recycle Bin to Quick Access..." -ForegroundColor Yellow
 $homeIni = @"
 [.ShellClassInfo]
@@ -1067,15 +1067,15 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
                 $recycleBin.Self.InvokeVerb("PinToHome") 
             }
             Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse 
-            ## Remove shortcut arrows
+        ## Remove shortcut arrows
             Write-Host "Removing shortcut arrows..." -ForegroundColor Yellow
             Copy-Item -Path "..\config\blank.ico" -Destination "C:\Windows" -Force
             Invoke-Output {New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Force}
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
-            ## Cleaning up context menus
+        ## Cleaning up context menus
             Write-Host "Cleaning up context menus..." -ForegroundColor Yellow
             Get-ChildItem ..\config\contextmenu\remove\* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
-            ## End Task
+        ## End Task
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
             $taskbarDevSettings = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
             if (-not (Test-Path $taskbarDevSettings)) { Invoke-Output {New-Item -Path $taskbarDevSettings -Force} }
