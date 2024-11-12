@@ -61,6 +61,8 @@ StartAllBack enhances the functionality of the Windows Taskbar by introducing fe
 
 Additionally, StartAllBack offers options for customizing the appearance and behavior of the Taskbar to suit individual user preferences, including taskbar size, position, dynamic transparency, start menu orb and tasks alignment and tray icons spacing.
 
+Stahky allows to create shortcuts for taskbar, that show custom context menus which can include settings and control panel shortcuts, website shortcuts and any other files and folders.
+
 - **Enhanced Explorer**
 
 StartAllBack extends its enhancements beyond the Taskbar to the Windows Explorer, providing users with a more streamlined and efficient file browsing experience, by bringing back older versions of Explorer from Windows 7 or Windows 10. 
@@ -78,10 +80,6 @@ WinMac provides you with debloated prompt with addition of completion functions 
 - **Keyboard Shortcuts**
 
 WinMac provides very useful keyboard shortcuts from macOS with use of AutoHotkey, which is an automation scripting language for Windows. Shortcuts include hiding/showing dock, minimizing single or all windows and cycling through windows of the same app. More details on Wiki page [Keyboard Shortcuts](https://github.com/Asteski/WinMac/wiki/Commands-cheat-sheet#keyboard-shortcuts).
-
-- **Stacks Context Menus**
-
-Stahky allows to create shortcuts for taskbar, that show custom context menus which can include settings and control panel shortcuts, website shortcuts and any other files and folders.
 
 ## Experience WinMac Today!
 
