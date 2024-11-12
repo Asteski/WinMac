@@ -51,7 +51,7 @@ Winstep Nexus is a highly customizable and feature-rich dock application for Win
 
 By integrating Winstep Nexus into your WinMac modification, you can provide users with a visually appealing and functional dock that resembles the macOS style. This will enhance the overall user experience and make the transition between Windows and macOS seamless. 
 
-- **Start Menu**
+- **Enhanced Start Menu**
 
 WinMac Menu is a collection of customization utilities, that allows to bring Start Menu replacement for Windows. You can replace traditional Start Menu with customized WinX menu, to resemble macOS main menu, or enable enhanced classic Start Menu. More details on Wiki page [Configuration](https://github.com/Asteski/WinMac/wiki/Configuration#winmac-menu).
 
@@ -71,10 +71,6 @@ Windhawk introduces explorer mods, that enables to see folder size, hide dot fil
 
 Additionally, deployment script includes pinning User folder, Start Menu Programs folder and Recycle Bin to Quick Access.
 
-- **Stacks Context Menus**
-
-Stahky allows to create shortcuts for taskbar, that show custom context menus which can include settings and control panel shortcuts, website shortcuts and any other files and folders.
-
 - **Enhanced Terminal**
 
 WinMac provides you with debloated prompt with addition of completion functions and most commonly used commands in macOS/Linux, like *vim, grep, touch, ditto, top, whatis, killall, ll, la, tree* with additional commands like *history, computerinfo, battery, backup, ntop, rcopy, brew* among ton of other functions! More details on Wiki page [Commands Cheat Sheet](https://github.com/Asteski/WinMac/wiki/Commands-Cheat-Sheet).
@@ -82,6 +78,10 @@ WinMac provides you with debloated prompt with addition of completion functions 
 - **Keyboard Shortcuts**
 
 WinMac provides very useful keyboard shortcuts from macOS with use of AutoHotkey, which is an automation scripting language for Windows. Shortcuts include hiding/showing dock, minimizing single or all windows and cycling through windows of the same app. More details on Wiki page [Keyboard Shortcuts](https://github.com/Asteski/WinMac/wiki/Commands-cheat-sheet#keyboard-shortcuts).
+
+- **Stacks Context Menus**
+
+Stahky allows to create shortcuts for taskbar, that show custom context menus which can include settings and control panel shortcuts, website shortcuts and any other files and folders.
 
 ## Experience WinMac Today!
 
@@ -98,13 +98,6 @@ For the most reliable deployment process, I recommend to check [Installation Gui
 [Wiki](https://github.com/Asteski/WinMac/wiki) have ton of very useful information, which can help you understand WinMac components capabilities and configuration to modify them to your liking.
 
 There are many dock customization you can find around the web, including [DeviantArt](https://www.deviantart.com/search?q=winstep+dock+windows).
-
-## Planned features
-
-- custom WinMac theme,
-- toggle theme script,
-- more keyboard shortcuts,
-- more and improved functions.
 
 ## Credits to
 
