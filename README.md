@@ -15,7 +15,7 @@
 </details>
 <details>
     <summary>Image 4</summary>
-    <img src="[https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_04.png](https://raw.githubusercontent.com/Asteski/WinMac/6cd141e3b5a5f01b583b23ff971e0d899cb27470/img/winmac_dark_04.png)" alt="winmac_dark_04">
+    <img src="https://raw.githubusercontent.com/Asteski/WinMac/6cd141e3b5a5f01b583b23ff971e0d899cb27470/img/winmac_dark_04.png" alt="winmac_dark_04">
 </details>
 
 ## Light
