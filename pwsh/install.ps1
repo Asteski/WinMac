@@ -713,11 +713,13 @@ foreach ($app in $selectedApps) {
                     } else {
                         Write-Host ".NET Desktop Runtime is already installed." -ForegroundColor Green
                     }
-                    $uiXaml = Get-AppxPackage -Name Microsoft.UI.Xaml.2.7 -ErrorAction SilentlyContinue
+                    # $uiXaml = Get-AppxPackage -Name Microsoft.UI.Xaml.2.7 -ErrorAction SilentlyContinue
+                    $uiXaml = Get-WinGetPackage -Id 'Microsoft.UI.Xaml.2.7' -ErrorAction SilentlyContinue
                     if ($null -eq $uiXaml) {
                         Write-Host "Installing Microsoft.UI.Xaml 2.7..." -ForegroundColor Yellow
-                        Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.7.3/Microsoft.UI.Xaml.2.7.x64.appx' -OutFile '..\temp\Microsoft.UI.Xaml.2.7.x64.appx'
-                        Add-AppxPackage -Path '..\temp\Microsoft.UI.Xaml.2.7.x64.appx'
+                        Invoke-Output { Install-WinGetPackage -id 'Microsoft.UI.Xaml.2.7' }
+                        # Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.7.3/Microsoft.UI.Xaml.2.7.x64.appx' -OutFile '..\temp\Microsoft.UI.Xaml.2.7.x64.appx'
+                        # Add-AppxPackage -Path '..\temp\Microsoft.UI.Xaml.2.7.x64.appx'
                     } else {
                         Write-Host "Microsoft.UI.Xaml is already installed." -ForegroundColor Green
                     }
