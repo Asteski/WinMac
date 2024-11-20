@@ -59,13 +59,13 @@ WinMac Menu is a collection of customization utilities, that allows to bring Sta
 
 StartAllBack enhances the functionality of the Windows Taskbar by introducing features inspired by earlier versions of Windows, such as Windows 7 and Windows 10. It brings back familiar elements like colored title bars and customizable Start buttons. 
 
-Additionally, StartAllBack offers options for customizing the appearance and behavior of the Taskbar to suit individual user preferences, including taskbar size, position, dynamic transparency, start menu orb and tasks alignment and tray icons spacing.
+Additionally, StartAllBack offers options for customizing the appearance and behavior of the Taskbar to suit individual user preferences, including taskbar size, position, dynamic transparency, tasks alignment and tray icons spacing.
 
-Stahky allows to create shortcuts for taskbar, that show custom context menus which can include settings and control panel shortcuts, website shortcuts and any other files and folders.
+Stahky allows to create shortcuts for taskbar, that show custom context menus which can include settings and control panel shortcuts, website shortcuts or any other files and folders.
 
 - **Enhanced Explorer**
 
-StartAllBack extends its enhancements beyond the Taskbar to the Windows Explorer, providing users with a more streamlined and efficient file browsing experience, by bringing back older versions of Explorer from Windows 7 or Windows 10. 
+StartAllBack extends its enhancements beyond the Taskbar with the Windows Explorer, providing users with more streamlined and efficient file browsing experience, by bringing back older versions of Explorer from Windows 7 or Windows 10. 
 
 Tools introduce features such as ribbons, tabs, customizable toolbar buttons, enhanced file previews, and improved navigation options. With StartAllBack and PowerToys, you can personalize your Explorer interface to better suit your workflow and access files and folders more efficiently.
 
@@ -75,7 +75,7 @@ Additionally, deployment script includes pinning User folder, Start Menu Program
 
 - **Enhanced Terminal**
 
-WinMac provides you with debloated prompt with addition of completion functions and most commonly used commands in macOS/Linux, like *vim, grep, touch, ditto, top, whatis, killall, ll, la, tree* with additional commands like *history, computerinfo, battery, backup, ntop, rcopy, brew* among ton of other functions! More details on Wiki page [Commands Cheat Sheet](https://github.com/Asteski/WinMac/wiki/Commands-Cheat-Sheet).
+WinMac provides improved prompt with addition of completion functions and most commonly used commands in macOS or Linux, like *vim, grep, touch, ditto, top, whatis, killall, ll, tree* with additional commands like *history, computerinfo, battery, backup, ntop, rcopy, brew* among ton of other functions. More details on Wiki page [Commands Cheat Sheet](https://github.com/Asteski/WinMac/wiki/Commands-Cheat-Sheet).
 
 - **Keyboard Shortcuts**
 
@@ -87,8 +87,6 @@ Discover the future of computing with WinMac, where the power of Windows meets t
 
 WinMac supports both x64 and ARM based platforms.
 
-Please be informed that this is a beta version - you're deploying it at your own risk!!
-
 ## Recommendations
 
 For the most reliable deployment process, I recommend to check [Installation Guide wiki page](https://github.com/Asteski/WinMac/wiki/Installation-Guide).
@@ -99,7 +97,7 @@ There are many dock customization you can find around the web, including [Devian
 
 ## Credits to
 
-List of utilities and their creators used in WinMac:
+List of utilities and their creators used with WinMac:
 
 - [PowerToys](https://learn.microsoft.com/en-us/windows/powertoys/) by Microsoft
 - [Everything](https://www.voidtools.com/) by David Carpenter
@@ -117,6 +115,6 @@ Please support creators however you can for their wonderful work!
 
 Keep in mind that StartAllBack is not a free software and requires license to run permanently. Free version will stop working after 100 days.
 
-WinMac is not planned to be used for business/earning purposes. If you're not okay with me using your software by installing it (using Winget) with Powershell deployment script, please let me know!
+WinMac is not planned to be used for business/earning purposes. If you're not okay with me using your software by installing it (using Winget) with Powershell deployment script, please let me know.
 
 Enjoy and support my work by giving feedback and contributing to the project!
