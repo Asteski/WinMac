@@ -413,12 +413,12 @@ userName@computerName ~ %
         Write-Host "Invalid input. Defaulting to WinMac prompt." -ForegroundColor Yellow
         $promptSet = 'W'
     }
-    $gitProfile = Read-Host "`nInstall Git profile (y/n)"
-    if ($gitProfile -eq 'y') {
+    $gitProfile = Read-Host "`nInstall Git profile (Y/n)"
+    if ($gitProfile -eq 'y' -or $gitProfile -eq 'Y') {
         Write-Host "Enabling Git profile." -ForegroundColor Green
         $gitProfile = $true
     }
-    elseif ($gitProfile -eq 'n') {
+    elseif ($gitProfile -eq 'n' -or $gitProfile -eq 'N') {
         Write-Host "Disabling Git profile." -ForegroundColor Yellow
         $gitProfile = $false
     }
