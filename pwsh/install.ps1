@@ -12,6 +12,7 @@ Add-Type -AssemblyName PresentationFramework
 Add-Type -AssemblyName System.Windows.Forms
 if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null}
 if (-not (Test-Path -Path "../logs")) {New-Item -ItemType Directory -Path "../logs" | Out-Null}
+$sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
 $user = [Security.Principal.WindowsIdentity]::GetCurrent()
 $adminTest = (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
 $checkDir = Get-ChildItem '..'
@@ -524,7 +525,6 @@ if ($null -eq $wingetClientCheck) {
         Write-Host "Winget is already installed." -ForegroundColor Green
     }
 }
-Import-Module -Name Microsoft.WinGet.Client -Force
 # WinMac deployment
 foreach ($app in $selectedApps) {
     switch ($app.Trim()) {
@@ -730,7 +730,6 @@ foreach ($app in $selectedApps) {
                     }
                     Invoke-Output {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\"}
                     if ((Get-ItemProperty -Path $sabRegPath -ErrorAction SilentlyContinue).WinKeyFunction -eq 0) {Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1}
-                    $sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
                     $exeKeyPath = "$env:LOCALAPPDATA\WinMac\WindowsKey.exe"
                     $exeStartPath = "$env:LOCALAPPDATA\WinMac\StartButton.exe"
                     $folderName = "WinMac"
@@ -880,7 +879,7 @@ foreach ($app in $selectedApps) {
     # Nexus Dock
         "9" {
             if ($adminTest) {
-                Write-Host "Winstep Nexus requires non-elevated session. Please run the script in a default user session. Skipping installation." -ForegroundColor Red
+                Write-Host "Winstep Nexus must be installed without admin rights. Skipping installation." -ForegroundColor Red
             }
             else {
                 Write-Host "Installing Nexus Dock..." -ForegroundColor Yellow
@@ -953,30 +952,35 @@ foreach ($app in $selectedApps) {
                 Write-Host "Nexus Dock installation completed." -ForegroundColor Green
             }
         }
-    # Windhawk`
+    # Windhawk
         "10" {
-            Write-Host "Installing Windhawk..." -ForegroundColor Yellow
-            Invoke-Output {Install-WinGetPackage -name Windhawk}
-            if (-not (Test-Path "$Env:ProgramData\Windhawk\ModsSource")) {New-Item -ItemType Directory -Path "$Env:ProgramData\Windhawk\ModsSource" -Force | Out-Null}
-            if (-not (Test-Path "$Env:ProgramData\Windhawk\Engine\Mods")) {New-Item -ItemType Directory -Path "$Env:ProgramData\Windhawk\Engine\Mods" -Force | Out-Null}
-            Stop-Process -Name Windhawk -Force
-            Copy-Item ..\config\windhawk\Mods\* "$Env:ProgramData\Windhawk\Engine\Mods" -Recurse -Force
-            $urls = @(
-                "https://raw.githubusercontent.com/m417z/my-windhawk-mods/main/mods/explorer-details-better-file-sizes.wh.cpp",
-                "https://raw.githubusercontent.com/m417z/my-windhawk-mods/main/mods/explorer-name-windows.wh.cpp",
-                "https://raw.githubusercontent.com/realgam3/dot-hide-wh/main/dot-hide.wh.cpp"
-            )
-            $destinationPath = "$Env:ProgramData\Windhawk\ModsSource"
-            foreach ($url in $urls) {
-                $fileName = [System.IO.Path]::GetFileName($url)
-                $outputPath = Join-Path -Path $destinationPath -ChildPath $fileName
-                Invoke-WebRequest -Uri $url -OutFile $outputPath
+            if ($sysType -like "*ARM*") {
+                Write-Host "Windhawk is not supported on ARM devices. Skipping installation." -ForegroundColor Red
             }
-            reg import ..\config\windhawk\settings.reg > $null 2>&1
-            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
-            Move-Item -Path "C:\Users\Public\Desktop\Windhawk.lnk" -Destination $programsDir -Force
-            Start-Process "$Env:ProgramFiles\Windhawk\Windhawk.exe"
-            Write-Host "Windhawk installation completed." -ForegroundColor Green   
+            else {
+                Write-Host "Installing Windhawk..." -ForegroundColor Yellow
+                Invoke-Output {Install-WinGetPackage -name Windhawk}
+                if (-not (Test-Path "$Env:ProgramData\Windhawk\ModsSource")) {New-Item -ItemType Directory -Path "$Env:ProgramData\Windhawk\ModsSource" -Force | Out-Null}
+                if (-not (Test-Path "$Env:ProgramData\Windhawk\Engine\Mods")) {New-Item -ItemType Directory -Path "$Env:ProgramData\Windhawk\Engine\Mods" -Force | Out-Null}
+                Stop-Process -Name Windhawk -Force
+                Copy-Item ..\config\windhawk\Mods\* "$Env:ProgramData\Windhawk\Engine\Mods" -Recurse -Force
+                $urls = @(
+                    "https://raw.githubusercontent.com/m417z/my-windhawk-mods/main/mods/explorer-details-better-file-sizes.wh.cpp",
+                    "https://raw.githubusercontent.com/m417z/my-windhawk-mods/main/mods/explorer-name-windows.wh.cpp",
+                    "https://raw.githubusercontent.com/realgam3/dot-hide-wh/main/dot-hide.wh.cpp"
+                )
+                $destinationPath = "$Env:ProgramData\Windhawk\ModsSource"
+                foreach ($url in $urls) {
+                    $fileName = [System.IO.Path]::GetFileName($url)
+                    $outputPath = Join-Path -Path $destinationPath -ChildPath $fileName
+                    Invoke-WebRequest -Uri $url -OutFile $outputPath
+                }
+                reg import ..\config\windhawk\settings.reg > $null 2>&1
+                $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+                Move-Item -Path "C:\Users\Public\Desktop\Windhawk.lnk" -Destination $programsDir -Force
+                Start-Process "$Env:ProgramFiles\Windhawk\Windhawk.exe"
+                Write-Host "Windhawk installation completed." -ForegroundColor Green
+            }
         }
     # Other
         "11" {
