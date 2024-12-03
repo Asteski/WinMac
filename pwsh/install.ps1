@@ -1084,7 +1084,12 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             $taskbarDevSettings = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
             if (-not (Test-Path $taskbarDevSettings)) { Invoke-Output {New-Item -Path $taskbarDevSettings -Force} }
             Invoke-Output {New-ItemProperty -Path $taskbarDevSettings -Name "TaskbarEndTask" -Value 1 -PropertyType DWORD -Force}
-            Stop-Process -n explorer
+            Write-Host "Cleaning up context menus..." -ForegroundColor Yellow
+        ## Icons Pack
+            Write-Host "Deploying icon pack..." -ForegroundColor Yellow
+            $exePath = "..\bin\iconpack.exe"
+            $arguments = "/S"
+            Start-Process -FilePath $exePath -ArgumentList $arguments -NoNewWindow
             Write-Host "Configuring Other Settings completed." -ForegroundColor Green
         }
     }
