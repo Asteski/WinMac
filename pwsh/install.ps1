@@ -1090,6 +1090,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             $exePath = "..\bin\iconpack.exe"
             $arguments = "/S"
             Start-Process -FilePath $exePath -ArgumentList $arguments -NoNewWindow
+            Start-Sleep -Seconds 90
             Write-Host "Configuring Other Settings completed." -ForegroundColor Green
         }
     }
