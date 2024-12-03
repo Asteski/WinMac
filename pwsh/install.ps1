@@ -935,6 +935,7 @@ foreach ($app in $selectedApps) {
                     $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace '"UIDarkMode"="3"', '"UIDarkMode"="1"' }
                     $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "1644825", "15658734" }
                     $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "16119283", "2563870" }
+                    $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "store_dark", "store_light" }
                     $modifiedFile = "..\temp\winstep.reg"
                     $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 
                     $regFile = $modifiedFile
