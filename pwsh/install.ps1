@@ -709,21 +709,21 @@ foreach ($app in $selectedApps) {
                     Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
                     $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.8' -ErrorAction SilentlyContinue
                     if ($null -eq $dotNetRuntime) {
-                        Write-Host "Installing .NET Desktop Runtime 8..." -ForegroundColor Yellow
+                        Write-Host "Installing .NET Desktop Runtime 8..." -ForegroundColor DarkYellow
                         Invoke-Output { Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8' }
                     } else {
                         Write-Host ".NET Desktop Runtime is already installed." -ForegroundColor Green
                     }
                     $uiXaml = Get-WinGetPackage -Id 'Microsoft.UI.Xaml.2.7' -ErrorAction SilentlyContinue
                     if ($null -eq $uiXaml) {
-                        Write-Host "Installing Microsoft.UI.Xaml 2.7..." -ForegroundColor Yellow
+                        Write-Host "Installing Microsoft.UI.Xaml 2.7..." -ForegroundColor DarkYellow
                         Invoke-Output { Install-WinGetPackage -id 'Microsoft.UI.Xaml.2.7' }
                     } else {
                         Write-Host "Microsoft.UI.Xaml is already installed." -ForegroundColor Green
                     }
                     $winverUWP = Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP -ErrorAction SilentlyContinue
                     if ($null -eq $winverUWP) {
-                        Write-Host "Installing WinverUWP 2.1.4..." -ForegroundColor Yellow
+                        Write-Host "Installing WinverUWP 2.1.4..." -ForegroundColor DarkYellow
                         Invoke-WebRequest -Uri 'https://github.com/dongle-the-gadget/WinverUWP/releases/download/v2.1.0.0/2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle' -OutFile '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
                         Add-AppxPackage -Path '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
                     } else {
