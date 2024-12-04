@@ -318,9 +318,9 @@ Write-Host @"
     }
     Start-Sleep 1
     Write-Host
-    $installConfirmation = Read-Host "Are you sure you want to start the uninstallation process (y/n)"
+    $installConfirmation = Read-Host "Are you sure you want to start the uninstallation process (Y/n)"
 
-    if ($installConfirmation -ne 'y') {
+    if ($installConfirmation -ne 'y' -or $installConfirmation -ne 'Y') {
         Write-Host "Uninstallation process aborted." -ForegroundColor Red
         Start-Sleep 2
         exit
@@ -571,7 +571,7 @@ If you have any questions or suggestions, please contact me on GitHub.
 
 Write-Host "-----------------------------------------------------------------------------"  -ForegroundColor Cyan
 Write-Host
-$restartConfirmation = Read-Host "Restart computer now? It's recommended to fully apply all the changes (y/n)"
+$restartConfirmation = Read-Host "Restart computer now? It's recommended to fully apply all the changes (Y/n)"
 if ($restartConfirmation -eq "Y" -or $restartConfirmation -eq "y") {
     Write-Host "Restarting computer in" -ForegroundColor Red
     for ($a=9; $a -ge 0; $a--) {
