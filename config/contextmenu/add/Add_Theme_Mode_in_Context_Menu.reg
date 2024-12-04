@@ -1,0 +1,57 @@
+Windows Registry Editor Version 5.00 
+
+[HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode]
+"MUIVerb"="Theme"
+"Position"="Bottom"
+"SubCommands"=""
+
+[HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\AppANDWindowsMode]
+"MUIVerb"="App and Windows mode"
+"SubCommands"=""
+
+[HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\AppANDWindowsMode\shell\001flyout]
+"MUIVerb"="Light"
+
+[HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\AppANDWindowsMode\shell\001flyout\command]
+@="cmd /s /c \"Reg Add HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize /v AppsUseLightTheme /t REG_DWORD /d 1 /f & Reg Add HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize /v SystemUsesLightTheme /t REG_DWORD /d 1 /f & taskkill /f /im explorer.exe  & start explorer.exe\""
+
+[HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\AppANDWindowsMode\shell\002flyout]
+"MUIVerb"="Dark"
+
+[HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\AppANDWindowsMode\shell\002flyout\command]
+@="cmd /s /c \"Reg Add HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize /v AppsUseLightTheme /t REG_DWORD /d 0 /f & Reg Add HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize /v SystemUsesLightTheme /t REG_DWORD /d 0 /f & taskkill /f /im explorer.exe  & start explorer.exe\""
+
+
+[HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\AppMode]
+"MUIVerb"="App mode"
+"SubCommands"=""
+"CommandFlags"=dword:00000020
+
+[HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\AppMode\shell\001flyout]
+"MUIVerb"="Light"
+
+[HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\AppMode\shell\001flyout\command]
+@="cmd /s /c \"Reg Add HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize /v AppsUseLightTheme /t REG_DWORD /d 1 /f & taskkill /f /im explorer.exe  & start explorer.exe\""
+
+[HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\AppMode\shell\002flyout]
+"MUIVerb"="Dark"
+
+[HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\AppMode\shell\002flyout\command]
+@="cmd /s /c \"Reg Add HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize /v AppsUseLightTheme /t REG_DWORD /d 0 /f & taskkill /f /im explorer.exe  & start explorer.exe\""
+
+[HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\WindowsMode]
+"MUIVerb"="Windows mode"
+"SubCommands"=""
+
+[HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\WindowsMode\shell\001flyout]
+"MUIVerb"="Light"
+
+[HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\WindowsMode\shell\001flyout\command]
+@="cmd /s /c \"Reg Add HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize /v SystemUsesLightTheme /t REG_DWORD /d 1 /f & taskkill /f /im explorer.exe  & start explorer.exe\""
+
+[HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\WindowsMode\shell\002flyout]
+"MUIVerb"="Dark"
+
+[HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\WindowsMode\shell\002flyout\command]
+@="cmd /s /c \"Reg Add HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize /v SystemUsesLightTheme /t REG_DWORD /d 0 /f & taskkill /f /im explorer.exe  & start explorer.exe\""
+  
