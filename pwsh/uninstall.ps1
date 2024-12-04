@@ -340,7 +340,7 @@ Start-Transcript -Path ../logs/$transcriptFile -Append | Out-Null
 Write-Host "Checking Package Provider (Nuget)" -ForegroundColor Yellow
 $nugetProvider = Get-PackageProvider -Name NuGet
 if ($null -eq $nugetProvider) {
-    Write-Host "NuGet is not installed. Installing NuGet..." -ForegroundColor Yellow
+    Write-Host "NuGet is not installed. Installing NuGet..." -ForegroundColor DarkYellow
     Install-PackageProvider -Name NuGet -Force -Scope CurrentUser
     Write-Host "NuGet installation completed." -ForegroundColor Green
 } else {
@@ -361,13 +361,13 @@ if ($null -eq $wingetCliCheck) {
 }
 $wingetClientCheck = Get-InstalledModule -Name Microsoft.WinGet.Client -ErrorAction SilentlyContinue
 if ($null -eq $wingetClientCheck) {
-    Write-Host "Winget is not installed. Installing Winget..." -ForegroundColor Yellow
+    Write-Host "Winget is not installed. Installing Winget..." -ForegroundColor DarkYellow
     Install-Module -Name Microsoft.WinGet.Client -Force
     Write-Host "Winget installation completed." -ForegroundColor Green
 } else {
     $wingetFind = Find-Module -Name Microsoft.WinGet.Client
     if ($wingetFind.Version -gt $wingetClientCheck.Version) {
-        Write-Host "A newer version of Winget is available. Updating Winget..." -ForegroundColor Yellow
+        Write-Host "A newer version of Winget is available. Updating Winget..." -ForegroundColor DarkYellow
         Update-Module -Name Microsoft.WinGet.Client -Force
         Write-Host "Winget update completed." -ForegroundColor Green
     } else {
