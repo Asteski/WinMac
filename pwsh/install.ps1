@@ -989,7 +989,7 @@ foreach ($app in $selectedApps) {
         "11" {
         ## Black Cursor
             Write-Host "Configuring Other Settings..." -ForegroundColor Yellow
-            Write-Host "Black cursor..." -ForegroundColor Yellow
+            Write-Host "Black cursor..." -ForegroundColor DarkYellow
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             $curSourceFolder = (Get-Item -Path "..\config\cursor").FullName
             $curDestFolder = "C:\Windows\Cursors"
@@ -1027,7 +1027,7 @@ uint fWinIni);
             $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
             Invoke-Output {$CursorRefresh::SystemParametersInfo(0x0057,0,$null,0)}
         ## Pin Home, Programs and Recycle Bin to Quick Access
-            write-host "Pinning Home, Programs and Recycle Bin to Quick Access..." -ForegroundColor Yellow
+            write-host "Pinning Home, Programs and Recycle Bin to Quick Access..." -ForegroundColor DarkYellow
 $homeIni = @"
 [.ShellClassInfo]
 IconResource=C:\Windows\System32\SHELL32.dll,160
@@ -1074,12 +1074,12 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             }
             Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse 
         ## Remove shortcut arrows
-            Write-Host "Removing shortcut arrows..." -ForegroundColor Yellow
+            Write-Host "Removing shortcut arrows..." -ForegroundColor DarkYellow
             Copy-Item -Path "..\config\blank.ico" -Destination "C:\Windows" -Force
             Invoke-Output {New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Force}
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
         ## Cleaning up context menus
-            Write-Host "Cleaning up context menus..." -ForegroundColor Yellow
+            Write-Host "Cleaning up context menus..." -ForegroundColor DarkYellow
             Get-ChildItem ..\config\contextmenu\remove\* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
         ## End Task
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
@@ -1090,7 +1090,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             $regPath = "HKCU:\SOFTWARE\WinMac"
             if (-not (Test-Path -Path $regPath)) {New-Item -Path $regPath -Force | Out-Null}
             if ((Get-ItemProperty -Path $regPath -Name "Icon_Pack" -ErrorAction SilentlyContinue).Icon_Pack -ne 1) {
-                Write-Host "Deploying icon pack..." -ForegroundColor Yellow
+                Write-Host "Deploying icon pack..." -ForegroundColor DarkYellow
                 $exePath = "..\bin\iconpack.exe"
                 $arguments = "/S"
                 Start-Process -FilePath $exePath -ArgumentList $arguments -NoNewWindow
