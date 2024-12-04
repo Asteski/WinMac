@@ -1087,11 +1087,16 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             if (-not (Test-Path $taskbarDevSettings)) { Invoke-Output {New-Item -Path $taskbarDevSettings -Force} }
             Invoke-Output {New-ItemProperty -Path $taskbarDevSettings -Name "TaskbarEndTask" -Value 1 -PropertyType DWORD -Force}
         ## Icons Pack
-            Write-Host "Deploying icon pack..." -ForegroundColor Yellow
-            $exePath = "..\bin\iconpack.exe"
-            $arguments = "/S"
-            Start-Process -FilePath $exePath -ArgumentList $arguments -NoNewWindow
-            Start-Sleep -Seconds 90
+            $regPath = "HKCU:\SOFTWARE\WinMac"
+            if (-not (Test-Path -Path $regPath)) {New-Item -Path $regPath -Force | Out-Null}
+            if ((Get-ItemProperty -Path $regPath -Name "Icon_Pack" -ErrorAction SilentlyContinue).Icon_Pack -ne 1) {
+                Write-Host "Deploying icon pack..." -ForegroundColor Yellow
+                $exePath = "..\bin\iconpack.exe"
+                $arguments = "/S"
+                Start-Process -FilePath $exePath -ArgumentList $arguments -NoNewWindow
+                Set-ItemProperty -Path $regPath -Name "Icon_Pack" -Value 1 -PropertyType DWORD
+                Start-Sleep -Seconds 60
+            }     
             Stop-Process -Name explorer -Force
             Write-Host "Configuring Other Settings completed." -ForegroundColor Green
         }
