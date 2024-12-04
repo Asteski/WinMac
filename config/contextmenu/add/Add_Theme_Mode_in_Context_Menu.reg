@@ -2,7 +2,7 @@ Windows Registry Editor Version 5.00
 
 [HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode]
 "MUIVerb"="Theme"
-"Position"="Top"
+"Position"="Bottom"
 "SubCommands"=""
 
 [HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\AppANDWindowsMode]
