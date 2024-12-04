@@ -648,6 +648,7 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarAl" -Value 0
             Set-ItemProperty -Path $exRegPath\Advanced -Name "UseCompactMode" -Value 1
             Set-ItemProperty -Path $sabRegPath -Name "RestyleControls" -Value 1
+            Set-ItemProperty -Path $sabRegPath -Name "RestyleIcons" -Value 0
             Set-ItemProperty -Path $sabRegPath -Name "WelcomeShown" -Value 3
             Set-ItemProperty -Path $sabRegPath -Name "SettingsVersion" -Value 5
             Set-ItemProperty -Path $sabRegPath -Name "ModernIconsColorized" -Value 0
