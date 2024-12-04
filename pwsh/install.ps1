@@ -1091,6 +1091,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             $arguments = "/S"
             Start-Process -FilePath $exePath -ArgumentList $arguments -NoNewWindow
             Start-Sleep -Seconds 90
+            Stop-Process -Name explorer -Force
             Write-Host "Configuring Other Settings completed." -ForegroundColor Green
         }
     }
