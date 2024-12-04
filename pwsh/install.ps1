@@ -657,7 +657,6 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $sabRegPath -Name "TaskbarOneSegment" -Value 0
             Set-ItemProperty -Path $sabRegPath -Name "TaskbarGrouping" -Value 0
             Set-ItemProperty -Path $sabRegPath -Name "TaskbarCenterIcons" -Value 1
-            Set-ItemProperty -Path $sabRegPath -Name "TaskbarTranslucentEffect" -Value 0
             Set-ItemProperty -Path $sabRegPath -Name "TaskbarLargerIcons" -Value 0
             Set-ItemProperty -Path $sabRegPath -Name "TaskbarSpacierIcons" -Value (-1)
             Set-ItemProperty -Path $sabRegPath -Name "TaskbarControlCenter" -Value 1
