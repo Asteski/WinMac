@@ -1082,7 +1082,11 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             Get-ChildItem ..\config\contextmenu\remove\* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
             Get-ChildItem '..\config\contextmenu\add\Add_Theme_Mode_in_Context_Menu.reg' | ForEach-Object { reg import $_.FullName > $null 2>&1 }
             if (-not (Test-Path -Path "$env:LOCALAPPDATA\WinMac")) {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac" -Force | Out-Null}
-            Copy-Item -Path "..\config\contextmenu\theme.ps1" -Destination "$env:LOCALAPPDATA\WinMac" -Force            
+            $sourceFilePath = "..\config\contextmenu\theme.ps1"
+            $tempFilePath = "..\temp\theme.ps1"
+            Copy-Item -Path $sourceFilePath -Destination $tempFilePath -Force
+            (Get-Content -Path $tempFilePath) -replace '$WINMACAPPDATA%', $env:LOCALAPPDATA | Set-Content -Path $tempFilePath
+            Copy-Item -Path $tempFilePath -Destination "$env:LOCALAPPDATA\WinMac" -Force            
         ## End Task
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
             $taskbarDevSettings = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
