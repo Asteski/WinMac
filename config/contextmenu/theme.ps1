@@ -99,5 +99,5 @@ if ($mode -eq 'Dark') {
 }
 try {
 	Start-Process explorer -ErrorAction SilentlyContinue
-	Start-Process "C:\Program Filesaa (x86)\Winstep\Nexus.exe"
+	Start-Process "C:\Program Files (x86)\Winstep\Nexus.exe"
 } catch {}
