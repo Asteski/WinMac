@@ -1077,10 +1077,12 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             Copy-Item -Path "..\config\blank.ico" -Destination "C:\Windows" -Force
             Invoke-Output {New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Force}
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
-        ## Configuring context menus
+            ## Configuring context menus
             Write-Host "Configure context menus..." -ForegroundColor DarkYellow
             Get-ChildItem ..\config\contextmenu\remove\* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
             Get-ChildItem '..\config\contextmenu\add\Add_Theme_Mode_in_Context_Menu.reg' | ForEach-Object { reg import $_.FullName > $null 2>&1 }
+            if (-not (Test-Path -Path "$env:LOCALAPPDATA\WinMac")) {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac" -Force | Out-Null}
+            Copy-Item -Path "..\config\contextmenu\theme.ps1" -Destination "$env:LOCALAPPDATA\WinMac" -Force            
         ## End Task
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
             $taskbarDevSettings = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
