@@ -2,7 +2,7 @@ param (
     [switch]$noGUI,
     [switch]$debug
 )
-$version = "0.6.3"
+$version = "0.7.0"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_uninstall_log_$date.txt"
 $transcriptFile = "WinMac_uninstall_transcript_$date.txt"
@@ -318,9 +318,9 @@ Write-Host @"
     }
     Start-Sleep 1
     Write-Host
-    $installConfirmation = Read-Host "Are you sure you want to start the uninstallation process (y/n)"
+    $installConfirmation = Read-Host "Are you sure you want to start the uninstallation process (Y/n)"
 
-    if ($installConfirmation -ne 'y') {
+    if ($installConfirmation -ne 'y' -or $installConfirmation -ne 'Y') {
         Write-Host "Uninstallation process aborted." -ForegroundColor Red
         Start-Sleep 2
         exit
@@ -340,7 +340,7 @@ Start-Transcript -Path ../logs/$transcriptFile -Append | Out-Null
 Write-Host "Checking Package Provider (Nuget)" -ForegroundColor Yellow
 $nugetProvider = Get-PackageProvider -Name NuGet
 if ($null -eq $nugetProvider) {
-    Write-Host "NuGet is not installed. Installing NuGet..." -ForegroundColor Yellow
+    Write-Host "NuGet is not installed. Installing NuGet..." -ForegroundColor DarkYellow
     Install-PackageProvider -Name NuGet -Force -Scope CurrentUser
     Write-Host "NuGet installation completed." -ForegroundColor Green
 } else {
@@ -361,13 +361,13 @@ if ($null -eq $wingetCliCheck) {
 }
 $wingetClientCheck = Get-InstalledModule -Name Microsoft.WinGet.Client -ErrorAction SilentlyContinue
 if ($null -eq $wingetClientCheck) {
-    Write-Host "Winget is not installed. Installing Winget..." -ForegroundColor Yellow
+    Write-Host "Winget is not installed. Installing Winget..." -ForegroundColor DarkYellow
     Install-Module -Name Microsoft.WinGet.Client -Force
     Write-Host "Winget installation completed." -ForegroundColor Green
 } else {
     $wingetFind = Find-Module -Name Microsoft.WinGet.Client
     if ($wingetFind.Version -gt $wingetClientCheck.Version) {
-        Write-Host "A newer version of Winget is available. Updating Winget..." -ForegroundColor Yellow
+        Write-Host "A newer version of Winget is available. Updating Winget..." -ForegroundColor DarkYellow
         Update-Module -Name Microsoft.WinGet.Client -Force
         Write-Host "Winget update completed." -ForegroundColor Green
     } else {
@@ -545,6 +545,17 @@ uint fWinIni);
             Invoke-Output { Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings" -Recurse }
             Invoke-Output { Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarSmallIcons" }
             Get-ChildItem ..\config\contextmenu\add\* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
+            Get-ChildItem '..\config\contextmenu\remove\Remove_Theme_Mode_in_Context_Menu.reg' | ForEach-Object { reg import $_.FullName > $null 2>&1 }
+            New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" -Force | Out-Null
+            New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Force | Out-Null
+            $regPath = "HKCU:\SOFTWARE\WinMac"
+            if ((Get-ItemProperty -Path $regPath -Name "Icon_Pack" -ErrorAction SilentlyContinue).Icon_Pack -eq 1) {
+                $exePath = "..\bin\iconpack.exe"
+                $arguments = "/S"
+                Start-Process -FilePath $exePath -ArgumentList $arguments -NoNewWindow
+                Set-ItemProperty -Path $regPath -Name "Icon_Pack" -Value 0 | Out-Null
+                Start-Sleep -Seconds 60
+            }
             Stop-Process -Name explorer -Force
             Write-Host "Uninstalling Other Settings completed." -ForegroundColor Green
         }
@@ -569,7 +580,7 @@ If you have any questions or suggestions, please contact me on GitHub.
 
 Write-Host "-----------------------------------------------------------------------------"  -ForegroundColor Cyan
 Write-Host
-$restartConfirmation = Read-Host "Restart computer now? It's recommended to fully apply all the changes (y/n)"
+$restartConfirmation = Read-Host "Restart computer now? It's recommended to fully apply all the changes (Y/n)"
 if ($restartConfirmation -eq "Y" -or $restartConfirmation -eq "y") {
     Write-Host "Restarting computer in" -ForegroundColor Red
     for ($a=9; $a -ge 0; $a--) {

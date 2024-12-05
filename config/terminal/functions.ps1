@@ -56,6 +56,8 @@ set-alias -name alias -value Set-Alias
 set-alias -name df -value Get-Volume
 
 # Functions
+function wua { winget upgrade --all }
+function wuu { winget upgrade --include-unknown --all }
 function sed($file, $find, $replace) {
     (Get-Content $file).replace("$find", $replace) | Set-Content $file
 }

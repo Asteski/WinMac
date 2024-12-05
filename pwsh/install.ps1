@@ -2,7 +2,7 @@ param (
     [switch]$noGUI,
     [switch]$debug
 )
-$version = "0.6.3"
+$version = "0.7.0"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_install_log_$date.txt"
 $transcriptFile = "WinMac_install_transcript_$date.txt"
@@ -462,9 +462,9 @@ if ($selectedApps -like '*4*' -or $selectedApps -like '*7*' -or $selectedApps -l
 }
 
 Start-Sleep 1
-$installConfirmation = Read-Host "`nAre you sure you want to start the installation process (y/n)"
+$installConfirmation = Read-Host "`nAre you sure you want to start the installation process (Y/n)"
 
-if ($installConfirmation -ne 'y') {
+if ($installConfirmation -ne 'y' -or $installConfirmation -ne 'Y') {
     Write-Host "Installation process aborted." -ForegroundColor Red
     Start-Sleep 2
     exit
@@ -491,7 +491,7 @@ Start-Transcript -Path ../logs/$transcriptFile -Append | Out-Null
 Write-Host "Checking Package Provider (Nuget)" -ForegroundColor Yellow
 $nugetProvider = Get-PackageProvider -Name NuGet
 if ($null -eq $nugetProvider) {
-    Write-Host "NuGet is not installed. Installing NuGet..." -ForegroundColor Yellow
+    Write-Host "NuGet is not installed. Installing NuGet..." -ForegroundColor DarkYellow
     Install-PackageProvider -Name NuGet -Force -Scope CurrentUser
     Write-Host "NuGet installation completed." -ForegroundColor Green
 } else {
@@ -502,7 +502,6 @@ Write-Host "Checking Package Manager (Winget)" -ForegroundColor Yellow
 $wingetCliCheck = winget -v
 if ($null -eq $wingetCliCheck) {
     $progressPreference = 'silentlyContinue'
-    Write-Information "Downloading Winget and its dependencies..."
     Invoke-WebRequest -Uri 'https://aka.ms/getwinget' -OutFile '..\temp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
     Invoke-WebRequest -Uri 'https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx' -OutFile '..\temp\Microsoft.VCLibs.x64.14.00.Desktop.appx'
     Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.6/Microsoft.UI.Xaml.2.8.x64.appx' -OutFile '..\temp\Microsoft.UI.Xaml.2.8.x64.appx'
@@ -512,13 +511,13 @@ if ($null -eq $wingetCliCheck) {
 }
 $wingetClientCheck = Get-InstalledModule -Name Microsoft.WinGet.Client -ErrorAction SilentlyContinue
 if ($null -eq $wingetClientCheck) {
-    Write-Host "Winget is not installed. Installing Winget..." -ForegroundColor Yellow
+    Write-Host "Winget is not installed. Installing Winget..." -ForegroundColor DarkYellow
     Install-Module -Name Microsoft.WinGet.Client -Force
     Write-Host "Winget installation completed." -ForegroundColor Green
 } else {
     $wingetFind = Find-Module -Name Microsoft.WinGet.Client
     if ($wingetFind.Version -gt $wingetClientCheck.Version) {
-        Write-Host "A newer version of Winget is available. Updating Winget..." -ForegroundColor Yellow
+        Write-Host "A newer version of Winget is available. Updating Winget..." -ForegroundColor DarkYellow
         Update-Module -Name Microsoft.WinGet.Client -Force
         Write-Host "Winget update completed." -ForegroundColor Green
     } else {
@@ -647,7 +646,9 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSi" -Value 0
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarAl" -Value 0
             Set-ItemProperty -Path $exRegPath\Advanced -Name "UseCompactMode" -Value 1
+            Set-ItemProperty -Path $sabRegPath -Name "TaskbarTranslucentEffect" -Value 1
             Set-ItemProperty -Path $sabRegPath -Name "RestyleControls" -Value 1
+            Set-ItemProperty -Path $sabRegPath -Name "RestyleIcons" -Value 0
             Set-ItemProperty -Path $sabRegPath -Name "WelcomeShown" -Value 3
             Set-ItemProperty -Path $sabRegPath -Name "SettingsVersion" -Value 5
             Set-ItemProperty -Path $sabRegPath -Name "ModernIconsColorized" -Value 0
@@ -655,7 +656,6 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $sabRegPath -Name "TaskbarOneSegment" -Value 0
             Set-ItemProperty -Path $sabRegPath -Name "TaskbarGrouping" -Value 0
             Set-ItemProperty -Path $sabRegPath -Name "TaskbarCenterIcons" -Value 1
-            Set-ItemProperty -Path $sabRegPath -Name "TaskbarTranslucentEffect" -Value 0
             Set-ItemProperty -Path $sabRegPath -Name "TaskbarLargerIcons" -Value 0
             Set-ItemProperty -Path $sabRegPath -Name "TaskbarSpacierIcons" -Value (-1)
             Set-ItemProperty -Path $sabRegPath -Name "TaskbarControlCenter" -Value 1
@@ -708,21 +708,21 @@ foreach ($app in $selectedApps) {
                     Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
                     $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.8' -ErrorAction SilentlyContinue
                     if ($null -eq $dotNetRuntime) {
-                        Write-Host "Installing .NET Desktop Runtime 8..." -ForegroundColor Yellow
+                        Write-Host "Installing .NET Desktop Runtime 8..." -ForegroundColor DarkYellow
                         Invoke-Output { Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8' }
                     } else {
                         Write-Host ".NET Desktop Runtime is already installed." -ForegroundColor Green
                     }
                     $uiXaml = Get-WinGetPackage -Id 'Microsoft.UI.Xaml.2.7' -ErrorAction SilentlyContinue
                     if ($null -eq $uiXaml) {
-                        Write-Host "Installing Microsoft.UI.Xaml 2.7..." -ForegroundColor Yellow
+                        Write-Host "Installing Microsoft.UI.Xaml 2.7..." -ForegroundColor DarkYellow
                         Invoke-Output { Install-WinGetPackage -id 'Microsoft.UI.Xaml.2.7' }
                     } else {
                         Write-Host "Microsoft.UI.Xaml is already installed." -ForegroundColor Green
                     }
                     $winverUWP = Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP -ErrorAction SilentlyContinue
                     if ($null -eq $winverUWP) {
-                        Write-Host "Installing WinverUWP 2.1.4..." -ForegroundColor Yellow
+                        Write-Host "Installing WinverUWP 2.1.4..." -ForegroundColor DarkYellow
                         Invoke-WebRequest -Uri 'https://github.com/dongle-the-gadget/WinverUWP/releases/download/v2.1.0.0/2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle' -OutFile '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
                         Add-AppxPackage -Path '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
                     } else {
@@ -925,6 +925,7 @@ foreach ($app in $selectedApps) {
                         $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace '"UIDarkMode"="3"', '"UIDarkMode"="1"' }
                         $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "1644825", "15658734" }
                         $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "16119283", "2563870" }
+                        $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "store_dark", "store_light" }
                         $modifiedFile = "..\temp\winstep.reg"
                         $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 
                     }
@@ -934,6 +935,7 @@ foreach ($app in $selectedApps) {
                     $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace '"UIDarkMode"="3"', '"UIDarkMode"="1"' }
                     $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "1644825", "15658734" }
                     $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "16119283", "2563870" }
+                    $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "store_dark", "store_light" }
                     $modifiedFile = "..\temp\winstep.reg"
                     $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 
                     $regFile = $modifiedFile
@@ -986,7 +988,7 @@ foreach ($app in $selectedApps) {
         "11" {
         ## Black Cursor
             Write-Host "Configuring Other Settings..." -ForegroundColor Yellow
-            Write-Host "Black cursor..." -ForegroundColor Yellow
+            Write-Host "Black cursor..." -ForegroundColor DarkYellow
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             $curSourceFolder = (Get-Item -Path "..\config\cursor").FullName
             $curDestFolder = "C:\Windows\Cursors"
@@ -1023,8 +1025,8 @@ uint fWinIni);
 '@
             $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
             Invoke-Output {$CursorRefresh::SystemParametersInfo(0x0057,0,$null,0)}
-        ## Pin Home, Programs and Recycle Bin to Quick Access
-            write-host "Pinning Home, Programs and Recycle Bin to Quick Access..." -ForegroundColor Yellow
+        ## Pin User folder, Programs and Recycle Bin to Quick Access
+            write-host "Pinning User folder, Programs and Recycle Bin to Quick Access..." -ForegroundColor DarkYellow
 $homeIni = @"
 [.ShellClassInfo]
 IconResource=C:\Windows\System32\SHELL32.dll,160
@@ -1071,19 +1073,43 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             }
             Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse 
         ## Remove shortcut arrows
-            Write-Host "Removing shortcut arrows..." -ForegroundColor Yellow
+            Write-Host "Removing shortcut arrows..." -ForegroundColor DarkYellow
             Copy-Item -Path "..\config\blank.ico" -Destination "C:\Windows" -Force
             Invoke-Output {New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Force}
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
-        ## Cleaning up context menus
-            Write-Host "Cleaning up context menus..." -ForegroundColor Yellow
+        ## Configuring context menus
+            Write-Host "Configure context menus..." -ForegroundColor DarkYellow
             Get-ChildItem ..\config\contextmenu\remove\* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
+            $sourceFilePath = "..\config\contextmenu\add\Add_Theme_Mode_in_Context_Menu.reg"
+            $tempFilePath = "..\temp\Add_Theme_Mode_in_Context_Menu.reg"
+            $ps1FilePath = "..\config\contextmenu\theme.ps1"
+            if (-not (Test-Path -Path "$env:LOCALAPPDATA\WinMac")) {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac" -Force | Out-Null}
+            Copy-Item -Path $ps1FilePath -Destination "$env:LOCALAPPDATA\WinMac" -Force     
+            Copy-Item -Path $sourceFilePath -Destination '..\temp\' -Force
+            $appData = $env:LOCALAPPDATA -replace '\\', '\\'
+            (Get-Content -Path $tempFilePath) -replace 'WINMACAPPDATA', $appData | Set-Content -Path $tempFilePath
+            Get-ChildItem '..\temp\Add_Theme_Mode_in_Context_Menu.reg' | ForEach-Object { reg import $_.FullName > $null 2>&1 }
         ## End Task
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
             $taskbarDevSettings = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
             if (-not (Test-Path $taskbarDevSettings)) { Invoke-Output {New-Item -Path $taskbarDevSettings -Force} }
             Invoke-Output {New-ItemProperty -Path $taskbarDevSettings -Name "TaskbarEndTask" -Value 1 -PropertyType DWORD -Force}
-            Stop-Process -n explorer
+        ## Remove Home and Gallery icons
+            Write-Host "Remove Home and Gallery icons..." -ForegroundColor DarkYellow
+            Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" -Force | Out-Null
+            Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Force | Out-Null
+        ## Icons Pack
+            $regPath = "HKCU:\SOFTWARE\WinMac"
+            if (-not (Test-Path -Path $regPath)) {New-Item -Path $regPath -Force | Out-Null}
+            if ((Get-ItemProperty -Path $regPath -Name "Icon_Pack" -ErrorAction SilentlyContinue).Icon_Pack -ne 1) {
+                Write-Host "Deploying icon pack..." -ForegroundColor DarkYellow
+                $exePath = "..\bin\iconpack.exe"
+                $arguments = "/S"
+                Start-Process -FilePath $exePath -ArgumentList $arguments -NoNewWindow
+                Set-ItemProperty -Path $regPath -Name "Icon_Pack" -Value 1 | Out-Null
+                Start-Sleep -Seconds 60
+            }     
+            Stop-Process -Name explorer -Force
             Write-Host "Configuring Other Settings completed." -ForegroundColor Green
         }
     }
@@ -1108,7 +1134,7 @@ If you have any questions or suggestions, please contact me on GitHub.
 
 Write-Host "-----------------------------------------------------------------------------"  -ForegroundColor Cyan
 Start-Sleep 2
-$restartConfirmation = Read-Host "`nRestart computer now? It's recommended to fully apply all the changes (y/n)"
+$restartConfirmation = Read-Host "`nRestart computer now? It's recommended to fully apply all the changes (Y/n)"
 if ($restartConfirmation -eq "Y" -or $restartConfirmation -eq "y") {
     Write-Host "Restarting computer in" -ForegroundColor Red
     for ($a=9; $a -ge 0; $a--) {
