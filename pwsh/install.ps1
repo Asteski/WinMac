@@ -1098,7 +1098,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
                 $exePath = "..\bin\iconpack.exe"
                 $arguments = "/S"
                 Start-Process -FilePath $exePath -ArgumentList $arguments -NoNewWindow
-                Set-ItemProperty -Path $regPath -Name "Icon_Pack" -Value 1 -PropertyType DWORD
+                Set-ItemProperty -Path $regPath -Name "Icon_Pack" -Value 1
                 Start-Sleep -Seconds 60
             }     
             Stop-Process -Name explorer -Force
