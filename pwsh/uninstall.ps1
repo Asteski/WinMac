@@ -545,14 +545,14 @@ uint fWinIni);
             Invoke-Output { Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings" -Recurse }
             Invoke-Output { Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarSmallIcons" }
             Get-ChildItem ..\config\contextmenu\add\* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
-            New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" -Force
-            New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Force
+            New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" -Force | Out-Null
+            New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Force | Out-Null
             $regPath = "HKCU:\SOFTWARE\WinMac"
             if ((Get-ItemProperty -Path $regPath -Name "Icon_Pack" -ErrorAction SilentlyContinue).Icon_Pack -eq 1) {
                 $exePath = "..\bin\iconpack.exe"
                 $arguments = "/S"
                 Start-Process -FilePath $exePath -ArgumentList $arguments -NoNewWindow
-                Set-ItemProperty -Path $regPath -Name "Icon_Pack" -Value 0
+                Set-ItemProperty -Path $regPath -Name "Icon_Pack" -Value 0 | Out-Null
                 Start-Sleep -Seconds 60
             }
             Stop-Process -Name explorer -Force
