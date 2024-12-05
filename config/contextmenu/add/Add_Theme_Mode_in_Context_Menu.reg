@@ -13,14 +13,13 @@ Windows Registry Editor Version 5.00
 "MUIVerb"="Light"
 
 [HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\AppANDWindowsMode\shell\001flyout\command]
-@="cmd /s /c \"Reg Add HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize /v AppsUseLightTheme /t REG_DWORD /d 1 /f & Reg Add HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize /v SystemUsesLightTheme /t REG_DWORD /d 1 /f & taskkill /f /im explorer.exe  & start explorer.exe\""
+@="pwsh -NoProfile -ExecutionPolicy Bypass -File \"C:\\Users\\astes\\AppData\\Local\\theme.ps1" -mode Light -mode2 app"
 
 [HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\AppANDWindowsMode\shell\002flyout]
 "MUIVerb"="Dark"
 
 [HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\AppANDWindowsMode\shell\002flyout\command]
-@="cmd /s /c \"Reg Add HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize /v AppsUseLightTheme /t REG_DWORD /d 0 /f & Reg Add HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize /v SystemUsesLightTheme /t REG_DWORD /d 0 /f & taskkill /f /im explorer.exe  & start explorer.exe\""
-
+@="pwsh -NoProfile -ExecutionPolicy Bypass -File \"C:\\Users\\astes\\AppData\\Local\\theme.ps1" -mode Dark -mode2 app"
 
 [HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\AppMode]
 "MUIVerb"="App mode"
@@ -47,11 +46,10 @@ Windows Registry Editor Version 5.00
 "MUIVerb"="Light"
 
 [HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\WindowsMode\shell\001flyout\command]
-@="cmd /s /c \"Reg Add HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize /v SystemUsesLightTheme /t REG_DWORD /d 1 /f & taskkill /f /im explorer.exe  & start explorer.exe\""
+@="pwsh -NoProfile -ExecutionPolicy Bypass -File \"C:\\Users\\astes\\AppData\\Local\\theme.ps1" -mode Light"
 
 [HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\WindowsMode\shell\002flyout]
 "MUIVerb"="Dark"
 
 [HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\WindowsMode\shell\002flyout\command]
-@="cmd /s /c \"Reg Add HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize /v SystemUsesLightTheme /t REG_DWORD /d 0 /f & taskkill /f /im explorer.exe  & start explorer.exe\""
-  
+@="pwsh -NoProfile -ExecutionPolicy Bypass -File \"C:\\Users\\astes\\AppData\\Local\\theme.ps1" -mode Dark"  

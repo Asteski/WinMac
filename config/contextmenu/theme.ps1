@@ -3,7 +3,7 @@ param
 	[Parameter(Mandatory=$true)]
 	[string]
 	$mode,
-	[Parameter(Mandatory=$true)]
+	[Parameter(Mandatory=$false)]
 	[string]
 	$mode2
 )
