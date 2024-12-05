@@ -1085,7 +1085,8 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             $sourceFilePath = "..\config\contextmenu\theme.ps1"
             $tempFilePath = "..\temp\theme.ps1"
             Copy-Item -Path $sourceFilePath -Destination $tempFilePath -Force
-            (Get-Content -Path $tempFilePath) -replace '$WINMACAPPDATA%', $env:LOCALAPPDATA | Set-Content -Path $tempFilePath
+            $themeDir = $env:LOCALAPPDATA -replace '\\', '\\'
+            (Get-Content -Path $tempFilePath) -replace 'WINMACAPPDATA', $themeDir | Set-Content -Path $tempFilePath
             Copy-Item -Path $tempFilePath -Destination "$env:LOCALAPPDATA\WinMac" -Force            
         ## End Task
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
