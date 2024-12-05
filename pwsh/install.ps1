@@ -1025,8 +1025,8 @@ uint fWinIni);
 '@
             $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
             Invoke-Output {$CursorRefresh::SystemParametersInfo(0x0057,0,$null,0)}
-        ## Pin Home, Programs and Recycle Bin to Quick Access
-            write-host "Pinning Home, Programs and Recycle Bin to Quick Access..." -ForegroundColor DarkYellow
+        ## Pin User folder, Programs and Recycle Bin to Quick Access
+            write-host "Pinning User folder, Programs and Recycle Bin to Quick Access..." -ForegroundColor DarkYellow
 $homeIni = @"
 [.ShellClassInfo]
 IconResource=C:\Windows\System32\SHELL32.dll,160
@@ -1098,7 +1098,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
                 $exePath = "..\bin\iconpack.exe"
                 $arguments = "/S"
                 Start-Process -FilePath $exePath -ArgumentList $arguments -NoNewWindow
-                Set-ItemProperty -Path $regPath -Name "Icon_Pack" -Value 1
+                Set-ItemProperty -Path $regPath -Name "Icon_Pack" -Value 1 | Out-Null
                 Start-Sleep -Seconds 60
             }     
             Stop-Process -Name explorer -Force
