@@ -28,7 +28,9 @@ try {
 	$dockRunningIndicator = (Get-ItemProperty -Path $registryPath1 -Name "DockRunningIndicator1" -ErrorAction SilentlyContinue).DockRunningIndicator1
 	$themeStyle = (Get-ItemProperty -Path $registryPath0 -Name "GenThemeName" -ErrorAction SilentlyContinue).GenThemeName
 }
-catch {}
+catch {
+	echo 
+}
 if ($mode -eq 'Light') {
 	$theme = $themeStyle -replace 'Dark', 'Light'
 	$dockRunningIndicator = $dockRunningIndicator -replace 'Dark', 'Light'
@@ -60,8 +62,7 @@ if ($mode -eq 'Light') {
 		if ($mode2 -eq 'App') {
 			Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "AppsUseLightTheme" -Type DWord -Value 1 -ErrorAction SilentlyContinue
 		}
-	}
-	catch {}
+	} catch {}
 }
 if ($mode -eq 'Dark') {
 	$theme = $themeStyle -replace 'Light', 'Dark'
@@ -85,7 +86,7 @@ if ($mode -eq 'Dark') {
 		Set-ItemProperty -Path $registryPath0 -Name "TrashFullIcon" -Value "C:\Users\Public\Documents\Winstep\Icons\recycle_bin_full_dark.ico" -ErrorAction SilentlyContinue
 		Set-ItemProperty -Path "HKCU:\Software\StartIsBack" -Name "OrbBitmap" -Value "white-rounded.svg" -ErrorAction SilentlyContinue
 		Set-ItemProperty -Path $registryPath1 -Name "DockBitmapFolder1" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\" -ErrorAction SilentlyContinue
-		Set-ItemProperty -Path $registryPath1 -Name "DockBack3Image1" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\NxBack.png"
+		Set-ItemProperty -Path $registryPath1 -Name "DockBack3Image1" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\NxBack.png" -ErrorAction SilentlyContinue
 		Set-ItemProperty -Path $registryPath1 -Name "DockLabelColor1" -Value $DockLabelColor1 -ErrorAction SilentlyContinue
 		Set-ItemProperty -Path $registryPath1 -Name "DockLabelBackColor1" -Value $DockLabelBackColor1 -ErrorAction SilentlyContinue
 		Set-ItemProperty -Path $registryPath2 -Name "UIDarkMode" -Value $UIDarkMode -ErrorAction SilentlyContinue
@@ -94,8 +95,9 @@ if ($mode -eq 'Dark') {
 		if ($mode2 -eq 'App') {
 			Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "AppsUseLightTheme" -Type DWord -Value 0 -ErrorAction SilentlyContinue
 		}
-	}
-	catch {}
+	} catch {}
 }
-Start-Process explorer -ErrorAction SilentlyContinue
-Start-Process "C:\Program Files (x86)\Winstep\Nexus.exe" -ErrorAction SilentlyContinue
+try {
+	Start-Process explorer -ErrorAction SilentlyContinue
+	Start-Process "C:\Program Filesaa (x86)\Winstep\Nexus.exe"
+} catch {}
