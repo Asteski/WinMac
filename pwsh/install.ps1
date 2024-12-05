@@ -1077,14 +1077,14 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             Copy-Item -Path "..\config\blank.ico" -Destination "C:\Windows" -Force
             Invoke-Output {New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Force}
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
-            ## Configuring context menus
+        ## Configuring context menus
             Write-Host "Configure context menus..." -ForegroundColor DarkYellow
             Get-ChildItem ..\config\contextmenu\remove\* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
             $sourceFilePath = "..\config\contextmenu\add\Add_Theme_Mode_in_Context_Menu.reg"
             $tempFilePath = "..\temp\Add_Theme_Mode_in_Context_Menu.reg"
             $ps1FilePath = "..\config\contextmenu\theme.ps1"
             if (-not (Test-Path -Path "$env:LOCALAPPDATA\WinMac")) {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac" -Force | Out-Null}
-            Copy-Item -Path $ps1FilePath -Destination "$env:LOCALAPPDATA\WinMac" -Force            
+            Copy-Item -Path $ps1FilePath -Destination "$env:LOCALAPPDATA\WinMac" -Force     
             Copy-Item -Path $sourceFilePath -Destination '..\temp\' -Force
             $appData = $env:LOCALAPPDATA -replace '\\', '\\'
             (Get-Content -Path $tempFilePath) -replace 'WINMACAPPDATA', $appData | Set-Content -Path $tempFilePath
@@ -1118,7 +1118,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
 if ((Get-ChildItem -Path "$env:LOCALAPPDATA\WinMac" -Recurse | Measure-Object).Count -eq 0) { Remove-Item -Path "$env:LOCALAPPDATA\WinMac" -Force }
 $explorerProcess = Get-Process -Name explorer -ErrorAction SilentlyContinue
 if ($null -eq $explorerProcess) {Start-Process -FilePath explorer.exe}
-Remove-Item "..\temp" -Recurse -Force
+# Remove-Item "..\temp" -Recurse -Force
 Stop-Transcript | Out-Null
 Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
 Write-Host @"
