@@ -71,7 +71,7 @@ Tools introduce features such as ribbons, tabs, customizable toolbar buttons, en
 
 Windhawk introduces explorer mods, that enables to see folder size, hide dot files and folders, and set custom name for explorer windows.
 
-Additionally, deployment script includes pinning User folder, Start Menu Programs folder and Recycle Bin to Quick Access.
+Additionally, deployment script includes pinning User folder, Start Menu Programs folder and Recycle Bin to Quick Access, cleaning up context menus and navigation pane.
 
 - **Enhanced Terminal**
 
@@ -80,6 +80,10 @@ WinMac provides improved prompt with addition of completion functions and most c
 - **Keyboard Shortcuts**
 
 WinMac provides very useful keyboard shortcuts from macOS with use of AutoHotkey, which is an automation scripting language for Windows. Shortcuts include hiding/showing dock, minimizing single or all windows and cycling through windows of the same app. More details on Wiki page [Keyboard Shortcuts](https://github.com/Asteski/WinMac/wiki/Commands-cheat-sheet#keyboard-shortcuts).
+
+- **Icon Pack**
+
+Refresh your Windows 11 experience with new set of icons applied to many old and new Windows components, including blue folders.
 
 ## Experience WinMac Today!
 
