@@ -83,7 +83,7 @@ WinMac provides very useful keyboard shortcuts from macOS with use of AutoHotkey
 
 - **Enhanced Icons**
 
-Refresh your Windows 11 experience with new set of icons applied to many old and new Windows components like Explorer, Control Panel items, Windows tools, various context menus, default and user folders, and many more.
+Refresh your Windows 11 experience with new set of icons applied to many old and new Windows components like Explorer, Control Panel items, Windows Tools, various context menus, default and user folders, and many more.
 
 ## Experience WinMac Today!
 
