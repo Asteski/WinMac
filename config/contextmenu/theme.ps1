@@ -23,7 +23,6 @@ if ($mode -eq 'Light')
 	$DockLabelColor1 = '1644825'
 	$DockLabelBackColor1 = '16119283'
 }
-Write-Host 'Changing theme to ' -nonew; Write-Host $mode -ForegroundColor Yellow
 taskkill /IM explorer.exe /F > $null 2>&1
 taskkill /IM nexus.exe /F > $null 2>&1
 $registryPath0 = "HKCU:\Software\WinSTEP2000\NeXuS"
