@@ -618,9 +618,9 @@ foreach ($app in $selectedApps) {
             Invoke-Output { Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $prompt }
             if ($gitProfile -eq $true) { Invoke-Output { Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $git } }
             Invoke-Output { Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $functions }
-            Invoke-Output { Move-Item -Path "C:\Users\Public\Desktop\gVim*" -Destination $programsDir -Force }
-            Invoke-Output { Move-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Destination $programsDir -Force }
-            Invoke-Output { Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\gVim*" -Destination $programsDir -Force }
+            Invoke-Output { Remove-Item -Path "C:\Users\Public\Desktop\gVim*" -Force }
+            Invoke-Output { Remove-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Force }
+            Invoke-Output { Remove-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\gVim*" -Force }
             Write-Host "PowerShell Profile configuration completed." -ForegroundColor Green
         }
     # StartAllBack
