@@ -1077,6 +1077,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
                     $recycleBin.Self.InvokeVerb("PinToHome")
                 }
                 Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse
+                Set-ItemProperty -Path $regPath -Name "Quick_Launcher" -Value 1 | Out-Null
             }
         ## Remove shortcut arrows
             Write-Host "Removing shortcut arrows..." -ForegroundColor DarkYellow
