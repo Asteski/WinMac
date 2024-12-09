@@ -10,7 +10,6 @@ param
 if ($mode -eq 'Dark')
 {
 	$CursorMode = 'aero'
-
 	$OSMode = 0
 	$UIDarkMode = '1'
 	$DockLabelColor1 = '15658734'
@@ -24,6 +23,7 @@ if ($mode -eq 'Light')
 	$DockLabelColor1 = '1644825'
 	$DockLabelBackColor1 = '16119283'
 }
+Write-Host 'Changing theme to ' -nonew; Write-Host $mode -ForegroundColor Yellow
 taskkill /IM explorer.exe /F > $null 2>&1
 taskkill /IM nexus.exe /F > $null 2>&1
 $registryPath0 = "HKCU:\Software\WinSTEP2000\NeXuS"
@@ -77,7 +77,7 @@ uint pvParam,
 uint fWinIni);
 '@
 	$CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
-	$CursorRefresh::SystemParametersInfo(0x0057,0,$null,0)
+	$CursorRefresh::SystemParametersInfo(0x0057,0,$null,0) > $null 2>&1
 	Set-ItemProperty -Path $registryPath0 -Name "GenThemeName" -Value $theme -ErrorAction SilentlyContinue
 	Set-ItemProperty -Path $registryPath0 -Name "BitmapsFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\" -ErrorAction SilentlyContinue
 	Set-ItemProperty -Path $registryPath0 -Name "GlobalBitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\" -ErrorAction SilentlyContinue
@@ -92,8 +92,8 @@ uint fWinIni);
 	Set-ItemProperty -Path $registryPath0 -Name "NetBitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\" -ErrorAction SilentlyContinue
 	Set-ItemProperty -Path $registryPath0 -Name "RAMBitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\" -ErrorAction SilentlyContinue
 	Set-ItemProperty -Path $registryPath0 -Name "WANDABitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\" -ErrorAction SilentlyContinue
-	Set-ItemProperty -Path $registryPath0 -Name "TrashEmptyIcon" -Value "C:\Users\Public\Documents\Winstep\Icons\recycle_bin_empty_$mode.ico" -ErrorAction SilentlyContinue
-	Set-ItemProperty -Path $registryPath0 -Name "TrashFullIcon" -Value "C:\Users\Public\Documents\Winstep\Icons\recycle_bin_full_$mode.ico" -ErrorAction SilentlyContinue
+	Set-ItemProperty -Path $registryPath0 -Name "TrashEmptyIcon" -Value "C:\Users\Public\Documents\Winstep\Icons\macos_bin_empty_$mode.ico" -ErrorAction SilentlyContinue
+	Set-ItemProperty -Path $registryPath0 -Name "TrashFullIcon" -Value "C:\Users\Public\Documents\Winstep\Icons\macos_bin_full_$mode.ico" -ErrorAction SilentlyContinue
 	Set-ItemProperty -Path "HKCU:\Software\StartIsBack" -Name "OrbBitmap" -Value $orbBitmap -ErrorAction SilentlyContinue
 	Set-ItemProperty -Path $registryPath1 -Name "DockBitmapFolder1" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\" -ErrorAction SilentlyContinue
 	Set-ItemProperty -Path $registryPath1 -Name "DockBack3Image1" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\NxBack.png" -ErrorAction SilentlyContinue
@@ -110,3 +110,4 @@ try {
 	Start-Process explorer -ErrorAction SilentlyContinue
 	Start-Process "C:\Program Files (x86)\Winstep\Nexus.exe"
 } catch {}
+start-sleep -s 2
