@@ -109,4 +109,3 @@ try {
 	Start-Process explorer -ErrorAction SilentlyContinue
 	Start-Process "C:\Program Files (x86)\Winstep\Nexus.exe"
 } catch {}
-start-sleep -s 2
