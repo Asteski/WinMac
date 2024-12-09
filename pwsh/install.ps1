@@ -1030,7 +1030,7 @@ uint fWinIni);
         ## Pin User folder, Programs and Recycle Bin to Quick Access
             $regPath = "HKCU:\SOFTWARE\WinMac"
             if (-not (Test-Path -Path $regPath)) {New-Item -Path $regPath -Force | Out-Null}
-            if ((Get-ItemProperty -Path $regPath -Name "Quick_Access" -ErrorAction SilentlyContinue).Icon_Pack -ne 1) {
+            if ((Get-ItemProperty -Path $regPath -Name "Quick_Access" -ErrorAction SilentlyContinue).Quick_Access -ne 1) {
                 Write-Host "Pinning User folder, Programs and Recycle Bin to Quick Access..." -ForegroundColor DarkYellow
 $homeIni = @"
 [.ShellClassInfo]
