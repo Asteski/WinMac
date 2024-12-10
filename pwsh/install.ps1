@@ -1135,9 +1135,9 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
                 Start-Process -FilePath $exePath -ArgumentList $arguments -NoNewWindow
                 Set-ItemProperty -Path $regPath -Name "Icon_Pack" -Value 1 | Out-Null
                 if ($blueOrYellow -eq "B" -or $blueOrYellow -eq "b") {                
-                    Stop-Process -n Nexus
+                    Stop-Process -n Nexus -ErrorAction SilentlyContinue
                     Start-Sleep -s 5
-                    Start-Process "C:\Program Files (x86)\Winstep\Nexus.exe"
+                    Start-Process "C:\Program Files (x86)\Winstep\Nexus.exe" -ErrorAction SilentlyContinue
                 }
                 Start-Sleep -s 55
             }     
