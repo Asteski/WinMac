@@ -461,8 +461,8 @@ if ($selectedApps -like '*4*' -or $selectedApps -like '*7*' -or $selectedApps -l
     }
 }
 
-if ($selectedApps -like '*11*') {
-    $blueOrYellow = Read-Host "`nEnter 'B' for blue or 'Y' for yellow folders"
+if ($selectedApps -like '*9*' -or $selectedApps -like '*11*') {
+    $blueOrYellow = Read-Host "`nEnter 'B' for blue or 'Y' for yellow folders color"
     if ($blueOrYellow -eq 'B' -or $blueOrYellow -eq 'b') {
         Write-Host "Using blue folders icon pack." -ForegroundColor Green
     }
@@ -471,7 +471,7 @@ if ($selectedApps -like '*11*') {
     }
     else
     {
-        Write-Host "Invalid input. Defaulting to  blue folders icon pack." -ForegroundColor Yellow
+        Write-Host "Invalid input. Defaulting to blue folders icon pack." -ForegroundColor Yellow
         $blueOrYellow = 'B'
     }
 }
@@ -964,7 +964,8 @@ foreach ($app in $selectedApps) {
                 Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type7"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path6" -Value $downloadsPath
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path7" -Value "$env:APPDATA\Microsoft\Windows\Recent\"
-                Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe' 
+                if ($blueOrYellow -eq "B" -or $blueOrYellow -eq "b") {Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath0" -Value "C:\\Users\\Public\\Documents\\Winstep\\Icons\\explorer_blue.ico"}
+                Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe'
                 while (!(Get-Process "nexus")) { Start-Sleep 1 }
                 $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
                 Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Nexus.lnk" -Destination $programsDir -Force 
@@ -1125,7 +1126,6 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             if ((Get-ItemProperty -Path $regPath -Name "Icon_Pack" -ErrorAction SilentlyContinue).Icon_Pack -ne 1) {
                 if ($blueOrYellow -eq "B" -or $blueOrYellow -eq "b") {
                     $exePath = "..\bin\iconpack_blue_folders.exe"
-                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath0" -Value "C:\\Users\\Public\\Documents\\Winstep\\Icons\\explorer_blue.ico"
                 }
                 elseif ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {
                     $exePath = "..\bin\iconpack_yellow_folders.exe"
@@ -1134,11 +1134,6 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
                 Write-Host "Deploying icon pack..." -ForegroundColor DarkYellow
                 Start-Process -FilePath $exePath -ArgumentList $arguments -NoNewWindow
                 Set-ItemProperty -Path $regPath -Name "Icon_Pack" -Value 1 | Out-Null
-                if ($blueOrYellow -eq "B" -or $blueOrYellow -eq "b") {                
-                    Stop-Process -n Nexus -ErrorAction SilentlyContinue
-                    Start-Sleep -s 5
-                    Start-Process "C:\Program Files (x86)\Winstep\Nexus.exe" -ErrorAction SilentlyContinue
-                }
                 Start-Sleep -s 55
             }     
             Stop-Process -Name explorer -Force
