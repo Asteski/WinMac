@@ -1123,12 +1123,23 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Force | Out-Null
         ## Icons Pack
             if ((Get-ItemProperty -Path $regPath -Name "Icon_Pack" -ErrorAction SilentlyContinue).Icon_Pack -ne 1) {
-                if ($blueOrYellow -eq "B" -or $blueOrYellow -eq "b") { $exePath = "..\bin\iconpack_blue_folders.exe" } elseif ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") { $exePath = "..\bin\iconpack_yellow_folders.exe" }
+                if ($blueOrYellow -eq "B" -or $blueOrYellow -eq "b") {
+                    $exePath = "..\bin\iconpack_blue_folders.exe"
+                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath0" -Value "C:\\Users\\Public\\Documents\\Winstep\\Icons\\explorer_blue.ico"
+                }
+                elseif ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {
+                    $exePath = "..\bin\iconpack_yellow_folders.exe"
+                }
                 $arguments = "/S"
                 Write-Host "Deploying icon pack..." -ForegroundColor DarkYellow
                 Start-Process -FilePath $exePath -ArgumentList $arguments -NoNewWindow
                 Set-ItemProperty -Path $regPath -Name "Icon_Pack" -Value 1 | Out-Null
-                Start-Sleep -Seconds 60
+                if ($blueOrYellow -eq "B" -or $blueOrYellow -eq "b") {                
+                    Stop-Process -n Nexus
+                    Start-Sleep -s 5
+                    Start-Process "C:\Program Files (x86)\Winstep\Nexus.exe"
+                }
+                Start-Sleep -s 55
             }     
             Stop-Process -Name explorer -Force
             Write-Host "Configuring Other Settings completed." -ForegroundColor Green
