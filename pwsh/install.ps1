@@ -464,14 +464,14 @@ if ($selectedApps -like '*4*' -or $selectedApps -like '*7*' -or $selectedApps -l
 if ($selectedApps -like '*11*') {
     $blueOrYellow = Read-Host "`nEnter 'B' for blue or 'Y' for yellow folders"
     if ($blueOrYellow -eq 'B' -or $blueOrYellow -eq 'b') {
-        Write-Host "Using Blue folders icon pack." -ForegroundColor Green
+        Write-Host "Using blue folders icon pack." -ForegroundColor Green
     }
     elseif ($blueOrYellow -eq 'Y' -or $blueOrYellow -eq 'y') {
-        Write-Host "Using Yellow folders icon pack." -ForegroundColor Green
+        Write-Host "Using yellow folders icon pack." -ForegroundColor Green
     }
     else
     {
-        Write-Host "Invalid input. Defaulting to  Blue folders icon pack." -ForegroundColor Yellow
+        Write-Host "Invalid input. Defaulting to  blue folders icon pack." -ForegroundColor Yellow
         $blueOrYellow = 'B'
     }
 }
