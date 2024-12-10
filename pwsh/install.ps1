@@ -461,6 +461,22 @@ if ($selectedApps -like '*4*' -or $selectedApps -like '*7*' -or $selectedApps -l
     }
 }
 
+if ($selectedApps -like '*11*') {
+    $blueOrYellow = Read-Host "`nEnter 'B' for blue or 'Y' for yellow folders"
+    if ($blueOrYellow -eq 'B' -or $blueOrYellow -eq 'b') {
+        Write-Host "Using Blue folders icon pack." -ForegroundColor Green
+    }
+    elseif ($blueOrYellow -eq 'Y' -or $blueOrYellow -eq 'y') {
+        Write-Host "Using Yellow folders icon pack." -ForegroundColor Green
+    }
+    else
+    {
+        Write-Host "Invalid input. Defaulting to  Blue folders icon pack." -ForegroundColor Yellow
+        $blueOrYellow = 'B'
+    }
+}
+
+
 Start-Sleep 1
 $installConfirmation = Read-Host "`nAre you sure you want to start the installation process (Y/n)"
 
@@ -1107,9 +1123,9 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Force | Out-Null
         ## Icons Pack
             if ((Get-ItemProperty -Path $regPath -Name "Icon_Pack" -ErrorAction SilentlyContinue).Icon_Pack -ne 1) {
-                Write-Host "Deploying icon pack..." -ForegroundColor DarkYellow
-                $exePath = "..\bin\iconpack.exe"
+                if ($blueOrYellow -eq "B" -or $blueOrYellow -eq "b") { $exePath = "..\bin\iconpack_blue_folders.exe" } elseif ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") { $exePath = "..\bin\iconpack_yellow_folders.exe" }
                 $arguments = "/S"
+                Write-Host "Deploying icon pack..." -ForegroundColor DarkYellow
                 Start-Process -FilePath $exePath -ArgumentList $arguments -NoNewWindow
                 Set-ItemProperty -Path $regPath -Name "Icon_Pack" -Value 1 | Out-Null
                 Start-Sleep -Seconds 60
