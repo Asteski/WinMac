@@ -550,7 +550,7 @@ uint fWinIni);
             New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Force | Out-Null
             $regPath = "HKCU:\SOFTWARE\WinMac"
             if ((Get-ItemProperty -Path $regPath -Name "Icon_Pack" -ErrorAction SilentlyContinue).Icon_Pack -eq 1) {
-                $exePath = "..\bin\iconpack.exe"
+                $exePath = "..\bin\iconpack_blue_folders.exe"
                 $arguments = "/S"
                 Start-Process -FilePath $exePath -ArgumentList $arguments -NoNewWindow
                 Set-ItemProperty -Path $regPath -Name "Icon_Pack" -Value 0 | Out-Null
