@@ -551,8 +551,7 @@ uint fWinIni);
             $regPath = "HKCU:\SOFTWARE\WinMac"
             if ((Get-ItemProperty -Path $regPath -Name "Icon_Pack" -ErrorAction SilentlyContinue).Icon_Pack -eq 1) {
                 $exePath = "..\bin\iconpack.exe"
-                $arguments = "/S"
-                Start-Process -FilePath $exePath -ArgumentList $arguments -NoNewWindow
+                Start-Process -FilePath $exePath
                 Set-ItemProperty -Path $regPath -Name "Icon_Pack" -Value 0 | Out-Null
                 Start-Sleep -Seconds 60
             }
