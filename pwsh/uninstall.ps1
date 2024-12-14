@@ -481,9 +481,10 @@ foreach ($app in $selectedApps) {
             Invoke-Output {Uninstall-WinGetPackage -name Windhawk}
             Write-Host "Uninstalling Windhawk completed." -ForegroundColor Green
         }
-    # Other
+        # Other
         "11" {
             Write-Host "Uninstalling Other Settings..." -ForegroundColor Yellow
+            $regPath = "HKCU:\SOFTWARE\WinMac"
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 0
             $homeDir = "C:\Users\$env:USERNAME"
@@ -548,7 +549,6 @@ uint fWinIni);
             Get-ChildItem '..\config\contextmenu\remove\Remove_Theme_Mode_in_Context_Menu.reg' | ForEach-Object { reg import $_.FullName > $null 2>&1 }
             New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" -Force | Out-Null
             New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Force | Out-Null
-            $regPath = "HKCU:\SOFTWARE\WinMac"
             Set-ItemProperty -Path $regPath -Name "Icon_Pack" -Value 0 | Out-Null
             Invoke-Output { Uninstall-WinGetPackage -name 'IconPack Installer' }
             Start-Sleep -Seconds 60
