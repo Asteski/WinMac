@@ -97,8 +97,6 @@ For the most reliable deployment process, I recommend to check [Installation Gui
 
 [Wiki](https://github.com/Asteski/WinMac/wiki) have ton of very useful information, which can help you understand WinMac components capabilities and configuration to modify them to your liking.
 
-There are many dock customization you can find around the web, including [DeviantArt](https://www.deviantart.com/search?q=winstep+dock+windows).
-
 ## Credits to
 
 List of utilities and their creators used with WinMac:
