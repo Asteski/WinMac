@@ -2,7 +2,7 @@ param (
     [switch]$noGUI,
     [switch]$debug
 )
-$version = "0.7.0"
+$version = "0.7.1"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_install_log_$date.txt"
 $transcriptFile = "WinMac_install_transcript_$date.txt"
@@ -460,6 +460,22 @@ if ($selectedApps -like '*4*' -or $selectedApps -like '*7*' -or $selectedApps -l
         $lightOrDark = "L"
     }
 }
+
+if ($selectedApps -like '*9*' -or $selectedApps -like '*11*') {
+    $blueOrYellow = Read-Host "`nEnter 'B' for blue or 'Y' for yellow folders color"
+    if ($blueOrYellow -eq 'B' -or $blueOrYellow -eq 'b') {
+        Write-Host "Using blue folders icon pack." -ForegroundColor Green
+    }
+    elseif ($blueOrYellow -eq 'Y' -or $blueOrYellow -eq 'y') {
+        Write-Host "Using yellow folders icon pack." -ForegroundColor Green
+    }
+    else
+    {
+        Write-Host "Invalid input. Defaulting to blue folders icon pack." -ForegroundColor Yellow
+        $blueOrYellow = 'B'
+    }
+}
+
 
 Start-Sleep 1
 $installConfirmation = Read-Host "`nAre you sure you want to start the installation process (Y/n)"
@@ -948,7 +964,8 @@ foreach ($app in $selectedApps) {
                 Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type7"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path6" -Value $downloadsPath
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path7" -Value "$env:APPDATA\Microsoft\Windows\Recent\"
-                Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe' 
+                if ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath0" -Value "C:\\Users\\Public\\Documents\\Winstep\\Icons\\explorer_yellow.ico"}
+                Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe'st
                 while (!(Get-Process "nexus")) { Start-Sleep 1 }
                 $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
                 Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Nexus.lnk" -Destination $programsDir -Force 
@@ -1107,12 +1124,17 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Force | Out-Null
         ## Icons Pack
             if ((Get-ItemProperty -Path $regPath -Name "Icon_Pack" -ErrorAction SilentlyContinue).Icon_Pack -ne 1) {
-                Write-Host "Deploying icon pack..." -ForegroundColor DarkYellow
-                $exePath = "..\bin\iconpack.exe"
+                if ($blueOrYellow -eq "B" -or $blueOrYellow -eq "b") {
+                    $exePath = "..\bin\iconpack_blue_folders.exe"
+                }
+                elseif ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {
+                    $exePath = "..\bin\iconpack_yellow_folders.exe"
+                }
                 $arguments = "/S"
+                Write-Host "Deploying icon pack..." -ForegroundColor DarkYellow
                 Start-Process -FilePath $exePath -ArgumentList $arguments -NoNewWindow
                 Set-ItemProperty -Path $regPath -Name "Icon_Pack" -Value 1 | Out-Null
-                Start-Sleep -Seconds 60
+                Start-Sleep -s 55
             }     
             Stop-Process -Name explorer -Force
             Write-Host "Configuring Other Settings completed." -ForegroundColor Green

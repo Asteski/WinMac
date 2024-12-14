@@ -161,7 +161,7 @@ function lsx {
 set-alias -name ls -value lls
 set-alias -name la -value lla
 function wl { $out = get-wingetpackage $args | Sort-Object name; if ($out) { $out } else { Write-Host "No package found" -ForegroundColor Red }}
-# function wl { winget list } 
+# function wl { winget list $args } 
 function wi { winget install $args }
 function wr { winget uninstall $args } 
 function ws { $appname = $args; winget search "$appname" }
