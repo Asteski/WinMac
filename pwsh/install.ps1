@@ -555,7 +555,7 @@ foreach ($app in $selectedApps) {
                 $envPath += ";$env:LOCALAPPDATA\PowerToys"
                 [System.Environment]::SetEnvironmentVariable("Path", $envPath, [System.EnvironmentVariableTarget]::User)
             }
-            & "$env:LOCALAPPDATA\PowerToys\ptr.exe" add 'ProcessKiller' '8LWXpg/PowerToysRun-ProcessKiller'
+            & "$env:LOCALAPPDATA\PowerToys\ptr.exe" add 'ProcessKiller' '8LWXpg/PowerToysRun-ProcessKiller' > $null 2>&1
             Write-Host "PowerToys installation completed." -ForegroundColor Green
         }
     # Everything
