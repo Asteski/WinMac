@@ -550,6 +550,7 @@ foreach ($app in $selectedApps) {
             winget configure ..\config\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
             Copy-Item -Path "..\config\powertoys\ptr\ptr.exe" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
             Copy-Item -Path "..\config\powertoys\RunPlugins" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
+            Copy-Item -Path "..\config\powertoys\RunPlugins\Everything" "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -Recurse -Force
             $envPath = [System.Environment]::GetEnvironmentVariable("Path", [System.EnvironmentVariableTarget]::User)
             if (-not ($envPath -like "*$env:LOCALAPPDATA\PowerToys*")) {
                 $envPath += ";$env:LOCALAPPDATA\PowerToys"
