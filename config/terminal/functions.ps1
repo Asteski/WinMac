@@ -175,6 +175,9 @@ function ffind {
         [Alias('r')][switch]$Recurse      # The -Recurse switch (with alias -r) to enable recursive search
     )
     if ($Name) {
+        if ($Name.StartsWith('.\')) {
+            $Name = $Name.Substring(2)
+        }    
         $filter = "*$Name*"
         if ($Recurse) {
             $items = Get-ChildItem -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -like $filter }
