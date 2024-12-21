@@ -1146,7 +1146,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
                 if ($blueOrYellow -eq "B" -or $blueOrYellow -eq "b") {
                     $shortcutPath = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\File Explorer.lnk"
                     $systemDllPath = "C:\Windows\System32\imageres.dll"
-                    $iconIndex = 265 # Replace with the desired icon index
+                    $iconIndex = 264 # Replace with the desired icon index
                     $shell = New-Object -ComObject WScript.Shell
                     $shortcut = $shell.CreateShortcut($shortcutPath)
                     $shortcut.IconLocation = "$systemDllPath,$iconIndex"
