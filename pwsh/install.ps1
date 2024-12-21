@@ -556,7 +556,7 @@ foreach ($app in $selectedApps) {
                 $envPath += ";$env:LOCALAPPDATA\PowerToys"
                 [System.Environment]::SetEnvironmentVariable("Path", $envPath, [System.EnvironmentVariableTarget]::User)
             }
-            & "$env:LOCALAPPDATA\PowerToys\ptr.exe" add 'ProcessKiller' '8LWXpg/PowerToysRun-ProcessKiller' #!> $null 2>&1
+            & "$env:LOCALAPPDATA\PowerToys\ptr.exe" add 'ProcessKiller' '8LWXpg/PowerToysRun-ProcessKiller' *>$null
             Write-Host "PowerToys installation completed." -ForegroundColor Green
         }
     # Everything
@@ -973,7 +973,7 @@ foreach ($app in $selectedApps) {
                 Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type7"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path6" -Value $downloadsPath
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path7" -Value "$env:APPDATA\Microsoft\Windows\Recent\"
-                if ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath0" -Value "C:\\Users\\Public\\Documents\\Winstep\\Icons\\explorer_yellow.ico"}
+                if ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath0" -Value "C:\\Users\\Public\\Documents\\Winstep\\Icons\\explorer_default.ico"}
                 Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe'st
                 while (!(Get-Process "nexus")) { Start-Sleep 1 }
                 $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
