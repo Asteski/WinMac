@@ -1143,6 +1143,13 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
                 Start-Process -FilePath $exePath -ArgumentList $arguments -NoNewWindow
                 Set-ItemProperty -Path $regPath -Name "IconPack" -Value 1 | Out-Null
                 Start-Sleep -s 55
+                $shortcutPath = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\File Explorer.lnk"
+                $systemDllPath = "C:\Windows\System32\imageres.dll"
+                $iconIndex = 265 # Replace with the desired icon index
+                $shell = New-Object -ComObject WScript.Shell
+                $shortcut = $shell.CreateShortcut($shortcutPath)
+                $shortcut.IconLocation = "$systemDllPath,$iconIndex"
+                $shortcut.Save()
             }     
             Stop-Process -Name explorer -Force
             Write-Host "Configuring Other Settings completed." -ForegroundColor Green
