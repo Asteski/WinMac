@@ -1131,15 +1131,6 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" -Force | Out-Null
             Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Force | Out-Null
         ## Icons Pack
-            if ($blueOrYellow -eq "B" -or $blueOrYellow -eq "b") {
-                $shortcutPath = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\File Explorer.lnk"
-                $systemDllPath = "C:\Windows\System32\imageres.dll"
-                $iconIndex = 265 # Replace with the desired icon index
-                $shell = New-Object -ComObject WScript.Shell
-                $shortcut = $shell.CreateShortcut($shortcutPath)
-                $shortcut.IconLocation = "$systemDllPath,$iconIndex"
-                $shortcut.Save()
-            }
             if ((Get-ItemProperty -Path $regPath -Name "IconPack" -ErrorAction SilentlyContinue).IconPack -ne 1) {
                 if ($blueOrYellow -eq "B" -or $blueOrYellow -eq "b") {
                     $exePath = "..\bin\iconpack_blue_folders.exe"
@@ -1152,6 +1143,15 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
                 Start-Process -FilePath $exePath -ArgumentList $arguments -NoNewWindow
                 Set-ItemProperty -Path $regPath -Name "IconPack" -Value 1 | Out-Null
                 Start-Sleep -s 55
+                if ($blueOrYellow -eq "B" -or $blueOrYellow -eq "b") {
+                    $shortcutPath = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\File Explorer.lnk"
+                    $systemDllPath = "C:\Windows\System32\imageres.dll"
+                    $iconIndex = 265 # Replace with the desired icon index
+                    $shell = New-Object -ComObject WScript.Shell
+                    $shortcut = $shell.CreateShortcut($shortcutPath)
+                    $shortcut.IconLocation = "$systemDllPath,$iconIndex"
+                    $shortcut.Save()
+                }
             }     
             Stop-Process -Name explorer -Force
             Write-Host "Configuring Other Settings completed." -ForegroundColor Green
