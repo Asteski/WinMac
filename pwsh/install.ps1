@@ -462,9 +462,9 @@ if ($selectedApps -like '*4*' -or $selectedApps -like '*7*' -or $selectedApps -l
 }
 
 if ($selectedApps -like '*1*' -or $selectedApps -like '*9*' -or $selectedApps -like '*11*') {
-    $blueOrYellow = Read-Host "`nEnter 'B' for blue or 'Y' for yellow folders color"
+    $blueOrYellow = Read-Host "`nEnter 'B' for blue or 'Y' for yellow folders"
     if ($blueOrYellow -eq 'B' -or $blueOrYellow -eq 'b') {
-        Write-Host "Using blue foldersk." -ForegroundColor Green
+        Write-Host "Using blue folders." -ForegroundColor Green
         $blueOrYellow = 'B'
     }
     elseif ($blueOrYellow -eq 'Y' -or $blueOrYellow -eq 'y') {
@@ -558,6 +558,7 @@ foreach ($app in $selectedApps) {
             }
             else {
                 Copy-Item -Path "..\config\powertoys\RunPlugins" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
+                Copy-Item -Path "..\config\powertoys\RunPlugins" "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -Recurse -Force
             }        
             $envPath = [System.Environment]::GetEnvironmentVariable("Path", [System.EnvironmentVariableTarget]::User)
             if (-not ($envPath -like "*$env:LOCALAPPDATA\PowerToys*")) {
