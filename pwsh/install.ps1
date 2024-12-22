@@ -461,10 +461,11 @@ if ($selectedApps -like '*4*' -or $selectedApps -like '*7*' -or $selectedApps -l
     }
 }
 
-if ($selectedApps -like '*9*' -or $selectedApps -like '*11*') {
+if ($selectedApps -like '*1*' -or $selectedApps -like '*9*' -or $selectedApps -like '*11*') {
     $blueOrYellow = Read-Host "`nEnter 'B' for blue or 'Y' for yellow folders color"
     if ($blueOrYellow -eq 'B' -or $blueOrYellow -eq 'b') {
         Write-Host "Using blue folders icon pack." -ForegroundColor Green
+        $blueOrYellow = 'B'
     }
     elseif ($blueOrYellow -eq 'Y' -or $blueOrYellow -eq 'y') {
         Write-Host "Using yellow folders icon pack." -ForegroundColor Green
@@ -549,8 +550,15 @@ foreach ($app in $selectedApps) {
             winget configure --enable | Out-Null
             winget configure ..\config\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
             Copy-Item -Path "..\config\powertoys\ptr\ptr.exe" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
-            Copy-Item -Path "..\config\powertoys\RunPlugins" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
-            Copy-Item -Path "..\config\powertoys\RunPlugins\Everything" "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -Recurse -Force
+            if ($blueOrYellow = 'B'){
+                $filesList1 = Get-ChildItem -path "..\config\powertoys\RunPlugins" -Recurse -Exclude "folder.png"
+                Copy-Item $filesList1 -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
+                $filesList2 = Get-ChildItem -path "..\config\powertoys\RunPlugins\Everything" -Recurse -Exclude "folder.png"
+                Copy-Item $filesList2 "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -Recurse -Force
+            }
+            else {
+                Copy-Item -Path "..\config\powertoys\RunPlugins" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
+            }        
             $envPath = [System.Environment]::GetEnvironmentVariable("Path", [System.EnvironmentVariableTarget]::User)
             if (-not ($envPath -like "*$env:LOCALAPPDATA\PowerToys*")) {
                 $envPath += ";$env:LOCALAPPDATA\PowerToys"
