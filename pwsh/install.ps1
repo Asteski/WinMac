@@ -2,7 +2,7 @@ param (
     [switch]$noGUI,
     [switch]$debug
 )
-$version = "0.7.1"
+$version = "0.7.2"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_install_log_$date.txt"
 $transcriptFile = "WinMac_install_transcript_$date.txt"
@@ -548,6 +548,14 @@ foreach ($app in $selectedApps) {
             Write-Host "Installing PowerToys..." -ForegroundColor Yellow
             winget configure --enable | Out-Null
             winget configure ..\config\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
+            Copy-Item -Path "..\config\powertoys\ptr\ptr.exe" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
+            Copy-Item -Path "..\config\powertoys\RunPlugins" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
+            Copy-Item -Path "..\config\powertoys\RunPlugins\Everything" "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -Recurse -Force
+            $envPath = [System.Environment]::GetEnvironmentVariable("Path", [System.EnvironmentVariableTarget]::User)
+            if (-not ($envPath -like "*$env:LOCALAPPDATA\PowerToys*")) {
+                $envPath += ";$env:LOCALAPPDATA\PowerToys"
+                [System.Environment]::SetEnvironmentVariable("Path", $envPath, [System.EnvironmentVariableTarget]::User)
+            }
             Write-Host "PowerToys installation completed." -ForegroundColor Green
         }
     # Everything
@@ -964,7 +972,7 @@ foreach ($app in $selectedApps) {
                 Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type7"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path6" -Value $downloadsPath
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path7" -Value "$env:APPDATA\Microsoft\Windows\Recent\"
-                if ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath0" -Value "C:\\Users\\Public\\Documents\\Winstep\\Icons\\explorer_yellow.ico"}
+                if ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath0" -Value "C:\\Users\\Public\\Documents\\Winstep\\Icons\\explorer_default.ico"}
                 Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe'st
                 while (!(Get-Process "nexus")) { Start-Sleep 1 }
                 $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
@@ -1047,7 +1055,7 @@ uint fWinIni);
         ## Pin User folder, Programs and Recycle Bin to Quick Access
             $regPath = "HKCU:\SOFTWARE\WinMac"
             if (-not (Test-Path -Path $regPath)) {New-Item -Path $regPath -Force | Out-Null}
-            if ((Get-ItemProperty -Path $regPath -Name "Quick_Access" -ErrorAction SilentlyContinue).Quick_Access -ne 1) {
+            if ((Get-ItemProperty -Path $regPath -Name "QuickAccess" -ErrorAction SilentlyContinue).QuickAccess -ne 1) {
                 Write-Host "Pinning User folder, Programs and Recycle Bin to Quick Access..." -ForegroundColor DarkYellow
 $homeIni = @"
 [.ShellClassInfo]
@@ -1094,7 +1102,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
                     $recycleBin.Self.InvokeVerb("PinToHome")
                 }
                 Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse
-                Set-ItemProperty -Path $regPath -Name "Quick_Access" -Value 1 | Out-Null
+                Set-ItemProperty -Path $regPath -Name "QuickAccess" -Value 1 | Out-Null
             }
         ## Remove shortcut arrows
             Write-Host "Removing shortcut arrows..." -ForegroundColor DarkYellow
@@ -1123,7 +1131,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" -Force | Out-Null
             Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Force | Out-Null
         ## Icons Pack
-            if ((Get-ItemProperty -Path $regPath -Name "Icon_Pack" -ErrorAction SilentlyContinue).Icon_Pack -ne 1) {
+            if ((Get-ItemProperty -Path $regPath -Name "IconPack" -ErrorAction SilentlyContinue).IconPack -ne 1) {
                 if ($blueOrYellow -eq "B" -or $blueOrYellow -eq "b") {
                     $exePath = "..\bin\iconpack_blue_folders.exe"
                 }
@@ -1133,8 +1141,17 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
                 $arguments = "/S"
                 Write-Host "Deploying icon pack..." -ForegroundColor DarkYellow
                 Start-Process -FilePath $exePath -ArgumentList $arguments -NoNewWindow
-                Set-ItemProperty -Path $regPath -Name "Icon_Pack" -Value 1 | Out-Null
+                Set-ItemProperty -Path $regPath -Name "IconPack" -Value 1 | Out-Null
                 Start-Sleep -s 55
+                if ($blueOrYellow -eq "B" -or $blueOrYellow -eq "b") {
+                    $shortcutPath = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\File Explorer.lnk"
+                    $systemDllPath = "C:\Windows\System32\imageres.dll"
+                    $iconIndex = 265 # Replace with the desired icon index
+                    $shell = New-Object -ComObject WScript.Shell
+                    $shortcut = $shell.CreateShortcut($shortcutPath)
+                    $shortcut.IconLocation = "$systemDllPath,$iconIndex"
+                    $shortcut.Save()
+                }
             }     
             Stop-Process -Name explorer -Force
             Write-Host "Configuring Other Settings completed." -ForegroundColor Green
