@@ -6,7 +6,7 @@
     <a href="https://github.com/Asteski/WinMac/wiki/Installation-Guide">Installation Guide</a> |
     <a href="#Features">Features</a> |
     <a href="#Recommendations">Recommendations</a> |
-    <a href="#Wiki">"https://github.com/Asteski/WinMac/wiki"</a> |
+    <a href="https://github.com/Asteski/WinMac/wiki">"Wiki"</a> |
     <a href="#Credits">Credits</a> |
     <a href="https://github.com/Asteski/WinMac/releases/">Releases</a>
 </p>
