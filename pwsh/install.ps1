@@ -558,7 +558,7 @@ foreach ($app in $selectedApps) {
             }
             else {
                 Copy-Item -Path "..\config\powertoys\RunPlugins" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
-                Copy-Item -Path "..\config\powertoys\RunPlugins" "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -Recurse -Force
+                Copy-Item -Path "..\config\powertoys\RunPlugins\Everything" "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -Recurse -Force
             }        
             $envPath = [System.Environment]::GetEnvironmentVariable("Path", [System.EnvironmentVariableTarget]::User)
             if (-not ($envPath -like "*$env:LOCALAPPDATA\PowerToys*")) {
