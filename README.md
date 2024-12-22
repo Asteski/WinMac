@@ -2,6 +2,8 @@
 
 **WinMac** is a revolutionary customization project that brings together the best of both Windows and macOS operating systems, offering users a unique and seamless Windows experience.
 
+[Installation Guide][https://github.com/Asteski/WinMac/wiki/Installation-Guide] | [Features][#Features] | [Recommendations](#Recomenndations) | [Credits](#Credits) | [Roadmap](github-release-link)
+
 ## Dark
 ![winmac_dark_01](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_01.png)
 </details>
@@ -97,7 +99,7 @@ For the most reliable deployment process, I recommend to check [Installation Gui
 
 [Wiki](https://github.com/Asteski/WinMac/wiki) have ton of very useful information, which can help you understand WinMac components capabilities and configuration to modify them to your liking.
 
-## Credits to
+## Credits
 
 List of utilities and their creators used with WinMac:
 
