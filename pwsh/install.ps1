@@ -550,7 +550,7 @@ foreach ($app in $selectedApps) {
             winget configure --enable | Out-Null
             winget configure ..\config\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
             Copy-Item -Path "..\config\powertoys\ptr\ptr.exe" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
-            if ($blueOrYellow = 'B'){
+            if (!($blueOrYellow = 'B')){
                 $filesList1 = Get-ChildItem -path "..\config\powertoys\RunPlugins" -Recurse -Exclude "folder.png"
                 Copy-Item $filesList1 -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
                 $filesList2 = Get-ChildItem -path "..\config\powertoys\RunPlugins\Everything" -Recurse -Exclude "folder.png"
