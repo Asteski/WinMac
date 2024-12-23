@@ -98,7 +98,7 @@ Refresh your Windows 11 experience with new set of icons applied to many old and
 
 Discover the future of computing with WinMac, where the power of Windows meets the elegance of macOS in perfect harmony. Upgrade to WinMac and elevate your computing experience to new heights!
 
-WinMac supports both x64 and ARM based platforms.
+WinMac is supported by Windows 11, on both x64 and ARM based platforms.
 
 ## Recommendations
 
