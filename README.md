@@ -3,13 +3,13 @@
 **WinMac** is a revolutionary customization project that brings together the best of both Windows and macOS operating systems, offering users a unique and seamless Windows experience.
 
 <p align="center">
-    | <a href="https://github.com/Asteski/WinMac/wiki/Installation-Guide">Installation Guide</a> |
+    <a href="https://github.com/Asteski/WinMac/wiki/Installation-Guide">Installation Guide</a> |
     <a href="#Features">Features</a> |
     <a href="https://github.com/Asteski/WinMac/wiki/Configuration">Configuration</a> |
     <a href="#Recommendations">Recommendations</a> |
     <a href="https://github.com/Asteski/WinMac/wiki">Documentation</a> |
     <a href="https://github.com/Asteski/WinMac/releases/">Releases</a> |
-    <a href="#Credits">Credits</a> |
+    <a href="#Credits">Credits</a>
 </p>
 
 ## Dark
