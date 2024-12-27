@@ -1035,6 +1035,7 @@ foreach ($app in $selectedApps) {
             #! Notes
             Invoke-Output {winget install SimnetLtd.SimpleStickyNotes}
             Start-Process "C:\Program Files (x86)\Simnet\Simple Sticky Notes\ssn.exe"
+            Move-Item -Path "$env:USERPROFILE\Desktop\Simple Sticky Notes.lnk" -Destination "$env:APPDATA\Microsoft\Windows\Start Menu\Programs" -Force
             #! Notes
             Invoke-WebRequest -Uri $url -OutFile $outputPath
             Expand-Archive -Path $outputPath -DestinationPath $destinationPath -Force
