@@ -119,6 +119,8 @@ List of utilities and their creators used with WinMac:
 - [Nexus](https://www.winstep.net/nexus.asp) by Winstep
 - [NewModernWinver](https://github.com/torchgm/NewModernWinver) by torchgm
 - [Windhawk](https://github.com/ramensoftware/windhawk) by Ramen Software
+- [WinXCorners](https://github.com/vhanla/winxcorners) by vhanla
+- [Simple Sticky Notes](https://www.simplestickynotes.com/) by Simnet
 - [PSTree](https://github.com/santisq/PSTree) by santisq
 - [ntop](https://github.com/gsass1/NTop) by gsass1
 - [ptr](https://github.com/8LWXpg/ptr) by 8LWXpg
