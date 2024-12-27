@@ -211,7 +211,7 @@ if (!($noGUI)) {
     $chkNexusDock = $window.FindName("chkNexusDock")
     $chkWindhawk = $window.FindName("chkWindhawk")
     $chkGitProfile = $window.FindName("chkGitProfile")
-    $chkGitProfile = $window.FindName("chkHotCorners")
+    $chkHotCorners = $window.FindName("chkHotCorners")
     $chkOther = $window.FindName("chkOther")
     $startMenu = $window.FindName("startMenuWinMac")
     $promptStyle = $window.FindName("promptStyleWinMac")
@@ -223,7 +223,7 @@ if (!($noGUI)) {
     $customInstall.Add_Checked({$componentSelection.IsEnabled = $true})
     $result = @{}
     $btnInstall.Add_Click({
-        if ($fullInstall.IsChecked) { $selection = "1","2","3","4","5","6","7","8","9","10","11" } 
+        if ($fullInstall.IsChecked) { $selection = "1","2","3","4","5","6","7","8","9","10","11","12" } 
         else {
             if ($chkPowerToys.IsChecked) { $selection += "1," }
             if ($chkEverything.IsChecked) { $selection += "2," }
@@ -235,7 +235,8 @@ if (!($noGUI)) {
             if ($chkKeyboardShortcuts.IsChecked) { $selection += "8," }
             if ($chkNexusDock.IsChecked) { $selection += "9," }
             if ($chkWindhawk.IsChecked) { $selection += "10," }
-            if ($chkOther.IsChecked) { $selection += "11" }
+            if ($chkHotCorners.IsChecked) { $selection += "11" }
+            if ($chkOther.IsChecked) { $selection += "12" }
         }
         $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Windhawk"; "11"="Hot Corners"; "12"="Other Settings"}
         $result["selectedApps"] = $selection.Split(',').TrimEnd(',')
@@ -309,12 +310,12 @@ https://github.com/Asteski/WinMac/wiki
     $fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom installation"
     if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
         Write-Host "Choosing full installation." -ForegroundColor Green
-        $selectedApps = "1","2","3","4","5","6","7","8","9","10","11"
+        $selectedApps = "1","2","3","4","5","6","7","8","9","10","11","12"
     } 
     elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
         Write-Host "Choosing custom installation." -ForegroundColor Green
         Start-Sleep 1
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Windhawk"; "11"="Other"}
+        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Windhawk"; "11"="Hot Corners"; "12"="Other"}
 Write-Host @"
 
 `e[93m$("Please select options you want to install:")`e[0m
@@ -339,7 +340,7 @@ Write-Host @"
         $selection = Read-Host "Enter the numbers of options you want to install (separated by commas)"
         $selection = $selection.Trim()
         $selection = $selection -replace '\s*,\s*', ','
-        $valid = $selection -match '^([1-9]|10|11)(,([1-9]|10|12))*$'
+        $valid = $selection -match '^([1-9]|10|11|12)(,([1-9]|10|11|12))*$'
         if (!$valid) {
             Write-Host "`e[91mInvalid input! Please enter numbers between 1 and 11, separated by commas.`e[0m`n"
         }
@@ -465,7 +466,7 @@ if ($selectedApps -like '*4*' -or $selectedApps -like '*7*' -or $selectedApps -l
     }
 }
 
-if ($selectedApps -like '*1*' -or $selectedApps -like '*9*' -or $selectedApps -like '*11*') {
+if ($selectedApps -like '*9*' -or $selectedApps -like '*12*' -or $selectedApps -notlike '11') {
     $blueOrYellow = Read-Host "`nEnter 'B' for blue or 'Y' for yellow folders"
     if ($blueOrYellow -eq 'B' -or $blueOrYellow -eq 'b') {
         Write-Host "Using blue folders." -ForegroundColor Green
@@ -1025,7 +1026,7 @@ foreach ($app in $selectedApps) {
             }
         }
     # Hot Corners
-        "12" {
+        "11" {
             Write-Host "Installing Hot Corners..." -ForegroundColor Yellow
             $url = "https://github.com/vhanla/winxcorners/releases/download/1.3.2/WinXCorners1.3.2.zip"
             $outputPath = '..\temp\WinXCorners.zip'
