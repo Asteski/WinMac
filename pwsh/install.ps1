@@ -2,7 +2,7 @@ param (
     [switch]$noGUI,
     [switch]$debug
 )
-$version = "0.7.2"
+$version = "0.8.0"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_install_log_$date.txt"
 $transcriptFile = "WinMac_install_transcript_$date.txt"
@@ -59,7 +59,7 @@ if (!($noGUI)) {
 <Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="WinMac Deployment Wizard" Height="820" Width="480" WindowStartupLocation="CenterScreen" Background="$backgroundColor" Icon="$iconFolderPath\wizard.ico">
+    Title="WinMac Deployment Wizard" Height="860" Width="480" WindowStartupLocation="CenterScreen" Background="$backgroundColor" Icon="$iconFolderPath\wizard.ico">
     <Window.Resources>
         <SolidColorBrush x:Key="BackgroundBrush" Color="$backgroundColor"/>
         <SolidColorBrush x:Key="ForegroundBrush" Color="$foregroundColor"/>
@@ -115,6 +115,7 @@ if (!($noGUI)) {
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
                         <CheckBox x:Name="chkPowerToys" Content="PowerToys" IsChecked="True" Grid.Row="0" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
@@ -128,7 +129,8 @@ if (!($noGUI)) {
                         <CheckBox x:Name="chkNexusDock" Content="Nexus Dock" IsChecked="True" Grid.Row="4" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkWindhawk" Content="Windhawk" IsChecked="True" Grid.Row="4" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkGitProfile" Content="Git Profile" IsChecked="True" Grid.Row="5" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="chkOther" Content="Other" IsChecked="True" Grid.Row="5" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkHotCorners" Content="Hot Corners" IsChecked="True" Grid.Row="5" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkOther" Content="Other" IsChecked="True" Grid.Row="6" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                     </Grid>
                 </GroupBox>
 
@@ -209,6 +211,7 @@ if (!($noGUI)) {
     $chkNexusDock = $window.FindName("chkNexusDock")
     $chkWindhawk = $window.FindName("chkWindhawk")
     $chkGitProfile = $window.FindName("chkGitProfile")
+    $chkGitProfile = $window.FindName("chkHotCorners")
     $chkOther = $window.FindName("chkOther")
     $startMenu = $window.FindName("startMenuWinMac")
     $promptStyle = $window.FindName("promptStyleWinMac")
@@ -234,7 +237,7 @@ if (!($noGUI)) {
             if ($chkWindhawk.IsChecked) { $selection += "10," }
             if ($chkOther.IsChecked) { $selection += "11" }
         }
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Windhawk"; "11"="Other Settings"}
+        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Windhawk"; "11"="Hot Corners"; "12"="Other Settings"}
         $result["selectedApps"] = $selection.Split(',').TrimEnd(',')
         $selectedAppNames = @()
         foreach ($appNumber in $selection) {
@@ -328,14 +331,15 @@ Write-Host @"
 8. Keyboard Shortcuts
 9. Nexus Dock
 10. Windhawk
-11. Other Settings
+11. Hot Corners
+12. Other Settings
 "@
     Write-Host
     do {
         $selection = Read-Host "Enter the numbers of options you want to install (separated by commas)"
         $selection = $selection.Trim()
         $selection = $selection -replace '\s*,\s*', ','
-        $valid = $selection -match '^([1-9]|10|11)(,([1-9]|10|11))*$'
+        $valid = $selection -match '^([1-9]|10|11)(,([1-9]|10|12))*$'
         if (!$valid) {
             Write-Host "`e[91mInvalid input! Please enter numbers between 1 and 11, separated by commas.`e[0m`n"
         }
@@ -353,7 +357,7 @@ Write-Host @"
 else
 {
     Write-Host "Invalid input. Defaulting to full installation." -ForegroundColor Yellow
-    $selectedApps = "1","2","3","4","5","6","7","8","9","10","11"
+    $selectedApps = "1","2","3","4","5","6","7","8","9","10","11","12"
 }
 
 if ($selectedApps -like '*4*' -and $selectedApps -like '*5*') {
@@ -1020,8 +1024,22 @@ foreach ($app in $selectedApps) {
                 Write-Host "Windhawk installation completed." -ForegroundColor Green
             }
         }
+    # Hot Corners
+        "12" {
+            Write-Host "Installing Hot Corners..." -ForegroundColor Yellow
+            $url = "https://github.com/vhanla/winxcorners/releases/download/1.3.2/WinXCorners1.3.2.zip"
+            $outputPath = '..\temp\WinXCorners.zip'
+            $configPath = '..\config\hotcorners\settings.ini'
+            $destinationPath = "$env:LOCALAPPDATA\WinXCorners"
+            Invoke-WebRequest -Uri $url -OutFile $outputPath
+            Expand-Archive -Path $outputPath -DestinationPath $destinationPath -Force
+            Copy-Item -Path $configPath -Destination $destinationPath -Force
+            Remove-Item $outputPath -Force
+            Start-Process "$destinationPath\WinXCorners.exe"
+            Write-Host "Hot Corners installation completed." -ForegroundColor Green
+            }
     # Other
-        "11" {
+        "12" {
         ## Black Cursor
             Write-Host "Configuring Other Settings..." -ForegroundColor Yellow
             Write-Host "Black cursor..." -ForegroundColor DarkYellow
