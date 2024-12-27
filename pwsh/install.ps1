@@ -1034,6 +1034,7 @@ foreach ($app in $selectedApps) {
             $destinationPath = "$env:LOCALAPPDATA\WinXCorners"
             #! Notes
             Invoke-Output {winget install SimnetLtd.SimpleStickyNotes}
+            Start-Process "C:\Program Files (x86)\Simnet\Simple Sticky Notes\ssn.exe"
             #! Notes
             Invoke-WebRequest -Uri $url -OutFile $outputPath
             Expand-Archive -Path $outputPath -DestinationPath $destinationPath -Force
