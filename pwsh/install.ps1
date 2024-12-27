@@ -1032,11 +1032,9 @@ foreach ($app in $selectedApps) {
             $outputPath = '..\temp\WinXCorners.zip'
             $configPath = '..\config\hotcorners\settings.ini'
             $destinationPath = "$env:LOCALAPPDATA\WinXCorners"
-            #! Notes
-            Invoke-Output {winget install SimnetLtd.SimpleStickyNotes}
+            Invoke-Output {winget install SimnetLtd.SimpleStickyNotes --silent}
             Start-Process "C:\Program Files (x86)\Simnet\Simple Sticky Notes\ssn.exe"
             Move-Item -Path "$env:USERPROFILE\Desktop\Simple Sticky Notes.lnk" -Destination "$env:APPDATA\Microsoft\Windows\Start Menu\Programs" -Force
-            #! Notes
             Invoke-WebRequest -Uri $url -OutFile $outputPath
             Expand-Archive -Path $outputPath -DestinationPath $destinationPath -Force
             Copy-Item -Path $configPath -Destination $destinationPath -Force
