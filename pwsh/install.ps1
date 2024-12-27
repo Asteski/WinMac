@@ -1037,6 +1037,7 @@ foreach ($app in $selectedApps) {
             Copy-Item -Path $configPath -Destination $destinationPath -Force
             Remove-Item $outputPath -Force
             Start-Process "$destinationPath\WinXCorners.exe"
+            New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "WinXCorners" -Value "$env:LOCALAPPDATA\WinMac\WinXCorners.exe"
             Write-Host "Hot Corners installation completed." -ForegroundColor Green
             }
     # Other
