@@ -1034,12 +1034,19 @@ foreach ($app in $selectedApps) {
             $destinationPath = "$env:LOCALAPPDATA\WinXCorners"
             Invoke-Output {winget install SimnetLtd.SimpleStickyNotes --silent}
             Start-Process "C:\Program Files (x86)\Simnet\Simple Sticky Notes\ssn.exe"
+            Invoke-Output {winget uninstall 9NBLGGH4QGHW --silent} #! Uninstall Microsoft Sticky Notes UWP
             Move-Item -Path "$env:USERPROFILE\Desktop\Simple Sticky Notes.lnk" -Destination "$env:APPDATA\Microsoft\Windows\Start Menu\Programs" -Force
             Invoke-WebRequest -Uri $url -OutFile $outputPath
             Expand-Archive -Path $outputPath -DestinationPath $destinationPath -Force
             Copy-Item -Path $configPath -Destination $destinationPath -Force
             Remove-Item $outputPath -Force
             Start-Process "$destinationPath\WinXCorners.exe"
+            $shortcutPath = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\WinXCorners.lnk"
+            $targetPath = "$destinationPath\WinXCorners.exe"
+            $shell = New-Object -ComObject WScript.Shell
+            $shortcut = $shell.CreateShortcut($shortcutPath)
+            $shortcut.TargetPath = $targetPath
+            $shortcut.Save()
             New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "WinXCorners" -Value "$env:LOCALAPPDATA\WinMac\WinXCorners.exe" | Out-Null
             Write-Host "Hot Corners installation completed." -ForegroundColor Green
             }
