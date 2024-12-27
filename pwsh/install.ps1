@@ -1032,6 +1032,7 @@ foreach ($app in $selectedApps) {
             $outputPath = '..\temp\WinXCorners.zip'
             $configPath = '..\config\hotcorners\settings.ini'
             $destinationPath = "$env:LOCALAPPDATA\WinXCorners"
+            Write-Host "Installing Simple Sticky Notes..." -ForegroundColor DarkYellow
             Invoke-Output {winget install SimnetLtd.SimpleStickyNotes --silent}
             Start-Process "C:\Program Files (x86)\Simnet\Simple Sticky Notes\ssn.exe"
             Invoke-Output {winget uninstall 9NBLGGH4QGHW --silent} #! Uninstall Microsoft Sticky Notes UWP
