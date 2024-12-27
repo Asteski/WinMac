@@ -555,15 +555,15 @@ foreach ($app in $selectedApps) {
             winget configure --enable | Out-Null
             winget configure ..\config\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
             Copy-Item -Path "..\config\powertoys\ptr\ptr.exe" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
-            if ($blueOrYellow -eq 'Y' -or $blueOrYellow -eq 'y') {
+            if ($blueOrYellow -eq 'B' -or $blueOrYellow -eq 'b') {
+                Copy-Item -Path "..\config\powertoys\RunPlugins" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
+                Copy-Item -Path "..\config\powertoys\RunPlugins\Everything" "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -Recurse -Force
+            }
+            else {
                 $filesList1 = Get-ChildItem -path "..\config\powertoys\RunPlugins" -Recurse -Exclude "folder.png"
                 Copy-Item $filesList1 -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
                 $filesList2 = Get-ChildItem -path "..\config\powertoys\RunPlugins\Everything" -Recurse -Exclude "folder.png"
                 Copy-Item $filesList2 "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -Recurse -Force
-            }
-            else {
-                Copy-Item -Path "..\config\powertoys\RunPlugins" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
-                Copy-Item -Path "..\config\powertoys\RunPlugins\Everything" "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -Recurse -Force
             }
             $envPath = [System.Environment]::GetEnvironmentVariable("Path", [System.EnvironmentVariableTarget]::User)
             if (-not ($envPath -like "*$env:LOCALAPPDATA\PowerToys*")) {
@@ -943,14 +943,14 @@ foreach ($app in $selectedApps) {
                 } else { Start-Sleep 10 }
                 Get-Process -n Nexus | Stop-Process
                 $winStep = 'C:\Users\Public\Documents\WinStep'
-                Remove-Item -Path "$winStep\Themes\*" -Recurse -Force 
+                Remove-Item -Path "$winStep\Themes\*" -Recurse -Force
                 Copy-Item -Path "..\config\dock\themes\*" -Destination "$winStep\Themes\" -Recurse -Force 
                 Remove-Item -Path "$winStep\NeXus\Indicators\*" -Force -Recurse 
                 Copy-Item -Path "..\config\dock\indicators\*" -Destination "$winStep\NeXus\Indicators\" -Recurse -Force 
                 Invoke-Output {New-Item -ItemType Directory -Path "$winStep\Sounds" -Force}
                 Copy-Item -Path "..\config\dock\sounds\*" -Destination "$winStep\Sounds\" -Recurse -Force
                 Invoke-Output {New-Item -ItemType Directory -Path "$winStep\Icons" -Force}
-                Copy-Item "..\config\dock\icons" "$winStep" -Recurse -Force 
+                Copy-Item "..\config\icons" "$winStep" -Recurse -Force
                 $regFile = "..\config\dock\winstep.reg"
                 $downloadsPath = "$env:USERPROFILE\Downloads"
                 if ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
