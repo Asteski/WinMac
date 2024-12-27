@@ -1033,7 +1033,7 @@ foreach ($app in $selectedApps) {
             $configPath = '..\config\hotcorners\settings.ini'
             $destinationPath = "$env:LOCALAPPDATA\WinXCorners"
             #! Notes
-            Invoke-Output {Install-WinGetPackage -name SimnetLtd.SimpleStickyNotes}
+            Invoke-Output {winget install SimnetLtd.SimpleStickyNotes}
             #! Notes
             Invoke-WebRequest -Uri $url -OutFile $outputPath
             Expand-Archive -Path $outputPath -DestinationPath $destinationPath -Force
