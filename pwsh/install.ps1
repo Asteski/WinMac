@@ -1041,6 +1041,9 @@ foreach ($app in $selectedApps) {
             Invoke-WebRequest -Uri $url -OutFile $outputPath
             Expand-Archive -Path $outputPath -DestinationPath $destinationPath -Force
             Copy-Item -Path $configPath -Destination $destinationPath -Force
+            # Replace string in settings.ini
+            $configFilePath = Join-Path -Path $destinationPath -ChildPath "settings.ini"
+            (Get-Content -Path $configFilePath) -replace "MINIMIZEALL", "$($env:LOCALAPPDATA)\WinMac\hotcorners\MinimizeAllWindowsExceptFocused.exe" | Set-Content -Path $configFilePath
             Remove-Item $outputPath -Force
             Start-Process "$destinationPath\WinXCorners.exe"
             $shortcutPath = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\WinXCorners.lnk"
@@ -1049,6 +1052,8 @@ foreach ($app in $selectedApps) {
             $shortcut = $shell.CreateShortcut($shortcutPath)
             $shortcut.TargetPath = $targetPath
             $shortcut.Save()
+            if (-not (Test-Path -Path "$env:LOCALAPPDATA\WinMac\hotcorners")) {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\hotcorners" -Force | Out-Null}
+            Copy-Item -Path "..\config\hotcorners\Minimize*" -Destination "$env:LOCALAPPDATA\WinMac\hotcorners\" -Force
             New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "WinXCorners" -Value "$env:LOCALAPPDATA\WinMac\WinXCorners.exe" | Out-Null
             Write-Host "Hot Corners installation completed." -ForegroundColor Green
             }
