@@ -3,10 +3,10 @@
 **WinMac** is a revolutionary customization project that brings together the best of both Windows and macOS operating systems, offering users a unique and seamless Windows experience.
 
 <p align="center">
+    <a href="https://github.com/Asteski/WinMac/wiki/Home">Home Page</a> |
     <a href="https://github.com/Asteski/WinMac/wiki/Installation-Guide">Installation Guide</a> |
     <a href="#Features">Features</a> |
     <a href="#Recommendations">Recommendations</a> |
-    <a href="https://github.com/Asteski/WinMac/wiki">Documentation</a> |
     <a href="https://github.com/Asteski/WinMac/releases/">Releases</a> |
     <a href="#Credits">Credits</a>
 </p>
@@ -109,7 +109,7 @@ For the most reliable deployment process, I recommend to check [Installation Gui
 ## Credits
 
 List of utilities and their creators used with WinMac:
-
+    
 - [PowerToys](https://learn.microsoft.com/en-us/windows/powertoys/) by Microsoft
 - [Everything](https://www.voidtools.com/) by David Carpenter
 - [StartAllBack](https://www.startallback.com/) by Tihiy
