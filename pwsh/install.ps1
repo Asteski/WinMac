@@ -1050,7 +1050,7 @@ foreach ($app in $selectedApps) {
             Write-Host "Installing Simple Sticky Notes..." -ForegroundColor DarkYellow
             Invoke-Output {winget install SimnetLtd.SimpleStickyNotes --silent}
             Start-Process "C:\Program Files (x86)\Simnet\Simple Sticky Notes\ssn.exe"
-            Invoke-Output {winget uninstall 9NBLGGH4QGHW --silent} #! Uninstall Microsoft Sticky Notes UWP
+            Invoke-Output {winget uninstall 9NBLGGH4QGHW --silent} #! comment this line to keep Microsoft Sticky Notes UWP
             Move-Item -Path "$env:USERPROFILE\Desktop\Simple Sticky Notes.lnk" -Destination "$env:APPDATA\Microsoft\Windows\Start Menu\Programs" -Force
             Invoke-WebRequest -Uri $url -OutFile $outputPath
             Expand-Archive -Path $outputPath -DestinationPath $destinationPath -Force
@@ -1067,7 +1067,8 @@ foreach ($app in $selectedApps) {
             $shortcut.TargetPath = $targetPath
             $shortcut.Save()
             if (-not (Test-Path -Path "$env:LOCALAPPDATA\WinMac\hotcorners")) {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\hotcorners" -Force | Out-Null}
-            Copy-Item -Path "..\config\hotcorners\Minimize*" -Destination "$env:LOCALAPPDATA\WinMac\hotcorners\" -Force
+            if ($sysType -like "*ARM*") {Copy-Item -Path ..\bin\hotcorners\arm64\* -Destination "$env:LOCALAPPDATA\WinMac\hotcorners\" -Recurse -Force }
+            else {Copy-Item -Path ..\bin\hotcorners\x64\* -Destination "$env:LOCALAPPDATA\WinMac\hotcorners\" -Recurse -Force }
             New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "WinXCorners" -Value "$env:LOCALAPPDATA\WinMac\WinXCorners.exe" | Out-Null
             Write-Host "Hot Corners installation completed." -ForegroundColor Green
             }
