@@ -1033,6 +1033,20 @@ foreach ($app in $selectedApps) {
             $outputPath = '..\temp\WinXCorners.zip'
             $configPath = '..\config\hotcorners\settings.ini'
             $destinationPath = "$env:LOCALAPPDATA\WinXCorners"
+            $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.8' -ErrorAction SilentlyContinue
+            if ($null -eq $dotNetRuntime) {
+                Write-Host "Installing .NET Desktop Runtime 8..." -ForegroundColor DarkYellow
+                Invoke-Output { Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8' }
+            } else {
+                Write-Host ".NET Desktop Runtime is already installed." -ForegroundColor Green
+            }
+            $uiXaml = Get-WinGetPackage -Id 'Microsoft.UI.Xaml.2.7' -ErrorAction SilentlyContinue
+            if ($null -eq $uiXaml) {
+                Write-Host "Installing Microsoft.UI.Xaml 2.7..." -ForegroundColor DarkYellow
+                Invoke-Output { Install-WinGetPackage -id 'Microsoft.UI.Xaml.2.7' }
+            } else {
+                Write-Host "Microsoft.UI.Xaml is already installed." -ForegroundColor Green
+            }
             Write-Host "Installing Simple Sticky Notes..." -ForegroundColor DarkYellow
             Invoke-Output {winget install SimnetLtd.SimpleStickyNotes --silent}
             Start-Process "C:\Program Files (x86)\Simnet\Simple Sticky Notes\ssn.exe"
