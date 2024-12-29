@@ -481,7 +481,7 @@ foreach ($app in $selectedApps) {
             Invoke-Output {Uninstall-WinGetPackage -name Windhawk}
             Write-Host "Uninstalling Windhawk completed." -ForegroundColor Green
         }
-        # Other
+    # Other
         "11" {
             Write-Host "Uninstalling Other Settings..." -ForegroundColor Yellow
             $regPath = "HKCU:\SOFTWARE\WinMac"
@@ -546,7 +546,7 @@ uint fWinIni);
             Invoke-Output { Remove-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" }
             Invoke-Output { Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings" -Recurse }
             Invoke-Output { Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarSmallIcons" }
-            Get-ChildItem ..\config\contextmenu\add\* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
+            Get-ChildItem ..\config\contextmenu\add\* -e *theme* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
             Get-ChildItem '..\config\contextmenu\remove\Remove_Theme_Mode_in_Context_Menu.reg' | ForEach-Object { reg import $_.FullName > $null 2>&1 }
             New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" -Force | Out-Null
             New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Force | Out-Null

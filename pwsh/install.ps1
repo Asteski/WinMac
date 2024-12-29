@@ -1167,7 +1167,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
         ## Configuring context menus
             Write-Host "Configure context menus..." -ForegroundColor DarkYellow
-            Get-ChildItem ..\config\contextmenu\remove\* | ForEach-Object { reg import $_.FullName } #! > $null 2>&1 
+            Get-ChildItem ..\config\contextmenu\remove\* -e *theme* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
             $sourceFilePath = "..\config\contextmenu\add\Add_Theme_Mode_in_Context_Menu.reg"
             $tempFilePath = "..\temp\Add_Theme_Mode_in_Context_Menu.reg"
             $ps1FilePath = "..\config\contextmenu\theme.ps1"
@@ -1176,7 +1176,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             Copy-Item -Path $sourceFilePath -Destination '..\temp\' -Force
             $appData = $env:LOCALAPPDATA -replace '\\', '\\'
             (Get-Content -Path $tempFilePath) -replace '%WINMACAPPDATA%', $appData | Set-Content -Path $tempFilePath
-            Get-ChildItem '..\temp\Add_Theme_Mode_in_Context_Menu.reg' | ForEach-Object { reg import $_.FullName } #! > $null 2>&1 
+            Get-ChildItem '..\temp\Add_Theme_Mode_in_Context_Menu.reg' | ForEach-Object { reg import $_.FullName > $null 2>&1 }
         ## End Task
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
             $taskbarDevSettings = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
