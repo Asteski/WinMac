@@ -481,8 +481,18 @@ foreach ($app in $selectedApps) {
             Invoke-Output {Uninstall-WinGetPackage -name Windhawk}
             Write-Host "Uninstalling Windhawk completed." -ForegroundColor Green
         }
-    # Other
+    # Hot Corners
         "11" {
+            Write-Host "Uninstalling Hot Corners..." -ForegroundColor Yellow
+            Stop-Process -n WinXCorners -Force
+            Stop-Process -n ssn -Force
+            Remove-Item -Path "$env:LOCALAPPDATA\WinMac\WinXCorners" -Recurse -Force
+            Invoke-Output { Uninstall-WinGetPackage -name "Simple Sticky Notes" }
+            Invoke-Output { Install-WinGetPackage 9NBLGGH4QGHW --silent}
+            Write-Host "Uninstalling Hot Corners completed." -ForegroundColor Green
+        }
+    # Other
+        "12" {
             Write-Host "Uninstalling Other Settings..." -ForegroundColor Yellow
             $regPath = "HKCU:\SOFTWARE\WinMac"
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
