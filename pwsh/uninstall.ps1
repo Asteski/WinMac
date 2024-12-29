@@ -285,13 +285,14 @@ Write-Host @"
         Write-Host "8. Keyboard Shortcuts"
         Write-Host "9. Nexus Dock"
         Write-Host "10. Windhawk"
-        Write-Host "11. Other Settings"
+        Write-Host "11. Hot Corners"
+        Write-Host "12. Other Settings"
         Write-Host
         do {
             $selection = Read-Host "Enter the numbers of options you want to uninstall (separated by commas)"
             $selection = $selection.Trim()
             $selection = $selection -replace '\s*,\s*', ','
-            $valid = $selection -match '^([1-9]|10|11)(,([1-9]|10|11))*$'
+            $valid = $selection -match '^([1-9]|10|11|12)(,([1-9]|10|11|12))*$'
             if (!$valid) {
                 Write-Host "`e[91mInvalid input! Please enter numbers between 1 and 10, separated by commas.`e[0m`n"
             }
@@ -316,7 +317,7 @@ Write-Host @"
     }
     else
     {
-        $selectedApps = "1","2","3","4","5","6","7","8","9","10","11"
+        $selectedApps = "1","2","3","4","5","6","7","8","9","10","11","12"
         Write-Host "Invalid input. Defaulting to full uninstallation." -ForegroundColor Yellow
     }
     Start-Sleep 1
@@ -488,7 +489,9 @@ foreach ($app in $selectedApps) {
         "11" {
             Write-Host "Uninstalling Hot Corners..." -ForegroundColor Yellow
             Stop-Process -n WinXCorners -Force
+            Stop-Process -n WinLaunch -Force
             Stop-Process -n ssn -Force
+            Remove-Item -Path "$env:LOCALAPPDATA\WinLaunch" -Recurse -Force
             Remove-Item -Path "$env:LOCALAPPDATA\WinMac\WinXCorners" -Recurse -Force
             Invoke-Output { Uninstall-WinGetPackage -name "Simple Sticky Notes" }
             Invoke-Output { Install-WinGetPackage 9NBLGGH4QGHW --silent}
