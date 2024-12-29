@@ -457,7 +457,7 @@ if ($selectedApps -like '*4*' -or $selectedApps -like '*7*' -or $selectedApps -l
         $orbTheme = 'black'
     } elseif ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
         Write-Host "Using dark theme." -ForegroundColor Green
-        $stackTheme = 'dark'
+        $stackTheme = 'dark'ź
         $orbTheme = 'white'
     } else {
         Write-Host "Invalid input. Defaulting to light theme." -ForegroundColor Yellow
