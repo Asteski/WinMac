@@ -1035,7 +1035,7 @@ foreach ($app in $selectedApps) {
             $destinationPath = "$env:LOCALAPPDATA\WinXCorners"
             $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.8' -ErrorAction SilentlyContinue
             $winLaunchUrl = "https://github.com/jensroth-git/WinLaunch/releases/download/v.0.7.3.0/WinLaunch.0.7.3.0.zip"
-            $winLaunchConfigPath = '..\config\hotcorners\settings.ini'
+            $winLaunchConfigPath = '..\config\hotcorners\Settings.xml'
             $winLaunchOutputPath = '..\temp\WinLaunch.zip'
             $winLaunchDestinationPath = "$env:LOCALAPPDATA\WinLaunch"
             if ($null -eq $dotNetRuntime) {
@@ -1059,7 +1059,7 @@ foreach ($app in $selectedApps) {
             Invoke-WebRequest -Uri $winXCornersUrl -OutFile $outputPath
             Expand-Archive -Path $outputPath -DestinationPath $destinationPath -Force
             Copy-Item -Path $winXCornersConfigPath -Destination $destinationPath -Force
-            Copy-Item -Path $winLaunchConfigPath -Destination $destinationPath -Force
+            Copy-Item -Path $winLaunchConfigPath -Destination "$destinationPath\Data" -Force
             $configFilePath = Join-Path -Path $destinationPath -ChildPath "settings.ini"
             (Get-Content -Path $configFilePath) -replace "WINLAUNCH", "$($env:LOCALAPPDATA)\WinLaunch\WinLaunch.exe" | Set-Content -Path $configFilePath
             (Get-Content -Path $configFilePath) -replace "MINIMIZEALL", "$($env:LOCALAPPDATA)\WinMac\hotcorners\MinimizeAllWindowsExceptFocused.exe" | Set-Content -Path $configFilePath
