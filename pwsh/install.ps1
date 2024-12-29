@@ -1029,11 +1029,15 @@ foreach ($app in $selectedApps) {
     # Hot Corners
         "11" {
             Write-Host "Installing Hot Corners..." -ForegroundColor Yellow
-            $url = "https://github.com/vhanla/winxcorners/releases/download/1.3.2/WinXCorners1.3.2.zip"
             $outputPath = '..\temp\WinXCorners.zip'
-            $configPath = '..\config\hotcorners\settings.ini'
+            $winXCornersUrl = "https://github.com/vhanla/winxcorners/releases/download/1.3.2/WinXCorners1.3.2.zip"
+            $winXCornersConfigPath = '..\config\hotcorners\settings.ini'
             $destinationPath = "$env:LOCALAPPDATA\WinXCorners"
             $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.8' -ErrorAction SilentlyContinue
+            $winLaunchUrl = "https://github.com/jensroth-git/WinLaunch/releases/download/v.0.7.3.0/WinLaunch.0.7.3.0.zip"
+            $winLaunchConfigPath = '..\config\hotcorners\settings.ini'
+            $winLaunchOutputPath = '..\temp\WinLaunch.zip'
+            $winLaunchDestinationPath = "$env:LOCALAPPDATA\WinLaunch"
             if ($null -eq $dotNetRuntime) {
                 Invoke-Output { Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8' }
             } else {
@@ -1044,14 +1048,20 @@ foreach ($app in $selectedApps) {
             }
             Write-Host "Installing Simple Sticky Notes..." -ForegroundColor DarkYellow
             Invoke-Output {winget install SimnetLtd.SimpleStickyNotes --silent}
+            Write-Host "Installing WinLaunch..." -ForegroundColor DarkYellow
+            Invoke-WebRequest -Uri $winLaunchUrl -OutFile $winLaunchOutputPath
+            Expand-Archive -Path $winLaunchOutputPath -DestinationPath $winLaunchDestinationPath -Force
+            Remove-Item $winLaunchOutputPath -Force
+            Start-Process "$winLaunchDestinationPath\WinLaunch.exe"
             Start-Process "C:\Program Files (x86)\Simnet\Simple Sticky Notes\ssn.exe"
             Invoke-Output {winget uninstall 9NBLGGH4QGHW --silent} #! comment this line to keep Microsoft Sticky Notes UWP
             Move-Item -Path "$env:USERPROFILE\Desktop\Simple Sticky Notes.lnk" -Destination "$env:APPDATA\Microsoft\Windows\Start Menu\Programs" -Force
-            Invoke-WebRequest -Uri $url -OutFile $outputPath
+            Invoke-WebRequest -Uri $winXCornersUrl -OutFile $outputPath
             Expand-Archive -Path $outputPath -DestinationPath $destinationPath -Force
-            Copy-Item -Path $configPath -Destination $destinationPath -Force
-            # Replace string in settings.ini
+            Copy-Item -Path $winXCornersConfigPath -Destination $destinationPath -Force
+            Copy-Item -Path $winLaunchConfigPath -Destination $destinationPath -Force
             $configFilePath = Join-Path -Path $destinationPath -ChildPath "settings.ini"
+            (Get-Content -Path $configFilePath) -replace "WINLAUNCH", "$($env:LOCALAPPDATA)\WinLaunch\WinLaunch.exe" | Set-Content -Path $configFilePath
             (Get-Content -Path $configFilePath) -replace "MINIMIZEALL", "$($env:LOCALAPPDATA)\WinMac\hotcorners\MinimizeAllWindowsExceptFocused.exe" | Set-Content -Path $configFilePath
             Remove-Item $outputPath -Force
             Start-Process "$destinationPath\WinXCorners.exe"
