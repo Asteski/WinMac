@@ -263,7 +263,7 @@ https://github.com/Asteski/WinMac/wiki
     # WinMac configuration
     $fullOrCustom = Read-Host "`nEnter 'F' for full or 'C' for custom uninstallation"
     if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
-        $selectedApps = "1","2","3","4","5","6","7","8","9","10","11"
+        $selectedApps = "1","2","3","4","5","6","7","8","9","10","11","12"
         Write-Host "Choosing full uninstallation." -ForegroundColor Yellow
     }
     elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
@@ -294,7 +294,7 @@ Write-Host @"
             $selection = $selection -replace '\s*,\s*', ','
             $valid = $selection -match '^([1-9]|10|11|12)(,([1-9]|10|11|12))*$'
             if (!$valid) {
-                Write-Host "`e[91mInvalid input! Please enter numbers between 1 and 10, separated by commas.`e[0m`n"
+                Write-Host "`e[91mInvalid input! Please enter numbers between 1 and 12, separated by commas.`e[0m`n"
             }
         } while ([string]::IsNullOrWhiteSpace($selection) -or !$valid)
         $selectedApps = @()
