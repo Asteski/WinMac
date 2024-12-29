@@ -1059,7 +1059,11 @@ foreach ($app in $selectedApps) {
             Invoke-WebRequest -Uri $winXCornersUrl -OutFile $outputPath
             Expand-Archive -Path $outputPath -DestinationPath $destinationPath -Force
             Copy-Item -Path $winXCornersConfigPath -Destination $destinationPath -Force
-            Copy-Item -Path $winLaunchConfigPath -Destination "$destinationPath\Data" -Force
+            $process = Get-Process -Name WinLaunch -ErrorAction SilentlyContinue
+            if ($process) {
+                Stop-Process -Name WinLaunch -Force
+            }
+            Copy-Item -Path $winLaunchConfigPath -Destination "$winLaunchDestinationPath\Data" -Force
             $configFilePath = Join-Path -Path $destinationPath -ChildPath "settings.ini"
             (Get-Content -Path $configFilePath) -replace "WINLAUNCH", "$($env:LOCALAPPDATA)\WinLaunch\WinLaunch.exe" | Set-Content -Path $configFilePath
             (Get-Content -Path $configFilePath) -replace "MINIMIZEALL", "$($env:LOCALAPPDATA)\WinMac\hotcorners\MinimizeAllWindowsExceptFocused.exe" | Set-Content -Path $configFilePath
