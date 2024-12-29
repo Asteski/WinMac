@@ -23,6 +23,7 @@ if ($mode -eq 'Light')
 	$DockLabelColor1 = '1644825'
 	$DockLabelBackColor1 = '16119283'
 }
+taskkill /IM PowerToys.PowerLauncher.exe /F > $null 2>&1
 taskkill /IM explorer.exe /F > $null 2>&1
 taskkill /IM nexus.exe /F > $null 2>&1
 $registryPath0 = "HKCU:\Software\WinSTEP2000\NeXuS"
@@ -108,4 +109,5 @@ uint fWinIni);
 try {
 	Start-Process explorer -ErrorAction SilentlyContinue
 	Start-Process "C:\Program Files (x86)\Winstep\Nexus.exe"
+	Start-Process "$env:LOCALAPPDATA\PowerToys\PowerToys.PowerLauncher.exe"
 } catch {}
