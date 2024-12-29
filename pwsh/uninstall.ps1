@@ -183,7 +183,7 @@ if (!($noGUI)) {
     $customUninstall.Add_Checked({$componentSelection.IsEnabled = $true})
     $result = @{}
     $btnUninstall.Add_Click({
-        if ($fullUninstall.IsChecked) { $selection = "1","2","3","4","5","6","7","8","9","10","11" } 
+        if ($fullUninstall.IsChecked) { $selection = "1","2","3","4","5","6","7","8","9","10","11","12" } 
         else {
             if ($chkPowerToys.IsChecked) { $selection += "1," }
             if ($chkEverything.IsChecked) { $selection += "2," }
@@ -269,7 +269,7 @@ https://github.com/Asteski/WinMac/wiki
     elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
         Write-Host "Choosing custom uninstallation." -ForegroundColor Yellow
         Start-Sleep 1
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Windhawk"; "11"="Other"}
+        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Windhawk"; "12"="Hot Corners"; "12"="Other"}
 Write-Host @"
 
 `e[93m$("Please select options you want to uninstall:")`e[0m
