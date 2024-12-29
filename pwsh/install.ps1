@@ -1063,7 +1063,7 @@ foreach ($app in $selectedApps) {
             if ($process) {
                 Stop-Process -Name WinLaunch -Force
             }
-            Copy-Item -Path $winLaunchConfigPath -Destination "$winLaunchDestinationPath\Data" -Force
+            Copy-Item -Path $winLaunchConfigPath -Destination "$winLaunchDestinationPath\Data\Settings.xml" -Force
             $configFilePath = Join-Path -Path $destinationPath -ChildPath "settings.ini"
             (Get-Content -Path $configFilePath) -replace "WINLAUNCH", "$($env:LOCALAPPDATA)\WinLaunch\WinLaunch.exe" | Set-Content -Path $configFilePath
             (Get-Content -Path $configFilePath) -replace "MINIMIZEALL", "$($env:LOCALAPPDATA)\WinMac\hotcorners\MinimizeAllWindowsExceptFocused.exe" | Set-Content -Path $configFilePath
