@@ -922,12 +922,15 @@ foreach ($app in $selectedApps) {
             }
             else {
                 Write-Host "Installing Nexus Dock..." -ForegroundColor Yellow
-                $downloadUrl = "https://www.winstep.net/nexus.zip"
-                $downloadPath = "..\temp\Nexus.zip"
-                if (-not (Test-Path $downloadPath)) {
-                    Invoke-WebRequest -Uri $downloadUrl -OutFile $downloadPath
+                $checkNexus = Get-WinGetPackage -name Nexus
+                if ($checkNexus) {
+                    $downloadUrl = "https://www.winstep.net/nexus.zip"
+                    $downloadPath = "..\temp\Nexus.zip"
+                    if (-not (Test-Path $downloadPath)) {
+                        Invoke-WebRequest -Uri $downloadUrl -OutFile $downloadPath
+                    }
+                    Expand-Archive -Path $downloadPath -DestinationPath ..\temp -Force
                 }
-                Expand-Archive -Path $downloadPath -DestinationPath ..\temp -Force
                 if (Get-Process -n Nexus) { Stop-Process -n Nexus }
                 Start-Process -FilePath "..\temp\NexusSetup.exe" -ArgumentList "/silent"
                 Start-Sleep 10
