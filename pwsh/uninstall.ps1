@@ -500,7 +500,8 @@ foreach ($app in $selectedApps) {
                 Remove-Item -Path "$env:LOCALAPPDATA\WinXCorners" -Recurse -Force 
             }
             Invoke-Output { Uninstall-WinGetPackage -name "Simple Sticky Notes" }
-            Invoke-Output { Install-WinGetPackage 9NBLGGH4QGHW }
+
+            Invoke-Output { winget install 9NBLGGH4QGHW }
             $regPath1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
             Remove-ItemProperty -Path $regPath1 -Name "WinLaunch"
             Remove-ItemProperty -Path $regPath1 -Name "WinXCorners"
