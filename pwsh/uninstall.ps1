@@ -496,7 +496,7 @@ foreach ($app in $selectedApps) {
             Remove-Item -Path "$env:LOCALAPPDATA\WinMac\hotcorners" -Recurse -Force
             Invoke-Output { Uninstall-WinGetPackage -name "Simple Sticky Notes" }
             Invoke-Output { Install-WinGetPackage 9NBLGGH4QGHW }
-            $regPath1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run"
+            $regPath1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Run"
             Remove-ItemProperty -Path $regPath1 -Name "WinLaunch"
             Remove-ItemProperty -Path $regPath1 -Name "WinXCorners"
             # -ErrorAction SilentlyContinue
