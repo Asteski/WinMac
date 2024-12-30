@@ -923,7 +923,7 @@ foreach ($app in $selectedApps) {
             else {
                 Write-Host "Installing Nexus Dock..." -ForegroundColor Yellow
                 $checkNexus = Get-WinGetPackage -name Nexus
-                if ($checkNexus) {
+                if ($null -eq $checkNexus) {
                     $downloadUrl = "https://www.winstep.net/nexus.zip"
                     $downloadPath = "..\temp\Nexus.zip"
                     if (-not (Test-Path $downloadPath)) {
