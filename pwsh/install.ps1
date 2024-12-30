@@ -583,7 +583,7 @@ foreach ($app in $selectedApps) {
             Invoke-Output { Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Destination $programsDir -Force }
             $everythingIniPath = "$env:APPDATA\Everything"
             if (-not (Test-Path -Path $everythingIniPath)) {New-Item -ItemType Directory -Path $everythingIniPath -Force | Out-Null}
-            # Copy-Item -Path "..\config\everything\Everything.ini" -Destination $everythingIniPath -Force
+            Copy-Item -Path "..\config\everything\Everything.ini" -Destination $everythingIniPath -Force
             Invoke-Output { Start-Process -FilePath Everything.exe -WorkingDirectory $env:PROGRAMFILES\Everything -WindowStyle Hidden }
             Write-Host "Everything installation completed." -ForegroundColor Green
         }
