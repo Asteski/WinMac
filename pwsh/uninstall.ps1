@@ -492,20 +492,13 @@ foreach ($app in $selectedApps) {
             Stop-Process -n WinLaunch -Force
             Stop-Process -n ssn -Force            
             Remove-Item -Path "$env:LOCALAPPDATA\WinMac\hotcorners" -Recurse -Force
-            if (-not (Get-Process -Name WinLaunch -ErrorAction SilentlyContinue)) { 
-                Remove-Item -Path "$env:LOCALAPPDATA\WinLaunch" -Recurse -Force
-                Remove-Item -Path "$env:APPDATA\WinLaunch" -Recurse -Force
-            }
-            if (-not (Get-Process -Name WinXCorners -ErrorAction SilentlyContinue)) {
-                Remove-Item -Path "$env:LOCALAPPDATA\WinXCorners" -Recurse -Force 
-            }
             Invoke-Output { Uninstall-WinGetPackage -name "Simple Sticky Notes" }
-
             Invoke-Output { winget install 9NBLGGH4QGHW --silent }
-            $regPath1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
-            Remove-ItemProperty -Path $regPath1 -Name "WinLaunch"
-            Remove-ItemProperty -Path $regPath1 -Name "WinXCorners"
-            # -ErrorAction SilentlyContinue
+            $regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
+            Remove-ItemProperty -Path $regPath -Name "WinLaunch"
+            Remove-ItemProperty -Path $regPath -Name "WinXCorners"
+            Remove-Item -Path "$env:LOCALAPPDATA\WinLaunch" -Recurse -Force
+            Remove-Item -Path "$env:LOCALAPPDATA\WinXCorners" -Recurse -Force
             Write-Host "Uninstalling Hot Corners completed." -ForegroundColor Green
         }
     # Other
