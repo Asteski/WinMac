@@ -1057,8 +1057,8 @@ foreach ($app in $selectedApps) {
             Remove-Item $winLaunchOutputPath -Force
             Start-Process "$winLaunchDestinationPath\WinLaunch.exe"
             Start-Process "C:\Program Files (x86)\Simnet\Simple Sticky Notes\ssn.exe"
-            Invoke-Output {winget uninstall 9NBLGGH4QGHW --silent} #! comment this line to keep Microsoft Sticky Notes UWP
             Move-Item -Path "$env:USERPROFILE\Desktop\Simple Sticky Notes.lnk" -Destination "$env:APPDATA\Microsoft\Windows\Start Menu\Programs" -Force
+            Invoke-Output {winget uninstall 9NBLGGH4QGHW --silent} #! comment this line to keep Microsoft Sticky Notes UWP
             Invoke-WebRequest -Uri $winXCornersUrl -OutFile $outputPath
             Expand-Archive -Path $outputPath -DestinationPath $destinationPath -Force
             Copy-Item -Path $winXCornersConfigPath -Destination $destinationPath -Force
