@@ -88,7 +88,7 @@ WinMac provides improved prompt with addition of completion functions and most c
 
 - **Keyboard Shortcuts**
 
-WinMac provides very useful keyboard shortcuts from macOS with use of AutoHotkey, which is an automation scripting language for Windows. Shortcuts include hiding/showing dock, minimizing single or all windows and cycling through windows of the same app. More details on Wiki page [Keyboard Shortcuts](https://github.com/Asteski/WinMac/wiki/Commands-cheat-sheet#keyboard-shortcuts).
+WinMac provides very useful keyboard shortcuts from macOS with use of AutoHotkey, which is an automation scripting language for Windows. Shortcuts include hiding/showing dock, minimizing single or all windows and cycling through windows of the same app. More details on Wiki page [Keyboard Shortcuts](https://github.com/Asteski/WinMac/wiki/keyboard-shortcuts).
 
 - **Enhanced Icons**
 
