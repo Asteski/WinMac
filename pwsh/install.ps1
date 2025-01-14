@@ -1050,6 +1050,9 @@ foreach ($app in $selectedApps) {
                 Invoke-Output { Install-WinGetPackage -id 'Microsoft.UI.Xaml.2.7' }
             }
             Invoke-WebRequest -Uri $winXCornersUrl -OutFile $outputPath
+            if (-not (Test-Path -Path $destinationPath)) {
+                New-Item -ItemType Directory -Path $destinationPath -Force | Out-Null
+            }
             Expand-Archive -Path $outputPath -DestinationPath $destinationPath -Force
             Copy-Item -Path $winXCornersConfigPath -Destination $destinationPath -Force
             Write-Host "Installing Simple Sticky Notes..." -ForegroundColor DarkYellow
@@ -1060,7 +1063,6 @@ foreach ($app in $selectedApps) {
             Remove-Item $winLaunchOutputPath -Force
             Start-Process "$winLaunchDestinationPath\WinLaunch.exe"
             Start-Process "C:\Program Files (x86)\Simnet\Simple Sticky Notes\ssn.exe"
-            Invoke-Output {winget uninstall 9NBLGGH4QGHW --silent} #! comment this line to keep Microsoft Sticky Notes UWP
             Move-Item -Path "$env:USERPROFILE\Desktop\Simple Sticky Notes.lnk" -Destination "$env:APPDATA\Microsoft\Windows\Start Menu\Programs" -Force
             $process = Get-Process -Name WinLaunch -ErrorAction SilentlyContinue
             if ($process) { Stop-Process -Name WinLaunch -Force }
