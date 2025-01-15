@@ -398,6 +398,7 @@ foreach ($app in $selectedApps) {
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Remove-Item -Path "$programsDir\Everything.lnk" -Force
             Remove-Item $env:LOCALAPPDATA\Everything -Recurse -Force
+            Invoke-Output { Remove-Item -Path "HKLM:\SYSTEM\CurrentControlSet\Services\Everything" -Recurse }
             Write-Host "Uninstalling Everything completed." -ForegroundColor Green
         }
     # PowerShell Profile
@@ -501,6 +502,7 @@ foreach ($app in $selectedApps) {
             Remove-Item -Path "$env:LOCALAPPDATA\WinXCorners" -Recurse -Force
             Remove-Item -Path "$env:APPDATA\WinLaunch" -Recurse -Force
             Remove-Item -Path "$env:APPDATA\Simnet" -Recurse -Force
+            Invoke-Output { Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run\Simple Sticky Notes" -Recurse }
             Write-Host "Uninstalling Hot Corners completed." -ForegroundColor Green
         }
     # Other
