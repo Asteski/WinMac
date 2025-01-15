@@ -577,7 +577,6 @@ uint fWinIni);
             Invoke-Output { Remove-Item -Path "$env:LOCALAPPDATA\WinMac\theme.ps1" }
             Set-ItemProperty -Path $regPath -Name "IconPack" -Value 0 | Out-Null
             Invoke-Output { Uninstall-WinGetPackage -name 'IconPack Installer' }
-            Invoke-Output {winget install "Windows web experience Pack" --silent}
             Start-Sleep -Seconds 60
             Stop-Process -Name explorer -Force
             Write-Host "Uninstalling Other Settings completed." -ForegroundColor Green
