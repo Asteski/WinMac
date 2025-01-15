@@ -121,6 +121,7 @@ List of utilities and their creators used with WinMac:
 - [Windhawk](https://github.com/ramensoftware/windhawk) by Ramen Software
 - [WinXCorners](https://github.com/vhanla/winxcorners) by vhanla
 - [Simple Sticky Notes](https://www.simplestickynotes.com/) by Simnet
+- [WinLaunch](https://github.com/jensroth-git/WinLaunch) by jensroth
 - [PSTree](https://github.com/santisq/PSTree) by santisq
 - [ntop](https://github.com/gsass1/NTop) by gsass1
 - [ptr](https://github.com/8LWXpg/ptr) by 8LWXpg

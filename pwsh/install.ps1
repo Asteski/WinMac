@@ -1057,7 +1057,7 @@ foreach ($app in $selectedApps) {
             Copy-Item -Path $winXCornersConfigPath -Destination $destinationPath -Force
             Write-Host "Installing Simple Sticky Notes..." -ForegroundColor DarkYellow
             Invoke-Output {winget install SimnetLtd.SimpleStickyNotes --silent}
-            Write-Host "Installing WinLaunch..." -ForegroundColsr DarkYellow
+            Write-Host "Installing WinLaunch..." -ForegroundColor DarkYellow
             Invoke-WebRequest -Uri $winLaunchUrl -OutFile $winLaunchOutputPath
             Expand-Archive -Path $winLaunchOutputPath -DestinationPath $winLaunchDestinationPath -Force
             Remove-Item $winLaunchOutputPath -Force
