@@ -483,8 +483,7 @@ foreach ($app in $selectedApps) {
         "10" {
             Write-Host "Uninstalling Windhawk..." -ForegroundColor Yellow
             Stop-Process -name windhawk -force
-            # Invoke-Output {Uninstall-WinGetPackage -name Windhawk}
-            Invoke-Output {winget uninstall -name Windhawk --silent}
+            Invoke-Output {Uninstall-WinGetPackage -name Windhawk}
             Write-Host "Uninstalling Windhawk completed." -ForegroundColor Green
         }
     # Hot Corners
