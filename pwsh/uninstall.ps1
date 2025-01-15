@@ -577,7 +577,6 @@ uint fWinIni);
             Invoke-Output { Remove-Item -Path "$env:LOCALAPPDATA\WinMac\theme.ps1" }
             Set-ItemProperty -Path $regPath -Name "IconPack" -Value 0 | Out-Null
             Invoke-Output { Uninstall-WinGetPackage -name 'IconPack Installer' }
-            # Invoke-Output { Remove-Item -Path "C:\IconPack" -Recurse -Force }
             Invoke-Output {winget install "Windows web experience Pack" --silent}
             Start-Sleep -Seconds 60
             Stop-Process -Name explorer -Force
@@ -586,6 +585,7 @@ uint fWinIni);
     }
 }
 # Clean up
+if ((Get-ChildItem -Path "C:\IconPack" -Recurse | Measure-Object).Count -eq 0) { Remove-Item -Path "C:\IconPack" -Recurse -Force }
 if ((Get-ChildItem -Path "$env:LOCALAPPDATA\WinMac" -Recurse | Measure-Object).Count -eq 0) { Remove-Item -Path "$env:LOCALAPPDATA\WinMac" -Force }
 $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue
 if ($null -eq $tasksFolder) { schtasks /DELETE /TN \WinMac /F > $null 2>&1 }
