@@ -493,7 +493,7 @@ foreach ($app in $selectedApps) {
             $regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
             Stop-Process -n WinXCorners -Force
             Stop-Process -n WinLaunch -Force
-            Stop-Process -n ssn -Force            
+            Stop-Process -n ssn -Force
             Invoke-Output { Uninstall-WinGetPackage -name "Simple Sticky Notes" }
             Invoke-Output { winget install 9NBLGGH4QGHW --silent }
             Remove-ItemProperty -Path $regPath -Name "WinLaunch"
