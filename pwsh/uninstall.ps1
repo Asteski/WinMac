@@ -397,7 +397,7 @@ foreach ($app in $selectedApps) {
             Invoke-Output { Uninstall-WinGetPackage -id Voidtools.Everything }
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Remove-Item -Path "$programsDir\Everything.lnk" -Force
-            Remove-Item $env:APPDATA\Everything -Recurse -Force
+            Remove-Item $env:LOCALAPPDATA\Everything -Recurse -Force
             Write-Host "Uninstalling Everything completed." -ForegroundColor Green
         }
     # PowerShell Profile
@@ -575,6 +575,7 @@ uint fWinIni);
             Invoke-Output { Remove-Item -Path "$env:LOCALAPPDATA\WinMac\theme.ps1" }
             Set-ItemProperty -Path $regPath -Name "IconPack" -Value 0 | Out-Null
             Invoke-Output { Uninstall-WinGetPackage -name 'IconPack Installer' }
+            Invoke-Output { Remove-Item -Path "C:\IconPack" }
             Invoke-Output {winget install "Windows web experience Pack" --silent}
             Start-Sleep -Seconds 60
             Stop-Process -Name explorer -Force
