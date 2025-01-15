@@ -497,12 +497,12 @@ foreach ($app in $selectedApps) {
             Invoke-Output { winget install 9NBLGGH4QGHW --silent }
             Remove-ItemProperty -Path $regPath -Name "WinLaunch"
             Remove-ItemProperty -Path $regPath -Name "WinXCorners"
+            Remove-ItemProperty -Path $regPath -Name "Simple Sticky Notes"
             Remove-Item -Path "$env:LOCALAPPDATA\WinMac\hotcorners" -Recurse -Force
             Remove-Item -Path "$env:LOCALAPPDATA\WinLaunch" -Recurse -Force
             Remove-Item -Path "$env:LOCALAPPDATA\WinXCorners" -Recurse -Force
             Remove-Item -Path "$env:APPDATA\WinLaunch" -Recurse -Force
             Remove-Item -Path "$env:APPDATA\Simnet" -Recurse -Force
-            Invoke-Output { Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run\Simple Sticky Notes" -Recurse }
             Write-Host "Uninstalling Hot Corners completed." -ForegroundColor Green
         }
     # Other
