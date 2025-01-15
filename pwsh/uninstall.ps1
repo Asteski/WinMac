@@ -387,14 +387,17 @@ foreach ($app in $selectedApps) {
             Write-Host "Uninstalling PowerToys..."  -ForegroundColor Yellow
             Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force
             Invoke-Output { Uninstall-WinGetPackage -id Microsoft.PowerToys }
+            Remove-Item $env:LOCALAPPDATA\Microsoft\PowerToys -Recurse -Force
+            Remove-Item $env:LOCALAPPDATA\PowerToys -Recurse -Force
             Write-Host "Uninstalling PowerToys completed." -ForegroundColor Green
         }
-    # Everything
+        # Everything
         "2" {
             Write-Host "Uninstalling Everything..."  -ForegroundColor Yellow
             Invoke-Output { Uninstall-WinGetPackage -id Voidtools.Everything }
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Remove-Item -Path "$programsDir\Everything.lnk" -Force
+            Remove-Item $env:APPDATA\Everything -Recurse -Force
             Write-Host "Uninstalling Everything completed." -ForegroundColor Green
         }
     # PowerShell Profile
@@ -476,6 +479,7 @@ foreach ($app in $selectedApps) {
             Invoke-Output { Uninstall-WinGetPackage -name Nexus }
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Remove-Item -Path "$programsDir\Nexus.lnk" -Force
+            Remove-Item -Path "C:\Users\Public\Documents\Winstep" -Recurse -Force
             Write-Host "Uninstalling Nexus Dock completed." -ForegroundColor Green
         }
     # Windhawk
@@ -488,17 +492,19 @@ foreach ($app in $selectedApps) {
     # Hot Corners
         "11" {
             Write-Host "Uninstalling Hot Corners..." -ForegroundColor Yellow
+            $regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
             Stop-Process -n WinXCorners -Force
             Stop-Process -n WinLaunch -Force
             Stop-Process -n ssn -Force            
-            Remove-Item -Path "$env:LOCALAPPDATA\WinMac\hotcorners" -Recurse -Force
             Invoke-Output { Uninstall-WinGetPackage -name "Simple Sticky Notes" }
             Invoke-Output { winget install 9NBLGGH4QGHW --silent }
-            $regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
             Remove-ItemProperty -Path $regPath -Name "WinLaunch"
             Remove-ItemProperty -Path $regPath -Name "WinXCorners"
+            Remove-Item -Path "$env:LOCALAPPDATA\WinMac\hotcorners" -Recurse -Force
             Remove-Item -Path "$env:LOCALAPPDATA\WinLaunch" -Recurse -Force
             Remove-Item -Path "$env:LOCALAPPDATA\WinXCorners" -Recurse -Force
+            Remove-Item -Path "$env:APPDATA\WinLaunch" -Recurse -Force
+            Remove-Item -Path "$env:APPDATA\Simnet" -Recurse -Force
             Write-Host "Uninstalling Hot Corners completed." -ForegroundColor Green
         }
     # Other
@@ -570,8 +576,10 @@ uint fWinIni);
             Get-ChildItem '..\config\contextmenu\remove\Remove_Theme_Mode_in_Context_Menu.reg' | ForEach-Object { reg import $_.FullName > $null 2>&1 }
             New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" -Force | Out-Null
             New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Force | Out-Null
+            Invoke-Output { Remove-Item -Path "$env:LOCALAPPDATA\WinMac\theme.ps1" }
             Set-ItemProperty -Path $regPath -Name "IconPack" -Value 0 | Out-Null
             Invoke-Output { Uninstall-WinGetPackage -name 'IconPack Installer' }
+            Invoke-Output { Remove-Item -Path "$env:LOCALAPPDATA\WinMac\theme.ps1" }#!!!
             Start-Sleep -Seconds 60
             Stop-Process -Name explorer -Force
             Write-Host "Uninstalling Other Settings completed." -ForegroundColor Green
