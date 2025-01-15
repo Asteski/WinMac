@@ -2,7 +2,7 @@ param (
     [switch]$noGUI,
     [switch]$debug
 )
-$version = "0.7.2"
+$version = "0.8.0"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_uninstall_log_$date.txt"
 $transcriptFile = "WinMac_uninstall_transcript_$date.txt"
@@ -126,7 +126,8 @@ if (!($noGUI)) {
                         <CheckBox x:Name="chkKeyboardShortcuts" Content="Keyboard Shortcuts" IsChecked="True" Grid.Row="3" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkNexusDock" Content="Nexus Dock" IsChecked="True" Grid.Row="4" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkWindhawk" Content="Windhawk" IsChecked="True" Grid.Row="4" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="chkOther" Content="Other" IsChecked="True" Grid.Row="5" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkHotCorners" Content="Hot Corners" IsChecked="True" Grid.Row="5" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkOther" Content="Other" IsChecked="True" Grid.Row="5" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                     </Grid>
                 </GroupBox>
 
@@ -174,6 +175,7 @@ if (!($noGUI)) {
     $chkKeyboardShortcuts = $window.FindName("chkKeyboardShortcuts")
     $chkNexusDock = $window.FindName("chkNexusDock")
     $chkWindhawk = $window.FindName("chkWindhawk")
+    $chkHotCorners = $window.FindName("chkHotCorners")
     $chkOther = $window.FindName("chkOther")
     $btnUninstall = $window.FindName("btnUninstall")
     $btnCancel = $window.FindName("btnCancel")
@@ -181,7 +183,7 @@ if (!($noGUI)) {
     $customUninstall.Add_Checked({$componentSelection.IsEnabled = $true})
     $result = @{}
     $btnUninstall.Add_Click({
-        if ($fullUninstall.IsChecked) { $selection = "1","2","3","4","5","6","7","8","9","10","11" } 
+        if ($fullUninstall.IsChecked) { $selection = "1","2","3","4","5","6","7","8","9","10","11","12" } 
         else {
             if ($chkPowerToys.IsChecked) { $selection += "1," }
             if ($chkEverything.IsChecked) { $selection += "2," }
@@ -193,9 +195,10 @@ if (!($noGUI)) {
             if ($chkKeyboardShortcuts.IsChecked) { $selection += "8," }
             if ($chkNexusDock.IsChecked) { $selection += "9," }
             if ($chkWindhawk.IsChecked) { $selection += "10," }
-            if ($chkOther.IsChecked) { $selection += "11" }
+            if ($chkHotCorners.IsChecked) { $selection += "11" }
+            if ($chkOther.IsChecked) { $selection += "12" }
         }
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Windhawk"; "11"="Other Settings"}
+        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Windhawk"; "11"="Hot Corners"; "12"="Other Settings"}
         $result["selectedApps"] = $selection.Split(',').TrimEnd(',')
         $selectedAppNames = @()
         foreach ($appNumber in $selection) {
@@ -260,13 +263,13 @@ https://github.com/Asteski/WinMac/wiki
     # WinMac configuration
     $fullOrCustom = Read-Host "`nEnter 'F' for full or 'C' for custom uninstallation"
     if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
-        $selectedApps = "1","2","3","4","5","6","7","8","9","10","11"
+        $selectedApps = "1","2","3","4","5","6","7","8","9","10","11","12"
         Write-Host "Choosing full uninstallation." -ForegroundColor Yellow
     }
     elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
         Write-Host "Choosing custom uninstallation." -ForegroundColor Yellow
         Start-Sleep 1
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Windhawk"; "11"="Other"}
+        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Windhawk"; "11"="Hot Corners"; "12"="Other"}
 Write-Host @"
 
 `e[93m$("Please select options you want to uninstall:")`e[0m
@@ -282,15 +285,16 @@ Write-Host @"
         Write-Host "8. Keyboard Shortcuts"
         Write-Host "9. Nexus Dock"
         Write-Host "10. Windhawk"
-        Write-Host "11. Other Settings"
+        Write-Host "11. Hot Corners"
+        Write-Host "12. Other Settings"
         Write-Host
         do {
             $selection = Read-Host "Enter the numbers of options you want to uninstall (separated by commas)"
             $selection = $selection.Trim()
             $selection = $selection -replace '\s*,\s*', ','
-            $valid = $selection -match '^([1-9]|10|11)(,([1-9]|10|11))*$'
+            $valid = $selection -match '^([1-9]|10|11|12)(,([1-9]|10|11|12))*$'
             if (!$valid) {
-                Write-Host "`e[91mInvalid input! Please enter numbers between 1 and 10, separated by commas.`e[0m`n"
+                Write-Host "`e[91mInvalid input! Please enter numbers between 1 and 12, separated by commas.`e[0m`n"
             }
         } while ([string]::IsNullOrWhiteSpace($selection) -or !$valid)
         $selectedApps = @()
@@ -313,7 +317,7 @@ Write-Host @"
     }
     else
     {
-        $selectedApps = "1","2","3","4","5","6","7","8","9","10","11"
+        $selectedApps = "1","2","3","4","5","6","7","8","9","10","11","12"
         Write-Host "Invalid input. Defaulting to full uninstallation." -ForegroundColor Yellow
     }
     Start-Sleep 1
@@ -383,14 +387,18 @@ foreach ($app in $selectedApps) {
             Write-Host "Uninstalling PowerToys..."  -ForegroundColor Yellow
             Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force
             Invoke-Output { Uninstall-WinGetPackage -id Microsoft.PowerToys }
+            Remove-Item $env:LOCALAPPDATA\Microsoft\PowerToys -Recurse -Force
+            Remove-Item $env:LOCALAPPDATA\PowerToys -Recurse -Force
             Write-Host "Uninstalling PowerToys completed." -ForegroundColor Green
         }
-    # Everything
+        # Everything
         "2" {
             Write-Host "Uninstalling Everything..."  -ForegroundColor Yellow
             Invoke-Output { Uninstall-WinGetPackage -id Voidtools.Everything }
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Remove-Item -Path "$programsDir\Everything.lnk" -Force
+            Invoke-Output { Remove-Item -Path "HKLM:\SYSTEM\CurrentControlSet\Services\Everything" -Recurse }
+            Remove-Item $env:LOCALAPPDATA\Everything -Recurse -Force
             Write-Host "Uninstalling Everything completed." -ForegroundColor Green
         }
     # PowerShell Profile
@@ -431,8 +439,6 @@ foreach ($app in $selectedApps) {
             Invoke-Output { Uninstall-WinGetPackage -name "Winver UWP" }
             $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -match 'Start Button|Windows Key' }
             foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
-            $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue
-            if ($null -eq $tasksFolder) { schtasks /DELETE /TN \WinMac /F > $null 2>&1 }
             Get-ChildItem "$env:LOCALAPPDATA\WinMac" | Where-Object { $_.Name -match 'startbutton|windowskey' } | Remove-Item -Recurse -Force
             Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
             Expand-Archive -Path "..\config\WinX-default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
@@ -460,8 +466,6 @@ foreach ($app in $selectedApps) {
             Stop-Process -Name KeyShortcuts -Force
             $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -match 'Keyboard Shortcuts' }
             foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
-            $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue
-            if ($null -eq $tasksFolder) { schtasks /DELETE /TN \WinMac /F > $null 2>&1 }
             Get-ChildItem "$env:LOCALAPPDATA\WinMac" | Where-Object { $_.Name -match 'keyshortcuts' } | Remove-Item -Recurse -Force
             Write-Host "Uninstalling Keyboard Shortcuts completed." -ForegroundColor Green
         }
@@ -472,6 +476,7 @@ foreach ($app in $selectedApps) {
             Invoke-Output { Uninstall-WinGetPackage -name Nexus }
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Remove-Item -Path "$programsDir\Nexus.lnk" -Force
+            Remove-Item -Path "C:\Users\Public\Documents\Winstep" -Recurse -Force
             Write-Host "Uninstalling Nexus Dock completed." -ForegroundColor Green
         }
     # Windhawk
@@ -481,8 +486,27 @@ foreach ($app in $selectedApps) {
             Invoke-Output {Uninstall-WinGetPackage -name Windhawk}
             Write-Host "Uninstalling Windhawk completed." -ForegroundColor Green
         }
-        # Other
+    # Hot Corners
         "11" {
+            Write-Host "Uninstalling Hot Corners..." -ForegroundColor Yellow
+            $regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
+            Stop-Process -n WinXCorners -Force
+            Stop-Process -n WinLaunch -Force
+            Stop-Process -n ssn -Force
+            Invoke-Output { Uninstall-WinGetPackage -name "Simple Sticky Notes" }
+            Invoke-Output { winget install 9NBLGGH4QGHW --silent }
+            Remove-ItemProperty -Path $regPath -Name "WinLaunch"
+            Remove-ItemProperty -Path $regPath -Name "WinXCorners"
+            Remove-ItemProperty -Path $regPath -Name "Simple Sticky Notes"
+            Remove-Item -Path "$env:LOCALAPPDATA\WinMac\hotcorners" -Recurse -Force
+            Remove-Item -Path "$env:LOCALAPPDATA\WinLaunch" -Recurse -Force
+            Remove-Item -Path "$env:LOCALAPPDATA\WinXCorners" -Recurse -Force
+            Remove-Item -Path "$env:APPDATA\WinLaunch" -Recurse -Force
+            Remove-Item -Path "$env:APPDATA\Simnet" -Recurse -Force
+            Write-Host "Uninstalling Hot Corners completed." -ForegroundColor Green
+        }
+    # Other
+        "12" {
             Write-Host "Uninstalling Other Settings..." -ForegroundColor Yellow
             $regPath = "HKCU:\SOFTWARE\WinMac"
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
@@ -546,10 +570,11 @@ uint fWinIni);
             Invoke-Output { Remove-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" }
             Invoke-Output { Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings" -Recurse }
             Invoke-Output { Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarSmallIcons" }
-            Get-ChildItem ..\config\contextmenu\add\* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
+            Get-ChildItem ..\config\contextmenu\add\* -e *theme* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
             Get-ChildItem '..\config\contextmenu\remove\Remove_Theme_Mode_in_Context_Menu.reg' | ForEach-Object { reg import $_.FullName > $null 2>&1 }
             New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" -Force | Out-Null
             New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Force | Out-Null
+            Invoke-Output { Remove-Item -Path "$env:LOCALAPPDATA\WinMac\theme.ps1" }
             Set-ItemProperty -Path $regPath -Name "IconPack" -Value 0 | Out-Null
             Invoke-Output { Uninstall-WinGetPackage -name 'IconPack Installer' }
             Start-Sleep -Seconds 60
@@ -559,7 +584,10 @@ uint fWinIni);
     }
 }
 # Clean up
+if ((Get-ChildItem -Path "C:\IconPack" -Recurse | Measure-Object).Count -eq 0) { Remove-Item -Path "C:\IconPack" -Recurse -Force }
 if ((Get-ChildItem -Path "$env:LOCALAPPDATA\WinMac" -Recurse | Measure-Object).Count -eq 0) { Remove-Item -Path "$env:LOCALAPPDATA\WinMac" -Force }
+$tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue
+if ($null -eq $tasksFolder) { schtasks /DELETE /TN \WinMac /F > $null 2>&1 }
 $explorerProcess = Get-Process -Name explorer -ErrorAction SilentlyContinue
 if ($null -eq $explorerProcess) {Start-Process -FilePath explorer.exe}
 Stop-Transcript | Out-Null

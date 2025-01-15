@@ -2,10 +2,11 @@ param (
     [switch]$noGUI,
     [switch]$debug
 )
-$version = "0.7.2"
+$version = "0.8.0"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_install_log_$date.txt"
 $transcriptFile = "WinMac_install_transcript_$date.txt"
+$blueOrYellow = "B"
 $errorActionPreference="SilentlyContinue"
 $WarningPreference="SilentlyContinue"
 Add-Type -AssemblyName PresentationFramework
@@ -59,7 +60,7 @@ if (!($noGUI)) {
 <Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="WinMac Deployment Wizard" Height="820" Width="480" WindowStartupLocation="CenterScreen" Background="$backgroundColor" Icon="$iconFolderPath\wizard.ico">
+    Title="WinMac Deployment Wizard" Height="860" Width="480" WindowStartupLocation="CenterScreen" Background="$backgroundColor" Icon="$iconFolderPath\wizard.ico">
     <Window.Resources>
         <SolidColorBrush x:Key="BackgroundBrush" Color="$backgroundColor"/>
         <SolidColorBrush x:Key="ForegroundBrush" Color="$foregroundColor"/>
@@ -115,6 +116,7 @@ if (!($noGUI)) {
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
                         <CheckBox x:Name="chkPowerToys" Content="PowerToys" IsChecked="True" Grid.Row="0" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
@@ -128,7 +130,8 @@ if (!($noGUI)) {
                         <CheckBox x:Name="chkNexusDock" Content="Nexus Dock" IsChecked="True" Grid.Row="4" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkWindhawk" Content="Windhawk" IsChecked="True" Grid.Row="4" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkGitProfile" Content="Git Profile" IsChecked="True" Grid.Row="5" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="chkOther" Content="Other" IsChecked="True" Grid.Row="5" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkHotCorners" Content="Hot Corners" IsChecked="True" Grid.Row="5" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkOther" Content="Other" IsChecked="True" Grid.Row="6" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                     </Grid>
                 </GroupBox>
 
@@ -209,6 +212,7 @@ if (!($noGUI)) {
     $chkNexusDock = $window.FindName("chkNexusDock")
     $chkWindhawk = $window.FindName("chkWindhawk")
     $chkGitProfile = $window.FindName("chkGitProfile")
+    $chkHotCorners = $window.FindName("chkHotCorners")
     $chkOther = $window.FindName("chkOther")
     $startMenu = $window.FindName("startMenuWinMac")
     $promptStyle = $window.FindName("promptStyleWinMac")
@@ -220,7 +224,7 @@ if (!($noGUI)) {
     $customInstall.Add_Checked({$componentSelection.IsEnabled = $true})
     $result = @{}
     $btnInstall.Add_Click({
-        if ($fullInstall.IsChecked) { $selection = "1","2","3","4","5","6","7","8","9","10","11" } 
+        if ($fullInstall.IsChecked) { $selection = "1","2","3","4","5","6","7","8","9","10","11","12" } 
         else {
             if ($chkPowerToys.IsChecked) { $selection += "1," }
             if ($chkEverything.IsChecked) { $selection += "2," }
@@ -232,9 +236,10 @@ if (!($noGUI)) {
             if ($chkKeyboardShortcuts.IsChecked) { $selection += "8," }
             if ($chkNexusDock.IsChecked) { $selection += "9," }
             if ($chkWindhawk.IsChecked) { $selection += "10," }
-            if ($chkOther.IsChecked) { $selection += "11" }
+            if ($chkHotCorners.IsChecked) { $selection += "11," }
+            if ($chkOther.IsChecked) { $selection += "12" }
         }
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Windhawk"; "11"="Other Settings"}
+        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Windhawk"; "11"="Hot Corners"; "12"="Other Settings"}
         $result["selectedApps"] = $selection.Split(',').TrimEnd(',')
         $selectedAppNames = @()
         foreach ($appNumber in $selection) {
@@ -306,12 +311,12 @@ https://github.com/Asteski/WinMac/wiki
     $fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom installation"
     if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
         Write-Host "Choosing full installation." -ForegroundColor Green
-        $selectedApps = "1","2","3","4","5","6","7","8","9","10","11"
+        $selectedApps = "1","2","3","4","5","6","7","8","9","10","11","12"
     } 
     elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
         Write-Host "Choosing custom installation." -ForegroundColor Green
         Start-Sleep 1
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Windhawk"; "11"="Other"}
+        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Windhawk"; "11"="Hot Corners"; "12"="Other"}
 Write-Host @"
 
 `e[93m$("Please select options you want to install:")`e[0m
@@ -328,16 +333,17 @@ Write-Host @"
 8. Keyboard Shortcuts
 9. Nexus Dock
 10. Windhawk
-11. Other Settings
+11. Hot Corners
+12. Other Settings
 "@
     Write-Host
     do {
         $selection = Read-Host "Enter the numbers of options you want to install (separated by commas)"
         $selection = $selection.Trim()
         $selection = $selection -replace '\s*,\s*', ','
-        $valid = $selection -match '^([1-9]|10|11)(,([1-9]|10|11))*$'
+        $valid = $selection -match '^([1-9]|10|11|12)(,([1-9]|10|11|12))*$'
         if (!$valid) {
-            Write-Host "`e[91mInvalid input! Please enter numbers between 1 and 11, separated by commas.`e[0m`n"
+            Write-Host "`e[91mInvalid input! Please enter numbers between 1 and 12, separated by commas.`e[0m`n"
         }
     } while ([string]::IsNullOrWhiteSpace($selection) -or !$valid)
     $selectedApps = @()
@@ -353,7 +359,7 @@ Write-Host @"
 else
 {
     Write-Host "Invalid input. Defaulting to full installation." -ForegroundColor Yellow
-    $selectedApps = "1","2","3","4","5","6","7","8","9","10","11"
+    $selectedApps = "1","2","3","4","5","6","7","8","9","10","11","12"
 }
 
 if ($selectedApps -like '*4*' -and $selectedApps -like '*5*') {
@@ -461,7 +467,7 @@ if ($selectedApps -like '*4*' -or $selectedApps -like '*7*' -or $selectedApps -l
     }
 }
 
-if ($selectedApps -like '*1*' -or $selectedApps -like '*9*' -or $selectedApps -like '*11*') {
+if ($selectedApps -like '*9*' -or $selectedApps -like '*12*') {
     $blueOrYellow = Read-Host "`nEnter 'B' for blue or 'Y' for yellow folders"
     if ($blueOrYellow -eq 'B' -or $blueOrYellow -eq 'b') {
         Write-Host "Using blue folders." -ForegroundColor Green
@@ -548,17 +554,17 @@ foreach ($app in $selectedApps) {
         "1" {
             Write-Host "Installing PowerToys..." -ForegroundColor Yellow
             winget configure --enable | Out-Null
-            winget configure ..\config\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
+            winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
             Copy-Item -Path "..\config\powertoys\ptr\ptr.exe" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
-            if ($blueOrYellow -eq 'Y' -or $blueOrYellow -eq 'y') {
+            if ($blueOrYellow -eq 'B' -or $blueOrYellow -eq 'b') {
+                Copy-Item -Path "..\config\powertoys\RunPlugins" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
+                Copy-Item -Path "..\config\powertoys\RunPlugins\Everything" "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -Recurse -Force
+            }
+            else {
                 $filesList1 = Get-ChildItem -path "..\config\powertoys\RunPlugins" -Recurse -Exclude "folder.png"
                 Copy-Item $filesList1 -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
                 $filesList2 = Get-ChildItem -path "..\config\powertoys\RunPlugins\Everything" -Recurse -Exclude "folder.png"
                 Copy-Item $filesList2 "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -Recurse -Force
-            }
-            else {
-                Copy-Item -Path "..\config\powertoys\RunPlugins" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
-                Copy-Item -Path "..\config\powertoys\RunPlugins\Everything" "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -Recurse -Force
             }
             $envPath = [System.Environment]::GetEnvironmentVariable("Path", [System.EnvironmentVariableTarget]::User)
             if (-not ($envPath -like "*$env:LOCALAPPDATA\PowerToys*")) {
@@ -577,7 +583,7 @@ foreach ($app in $selectedApps) {
             Invoke-Output { Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Destination $programsDir -Force }
             $everythingIniPath = "$env:APPDATA\Everything"
             if (-not (Test-Path -Path $everythingIniPath)) {New-Item -ItemType Directory -Path $everythingIniPath -Force | Out-Null}
-            Copy-Item -Path "..\config\Everything.ini" -Destination $everythingIniPath -Force
+            Copy-Item -Path "..\config\everything\Everything.ini" -Destination $everythingIniPath -Force
             Invoke-Output { Start-Process -FilePath Everything.exe -WorkingDirectory $env:PROGRAMFILES\Everything -WindowStyle Hidden }
             Write-Host "Everything installation completed." -ForegroundColor Green
         }
@@ -695,6 +701,7 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $sabRegPath -Name "SysTrayStyle" -Value 1
             Set-ItemProperty -Path $sabRegPath -Name "SysTrayActionCenter" -Value 1
             Set-ItemProperty -Path $sabRegPath -Name "SysTraySpacierIcons" -Value 1
+            Set-ItemProperty -Path $sabRegPath -Name "DriveGrouping" -Value 1
             Set-ItemProperty -Path $sabRegPath -Name "SysTrayClockFormat" -Value 3
             Set-ItemProperty -Path $sabRegPath -Name "SysTrayInputSwitch" -Value 0
             if ($menuSet -eq 'X' -or $menuSet -eq 'x') {
@@ -916,12 +923,15 @@ foreach ($app in $selectedApps) {
             }
             else {
                 Write-Host "Installing Nexus Dock..." -ForegroundColor Yellow
-                $downloadUrl = "https://www.winstep.net/nexus.zip"
-                $downloadPath = "..\temp\Nexus.zip"
-                if (-not (Test-Path $downloadPath)) {
-                    Invoke-WebRequest -Uri $downloadUrl -OutFile $downloadPath
+                $checkNexus = Get-WinGetPackage -name Nexus
+                if ($null -eq $checkNexus) {
+                    $downloadUrl = "https://www.winstep.net/nexus.zip"
+                    $downloadPath = "..\temp\Nexus.zip"
+                    if (-not (Test-Path $downloadPath)) {
+                        Invoke-WebRequest -Uri $downloadUrl -OutFile $downloadPath
+                    }
+                    Expand-Archive -Path $downloadPath -DestinationPath ..\temp -Force
                 }
-                Expand-Archive -Path $downloadPath -DestinationPath ..\temp -Force
                 if (Get-Process -n Nexus) { Stop-Process -n Nexus }
                 Start-Process -FilePath "..\temp\NexusSetup.exe" -ArgumentList "/silent"
                 Start-Sleep 10
@@ -938,14 +948,14 @@ foreach ($app in $selectedApps) {
                 } else { Start-Sleep 10 }
                 Get-Process -n Nexus | Stop-Process
                 $winStep = 'C:\Users\Public\Documents\WinStep'
-                Remove-Item -Path "$winStep\Themes\*" -Recurse -Force 
+                Remove-Item -Path "$winStep\Themes\*" -Recurse -Force
                 Copy-Item -Path "..\config\dock\themes\*" -Destination "$winStep\Themes\" -Recurse -Force 
                 Remove-Item -Path "$winStep\NeXus\Indicators\*" -Force -Recurse 
                 Copy-Item -Path "..\config\dock\indicators\*" -Destination "$winStep\NeXus\Indicators\" -Recurse -Force 
                 Invoke-Output {New-Item -ItemType Directory -Path "$winStep\Sounds" -Force}
                 Copy-Item -Path "..\config\dock\sounds\*" -Destination "$winStep\Sounds\" -Recurse -Force
                 Invoke-Output {New-Item -ItemType Directory -Path "$winStep\Icons" -Force}
-                Copy-Item "..\config\dock\icons" "$winStep" -Recurse -Force 
+                Copy-Item "..\config\icons" "$winStep" -Recurse -Force
                 $regFile = "..\config\dock\winstep.reg"
                 $downloadsPath = "$env:USERPROFILE\Downloads"
                 if ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
@@ -1006,6 +1016,7 @@ foreach ($app in $selectedApps) {
                     "https://raw.githubusercontent.com/m417z/my-windhawk-mods/main/mods/explorer-details-better-file-sizes.wh.cpp",
                     "https://raw.githubusercontent.com/m417z/my-windhawk-mods/main/mods/explorer-name-windows.wh.cpp",
                     "https://raw.githubusercontent.com/realgam3/dot-hide-wh/main/dot-hide.wh.cpp"
+                    "https://raw.githubusercontent.com/aubymori/windhawk-mods/refs/heads/main/mods/modernize-folder-picker-dialog.wh.cpp"
                 )
                 $destinationPath = "$Env:ProgramData\Windhawk\ModsSource"
                 foreach ($url in $urls) {
@@ -1020,8 +1031,65 @@ foreach ($app in $selectedApps) {
                 Write-Host "Windhawk installation completed." -ForegroundColor Green
             }
         }
-    # Other
+    # Hot Corners
         "11" {
+            Write-Host "Installing Hot Corners..." -ForegroundColor Yellow
+            $outputPath = '..\temp\WinXCorners.zip'
+            $winXCornersUrl = "https://github.com/vhanla/winxcorners/releases/download/1.3.2/WinXCorners1.3.2.zip"
+            $winXCornersConfigPath = '..\config\hotcorners\settings.ini'
+            $destinationPath = "$env:LOCALAPPDATA\WinXCorners"
+            $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.8' -ErrorAction SilentlyContinue
+            $winLaunchUrl = "https://github.com/jensroth-git/WinLaunch/releases/download/v.0.7.3.0/WinLaunch.0.7.3.0.zip"
+            $winLaunchConfigPath = '..\config\hotcorners\Settings.xml'
+            $winLaunchOutputPath = '..\temp\WinLaunch.zip'
+            $winLaunchDestinationPath = "$env:LOCALAPPDATA\WinLaunch"
+            if ($null -eq $dotNetRuntime) {
+                Invoke-Output { Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8' }
+            } else {
+            }
+            $uiXaml = Get-WinGetPackage -Id 'Microsoft.UI.Xaml.2.7' -ErrorAction SilentlyContinue
+            if ($null -eq $uiXaml) {
+                Invoke-Output { Install-WinGetPackage -id 'Microsoft.UI.Xaml.2.7' }
+            }
+            Invoke-WebRequest -Uri $winXCornersUrl -OutFile $outputPath
+            if (-not (Test-Path -Path $destinationPath)) {
+                New-Item -ItemType Directory -Path $destinationPath -Force | Out-Null
+            }
+            Expand-Archive -Path $outputPath -DestinationPath $destinationPath -Force
+            Copy-Item -Path $winXCornersConfigPath -Destination $destinationPath -Force
+            Write-Host "Installing Simple Sticky Notes..." -ForegroundColor DarkYellow
+            Invoke-Output {winget install SimnetLtd.SimpleStickyNotes --silent}
+            Write-Host "Installing WinLaunch..." -ForegroundColor DarkYellow
+            Invoke-WebRequest -Uri $winLaunchUrl -OutFile $winLaunchOutputPath
+            Expand-Archive -Path $winLaunchOutputPath -DestinationPath $winLaunchDestinationPath -Force
+            Remove-Item $winLaunchOutputPath -Force
+            Start-Process "$winLaunchDestinationPath\WinLaunch.exe"
+            Start-Process "C:\Program Files (x86)\Simnet\Simple Sticky Notes\ssn.exe"
+            Move-Item -Path "$env:USERPROFILE\Desktop\Simple Sticky Notes.lnk" -Destination "$env:APPDATA\Microsoft\Windows\Start Menu\Programs" -Force
+            $process = Get-Process -Name WinLaunch -ErrorAction SilentlyContinue
+            if ($process) { Stop-Process -Name WinLaunch -Force }
+            New-Item -ItemType Directory -Path "$winLaunchDestinationPath\Data" -Force | Out-Null
+            Copy-Item -Path $winLaunchConfigPath -Destination "$winLaunchDestinationPath\Data\Settings.xml" -Force
+            Copy-Item -Path $winLaunchConfigPath -Destination "$env:APPDATA\WinLaunch\Settings.xml" -Force
+            $configFilePath = Join-Path -Path $destinationPath -ChildPath "settings.ini"
+            (Get-Content -Path $configFilePath) -replace "WINLAUNCH", "$($env:LOCALAPPDATA)\WinLaunch\WinLaunch.exe" | Set-Content -Path $configFilePath
+            (Get-Content -Path $configFilePath) -replace "MINIMIZEALL", "$($env:LOCALAPPDATA)\WinMac\hotcorners\MinimizeAllWindowsExceptFocused.exe" | Set-Content -Path $configFilePath
+            Remove-Item $outputPath -Force
+            Start-Process "$destinationPath\WinXCorners.exe"
+            $shortcutPath = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\WinXCorners.lnk"
+            $targetPath = "$destinationPath\WinXCorners.exe"
+            $shell = New-Object -ComObject WScript.Shell
+            $shortcut = $shell.CreateShortcut($shortcutPath)
+            $shortcut.TargetPath = $targetPath
+            $shortcut.Save()
+            if (-not (Test-Path -Path "$env:LOCALAPPDATA\WinMac\hotcorners")) {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\hotcorners" -Force | Out-Null}
+            if ($sysType -like "*ARM*") {Copy-Item -Path ..\bin\hotcorners\arm64\* -Destination "$env:LOCALAPPDATA\WinMac\hotcorners\" -Recurse -Force }
+            else {Copy-Item -Path ..\bin\hotcorners\x64\* -Destination "$env:LOCALAPPDATA\WinMac\hotcorners\" -Recurse -Force }
+            New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "WinXCorners" -Value "$env:LOCALAPPDATA\WinMac\WinXCorners.exe" | Out-Null
+            Write-Host "Hot Corners installation completed." -ForegroundColor Green
+            }
+    # Other
+        "12" {
         ## Black Cursor
             Write-Host "Configuring Other Settings..." -ForegroundColor Yellow
             Write-Host "Black cursor..." -ForegroundColor DarkYellow
@@ -1120,16 +1188,17 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
         ## Configuring context menus
             Write-Host "Configure context menus..." -ForegroundColor DarkYellow
-            Get-ChildItem ..\config\contextmenu\remove\* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
+            Get-ChildItem ..\config\contextmenu\remove\* -e *theme* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
             $sourceFilePath = "..\config\contextmenu\add\Add_Theme_Mode_in_Context_Menu.reg"
             $tempFilePath = "..\temp\Add_Theme_Mode_in_Context_Menu.reg"
             $ps1FilePath = "..\config\contextmenu\theme.ps1"
-            if (-not (Test-Path -Path "$env:LOCALAPPDATA\WinMac")) {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac" -Force | Out-Null}
+            if (-not (Test-Path -Path "$env:LOCALAPPDATA\WinMac")) {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac" -Force}
             Copy-Item -Path $ps1FilePath -Destination "$env:LOCALAPPDATA\WinMac" -Force     
             Copy-Item -Path $sourceFilePath -Destination '..\temp\' -Force
             $appData = $env:LOCALAPPDATA -replace '\\', '\\'
             (Get-Content -Path $tempFilePath) -replace '%WINMACAPPDATA%', $appData | Set-Content -Path $tempFilePath
             Get-ChildItem '..\temp\Add_Theme_Mode_in_Context_Menu.reg' | ForEach-Object { reg import $_.FullName > $null 2>&1 }
+            Invoke-Output {winget uninstall "Windows web experience Pack" --silent}
         ## End Task
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
             $taskbarDevSettings = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"

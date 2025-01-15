@@ -3,10 +3,10 @@
 **WinMac** is a revolutionary customization project that brings together the best of both Windows and macOS operating systems, offering users a unique and seamless Windows experience.
 
 <p align="center">
+    <a href="https://github.com/Asteski/WinMac/wiki/Home">Home Page</a> |
     <a href="https://github.com/Asteski/WinMac/wiki/Installation-Guide">Installation Guide</a> |
     <a href="#Features">Features</a> |
     <a href="#Recommendations">Recommendations</a> |
-    <a href="https://github.com/Asteski/WinMac/wiki">Documentation</a> |
     <a href="https://github.com/Asteski/WinMac/releases/">Releases</a> |
     <a href="#Credits">Credits</a>
 </p>
@@ -58,7 +58,11 @@ By pressing a customizable hotkey combination, a search bar appears, enabling us
 
 Winstep Nexus is a highly customizable and feature-rich dock application for Windows that can be used to achieve a macOS-like dock experience. It offers a wide range of customization options, including size, animations, sounds, auto-hide, transparency, different themes and icons.
 
-By integrating Winstep Nexus into your WinMac modification, you can provide users with a visually appealing and functional dock that resembles the macOS style. This will enhance the overall user experience and make the transition between Windows and macOS seamless. 
+By integrating Winstep Nexus into your WinMac modification, you can provide users with a visually appealing and functional dock that resembles the macOS style. This will enhance the overall user experience and make the transition between Windows and macOS seamless.
+
+- **Hot Corners**
+
+Make your screen corners trigger actions like in macOS, with available actions like creating/showing/hiding notes, showing launchpad, running explorer windows, task view, show desktop, hide all unfocused windows among other useful actions. With WinXCorners you can customize up to 4 custom commands.
 
 - **Enhanced Start Menu**
 
@@ -88,7 +92,7 @@ WinMac provides improved prompt with addition of completion functions and most c
 
 - **Keyboard Shortcuts**
 
-WinMac provides very useful keyboard shortcuts from macOS with use of AutoHotkey, which is an automation scripting language for Windows. Shortcuts include hiding/showing dock, minimizing single or all windows and cycling through windows of the same app. More details on Wiki page [Keyboard Shortcuts](https://github.com/Asteski/WinMac/wiki/Commands-cheat-sheet#keyboard-shortcuts).
+WinMac provides very useful keyboard shortcuts from macOS with use of AutoHotkey, which is an automation scripting language for Windows. Shortcuts include hiding/showing dock, minimizing single or all windows and cycling through windows of the same app. More details on Wiki page [Keyboard Shortcuts](https://github.com/Asteski/WinMac/wiki/keyboard-shortcuts).
 
 - **Enhanced Icons**
 
@@ -109,7 +113,7 @@ For the most reliable deployment process, I recommend to check [Installation Gui
 ## Credits
 
 List of utilities and their creators used with WinMac:
-
+    
 - [PowerToys](https://learn.microsoft.com/en-us/windows/powertoys/) by Microsoft
 - [Everything](https://www.voidtools.com/) by David Carpenter
 - [StartAllBack](https://www.startallback.com/) by Tihiy
@@ -119,6 +123,9 @@ List of utilities and their creators used with WinMac:
 - [Nexus](https://www.winstep.net/nexus.asp) by Winstep
 - [NewModernWinver](https://github.com/torchgm/NewModernWinver) by torchgm
 - [Windhawk](https://github.com/ramensoftware/windhawk) by Ramen Software
+- [WinXCorners](https://github.com/vhanla/winxcorners) by vhanla
+- [Simple Sticky Notes](https://www.simplestickynotes.com/) by Simnet
+- [WinLaunch](https://github.com/jensroth-git/WinLaunch) by jensroth
 - [PSTree](https://github.com/santisq/PSTree) by santisq
 - [ntop](https://github.com/gsass1/NTop) by gsass1
 - [ptr](https://github.com/8LWXpg/ptr) by 8LWXpg
