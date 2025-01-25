@@ -102,7 +102,13 @@ Refresh your Windows 11 experience with new set of icons applied to many old and
 
 Discover the future of computing with WinMac, where the power of Windows meets the elegance of macOS in perfect harmony. Upgrade to WinMac and elevate your computing experience to new heights!
 
+Intaller includes 
+
+EasyLauncher batch script allows the installer to be run as a GUI or in a terminal to make the installation and configuration process simple and straightforward.
+
 WinMac is supported by Windows 11, on both x64 and ARM based platforms.
+
+With some caveats, you can also [install WinMac on Windows 11 22H2+](https://github.com/Asteski/WinMac/blob/main/How-To-Win10.md).
 
 ## Recommendations
 
