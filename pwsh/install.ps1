@@ -814,7 +814,7 @@ foreach ($app in $selectedApps) {
                 } else {
                     Write-Host "Skipping WinMac Menu installation." -ForegroundColor Magenta
                 }
-            } else {                
+            } else {
                 Write-Host "WinMac Menu requires elevated session. Please run the script as an administrator. Skipping installation." -ForegroundColor Red
             }
         }
