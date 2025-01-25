@@ -108,7 +108,7 @@ EasyLauncher batch script allows the installer to be run as a GUI or in a termin
 
 WinMac is supported by Windows 11, on both x64 and ARM based platforms.
 
-With some caveats, you can also [install WinMac on Windows 11 22H2+](https://github.com/Asteski/WinMac/wiki/Windows-10-setup).
+With some caveats, you can also install WinMac on [Windows 11 22H2+](https://github.com/Asteski/WinMac/wiki/Windows-10-setup).
 
 ## Recommendations
 
