@@ -58,11 +58,11 @@ By pressing a customizable hotkey combination, a search bar appears, enabling us
 
 Winstep Nexus is a highly customizable and feature-rich dock application for Windows that can be used to achieve a macOS-like dock experience. It offers a wide range of customization options, including size, animations, sounds, auto-hide, transparency, different themes and icons.
 
-By integrating Winstep Nexus into your WinMac modification, you can provide users with a visually appealing and functional dock that resembles the macOS style. This will enhance the overall user experience and make the transition between Windows and macOS seamless.
+By integrating Winstep Nexus into WinMac modification, it provides users with visually appealing and functional dock that resembles the macOS style, while keeping Windows 11 design principles. This will enhance the overall user experience and make the transition between Windows and macOS seamless.
 
 - **Hot Corners**
 
-Make your screen corners trigger actions like in macOS, with available actions like creating/showing/hiding notes, showing launchpad, running explorer windows, task view, show desktop, hide all unfocused windows among other useful actions. With WinXCorners you can customize up to 4 custom commands.
+Make your screen corners trigger actions like on macOS, with available actions like creating/showing/hiding notes, showing launchpad, running explorer windows, task view, show desktop, hide all unfocused windows among other useful actions. With WinXCorners you can customize up to 4 custom commands.
 
 - **Enhanced Start Menu**
 
@@ -70,7 +70,7 @@ WinMac Menu is a collection of customization utilities, that allows to bring Sta
 
 - **Enhanced Taskbar**
 
-StartAllBack enhances the functionality of the Windows Taskbar by introducing features inspired by earlier versions of Windows, such as Windows 7 and Windows 10. It brings back familiar elements like colored title bars and customizable Start buttons. 
+StartAllBack enhances the functionality of the Windows Taskbar by introducing features inspired by earlier versions of Windows, such as Windows 7 and Windows 10. It brings back familiar elements like colored title bars and different positioning options.
 
 Additionally, StartAllBack offers options for customizing the appearance and behavior of the Taskbar to suit individual user preferences, including taskbar size, position, dynamic transparency, tasks alignment and tray icons spacing.
 
@@ -118,7 +118,7 @@ For the most reliable deployment process, I recommend to check [Installation Gui
 
 ## Credits
 
-List of utilities and their creators used with WinMac:
+List of utilities and their creators, used with WinMac:
     
 - [PowerToys](https://learn.microsoft.com/en-us/windows/powertoys/) by Microsoft
 - [Everything](https://www.voidtools.com/) by David Carpenter

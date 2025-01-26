@@ -78,8 +78,7 @@ if (!($noGUI)) {
         <!-- Title -->
         <StackPanel Grid.Row="0" HorizontalAlignment="Center">
             <TextBlock FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,10,0,10">
-                <Run Text="Win" Foreground="#0174cf"/>
-                <Run Text="Mac" Foreground="#a6a6a6"/>
+                <Run Text="WinMac" Foreground="#0174cf"/>
             </TextBlock>
             
             <!-- Static TextBlock below the title -->
