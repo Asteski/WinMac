@@ -49,7 +49,7 @@ if (!($noGUI)) {
     $parentDirectory = Split-Path -Path $PSScriptRoot -Parent
     $iconFolderName = "config"
     $iconFolderPath = Join-Path -Path $parentDirectory -ChildPath $iconFolderName
-    $topTextBlock = "PowerShell uninstaller wizard for Windows and macOS hybrid"
+    $topTextBlock = "PowerShell GUI uninstaller wizard for Windows and macOS hybrid"
     $bottomTextBlock1 = 'Important Notes:'
     $bottomTextBlock2 = 'PowerShell profile files will be removed, please make sure to backup your current profiles if needed.'
     $bottomTextBlock3 = 'Vim and Nexus packages will show prompt to uninstall, please confirm the uninstallations manually.'
@@ -82,7 +82,8 @@ if (!($noGUI)) {
             </TextBlock>
             
             <!-- Static TextBlock below the title -->
-            <TextBlock Text="$topTextBlock" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="0,5,0,10" TextWrapping="Wrap"/>
+            <TextBlock Text="Version $version" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="0,5,0,5" TextWrapping="Wrap"/>
+            <TextBlock Text="$topTextBlock" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="0,5,0,5" TextWrapping="Wrap"/>
         </StackPanel>
 
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
