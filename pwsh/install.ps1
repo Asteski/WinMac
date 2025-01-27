@@ -820,8 +820,8 @@ foreach ($app in $selectedApps) {
     # TopNotify
         "6" {
             Write-Host "Installing TopNotify..." -ForegroundColor Yellow
-            $url = 'https://github.com/SamsidParty/TopNotify/releases/download/2.4.5/TopNotify.Msix'
-            Invoke-WebRequest -Uri $url -OutFile .\temp\Install_TopNotify.msix
+            # $url = 'https://github.com/SamsidParty/TopNotify/releases/download/2.4.5/TopNotify.Msix'
+            # Invoke-WebRequest -Uri $url -OutFile .\temp\Install_TopNotify.msix
             Install-WinGetPackage -name TopNotify
             $app = Get-AppxPackage *TopNotify*
             Start-Process -FilePath TopNotify.exe -WorkingDirectory $app.InstallLocation
