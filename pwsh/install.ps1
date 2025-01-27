@@ -552,7 +552,7 @@ foreach ($app in $selectedApps) {
     # PowerToys
         "1" {
             Write-Host "Installing PowerToys..." -ForegroundColor Yellow
-            # winget configure --enable | Out-Null
+            winget configure --enable
             winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements
             Copy-Item -Path "..\config\powertoys\ptr\ptr.exe" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
             if ($blueOrYellow -eq 'B' -or $blueOrYellow -eq 'b') {
