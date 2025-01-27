@@ -2,7 +2,6 @@ param (
     [switch]$noGUI,
     [switch]$debug
 )
-
 $version = "0.8.1"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_install_log_$date.txt"
@@ -510,7 +509,6 @@ for ($a=3; $a -ge 0; $a--) {
     Write-Host -NoNewLine "`b$a" -ForegroundColor Green
     Start-Sleep 1
 }
-$startTime = Get-Date
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
 Start-Transcript -Path ../logs/$transcriptFile -Append | Out-Null
 # Nuget check
@@ -1253,9 +1251,6 @@ $explorerProcess = Get-Process -Name explorer -ErrorAction SilentlyContinue
 if ($null -eq $explorerProcess) {Start-Process -FilePath explorer.exe}
 Remove-Item "..\temp" -Recurse -Force
 Stop-Transcript | Out-Null
-$endTime = Get-Date
-$loadTime = $endTime - $startTime
-Write-Host "WinMac installation took $($loadTime.Minutes) minutes." -ForegroundColor Green
 Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
 Write-Host @"
 
