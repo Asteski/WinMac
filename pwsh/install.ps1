@@ -2,6 +2,7 @@ param (
     [switch]$noGUI,
     [switch]$debug
 )
+
 $version = "0.8.1"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_install_log_$date.txt"
@@ -509,6 +510,7 @@ for ($a=3; $a -ge 0; $a--) {
     Write-Host -NoNewLine "`b$a" -ForegroundColor Green
     Start-Sleep 1
 }
+$startTime = Get-Date
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
 Start-Transcript -Path ../logs/$transcriptFile -Append | Out-Null
 # Nuget check
