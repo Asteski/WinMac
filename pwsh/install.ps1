@@ -2,7 +2,7 @@ param (
     [switch]$noGUI,
     [switch]$debug
 )
-$version = "0.8.0"
+$version = "0.8.1"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_install_log_$date.txt"
 $transcriptFile = "WinMac_install_transcript_$date.txt"
@@ -552,8 +552,8 @@ foreach ($app in $selectedApps) {
     # PowerToys
         "1" {
             Write-Host "Installing PowerToys..." -ForegroundColor Yellow
-            winget configure --enable | Out-Null
-            winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
+            # winget configure --enable | Out-Null
+            winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements
             Copy-Item -Path "..\config\powertoys\ptr\ptr.exe" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
             if ($blueOrYellow -eq 'B' -or $blueOrYellow -eq 'b') {
                 Copy-Item -Path "..\config\powertoys\RunPlugins" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
