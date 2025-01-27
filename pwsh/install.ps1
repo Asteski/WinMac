@@ -821,17 +821,17 @@ foreach ($app in $selectedApps) {
         "6" {
             Write-Host "Installing TopNotify..." -ForegroundColor Yellow
             $url = 'https://github.com/SamsidParty/TopNotify/releases/download/2.4.5/TopNotify.Msix'
-            Invoke-WebRequest -Uri $url -OutFile .\temp\Install_TopNotify.Msix
-            Add-AppxPackage .\temp\Install_TopNotify.Msix
+            Invoke-WebRequest -Uri $url -OutFile .\temp\Install_TopNotify.msix
+            Install-WinGetPackage -name TopNotify
             $app = Get-AppxPackage *TopNotify*
             Start-Process -FilePath TopNotify.exe -WorkingDirectory $app.InstallLocation
             $pkgName = $app.PackageFamilyName
             $startupTask = ($app | Get-AppxPackageManifest).Package.Applications.Application.Extensions.Extension | Where-Object -Property Category -Eq -Value windows.startupTask
             $taskId = $startupTask.StartupTask.TaskId
             Start-Process Taskmgr -WindowStyle Hidden
-            while (!(Get-ItemProperty -Path "HKCU:Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\SystemAppData\$pkgName\$taskId" -Name State )) {Start-Sleep -Seconds 1}
+            while (!(Get-ItemProperty -Path "HKCU:\Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\SystemAppData\$pkgName\$taskId" -Name State )) {Start-Sleep -Seconds 1}
             Stop-Process -Name Taskmgr
-            $regKey = "HKCU:Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\SystemAppData\$pkgName\$taskId"
+            $regKey = "HKCU:\Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\SystemAppData\$pkgName\$taskId"
             Set-ItemProperty -Path $regKey -Name UserEnabledStartupOnce -Value 1
             Set-ItemProperty -Path $regKey -Name State -Value 2
             Write-Host "TopNotify installation completed." -ForegroundColor Green
