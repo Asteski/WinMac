@@ -230,11 +230,10 @@ function run {
     $name = "$args"
     $lnk = Get-ChildItem -Path $start -Filter "*.lnk" -Recurse | Where-Object { $_.Name -like "*$name*" }
     if ($lnk.Count -gt 1) {
-        Write-Host "Multiple shortcuts found. Please provide specific shortcut name:" -ForegroundColor Yellow
-        Write-Host
+        Write-Host "Multiple shortcuts found. Please provide more specific shortcut name:" -ForegroundColor Yellow
         (($lnk | Select-Object -Property Name).Name).Replace(".lnk", "")
     } elseif ($lnk.Count -eq 0) {
-        Write-Host "No shortcut found" -ForegroundColor Red
+        Write-Host "Shortcut not found." -ForegroundColor Red
     } else {
         Start-Process -FilePath $lnk.FullName
     }
