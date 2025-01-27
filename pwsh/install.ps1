@@ -1253,6 +1253,10 @@ $explorerProcess = Get-Process -Name explorer -ErrorAction SilentlyContinue
 if ($null -eq $explorerProcess) {Start-Process -FilePath explorer.exe}
 Remove-Item "..\temp" -Recurse -Force
 Stop-Transcript | Out-Null
+$endTime = Get-Date
+$loadTime = $endTime - $startTime
+$loadTimeMilliseconds = [math]::Round($loadTime.TotalMilliseconds, 2)
+Write-Host "WinMac installation took $loadTimeMilliseconds ms"
 Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
 Write-Host @"
 
