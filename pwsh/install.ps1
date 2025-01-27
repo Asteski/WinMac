@@ -748,7 +748,7 @@ foreach ($app in $selectedApps) {
         }
     # WinMac Menu
         "5" {
-            if ($adminTest -and $osVersion -like 'Windows 11') {
+            if ($adminTest -and $osVersion -like '*Windows 11*') {
                 if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
                     Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
                     $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.8' -ErrorAction SilentlyContinue
