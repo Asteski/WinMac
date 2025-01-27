@@ -1255,8 +1255,7 @@ Remove-Item "..\temp" -Recurse -Force
 Stop-Transcript | Out-Null
 $endTime = Get-Date
 $loadTime = $endTime - $startTime
-$loadTimeMilliseconds = [math]::Round($loadTime.TotalMilliseconds, 2)
-Write-Host "WinMac installation took $loadTimeMilliseconds ms"
+Write-Host "WinMac installation took $loadTime.Minutes minutes and $loadTime.Seconds seconds." -ForegroundColor Green
 Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
 Write-Host @"
 
