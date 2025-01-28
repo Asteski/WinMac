@@ -1084,11 +1084,19 @@ foreach ($app in $selectedApps) {
             (Get-Content -Path $configFilePath) -replace "MINIMIZEALL", "$($env:LOCALAPPDATA)\WinMac\hotcorners\MinimizeAllWindowsExceptFocused.exe" | Set-Content -Path $configFilePath
             Remove-Item $outputPath -Force
             Start-Process "$destinationPath\WinXCorners.exe"
-            $shortcutPath = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\WinXCorners.lnk"
-            $targetPath = "$destinationPath\WinXCorners.exe"
+            $shortcut1Path = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\WinXCorners.lnk"
+            $target1Path = "$destinationPath\WinXCorners.exe"
             $shell = New-Object -ComObject WScript.Shell
-            $shortcut = $shell.CreateShortcut($shortcutPath)
-            $shortcut.TargetPath = $targetPath
+            $shortcut = $shell.CreateShortcut($shortcut1Path)
+            $shortcut.TargetPath = $target1Path
+            $shortcut.Save()            
+            $shortcut2Path = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\WinLaunch.lnk"
+            $target2Path = "$winLaunchDestinationPath\WinLaunch.exe"
+            $icon2Path = "$winLaunchDestinationPath\winlaunch.ico"
+            $shell = New-Object -ComObject WScript.Shell
+            $shortcut = $shell.CreateShortcut($shortcut2Path)
+            $shortcut.TargetPath = $target2Path
+            $shortcut.IconLocation = $icon2Path
             $shortcut.Save()
             if (-not (Test-Path -Path "$env:LOCALAPPDATA\WinMac\hotcorners")) {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\hotcorners" -Force | Out-Null}
             if ($sysType -like "*ARM*") {Copy-Item -Path ..\bin\hotcorners\arm64\* -Destination "$env:LOCALAPPDATA\WinMac\hotcorners\" -Recurse -Force}
