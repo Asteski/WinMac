@@ -589,16 +589,14 @@ uint fWinIni);
                 Start-Sleep -Seconds 5
             }
             Stop-Process -Name explorer -Force
-            $endTime = (Get-Date).AddMinutes(1)
+            $endTime = (Get-Date).AddMinutes(5)
             do {
                 try {
                     if ((Get-ChildItem -Path "C:\IconPack" -Recurse | Measure-Object).Count -eq 0) { 
                         Remove-Item -Path "C:\IconPack" -Recurse -Force -ErrorAction Stop
                     }
                     $success = $true
-                    Write-Host success
                 } catch {
-                    Write-Host fail
                     Start-Sleep -Seconds 5
                 }
             } until ($success -or (Get-Date) -ge $endTime)
