@@ -418,7 +418,6 @@ foreach ($app in $selectedApps) {
             Uninstall-Module PSTree -Force
             if ((Test-Path "$profilePath\PowerShell\$profileFile")) { Remove-Item -Path "$profilePath\PowerShell\$profileFile" }
             if ((Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { Remove-Item -Path "$profilePath\WindowsPowerShell\$profileFile" }
-            # $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Remove-Item -Path "$programsDir\gVim*" -Force
             Write-Host "Uninstalling PowerShell Profile completed." -ForegroundColor Green
         }
@@ -478,7 +477,6 @@ foreach ($app in $selectedApps) {
             Write-Host "Uninstalling Nexus Dock..." -ForegroundColor Yellow
             Get-Process Nexus | Stop-Process -Force
             Invoke-Output { Uninstall-WinGetPackage -name Nexus }
-            # $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Remove-Item -Path "$programsDir\Nexus.lnk" -Force
             Remove-Item -Path "C:\Users\Public\Documents\Winstep" -Recurse -Force
             Write-Host "Uninstalling Nexus Dock completed." -ForegroundColor Green
@@ -523,7 +521,6 @@ foreach ($app in $selectedApps) {
             $homeDir = "C:\Users\$env:USERNAME"
             $homeIniFilePath = "$($homeDir)\desktop.ini"
             Invoke-Output { Remove-Item -Path $homeIniFilePath -Force }
-            # $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             $programsIniFilePath = "$($programsDir)\desktop.ini"
             Invoke-Output { Remove-Item -Path $programsIniFilePath -Force }
             $curDestFolder = "C:\Windows\Cursors"
@@ -563,7 +560,6 @@ uint fWinIni);
             $homeDir = "C:\Users\$env:USERNAME"
             $homePin = new-object -com shell.application
             Invoke-Output { $homePin.Namespace($homeDir).Self.InvokeVerb("pintohome") }
-            # $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             $programsPin = new-object -com shell.application
             Invoke-Output { $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome") }
             $RBPath = 'HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\pintohome\command\'
