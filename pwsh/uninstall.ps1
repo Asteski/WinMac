@@ -594,9 +594,9 @@ uint fWinIni);
                         Remove-Item -Path "C:\IconPack" -Recurse -Force -ErrorAction Stop
                     }
                     $success = $true
-                    echo success
+                    Write-Host success
                 } catch {
-                    echo fail
+                    Write-Host fail
                     Start-Sleep -Seconds 5
                 }
             } until ($success -or (Get-Date) -ge $endTime)
