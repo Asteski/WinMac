@@ -1091,9 +1091,9 @@ foreach ($app in $selectedApps) {
             $shortcut.TargetPath = $targetPath
             $shortcut.Save()
             if (-not (Test-Path -Path "$env:LOCALAPPDATA\WinMac\hotcorners")) {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\hotcorners" -Force | Out-Null}
-            if ($sysType -like "*ARM*") {Copy-Item -Path ..\bin\hotcorners\arm64\* -Destination "$env:LOCALAPPDATA\WinMac\hotcorners\" -Recurse -Force }
-            else {Copy-Item -Path ..\bin\hotcorners\x64\* -Destination "$env:LOCALAPPDATA\WinMac\hotcorners\" -Recurse -Force }
-            New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "WinXCorners" -Value "$env:LOCALAPPDATA\WinMac\WinXCorners.exe" | Out-Null
+            if ($sysType -like "*ARM*") {Copy-Item -Path ..\bin\hotcorners\arm64\* -Destination "$env:LOCALAPPDATA\WinMac\hotcorners\" -Recurse -Force}
+            else {Copy-Item -Path ..\bin\hotcorners\x64\* -Destination "$env:LOCALAPPDATA\WinMac\hotcorners\" -Recurse -Force}
+            New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "WinXCorners" -Value "$destinationPath\WinXCorners.exe" | Out-Null
             Write-Host "Hot Corners installation completed." -ForegroundColor Green
             }
     # Other
