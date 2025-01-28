@@ -398,7 +398,15 @@ foreach ($app in $selectedApps) {
             Invoke-Output { Uninstall-WinGetPackage -id Voidtools.Everything }            
             Remove-Item -Path "$programsDir\Everything.lnk" -Force
             Invoke-Output { Remove-Item -Path "HKLM:\SYSTEM\CurrentControlSet\Services\Everything" -Recurse }
-            Remove-Item $env:LOCALAPPDATA\Everything -Recurse -Force
+            $endTime = (Get-Date).AddMinutes(1)
+            do {
+                try {
+                    Remove-Item $env:LOCALAPPDATA\Everything -Recurse -Force -ErrorAction Stop
+                    $success = $true
+                } catch {
+                    Start-Sleep -Seconds 5
+                }
+            } until ($success -or (Get-Date) -ge $endTime)
             Write-Host "Uninstalling Everything completed." -ForegroundColor Green
         }
     # PowerShell Profile
@@ -586,12 +594,22 @@ uint fWinIni);
             Invoke-Output { Uninstall-WinGetPackage -name 'IconPack Installer' }
             Start-Sleep -Seconds 60
             Stop-Process -Name explorer -Force
+            $endTime = (Get-Date).AddMinutes(1)
+            do {
+                try {
+                    if ((Get-ChildItem -Path "C:\IconPack" -Recurse | Measure-Object).Count -eq 0) { 
+                        Remove-Item -Path "C:\IconPack" -Recurse -Force -ErrorAction Stop
+                    }
+                    $success = $true
+                } catch {
+                    Start-Sleep -Seconds 5
+                }
+            } until ($success -or (Get-Date) -ge $endTime)
             Write-Host "Uninstalling Other Settings completed." -ForegroundColor Green
         }
     }
 }
 # Clean up
-if ((Get-ChildItem -Path "C:\IconPack" -Recurse | Measure-Object).Count -eq 0) { Remove-Item -Path "C:\IconPack" -Recurse -Force }
 if ((Get-ChildItem -Path "$env:LOCALAPPDATA\WinMac" -Recurse | Measure-Object).Count -eq 0) { Remove-Item -Path "$env:LOCALAPPDATA\WinMac" -Force }
 $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue
 if ($null -eq $tasksFolder) { schtasks /DELETE /TN \WinMac /F > $null 2>&1 }
