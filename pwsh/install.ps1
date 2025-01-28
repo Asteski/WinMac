@@ -836,7 +836,7 @@ foreach ($app in $selectedApps) {
             $startupTask = ($app | Get-AppxPackageManifest).Package.Applications.Application.Extensions.Extension | Where-Object -Property Category -Eq -Value windows.startupTask
             $taskId = $startupTask.StartupTask.TaskId
             Start-Process Taskmgr -WindowStyle Hidden
-            while (!(Get-ItemProperty -Path "HKCU:\Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\SystemAppData\$pkgName\$taskId" -Name State )) {Start-Sleep -Seconds 1}
+            while (!(Get-ItemProperty -Path "HKCU:\Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\SystemAppData\$pkgName\$taskId" -Name State)) {Start-Sleep -Seconds 1}
             Stop-Process -Name Taskmgr
             $regKey = "HKCU:\Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\SystemAppData\$pkgName\$taskId"
             Set-ItemProperty -Path $regKey -Name UserEnabledStartupOnce -Value 1
