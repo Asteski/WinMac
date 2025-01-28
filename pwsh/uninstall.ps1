@@ -584,9 +584,8 @@ uint fWinIni);
             New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Force | Out-Null
             Invoke-Output { Remove-Item -Path "$env:LOCALAPPDATA\WinMac\theme.ps1" }
             Set-ItemProperty -Path $regPath -Name "IconPack" -Value 0 | Out-Null
-            $packageId = 'ARP\Machine\X86\IconPack'
-            Invoke-Output { Uninstall-WinGetPackage -id $packageId }
-            while (Get-WinGetPackage -id $packageId -ErrorAction SilentlyContinue) {
+            Invoke-Output { Uninstall-WinGetPackage -name 'IconPack Installer' }
+            while (Get-WinGetPackage -name 'IconPack Installer' -ErrorAction SilentlyContinue) {
                 Start-Sleep -Seconds 5
             }
             Stop-Process -Name explorer -Force
