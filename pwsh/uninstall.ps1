@@ -575,8 +575,6 @@ uint fWinIni);
             Invoke-Output { Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings" -Recurse }
             Invoke-Output { Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarSmallIcons" }
             Get-ChildItem ..\config\contextmenu\add\* -e *theme* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
-            Get-ChildItem '..\config\contextmenu\remove\Remove_Theme_Mode_in_Context_Menu.reg' | ForEach-Object { reg import $_.FullName > $null 2>&1 }
-            Get-ChildItem '..\config\contextmenu\remove\Remove_Hidden_items_from_context_menu.reg' | ForEach-Object { reg import $_.FullName > $null 2>&1 }
             reg import '..\config\contextmenu\remove\Remove_Theme_Mode_in_Context_Menu.reg' > $null 2>&1
             reg import '..\config\contextmenu\remove\Remove_Hidden_items_from_context_menu.reg' > $null 2>&1
             New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" -Force | Out-Null
