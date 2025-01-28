@@ -398,15 +398,16 @@ foreach ($app in $selectedApps) {
             Invoke-Output { Uninstall-WinGetPackage -id Voidtools.Everything }            
             Remove-Item -Path "$programsDir\Everything.lnk" -Force
             Invoke-Output { Remove-Item -Path "HKLM:\SYSTEM\CurrentControlSet\Services\Everything" -Recurse }
-            $endTime = (Get-Date).AddMinutes(1)
-            do {
-                try {
-                    Remove-Item $env:LOCALAPPDATA\Everything -Recurse -Force -ErrorAction Stop
-                    $success = $true
-                } catch {
-                    Start-Sleep -Seconds 5
-                }
-            } until ($success -or (Get-Date) -ge $endTime)
+            Remove-Item $env:APPDATA\Everything -Recurse -Force -ErrorAction Stop
+            # $endTime = (Get-Date).AddMinutes(1)
+            # do {
+            #     try {
+            #         Remove-Item $env:APPDATA\Everything -Recurse -Force -ErrorAction Stop
+            #         $success = $true
+            #     } catch {
+            #         Start-Sleep -Seconds 5
+            #     }
+            # } until ($success -or (Get-Date) -ge $endTime)
             Write-Host "Uninstalling Everything completed." -ForegroundColor Green
         }
     # PowerShell Profile
