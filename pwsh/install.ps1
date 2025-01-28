@@ -1000,7 +1000,7 @@ foreach ($app in $selectedApps) {
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path6" -Value $downloadsPath
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path7" -Value "$env:APPDATA\Microsoft\Windows\Recent\"
                 if ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath0" -Value "C:\\Users\\Public\\Documents\\Winstep\\Icons\\explorer_default.ico"}
-                Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe'st
+                Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe'
                 while (!(Get-Process "nexus")) { Start-Sleep 1 }
                 $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
                 Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Nexus.lnk" -Destination $programsDir -Force 
