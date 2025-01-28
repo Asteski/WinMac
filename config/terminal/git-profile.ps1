@@ -29,6 +29,7 @@ function clone { git clone $args }
 function log { git log $args }
 function tag { $msg = $args[1]; git tag -a $args[0] -m "$msg" }
 function pusha { $msg = $args; git add -u; git status; start-sleep 1; git commit -m "$msg"; git push }
+set-alias -name pa -value pusha
 set-alias -name pu -value pull
 set-alias -name st -value status
 set-alias -name ch -value checkout

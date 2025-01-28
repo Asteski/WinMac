@@ -67,6 +67,7 @@ properties:
               Disabled: false
             - Name: "Web Search"
               Disabled: false
+              ActionKeyword: "/"
             - Name: "Windows settings"
               Disabled: false
               ActionKeyword: ","

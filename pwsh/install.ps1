@@ -2,7 +2,7 @@ param (
     [switch]$noGUI,
     [switch]$debug
 )
-$version = "0.8.0"
+$version = "0.8.1"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_install_log_$date.txt"
 $transcriptFile = "WinMac_install_transcript_$date.txt"
@@ -14,6 +14,7 @@ Add-Type -AssemblyName System.Windows.Forms
 if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null}
 if (-not (Test-Path -Path "../logs")) {New-Item -ItemType Directory -Path "../logs" | Out-Null}
 $sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
+$osVersion = (Get-WmiObject -Class Win32_OperatingSystem).Caption
 $user = [Security.Principal.WindowsIdentity]::GetCurrent()
 $adminTest = (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
 $checkDir = Get-ChildItem '..'
@@ -51,7 +52,7 @@ if (!($noGUI)) {
     $parentDirectory = Split-Path -Path $PSScriptRoot -Parent
     $iconFolderName = "config"
     $iconFolderPath = Join-Path -Path $parentDirectory -ChildPath $iconFolderName
-    $topTextBlock = "PowerShell deployment wizard for Windows and macOS hybrid"
+    $topTextBlock = "PowerShell GUI deployment wizard for Windows and macOS hybrid"
     $bottomTextBlock1 = 'Important Notes:'
     $bottomTextBlock2 = 'PowerShell profile files will be removed and replaced with new ones. Please make sure to backup your current profiles if needed.'
     $bottomTextBlock3 = 'The author of this script is not responsible for any damage caused by running it. Highly recommend to create a system restore point before proceeding with the installation process to ensure you can revert any changes if necessary.'
@@ -84,7 +85,8 @@ if (!($noGUI)) {
             </TextBlock>
                         
             <!-- Static TextBlock below the title -->
-            <TextBlock Text="$topTextBlock" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="0,5,0,10" TextWrapping="Wrap"/>
+            <TextBlock Text="Version $version" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="0,5,0,5" TextWrapping="Wrap"/>
+            <TextBlock Text="$topTextBlock" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="0,5,0,5" TextWrapping="Wrap"/>
         </StackPanel>
 
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
@@ -553,7 +555,8 @@ foreach ($app in $selectedApps) {
         "1" {
             Write-Host "Installing PowerToys..." -ForegroundColor Yellow
             winget configure --enable | Out-Null
-            winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
+            pwsh -NoProfile -Command "winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null"
+            # Start-Process pwsh -ArgumentList "-NoProfile -Command winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null" -Wait
             Copy-Item -Path "..\config\powertoys\ptr\ptr.exe" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
             if ($blueOrYellow -eq 'B' -or $blueOrYellow -eq 'b') {
                 Copy-Item -Path "..\config\powertoys\RunPlugins" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
@@ -663,86 +666,90 @@ foreach ($app in $selectedApps) {
         }
     # StartAllBack
         "4" {
-            Write-Host "Installing StartAllBack..." -ForegroundColor Yellow
-            Invoke-Output {Install-WinGetPackage -Id "StartIsBack.StartAllBack"}
-            $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
-            $sabOrbs = $env:localAPPDATA + "\StartAllBack\Orbs"
-            $sabRegPath = "HKCU:\Software\StartIsBack"
-            $taskbarOnTopPath = "$exRegPath\StuckRectsLegacy"
-            $taskbarOnTopName = "Settings"
-            $taskbarOnTopValue = @(0x30,0x00,0x00,0x00,0xfe,0xff,0xff,0xff,0x02,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x5a,0x00,0x00,0x00,0x32,0x00,0x00,0x00,0x26,0x07,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0x07,0x00,0x00,0x38,0x04,0x00,0x00,0x78,0x00,0x00,0x00,0x01,0x00,0x00,0x00)
-            Invoke-Output {New-Item -Path $taskbarOnTopPath -Force}
-            Invoke-Output {New-ItemProperty -Path $taskbarOnTopPath -Name $taskbarOnTopName -Value $taskbarOnTopValue -PropertyType Binary}
-            Invoke-Output {Copy-Item "..\config\taskbar\orbs\*" $sabOrbs -Force}
-            Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 1
-            Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSizeMove" -Value 1
-            Set-ItemProperty -Path $exRegPath\Advanced -Name "ShowStatusBar" -Value 0
-            Set-ItemProperty -Path $exRegPath\Advanced -Name "EnableSnapAssistFlyout" -Value 0
-            Set-ItemProperty -Path $exRegPath\Advanced -Name "EnableSnapBar" -Value 0
-            Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarGlomLevel" -Value 1
-            Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSmallIcons" -Value 1
-            Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSi" -Value 0
-            Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarAl" -Value 0
-            Set-ItemProperty -Path $exRegPath\Advanced -Name "UseCompactMode" -Value 1
-            Set-ItemProperty -Path $sabRegPath -Name "TaskbarTranslucentEffect" -Value 1
-            Set-ItemProperty -Path $sabRegPath -Name "RestyleControls" -Value 1
-            Set-ItemProperty -Path $sabRegPath -Name "RestyleIcons" -Value 0
-            Set-ItemProperty -Path $sabRegPath -Name "WelcomeShown" -Value 3
-            Set-ItemProperty -Path $sabRegPath -Name "SettingsVersion" -Value 5
-            Set-ItemProperty -Path $sabRegPath -Name "ModernIconsColorized" -Value 0
-            Set-ItemProperty -Path $sabRegPath -Name "FrameStyle" -Value 2
-            Set-ItemProperty -Path $sabRegPath -Name "TaskbarOneSegment" -Value 0
-            Set-ItemProperty -Path $sabRegPath -Name "TaskbarGrouping" -Value 0
-            Set-ItemProperty -Path $sabRegPath -Name "TaskbarCenterIcons" -Value 1
-            Set-ItemProperty -Path $sabRegPath -Name "TaskbarLargerIcons" -Value 0
-            Set-ItemProperty -Path $sabRegPath -Name "TaskbarSpacierIcons" -Value (-1)
-            Set-ItemProperty -Path $sabRegPath -Name "TaskbarControlCenter" -Value 1
-            Set-ItemProperty -Path $sabRegPath -Name "SysTrayStyle" -Value 1
-            Set-ItemProperty -Path $sabRegPath -Name "SysTrayActionCenter" -Value 1
-            Set-ItemProperty -Path $sabRegPath -Name "SysTraySpacierIcons" -Value 1
-            Set-ItemProperty -Path $sabRegPath -Name "DriveGrouping" -Value 1
-            Set-ItemProperty -Path $sabRegPath -Name "SysTrayClockFormat" -Value 3
-            Set-ItemProperty -Path $sabRegPath -Name "SysTrayInputSwitch" -Value 0
-            if ($menuSet -eq 'X' -or $menuSet -eq 'x') {
-                Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1
-            }
-            else {
-                Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 0
-                $isWinXMenuActive = (Get-Process -Name WindowsKey -ErrorAction SilentlyContinue) -or (Get-Process -Name StartButton -ErrorAction SilentlyContinue)
-                if ($isWinXMenuActive) {
-                    Stop-Process -Name WindowsKey -Force
-                    Stop-Process -Name StartButton -Force
-                    Invoke-Output { Uninstall-WinGetPackage -name "Winver UWP" }
-                    $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -match 'startbutton|windowskey' }
-                    foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
-                    $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue
-                    if ($null -eq $tasksFolder) { schtasks /DELETE /TN \WinMac /F > $null 2>&1 }
-                    Get-ChildItem "$env:LOCALAPPDATA\WinMac" | Where-Object { $_.Name -match 'startbutton|windowskey' } | Remove-Item -Recurse -Force
-                    Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
-                    Expand-Archive -Path "..\config\WinX-default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
+            if (!($osVersion -like '*Windows 11*')) {
+                Write-Host "StartAllBack is supported only on Windows 11. Skipping installation." -ForegroundColor Red
+            } else {
+                Write-Host "Installing StartAllBack..." -ForegroundColor Yellow
+                Invoke-Output {Install-WinGetPackage -Id "StartIsBack.StartAllBack"}
+                $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
+                $sabOrbs = $env:localAPPDATA + "\StartAllBack\Orbs"
+                $sabRegPath = "HKCU:\Software\StartIsBack"
+                $taskbarOnTopPath = "$exRegPath\StuckRectsLegacy"
+                $taskbarOnTopName = "Settings"
+                $taskbarOnTopValue = @(0x30,0x00,0x00,0x00,0xfe,0xff,0xff,0xff,0x02,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x5a,0x00,0x00,0x00,0x32,0x00,0x00,0x00,0x26,0x07,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0x07,0x00,0x00,0x38,0x04,0x00,0x00,0x78,0x00,0x00,0x00,0x01,0x00,0x00,0x00)
+                Invoke-Output {New-Item -Path $taskbarOnTopPath -Force}
+                Invoke-Output {New-ItemProperty -Path $taskbarOnTopPath -Name $taskbarOnTopName -Value $taskbarOnTopValue -PropertyType Binary}
+                Invoke-Output {Copy-Item "..\config\taskbar\orbs\*" $sabOrbs -Force}
+                Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 1
+                Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSizeMove" -Value 1
+                Set-ItemProperty -Path $exRegPath\Advanced -Name "ShowStatusBar" -Value 0
+                Set-ItemProperty -Path $exRegPath\Advanced -Name "EnableSnapAssistFlyout" -Value 0
+                Set-ItemProperty -Path $exRegPath\Advanced -Name "EnableSnapBar" -Value 0
+                Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarGlomLevel" -Value 1
+                Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSmallIcons" -Value 1
+                Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSi" -Value 0
+                Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarAl" -Value 0
+                Set-ItemProperty -Path $exRegPath\Advanced -Name "UseCompactMode" -Value 1
+                Set-ItemProperty -Path $sabRegPath -Name "TaskbarTranslucentEffect" -Value 1
+                Set-ItemProperty -Path $sabRegPath -Name "RestyleControls" -Value 1
+                Set-ItemProperty -Path $sabRegPath -Name "RestyleIcons" -Value 0
+                Set-ItemProperty -Path $sabRegPath -Name "WelcomeShown" -Value 3
+                Set-ItemProperty -Path $sabRegPath -Name "SettingsVersion" -Value 5
+                Set-ItemProperty -Path $sabRegPath -Name "ModernIconsColorized" -Value 0
+                Set-ItemProperty -Path $sabRegPath -Name "FrameStyle" -Value 2
+                Set-ItemProperty -Path $sabRegPath -Name "TaskbarOneSegment" -Value 0
+                Set-ItemProperty -Path $sabRegPath -Name "TaskbarGrouping" -Value 0
+                Set-ItemProperty -Path $sabRegPath -Name "TaskbarCenterIcons" -Value 1
+                Set-ItemProperty -Path $sabRegPath -Name "TaskbarLargerIcons" -Value 0
+                Set-ItemProperty -Path $sabRegPath -Name "TaskbarSpacierIcons" -Value (-1)
+                Set-ItemProperty -Path $sabRegPath -Name "TaskbarControlCenter" -Value 1
+                Set-ItemProperty -Path $sabRegPath -Name "SysTrayStyle" -Value 1
+                Set-ItemProperty -Path $sabRegPath -Name "SysTrayActionCenter" -Value 1
+                Set-ItemProperty -Path $sabRegPath -Name "SysTraySpacierIcons" -Value 1
+                Set-ItemProperty -Path $sabRegPath -Name "DriveGrouping" -Value 1
+                Set-ItemProperty -Path $sabRegPath -Name "SysTrayClockFormat" -Value 3
+                Set-ItemProperty -Path $sabRegPath -Name "SysTrayInputSwitch" -Value 0
+                if ($menuSet -eq 'X' -or $menuSet -eq 'x') {
+                    Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1
                 }
+                else {
+                    Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 0
+                    $isWinXMenuActive = (Get-Process -Name WindowsKey -ErrorAction SilentlyContinue) -or (Get-Process -Name StartButton -ErrorAction SilentlyContinue)
+                    if ($isWinXMenuActive) {
+                        Stop-Process -Name WindowsKey -Force
+                        Stop-Process -Name StartButton -Force
+                        Invoke-Output { Uninstall-WinGetPackage -name "Winver UWP" }
+                        $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -match 'startbutton|windowskey' }
+                        foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
+                        $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue
+                        if ($null -eq $tasksFolder) { schtasks /DELETE /TN \WinMac /F > $null 2>&1 }
+                        Get-ChildItem "$env:LOCALAPPDATA\WinMac" | Where-Object { $_.Name -match 'startbutton|windowskey' } | Remove-Item -Recurse -Force
+                        Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
+                        Expand-Archive -Path "..\config\WinX-default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
+                    }
+                }
+                Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "(default)" -Value 1
+                Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
+                if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') {
+                    $orbBitmapValue = "$orbTheme-rounded.svg"
+                    $unroundValue = 0
+                }
+                else { 
+                    $orbBitmapValue = "$orbTheme-squared.svg"
+                    $unroundValue = 1
+                }
+                Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value $unroundValue
+                Set-ItemProperty -Path $sabRegPath -Name "OrbBitmap" -Value $orbBitmapValue
+                Set-ItemProperty -Path $exRegPath\Advanced -Name "LaunchTO" -Value 1
+                Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
+                Invoke-Output {Stop-Process -Name explorer -Force}
+                Start-Sleep 2
+                Write-Host "StartAllBack installation completed." -ForegroundColor Green
             }
-            Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "(default)" -Value 1
-            Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
-            if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') {
-                $orbBitmapValue = "$orbTheme-rounded.svg"
-                $unroundValue = 0
-            }
-            else { 
-                $orbBitmapValue = "$orbTheme-squared.svg"
-                $unroundValue = 1
-            }
-            Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value $unroundValue
-            Set-ItemProperty -Path $sabRegPath -Name "OrbBitmap" -Value $orbBitmapValue
-            Set-ItemProperty -Path $exRegPath\Advanced -Name "LaunchTO" -Value 1
-            Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
-            Invoke-Output {Stop-Process -Name explorer -Force}
-            Start-Sleep 2
-            Write-Host "StartAllBack installation completed." -ForegroundColor Green
         }
     # WinMac Menu
         "5" {
-            if ($adminTest) {
+            if ($adminTest -and $osVersion -like '*Windows 11*') {
                 if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
                     Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
                     $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.8' -ErrorAction SilentlyContinue
@@ -813,7 +820,9 @@ foreach ($app in $selectedApps) {
                 } else {
                     Write-Host "Skipping WinMac Menu installation." -ForegroundColor Magenta
                 }
-            } else {
+            } elseif ($osVersion -notlike '*Windows 11*') {
+                Write-Host "WinMac Menu is supported only on Windows 11. Skipping installation." -ForegroundColor Red
+            } elseif ($adminTest -eq $false) {
                 Write-Host "WinMac Menu requires elevated session. Please run the script as an administrator. Skipping installation." -ForegroundColor Red
             }
         }
@@ -827,9 +836,9 @@ foreach ($app in $selectedApps) {
             $startupTask = ($app | Get-AppxPackageManifest).Package.Applications.Application.Extensions.Extension | Where-Object -Property Category -Eq -Value windows.startupTask
             $taskId = $startupTask.StartupTask.TaskId
             Start-Process Taskmgr -WindowStyle Hidden
-            while (!(Get-ItemProperty -Path "HKCU:Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\SystemAppData\$pkgName\$taskId" -Name State )) {Start-Sleep -Seconds 1}
+            while (!(Get-ItemProperty -Path "HKCU:\Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\SystemAppData\$pkgName\$taskId" -Name State)) {Start-Sleep -Seconds 1}
             Stop-Process -Name Taskmgr
-            $regKey = "HKCU:Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\SystemAppData\$pkgName\$taskId"
+            $regKey = "HKCU:\Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\SystemAppData\$pkgName\$taskId"
             Set-ItemProperty -Path $regKey -Name UserEnabledStartupOnce -Value 1
             Set-ItemProperty -Path $regKey -Name State -Value 2
             Write-Host "TopNotify installation completed." -ForegroundColor Green
@@ -991,7 +1000,7 @@ foreach ($app in $selectedApps) {
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path6" -Value $downloadsPath
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path7" -Value "$env:APPDATA\Microsoft\Windows\Recent\"
                 if ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath0" -Value "C:\\Users\\Public\\Documents\\Winstep\\Icons\\explorer_default.ico"}
-                Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe'st
+                Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe'
                 while (!(Get-Process "nexus")) { Start-Sleep 1 }
                 $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
                 Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Nexus.lnk" -Destination $programsDir -Force 
@@ -1061,6 +1070,7 @@ foreach ($app in $selectedApps) {
             Write-Host "Installing WinLaunch..." -ForegroundColor DarkYellow
             Invoke-WebRequest -Uri $winLaunchUrl -OutFile $winLaunchOutputPath
             Expand-Archive -Path $winLaunchOutputPath -DestinationPath $winLaunchDestinationPath -Force
+            Copy-Item -Path ..\config\HotCorners\winlaunch.ico -Destination $winLaunchDestinationPath -Force
             Remove-Item $winLaunchOutputPath -Force
             Start-Process "$winLaunchDestinationPath\WinLaunch.exe"
             Start-Process "C:\Program Files (x86)\Simnet\Simple Sticky Notes\ssn.exe"
@@ -1075,16 +1085,24 @@ foreach ($app in $selectedApps) {
             (Get-Content -Path $configFilePath) -replace "MINIMIZEALL", "$($env:LOCALAPPDATA)\WinMac\hotcorners\MinimizeAllWindowsExceptFocused.exe" | Set-Content -Path $configFilePath
             Remove-Item $outputPath -Force
             Start-Process "$destinationPath\WinXCorners.exe"
-            $shortcutPath = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\WinXCorners.lnk"
-            $targetPath = "$destinationPath\WinXCorners.exe"
+            $shortcut1Path = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\WinXCorners.lnk"
+            $target1Path = "$destinationPath\WinXCorners.exe"
             $shell = New-Object -ComObject WScript.Shell
-            $shortcut = $shell.CreateShortcut($shortcutPath)
-            $shortcut.TargetPath = $targetPath
+            $shortcut = $shell.CreateShortcut($shortcut1Path)
+            $shortcut.TargetPath = $target1Path
+            $shortcut.Save()            
+            $shortcut2Path = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\WinLaunch.lnk"
+            $target2Path = "$winLaunchDestinationPath\WinLaunch.exe"
+            $icon2Path = "$winLaunchDestinationPath\winlaunch.ico"
+            $shell = New-Object -ComObject WScript.Shell
+            $shortcut = $shell.CreateShortcut($shortcut2Path)
+            $shortcut.TargetPath = $target2Path
+            $shortcut.IconLocation = $icon2Path
             $shortcut.Save()
             if (-not (Test-Path -Path "$env:LOCALAPPDATA\WinMac\hotcorners")) {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\hotcorners" -Force | Out-Null}
-            if ($sysType -like "*ARM*") {Copy-Item -Path ..\bin\hotcorners\arm64\* -Destination "$env:LOCALAPPDATA\WinMac\hotcorners\" -Recurse -Force }
-            else {Copy-Item -Path ..\bin\hotcorners\x64\* -Destination "$env:LOCALAPPDATA\WinMac\hotcorners\" -Recurse -Force }
-            New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "WinXCorners" -Value "$env:LOCALAPPDATA\WinMac\WinXCorners.exe" | Out-Null
+            if ($sysType -like "*ARM*") {Copy-Item -Path ..\bin\hotcorners\arm64\* -Destination "$env:LOCALAPPDATA\WinMac\hotcorners\" -Recurse -Force}
+            else {Copy-Item -Path ..\bin\hotcorners\x64\* -Destination "$env:LOCALAPPDATA\WinMac\hotcorners\" -Recurse -Force}
+            New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "WinXCorners" -Value "$destinationPath\WinXCorners.exe" | Out-Null
             Write-Host "Hot Corners installation completed." -ForegroundColor Green
             }
     # Other
@@ -1196,7 +1214,8 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             Copy-Item -Path $sourceFilePath -Destination '..\temp\' -Force
             $appData = $env:LOCALAPPDATA -replace '\\', '\\'
             (Get-Content -Path $tempFilePath) -replace '%WINMACAPPDATA%', $appData | Set-Content -Path $tempFilePath
-            Get-ChildItem '..\temp\Add_Theme_Mode_in_Context_Menu.reg' | ForEach-Object { reg import $_.FullName > $null 2>&1 }
+            reg import '..\config\contextmenu\add\Add_Theme_Mode_in_Context_Menu.reg'  > $null 2>&1
+            reg import '..\config\contextmenu\add\Add_Hidden_items_to_context_menu.reg' > $null 2>&1
             Invoke-Output {winget uninstall "Windows web experience Pack" --silent}
         ## End Task
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""

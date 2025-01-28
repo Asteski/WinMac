@@ -2,12 +2,13 @@ param (
     [switch]$noGUI,
     [switch]$debug
 )
-$version = "0.8.0"
+$version = "0.8.1"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_uninstall_log_$date.txt"
 $transcriptFile = "WinMac_uninstall_transcript_$date.txt"
 $errorActionPreference="SilentlyContinue"
 $WarningPreference="SilentlyContinue"
+$programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
 Add-Type -AssemblyName PresentationFramework
 Add-Type -AssemblyName System.Windows.Forms
 if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null}
@@ -49,7 +50,7 @@ if (!($noGUI)) {
     $parentDirectory = Split-Path -Path $PSScriptRoot -Parent
     $iconFolderName = "config"
     $iconFolderPath = Join-Path -Path $parentDirectory -ChildPath $iconFolderName
-    $topTextBlock = "PowerShell uninstaller wizard for Windows and macOS hybrid"
+    $topTextBlock = "PowerShell GUI uninstaller wizard for Windows and macOS hybrid"
     $bottomTextBlock1 = 'Important Notes:'
     $bottomTextBlock2 = 'PowerShell profile files will be removed, please make sure to backup your current profiles if needed.'
     $bottomTextBlock3 = 'Vim and Nexus packages will show prompt to uninstall, please confirm the uninstallations manually.'
@@ -82,7 +83,8 @@ if (!($noGUI)) {
             </TextBlock>
             
             <!-- Static TextBlock below the title -->
-            <TextBlock Text="$topTextBlock" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="0,5,0,10" TextWrapping="Wrap"/>
+            <TextBlock Text="Version $version" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="0,5,0,5" TextWrapping="Wrap"/>
+            <TextBlock Text="$topTextBlock" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="0,5,0,5" TextWrapping="Wrap"/>
         </StackPanel>
 
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
@@ -393,10 +395,13 @@ foreach ($app in $selectedApps) {
         # Everything
         "2" {
             Write-Host "Uninstalling Everything..."  -ForegroundColor Yellow
-            Invoke-Output { Uninstall-WinGetPackage -id Voidtools.Everything }
-            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+            Invoke-Output { Uninstall-WinGetPackage -id Voidtools.Everything }            
             Remove-Item -Path "$programsDir\Everything.lnk" -Force
             Invoke-Output { Remove-Item -Path "HKLM:\SYSTEM\CurrentControlSet\Services\Everything" -Recurse }
+            while (Get-WinGetPackage -id Voidtools.Everything -ErrorAction SilentlyContinue) {
+                Start-Sleep -Seconds 5
+            }
+            Remove-Item $env:APPDATA\Everything -Recurse -Force
             Remove-Item $env:LOCALAPPDATA\Everything -Recurse -Force
             Write-Host "Uninstalling Everything completed." -ForegroundColor Green
         }
@@ -413,7 +418,7 @@ foreach ($app in $selectedApps) {
             Uninstall-Module PSTree -Force
             if ((Test-Path "$profilePath\PowerShell\$profileFile")) { Remove-Item -Path "$profilePath\PowerShell\$profileFile" }
             if ((Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { Remove-Item -Path "$profilePath\WindowsPowerShell\$profileFile" }
-            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+            # $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Remove-Item -Path "$programsDir\gVim*" -Force
             Write-Host "Uninstalling PowerShell Profile completed." -ForegroundColor Green
         }
@@ -473,7 +478,7 @@ foreach ($app in $selectedApps) {
             Write-Host "Uninstalling Nexus Dock..." -ForegroundColor Yellow
             Get-Process Nexus | Stop-Process -Force
             Invoke-Output { Uninstall-WinGetPackage -name Nexus }
-            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+            # $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Remove-Item -Path "$programsDir\Nexus.lnk" -Force
             Remove-Item -Path "C:\Users\Public\Documents\Winstep" -Recurse -Force
             Write-Host "Uninstalling Nexus Dock completed." -ForegroundColor Green
@@ -483,6 +488,7 @@ foreach ($app in $selectedApps) {
             Write-Host "Uninstalling Windhawk..." -ForegroundColor Yellow
             Stop-Process -name windhawk -force
             Invoke-Output {Uninstall-WinGetPackage -name Windhawk}
+            Remove-Item -Path "$programsDir\Windhawk.lnk" -Recurse -Force
             Write-Host "Uninstalling Windhawk completed." -ForegroundColor Green
         }
     # Hot Corners
@@ -502,6 +508,9 @@ foreach ($app in $selectedApps) {
             Remove-Item -Path "$env:LOCALAPPDATA\WinXCorners" -Recurse -Force
             Remove-Item -Path "$env:APPDATA\WinLaunch" -Recurse -Force
             Remove-Item -Path "$env:APPDATA\Simnet" -Recurse -Force
+            Remove-Item -Path "$programsDir\WinXCorners.lnk" -Recurse -Force
+            Remove-Item -Path "$programsDir\WinLaunch.lnk" -Recurse -Force
+            Remove-Item -Path "$programsDir\Simple Sticky Notes.lnk" -Recurse -Force
             Write-Host "Uninstalling Hot Corners completed." -ForegroundColor Green
         }
     # Other
@@ -514,7 +523,7 @@ foreach ($app in $selectedApps) {
             $homeDir = "C:\Users\$env:USERNAME"
             $homeIniFilePath = "$($homeDir)\desktop.ini"
             Invoke-Output { Remove-Item -Path $homeIniFilePath -Force }
-            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+            # $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             $programsIniFilePath = "$($programsDir)\desktop.ini"
             Invoke-Output { Remove-Item -Path $programsIniFilePath -Force }
             $curDestFolder = "C:\Windows\Cursors"
@@ -554,7 +563,7 @@ uint fWinIni);
             $homeDir = "C:\Users\$env:USERNAME"
             $homePin = new-object -com shell.application
             Invoke-Output { $homePin.Namespace($homeDir).Self.InvokeVerb("pintohome") }
-            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+            # $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             $programsPin = new-object -com shell.application
             Invoke-Output { $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome") }
             $RBPath = 'HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\pintohome\command\'
@@ -571,19 +580,34 @@ uint fWinIni);
             Invoke-Output { Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarSmallIcons" }
             Get-ChildItem ..\config\contextmenu\add\* -e *theme* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
             Get-ChildItem '..\config\contextmenu\remove\Remove_Theme_Mode_in_Context_Menu.reg' | ForEach-Object { reg import $_.FullName > $null 2>&1 }
+            Get-ChildItem '..\config\contextmenu\remove\Remove_Hidden_items_from_context_menu.reg' | ForEach-Object { reg import $_.FullName > $null 2>&1 }
+            reg import '..\config\contextmenu\remove\Remove_Theme_Mode_in_Context_Menu.reg' > $null 2>&1
+            reg import '..\config\contextmenu\remove\Remove_Hidden_items_from_context_menu.reg' > $null 2>&1
             New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" -Force | Out-Null
             New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Force | Out-Null
             Invoke-Output { Remove-Item -Path "$env:LOCALAPPDATA\WinMac\theme.ps1" }
             Set-ItemProperty -Path $regPath -Name "IconPack" -Value 0 | Out-Null
             Invoke-Output { Uninstall-WinGetPackage -name 'IconPack Installer' }
-            Start-Sleep -Seconds 60
+            while (Get-WinGetPackage -name 'IconPack Installer' -ErrorAction SilentlyContinue) {
+                Start-Sleep -Seconds 5
+            }
             Stop-Process -Name explorer -Force
+            $endTime = (Get-Date).AddMinutes(5)
+            do {
+                try {
+                    if ((Get-ChildItem -Path "C:\IconPack" -Recurse | Measure-Object).Count -eq 0) { 
+                        Remove-Item -Path "C:\IconPack" -Recurse -Force -ErrorAction Stop
+                    }
+                    $success = $true
+                } catch {
+                    Start-Sleep -Seconds 5
+                }
+            } until ($success -or (Get-Date) -ge $endTime)
             Write-Host "Uninstalling Other Settings completed." -ForegroundColor Green
         }
     }
 }
 # Clean up
-if ((Get-ChildItem -Path "C:\IconPack" -Recurse | Measure-Object).Count -eq 0) { Remove-Item -Path "C:\IconPack" -Recurse -Force }
 if ((Get-ChildItem -Path "$env:LOCALAPPDATA\WinMac" -Recurse | Measure-Object).Count -eq 0) { Remove-Item -Path "$env:LOCALAPPDATA\WinMac" -Force }
 $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue
 if ($null -eq $tasksFolder) { schtasks /DELETE /TN \WinMac /F > $null 2>&1 }
