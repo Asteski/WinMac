@@ -8,6 +8,7 @@ $logFile = "WinMac_uninstall_log_$date.txt"
 $transcriptFile = "WinMac_uninstall_transcript_$date.txt"
 $errorActionPreference="SilentlyContinue"
 $WarningPreference="SilentlyContinue"
+$programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
 Add-Type -AssemblyName PresentationFramework
 Add-Type -AssemblyName System.Windows.Forms
 if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null}
@@ -394,8 +395,7 @@ foreach ($app in $selectedApps) {
         # Everything
         "2" {
             Write-Host "Uninstalling Everything..."  -ForegroundColor Yellow
-            Invoke-Output { Uninstall-WinGetPackage -id Voidtools.Everything }
-            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+            Invoke-Output { Uninstall-WinGetPackage -id Voidtools.Everything }            
             Remove-Item -Path "$programsDir\Everything.lnk" -Force
             Invoke-Output { Remove-Item -Path "HKLM:\SYSTEM\CurrentControlSet\Services\Everything" -Recurse }
             Remove-Item $env:LOCALAPPDATA\Everything -Recurse -Force
@@ -414,7 +414,7 @@ foreach ($app in $selectedApps) {
             Uninstall-Module PSTree -Force
             if ((Test-Path "$profilePath\PowerShell\$profileFile")) { Remove-Item -Path "$profilePath\PowerShell\$profileFile" }
             if ((Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { Remove-Item -Path "$profilePath\WindowsPowerShell\$profileFile" }
-            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+            # $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Remove-Item -Path "$programsDir\gVim*" -Force
             Write-Host "Uninstalling PowerShell Profile completed." -ForegroundColor Green
         }
@@ -474,7 +474,7 @@ foreach ($app in $selectedApps) {
             Write-Host "Uninstalling Nexus Dock..." -ForegroundColor Yellow
             Get-Process Nexus | Stop-Process -Force
             Invoke-Output { Uninstall-WinGetPackage -name Nexus }
-            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+            # $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Remove-Item -Path "$programsDir\Nexus.lnk" -Force
             Remove-Item -Path "C:\Users\Public\Documents\Winstep" -Recurse -Force
             Write-Host "Uninstalling Nexus Dock completed." -ForegroundColor Green
@@ -484,6 +484,7 @@ foreach ($app in $selectedApps) {
             Write-Host "Uninstalling Windhawk..." -ForegroundColor Yellow
             Stop-Process -name windhawk -force
             Invoke-Output {Uninstall-WinGetPackage -name Windhawk}
+            Remove-Item -Path "$programsDir\Windhawk.lnk" -Recurse -Force
             Write-Host "Uninstalling Windhawk completed." -ForegroundColor Green
         }
     # Hot Corners
@@ -503,6 +504,9 @@ foreach ($app in $selectedApps) {
             Remove-Item -Path "$env:LOCALAPPDATA\WinXCorners" -Recurse -Force
             Remove-Item -Path "$env:APPDATA\WinLaunch" -Recurse -Force
             Remove-Item -Path "$env:APPDATA\Simnet" -Recurse -Force
+            Remove-Item -Path "$programsDir\WinXCorners.lnk" -Recurse -Force
+            Remove-Item -Path "$programsDir\WinLaunch.lnk" -Recurse -Force
+            Remove-Item -Path "$programsDir\Simple Sticky Notes.lnk" -Recurse -Force
             Write-Host "Uninstalling Hot Corners completed." -ForegroundColor Green
         }
     # Other
@@ -515,7 +519,7 @@ foreach ($app in $selectedApps) {
             $homeDir = "C:\Users\$env:USERNAME"
             $homeIniFilePath = "$($homeDir)\desktop.ini"
             Invoke-Output { Remove-Item -Path $homeIniFilePath -Force }
-            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+            # $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             $programsIniFilePath = "$($programsDir)\desktop.ini"
             Invoke-Output { Remove-Item -Path $programsIniFilePath -Force }
             $curDestFolder = "C:\Windows\Cursors"
@@ -555,7 +559,7 @@ uint fWinIni);
             $homeDir = "C:\Users\$env:USERNAME"
             $homePin = new-object -com shell.application
             Invoke-Output { $homePin.Namespace($homeDir).Self.InvokeVerb("pintohome") }
-            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+            # $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             $programsPin = new-object -com shell.application
             Invoke-Output { $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome") }
             $RBPath = 'HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\pintohome\command\'
