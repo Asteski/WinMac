@@ -399,15 +399,7 @@ foreach ($app in $selectedApps) {
             Remove-Item -Path "$programsDir\Everything.lnk" -Force
             Invoke-Output { Remove-Item -Path "HKLM:\SYSTEM\CurrentControlSet\Services\Everything" -Recurse }
             Remove-Item $env:APPDATA\Everything -Recurse -Force
-            # $endTime = (Get-Date).AddMinutes(1)
-            # do {
-            #     try {
-            #         Remove-Item $env:APPDATA\Everything -Recurse -Force -ErrorAction Stop
-            #         $success = $true
-            #     } catch {
-            #         Start-Sleep -Seconds 5
-            #     }
-            # } until ($success -or (Get-Date) -ge $endTime)
+            Remove-Item $env:LOCALAPPDATA\Everything -Recurse -Force
             Write-Host "Uninstalling Everything completed." -ForegroundColor Green
         }
     # PowerShell Profile
@@ -602,7 +594,9 @@ uint fWinIni);
                         Remove-Item -Path "C:\IconPack" -Recurse -Force -ErrorAction Stop
                     }
                     $success = $true
+                    echo success
                 } catch {
+                    echo fail
                     Start-Sleep -Seconds 5
                 }
             } until ($success -or (Get-Date) -ge $endTime)
