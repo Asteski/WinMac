@@ -829,18 +829,31 @@ foreach ($app in $selectedApps) {
     # TopNotify
         "6" {
             Write-Host "Installing TopNotify..." -ForegroundColor Yellow
+            echo 1
             Invoke-Output {Install-WinGetPackage -name TopNotify}
+            echo 2
             $app = Get-AppxPackage *TopNotify*
+            echo 3
             Start-Process -FilePath TopNotify.exe -WorkingDirectory $app.InstallLocation
+            echo 4
             $pkgName = $app.PackageFamilyName
+            echo 5
             $startupTask = ($app | Get-AppxPackageManifest).Package.Applications.Application.Extensions.Extension | Where-Object -Property Category -Eq -Value windows.startupTask
+            echo 6
             $taskId = $startupTask.StartupTask.TaskId
+            echo 7
             Start-Process Taskmgr -WindowStyle Hidden
+            echo 8
             while (!(Get-ItemProperty -Path "HKCU:\Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\SystemAppData\$pkgName\$taskId" -Name State)) {Start-Sleep -Seconds 1}
+            echo 9
             Stop-Process -Name Taskmgr
+            echo 10
             $regKey = "HKCU:\Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\SystemAppData\$pkgName\$taskId"
+            echo 11
             Set-ItemProperty -Path $regKey -Name UserEnabledStartupOnce -Value 1
+            echo 12
             Set-ItemProperty -Path $regKey -Name State -Value 2
+            echo 13
             Write-Host "TopNotify installation completed." -ForegroundColor Green
         }
     # Stahky
