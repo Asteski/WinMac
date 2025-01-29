@@ -1170,7 +1170,7 @@ IconResource=C:\Windows\System32\SHELL32.dll,160
                 } 
 $programsIni = @"
 [.ShellClassInfo]
-IconResource=C:\WINDOWS\System32\imageres.dll,87
+IconResource=C:\WINDOWS\System32\imageres.dll,-87
 "@
                 $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
                 $programsIniFilePath = "$($programsDir)\desktop.ini"
