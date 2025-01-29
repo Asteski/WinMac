@@ -7,7 +7,7 @@ Windows Registry Editor Version 5.00
 "Icon"="themeui.dll,-701"
 
 [HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\AppANDWindowsMode]
-"MUIVerb"="App and Windows mode"
+"MUIVerb"="Choose your mode"
 "SubCommands"=""
 
 [HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\AppANDWindowsMode\shell\001flyout]
