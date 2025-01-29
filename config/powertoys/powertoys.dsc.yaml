@@ -131,8 +131,6 @@ properties:
           Enabled: false
         ShortcutGuide:
           Enabled: false
-        VideoConference:
-          Enabled: false
         PowerPreview:
           EnableSvgPreview: false
           EnableSvgThumbnail: true
