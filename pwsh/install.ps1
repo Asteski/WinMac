@@ -2,7 +2,7 @@ param (
     [switch]$noGUI,
     [switch]$debug
 )
-$version = "0.8.1"
+$version = "0.8.2"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_install_log_$date.txt"
 $transcriptFile = "WinMac_install_transcript_$date.txt"
@@ -1170,7 +1170,7 @@ IconResource=C:\Windows\System32\SHELL32.dll,160
                 } 
 $programsIni = @"
 [.ShellClassInfo]
-IconResource=C:\WINDOWS\System32\imageres.dll,187
+IconResource=C:\WINDOWS\System32\imageres.dll,-87
 "@
                 $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
                 $programsIniFilePath = "$($programsDir)\desktop.ini"
@@ -1214,7 +1214,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,187
             Copy-Item -Path $sourceFilePath -Destination '..\temp\' -Force
             $appData = $env:LOCALAPPDATA -replace '\\', '\\'
             (Get-Content -Path $tempFilePath) -replace '%WINMACAPPDATA%', $appData | Set-Content -Path $tempFilePath
-            reg import '..\config\contextmenu\add\Add_Theme_Mode_in_Context_Menu.reg'  > $null 2>&1
+            reg import '..\temp\Add_Theme_Mode_in_Context_Menu.reg'  > $null 2>&1
             reg import '..\config\contextmenu\add\Add_Hidden_items_to_context_menu.reg' > $null 2>&1
             Invoke-Output {winget uninstall "Windows web experience Pack" --silent}
         ## End Task
