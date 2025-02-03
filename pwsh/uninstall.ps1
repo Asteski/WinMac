@@ -11,8 +11,8 @@ $WarningPreference="SilentlyContinue"
 $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
 Add-Type -AssemblyName PresentationFramework
 Add-Type -AssemblyName System.Windows.Forms
-if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null}
-if (-not (Test-Path -Path "../logs")) {New-Item -ItemType Directory -Path "../logs" | Out-Null}
+if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" }
+if (-not (Test-Path -Path "../logs")) {New-Item -ItemType Directory -Path "../logs" }
 $user = [Security.Principal.WindowsIdentity]::GetCurrent()
 $adminTest = (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
 $checkDir = Get-ChildItem '..'
@@ -222,7 +222,7 @@ if (!($noGUI)) {
         $window.Close()
         exit
     })
-    $window.ShowDialog() | Out-Null
+    $window.ShowDialog() 
 }
 else {
     Clear-Host
@@ -340,7 +340,7 @@ for ($a=3; $a -ge 0; $a--) {
     Start-Sleep 1
 }
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
-Start-Transcript -Path ../logs/$transcriptFile -Append | Out-Null
+Start-Transcript -Path ../logs/$transcriptFile -Append 
 # Nuget check
 Write-Host "Checking Package Provider (Nuget)" -ForegroundColor Yellow
 $nugetProvider = Get-PackageProvider -Name NuGet
@@ -577,10 +577,10 @@ uint fWinIni);
             Get-ChildItem ..\config\contextmenu\add\* -e *theme* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
             reg import '..\config\contextmenu\remove\Remove_Theme_Mode_in_Context_Menu.reg' > $null 2>&1
             reg import '..\config\contextmenu\remove\Remove_Hidden_items_from_context_menu.reg' > $null 2>&1
-            New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" -Force | Out-Null
-            New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Force | Out-Null
+            New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" -Force 
+            New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Force 
             Invoke-Output { Remove-Item -Path "$env:LOCALAPPDATA\WinMac\theme.ps1" }
-            Set-ItemProperty -Path $regPath -Name "IconPack" -Value 0 | Out-Null
+            Set-ItemProperty -Path $regPath -Name "IconPack" -Value 0 
             Invoke-Output { Uninstall-WinGetPackage -name 'IconPack Installer' }
             while (Get-WinGetPackage -name 'IconPack Installer' -ErrorAction SilentlyContinue) {
                 Start-Sleep -Seconds 5
@@ -607,7 +607,7 @@ $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyConti
 if ($null -eq $tasksFolder) { schtasks /DELETE /TN \WinMac /F > $null 2>&1 }
 $explorerProcess = Get-Process -Name explorer -ErrorAction SilentlyContinue
 if ($null -eq $explorerProcess) {Start-Process -FilePath explorer.exe}
-Stop-Transcript | Out-Null
+Stop-Transcript 
 Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
 Write-Host @"
 

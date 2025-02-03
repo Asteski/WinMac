@@ -11,8 +11,8 @@ $errorActionPreference="SilentlyContinue"
 $WarningPreference="SilentlyContinue"
 Add-Type -AssemblyName PresentationFramework
 Add-Type -AssemblyName System.Windows.Forms
-if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null}
-if (-not (Test-Path -Path "../logs")) {New-Item -ItemType Directory -Path "../logs" | Out-Null}
+if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" }
+if (-not (Test-Path -Path "../logs")) {New-Item -ItemType Directory -Path "../logs" }
 $sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
 $osVersion = (Get-WmiObject -Class Win32_OperatingSystem).Caption
 $user = [Security.Principal.WindowsIdentity]::GetCurrent()
@@ -269,7 +269,7 @@ if (!($noGUI)) {
         exit
     })
 
-    $window.ShowDialog() | Out-Null
+    $window.ShowDialog() 
 }
 else {
     Clear-Host
@@ -510,7 +510,7 @@ for ($a=3; $a -ge 0; $a--) {
     Start-Sleep 1
 }
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
-Start-Transcript -Path ../logs/$transcriptFile -Append | Out-Null
+Start-Transcript -Path ../logs/$transcriptFile -Append 
 # Nuget check
 Write-Host "Checking Package Provider (Nuget)" -ForegroundColor Yellow
 $nugetProvider = Get-PackageProvider -Name NuGet
@@ -554,9 +554,9 @@ foreach ($app in $selectedApps) {
     # PowerToys
         "1" {
             Write-Host "Installing PowerToys..." -ForegroundColor Yellow
-            winget configure --enable | Out-Null
-            pwsh -NoProfile -Command "winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null"
-            # Start-Process pwsh -ArgumentList "-NoProfile -Command winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null" -Wait
+            winget configure --enable 
+            pwsh -NoProfile -Command "winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements "
+            # Start-Process pwsh -ArgumentList "-NoProfile -Command winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements " -Wait
             Copy-Item -Path "..\config\powertoys\ptr\ptr.exe" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
             if ($blueOrYellow -eq 'B' -or $blueOrYellow -eq 'b') {
                 Copy-Item -Path "..\config\powertoys\RunPlugins" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
@@ -584,7 +584,7 @@ foreach ($app in $selectedApps) {
             Invoke-Output { Move-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Destination $programsDir -Force  }
             Invoke-Output { Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Destination $programsDir -Force }
             $everythingIniPath = "$env:APPDATA\Everything"
-            if (-not (Test-Path -Path $everythingIniPath)) {New-Item -ItemType Directory -Path $everythingIniPath -Force | Out-Null}
+            if (-not (Test-Path -Path $everythingIniPath)) {New-Item -ItemType Directory -Path $everythingIniPath -Force }
             Copy-Item -Path "..\config\everything\Everything.ini" -Destination $everythingIniPath -Force
             Invoke-Output { Start-Process -FilePath Everything.exe -WorkingDirectory $env:PROGRAMFILES\Everything -WindowStyle Hidden }
             Write-Host "Everything installation completed." -ForegroundColor Green
@@ -623,7 +623,7 @@ foreach ($app in $selectedApps) {
                 $vimVersion = (Find-WingetPackage Vim.Vim | Where-Object {$_.Id -notlike "*nightly*"}).Version
                 $vimVersion = ($vimVersion -split '\.')[0..1] -join '.'
                 $vimRegPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Vim $vimVersion"
-                if (-not (Test-Path $vimRegPath)) {New-Item -Path $vimRegPath -Force | Out-Null}
+                if (-not (Test-Path $vimRegPath)) {New-Item -Path $vimRegPath -Force }
                 Set-ItemProperty -Path $vimRegPath -Name "select_startmenu" -Value 0
                 Set-ItemProperty -Path $vimRegPath -Name "select_editwith" -Value 0
                 Invoke-Output {Install-WinGetPackage -Id "Vim.Vim"}
@@ -780,10 +780,10 @@ foreach ($app in $selectedApps) {
                     $exeStartPath = "$env:LOCALAPPDATA\WinMac\StartButton.exe"
                     $folderName = "WinMac"
                     $taskService = New-Object -ComObject "Schedule.Service"
-                    $taskService.Connect() | Out-Null
+                    $taskService.Connect() 
                     $rootFolder = $taskService.GetFolder("\")
                     try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }                
-                    if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
+                    if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) }
                     $taskFolder = "\" + $folderName
                     $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
                     $trigger = New-ScheduledTaskTrigger -AtLogon
@@ -902,7 +902,7 @@ foreach ($app in $selectedApps) {
                 Write-Host "Installing Keyboard Shortcuts..." -ForegroundColor Yellow
                 $fileName = 'KeyShortcuts.exe'
                 $fileDirectory = "$env:LOCALAPPDATA\WinMac"
-                New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" | Out-Null
+                New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" 
                 if (Get-Process keyshortcuts) { Stop-Process -Name keyshortcuts }
                 Copy-Item ..\bin\$fileName "$env:LOCALAPPDATA\WinMac\" 
                 $description = "WinMac Keyboard Shortcuts - custom keyboard shortcut described in Commands cheat sheet wiki page."
@@ -911,7 +911,7 @@ foreach ($app in $selectedApps) {
                 $taskService.Connect()
                 $rootFolder = $taskService.GetFolder("\") 
                 try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }              
-                if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
+                if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) }
                 $taskFolder = "\" + $folderName
                 $trigger = New-ScheduledTaskTrigger -AtLogon
                 $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
@@ -1016,8 +1016,8 @@ foreach ($app in $selectedApps) {
             else {
                 Write-Host "Installing Windhawk..." -ForegroundColor Yellow
                 Invoke-Output {Install-WinGetPackage -name Windhawk}
-                if (-not (Test-Path "$Env:ProgramData\Windhawk\ModsSource")) {New-Item -ItemType Directory -Path "$Env:ProgramData\Windhawk\ModsSource" -Force | Out-Null}
-                if (-not (Test-Path "$Env:ProgramData\Windhawk\Engine\Mods")) {New-Item -ItemType Directory -Path "$Env:ProgramData\Windhawk\Engine\Mods" -Force | Out-Null}
+                if (-not (Test-Path "$Env:ProgramData\Windhawk\ModsSource")) {New-Item -ItemType Directory -Path "$Env:ProgramData\Windhawk\ModsSource" -Force }
+                if (-not (Test-Path "$Env:ProgramData\Windhawk\Engine\Mods")) {New-Item -ItemType Directory -Path "$Env:ProgramData\Windhawk\Engine\Mods" -Force }
                 Stop-Process -Name Windhawk -Force
                 Copy-Item ..\config\windhawk\Mods\* "$Env:ProgramData\Windhawk\Engine\Mods" -Recurse -Force
                 $urls = @(
@@ -1061,7 +1061,7 @@ foreach ($app in $selectedApps) {
             }
             Invoke-WebRequest -Uri $winXCornersUrl -OutFile $outputPath
             if (-not (Test-Path -Path $destinationPath)) {
-                New-Item -ItemType Directory -Path $destinationPath -Force | Out-Null
+                New-Item -ItemType Directory -Path $destinationPath -Force 
             }
             Expand-Archive -Path $outputPath -DestinationPath $destinationPath -Force
             Copy-Item -Path $winXCornersConfigPath -Destination $destinationPath -Force
@@ -1077,7 +1077,7 @@ foreach ($app in $selectedApps) {
             Move-Item -Path "$env:USERPROFILE\Desktop\Simple Sticky Notes.lnk" -Destination "$env:APPDATA\Microsoft\Windows\Start Menu\Programs" -Force
             $process = Get-Process -Name WinLaunch -ErrorAction SilentlyContinue
             if ($process) { Stop-Process -Name WinLaunch -Force }
-            New-Item -ItemType Directory -Path "$winLaunchDestinationPath\Data" -Force | Out-Null
+            New-Item -ItemType Directory -Path "$winLaunchDestinationPath\Data" -Force 
             Copy-Item -Path $winLaunchConfigPath -Destination "$winLaunchDestinationPath\Data\Settings.xml" -Force
             Copy-Item -Path $winLaunchConfigPath -Destination "$env:APPDATA\WinLaunch\Settings.xml" -Force
             $configFilePath = Join-Path -Path $destinationPath -ChildPath "settings.ini"
@@ -1099,10 +1099,10 @@ foreach ($app in $selectedApps) {
             $shortcut.TargetPath = $target2Path
             $shortcut.IconLocation = $icon2Path
             $shortcut.Save()
-            if (-not (Test-Path -Path "$env:LOCALAPPDATA\WinMac\hotcorners")) {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\hotcorners" -Force | Out-Null}
+            if (-not (Test-Path -Path "$env:LOCALAPPDATA\WinMac\hotcorners")) {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\hotcorners" -Force }
             if ($sysType -like "*ARM*") {Copy-Item -Path ..\bin\hotcorners\arm64\* -Destination "$env:LOCALAPPDATA\WinMac\hotcorners\" -Recurse -Force}
             else {Copy-Item -Path ..\bin\hotcorners\x64\* -Destination "$env:LOCALAPPDATA\WinMac\hotcorners\" -Recurse -Force}
-            New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "WinXCorners" -Value "$destinationPath\WinXCorners.exe" | Out-Null
+            New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "WinXCorners" -Value "$destinationPath\WinXCorners.exe" 
             Write-Host "Hot Corners installation completed." -ForegroundColor Green
             }
     # Other
@@ -1148,7 +1148,7 @@ uint fWinIni);
             Invoke-Output {$CursorRefresh::SystemParametersInfo(0x0057,0,$null,0)}
         ## Pin User folder, Programs and Recycle Bin to Quick Access
             $regPath = "HKCU:\SOFTWARE\WinMac"
-            if (-not (Test-Path -Path $regPath)) {New-Item -Path $regPath -Force | Out-Null}
+            if (-not (Test-Path -Path $regPath)) {New-Item -Path $regPath -Force }
             if ((Get-ItemProperty -Path $regPath -Name "QuickAccess" -ErrorAction SilentlyContinue).QuickAccess -ne 1) {
                 Write-Host "Pinning User folder, Programs and Recycle Bin to Quick Access..." -ForegroundColor DarkYellow
 $homeIni = @"
@@ -1196,7 +1196,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
                     $recycleBin.Self.InvokeVerb("PinToHome")
                 }
                 Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse
-                Set-ItemProperty -Path $regPath -Name "QuickAccess" -Value 1 | Out-Null
+                Set-ItemProperty -Path $regPath -Name "QuickAccess" -Value 1 
             }
         ## Remove shortcut arrows
             Write-Host "Removing shortcut arrows..." -ForegroundColor DarkYellow
@@ -1224,8 +1224,8 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             Invoke-Output {New-ItemProperty -Path $taskbarDevSettings -Name "TaskbarEndTask" -Value 1 -PropertyType DWORD -Force}
         ## Remove Home and Gallery icons
             Write-Host "Remove Home and Gallery icons..." -ForegroundColor DarkYellow
-            Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" -Force | Out-Null
-            Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Force | Out-Null
+            Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" -Force 
+            Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Force 
         ## Icons Pack
             if ((Get-ItemProperty -Path $regPath -Name "IconPack" -ErrorAction SilentlyContinue).IconPack -ne 1) {
                 if ($blueOrYellow -eq "B" -or $blueOrYellow -eq "b") {
@@ -1237,7 +1237,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
                 $arguments = "/S"
                 Write-Host "Deploying icon pack..." -ForegroundColor DarkYellow
                 Start-Process -FilePath $exePath -ArgumentList $arguments -NoNewWindow
-                Set-ItemProperty -Path $regPath -Name "IconPack" -Value 1 | Out-Null
+                Set-ItemProperty -Path $regPath -Name "IconPack" -Value 1 
                 Start-Sleep -s 55
                 if ($blueOrYellow -eq "B" -or $blueOrYellow -eq "b") {
                     $shortcutPath = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\File Explorer.lnk"
@@ -1259,7 +1259,7 @@ if ((Get-ChildItem -Path "$env:LOCALAPPDATA\WinMac" -Recurse | Measure-Object).C
 $explorerProcess = Get-Process -Name explorer -ErrorAction SilentlyContinue
 if ($null -eq $explorerProcess) {Start-Process -FilePath explorer.exe}
 Remove-Item "..\temp" -Recurse -Force
-Stop-Transcript | Out-Null
+Stop-Transcript 
 Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
 Write-Host @"
 
