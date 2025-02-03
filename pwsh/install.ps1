@@ -554,6 +554,7 @@ foreach ($app in $selectedApps) {
     # PowerToys
         "1" {
             Write-Host "Installing PowerToys..." -ForegroundColor Yellow
+            $startTime = Get-Date
             winget configure --enable 
             pwsh -NoProfile -Command "winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements "
             # Start-Process pwsh -ArgumentList "-NoProfile -Command winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements " -Wait
@@ -573,11 +574,15 @@ foreach ($app in $selectedApps) {
                 $envPath += ";$env:LOCALAPPDATA\PowerToys"
                 [System.Environment]::SetEnvironmentVariable("Path", $envPath, [System.EnvironmentVariableTarget]::User)
             }
+            $endTime = Get-Date
+            $timeTaken = $endTime - $startTime
+            Write-Host "Time taken: $($timeTaken.ToString('mm\:ss'))" -ForegroundColor Cyan
             Write-Host "PowerToys installation completed." -ForegroundColor Green
         }
     # Everything
         "2" {
             Write-Host "Installing Everything..." -ForegroundColor Yellow
+            $startTime = Get-Date
             Invoke-Output {Install-WinGetPackage -Id "Voidtools.Everything"}
             Stop-Process -Name Everything.exe -ErrorAction SilentlyContinue
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
@@ -588,10 +593,14 @@ foreach ($app in $selectedApps) {
             Copy-Item -Path "..\config\everything\Everything.ini" -Destination $everythingIniPath -Force
             Invoke-Output { Start-Process -FilePath Everything.exe -WorkingDirectory $env:PROGRAMFILES\Everything -WindowStyle Hidden }
             Write-Host "Everything installation completed." -ForegroundColor Green
+            $endTime = Get-Date
+            $timeTaken = $endTime - $startTime
+            Write-Host "Time taken: $($timeTaken.ToString('mm\:ss'))" -ForegroundColor Cyan
         }
     # PowerShell Profile
         "3" {
             Write-Host "Configuring PowerShell Profile..." -ForegroundColor Yellow
+            $startTime = Get-Date
             $profilePath = $PROFILE | Split-Path | Split-Path
             $profileFile = $PROFILE | Split-Path -Leaf
             if ($gitProfile -eq $true) { 
@@ -607,17 +616,17 @@ foreach ($app in $selectedApps) {
             Invoke-Output { 
                 if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell" } 
                 else { Remove-Item -Path "$profilePath\PowerShell\$profileFile" -Force } 
-                }
+            }
             Invoke-Output { 
                 if (-not (Test-Path "$profilePath\WindowsPowerShell")) { New-Item -ItemType Directory -Path "$profilePath\WindowsPowerShell" } 
                 else { Remove-Item -Path "$profilePath\WindowsPowerShell\$profileFile" -Force } 
-                }
+            }
             Invoke-Output { 
                 if (-not (Test-Path "$profilePath\PowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\PowerShell\$profileFile" } 
-                }
+            }
             Invoke-Output { 
                 if (-not (Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\WindowsPowerShell\$profileFile" } 
-                }
+            }
             $vim = Get-WinGetPackage -Id Vim.Vim -ErrorAction SilentlyContinue
             if ($null -eq $vim) {
                 $vimVersion = (Find-WingetPackage Vim.Vim | Where-Object {$_.Id -notlike "*nightly*"}).Version
@@ -633,219 +642,235 @@ foreach ($app in $selectedApps) {
             $winget = @(
                 "gsass1.NTop"
                 )
-            if ($gitProfile -eq $true) { $winget += "Git.Git" }   
-            foreach ($app in $winget) {
-                $package = Get-WinGetPackage -Id $app -ErrorAction SilentlyContinue
-                if ($null -eq $package) {
-                    Invoke-Output { Install-WinGetPackage -id $app -source winget }
+                if ($gitProfile -eq $true) { $winget += "Git.Git" }   
+                foreach ($app in $winget) {
+                    $package = Get-WinGetPackage -Id $app -ErrorAction SilentlyContinue
+                    if ($null -eq $package) {
+                        Invoke-Output { Install-WinGetPackage -id $app -source winget }
+                    } else {
+                        Write-Host "$($app.split(".")[1]) is already installed." -ForegroundColor Green
+                    }
+                }
+                $pstreeModule = Get-InstalledModule -Name PSTree -ErrorAction SilentlyContinue
+                if ($null -eq $pstreeModule) {
+                    Invoke-Output { Install-Module PSTree -Force }
                 } else {
-                    Write-Host "$($app.split(".")[1]) is already installed." -ForegroundColor Green
+                    Write-Host "PSTree is already installed." -ForegroundColor Green
+                }
+                $vimParentPath = Join-Path $env:PROGRAMFILES Vim
+                $latestSubfolder = Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -Property CreationTime -Descending | Select-Object -First 1
+                $vimChildPath = $latestSubfolder.FullName
+                Invoke-Output { [Environment]::SetEnvironmentVariable("Path", $env:Path + ";$vimChildPath", [EnvironmentVariableTarget]::Machine) }
+                $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+                Invoke-Output { Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $prompt }
+                if ($gitProfile -eq $true) { Invoke-Output { Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $git } }
+                Invoke-Output { Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $functions }
+                Invoke-Output { Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $prompt }
+                if ($gitProfile -eq $true) { Invoke-Output { Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $git } }
+                Invoke-Output { Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $functions }
+                Invoke-Output { Remove-Item -Path "C:\Users\Public\Desktop\gVim*" -Force }
+                Invoke-Output { Remove-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Force }
+                Invoke-Output { Remove-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\gVim*" -Force }
+                $endTime = Get-Date
+                $timeTaken = $endTime - $startTime
+                Write-Host "Time taken: $($timeTaken.ToString('mm\:ss'))" -ForegroundColor Cyan
+                Write-Host "PowerShell Profile configuration completed." -ForegroundColor Green
+            }
+            # StartAllBack
+            "4" {
+                if (!($osVersion -like '*Windows 11*')) {
+                    Write-Host "StartAllBack is supported only on Windows 11. Skipping installation." -ForegroundColor Red
+                } else {
+                    Write-Host "Installing StartAllBack..." -ForegroundColor Yellow
+                    $startTime = Get-Date
+                    Invoke-Output {Install-WinGetPackage -Id "StartIsBack.StartAllBack"}
+                    $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
+                    $sabOrbs = $env:localAPPDATA + "\StartAllBack\Orbs"
+                    $sabRegPath = "HKCU:\Software\StartIsBack"
+                    $taskbarOnTopPath = "$exRegPath\StuckRectsLegacy"
+                    $taskbarOnTopName = "Settings"
+                    $taskbarOnTopValue = @(0x30,0x00,0x00,0x00,0xfe,0xff,0xff,0xff,0x02,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x5a,0x00,0x00,0x00,0x32,0x00,0x00,0x00,0x26,0x07,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0x07,0x00,0x00,0x38,0x04,0x00,0x00,0x78,0x00,0x00,0x00,0x01,0x00,0x00,0x00)
+                    Invoke-Output {New-Item -Path $taskbarOnTopPath -Force}
+                    Invoke-Output {New-ItemProperty -Path $taskbarOnTopPath -Name $taskbarOnTopName -Value $taskbarOnTopValue -PropertyType Binary}
+                    Invoke-Output {Copy-Item "..\config\taskbar\orbs\*" $sabOrbs -Force}
+                    Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 1
+                    Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSizeMove" -Value 1
+                    Set-ItemProperty -Path $exRegPath\Advanced -Name "ShowStatusBar" -Value 0
+                    Set-ItemProperty -Path $exRegPath\Advanced -Name "EnableSnapAssistFlyout" -Value 0
+                    Set-ItemProperty -Path $exRegPath\Advanced -Name "EnableSnapBar" -Value 0
+                    Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarGlomLevel" -Value 1
+                    Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSmallIcons" -Value 1
+                    Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSi" -Value 0
+                    Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarAl" -Value 0
+                    Set-ItemProperty -Path $exRegPath\Advanced -Name "UseCompactMode" -Value 1
+                    Set-ItemProperty -Path $sabRegPath -Name "TaskbarTranslucentEffect" -Value 1
+                    Set-ItemProperty -Path $sabRegPath -Name "RestyleControls" -Value 1
+                    Set-ItemProperty -Path $sabRegPath -Name "RestyleIcons" -Value 0
+                    Set-ItemProperty -Path $sabRegPath -Name "WelcomeShown" -Value 3
+                    Set-ItemProperty -Path $sabRegPath -Name "SettingsVersion" -Value 5
+                    Set-ItemProperty -Path $sabRegPath -Name "ModernIconsColorized" -Value 0
+                    Set-ItemProperty -Path $sabRegPath -Name "FrameStyle" -Value 2
+                    Set-ItemProperty -Path $sabRegPath -Name "TaskbarOneSegment" -Value 0
+                    Set-ItemProperty -Path $sabRegPath -Name "TaskbarGrouping" -Value 0
+                    Set-ItemProperty -Path $sabRegPath -Name "TaskbarCenterIcons" -Value 1
+                    Set-ItemProperty -Path $sabRegPath -Name "TaskbarLargerIcons" -Value 0
+                    Set-ItemProperty -Path $sabRegPath -Name "TaskbarSpacierIcons" -Value (-1)
+                    Set-ItemProperty -Path $sabRegPath -Name "TaskbarControlCenter" -Value 1
+                    Set-ItemProperty -Path $sabRegPath -Name "SysTrayStyle" -Value 1
+                    Set-ItemProperty -Path $sabRegPath -Name "SysTrayActionCenter" -Value 1
+                    Set-ItemProperty -Path $sabRegPath -Name "SysTraySpacierIcons" -Value 1
+                    Set-ItemProperty -Path $sabRegPath -Name "DriveGrouping" -Value 1
+                    Set-ItemProperty -Path $sabRegPath -Name "SysTrayClockFormat" -Value 3
+                    Set-ItemProperty -Path $sabRegPath -Name "SysTrayInputSwitch" -Value 0
+                    if ($menuSet -eq 'X' -or $menuSet -eq 'x') {
+                        Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1
+                    }
+                    else {
+                        Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 0
+                        $isWinXMenuActive = (Get-Process -Name WindowsKey -ErrorAction SilentlyContinue) -or (Get-Process -Name StartButton -ErrorAction SilentlyContinue)
+                        if ($isWinXMenuActive) {
+                            Stop-Process -Name WindowsKey -Force
+                            Stop-Process -Name StartButton -Force
+                            Invoke-Output { Uninstall-WinGetPackage -name "Winver UWP" }
+                            $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -match 'startbutton|windowskey' }
+                            foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
+                            $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue
+                            if ($null -eq $tasksFolder) { schtasks /DELETE /TN \WinMac /F > $null 2>&1 }
+                            Get-ChildItem "$env:LOCALAPPDATA\WinMac" | Where-Object { $_.Name -match 'startbutton|windowskey' } | Remove-Item -Recurse -Force
+                            Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
+                            Expand-Archive -Path "..\config\WinX-default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
+                        }
+                    }
+                    Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "(default)" -Value 1
+                    Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
+                    if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') {
+                        $orbBitmapValue = "$orbTheme-rounded.svg"
+                        $unroundValue = 0
+                    }
+                    else { 
+                        $orbBitmapValue = "$orbTheme-squared.svg"
+                        $unroundValue = 1
+                    }
+                    Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value $unroundValue
+                    Set-ItemProperty -Path $sabRegPath -Name "OrbBitmap" -Value $orbBitmapValue
+                    Set-ItemProperty -Path $exRegPath\Advanced -Name "LaunchTO" -Value 1
+                    Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
+                    Invoke-Output {Stop-Process -Name explorer -Force}
+                    Start-Sleep 2
+                    $endTime = Get-Date
+                    $timeTaken = $endTime - $startTime
+                    Write-Host "Time taken: $($timeTaken.ToString('mm\:ss'))" -ForegroundColor Cyan
+                    Write-Host "StartAllBack installation completed." -ForegroundColor Green
                 }
             }
-            $pstreeModule = Get-InstalledModule -Name PSTree -ErrorAction SilentlyContinue
-            if ($null -eq $pstreeModule) {
-                Invoke-Output { Install-Module PSTree -Force }
-            } else {
-                Write-Host "PSTree is already installed." -ForegroundColor Green
-            }
-            $vimParentPath = Join-Path $env:PROGRAMFILES Vim
-            $latestSubfolder = Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -Property CreationTime -Descending | Select-Object -First 1
-            $vimChildPath = $latestSubfolder.FullName
-            Invoke-Output { [Environment]::SetEnvironmentVariable("Path", $env:Path + ";$vimChildPath", [EnvironmentVariableTarget]::Machine) }
-            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
-            Invoke-Output { Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $prompt }
-            if ($gitProfile -eq $true) { Invoke-Output { Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $git } }
-            Invoke-Output { Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $functions }
-            Invoke-Output { Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $prompt }
-            if ($gitProfile -eq $true) { Invoke-Output { Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $git } }
-            Invoke-Output { Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $functions }
-            Invoke-Output { Remove-Item -Path "C:\Users\Public\Desktop\gVim*" -Force }
-            Invoke-Output { Remove-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Force }
-            Invoke-Output { Remove-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\gVim*" -Force }
-            Write-Host "PowerShell Profile configuration completed." -ForegroundColor Green
-        }
-    # StartAllBack
-        "4" {
-            if (!($osVersion -like '*Windows 11*')) {
-                Write-Host "StartAllBack is supported only on Windows 11. Skipping installation." -ForegroundColor Red
-            } else {
-                Write-Host "Installing StartAllBack..." -ForegroundColor Yellow
-                Invoke-Output {Install-WinGetPackage -Id "StartIsBack.StartAllBack"}
-                $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
-                $sabOrbs = $env:localAPPDATA + "\StartAllBack\Orbs"
-                $sabRegPath = "HKCU:\Software\StartIsBack"
-                $taskbarOnTopPath = "$exRegPath\StuckRectsLegacy"
-                $taskbarOnTopName = "Settings"
-                $taskbarOnTopValue = @(0x30,0x00,0x00,0x00,0xfe,0xff,0xff,0xff,0x02,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x5a,0x00,0x00,0x00,0x32,0x00,0x00,0x00,0x26,0x07,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0x07,0x00,0x00,0x38,0x04,0x00,0x00,0x78,0x00,0x00,0x00,0x01,0x00,0x00,0x00)
-                Invoke-Output {New-Item -Path $taskbarOnTopPath -Force}
-                Invoke-Output {New-ItemProperty -Path $taskbarOnTopPath -Name $taskbarOnTopName -Value $taskbarOnTopValue -PropertyType Binary}
-                Invoke-Output {Copy-Item "..\config\taskbar\orbs\*" $sabOrbs -Force}
-                Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 1
-                Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSizeMove" -Value 1
-                Set-ItemProperty -Path $exRegPath\Advanced -Name "ShowStatusBar" -Value 0
-                Set-ItemProperty -Path $exRegPath\Advanced -Name "EnableSnapAssistFlyout" -Value 0
-                Set-ItemProperty -Path $exRegPath\Advanced -Name "EnableSnapBar" -Value 0
-                Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarGlomLevel" -Value 1
-                Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSmallIcons" -Value 1
-                Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSi" -Value 0
-                Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarAl" -Value 0
-                Set-ItemProperty -Path $exRegPath\Advanced -Name "UseCompactMode" -Value 1
-                Set-ItemProperty -Path $sabRegPath -Name "TaskbarTranslucentEffect" -Value 1
-                Set-ItemProperty -Path $sabRegPath -Name "RestyleControls" -Value 1
-                Set-ItemProperty -Path $sabRegPath -Name "RestyleIcons" -Value 0
-                Set-ItemProperty -Path $sabRegPath -Name "WelcomeShown" -Value 3
-                Set-ItemProperty -Path $sabRegPath -Name "SettingsVersion" -Value 5
-                Set-ItemProperty -Path $sabRegPath -Name "ModernIconsColorized" -Value 0
-                Set-ItemProperty -Path $sabRegPath -Name "FrameStyle" -Value 2
-                Set-ItemProperty -Path $sabRegPath -Name "TaskbarOneSegment" -Value 0
-                Set-ItemProperty -Path $sabRegPath -Name "TaskbarGrouping" -Value 0
-                Set-ItemProperty -Path $sabRegPath -Name "TaskbarCenterIcons" -Value 1
-                Set-ItemProperty -Path $sabRegPath -Name "TaskbarLargerIcons" -Value 0
-                Set-ItemProperty -Path $sabRegPath -Name "TaskbarSpacierIcons" -Value (-1)
-                Set-ItemProperty -Path $sabRegPath -Name "TaskbarControlCenter" -Value 1
-                Set-ItemProperty -Path $sabRegPath -Name "SysTrayStyle" -Value 1
-                Set-ItemProperty -Path $sabRegPath -Name "SysTrayActionCenter" -Value 1
-                Set-ItemProperty -Path $sabRegPath -Name "SysTraySpacierIcons" -Value 1
-                Set-ItemProperty -Path $sabRegPath -Name "DriveGrouping" -Value 1
-                Set-ItemProperty -Path $sabRegPath -Name "SysTrayClockFormat" -Value 3
-                Set-ItemProperty -Path $sabRegPath -Name "SysTrayInputSwitch" -Value 0
-                if ($menuSet -eq 'X' -or $menuSet -eq 'x') {
-                    Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1
-                }
-                else {
-                    Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 0
-                    $isWinXMenuActive = (Get-Process -Name WindowsKey -ErrorAction SilentlyContinue) -or (Get-Process -Name StartButton -ErrorAction SilentlyContinue)
-                    if ($isWinXMenuActive) {
-                        Stop-Process -Name WindowsKey -Force
-                        Stop-Process -Name StartButton -Force
-                        Invoke-Output { Uninstall-WinGetPackage -name "Winver UWP" }
-                        $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -match 'startbutton|windowskey' }
-                        foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
-                        $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue
-                        if ($null -eq $tasksFolder) { schtasks /DELETE /TN \WinMac /F > $null 2>&1 }
-                        Get-ChildItem "$env:LOCALAPPDATA\WinMac" | Where-Object { $_.Name -match 'startbutton|windowskey' } | Remove-Item -Recurse -Force
+            # WinMac Menu
+            "5" {
+                if ($adminTest -and $osVersion -like '*Windows 11*') {
+                    if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
+                        Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
+                        $startTime = Get-Date
+                        $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.8' -ErrorAction SilentlyContinue
+                        if ($null -eq $dotNetRuntime) {
+                            Write-Host "Installing .NET Desktop Runtime 8..." -ForegroundColor DarkYellow
+                            Invoke-Output { Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8' }
+                        } else {
+                            Write-Host ".NET Desktop Runtime is already installed." -ForegroundColor Green
+                        }
+                        $uiXaml = Get-WinGetPackage -Id 'Microsoft.UI.Xaml.2.7' -ErrorAction SilentlyContinue
+                        if ($null -eq $uiXaml) {
+                            Write-Host "Installing Microsoft.UI.Xaml 2.7..." -ForegroundColor DarkYellow
+                            Invoke-Output { Install-WinGetPackage -id 'Microsoft.UI.Xaml.2.7' }
+                        } else {
+                            Write-Host "Microsoft.UI.Xaml is already installed." -ForegroundColor Green
+                        }
+                        $winverUWP = Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP -ErrorAction SilentlyContinue
+                        if ($null -eq $winverUWP) {
+                            Write-Host "Installing WinverUWP 2.1.4..." -ForegroundColor DarkYellow
+                            Invoke-WebRequest -Uri 'https://github.com/dongle-the-gadget/WinverUWP/releases/download/v2.1.0.0/2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle' -OutFile '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
+                            Add-AppxPackage -Path '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
+                        } else {
+                            Write-Host "WinverUWP is already installed." -ForegroundColor Green
+                        }
+                        Invoke-Output {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\"}
+                        if ((Get-ItemProperty -Path $sabRegPath -ErrorAction SilentlyContinue).WinKeyFunction -eq 0) {Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1}
+                        $exeKeyPath = "$env:LOCALAPPDATA\WinMac\WindowsKey.exe"
+                        $exeStartPath = "$env:LOCALAPPDATA\WinMac\StartButton.exe"
+                        $folderName = "WinMac"
+                        $taskService = New-Object -ComObject "Schedule.Service"
+                        $taskService.Connect() 
+                        $rootFolder = $taskService.GetFolder("\")
+                        try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }                
+                        if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) }
+                        $taskFolder = "\" + $folderName
+                        $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
+                        $trigger = New-ScheduledTaskTrigger -AtLogon
+                        $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
+                        $actionWinKey = New-ScheduledTaskAction -Execute 'WindowsKey.exe' -WorkingDirectory "$env:LOCALAPPDATA\WinMac\"
+                        $actionStartButton = New-ScheduledTaskAction -Execute "StartButton.exe" -WorkingDirectory "$env:LOCALAPPDATA\WinMac\"
+                        $processes = @("windowskey", "startbutton")
+                        foreach ($process in $processes) {
+                            $runningProcess = Get-Process -Name $process
+                            if ($runningProcess) {Stop-Process -Name $process -Force}
+                        }
+                        if ($sysType -like "*ARM*") {Copy-Item -Path ..\bin\menu\arm64\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force }
+                        else {Copy-Item -Path ..\bin\menu\x64\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force }
+                        Copy-Item -Path ..\bin\menu\startbutton.exe -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force 
                         Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
-                        Expand-Archive -Path "..\config\WinX-default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
+                        $descriptionSB = "WinMac Menu Start button trigger - WinMac/Classic start menu trigger, using these keyboard shortcuts: ctrl + esc, left, middle and right mouse click on Start orb."
+                        $descriptionWK = "WinMac Menu Windows key trigger - C# program to trigger WinX menu using Win key, while keeping default and custom shortcuts with Win key supported."
+                        $parentDirectory = Split-Path -Path $PSScriptRoot -Parent
+                        $winxFolderName = "config\winx\Group2"
+                        $winxFolderPath = Join-Path -Path $parentDirectory -ChildPath $winxFolderName
+                        $WinverUWP = (Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP).InstallLocation
+                        $shortcutPath = "$winxFolderPath\8 - System.lnk"
+                        $newTargetPath = "$WinverUWP\WinverUWP.exe"
+                        $WScriptShell = New-Object -ComObject WScript.Shell
+                        $shortcut = $WScriptShell.CreateShortcut($shortcutPath)
+                        $shortcut.TargetPath = $newTargetPath
+                        $shortcut.Save()
+                        Copy-Item -Path "..\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force 
+                        Invoke-Output {Register-ScheduledTask -TaskName "Start Button" -Action $actionStartButton -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -Description $descriptionSB}
+                        Invoke-Output {Register-ScheduledTask -TaskName "Windows Key" -Action $actionWinKey -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -Description $descriptionWK}
+                        Start-Process $exeKeyPath
+                        Start-Process $exeStartPath
+                        $endTime = Get-Date
+                        $timeTaken = $endTime - $startTime
+                        Write-Host "Time taken: $($timeTaken.ToString('mm\:ss'))" -ForegroundColor Cyan
+                        Write-Host "WinMac Menu installation completed." -ForegroundColor Green
+                    } else {
+                        Write-Host "Skipping WinMac Menu installation." -ForegroundColor Magenta
                     }
+                } elseif ($osVersion -notlike '*Windows 11*') {
+                    Write-Host "WinMac Menu is supported only on Windows 11. Skipping installation." -ForegroundColor Red
+                } elseif ($adminTest -eq $false) {
+                    Write-Host "WinMac Menu requires elevated session. Please run the script as an administrator. Skipping installation." -ForegroundColor Red
                 }
-                Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "(default)" -Value 1
-                Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
-                if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') {
-                    $orbBitmapValue = "$orbTheme-rounded.svg"
-                    $unroundValue = 0
-                }
-                else { 
-                    $orbBitmapValue = "$orbTheme-squared.svg"
-                    $unroundValue = 1
-                }
-                Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value $unroundValue
-                Set-ItemProperty -Path $sabRegPath -Name "OrbBitmap" -Value $orbBitmapValue
-                Set-ItemProperty -Path $exRegPath\Advanced -Name "LaunchTO" -Value 1
-                Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
-                Invoke-Output {Stop-Process -Name explorer -Force}
-                Start-Sleep 2
-                Write-Host "StartAllBack installation completed." -ForegroundColor Green
             }
-        }
-    # WinMac Menu
-        "5" {
-            if ($adminTest -and $osVersion -like '*Windows 11*') {
-                if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
-                    Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
-                    $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.8' -ErrorAction SilentlyContinue
-                    if ($null -eq $dotNetRuntime) {
-                        Write-Host "Installing .NET Desktop Runtime 8..." -ForegroundColor DarkYellow
-                        Invoke-Output { Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8' }
-                    } else {
-                        Write-Host ".NET Desktop Runtime is already installed." -ForegroundColor Green
-                    }
-                    $uiXaml = Get-WinGetPackage -Id 'Microsoft.UI.Xaml.2.7' -ErrorAction SilentlyContinue
-                    if ($null -eq $uiXaml) {
-                        Write-Host "Installing Microsoft.UI.Xaml 2.7..." -ForegroundColor DarkYellow
-                        Invoke-Output { Install-WinGetPackage -id 'Microsoft.UI.Xaml.2.7' }
-                    } else {
-                        Write-Host "Microsoft.UI.Xaml is already installed." -ForegroundColor Green
-                    }
-                    $winverUWP = Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP -ErrorAction SilentlyContinue
-                    if ($null -eq $winverUWP) {
-                        Write-Host "Installing WinverUWP 2.1.4..." -ForegroundColor DarkYellow
-                        Invoke-WebRequest -Uri 'https://github.com/dongle-the-gadget/WinverUWP/releases/download/v2.1.0.0/2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle' -OutFile '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
-                        Add-AppxPackage -Path '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
-                    } else {
-                        Write-Host "WinverUWP is already installed." -ForegroundColor Green
-                    }
-                    Invoke-Output {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\"}
-                    if ((Get-ItemProperty -Path $sabRegPath -ErrorAction SilentlyContinue).WinKeyFunction -eq 0) {Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1}
-                    $exeKeyPath = "$env:LOCALAPPDATA\WinMac\WindowsKey.exe"
-                    $exeStartPath = "$env:LOCALAPPDATA\WinMac\StartButton.exe"
-                    $folderName = "WinMac"
-                    $taskService = New-Object -ComObject "Schedule.Service"
-                    $taskService.Connect() 
-                    $rootFolder = $taskService.GetFolder("\")
-                    try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }                
-                    if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) }
-                    $taskFolder = "\" + $folderName
-                    $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
-                    $trigger = New-ScheduledTaskTrigger -AtLogon
-                    $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
-                    $actionWinKey = New-ScheduledTaskAction -Execute 'WindowsKey.exe' -WorkingDirectory "$env:LOCALAPPDATA\WinMac\"
-                    $actionStartButton = New-ScheduledTaskAction -Execute "StartButton.exe" -WorkingDirectory "$env:LOCALAPPDATA\WinMac\"
-                    $processes = @("windowskey", "startbutton")
-                    foreach ($process in $processes) {
-                        $runningProcess = Get-Process -Name $process
-                        if ($runningProcess) {Stop-Process -Name $process -Force}
-                    }
-                    if ($sysType -like "*ARM*") {Copy-Item -Path ..\bin\menu\arm64\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force }
-                    else {Copy-Item -Path ..\bin\menu\x64\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force }
-                    Copy-Item -Path ..\bin\menu\startbutton.exe -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force 
-                    Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
-                    $descriptionSB = "WinMac Menu Start button trigger - WinMac/Classic start menu trigger, using these keyboard shortcuts: ctrl + esc, left, middle and right mouse click on Start orb."
-                    $descriptionWK = "WinMac Menu Windows key trigger - C# program to trigger WinX menu using Win key, while keeping default and custom shortcuts with Win key supported."
-                    $parentDirectory = Split-Path -Path $PSScriptRoot -Parent
-                    $winxFolderName = "config\winx\Group2"
-                    $winxFolderPath = Join-Path -Path $parentDirectory -ChildPath $winxFolderName
-                    $WinverUWP = (Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP).InstallLocation
-                    $shortcutPath = "$winxFolderPath\8 - System.lnk"
-                    $newTargetPath = "$WinverUWP\WinverUWP.exe"
-                    $WScriptShell = New-Object -ComObject WScript.Shell
-                    $shortcut = $WScriptShell.CreateShortcut($shortcutPath)
-                    $shortcut.TargetPath = $newTargetPath
-                    $shortcut.Save()
-                    Copy-Item -Path "..\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force 
-                    Invoke-Output {Register-ScheduledTask -TaskName "Start Button" -Action $actionStartButton -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -Description $descriptionSB}
-                    Invoke-Output {Register-ScheduledTask -TaskName "Windows Key" -Action $actionWinKey -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -Description $descriptionWK}
-                    Start-Process $exeKeyPath
-                    Start-Process $exeStartPath
-                    Write-Host "WinMac Menu installation completed." -ForegroundColor Green
-                } else {
-                    Write-Host "Skipping WinMac Menu installation." -ForegroundColor Magenta
-                }
-            } elseif ($osVersion -notlike '*Windows 11*') {
-                Write-Host "WinMac Menu is supported only on Windows 11. Skipping installation." -ForegroundColor Red
-            } elseif ($adminTest -eq $false) {
-                Write-Host "WinMac Menu requires elevated session. Please run the script as an administrator. Skipping installation." -ForegroundColor Red
+            # TopNotify
+            "6" {
+                Write-Host "Installing TopNotify..." -ForegroundColor Yellow
+                $startTime = Get-Date
+                Invoke-Output {Install-WinGetPackage -name TopNotify}
+                $app = Get-AppxPackage *TopNotify*
+                Start-Process -FilePath TopNotify.exe -WorkingDirectory $app.InstallLocation
+                $pkgName = $app.PackageFamilyName
+                $startupTask = ($app | Get-AppxPackageManifest).Package.Applications.Application.Extensions.Extension | Where-Object -Property Category -Eq -Value windows.startupTask
+                $taskId = $startupTask.StartupTask.TaskId
+                Start-Process Taskmgr -WindowStyle Hidden
+                while (!(Get-ItemProperty -Path "HKCU:\Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\SystemAppData\$pkgName\$taskId" -Name State)) {Start-Sleep -Seconds 1}
+                Stop-Process -Name Taskmgr
+                $regKey = "HKCU:\Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\SystemAppData\$pkgName\$taskId"
+                Set-ItemProperty -Path $regKey -Name UserEnabledStartupOnce -Value 1
+                Set-ItemProperty -Path $regKey -Name State -Value 2
+                $endTime = Get-Date
+                $timeTaken = $endTime - $startTime
+                Write-Host "Time taken: $($timeTaken.ToString('mm\:ss'))" -ForegroundColor Cyan
+                Write-Host "TopNotify installation completed." -ForegroundColor Green
             }
-        }
-    # TopNotify
-        "6" {
-            Write-Host "Installing TopNotify..." -ForegroundColor Yellow
-            Invoke-Output {Install-WinGetPackage -name TopNotify}
-            $app = Get-AppxPackage *TopNotify*
-            Start-Process -FilePath TopNotify.exe -WorkingDirectory $app.InstallLocation
-            $pkgName = $app.PackageFamilyName
-            $startupTask = ($app | Get-AppxPackageManifest).Package.Applications.Application.Extensions.Extension | Where-Object -Property Category -Eq -Value windows.startupTask
-            $taskId = $startupTask.StartupTask.TaskId
-            Start-Process Taskmgr -WindowStyle Hidden
-            while (!(Get-ItemProperty -Path "HKCU:\Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\SystemAppData\$pkgName\$taskId" -Name State)) {Start-Sleep -Seconds 1}
-            Stop-Process -Name Taskmgr
-            $regKey = "HKCU:\Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\SystemAppData\$pkgName\$taskId"
-            Set-ItemProperty -Path $regKey -Name UserEnabledStartupOnce -Value 1
-            Set-ItemProperty -Path $regKey -Name State -Value 2
-            Write-Host "TopNotify installation completed." -ForegroundColor Green
-        }
     # Stahky
         "7" {
             Write-Host "Installing Stahky..." -ForegroundColor Yellow
+            $startTime = Get-Date
             $url = "https://github.com/joedf/stahky/releases/download/v0.1.0.9/stahky_U64_v0.1.0.9.zip"
             $outputPath = "..\stahky_U64.zip"
             $exePath = "$env:LOCALAPPDATA\Stahky"
@@ -865,7 +890,7 @@ foreach ($app in $selectedApps) {
                 $pathVarUser += ";$exePath"
                 [Environment]::SetEnvironmentVariable("Path", $pathVarUser, "User")
             }
-                        # Assuming $job contains a job ID or job object
+            # Assuming $job contains a job ID or job object
             $job | Get-Jobif (-not ($pathVarMachine -like "* $exePath*")) {
                 $pathVarMachine += "; $exePath"
                 [Environment]::SetEnvironmentVariable("Path", $pathVarMachine, "Machine")
@@ -894,11 +919,15 @@ foreach ($app in $selectedApps) {
             $shortcut2.WorkingDirectory = $newWorkDir2
             $shortcut2.Save()
             Remove-Item $outputPath -Force
+            $endTime = Get-Date
+            $timeTaken = $endTime - $startTime
+            Write-Host "Time taken: $($timeTaken.ToString('mm\:ss'))" -ForegroundColor Cyan
             Write-Host "Stahky installation completed." -ForegroundColor Green
         }
-    # Keyboard Shortcuts
+        # Keyboard Shortcuts
         "8" {
             if ($adminTest) {
+                $startTime = Get-Date
                 Write-Host "Installing Keyboard Shortcuts..." -ForegroundColor Yellow
                 $fileName = 'KeyShortcuts.exe'
                 $fileDirectory = "$env:LOCALAPPDATA\WinMac"
@@ -919,18 +948,22 @@ foreach ($app in $selectedApps) {
                 $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
                 Invoke-Output {Register-ScheduledTask -TaskName "Keyboard Shortcuts" -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -Description $description}
                 Start-Process -FilePath "$env:LOCALAPPDATA\WinMac\KeyShortcuts.exe" -WorkingDirectory $env:LOCALAPPDATA\WinMac
+                $endTime = Get-Date
+                $timeTaken = $endTime - $startTime
+                Write-Host "Time taken: $($timeTaken.ToString('mm\:ss'))" -ForegroundColor Cyan
                 Write-Host "Keyboard Shortcuts installation completed." -ForegroundColor Green
             } else {
                 Write-Host "Keyboard Shortcuts requires elevated session. Please run the script as an administrator. Skipping installation." -ForegroundColor Red
             }
         }
-    # Nexus Dock
+        # Nexus Dock
         "9" {
             if ($adminTest) {
                 Write-Host "Winstep Nexus must be installed without admin rights. Skipping installation." -ForegroundColor Red
             }
             else {
                 Write-Host "Installing Nexus Dock..." -ForegroundColor Yellow
+                $startTime = Get-Date
                 $checkNexus = Get-WinGetPackage -name Nexus
                 if ($null -eq $checkNexus) {
                     $downloadUrl = "https://www.winstep.net/nexus.zip"
@@ -1005,16 +1038,20 @@ foreach ($app in $selectedApps) {
                 $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
                 Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Nexus.lnk" -Destination $programsDir -Force 
                 Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\Nexus.lnk" -Destination $programsDir -Force 
+                $endTime = Get-Date
+                $timeTaken = $endTime - $startTime
+                Write-Host "Time taken: $($timeTaken.ToString('mm\:ss'))" -ForegroundColor Cyan
                 Write-Host "Nexus Dock installation completed." -ForegroundColor Green
             }
         }
-    # Windhawk
+        # Windhawk
         "10" {
             if ($sysType -like "*ARM*") {
                 Write-Host "Windhawk is not supported on ARM devices. Skipping installation." -ForegroundColor Red
             }
             else {
                 Write-Host "Installing Windhawk..." -ForegroundColor Yellow
+                $startTime = Get-Date
                 Invoke-Output {Install-WinGetPackage -name Windhawk}
                 if (-not (Test-Path "$Env:ProgramData\Windhawk\ModsSource")) {New-Item -ItemType Directory -Path "$Env:ProgramData\Windhawk\ModsSource" -Force }
                 if (-not (Test-Path "$Env:ProgramData\Windhawk\Engine\Mods")) {New-Item -ItemType Directory -Path "$Env:ProgramData\Windhawk\Engine\Mods" -Force }
@@ -1025,23 +1062,27 @@ foreach ($app in $selectedApps) {
                     "https://raw.githubusercontent.com/m417z/my-windhawk-mods/main/mods/explorer-name-windows.wh.cpp",
                     "https://raw.githubusercontent.com/realgam3/dot-hide-wh/main/dot-hide.wh.cpp"
                     "https://raw.githubusercontent.com/aubymori/windhawk-mods/refs/heads/main/mods/modernize-folder-picker-dialog.wh.cpp"
-                )
-                $destinationPath = "$Env:ProgramData\Windhawk\ModsSource"
-                foreach ($url in $urls) {
-                    $fileName = [System.IO.Path]::GetFileName($url)
-                    $outputPath = Join-Path -Path $destinationPath -ChildPath $fileName
-                    Invoke-WebRequest -Uri $url -OutFile $outputPath
-                }
-                reg import ..\config\windhawk\settings.reg > $null 2>&1
-                $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
-                Move-Item -Path "C:\Users\Public\Desktop\Windhawk.lnk" -Destination $programsDir -Force
-                Start-Process "$Env:ProgramFiles\Windhawk\Windhawk.exe"
-                Write-Host "Windhawk installation completed." -ForegroundColor Green
+                    )
+                    $destinationPath = "$Env:ProgramData\Windhawk\ModsSource"
+                    foreach ($url in $urls) {
+                        $fileName = [System.IO.Path]::GetFileName($url)
+                        $outputPath = Join-Path -Path $destinationPath -ChildPath $fileName
+                        Invoke-WebRequest -Uri $url -OutFile $outputPath
+                    }
+                    reg import ..\config\windhawk\settings.reg > $null 2>&1
+                    $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+                    Move-Item -Path "C:\Users\Public\Desktop\Windhawk.lnk" -Destination $programsDir -Force
+                    Start-Process "$Env:ProgramFiles\Windhawk\Windhawk.exe"
+                    $endTime = Get-Date
+                    $timeTaken = $endTime - $startTime
+                    Write-Host "Time taken: $($timeTaken.ToString('mm\:ss'))" -ForegroundColor Cyan
+                    Write-Host "Windhawk installation completed." -ForegroundColor Green
             }
         }
     # Hot Corners
         "11" {
             Write-Host "Installing Hot Corners..." -ForegroundColor Yellow
+            $startTime = Get-Date
             $outputPath = '..\temp\WinXCorners.zip'
             $winXCornersUrl = "https://github.com/vhanla/winxcorners/releases/download/1.3.2/WinXCorners1.3.2.zip"
             $winXCornersConfigPath = '..\config\hotcorners\settings.ini'
@@ -1059,17 +1100,29 @@ foreach ($app in $selectedApps) {
             if ($null -eq $uiXaml) {
                 Invoke-Output { Install-WinGetPackage -id 'Microsoft.UI.Xaml.2.7' }
             }
+            $startTimewinxc = Get-Date
             Invoke-WebRequest -Uri $winXCornersUrl -OutFile $outputPath
             if (-not (Test-Path -Path $destinationPath)) {
                 New-Item -ItemType Directory -Path $destinationPath -Force 
             }
             Expand-Archive -Path $outputPath -DestinationPath $destinationPath -Force
             Copy-Item -Path $winXCornersConfigPath -Destination $destinationPath -Force
+            $endTimewinxc = Get-Date
+            $timeTakenwinxc = $endTimewinxc - $startTimewinxc
+            Write-Host "Time taken: $($timeTakenwinxc.ToString('mm\:ss'))" -ForegroundColor Cyan
             Write-Host "Installing Simple Sticky Notes..." -ForegroundColor DarkYellow
+            $startTimessn = Get-Date
             Invoke-Output { winget install SimnetLtd.SimpleStickyNotes --silent --accept-source-agreements --accept-package-agreements }
+            $endTimessn = Get-Date
+            $timeTakenssn = $endTimessn - $startTimessn
+            Write-Host "Time taken: $($timeTakenwinxc.ToString('mm\:ss'))" -ForegroundColor Cyan
             Write-Host "Installing WinLaunch..." -ForegroundColor DarkYellow
+            $startTimewinl = Get-Date
             Invoke-WebRequest -Uri $winLaunchUrl -OutFile $winLaunchOutputPath
             Expand-Archive -Path $winLaunchOutputPath -DestinationPath $winLaunchDestinationPath -Force
+            $endTimewinl = Get-Date
+            $timeTakenwinl = $endTimewinl - $startTimewinl
+            Write-Host "Time taken: $($timeTakenwinl.ToString('mm\:ss'))" -ForegroundColor Cyan
             Copy-Item -Path ..\config\HotCorners\winlaunch.ico -Destination $winLaunchDestinationPath -Force
             Remove-Item $winLaunchOutputPath -Force
             Start-Process "$winLaunchDestinationPath\WinLaunch.exe"
@@ -1103,12 +1156,16 @@ foreach ($app in $selectedApps) {
             if ($sysType -like "*ARM*") {Copy-Item -Path ..\bin\hotcorners\arm64\* -Destination "$env:LOCALAPPDATA\WinMac\hotcorners\" -Recurse -Force}
             else {Copy-Item -Path ..\bin\hotcorners\x64\* -Destination "$env:LOCALAPPDATA\WinMac\hotcorners\" -Recurse -Force}
             New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "WinXCorners" -Value "$destinationPath\WinXCorners.exe" 
+            $endTime = Get-Date
+            $timeTaken = $endTime - $startTime
+            Write-Host "Time taken: $($timeTaken.ToString('mm\:ss'))" -ForegroundColor Cyan
             Write-Host "Hot Corners installation completed." -ForegroundColor Green
-            }
-    # Other
+        }
+        # Other
         "12" {
-        ## Black Cursor
+            ## Black Cursor
             Write-Host "Configuring Other Settings..." -ForegroundColor Yellow
+            $startTime = Get-Date
             Write-Host "Black cursor..." -ForegroundColor DarkYellow
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             $curSourceFolder = (Get-Item -Path "..\config\cursor").FullName
@@ -1250,6 +1307,9 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
                 }
             }     
             Stop-Process -Name explorer -Force
+            $endTime = Get-Date
+            $timeTaken = $endTime - $startTime
+            Write-Host "Time taken: $($timeTaken.ToString('mm\:ss'))" -ForegroundColor Cyan
             Write-Host "Configuring Other Settings completed." -ForegroundColor Green
         }
     }
