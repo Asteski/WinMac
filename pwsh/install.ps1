@@ -54,14 +54,15 @@ if (!($noGUI)) {
     $iconFolderPath = Join-Path -Path $parentDirectory -ChildPath $iconFolderName
     $topTextBlock = "PowerShell GUI deployment wizard for Windows and macOS hybrid"
     $bottomTextBlock1 = 'Important Notes:'
-    $bottomTextBlock2 = 'PowerShell profile files will be removed and replaced with new ones. Please make sure to backup your current profiles if needed.'
-    $bottomTextBlock3 = 'The author of this script is not responsible for any damage caused by running it. Highly recommend to create a system restore point before proceeding with the installation process to ensure you can revert any changes if necessary.'
-    $bottomTextBlock4 = 'For guide on how to use the script, please refer to the Wiki page on WinMac GitHub page: https://github.com/Asteski/WinMac/wiki'
+    $bottomTextBlock2 = 'Please disable Windows Defender/3rd party Anti-virus to prevent issues with applying icons pack or exclude .\bin\iconpack subdirectory in locally cloned WinMac folder.'
+    $bottomTextBlock3 = 'PowerShell default profile will be removed and replaced with new one. Please make sure to backup your current profile if needed.'
+    $bottomTextBlock4 = 'The author of this script is not responsible for any damage caused by running it. Highly recommend to create a system restore point before proceeding with the installation process to ensure you can revert any changes if necessary.'
+    $bottomTextBlock5 = 'For guide on how to use the script, please refer to the Wiki page on WinMac GitHub page: https://github.com/Asteski/WinMac/wiki'
 [xml]$xaml = @"
 <Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="WinMac Deployment Wizard" Height="860" Width="480" WindowStartupLocation="CenterScreen" Background="$backgroundColor" Icon="$iconFolderPath\wizard.ico">
+    Title="WinMac Deployment Wizard" Height="920" Width="480" WindowStartupLocation="CenterScreen" Background="$backgroundColor" Icon="$iconFolderPath\wizard.ico">
     <Window.Resources>
         <SolidColorBrush x:Key="BackgroundBrush" Color="$backgroundColor"/>
         <SolidColorBrush x:Key="ForegroundBrush" Color="$foregroundColor"/>
@@ -185,6 +186,7 @@ if (!($noGUI)) {
                     <TextBlock Margin="10" Foreground="{StaticResource ForegroundBrush}" Text="$bottomTextBlock2" TextWrapping="Wrap"/>
                     <TextBlock Margin="10" Foreground="{StaticResource ForegroundBrush}" Text="$bottomTextBlock3" TextWrapping="Wrap"/>
                     <TextBlock Margin="10" Foreground="{StaticResource ForegroundBrush}" Text="$bottomTextBlock4" TextWrapping="Wrap"/>
+                    <TextBlock Margin="10" Foreground="{StaticResource ForegroundBrush}" Text="$bottomTextBlock5" TextWrapping="Wrap"/>
 
             </StackPanel>
         </ScrollViewer>
@@ -298,6 +300,10 @@ The author of this script is not responsible for any damage caused by
 running it. Highly recommend to create a system restore point 
 before proceeding with the installation process to ensure you can 
 revert any changes if necessary.
+
+Please disable Windows Defender/3rd party Anti-virus to prevent issues 
+with applying icons pack or exclude ".\bin\iconpack" subdirectory 
+in locally cloned WinMac folder.
 
 For guide on how to use the script, please refer to the Wiki page 
 on WinMac GitHub page:
@@ -1229,10 +1235,10 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
         ## Icons Pack
             if ((Get-ItemProperty -Path $regPath -Name "IconPack" -ErrorAction SilentlyContinue).IconPack -ne 1) {
                 if ($blueOrYellow -eq "B" -or $blueOrYellow -eq "b") {
-                    $exePath = "..\bin\iconpack_blue_folders.exe"
+                    $exePath = "..\bin\iconpack\iconpack_blue_folders.exe"
                 }
                 elseif ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {
-                    $exePath = "..\bin\iconpack_yellow_folders.exe"
+                    $exePath = "..\bin\iconpack\iconpack_yellow_folders.exe"
                 }
                 $arguments = "/S"
                 Write-Host "Deploying icon pack..." -ForegroundColor DarkYellow
