@@ -560,8 +560,8 @@ foreach ($app in $selectedApps) {
     # PowerToys
         "1" {
             Write-Host "Installing PowerToys..." -ForegroundColor Yellow
-            winget configure --enable | Out-Null
-            pwsh -NoProfile -Command "winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null"
+            winget configure --enable
+            pwsh -NoProfile -Command "winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements"
             # Start-Process pwsh -ArgumentList "-NoProfile -Command winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null" -Wait
             Copy-Item -Path "..\config\powertoys\ptr\ptr.exe" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
             if ($blueOrYellow -eq 'B' -or $blueOrYellow -eq 'b') {
