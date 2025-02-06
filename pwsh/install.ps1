@@ -884,7 +884,7 @@ foreach ($app in $selectedApps) {
     # Stahky
         "7" {
             Write-Host "Installing Stahky..." -ForegroundColor Yellow
-            $url = "https://github.com/joedf/stahky/releases/download/v0.1.0.9/stahky_U64_v0.1.0.9.zip"
+            $url = "https://github.com/joedf/stahky/releases/download/v0.2.0.1/stahky_U64_v0.2.0.1.zip"
             $outputPath = "..\stahky_U64.zip"
             $exePath = "$env:LOCALAPPDATA\Stahky"
             Invoke-Output {New-Item -ItemType Directory -Path $exePath -Force}
