@@ -2,7 +2,7 @@ param (
     [switch]$noGUI,
     [switch]$debug
 )
-$version = "0.8.1"
+$version = "0.8.2"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_install_log_$date.txt"
 $transcriptFile = "WinMac_install_transcript_$date.txt"
@@ -54,7 +54,7 @@ if (!($noGUI)) {
     $iconFolderPath = Join-Path -Path $parentDirectory -ChildPath $iconFolderName
     $topTextBlock = "PowerShell GUI deployment wizard for Windows and macOS hybrid"
     $bottomTextBlock1 = 'Important Notes:'
-    $bottomTextBlock2 = 'Please disable Windows Defender/3rd party Anti-virus to prevent issues with applying icons pack or exclude .\bin\iconpack subdirectory in locally cloned WinMac folder.'
+    $bottomTextBlock2 = 'Please disable Windows Defender/3rd party Anti-virus to prevent issues with applying icons pack or exclude .\bin\iconpack\ subdirectory in locally cloned WinMac folder.'
     $bottomTextBlock3 = 'PowerShell default profile will be removed and replaced with new one. Please make sure to backup your current profile if needed.'
     $bottomTextBlock4 = 'The author of this script is not responsible for any damage caused by running it. Highly recommend to create a system restore point before proceeding with the installation process to ensure you can revert any changes if necessary.'
     $bottomTextBlock5 = 'For guide on how to use the script, please refer to the Wiki page on WinMac GitHub page: https://github.com/Asteski/WinMac/wiki'
@@ -302,7 +302,7 @@ before proceeding with the installation process to ensure you can
 revert any changes if necessary.
 
 Please disable Windows Defender/3rd party Anti-virus to prevent issues 
-with applying icons pack or exclude ".\bin\iconpack" subdirectory 
+with applying icons pack or exclude ".\bin\iconpack\" subdirectory 
 in locally cloned WinMac folder.
 
 For guide on how to use the script, please refer to the Wiki page 

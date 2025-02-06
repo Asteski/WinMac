@@ -2,7 +2,7 @@ param (
     [switch]$noGUI,
     [switch]$debug
 )
-$version = "0.8.1"
+$version = "0.8.2"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_uninstall_log_$date.txt"
 $transcriptFile = "WinMac_uninstall_transcript_$date.txt"
