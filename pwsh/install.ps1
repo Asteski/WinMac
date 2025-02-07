@@ -1266,10 +1266,10 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Force | Out-Null
         ## Icons Pack
 Write-Host @"
-`e[91m$("Please make sure that MS Defender/3rd party tool is disabled,
+`e[93m$("Please make sure that MS Defender/3rd party tool is disabled,
 otherwise MS Defender will block installation of Icon Pack!")`e[0m
 "@
-            $defender = Read-Host "Do you wat to install Icon Pack? (Y/n)"
+            $defender = Read-Host "Do you want to continue? (Y/n)"
             if ($defender -eq 'Y' -or $defender -eq 'y') {       
                 if ((Get-ItemProperty -Path $regPath -Name "IconPack" -ErrorAction SilentlyContinue).IconPack -ne 1) {
                     if ($blueOrYellow -eq "B" -or $blueOrYellow -eq "b") {
@@ -1295,7 +1295,7 @@ otherwise MS Defender will block installation of Icon Pack!")`e[0m
                 }
             }
             else {
-                Write-Host "Icon Pack installation skipped." -ForegroundColor Red
+                Write-Host "Icon Pack installation skipped." -ForegroundColor DarkoRed
             }
             Stop-Process -Name explorer -Force
             Write-Host "Configuring Other Settings completed." -ForegroundColor Green

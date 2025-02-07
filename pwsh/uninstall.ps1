@@ -588,10 +588,10 @@ uint fWinIni);
             New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Force | Out-Null
             Invoke-Output { Remove-Item -Path "$env:LOCALAPPDATA\WinMac\theme.ps1" }
             Write-Host @"
-`e[91m$("Please make sure that MS Defender/3rd party tool is disabled,
+`e[93m$("Please make sure that MS Defender/3rd party tool is disabled,
 otherwise MS Defender will block uninstallation of Icon Pack!")`e[0m
 "@
-            $defender = Read-Host "Do you wat to uninstall Icon Pack? (Y/n)"
+            $defender = Read-Host "Do you want to continue? (Y/n)"
             if ($defender -eq 'Y' -or $defender -eq 'y') {
                 Set-ItemProperty -Path $regPath -Name "IconPack" -Value 0 | Out-Null
                 Invoke-Output { Uninstall-WinGetPackage -name 'IconPack Installer' }
@@ -611,7 +611,7 @@ otherwise MS Defender will block uninstallation of Icon Pack!")`e[0m
                     }
                 } until ($success -or (Get-Date) -ge $endTime)
             else {
-                Write-Host "Icon Pack uninstallation skipped." -ForegroundColor Red
+                Write-Host "Icon Pack uninstallation skipped." -ForegroundColor DarkRed
             }
             Write-Host "Uninstalling Other Settings completed." -ForegroundColor Green
             }
