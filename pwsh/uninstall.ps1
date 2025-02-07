@@ -3,6 +3,7 @@ param (
     [switch]$debug
 )
 $version = "0.8.2"
+$sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_uninstall_log_$date.txt"
 $transcriptFile = "WinMac_uninstall_transcript_$date.txt"
@@ -437,12 +438,18 @@ foreach ($app in $selectedApps) {
     # WinMac Menu
         "5" {
             Write-Host "Uninstalling WinMac Menu..." -ForegroundColor Yellow
-            Stop-Process -Name WindowsKey -Force
-            Stop-Process -Name StartButton -Force
+            if ($sysType -like "*ARM*"){
+                Stop-Process -Name WindowsKey -Force
+                Stop-Process -Name StartButton -Force
+                $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -match 'Start Button|Windows Key' }
+                foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
+                Get-ChildItem "$env:LOCALAPPDATA\WinMac" | Where-Object { $_.Name -match 'startbutton|windowskey' } | Remove-Item -Recurse -Force
+            }
+            else {
+                Stop-Process -Name startmenu -Force | Out-Null
+                winget uninstall --id "Open-Shell.Open-Shell-Menu" --source winget --force | Out-Null    
+            }
             Invoke-Output { Uninstall-WinGetPackage -name "Winver UWP" }
-            $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -match 'Start Button|Windows Key' }
-            foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
-            Get-ChildItem "$env:LOCALAPPDATA\WinMac" | Where-Object { $_.Name -match 'startbutton|windowskey' } | Remove-Item -Recurse -Force
             Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
             Expand-Archive -Path "..\config\WinX-default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
             $sabRegPath = "HKCU:\Software\StartIsBack"
