@@ -2,7 +2,7 @@ param (
     [switch]$noGUI,
     [switch]$debug
 )
-$version = "0.8.1"
+$version = "0.8.2"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_install_log_$date.txt"
 $transcriptFile = "WinMac_install_transcript_$date.txt"
@@ -54,7 +54,7 @@ if (!($noGUI)) {
     $iconFolderPath = Join-Path -Path $parentDirectory -ChildPath $iconFolderName
     $topTextBlock = "PowerShell GUI deployment wizard for Windows and macOS hybrid"
     $bottomTextBlock1 = 'Important Notes:'
-    $bottomTextBlock2 = 'Please disable Windows Defender/3rd party Anti-virus to prevent issues with applying icons pack or exclude .\bin\iconpack subdirectory in locally cloned WinMac folder.'
+    $bottomTextBlock2 = 'Please disable Windows Defender/3rd party Anti-virus, to prevent issues with applying icons pack.'
     $bottomTextBlock3 = 'PowerShell default profile will be removed and replaced with new one. Please make sure to backup your current profile if needed.'
     $bottomTextBlock4 = 'The author of this script is not responsible for any damage caused by running it. Highly recommend to create a system restore point before proceeding with the installation process to ensure you can revert any changes if necessary.'
     $bottomTextBlock5 = 'For guide on how to use the script, please refer to the Wiki page on WinMac GitHub page: https://github.com/Asteski/WinMac/wiki'
@@ -293,6 +293,9 @@ Write-Host @"
 This script is responsible for installing all or specific WinMac 
 components.
 
+Please disable Windows Defender/3rd party Anti-virus, to prevent issues 
+with applying icons pack.
+
 PowerShell profile files will be removed and replaced with new ones.
 Please make sure to backup your current profiles if needed.
 
@@ -300,10 +303,6 @@ The author of this script is not responsible for any damage caused by
 running it. Highly recommend to create a system restore point 
 before proceeding with the installation process to ensure you can 
 revert any changes if necessary.
-
-Please disable Windows Defender/3rd party Anti-virus to prevent issues 
-with applying icons pack or exclude ".\bin\iconpack" subdirectory 
-in locally cloned WinMac folder.
 
 For guide on how to use the script, please refer to the Wiki page 
 on WinMac GitHub page:
@@ -562,7 +561,6 @@ foreach ($app in $selectedApps) {
             Write-Host "Installing PowerToys..." -ForegroundColor Yellow
             winget configure --enable | Out-Null
             pwsh -NoProfile -Command "winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null"
-            # Start-Process pwsh -ArgumentList "-NoProfile -Command winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null" -Wait
             Copy-Item -Path "..\config\powertoys\ptr\ptr.exe" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
             if ($blueOrYellow -eq 'B' -or $blueOrYellow -eq 'b') {
                 Copy-Item -Path "..\config\powertoys\RunPlugins" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
@@ -781,51 +779,83 @@ foreach ($app in $selectedApps) {
                         Write-Host "WinverUWP is already installed." -ForegroundColor Green
                     }
                     Invoke-Output {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\"}
-                    if ((Get-ItemProperty -Path $sabRegPath -ErrorAction SilentlyContinue).WinKeyFunction -eq 0) {Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1}
-                    $exeKeyPath = "$env:LOCALAPPDATA\WinMac\WindowsKey.exe"
-                    $exeStartPath = "$env:LOCALAPPDATA\WinMac\StartButton.exe"
-                    $folderName = "WinMac"
-                    $taskService = New-Object -ComObject "Schedule.Service"
-                    $taskService.Connect() | Out-Null
-                    $rootFolder = $taskService.GetFolder("\")
-                    try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }                
-                    if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
-                    $taskFolder = "\" + $folderName
-                    $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
-                    $trigger = New-ScheduledTaskTrigger -AtLogon
-                    $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
-                    $actionWinKey = New-ScheduledTaskAction -Execute 'WindowsKey.exe' -WorkingDirectory "$env:LOCALAPPDATA\WinMac\"
-                    $actionStartButton = New-ScheduledTaskAction -Execute "StartButton.exe" -WorkingDirectory "$env:LOCALAPPDATA\WinMac\"
-                    $processes = @("windowskey", "startbutton")
-                    foreach ($process in $processes) {
-                        $runningProcess = Get-Process -Name $process
-                        if ($runningProcess) {Stop-Process -Name $process -Force}
+                    if ($sysType -like "*ARM*"){
+                        if ((Get-ItemProperty -Path $sabRegPath -ErrorAction SilentlyContinue).WinKeyFunction -eq 0) {Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1}
+                        $exeKeyPath = "$env:LOCALAPPDATA\WinMac\WindowsKey.exe"
+                        $exeStartPath = "$env:LOCALAPPDATA\WinMac\StartButton.exe"
+                        $folderName = "WinMac"
+                        $taskService = New-Object -ComObject "Schedule.Service"
+                        $taskService.Connect() | Out-Null
+                        $rootFolder = $taskService.GetFolder("\")
+                        try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }                
+                        if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
+                        $taskFolder = "\" + $folderName
+                        $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
+                        $trigger = New-ScheduledTaskTrigger -AtLogon
+                        $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
+                        $actionWinKey = New-ScheduledTaskAction -Execute 'WindowsKey.exe' -WorkingDirectory "$env:LOCALAPPDATA\WinMac\"
+                        $actionStartButton = New-ScheduledTaskAction -Execute "StartButton.exe" -WorkingDirectory "$env:LOCALAPPDATA\WinMac\"
+                        $processes = @("windowskey", "startbutton")
+                        foreach ($process in $processes) {
+                            $runningProcess = Get-Process -Name $process
+                            if ($runningProcess) {Stop-Process -Name $process -Force}
+                        }
+                        Copy-Item -Path ..\bin\menu\arm64\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force
+                        Copy-Item -Path ..\bin\menu\startbutton.exe -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force 
+                        Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
+                        $descriptionSB = "WinMac Menu Start button trigger - WinMac/Classic start menu trigger, using these keyboard shortcuts: ctrl + esc, left, middle and right mouse click on Start orb."
+                        $descriptionWK = "WinMac Menu Windows key trigger - C# program to trigger WinX menu using Win key, while keeping default and custom shortcuts with Win key supported."
+                        $parentDirectory = Split-Path -Path $PSScriptRoot -Parent
+                        $winxFolderName = "config\winx\Group2"
+                        $winxFolderPath = Join-Path -Path $parentDirectory -ChildPath $winxFolderName
+                        $WinverUWP = (Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP).InstallLocation
+                        $shortcutPath = "$winxFolderPath\8 - System.lnk"
+                        $newTargetPath = "$WinverUWP\WinverUWP.exe"
+                        $WScriptShell = New-Object -ComObject WScript.Shell
+                        $shortcut = $WScriptShell.CreateShortcut($shortcutPath)
+                        $shortcut.TargetPath = $newTargetPath
+                        $shortcut.Save()
+                        Copy-Item -Path "..\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force 
+                        Invoke-Output {Register-ScheduledTask -TaskName "Start Button" -Action $actionStartButton -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -Description $descriptionSB}
+                        Invoke-Output {Register-ScheduledTask -TaskName "Windows Key" -Action $actionWinKey -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -Description $descriptionWK}
+                        Start-Process $exeKeyPath
+                        Start-Process $exeStartPath    
                     }
-                    if ($sysType -like "*ARM*") {Copy-Item -Path ..\bin\menu\arm64\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force }
-                    else {Copy-Item -Path ..\bin\menu\x64\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force }
-                    Copy-Item -Path ..\bin\menu\startbutton.exe -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force 
-                    Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
-                    $descriptionSB = "WinMac Menu Start button trigger - WinMac/Classic start menu trigger, using these keyboard shortcuts: ctrl + esc, left, middle and right mouse click on Start orb."
-                    $descriptionWK = "WinMac Menu Windows key trigger - C# program to trigger WinX menu using Win key, while keeping default and custom shortcuts with Win key supported."
-                    $parentDirectory = Split-Path -Path $PSScriptRoot -Parent
-                    $winxFolderName = "config\winx\Group2"
-                    $winxFolderPath = Join-Path -Path $parentDirectory -ChildPath $winxFolderName
-                    $WinverUWP = (Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP).InstallLocation
-                    $shortcutPath = "$winxFolderPath\8 - System.lnk"
-                    $newTargetPath = "$WinverUWP\WinverUWP.exe"
-                    $WScriptShell = New-Object -ComObject WScript.Shell
-                    $shortcut = $WScriptShell.CreateShortcut($shortcutPath)
-                    $shortcut.TargetPath = $newTargetPath
-                    $shortcut.Save()
-                    Copy-Item -Path "..\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force 
-                    Invoke-Output {Register-ScheduledTask -TaskName "Start Button" -Action $actionStartButton -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -Description $descriptionSB}
-                    Invoke-Output {Register-ScheduledTask -TaskName "Windows Key" -Action $actionWinKey -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -Description $descriptionWK}
-                    Start-Process $exeKeyPath
-                    Start-Process $exeStartPath
+                    else {
+                        Write-Host "Installing Open-Shell..." -ForegroundColor DarkYellow
+                        $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\StartMenu.exe"
+                        winget install --id "Open-Shell.Open-Shell-Menu" --source winget --custom 'ADDLOCAL=StartMenu' --silent | Out-Null
+                        Stop-Process -Name StartMenu -Force | Out-Null
+                        New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force | Out-Null
+                        New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force | Out-Null
+                        New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu" -Force | Out-Null
+                        New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell\Settings" -Force | Out-Null
+                        New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu\Settings" -Force | Out-Null
+                        Set-ItemProperty -Path "HKCU:\Software\OpenShell\OpenShell\Settings" -Name "Nightly" -Value 0x00000001
+                        Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "Version" -Value 0x040400bf
+                        Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "DisablePinExt" -Value 1
+                        Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "EnableContextMenu" -Value 0
+                        Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "MouseClick" -Value "Command"
+                        Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftClick" -Value "Command"
+                        Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "WinKey" -Value "Command"
+                        Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "MouseClickCommand" -Value "$env:LOCALAPPDATA\WinMac\start.exe"
+                        Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftClickCommand" -Value "Nothing"
+                        Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "WinKeyCommand" -Value "$env:LOCALAPPDATA\WinMac\start.exe"
+                        Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftWin" -Value "Nothing"
+                        Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftRight" -Value 1
+                        Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "SearchBox" -Value "Hide"
+                        Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
+                        Copy-Item -Path "..\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
+                        Copy-Item -Path ..\bin\menu\x64\osh\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force
+                        Stop-Process -Name Explorer
+                        Start-Process $shellExePath
+                    }
                     Write-Host "WinMac Menu installation completed." -ForegroundColor Green
                 } else {
                     Write-Host "Skipping WinMac Menu installation." -ForegroundColor Magenta
                 }
+            } elseif ($sysType -like "*ARM*") {
+
             } elseif ($osVersion -notlike '*Windows 11*') {
                 Write-Host "WinMac Menu is supported only on Windows 11. Skipping installation." -ForegroundColor Red
             } elseif ($adminTest -eq $false) {
@@ -852,7 +882,7 @@ foreach ($app in $selectedApps) {
     # Stahky
         "7" {
             Write-Host "Installing Stahky..." -ForegroundColor Yellow
-            $url = "https://github.com/joedf/stahky/releases/download/v0.1.0.9/stahky_U64_v0.1.0.9.zip"
+            $url = "https://github.com/joedf/stahky/releases/download/v0.2.0.1/stahky_U64_v0.2.0.1.zip"
             $outputPath = "..\stahky_U64.zip"
             $exePath = "$env:LOCALAPPDATA\Stahky"
             Invoke-Output {New-Item -ItemType Directory -Path $exePath -Force}
@@ -1233,28 +1263,38 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" -Force | Out-Null
             Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Force | Out-Null
         ## Icons Pack
-            if ((Get-ItemProperty -Path $regPath -Name "IconPack" -ErrorAction SilentlyContinue).IconPack -ne 1) {
-                if ($blueOrYellow -eq "B" -or $blueOrYellow -eq "b") {
-                    $exePath = "..\bin\iconpack\iconpack_blue_folders.exe"
+Write-Host @"
+`e[91m$("Please make sure that MS Defender/3rd party tool is disabled,
+otherwise MS Defender will block installation of Icon Pack!")`e[0m
+"@
+            $defender = Read-Host "Do you want to continue? (Y/n)"
+            if ($defender -eq 'Y' -or $defender -eq 'y') {       
+                if ((Get-ItemProperty -Path $regPath -Name "IconPack" -ErrorAction SilentlyContinue).IconPack -ne 1) {
+                    if ($blueOrYellow -eq "B" -or $blueOrYellow -eq "b") {
+                        $exePath = "..\bin\iconpack\iconpack_blue_folders.exe"
+                    }
+                    elseif ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {
+                        $exePath = "..\bin\iconpack\iconpack_yellow_folders.exe"
+                    }
+                    $arguments = "/S"
+                    Write-Host "Deploying icon pack..." -ForegroundColor DarkYellow
+                    Start-Process -FilePath $exePath -ArgumentList $arguments -NoNewWindow
+                    Set-ItemProperty -Path $regPath -Name "IconPack" -Value 1 | Out-Null
+                    Start-Sleep -s 55
+                    if ($blueOrYellow -eq "B" -or $blueOrYellow -eq "b") {
+                        $shortcutPath = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\File Explorer.lnk"
+                        $systemDllPath = "C:\Windows\System32\imageres.dll"
+                        $iconIndex = 265 # Replace with the desired icon index
+                        $shell = New-Object -ComObject WScript.Shell
+                        $shortcut = $shell.CreateShortcut($shortcutPath)
+                        $shortcut.IconLocation = "$systemDllPath,$iconIndex"
+                        $shortcut.Save()
+                    }
                 }
-                elseif ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {
-                    $exePath = "..\bin\iconpack\iconpack_yellow_folders.exe"
-                }
-                $arguments = "/S"
-                Write-Host "Deploying icon pack..." -ForegroundColor DarkYellow
-                Start-Process -FilePath $exePath -ArgumentList $arguments -NoNewWindow
-                Set-ItemProperty -Path $regPath -Name "IconPack" -Value 1 | Out-Null
-                Start-Sleep -s 55
-                if ($blueOrYellow -eq "B" -or $blueOrYellow -eq "b") {
-                    $shortcutPath = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\File Explorer.lnk"
-                    $systemDllPath = "C:\Windows\System32\imageres.dll"
-                    $iconIndex = 265 # Replace with the desired icon index
-                    $shell = New-Object -ComObject WScript.Shell
-                    $shortcut = $shell.CreateShortcut($shortcutPath)
-                    $shortcut.IconLocation = "$systemDllPath,$iconIndex"
-                    $shortcut.Save()
-                }
-            }     
+            }
+            else {
+                Write-Host "Icon Pack installation skipped." -ForegroundColor DarkoRed
+            }
             Stop-Process -Name explorer -Force
             Write-Host "Configuring Other Settings completed." -ForegroundColor Green
         }

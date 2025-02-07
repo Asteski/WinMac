@@ -2,7 +2,8 @@ param (
     [switch]$noGUI,
     [switch]$debug
 )
-$version = "0.8.1"
+$version = "0.8.2"
+$sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_uninstall_log_$date.txt"
 $transcriptFile = "WinMac_uninstall_transcript_$date.txt"
@@ -52,9 +53,10 @@ if (!($noGUI)) {
     $iconFolderPath = Join-Path -Path $parentDirectory -ChildPath $iconFolderName
     $topTextBlock = "PowerShell GUI uninstaller wizard for Windows and macOS hybrid"
     $bottomTextBlock1 = 'Important Notes:'
-    $bottomTextBlock2 = 'PowerShell profile files will be removed, please make sure to backup your current profiles if needed.'
-    $bottomTextBlock3 = 'Vim and Nexus packages will show prompt to uninstall, please confirm the uninstallations manually.'
-    $bottomTextBlock4 = 'For guide on how to use the script, please refer to the Wiki page on WinMac GitHub page: https://github.com/Asteski/WinMac/wiki'
+    $bottomTextBlock2 = 'Please disable Windows Defender/3rd party Anti-virus, to prevent issues with uninsalling icons pack.'
+    $bottomTextBlock3 = 'PowerShell profile files will be removed, please make sure to backup your current profiles if needed.'
+    $bottomTextBlock4 = 'Vim and Nexus packages will show prompt to uninstall, please confirm the uninstallations manually.'
+    $bottomTextBlock5 = 'For guide on how to use the script, please refer to the Wiki page on WinMac GitHub page: https://github.com/Asteski/WinMac/wiki'
 [xml]$xaml = @"
 <Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -149,6 +151,7 @@ if (!($noGUI)) {
                     <TextBlock Margin="10" Foreground="{StaticResource ForegroundBrush}" Text="$bottomTextBlock2" TextWrapping="Wrap"/>
                     <TextBlock Margin="10" Foreground="{StaticResource ForegroundBrush}" Text="$bottomTextBlock3" TextWrapping="Wrap"/>
                     <TextBlock Margin="10" Foreground="{StaticResource ForegroundBrush}" Text="$bottomTextBlock4" TextWrapping="Wrap"/>
+                    <TextBlock Margin="10" Foreground="{StaticResource ForegroundBrush}" Text="$bottomTextBlock5" TextWrapping="Wrap"/>
 
             </StackPanel>
         </ScrollViewer>
@@ -243,6 +246,9 @@ Write-Host @"
 
 This script is responsible for uninstalling all or specific WinMac 
 components.
+
+Please disable Windows Defender/3rd party Anti-virus, to prevent issues 
+with uninstalling icons pack.
 
 PowerShell profile files will be removed, please make sure to backup 
 your current profiles if needed.
@@ -437,12 +443,18 @@ foreach ($app in $selectedApps) {
     # WinMac Menu
         "5" {
             Write-Host "Uninstalling WinMac Menu..." -ForegroundColor Yellow
-            Stop-Process -Name WindowsKey -Force
-            Stop-Process -Name StartButton -Force
+            if ($sysType -like "*ARM*"){
+                Stop-Process -Name WindowsKey -Force
+                Stop-Process -Name StartButton -Force
+                $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -match 'Start Button|Windows Key' }
+                foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
+                Get-ChildItem "$env:LOCALAPPDATA\WinMac" | Where-Object { $_.Name -match 'startbutton|windowskey' } | Remove-Item -Recurse -Force
+            }
+            else {
+                Stop-Process -Name startmenu -Force | Out-Null
+                winget uninstall --id "Open-Shell.Open-Shell-Menu" --source winget --force | Out-Null    
+            }
             Invoke-Output { Uninstall-WinGetPackage -name "Winver UWP" }
-            $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -match 'Start Button|Windows Key' }
-            foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
-            Get-ChildItem "$env:LOCALAPPDATA\WinMac" | Where-Object { $_.Name -match 'startbutton|windowskey' } | Remove-Item -Recurse -Force
             Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
             Expand-Archive -Path "..\config\WinX-default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
             $sabRegPath = "HKCU:\Software\StartIsBack"
@@ -580,24 +592,36 @@ uint fWinIni);
             New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" -Force | Out-Null
             New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Force | Out-Null
             Invoke-Output { Remove-Item -Path "$env:LOCALAPPDATA\WinMac\theme.ps1" }
-            Set-ItemProperty -Path $regPath -Name "IconPack" -Value 0 | Out-Null
-            Invoke-Output { Uninstall-WinGetPackage -name 'IconPack Installer' }
-            while (Get-WinGetPackage -name 'IconPack Installer' -ErrorAction SilentlyContinue) {
-                Start-Sleep -Seconds 5
-            }
-            Stop-Process -Name explorer -Force
-            $endTime = (Get-Date).AddMinutes(5)
-            do {
-                try {
-                    if ((Get-ChildItem -Path "C:\IconPack" -Recurse | Measure-Object).Count -eq 0) { 
-                        Remove-Item -Path "C:\IconPack" -Recurse -Force -ErrorAction Stop
-                    }
-                    $success = $true
-                } catch {
+            Write-Host @"
+`e[91m$("Please make sure that MS Defender/3rd party tool is disabled,
+otherwise MS Defender will block uninstallation of Icon Pack!")`e[0m
+"@
+            $defender = Read-Host "Do you want to continue? (Y/n)"
+            if ($defender -eq 'Y' -or $defender -eq 'y') {
+                if ($null -eq $explorerProcess) {Start-Process -FilePath explorer.exe}
+                Start-Sleep -Seconds 3
+                Set-ItemProperty -Path $regPath -Name "IconPack" -Value 0 | Out-Null
+                Invoke-Output { Uninstall-WinGetPackage -name 'IconPack Installer' }
+                while (Get-WinGetPackage -name 'IconPack Installer' -ErrorAction SilentlyContinue) {
                     Start-Sleep -Seconds 5
                 }
-            } until ($success -or (Get-Date) -ge $endTime)
+                Stop-Process -Name explorer -Force
+                $endTime = (Get-Date).AddMinutes(5)
+                do {
+                    try {
+                        if ((Get-ChildItem -Path "C:\IconPack" -Recurse | Measure-Object).Count -eq 0) { 
+                            Remove-Item -Path "C:\IconPack" -Recurse -Force -ErrorAction Stop
+                        }
+                        $success = $true
+                    } catch {
+                        Start-Sleep -Seconds 5
+                    }
+                } until ($success -or (Get-Date) -ge $endTime)
+            else {
+                Write-Host "Icon Pack uninstallation skipped." -ForegroundColor DarkRed
+            }
             Write-Host "Uninstalling Other Settings completed." -ForegroundColor Green
+            }
         }
     }
 }
