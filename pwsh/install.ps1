@@ -1266,7 +1266,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Force | Out-Null
         ## Icons Pack
 Write-Host @"
-`e[93m$("Please make sure that MS Defender/3rd party tool is disabled,
+`e[91m$("Please make sure that MS Defender/3rd party tool is disabled,
 otherwise MS Defender will block installation of Icon Pack!")`e[0m
 "@
             $defender = Read-Host "Do you want to continue? (Y/n)"
