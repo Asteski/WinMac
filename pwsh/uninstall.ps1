@@ -593,6 +593,8 @@ otherwise MS Defender will block uninstallation of Icon Pack!")`e[0m
 "@
             $defender = Read-Host "Do you want to continue? (Y/n)"
             if ($defender -eq 'Y' -or $defender -eq 'y') {
+                if ($null -eq $explorerProcess) {Start-Process -FilePath explorer.exe}
+                Start-Sleep -Seconds 3
                 Set-ItemProperty -Path $regPath -Name "IconPack" -Value 0 | Out-Null
                 Invoke-Output { Uninstall-WinGetPackage -name 'IconPack Installer' }
                 while (Get-WinGetPackage -name 'IconPack Installer' -ErrorAction SilentlyContinue) {
