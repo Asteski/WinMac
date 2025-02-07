@@ -1270,7 +1270,7 @@ Write-Host @"
 otherwise MS Defender will block installation of Icon Pack!")`e[0m
 "@
             $defender = Read-Host "Do you wat to install Icon Pack? (Y/n)"
-            if ($defender -eq 'Y' -or $defender -eq 'y') {           
+            if ($defender -eq 'Y' -or $defender -eq 'y') {       
                 if ((Get-ItemProperty -Path $regPath -Name "IconPack" -ErrorAction SilentlyContinue).IconPack -ne 1) {
                     if ($blueOrYellow -eq "B" -or $blueOrYellow -eq "b") {
                         $exePath = "..\bin\iconpack\iconpack_blue_folders.exe"

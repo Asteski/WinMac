@@ -614,6 +614,7 @@ otherwise MS Defender will block uninstallation of Icon Pack!")`e[0m
                 Write-Host "Icon Pack uninstallation skipped." -ForegroundColor Red
             }
             Write-Host "Uninstalling Other Settings completed." -ForegroundColor Green
+            }
         }
     }
 }
