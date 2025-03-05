@@ -589,8 +589,8 @@ uint fWinIni);
             Get-ChildItem ..\config\contextmenu\add\* -e *theme* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
             reg import '..\config\contextmenu\remove\Remove_Theme_Mode_in_Context_Menu.reg' > $null 2>&1
             reg import '..\config\contextmenu\remove\Remove_Hidden_items_from_context_menu.reg' > $null 2>&1
-            New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" -Force | Out-Null
-            New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Force | Out-Null
+            New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" -Force | Out-Null # Home
+            New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Force | Out-Null # Gallery
             Invoke-Output { Remove-Item -Path "$env:LOCALAPPDATA\WinMac\theme.ps1" }
             Write-Host @"
 `e[91m$("Please make sure that MS Defender/3rd party tool is disabled,
