@@ -1126,7 +1126,7 @@ foreach ($app in $selectedApps) {
             $shell = New-Object -ComObject WScript.Shell
             $shortcut = $shell.CreateShortcut($shortcut1Path)
             $shortcut.TargetPath = $target1Path
-            $shortcut.Save()            
+            $shortcut.Save()
             $shortcut2Path = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\WinLaunch.lnk"
             $target2Path = "$winLaunchDestinationPath\WinLaunch.exe"
             $icon2Path = "$winLaunchDestinationPath\winlaunch.ico"
@@ -1297,6 +1297,40 @@ otherwise MS Defender will block installation of Icon Pack!")`e[0m
             }
             Stop-Process -Name explorer -Force
             Write-Host "Configuring Other Settings completed." -ForegroundColor Green
+
+            # OneDrive
+            $dllPath = ".\dll\FileSync.Resources.dll"
+            $newIconList = @(
+                ".\?\FileSync_537.ico",
+                ".\?\FileSync_538.ico"
+            )
+            $resourceHackerPath = "C:\Program Files (x86)\Resource Hacker\ResourceHacker.exe"
+            Stop-Process -n OneDrive -Force
+            Install-WinGetPackage -id resourcehacker -source winget
+            # Create a backup of the original DLL file
+            $backupPath = $dllPath.Replace([System.IO.Path]::GetExtension($dllPath), "_backup" + [System.IO.Path]::GetExtension($dllPath))
+            Copy-Item -Path $dllPath -Destination $backupPath
+            Write-Output "Backup created at $backupPath"
+            ForEach ($newIconPath in $newIconList) {
+                Write-Output "Replacing icon with $newIconPath"
+                $iconGroup = "ICONGROUP," + [int]([regex]::Match($newIconPath, '_(\d+)\.ico$').Groups[1].Value)
+                $process = Start-Process -FilePath $resourceHackerPath -ArgumentList "-open `"$dllPath`" -save `"$dllPath`" -action addoverwrite -res `"$newIconPath`" -mask $iconGroup" -PassThru -Wait
+                if ($process.ExitCode -ne 0) {
+                    Write-Error "Failed to replace icon $newIconPath"
+                    exit $process.ExitCode
+                }
+                Start-Sleep -Seconds 1
+            }
+            $exePath = "$env:LOCALAPPDATA\Microsoft\OneDrive\OneDrive.exe"
+            #! add exe from progfiles if exists
+            $newIconPath = ".\?\IconGroup552.ico"
+            $iconGroup = "ICONGROUP,552"
+            $process = Start-Process -FilePath $resourceHackerPath -ArgumentList "-open `"$exePath`" -save `"$exePath`" -action addoverwrite -res `"$newIconPath`" -mask $iconGroup" -PassThru -Wait
+            if ($process.ExitCode -ne 0) {
+                Write-Error "Failed to replace icon $newIconPath"
+                exit $process.ExitCode
+            }
+            Start-Sleep -Seconds 1
         }
     }
 }
