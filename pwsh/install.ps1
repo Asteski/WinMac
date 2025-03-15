@@ -1306,7 +1306,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
                 "..\config\onedrive\FileSync_538.ico"
             )
             Install-WinGetPackage -id AngusJohnson.ResourceHacker -source winget
-            Stop-Process -n OneDrive -Force{
+            Stop-Process -n OneDrive -Force
             ForEach ($searchDir in $searchDirList){
                 $dllPath = Get-ChildItem -Path $searchDir -Filter "FileSync.Resources.dll" -Recurse | Select-Object -First 1 | ForEach-Object { $_.FullName }
                 $backupPath = $dllPath.Replace([System.IO.Path]::GetExtension($dllPath), "_backup" + [System.IO.Path]::GetExtension($dllPath))
