@@ -1339,7 +1339,6 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
                     Start-Sleep -Seconds 1
                 }
             }
-            }
             Stop-Process -Name explorer -Force
             Write-Host "Configuring Other Settings completed." -ForegroundColor Green
         }
