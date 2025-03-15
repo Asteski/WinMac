@@ -1297,9 +1297,10 @@ otherwise MS Defender will block installation of Icon Pack!")`e[0m
             }
         #! SendTo Programs
             $sendToPath = "$env:APPDATA\Microsoft\Windows\SendTo"
-            Copy-Item -Path "..\config\sendto\Programs (create shortcut)" -Destination $sendToPath -Recurse -Force
             $shortcutPath = Join-Path $sendToPath "Programs (create shortcut).lnk"
-            $targetPath = "$env:LOCALAPPDATA\WinMac\shortcut.exe"
+            $targetPath = "$env:LOCALAPPDATA\WinMac"
+            Copy-Item -Path "..\config\sendto\Programs (create shortcut)" -Destination $sendToPath -Recurse -Force
+            Copy-Item -Path "..\config\sendto\shortcut*" -Destination $targetPath -Recurse -Force
             $shell = New-Object -ComObject WScript.Shell
             $shortcut = $shell.CreateShortcut($shortcutPath)
             $shortcut.TargetPath = $targetPath 
