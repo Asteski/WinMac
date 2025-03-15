@@ -1245,7 +1245,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             $sourceFilePath = "..\config\contextmenu\add\Add_Theme_Mode_in_Context_Menu.reg"
             $tempFilePath = "..\temp\Add_Theme_Mode_in_Context_Menu.reg"
             $ps1FilePath = "..\config\contextmenu\theme.ps1"
-            if (-not (Test-Path -Path "$env:LOCALAPPDATA\WinMac")) {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac" -Force}
+            if (-not (Test-Path -Path "$env:LOCALAPPDATA\WinMac")) {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac" -Force | Out-Null}
             Copy-Item -Path $ps1FilePath -Destination "$env:LOCALAPPDATA\WinMac" -Force     
             Copy-Item -Path $sourceFilePath -Destination '..\temp\' -Force
             $appData = $env:LOCALAPPDATA -replace '\\', '\\'
@@ -1303,7 +1303,7 @@ otherwise MS Defender will block installation of Icon Pack!")`e[0m
             }
             $sendToPath = "$env:APPDATA\Microsoft\Windows\SendTo"
             $shortcutPath = Join-Path $sendToPath "Programs (create shortcut).lnk"
-            $targetPath = "$env:LOCALAPPDATA\WinMac"
+            $targetPath = "$env:LOCALAPPDATA\WinMac\shortcut.exe"
             Copy-Item -Path "..\config\sendto\Programs (create shortcut)" -Destination $sendToPath -Recurse -Force
             Copy-Item -Path "..\config\sendto\shortcut*" -Destination $targetPath -Recurse -Force
             $shell = New-Object -ComObject WScript.Shell
