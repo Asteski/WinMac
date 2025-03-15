@@ -1298,7 +1298,7 @@ otherwise MS Defender will block installation of Icon Pack!")`e[0m
         #! SendTo Programs
             $sendToPath = "$env:APPDATA\Microsoft\Windows\SendTo"
             Copy-Item -Path "..\config\sendto\Programs (create shortcut)" -Destination $sendToPath -Recurse -Force
-            $shortcutPath = Join-Path $sendToPath "Programs (create shortcut)"
+            $shortcutPath = Join-Path $sendToPath "Programs (create shortcut).lnk"
             $targetPath = "$env:LOCALAPPDATA\WinMac\shortcut.exe"
             $shell = New-Object -ComObject WScript.Shell
             $shortcut = $shell.CreateShortcut($shortcutPath)
@@ -1326,10 +1326,6 @@ otherwise MS Defender will block installation of Icon Pack!")`e[0m
                     Write-Output "Replacing icon with $newIconPath"
                     $iconGroup = "ICONGROUP," + [int]([regex]::Match($newIconPath, '_(\d+)\.ico$').Groups[1].Value)
                     $process = Start-Process -FilePath $resourceHackerPath -ArgumentList "-open `"$dllPath`" -save `"$dllPath`" -action addoverwrite -res `"$newIconPath`" -mask $iconGroup" -PassThru -Wait
-                    if ($process.ExitCode -ne 0) {
-                        Write-Error "Failed to replace icon $newIconPath"
-                        exit $process.ExitCode
-                    }
                     Start-Sleep -Seconds 1
                 }
             }
