@@ -1339,7 +1339,7 @@ otherwise MS Defender will block installation of Icon Pack!")`e[0m
                     Start-Sleep -Seconds 1
                 }
             }
-
+            }
             Stop-Process -Name explorer -Force
             Write-Host "Configuring Other Settings completed." -ForegroundColor Green
         }
