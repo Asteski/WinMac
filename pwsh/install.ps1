@@ -1296,6 +1296,11 @@ otherwise MS Defender will block installation of Icon Pack!")`e[0m
                 Write-Host "Icon Pack installation skipped." -ForegroundColor DarkoRed
             }
         #! SendTo Programs
+        #! install net 8.0 desktop runtime if missing
+            $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.8' -ErrorAction SilentlyContinue
+            if ($null -eq $dotNetRuntime) {
+                Invoke-Output { Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8' }
+            }
             $sendToPath = "$env:APPDATA\Microsoft\Windows\SendTo"
             $shortcutPath = Join-Path $sendToPath "Programs (create shortcut).lnk"
             $targetPath = "$env:LOCALAPPDATA\WinMac"
@@ -1330,7 +1335,6 @@ otherwise MS Defender will block installation of Icon Pack!")`e[0m
                     Start-Sleep -Seconds 1
                 }
             }
-            Start-Process -FilePath "$env:LOCALAPPDATA\Microsoft\OneDrive\OneDrive.exe"
             Stop-Process -Name explorer -Force
             Write-Host "Configuring Other Settings completed." -ForegroundColor Green
         }
