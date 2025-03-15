@@ -1330,6 +1330,7 @@ otherwise MS Defender will block installation of Icon Pack!")`e[0m
                     Start-Sleep -Seconds 1
                 }
             }
+            Start-Process -FilePath "$env:LOCALAPPDATA\Microsoft\OneDrive\OneDrive.exe"
             Stop-Process -Name explorer -Force
             Write-Host "Configuring Other Settings completed." -ForegroundColor Green
         }
