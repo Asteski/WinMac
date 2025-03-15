@@ -1305,7 +1305,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
                 "..\config\onedrive\FileSync_537.ico",
                 "..\config\onedrive\FileSync_538.ico"
             )
-            Install-WinGetPackage -id resourcehacker -source winget
+            Install-WinGetPackage -id AngusJohnson.ResourceHacker -source winget
             Stop-Process -n OneDrive -Force{
             ForEach ($searchDir in $searchDirList){
                 $dllPath = Get-ChildItem -Path $searchDir -Filter "FileSync.Resources.dll" -Recurse | Select-Object -First 1 | ForEach-Object { $_.FullName }
