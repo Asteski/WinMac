@@ -1331,7 +1331,6 @@ otherwise MS Defender will block installation of Icon Pack!")`e[0m
             $iconGroup = "ICONGROUP,552"
             ForEach ($exePath in $exePathList) {
                 if (Test-Path $exePath) {
-                    Write-Output "Replacing icon with $newIconPath"
                     $process = Start-Process -FilePath $resourceHackerPath -ArgumentList "-open `"$exePath`" -save `"$exePath`" -action addoverwrite -res `"$newIconPath`" -mask $iconGroup" -PassThru -Wait
                     if ($process.ExitCode -ne 0) {
                         Write-Error "Failed to replace icon $newIconPath"
