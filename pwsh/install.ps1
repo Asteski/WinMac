@@ -1321,7 +1321,7 @@ otherwise MS Defender will block installation of Icon Pack!")`e[0m
                 "..\config\onedrive\FileSync_537.ico",   
                 "..\config\onedrive\FileSync_538.ico"
             )
-            winget install AngusJohnson.ResourceHacker -source winget
+            winget install AngusJohnson.ResourceHacker --source winget
             Stop-Process -n OneDrive -Force
             ForEach ($searchDir in $searchDirList){
                 $dllPath = Get-ChildItem -Path $searchDir -Filter "FileSync.Resources.dll" -Recurse | Select-Object -First 1 | ForEach-Object { $_.FullName }
