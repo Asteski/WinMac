@@ -1044,7 +1044,7 @@ foreach ($app in $selectedApps) {
                 Write-Host "Nexus Dock installation completed." -ForegroundColor Green
             }
         }
-    # Windhawk
+    #
         "10" {
             if ($sysType -like "*ARM*") {
                 Write-Host "Windhawk is not supported on ARM devices. Skipping installation." -ForegroundColor Red
@@ -1061,6 +1061,7 @@ foreach ($app in $selectedApps) {
                     "https://raw.githubusercontent.com/m417z/my-windhawk-mods/main/mods/explorer-name-windows.wh.cpp",
                     "https://raw.githubusercontent.com/realgam3/dot-hide-wh/main/dot-hide.wh.cpp"
                     "https://raw.githubusercontent.com/aubymori/windhawk-mods/refs/heads/main/mods/modernize-folder-picker-dialog.wh.cpp"
+                    "https://raw.githubusercontent.com/m417z/my-windhawk-mods/refs/heads/main/mods/windows-11-notification-center-styler.wh.cpp"
                 )
                 $destinationPath = "$Env:ProgramData\Windhawk\ModsSource"
                 foreach ($url in $urls) {
