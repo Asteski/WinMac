@@ -1296,7 +1296,6 @@ otherwise MS Defender will block installation of Icon Pack!")`e[0m
             else {
                 Write-Host "Icon Pack installation skipped." -ForegroundColor DarkoRed
             }
-        #! SendTo Programs
         #! install net 8.0 desktop runtime if missing
             $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.8' -ErrorAction SilentlyContinue
             if ($null -eq $dotNetRuntime) {
