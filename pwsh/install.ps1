@@ -2,7 +2,7 @@ param (
     [switch]$noGUI,
     [switch]$debug
 )
-$version = "0.8.2"
+$version = "0.9.0"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_install_log_$date.txt"
 $transcriptFile = "WinMac_install_transcript_$date.txt"
@@ -1044,7 +1044,7 @@ foreach ($app in $selectedApps) {
                 Write-Host "Nexus Dock installation completed." -ForegroundColor Green
             }
         }
-    #
+    # Windhawk
         "10" {
             if ($sysType -like "*ARM*") {
                 Write-Host "Windhawk is not supported on ARM devices. Skipping installation." -ForegroundColor Red
