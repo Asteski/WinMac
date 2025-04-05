@@ -1036,6 +1036,9 @@ foreach ($app in $selectedApps) {
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path6" -Value $downloadsPath
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path7" -Value "$env:APPDATA\Microsoft\Windows\Recent\"
                 if ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath0" -Value "C:\\Users\\Public\\Documents\\Winstep\\Icons\\explorer_default.ico"}
+                # if (Test-Path -Path "$env:LOCALAPPDATA\WinLaunch") {$testWinLaunchPath = $true}
+                # if ($selectedApps -like '*11*' or $testWinLaunchPath -eq $true) {
+                # }
                 Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe'
                 while (!(Get-Process "nexus")) { Start-Sleep 1 }
                 $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
