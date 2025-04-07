@@ -1036,9 +1036,6 @@ foreach ($app in $selectedApps) {
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path6" -Value $downloadsPath
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path7" -Value "$env:APPDATA\Microsoft\Windows\Recent\"
                 if ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath0" -Value "C:\\Users\\Public\\Documents\\Winstep\\Icons\\explorer_default.ico"}
-                # if (Test-Path -Path "$env:LOCALAPPDATA\WinLaunch") {$testWinLaunchPath = $true}
-                # if ($selectedApps -like '*11*' or $testWinLaunchPath -eq $true) {
-                # }
                 Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe'
                 while (!(Get-Process "nexus")) { Start-Sleep 1 }
                 $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
@@ -1254,7 +1251,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             Copy-Item -Path $sourceFilePath -Destination '..\temp\' -Force
             $appData = $env:LOCALAPPDATA -replace '\\', '\\'
             (Get-Content -Path $tempFilePath) -replace '%WINMACAPPDATA%', $appData | Set-Content -Path $tempFilePath
-            reg import '..\temp\Add_Theme_Mode_in_Context_Menu.reg'  > $null 2>&1
+            reg import '..\temp\Add_Theme_Mode_in_Context_Menu.reg' > $null 2>&1
             reg import '..\config\contextmenu\add\Add_Hidden_items_to_context_menu.reg' > $null 2>&1
             Invoke-Output {winget uninstall "Windows web experience Pack" --silent}
         ## End Task
@@ -1299,7 +1296,6 @@ otherwise MS Defender will block installation of Icon Pack!")`e[0m
             else {
                 Write-Host "Icon Pack installation skipped." -ForegroundColor DarkoRed
             }
-        #! install net 8.0 desktop runtime if missing
             $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.8' -ErrorAction SilentlyContinue
             if ($null -eq $dotNetRuntime) {
                 Invoke-Output { Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8' }
@@ -1316,25 +1312,21 @@ otherwise MS Defender will block installation of Icon Pack!")`e[0m
             $shortcut.Save()
         #! OneDrive Icons
             $searchDirList = @(
-                "$env:LOCALAPPDATA\Microsoft\OneDrive\",
+                # "$env:LOCALAPPDATA\Microsoft\OneDrive\",
                 "$env:ProgramFiles\Microsoft OneDrive\"
             )
-            $resourceHackerPath = "C:\Program Files (x86)\Resource Hacker\ResourceHacker.exe"
             $newIconList = @(
                 "..\config\onedrive\FileSync_537.ico",   
                 "..\config\onedrive\FileSync_538.ico"
             )
-            winget install AngusJohnson.ResourceHacker --source winget
             Stop-Process -n OneDrive -Force
             ForEach ($searchDir in $searchDirList){
                 $dllPath = Get-ChildItem -Path $searchDir -Filter "FileSync.Resources.dll" -Recurse | Select-Object -First 1 | ForEach-Object { $_.FullName }
                 $backupPath = $dllPath.Replace([System.IO.Path]::GetExtension($dllPath), "_backup" + [System.IO.Path]::GetExtension($dllPath))
-                Copy-Item -Path $dllPath -Destination $backupPath
-                Write-Output "Backup created at $backupPath"
+                Copy-Item -Path $dllPath -Destination $backupPath -Force -ErrorAction SilentlyContinue > $null 2>&1
                 ForEach ($newIconPath in $newIconList) {
-                    Write-Output "Replacing icon with $newIconPath"
                     $iconGroup = "ICONGROUP," + [int]([regex]::Match($newIconPath, '_(\d+)\.ico$').Groups[1].Value)
-                    $process = Start-Process -FilePath $resourceHackerPath -ArgumentList "-open `"$dllPath`" -save `"$dllPath`" -action addoverwrite -res `"$newIconPath`" -mask $iconGroup" -PassThru -Wait
+                    Start-Process -FilePath ..\bin\resourcehacker.exe -ArgumentList "-open `"$dllPath`" -save `"$dllPath`" -action addoverwrite -res `"$newIconPath`" -mask $iconGroup" -PassThru -Wait > $null 2>&1
                     Start-Sleep -Seconds 1
                 }
             }
