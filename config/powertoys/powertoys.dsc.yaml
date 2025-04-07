@@ -33,7 +33,7 @@ properties:
           CloseAfterLosingFocus: true
         AlwaysOnTop:
           Enabled: true
-          Hotkey: "Win+A"
+          Hotkey: "Win+Shift+A"
           FrameThickness: 4
           FrameOpacity: 70
         RegistryPreview:
