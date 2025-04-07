@@ -1312,7 +1312,7 @@ otherwise MS Defender will block installation of Icon Pack!")`e[0m
             $shortcut.Save()
         #! OneDrive Icons
             $searchDirList = @(
-                # "$env:LOCALAPPDATA\Microsoft\OneDrive\",
+                "$env:LOCALAPPDATA\Microsoft\OneDrive\",
                 "$env:ProgramFiles\Microsoft OneDrive\"
             )
             $newIconList = @(
