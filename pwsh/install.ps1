@@ -1302,7 +1302,7 @@ otherwise MS Defender will block installation of Icon Pack!")`e[0m
                 "$env:ProgramFiles\Microsoft OneDrive\"
             )
             $newIconList = @(
-                "..\config\onedrive\FileSync_537.ico",   
+                "..\config\onedrive\FileSync_537.ico",
                 "..\config\onedrive\FileSync_538.ico"
             )
             Stop-Process -n OneDrive -Force
