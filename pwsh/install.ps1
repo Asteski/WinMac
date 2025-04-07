@@ -1296,20 +1296,6 @@ otherwise MS Defender will block installation of Icon Pack!")`e[0m
             else {
                 Write-Host "Icon Pack installation skipped." -ForegroundColor DarkoRed
             }
-            $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.8' -ErrorAction SilentlyContinue
-            if ($null -eq $dotNetRuntime) {
-                Invoke-Output { Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8' }
-            }
-            $sendToPath = "$env:APPDATA\Microsoft\Windows\SendTo"
-            $shortcutPath = Join-Path $sendToPath "Programs (create shortcut).lnk"
-            $targetPath = "$env:LOCALAPPDATA\WinMac\shortcut.exe"
-            Copy-Item -Path "..\config\sendto\Programs (create shortcut)" -Destination $sendToPath -Recurse -Force
-            Copy-Item -Path "..\config\sendto\shortcut*" -Destination $targetPath -Recurse -Force
-            $shell = New-Object -ComObject WScript.Shell
-            $shortcut = $shell.CreateShortcut($shortcutPath)
-            $shortcut.TargetPath = $targetPath 
-            $shortcut.WorkingDirectory = $targetPath
-            $shortcut.Save()
         #! OneDrive Icons
             $searchDirList = @(
                 "$env:LOCALAPPDATA\Microsoft\OneDrive\",
