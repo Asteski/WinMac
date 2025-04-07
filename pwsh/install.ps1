@@ -1312,7 +1312,7 @@ otherwise MS Defender will block installation of Icon Pack!")`e[0m
                 Copy-Item -Path $dllPath -Destination $backupPath -Force -ErrorAction SilentlyContinue > $null 2>&1
                 ForEach ($newIconPath in $newIconList) {
                     $iconGroup = "ICONGROUP," + [int]([regex]::Match($newIconPath, '_(\d+)\.ico$').Groups[1].Value)
-                    Start-Process -FilePath ..\bin\resourcehacker.exe -ArgumentList "-open `"$dllPath`" -save `"$dllPath`" -action addoverwrite -res `"$newIconPath`" -mask $iconGroup" -PassThru -Wait > $null 2>&1
+                    Start-Process -FilePath ..\bin\resourcehacker.exe -ArgumentList "-open `"$dllPath`" -save `"$dllPath`" -action addoverwrite -res `"$newIconPath`" -mask $iconGroup" -PassThru -Wait
                     Start-Sleep -Seconds 1
                 }
             }
