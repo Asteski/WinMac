@@ -1314,7 +1314,6 @@ otherwise MS Defender will block installation of Icon Pack!")`e[0m
                 ForEach ($newIconPath in $newIconList) {
                     $iconGroup = "ICONGROUP," + [int]([regex]::Match($newIconPath, '_(\d+)\.ico$').Groups[1].Value)
                     pwsh -NoProfile -Command "..\bin\resourcehacker.exe -open `"$dllPath`" -save `"$dllPath`" -action addoverwrite -res `"$newIconPath`" -mask $iconGroup" > $null 2>&1
-                    # Start-Process -FilePath ..\bin\resourcehacker.exe -ArgumentList "-open `"$dllPath`" -save `"$dllPath`" -action addoverwrite -res `"$newIconPath`" -mask $iconGroup" -PassThru -Wait
                     Start-Sleep -Seconds 1
                 }
             }

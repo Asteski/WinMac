@@ -98,7 +98,6 @@ function ld {
         }
     }
 }
-
 function lf { Get-ChildItem $args -Force -Attributes !D -ErrorAction SilentlyContinue | format-table -autosize }
 function lls {
     param (
