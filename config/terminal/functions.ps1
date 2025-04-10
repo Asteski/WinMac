@@ -76,9 +76,29 @@ set-alias -name cc -value '..2'
 function l { Get-ChildItem $args -Force -ErrorAction SilentlyContinue | format-table -autosize }
 function ll { Get-ChildItem $args -ErrorAction SilentlyContinue | Where-Object { $_.PSIsContainer -and $_.Name -notmatch '^\.' -or $_.PSIsContainer -eq $false } | format-table -autosize }
 function ld {
-    $out = Get-ChildItem $args -Force -Directory -ErrorAction SilentlyContinue
-    if ($out.mode -like '*a*') { Write-Host "Not a directory" -ForegroundColor Red } else { $out | format-table -autosize }
+    param (
+        [string[]]$Paths = "."
+    )
+
+    foreach ($Path in $Paths) {
+        if (Test-Path $Path) {
+            $item = Get-Item -LiteralPath $Path -Force -ErrorAction SilentlyContinue
+            if ($item -is [System.IO.DirectoryInfo]) {
+                Get-ChildItem -LiteralPath $Path -Directory -Force -ErrorAction SilentlyContinue
+            }
+            elseif ($item -is [System.IO.FileInfo]) {
+                Write-Error "'$Path' is not a directory."
+            }
+            else {
+                Write-Error "Unknown item type: '$Path'"
+            }
+        }
+        else {
+            Write-Error "Path not found: '$Path'"
+        }
+    }
 }
+
 function lf { Get-ChildItem $args -Force -Attributes !D -ErrorAction SilentlyContinue | format-table -autosize }
 function lls {
     param (
