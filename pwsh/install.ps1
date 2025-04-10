@@ -1297,6 +1297,7 @@ otherwise MS Defender will block installation of Icon Pack!")`e[0m
             else {
                 Write-Host "Icon Pack installation skipped." -ForegroundColor DarkoRed
             }
+        }
     }
 }
 # Clean up
