@@ -1297,29 +1297,6 @@ otherwise MS Defender will block installation of Icon Pack!")`e[0m
             else {
                 Write-Host "Icon Pack installation skipped." -ForegroundColor DarkoRed
             }
-        #! OneDrive Icons
-            $searchDirList = @(
-                "$env:LOCALAPPDATA\Microsoft\OneDrive\",
-                "$env:ProgramFiles\Microsoft OneDrive\"
-            )
-            $newIconList = @(
-                "..\config\onedrive\FileSync_537.ico",
-                "..\config\onedrive\FileSync_538.ico"
-            )
-            Stop-Process -n OneDrive -Force
-            ForEach ($searchDir in $searchDirList){
-                $dllPath = Get-ChildItem -Path $searchDir -Filter "FileSync.Resources.dll" -Recurse | Select-Object -First 1 | ForEach-Object { $_.FullName }
-                $backupPath = $dllPath.Replace([System.IO.Path]::GetExtension($dllPath), "_backup" + [System.IO.Path]::GetExtension($dllPath))
-                Copy-Item -Path $dllPath -Destination $backupPath -Force -ErrorAction SilentlyContinue > $null 2>&1
-                ForEach ($newIconPath in $newIconList) {
-                    $iconGroup = "ICONGROUP," + [int]([regex]::Match($newIconPath, '_(\d+)\.ico$').Groups[1].Value)
-                    pwsh -NoProfile -Command "..\bin\resourcehacker.exe -open `"$dllPath`" -save `"$dllPath`" -action addoverwrite -res `"$newIconPath`" -mask $iconGroup" > $null 2>&1
-                    Start-Sleep -Seconds 1
-                }
-            }
-            Stop-Process -Name explorer -Force
-            Write-Host "Configuring Other Settings completed." -ForegroundColor Green
-        }
     }
 }
 # Clean up
