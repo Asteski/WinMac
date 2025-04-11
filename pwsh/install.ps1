@@ -9,8 +9,8 @@ $transcriptFile = "WinMac_install_transcript_$date.txt"
 $blueOrYellow = "B"
 $errorActionPreference="SilentlyContinue"
 $WarningPreference="SilentlyContinue"
-Add-Type -AssemblyName PresentationFramework
 Add-Type -AssemblyName System.Windows.Forms
+Add-Type -AssemblyName PresentationFramework
 if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null}
 if (-not (Test-Path -Path "../logs")) {New-Item -ItemType Directory -Path "../logs" | Out-Null}
 $sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType

@@ -97,6 +97,8 @@ properties:
         ColorPicker:
           Enabled: true
           ActivationShortcut: "Win+C"
+        CommandPalette:
+          Enabled: false
         PowerRename:
           Enabled: false
           MRUEnabled: true
