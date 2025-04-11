@@ -97,14 +97,8 @@ properties:
         ColorPicker:
           Enabled: true
           ActivationShortcut: "Win+C"
-        CommandPalette:
-          Enabled: false
         PowerRename:
           Enabled: false
-          MRUEnabled: true
-          MaxMRUSize: 5
-          ExtendedContextMenuOnly: true
-          UseBoostLib: true
         ImageResizer:
           Enabled: true
         Awake:
