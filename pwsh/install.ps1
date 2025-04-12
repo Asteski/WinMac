@@ -578,9 +578,9 @@ foreach ($app in $selectedApps) {
                 $envPath += ";$env:LOCALAPPDATA\PowerToys"
                 [System.Environment]::SetEnvironmentVariable("Path", $envPath, [System.EnvironmentVariableTarget]::User)
             }
-            Stop-Process -Name PowerToys -ErrorAction SilentlyContinue
-            winget uninstall 'MSIX\Microsoft.CommandPalette_0.1.1.0_x64__8wekyb3d8bbwe'
-            Start-Process "$env:LOCALAPPDATA\PowerToys\PowerToys.exe" -ArgumentList "--start-minimized" -WorkingDirectory "$env:LOCALAPPDATA\PowerToys" -WindowStyle Hidden
+            # Stop-Process -Name PowerToys -ErrorAction SilentlyContinue
+            # winget uninstall 'MSIX\Microsoft.CommandPalette_0.1.1.0_x64__8wekyb3d8bbwe'
+            # Start-Process "$env:LOCALAPPDATA\PowerToys\PowerToys.exe" -ArgumentList "--start-minimized" -WorkingDirectory "$env:LOCALAPPDATA\PowerToys" -WindowStyle Hidden
             Write-Host "PowerToys installation completed." -ForegroundColor Green
         }
     # Everything
