@@ -513,7 +513,7 @@ for ($a=3; $a -ge 0; $a--) {
     Write-Host "`rStarting installation process in $a" -NoNewLine -ForegroundColor Yellow
     Start-Sleep 1
 }
-Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
+Write-Host "`r`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
 Start-Transcript -Path ../logs/$transcriptFile -Append | Out-Null
 # Nuget check
 Write-Host "Checking Package Provider (Nuget)" -ForegroundColor Yellow
@@ -559,7 +559,7 @@ foreach ($app in $selectedApps) {
         "1" {
             Write-Host "Installing PowerToys..." -ForegroundColor Yellow
             winget configure --enable | Out-Null
-            pwsh -NoProfile -Command "winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements"
+            pwsh -NoProfile -Command "winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements" > $null 2>&1
             Copy-Item -Path "..\config\powertoys\ptr\ptr.exe" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
             Copy-Item -Path "..\config\powertoys\Assets" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
             Copy-Item -Path "..\config\powertoys\Plugins" -Destination "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\" -Recurse -Force
@@ -973,41 +973,29 @@ foreach ($app in $selectedApps) {
             }
             else {
                 Write-Host "Installing Nexus Dock..." -ForegroundColor Yellow
-                echo 1
                 $checkNexus = Get-WinGetPackage -name Nexus
                 if ($null -eq $checkNexus) {
-                    echo 11
                     $downloadUrl = "https://www.winstep.net/nexus.zip"
-                    echo 12
                     $downloadPath = "..\temp\Nexus.zip"
                     if (-not (Test-Path $downloadPath)) {
-                        echo 13
                         Invoke-WebRequest -Uri $downloadUrl -OutFile $downloadPath
                     }
-                    echo 14
                     Expand-Archive -Path $downloadPath -DestinationPath ..\temp -Force
                 }
-                echo 2
                 if (Get-Process -n Nexus) { Stop-Process -n Nexus }
-                echo 3
                 Start-Process -FilePath "..\temp\NexusSetup.exe" -ArgumentList "/silent"
-                echo 4
                 Start-Sleep 10
                 $process1 = Get-Process -Name "NexusSetup"
                 while ($process1) {
                     Start-Sleep 5
-                    echo 5
                     $process1 = Get-Process -Name "NexusSetup"
                 }
                 Start-Sleep 10
-                echo 6
                 $process2 = Get-Process -Name "Nexus"
                 if (!($process2)) {
                     Start-Sleep 5
-                    echo 7
                     $process2 = Get-Process -Name "Nexus"
                 } else { Start-Sleep 10 }
-                echo 8
                 Get-Process -n Nexus | Stop-Process
                 $winStep = 'C:\Users\Public\Documents\WinStep'
                 Remove-Item -Path "$winStep\Themes\*" -Recurse -Force
@@ -1018,7 +1006,6 @@ foreach ($app in $selectedApps) {
                 Copy-Item -Path "..\config\dock\sounds\*" -Destination "$winStep\Sounds\" -Recurse -Force
                 Invoke-Output {New-Item -ItemType Directory -Path "$winStep\Icons" -Force}
                 Copy-Item "..\config\icons" "$winStep" -Recurse -Force
-                echo 9
                 $regFile = "..\config\dock\winstep.reg"
                 $downloadsPath = "$env:USERPROFILE\Downloads"
                 if ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
@@ -1048,21 +1035,15 @@ foreach ($app in $selectedApps) {
                     $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 
                     $regFile = $modifiedFile
                 }
-                echo 10
                 reg import $regFile > $null 2>&1
-                echo 11
                 Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "DockLabelColorHotTrack1" 
                 Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type6"
                 Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type7"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path6" -Value $downloadsPath
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path7" -Value "$env:APPDATA\Microsoft\Windows\Recent\"
-                echo 12
                 if ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath0" -Value "C:\\Users\\Public\\Documents\\Winstep\\Icons\\explorer_default.ico"}
-                echo 13
                 Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe'
-                echo 14
                 while (!(Get-Process "nexus")) { Start-Sleep 1 }
-                echo 15
                 $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
                 Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Nexus.lnk" -Destination $programsDir -Force 
                 Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\Nexus.lnk" -Destination $programsDir -Force 
