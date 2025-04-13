@@ -513,7 +513,8 @@ for ($a=3; $a -ge 0; $a--) {
     Write-Host "`rStarting installation process in $a" -NoNewLine -ForegroundColor Yellow
     Start-Sleep 1
 }
-Write-Host "`r`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
+Write-Host "`r" -NoNewline
+Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
 Start-Transcript -Path ../logs/$transcriptFile -Append | Out-Null
 # Nuget check
 Write-Host "Checking Package Provider (Nuget)" -ForegroundColor Yellow
