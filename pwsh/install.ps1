@@ -580,6 +580,7 @@ foreach ($app in $selectedApps) {
             }
             Stop-Process -Name PowerToys* -ErrorAction SilentlyContinue
             winget uninstall 'MSIX\Microsoft.CommandPalette_0.1.1.0_x64__8wekyb3d8bbwe'
+            start-sleep 6
             Start-Process "$env:LOCALAPPDATA\PowerToys\PowerToys.exe" -ArgumentList "--start-minimized" -WorkingDirectory "$env:LOCALAPPDATA\PowerToys" -WindowStyle Hidden
             Write-Host "PowerToys installation completed." -ForegroundColor Green
         }
