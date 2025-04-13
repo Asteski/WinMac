@@ -340,9 +340,8 @@ Write-Host @"
 if ($result){
     $selectedApps = $result["selectedApps"]
 }
-Write-Host "Starting uninstallation process in..." -ForegroundColor Green
 for ($a=3; $a -ge 0; $a--) {
-    Write-Host -NoNewLine "`b$a" -ForegroundColor Green
+    Write-Host "`rStarting uninstallation process in $a" -NoNewLine -ForegroundColor Yellow
     Start-Sleep 1
 }
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
