@@ -196,8 +196,11 @@ function ffind {
     if ($Name) {
         if ($Name.StartsWith('.\')) {
             $Name = $Name.Substring(2)
-        }    
+        }
         $filter = "*$Name*"
+        # Extract the actual search term without wildcards and leading dot
+        $searchTerm = $Name -replace '^\*+' -replace '\*+$' -replace '^\.'
+        
         if ($Recurse) {
             $items = Get-ChildItem -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -like $filter }
         } else {
@@ -207,10 +210,15 @@ function ffind {
             foreach ($item in $items) {
                 $fullName = $item.FullName.Replace($pwd, '.')
                 $fileName = $item.Name
-                $beforeMatch, $match, $afterMatch = $fileName -split "($Name)", 3, 'IgnoreCase'
-                Write-Host "$($fullName.Substring(0, $fullName.Length - $fileName.Length))$beforeMatch" -NoNewline -ForegroundColor DarkGray
-                Write-Host "$match" -ForegroundColor Red -NoNewline
-                Write-Host "$afterMatch" -ForegroundColor DarkGray
+                $parts = $fileName -split "($([regex]::Escape($searchTerm)))", 3, 'IgnoreCase'
+                if ($parts.Count -eq 3) {
+                    $beforeMatch, $match, $afterMatch = $parts
+                    Write-Host "$($fullName.Substring(0, $fullName.Length - $fileName.Length))$beforeMatch" -NoNewline -ForegroundColor DarkGray
+                    Write-Host "$match" -ForegroundColor Red -NoNewline
+                    Write-Host "$afterMatch" -ForegroundColor DarkGray
+                } else {
+                    Write-Host $fullName -ForegroundColor DarkGray
+                }
             }
         } else {
             Write-Host "No files found" -ForegroundColor Yellow
@@ -219,7 +227,6 @@ function ffind {
         Write-Host "No filename provided" -ForegroundColor Red
     }
 }
-
 $stacks = "$env:LOCALAPPDATA\Stahky"
 function stahky { 
     $dir = "$args"
