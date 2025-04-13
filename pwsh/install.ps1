@@ -509,9 +509,8 @@ if ($result){
     $orbTheme = $result["orbTheme"]
     $gitProfile = $result["gitProfile"]
 }
-Write-Host "Starting installation process in..." -ForegroundColor Green
 for ($a=3; $a -ge 0; $a--) {
-    Write-Host -NoNewLine "`b$a" -ForegroundColor Green
+    Write-Host "`rStarting installation process in $a" -NoNewLine -ForegroundColor Yellow
     Start-Sleep 1
 }
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
@@ -562,8 +561,8 @@ foreach ($app in $selectedApps) {
             winget configure --enable | Out-Null
             pwsh -NoProfile -Command "winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements"
             Copy-Item -Path "..\config\powertoys\ptr\ptr.exe" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
+            Copy-Item -Path "..\config\powertoys\Assets" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
             if ($blueOrYellow -eq 'B' -or $blueOrYellow -eq 'b') {
-                Copy-Item -Path "..\config\powertoys\Assets" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
                 Copy-Item -Path "..\config\powertoys\RunPlugins" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
                 Copy-Item -Path "..\config\powertoys\RunPlugins\Everything" "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -Recurse -Force
             }
@@ -579,8 +578,8 @@ foreach ($app in $selectedApps) {
                 [System.Environment]::SetEnvironmentVariable("Path", $envPath, [System.EnvironmentVariableTarget]::User)
             }
             Stop-Process -Name PowerToys* -ErrorAction SilentlyContinue
-            winget uninstall 'MSIX\Microsoft.CommandPalette_0.1.1.0_x64__8wekyb3d8bbwe'
             start-sleep 6
+            winget uninstall 'MSIX\Microsoft.CommandPalette_0.1.1.0_x64__8wekyb3d8bbwe'
             Start-Process "$env:LOCALAPPDATA\PowerToys\PowerToys.exe" -ArgumentList "--start-minimized" -WorkingDirectory "$env:LOCALAPPDATA\PowerToys" -WindowStyle Hidden
             Write-Host "PowerToys installation completed." -ForegroundColor Green
         }
@@ -887,7 +886,7 @@ foreach ($app in $selectedApps) {
     # Stahky
         "7" {
             Write-Host "Installing Stahky..." -ForegroundColor Yellow
-            $url = "https://github.com/joedf/stahky/releases/download/v0.2.0.1/stahky_U64_v0.2.0.1.zip"
+            $url = "https://github.com/joedf/stahky/releases/download/v0.3.9.1/stahky_U64_v0.3.9.1.zip"
             $outputPath = "..\stahky_U64.zip"
             $exePath = "$env:LOCALAPPDATA\Stahky"
             Invoke-Output {New-Item -ItemType Directory -Path $exePath -Force}
