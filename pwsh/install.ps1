@@ -1037,7 +1037,7 @@ foreach ($app in $selectedApps) {
                     $regFile = $modifiedFile
                 }
                 reg import $regFile > $null 2>&1
-                if (Test-Path -Path "$env:LOCALAPPDATA\WinXCorners" -or $selectedApps -like '*11*' ) {
+                if (Test-Path -Path "$env:LOCALAPPDATA\WinXCorners" -or ($selectedApps -is [array] -and $selectedApps -contains '11') -or ($selectedApps -is [string] -and $selectedApps -like '*11*')) {
                     $LOCALAPPDATA = $env:LOCALAPPDATA -replace '\\', '\\'
                     Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Label9" -Value "Launchpad"
                     Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path9" -Value "$env:LOCALAPPDATA\WinXCorners\WinXCorners.exe"
