@@ -1037,11 +1037,10 @@ foreach ($app in $selectedApps) {
                     $regFile = $modifiedFile
                 }
                 reg import $regFile > $null 2>&1
-                if (Test-Path -Path "$env:LOCALAPPDATA\WinXCorners") {
-                    $LOCALAPPDATA = $env:LOCALAPPDATA -replace '\\', '\\'
+                if (Test-Path -Path "$env:LOCALAPPDATA\WinLaunch") {
                     Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Label9" -Value "Launchpad"
-                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path9" -Value "$env:LOCALAPPDATA\WinXCorners\WinXCorners.exe"
-                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "IconPath9" -Value "C:\Users\Public\Documents\Winstep\Icons\launchpad.ico"
+                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path9" -Value "$env:LOCALAPPDATA\WinXCorners\WinLaunch.exe"
+                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "IconPath9" -Value "C:\Users\Public\Documents\Winstep\Icons\Launchpad.ico"
                     Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type9" -Value "1"
                     Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockNoItems1" -Value "10"
                 }
