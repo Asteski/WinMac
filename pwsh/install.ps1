@@ -1082,7 +1082,8 @@ foreach ($app in $selectedApps) {
                     "https://raw.githubusercontent.com/m417z/my-windhawk-mods/main/mods/explorer-name-windows.wh.cpp",
                     "https://raw.githubusercontent.com/realgam3/dot-hide-wh/main/dot-hide.wh.cpp"
                     "https://raw.githubusercontent.com/aubymori/windhawk-mods/refs/heads/main/mods/modernize-folder-picker-dialog.wh.cpp"
-                    "https://raw.githubusercontent.com/m417z/my-windhawk-mods/refs/heads/main/mods/windows-11-notification-center-styler.wh.cpp"
+                    "https://raw.githubusercontent.com/m417z/my-windhawk-mods/refs/heads/main/mods/windows-11-notification-center-styler.wh.cpp",
+                    "https://raw.githubusercontent.com/ramensoftware/windhawk-mods/refs/heads/main/mods/classic-desktop-icons.wh.cpp"
                 )
                 $destinationPath = "$Env:ProgramData\Windhawk\ModsSource"
                 foreach ($url in $urls) {
