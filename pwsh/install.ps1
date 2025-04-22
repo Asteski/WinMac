@@ -1299,7 +1299,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             $shortcut.TargetPath = $targetPath
             $shortcut.IconLocation = $iconPath
             $shortcut.Save()
-        # Icons Pack
+        ## Icons Pack
 Write-Host @"
 `e[91m$("Please make sure that MS Defender/3rd party tool is disabled,
 otherwise MS Defender will block installation of Icon Pack!")`e[0m
