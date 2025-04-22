@@ -443,6 +443,7 @@ foreach ($app in $selectedApps) {
     # WinMac Menu
         "5" {
             Write-Host "Uninstalling WinMac Menu..." -ForegroundColor Yellow
+            $sabRegPath = "HKCU:\Software\StartIsBack"
             if ($sysType -like "*ARM*"){
                 Stop-Process -Name WindowsKey -Force
                 Stop-Process -Name StartButton -Force
@@ -457,7 +458,6 @@ foreach ($app in $selectedApps) {
             Invoke-Output { Uninstall-WinGetPackage -name "Winver UWP" }
             Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
             Expand-Archive -Path "..\config\WinX-default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
-            $sabRegPath = "HKCU:\Software\StartIsBack"
             Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 0 -ErrorAction SilentlyContinue
             Remove-Item -Path "$env:LOCALAPPDATA\WinMac\start.exe" -Force
             Stop-Process -n Explorer
