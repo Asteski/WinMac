@@ -1359,7 +1359,7 @@ $restartConfirmation = Read-Host "`nRestart computer now? It's recommended to fu
 if ($restartConfirmation -eq "Y" -or $restartConfirmation -eq "y") {
     Write-Host "" -ForegroundColor Red
     for ($a=9; $a -ge 0; $a--) {
-        Write-Host "`rRestarting computer in $a" -NoNewLine -ForegroundColor Yellow
+        Write-Host "`rRestarting computer in $a" -NoNewLine -ForegroundColor Red
         Start-Sleep 1
     }
     Restart-Computer -Force
