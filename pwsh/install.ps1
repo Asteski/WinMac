@@ -555,7 +555,7 @@ if ($null -eq $wingetClientCheck) {
 }
 # WinMac deployment
 foreach ($app in $selectedApps) {
-    switch ($app.Trim()) {
+    switch ($app.Trim()) 
     # PowerToys
         "1" {
             Write-Host "Installing PowerToys..." -ForegroundColor Yellow
@@ -1168,7 +1168,7 @@ foreach ($app in $selectedApps) {
             Write-Host "Hot Corners installation completed." -ForegroundColor Green
             }
     # Other
-        "12" {
+        "12" 
         ## Black Cursor
             Write-Host "Configuring Other Settings..." -ForegroundColor Yellow
             Write-Host "Black cursor..." -ForegroundColor DarkYellow
@@ -1288,6 +1288,10 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             Write-Host "Remove Home and Gallery icons..." -ForegroundColor DarkYellow
             Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" -Force | Out-Null
             Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Force | Out-Null
+        ## Hide Desktop icons
+            Write-Host "Hide Desktop Icons shortcut..." -ForegroundColor DarkYellow
+            Copy-Item -Path "..\bin\HideDesktopIcons.exe" -Destination "$env:LOCALAPPDATA\WinMac" -Force
+
         # Icons Pack
 Write-Host @"
 `e[91m$("Please make sure that MS Defender/3rd party tool is disabled,
@@ -1319,10 +1323,10 @@ otherwise MS Defender will block installation of Icon Pack!")`e[0m
                 }
             }
             else {
-                Write-Host "Icon Pack installation skipped." -ForegroundColor DarkoRed
+                Write-Host "Icon Pack installation skipped." -ForegroundColor DarkRed
             }
-        }
-    }
+        
+    
 }
 # Clean up
 if ((Get-ChildItem -Path "$env:LOCALAPPDATA\WinMac" -Recurse | Measure-Object).Count -eq 0) { Remove-Item -Path "$env:LOCALAPPDATA\WinMac" -Force }
