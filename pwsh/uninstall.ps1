@@ -430,8 +430,12 @@ foreach ($app in $selectedApps) {
     # StartAllBack
         "4" {
             Write-Host "Uninstalling StartAllBack..." -ForegroundColor Yellow
-            Invoke-Output { Uninstall-WinGetPackage -id "StartIsBack.StartAllBack" }
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
+            $sabRegPath = "HKCU:\Software\StartIsBack"
+            Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0
+            Stop-Process -name explorer -Force
+            Start-Sleep 5
+            Invoke-Output { Uninstall-WinGetPackage -id "StartIsBack.StartAllBack" }
             Set-ItemProperty -Path $exRegPath\Advanced -Name "UseCompactMode" -Value 0
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarAl" -Value 1
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarGlomLevel" -Value 0
