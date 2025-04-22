@@ -95,8 +95,7 @@ properties:
             - Name: "Windows Terminal"
               Disabled: true
         ColorPicker:
-          Enabled: true
-          ActivationShortcut: "Win+C"
+          Enabled: false
         PowerRename:
           Enabled: false
         ImageResizer:
