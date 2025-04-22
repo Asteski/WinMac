@@ -1168,7 +1168,7 @@ foreach ($app in $selectedApps) {
             Write-Host "Hot Corners installation completed." -ForegroundColor Green
             }
     # Other
-        "12" 
+        "12" {
         ## Black Cursor
             Write-Host "Configuring Other Settings..." -ForegroundColor Yellow
             Write-Host "Black cursor..." -ForegroundColor DarkYellow
@@ -1325,8 +1325,8 @@ otherwise MS Defender will block installation of Icon Pack!")`e[0m
             else {
                 Write-Host "Icon Pack installation skipped." -ForegroundColor DarkRed
             }
-        
-    
+        }
+    }
 }
 # Clean up
 if ((Get-ChildItem -Path "$env:LOCALAPPDATA\WinMac" -Recurse | Measure-Object).Count -eq 0) { Remove-Item -Path "$env:LOCALAPPDATA\WinMac" -Force }
