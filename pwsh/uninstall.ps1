@@ -434,7 +434,7 @@ foreach ($app in $selectedApps) {
             $sabRegPath = "HKCU:\Software\StartIsBack"
             taskkill /f /im explorer.exe
             Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0
-            Start-Sleep 3
+            Start-Sleep 5
             Start-Process -name explorer
             Invoke-Output { Uninstall-WinGetPackage -id "StartIsBack.StartAllBack" }
             Set-ItemProperty -Path $exRegPath\Advanced -Name "UseCompactMode" -Value 0
