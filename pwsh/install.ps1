@@ -1275,7 +1275,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             Copy-Item -Path $ps1FilePath -Destination "$env:LOCALAPPDATA\WinMac" -Force     
             Copy-Item -Path $sourceFilePath -Destination '..\temp\' -Force
             $appData = $env:LOCALAPPDATA -replace '\\', '\\'
-            (Get-Content -Path $tempFilePath) -replace ' %LOCALAPPDATA%', $appData | Set-Content -Path $tempFilePath
+            (Get-Content -Path $tempFilePath) -replace '%LOCALAPPDATA%', $appData | Set-Content -Path $tempFilePath
             reg import '..\temp\Add_Theme_Mode_in_Context_Menu.reg' > $null 2>&1
             reg import '..\config\contextmenu\add\Add_Hidden_items_to_context_menu.reg' > $null 2>&1
             Invoke-Output {winget uninstall "Windows web experience Pack" --silent}
