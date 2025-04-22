@@ -555,7 +555,7 @@ if ($null -eq $wingetClientCheck) {
 }
 # WinMac deployment
 foreach ($app in $selectedApps) {
-    switch ($app.Trim()) 
+    switch ($app.Trim()) {
     # PowerToys
         "1" {
             Write-Host "Installing PowerToys..." -ForegroundColor Yellow
