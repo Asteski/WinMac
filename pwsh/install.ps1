@@ -1291,7 +1291,14 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
         ## Hide Desktop icons
             Write-Host "Hide Desktop Icons shortcut..." -ForegroundColor DarkYellow
             Copy-Item -Path "..\bin\HideDesktopIcons.exe" -Destination "$env:LOCALAPPDATA\WinMac" -Force
-
+            $shortcutPath = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Hide Desktop Icons.lnk"
+            $targetPath = "$env:LOCALAPPDATA\WinMac\HideDesktopIcons.exe"
+            $iconPath = "$env:LOCALAPPDATA\WinMac\HideDesktopIcons.exe"
+            $shell = New-Object -ComObject WScript.Shell
+            $shortcut = $shell.CreateShortcut($shortcutPath)
+            $shortcut.TargetPath = $targetPath
+            $shortcut.IconLocation = $iconPath
+            $shortcut.Save()
         # Icons Pack
 Write-Host @"
 `e[91m$("Please make sure that MS Defender/3rd party tool is disabled,
