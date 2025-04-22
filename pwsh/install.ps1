@@ -1357,9 +1357,9 @@ Write-Host "--------------------------------------------------------------------
 Start-Sleep 2
 $restartConfirmation = Read-Host "`nRestart computer now? It's recommended to fully apply all the changes (Y/n)"
 if ($restartConfirmation -eq "Y" -or $restartConfirmation -eq "y") {
-    Write-Host "Restarting computer in" -ForegroundColor Red
+    Write-Host "" -ForegroundColor Red
     for ($a=9; $a -ge 0; $a--) {
-        Write-Host -NoNewLine "`b$a" -ForegroundColor Red
+        Write-Host "`rRestarting computer in $a" -NoNewLine -ForegroundColor Yellow
         Start-Sleep 1
     }
     Restart-Computer -Force
