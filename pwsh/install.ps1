@@ -1019,7 +1019,7 @@ foreach ($app in $selectedApps) {
                         $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace '"UIDarkMode"="3"', '"UIDarkMode"="1"' }
                         $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "1644825", "15658734" }
                         $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "16119283", "2563870" }
-                        $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "store_dark", "store_light" }
+                        $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "store_light", "store_dark" }
                         $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "recycle_bin_empty_light", "recycle_bin_empty_dark" }
                         $modifiedFile = "..\temp\winstep.reg"
                         $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 
@@ -1030,7 +1030,7 @@ foreach ($app in $selectedApps) {
                     $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace '"UIDarkMode"="3"', '"UIDarkMode"="1"' }
                     $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "1644825", "15658734" }
                     $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "16119283", "2563870" }
-                    $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "store_dark", "store_light" }
+                    $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "store_light", "store_dark" }
                     $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "recycle_bin_empty_light", "recycle_bin_empty_dark" }
                     $modifiedFile = "..\temp\winstep.reg"
                     $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 
