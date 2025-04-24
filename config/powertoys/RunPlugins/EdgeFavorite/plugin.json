@@ -1,0 +1,14 @@
+{
+  "ID": "D73A7EF0633F4C82A14454FFD848F447",
+  "Disabled": false,
+  "ActionKeyword": "@",
+  "IsGlobal": false,
+  "Name": "Edge Favorite",
+  "Author": "davidegiacometti",
+  "Version": "1.0.0",
+  "Language": "csharp",
+  "Website": "https://aka.ms/powertoys",
+  "ExecuteFileName": "Community.PowerToys.Run.Plugin.EdgeFavorite.dll",
+  "IcoPathDark": "Images\\EdgeFavorite.dark.png",
+  "IcoPathLight": "Images\\EdgeFavorite.light.png"
+}

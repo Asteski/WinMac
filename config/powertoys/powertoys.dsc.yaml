@@ -33,7 +33,7 @@ properties:
           CloseAfterLosingFocus: true
         AlwaysOnTop:
           Enabled: true
-          Hotkey: "Win+A"
+          Hotkey: "Win+Shift+A"
           FrameThickness: 4
           FrameOpacity: 70
         RegistryPreview:
@@ -95,14 +95,9 @@ properties:
             - Name: "Windows Terminal"
               Disabled: true
         ColorPicker:
-          Enabled: true
-          ActivationShortcut: "Win+C"
+          Enabled: false
         PowerRename:
           Enabled: false
-          MRUEnabled: true
-          MaxMRUSize: 5
-          ExtendedContextMenuOnly: true
-          UseBoostLib: true
         ImageResizer:
           Enabled: true
         Awake:

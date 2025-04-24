@@ -2,15 +2,15 @@ param (
     [switch]$noGUI,
     [switch]$debug
 )
-$version = "0.8.2"
+$version = "0.9.0"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_install_log_$date.txt"
 $transcriptFile = "WinMac_install_transcript_$date.txt"
 $blueOrYellow = "B"
 $errorActionPreference="SilentlyContinue"
 $WarningPreference="SilentlyContinue"
-Add-Type -AssemblyName PresentationFramework
 Add-Type -AssemblyName System.Windows.Forms
+Add-Type -AssemblyName PresentationFramework
 if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null}
 if (-not (Test-Path -Path "../logs")) {New-Item -ItemType Directory -Path "../logs" | Out-Null}
 $sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
@@ -509,11 +509,11 @@ if ($result){
     $orbTheme = $result["orbTheme"]
     $gitProfile = $result["gitProfile"]
 }
-Write-Host "Starting installation process in..." -ForegroundColor Green
 for ($a=3; $a -ge 0; $a--) {
-    Write-Host -NoNewLine "`b$a" -ForegroundColor Green
+    Write-Host "`rStarting installation process in $a" -NoNewLine -ForegroundColor Yellow
     Start-Sleep 1
 }
+Write-Host "`r" -NoNewline
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
 Start-Transcript -Path ../logs/$transcriptFile -Append | Out-Null
 # Nuget check
@@ -560,8 +560,10 @@ foreach ($app in $selectedApps) {
         "1" {
             Write-Host "Installing PowerToys..." -ForegroundColor Yellow
             winget configure --enable | Out-Null
-            pwsh -NoProfile -Command "winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null"
+            pwsh -NoProfile -Command "winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements" > $null 2>&1
             Copy-Item -Path "..\config\powertoys\ptr\ptr.exe" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
+            Copy-Item -Path "..\config\powertoys\Assets" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
+            Copy-Item -Path "..\config\powertoys\Plugins" -Destination "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\" -Recurse -Force
             if ($blueOrYellow -eq 'B' -or $blueOrYellow -eq 'b') {
                 Copy-Item -Path "..\config\powertoys\RunPlugins" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
                 Copy-Item -Path "..\config\powertoys\RunPlugins\Everything" "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -Recurse -Force
@@ -577,6 +579,11 @@ foreach ($app in $selectedApps) {
                 $envPath += ";$env:LOCALAPPDATA\PowerToys"
                 [System.Environment]::SetEnvironmentVariable("Path", $envPath, [System.EnvironmentVariableTarget]::User)
             }
+            Stop-Process -Name PowerToys* -ErrorAction SilentlyContinue
+            start-sleep 5
+            Stop-Process -Name Microsoft.CmdPal.UI -ErrorAction SilentlyContinue
+            (Get-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json") -replace '"CmdPal":true', '"CmdPal": false' | Set-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json" -Force
+            Start-Process "$env:LOCALAPPDATA\PowerToys\PowerToys.exe" -ArgumentList "--start-minimized" -WorkingDirectory "$env:LOCALAPPDATA\PowerToys" -WindowStyle Hidden
             Write-Host "PowerToys installation completed." -ForegroundColor Green
         }
     # Everything
@@ -882,7 +889,7 @@ foreach ($app in $selectedApps) {
     # Stahky
         "7" {
             Write-Host "Installing Stahky..." -ForegroundColor Yellow
-            $url = "https://github.com/joedf/stahky/releases/download/v0.2.0.1/stahky_U64_v0.2.0.1.zip"
+            $url = "https://github.com/joedf/stahky/releases/download/v0.3.9.1/stahky_U64_v0.3.9.1.zip"
             $outputPath = "..\stahky_U64.zip"
             $exePath = "$env:LOCALAPPDATA\Stahky"
             Invoke-Output {New-Item -ItemType Directory -Path $exePath -Force}
@@ -1012,7 +1019,7 @@ foreach ($app in $selectedApps) {
                         $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace '"UIDarkMode"="3"', '"UIDarkMode"="1"' }
                         $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "1644825", "15658734" }
                         $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "16119283", "2563870" }
-                        $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "store_dark", "store_light" }
+                        $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "store_light", "store_dark" }
                         $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "recycle_bin_empty_light", "recycle_bin_empty_dark" }
                         $modifiedFile = "..\temp\winstep.reg"
                         $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 
@@ -1023,13 +1030,30 @@ foreach ($app in $selectedApps) {
                     $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace '"UIDarkMode"="3"', '"UIDarkMode"="1"' }
                     $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "1644825", "15658734" }
                     $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "16119283", "2563870" }
-                    $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "store_dark", "store_light" }
+                    $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "store_light", "store_dark" }
                     $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "recycle_bin_empty_light", "recycle_bin_empty_dark" }
                     $modifiedFile = "..\temp\winstep.reg"
                     $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 
                     $regFile = $modifiedFile
                 }
                 reg import $regFile > $null 2>&1
+                if (Test-Path -Path "$env:LOCALAPPDATA\WinLaunch") {
+                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Label9" -Value "Launchpad"
+                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path9" -Value "$env:LOCALAPPDATA\WinLaunch\WinLaunch.exe"
+                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath9" -Value "C:\Users\Public\Documents\Winstep\Icons\launchpad.ico"
+                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type9" -Value "1"
+                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Label10" -Value "Capture Desktop"
+                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path10" -Value "*78"
+                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type10" -Value "2"
+                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath10" -Value "C:\Users\Public\Documents\Winstep\Icons\camera.ico"
+                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockNoItems1" -Value "10"
+                } else {
+                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Label9" -Value "Capture Desktop"
+                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path9" -Value "*78"
+                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type9" -Value "2"
+                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath9" -Value "C:\Users\Public\Documents\Winstep\Icons\camera.ico"
+                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockNoItems1" -Value "9"
+                }
                 Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "DockLabelColorHotTrack1" 
                 Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type6"
                 Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type7"
@@ -1061,6 +1085,8 @@ foreach ($app in $selectedApps) {
                     "https://raw.githubusercontent.com/m417z/my-windhawk-mods/main/mods/explorer-name-windows.wh.cpp",
                     "https://raw.githubusercontent.com/realgam3/dot-hide-wh/main/dot-hide.wh.cpp"
                     "https://raw.githubusercontent.com/aubymori/windhawk-mods/refs/heads/main/mods/modernize-folder-picker-dialog.wh.cpp"
+                    "https://raw.githubusercontent.com/m417z/my-windhawk-mods/refs/heads/main/mods/windows-11-notification-center-styler.wh.cpp",
+                    "https://raw.githubusercontent.com/ramensoftware/windhawk-mods/refs/heads/main/mods/classic-desktop-icons.wh.cpp"
                 )
                 $destinationPath = "$Env:ProgramData\Windhawk\ModsSource"
                 foreach ($url in $urls) {
@@ -1126,7 +1152,7 @@ foreach ($app in $selectedApps) {
             $shell = New-Object -ComObject WScript.Shell
             $shortcut = $shell.CreateShortcut($shortcut1Path)
             $shortcut.TargetPath = $target1Path
-            $shortcut.Save()            
+            $shortcut.Save()
             $shortcut2Path = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\WinLaunch.lnk"
             $target2Path = "$winLaunchDestinationPath\WinLaunch.exe"
             $icon2Path = "$winLaunchDestinationPath\winlaunch.ico"
@@ -1245,12 +1271,12 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             $sourceFilePath = "..\config\contextmenu\add\Add_Theme_Mode_in_Context_Menu.reg"
             $tempFilePath = "..\temp\Add_Theme_Mode_in_Context_Menu.reg"
             $ps1FilePath = "..\config\contextmenu\theme.ps1"
-            if (-not (Test-Path -Path "$env:LOCALAPPDATA\WinMac")) {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac" -Force}
+            if (-not (Test-Path -Path "$env:LOCALAPPDATA\WinMac")) {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac" -Force | Out-Null}
             Copy-Item -Path $ps1FilePath -Destination "$env:LOCALAPPDATA\WinMac" -Force     
             Copy-Item -Path $sourceFilePath -Destination '..\temp\' -Force
             $appData = $env:LOCALAPPDATA -replace '\\', '\\'
-            (Get-Content -Path $tempFilePath) -replace '%WINMACAPPDATA%', $appData | Set-Content -Path $tempFilePath
-            reg import '..\temp\Add_Theme_Mode_in_Context_Menu.reg'  > $null 2>&1
+            (Get-Content -Path $tempFilePath) -replace '%LOCALAPPDATA%', $appData | Set-Content -Path $tempFilePath
+            reg import '..\temp\Add_Theme_Mode_in_Context_Menu.reg' > $null 2>&1
             reg import '..\config\contextmenu\add\Add_Hidden_items_to_context_menu.reg' > $null 2>&1
             Invoke-Output {winget uninstall "Windows web experience Pack" --silent}
         ## End Task
@@ -1260,8 +1286,19 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             Invoke-Output {New-ItemProperty -Path $taskbarDevSettings -Name "TaskbarEndTask" -Value 1 -PropertyType DWORD -Force}
         ## Remove Home and Gallery icons
             Write-Host "Remove Home and Gallery icons..." -ForegroundColor DarkYellow
-            Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" -Force | Out-Null # Home
-            Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Force | Out-Null # Gallery
+            Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" -Force | Out-Null
+            Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Force | Out-Null
+        ## Hide Desktop icons
+            Write-Host "Hide Desktop Icons shortcut..." -ForegroundColor DarkYellow
+            Copy-Item -Path "..\bin\HideDesktopIcons.exe" -Destination "$env:LOCALAPPDATA\WinMac" -Force
+            $shortcutPath = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Hide Desktop Icons.lnk"
+            $targetPath = "$env:LOCALAPPDATA\WinMac\HideDesktopIcons.exe"
+            $iconPath = "$env:LOCALAPPDATA\WinMac\HideDesktopIcons.exe"
+            $shell = New-Object -ComObject WScript.Shell
+            $shortcut = $shell.CreateShortcut($shortcutPath)
+            $shortcut.TargetPath = $targetPath
+            $shortcut.IconLocation = $iconPath
+            $shortcut.Save()
         ## Icons Pack
 Write-Host @"
 `e[91m$("Please make sure that MS Defender/3rd party tool is disabled,
@@ -1284,7 +1321,7 @@ otherwise MS Defender will block installation of Icon Pack!")`e[0m
                     if ($blueOrYellow -eq "B" -or $blueOrYellow -eq "b") {
                         $shortcutPath = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\File Explorer.lnk"
                         $systemDllPath = "C:\Windows\System32\imageres.dll"
-                        $iconIndex = 265 # Replace with the desired icon index
+                        $iconIndex = 265
                         $shell = New-Object -ComObject WScript.Shell
                         $shortcut = $shell.CreateShortcut($shortcutPath)
                         $shortcut.IconLocation = "$systemDllPath,$iconIndex"
@@ -1293,10 +1330,8 @@ otherwise MS Defender will block installation of Icon Pack!")`e[0m
                 }
             }
             else {
-                Write-Host "Icon Pack installation skipped." -ForegroundColor DarkoRed
+                Write-Host "Icon Pack installation skipped." -ForegroundColor DarkRed
             }
-            Stop-Process -Name explorer -Force
-            Write-Host "Configuring Other Settings completed." -ForegroundColor Green
         }
     }
 }
@@ -1322,9 +1357,9 @@ Write-Host "--------------------------------------------------------------------
 Start-Sleep 2
 $restartConfirmation = Read-Host "`nRestart computer now? It's recommended to fully apply all the changes (Y/n)"
 if ($restartConfirmation -eq "Y" -or $restartConfirmation -eq "y") {
-    Write-Host "Restarting computer in" -ForegroundColor Red
+    Write-Host "" -ForegroundColor Red
     for ($a=9; $a -ge 0; $a--) {
-        Write-Host -NoNewLine "`b$a" -ForegroundColor Red
+        Write-Host "`rRestarting computer in $a" -NoNewLine -ForegroundColor Red
         Start-Sleep 1
     }
     Restart-Computer -Force

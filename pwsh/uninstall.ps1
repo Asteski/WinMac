@@ -2,7 +2,7 @@ param (
     [switch]$noGUI,
     [switch]$debug
 )
-$version = "0.8.2"
+$version = "0.9.0"
 $sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_uninstall_log_$date.txt"
@@ -55,13 +55,13 @@ if (!($noGUI)) {
     $bottomTextBlock1 = 'Important Notes:'
     $bottomTextBlock2 = 'Please disable Windows Defender/3rd party Anti-virus, to prevent issues with uninsalling icons pack.'
     $bottomTextBlock3 = 'PowerShell profile files will be removed, please make sure to backup your current profiles if needed.'
-    $bottomTextBlock4 = 'Vim and Nexus packages will show prompt to uninstall, please confirm the uninstallations manually.'
+    $bottomTextBlock4 = 'Vim, Nexus, Windhawk and Icons Pack will show prompt to uninstall, please confirm the uninstallations manually.'
     $bottomTextBlock5 = 'For guide on how to use the script, please refer to the Wiki page on WinMac GitHub page: https://github.com/Asteski/WinMac/wiki'
 [xml]$xaml = @"
 <Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="WinMac Uninstaller Wizard" Height="640" Width="480" WindowStartupLocation="CenterScreen" Background="$backgroundColor" Icon="$iconFolderPath\wizard.ico">
+    Title="WinMac Uninstaller Wizard" Height="740" Width="480" WindowStartupLocation="CenterScreen" Background="$backgroundColor" Icon="$iconFolderPath\wizard.ico">
     <Window.Resources>
         <SolidColorBrush x:Key="BackgroundBrush" Color="$backgroundColor"/>
         <SolidColorBrush x:Key="ForegroundBrush" Color="$foregroundColor"/>
@@ -340,11 +340,11 @@ Write-Host @"
 if ($result){
     $selectedApps = $result["selectedApps"]
 }
-Write-Host "Starting uninstallation process in..." -ForegroundColor Green
 for ($a=3; $a -ge 0; $a--) {
-    Write-Host -NoNewLine "`b$a" -ForegroundColor Green
+    Write-Host "`rStarting uninstallation process in $a" -NoNewLine -ForegroundColor Yellow
     Start-Sleep 1
 }
+Write-Host "`r" -NoNewline
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
 Start-Transcript -Path ../logs/$transcriptFile -Append | Out-Null
 # Nuget check
@@ -430,8 +430,13 @@ foreach ($app in $selectedApps) {
     # StartAllBack
         "4" {
             Write-Host "Uninstalling StartAllBack..." -ForegroundColor Yellow
-            Invoke-Output { Uninstall-WinGetPackage -id "StartIsBack.StartAllBack" }
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
+            $sabRegPath = "HKCU:\Software\StartIsBack"
+            taskkill /f /im explorer.exe
+            Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0
+            Start-Sleep 5
+            Start-Process -name explorer
+            Invoke-Output { Uninstall-WinGetPackage -id "StartIsBack.StartAllBack" }
             Set-ItemProperty -Path $exRegPath\Advanced -Name "UseCompactMode" -Value 0
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarAl" -Value 1
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarGlomLevel" -Value 0
@@ -443,6 +448,7 @@ foreach ($app in $selectedApps) {
     # WinMac Menu
         "5" {
             Write-Host "Uninstalling WinMac Menu..." -ForegroundColor Yellow
+            $sabRegPath = "HKCU:\Software\StartIsBack"
             if ($sysType -like "*ARM*"){
                 Stop-Process -Name WindowsKey -Force
                 Stop-Process -Name StartButton -Force
@@ -457,8 +463,8 @@ foreach ($app in $selectedApps) {
             Invoke-Output { Uninstall-WinGetPackage -name "Winver UWP" }
             Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
             Expand-Archive -Path "..\config\WinX-default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
-            $sabRegPath = "HKCU:\Software\StartIsBack"
             Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 0 -ErrorAction SilentlyContinue
+            Remove-Item -Path "$env:LOCALAPPDATA\WinMac\start.exe" -Force
             Stop-Process -n Explorer
             Write-Host "Uninstalling WinMac Menu completed." -ForegroundColor Green
         }
@@ -592,6 +598,8 @@ uint fWinIni);
             New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" -Force | Out-Null # Home
             New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Force | Out-Null # Gallery
             Invoke-Output { Remove-Item -Path "$env:LOCALAPPDATA\WinMac\theme.ps1" }
+            Remove-Item -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Hide Desktop Icons.lnk" -Force
+            Remove-Item -Path "$env:LOCALAPPDATA\WinMac\HideDesktopIcons.exe" -Force
             Write-Host @"
 `e[91m$("Please make sure that MS Defender/3rd party tool is disabled,
 otherwise MS Defender will block uninstallation of Icon Pack!")`e[0m
@@ -648,9 +656,8 @@ Write-Host "--------------------------------------------------------------------
 Write-Host
 $restartConfirmation = Read-Host "Restart computer now? It's recommended to fully apply all the changes (Y/n)"
 if ($restartConfirmation -eq "Y" -or $restartConfirmation -eq "y") {
-    Write-Host "Restarting computer in" -ForegroundColor Red
     for ($a=9; $a -ge 0; $a--) {
-        Write-Host -NoNewLine "`b$a" -ForegroundColor Red
+        Write-Host "`rRestarting computer in $a" -NoNewLine -ForegroundColor Red
         Start-Sleep 1
     }
     Restart-Computer -Force

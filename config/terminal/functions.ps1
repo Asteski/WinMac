@@ -76,8 +76,27 @@ set-alias -name cc -value '..2'
 function l { Get-ChildItem $args -Force -ErrorAction SilentlyContinue | format-table -autosize }
 function ll { Get-ChildItem $args -ErrorAction SilentlyContinue | Where-Object { $_.PSIsContainer -and $_.Name -notmatch '^\.' -or $_.PSIsContainer -eq $false } | format-table -autosize }
 function ld {
-    $out = Get-ChildItem $args -Force -Directory -ErrorAction SilentlyContinue
-    if ($out.mode -like '*a*') { Write-Host "Not a directory" -ForegroundColor Red } else { $out | format-table -autosize }
+    param (
+        [string[]]$Paths = "."
+    )
+
+    foreach ($Path in $Paths) {
+        if (Test-Path $Path) {
+            $item = Get-Item -LiteralPath $Path -Force -ErrorAction SilentlyContinue
+            if ($item -is [System.IO.DirectoryInfo]) {
+                Get-ChildItem -LiteralPath $Path -Directory -Force -ErrorAction SilentlyContinue
+            }
+            elseif ($item -is [System.IO.FileInfo]) {
+                Write-Error "'$Path' is not a directory."
+            }
+            else {
+                Write-Error "Unknown item type: '$Path'"
+            }
+        }
+        else {
+            Write-Error "Path not found: '$Path'"
+        }
+    }
 }
 function lf { Get-ChildItem $args -Force -Attributes !D -ErrorAction SilentlyContinue | format-table -autosize }
 function lls {
@@ -177,8 +196,11 @@ function ffind {
     if ($Name) {
         if ($Name.StartsWith('.\')) {
             $Name = $Name.Substring(2)
-        }    
+        }
         $filter = "*$Name*"
+        # Extract the actual search term without wildcards and leading dot
+        $searchTerm = $Name -replace '^\*+' -replace '\*+$' -replace '^\.'
+        
         if ($Recurse) {
             $items = Get-ChildItem -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -like $filter }
         } else {
@@ -188,19 +210,23 @@ function ffind {
             foreach ($item in $items) {
                 $fullName = $item.FullName.Replace($pwd, '.')
                 $fileName = $item.Name
-                $beforeMatch, $match, $afterMatch = $fileName -split "($Name)", 3, 'IgnoreCase'
-                Write-Host "$($fullName.Substring(0, $fullName.Length - $fileName.Length))$beforeMatch" -NoNewline -ForegroundColor DarkGray
-                Write-Host "$match" -ForegroundColor Red -NoNewline
-                Write-Host "$afterMatch" -ForegroundColor DarkGray
+                $parts = $fileName -split "($([regex]::Escape($searchTerm)))", 3, 'IgnoreCase'
+                if ($parts.Count -eq 3) {
+                    $beforeMatch, $match, $afterMatch = $parts
+                    Write-Host "$($fullName.Substring(0, $fullName.Length - $fileName.Length))$beforeMatch" -NoNewline -ForegroundColor DarkGray
+                    Write-Host "$match" -ForegroundColor Red -NoNewline
+                    Write-Host "$afterMatch" -ForegroundColor DarkGray
+                } else {
+                    Write-Host $fullName -ForegroundColor DarkGray
+                }
             }
         } else {
             Write-Host "No files found" -ForegroundColor Yellow
         }
     } else {
-        Write-Host "No filename provided" -ForegroundColor Red
+        Write-Host "No file name provided" -ForegroundColor Red
     }
 }
-
 $stacks = "$env:LOCALAPPDATA\Stahky"
 function stahky { 
     $dir = "$args"
@@ -625,7 +651,7 @@ function string-search {
 }
 
 function grep {
-    $excludeFiles = @('*.dll', '*.lnk', '*.zip', '*.rar', '*.7zip', '*.png', '*.exe', '*.msi', '*.jpg', '*.jpeg', '*.gif', '*.bmp', '*.ico', '*.mp3', '*.mp4', '*.avi', '*.mkv', '*.flv', '*.mov', '*.wav', '*.wma', '*.wmv', '*.aac', '*.flac', '*.m4a', '*.ogg', '*.opus', '*.webm', '*.webp', '*.pdf')
+    $excludeFiles = @('*.svg', '*.dll', '*.lnk', '*.zip', '*.rar', '*.7zip', '*.png', '*.exe', '*.msi', '*.jpg', '*.jpeg', '*.gif', '*.bmp', '*.ico', '*.mp3', '*.mp4', '*.avi', '*.mkv', '*.flv', '*.mov', '*.wav', '*.wma', '*.wmv', '*.aac', '*.flac', '*.m4a', '*.ogg', '*.opus', '*.webm', '*.webp', '*.pdf')
     if($args -eq 0) { 
         Write-Host -f Red "Error: " -Non; Write-Host "No arguments provided"
     }
