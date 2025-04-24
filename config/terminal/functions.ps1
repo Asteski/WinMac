@@ -224,7 +224,7 @@ function ffind {
             Write-Host "No files found" -ForegroundColor Yellow
         }
     } else {
-        Write-Host "No filename provided" -ForegroundColor Red
+        Write-Host "No file name provided" -ForegroundColor Red
     }
 }
 $stacks = "$env:LOCALAPPDATA\Stahky"
