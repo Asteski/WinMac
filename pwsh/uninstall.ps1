@@ -55,7 +55,7 @@ if (!($noGUI)) {
     $bottomTextBlock1 = 'Important Notes:'
     $bottomTextBlock2 = 'Please disable Windows Defender/3rd party Anti-virus, to prevent issues with uninsalling icons pack.'
     $bottomTextBlock3 = 'PowerShell profile files will be removed, please make sure to backup your current profiles if needed.'
-    $bottomTextBlock4 = 'Vim and Nexus packages will show prompt to uninstall, please confirm the uninstallations manually.'
+    $bottomTextBlock4 = 'Vim, Nexus, Windhawk and Icons Pack packages will show prompt to uninstall, please confirm the uninstallations manually.'
     $bottomTextBlock5 = 'For guide on how to use the script, please refer to the Wiki page on WinMac GitHub page: https://github.com/Asteski/WinMac/wiki'
 [xml]$xaml = @"
 <Window
