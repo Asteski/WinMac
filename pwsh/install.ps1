@@ -514,6 +514,7 @@ if ($selectedApps -like '*9*') {
     $dockDynamic = Read-Host "`nEnter 'D' for default or 'X' for dynamic dock"
     if ($dockDynamic -eq 'D' -or $dockDynamic -eq 'd') {
         Write-Host "Using default Dock." -ForegroundColor Green
+        $dockDynamic = 'D'
     }
     elseif ($dockDynamic -eq 'X' -or $dockDynamic -eq 'x') {
         Write-Host "Using dynamic Dock." -ForegroundColor Green
@@ -521,6 +522,7 @@ if ($selectedApps -like '*9*') {
     else
     {
         Write-Host "Invalid input. Using defualt Dock." -ForegroundColor Yellow
+        $dockDynamic = 'D'
     }
 }
 
