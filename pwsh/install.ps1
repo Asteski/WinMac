@@ -1016,7 +1016,7 @@ foreach ($app in $selectedApps) {
                 $checkNexus = Get-WinGetPackage -name Nexus
                 if ($null -eq $checkNexus) {
                     $downloadUrl = "https://www.winstep.net/nexus.zip"
-                    $downloadPath = "..\temp\Nexus.zip"w
+                    $downloadPath = "..\temp\Nexus.zip"
                     if (-not (Test-Path $downloadPath)) {
                         Invoke-WebRequest -Uri $downloadUrl -OutFile $downloadPath
                     }
