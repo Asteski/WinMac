@@ -543,6 +543,8 @@ if ($result){
     $roundedOrSquared = $result["roundedOrSquared"]
     $lightOrDark = $result["lightOrDark"]
     $stackTheme = $result["stackTheme"]
+    $dockDynamic = $result["dockDynamic"]
+    $blueOrYellow = $result["blueOrYellow"]
     $orbTheme = $result["orbTheme"]
     $gitProfile = $result["gitProfile"]
 }
