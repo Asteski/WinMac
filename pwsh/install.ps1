@@ -2,7 +2,7 @@ param (
     [switch]$noGUI,
     [switch]$debug
 )
-$version = "0.9.0"
+$version = "0.9.1"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_install_log_$date.txt"
 $transcriptFile = "WinMac_install_transcript_$date.txt"
@@ -486,6 +486,20 @@ if ($selectedApps -like '*9*' -or $selectedApps -like '*12*') {
     {
         Write-Host "Invalid input. Defaulting to blue folders." -ForegroundColor Yellow
         $blueOrYellow = 'B'
+    }
+}
+
+if ($selectedApps -like '*9*') {
+    $dynamicDock = Read-Host "`nEnter 'D' for default or 'X' for dynamic dock"
+    if ($dynamicDock -eq 'D' -or $dynamicDock -eq 'd') {
+        Write-Host "Using default Dock." -ForegroundColor Green
+    }
+    elseif ($dynamicDock -eq 'X' -or $dynamicDock -eq 'x') {
+        Write-Host "Using dynamic Dock." -ForegroundColor Green
+    }
+    else
+    {
+        Write-Host "Invalid input. Using defualt Dock." -ForegroundColor Yellow
     }
 }
 
@@ -1053,6 +1067,9 @@ foreach ($app in $selectedApps) {
                     Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type9" -Value "2"
                     Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath9" -Value "C:\Users\Public\Documents\Winstep\Icons\camera.ico"
                     Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockNoItems1" -Value "9"
+                }
+                if ($dynamicDock -eq "X" -or $dynamicDock -eq "x") {
+                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockAutoHideMaximized1" -Value "True"
                 }
                 Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "DockLabelColorHotTrack1" 
                 Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type6"
