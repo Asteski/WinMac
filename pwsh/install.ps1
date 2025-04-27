@@ -2,7 +2,7 @@ param (
     [switch]$noGUI,
     [switch]$debug
 )
-$version = "0.9.0"
+$version = "0.9.1"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_install_log_$date.txt"
 $transcriptFile = "WinMac_install_transcript_$date.txt"
@@ -147,21 +147,22 @@ if (!($noGUI)) {
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
                     <!-- Additional Settings: Start Menu -->
                     <GroupBox Grid.Row="0" Grid.Column="0" Header="Start Menu Options" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
                         <StackPanel>
-                            <RadioButton x:Name="startMenuWinMac" Content="WinMac Start Menu" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                            <RadioButton x:Name="startMenuClassic" Content="Classic Start Menu" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                            <RadioButton x:Name="startMenuWinMac" Content="WinMac Menu" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                            <RadioButton x:Name="startMenuClassic" Content="Classic Menu" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         </StackPanel>
                     </GroupBox>
 
                     <!-- Additional Settings: Prompt Style -->
                     <GroupBox Grid.Row="0" Grid.Column="1" Header="Prompt Style Options" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
                         <StackPanel>
-                            <RadioButton x:Name="promptStyleWinMac" Content="WinMac Prompt" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                            <RadioButton x:Name="promptStylemacOS" Content="macOS Prompt" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                            <RadioButton x:Name="promptStyleWinMac" Content="WinMac prompt" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                            <RadioButton x:Name="promptStylemacOS" Content="macOS prompt" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         </StackPanel>
                     </GroupBox>
 
@@ -178,6 +179,22 @@ if (!($noGUI)) {
                         <StackPanel>
                             <RadioButton x:Name="themeLight" Content="Light" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                             <RadioButton x:Name="themeDark" Content="Dark" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <!-- Additional Settings: Folder Color -->
+                    <GroupBox Grid.Row="0" Grid.Column="2" Header="Folder Color" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
+                        <StackPanel>
+                            <RadioButton x:Name="folderColorBlue" Content="Blue" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                            <RadioButton x:Name="folderColorYellow" Content="Yellow" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <!-- Additional Settings: Dock Style -->
+                    <GroupBox Grid.Row="1" Grid.Column="2" Header="Dock Style" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
+                        <StackPanel>
+                            <RadioButton x:Name="dockStyleDefault" Content="Default" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                            <RadioButton x:Name="dockStyleDynamic" Content="Dynamic" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         </StackPanel>
                     </GroupBox>
                 </Grid>
@@ -221,6 +238,8 @@ if (!($noGUI)) {
     $promptStyle = $window.FindName("promptStyleWinMac")
     $shellCorner = $window.FindName("shellCornerRounded")
     $theme = $window.FindName("themeLight")
+    $blueOrYellow = $window.FindName("folderColorYellow")
+    $dockDynamic = $window.FindName("dockStyleDynamic")
     $btnInstall = $window.FindName("btnInstall")
     $btnCancel = $window.FindName("btnCancel")
     $fullInstall.Add_Checked({$componentSelection.IsEnabled = $false})
@@ -254,6 +273,8 @@ if (!($noGUI)) {
         $result["promptSetVar"] = if ($promptStyle.IsChecked) { "W"} else { "M" }
         $result["roundedOrSquared"] = if ($shellCorner.IsChecked) { "R" } else { "S" }
         $result["lightOrDark"] = if ($theme.IsChecked) { "L"; $result["stackTheme"] = 'light'; $result["orbTheme"] = 'black' } else { "D"; $result["stackTheme"] = 'dark'; $result["orbTheme"] = 'white' }
+        $result["blueOrYellow"] = if ($blueOrYellow.IsChecked) { "Y" } else { "B" }
+        $result["dockDynamic"] = if ($dockDynamic.IsChecked) { "X" } else { "D" }
         $result["gitProfile"] = if ($chkGitProfile.IsChecked) { $true } else { $false }
         $result = [System.Windows.MessageBox]::Show("Do you wish to continue installation?", "WinMac Deployment", [System.Windows.MessageBoxButton]::OKCancel, [System.Windows.MessageBoxImage]::Information) 
         if ($result -eq 'OK') {
@@ -489,6 +510,22 @@ if ($selectedApps -like '*9*' -or $selectedApps -like '*12*') {
     }
 }
 
+if ($selectedApps -like '*9*') {
+    $dockDynamic = Read-Host "`nEnter 'D' for default or 'X' for dynamic dock"
+    if ($dockDynamic -eq 'D' -or $dockDynamic -eq 'd') {
+        Write-Host "Using default Dock." -ForegroundColor Green
+        # $dockDynamic = 'D'
+    }
+    elseif ($dockDynamic -eq 'X' -or $dockDynamic -eq 'x') {
+        Write-Host "Using dynamic Dock." -ForegroundColor Green
+    }
+    else
+    {
+        Write-Host "Invalid input. Using defualt Dock." -ForegroundColor Yellow
+        # $dockDynamic = 'D'
+    }
+}
+
 
 Start-Sleep 1
 $installConfirmation = Read-Host "`nAre you sure you want to start the installation process (Y/n)"
@@ -506,6 +543,8 @@ if ($result){
     $roundedOrSquared = $result["roundedOrSquared"]
     $lightOrDark = $result["lightOrDark"]
     $stackTheme = $result["stackTheme"]
+    $dockDynamic = $result["dockDynamic"]
+    $blueOrYellow = $result["blueOrYellow"]
     $orbTheme = $result["orbTheme"]
     $gitProfile = $result["gitProfile"]
 }
@@ -1059,6 +1098,11 @@ foreach ($app in $selectedApps) {
                 Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type7"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path6" -Value $downloadsPath
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path7" -Value "$env:APPDATA\Microsoft\Windows\Recent\"
+                if ($dockDynamic -eq "X" -or $dockDynamic -eq "x") {
+                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockAutoHideMaximized1" -Value "True"
+                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockRespectReserved1" -Value "False"
+                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockReserveScreen1" -Value "False"
+            }
                 if ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath0" -Value "C:\\Users\\Public\\Documents\\Winstep\\Icons\\explorer_default.ico"}
                 Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe'
                 while (!(Get-Process "nexus")) { Start-Sleep 1 }
