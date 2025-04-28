@@ -62,7 +62,11 @@ if (!($noGUI)) {
 <Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="WinMac Deployment Wizard" Height="920" Width="480" WindowStartupLocation="CenterScreen" Background="$backgroundColor" Icon="$iconFolderPath\wizard.ico">
+    Title="WinMac Deployment Wizard" 
+    Height="920" Width="480" 
+    WindowStartupLocation="CenterScreen" 
+    Background="$backgroundColor" 
+    Icon="$iconFolderPath\wizard.ico">
     <Window.Resources>
         <SolidColorBrush x:Key="BackgroundBrush" Color="$backgroundColor"/>
         <SolidColorBrush x:Key="ForegroundBrush" Color="$foregroundColor"/>
@@ -1127,8 +1131,8 @@ foreach ($app in $selectedApps) {
                 $urls = @(
                     "https://raw.githubusercontent.com/m417z/my-windhawk-mods/main/mods/explorer-details-better-file-sizes.wh.cpp",
                     "https://raw.githubusercontent.com/m417z/my-windhawk-mods/main/mods/explorer-name-windows.wh.cpp",
-                    "https://raw.githubusercontent.com/realgam3/dot-hide-wh/main/dot-hide.wh.cpp"
-                    "https://raw.githubusercontent.com/aubymori/windhawk-mods/refs/heads/main/mods/modernize-folder-picker-dialog.wh.cpp"
+                    "https://raw.githubusercontent.com/realgam3/dot-hide-wh/main/dot-hide.wh.cpp",
+                    "https://raw.githubusercontent.com/aubymori/windhawk-mods/refs/heads/main/mods/modernize-folder-picker-dialog.wh.cpp",
                     "https://raw.githubusercontent.com/m417z/my-windhawk-mods/refs/heads/main/mods/windows-11-notification-center-styler.wh.cpp"
                 )
                 $destinationPath = "$Env:ProgramData\Windhawk\ModsSource"
