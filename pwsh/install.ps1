@@ -1117,11 +1117,7 @@ foreach ($app in $selectedApps) {
             }
         }
     # Windhawk
-        "10" {
-            if ($sysType -like "*ARM*") {
-                Write-Host "Windhawk is not supported on ARM devices. Skipping installation." -ForegroundColor Red
-            }
-            else {
+       "10" {
                 Write-Host "Installing Windhawk..." -ForegroundColor Yellow
                 Invoke-Output {Install-WinGetPackage -name Windhawk}
                 if (-not (Test-Path "$Env:ProgramData\Windhawk\ModsSource")) {New-Item -ItemType Directory -Path "$Env:ProgramData\Windhawk\ModsSource" -Force | Out-Null}
@@ -1147,7 +1143,6 @@ foreach ($app in $selectedApps) {
                 Start-Process "$Env:ProgramFiles\Windhawk\Windhawk.exe"
                 Write-Host "Windhawk installation completed." -ForegroundColor Green
             }
-        }
     # Hot Corners
         "11" {
             Write-Host "Installing Hot Corners..." -ForegroundColor Yellow
