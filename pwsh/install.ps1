@@ -1118,35 +1118,35 @@ foreach ($app in $selectedApps) {
         }
     # Windhawk
         "10" {
-            if ($sysType -like "*ARM*") {
-                Write-Host "Windhawk is not supported on ARM devices. Skipping installation." -ForegroundColor Red
+            # if ($sysType -like "*ARM*") {
+            #     Write-Host "Windhawk is not supported on ARM devices. Skipping installation." -ForegroundColor Red
+            # }
+            # else {
+            Write-Host "Installing Windhawk..." -ForegroundColor Yellow
+            Invoke-Output {Install-WinGetPackage -name Windhawk}
+            if (-not (Test-Path "$Env:ProgramData\Windhawk\ModsSource")) {New-Item -ItemType Directory -Path "$Env:ProgramData\Windhawk\ModsSource" -Force | Out-Null}
+            if (-not (Test-Path "$Env:ProgramData\Windhawk\Engine\Mods")) {New-Item -ItemType Directory -Path "$Env:ProgramData\Windhawk\Engine\Mods" -Force | Out-Null}
+            Stop-Process -Name Windhawk -Force
+            Copy-Item ..\config\windhawk\Mods\* "$Env:ProgramData\Windhawk\Engine\Mods" -Recurse -Force
+            $urls = @(
+                "https://raw.githubusercontent.com/m417z/my-windhawk-mods/main/mods/explorer-details-better-file-sizes.wh.cpp",
+                "https://raw.githubusercontent.com/m417z/my-windhawk-mods/main/mods/explorer-name-windows.wh.cpp",
+                "https://raw.githubusercontent.com/realgam3/dot-hide-wh/main/dot-hide.wh.cpp",
+                "https://raw.githubusercontent.com/aubymori/windhawk-mods/refs/heads/main/mods/modernize-folder-picker-dialog.wh.cpp",
+                "https://raw.githubusercontent.com/m417z/my-windhawk-mods/refs/heads/main/mods/windows-11-notification-center-styler.wh.cpp"
+            )
+            $destinationPath = "$Env:ProgramData\Windhawk\ModsSource"
+            foreach ($url in $urls) {
+                $fileName = [System.IO.Path]::GetFileName($url)
+                $outputPath = Join-Path -Path $destinationPath -ChildPath $fileName
+                Invoke-WebRequest -Uri $url -OutFile $outputPath
             }
-            else {
-                Write-Host "Installing Windhawk..." -ForegroundColor Yellow
-                Invoke-Output {Install-WinGetPackage -name Windhawk}
-                if (-not (Test-Path "$Env:ProgramData\Windhawk\ModsSource")) {New-Item -ItemType Directory -Path "$Env:ProgramData\Windhawk\ModsSource" -Force | Out-Null}
-                if (-not (Test-Path "$Env:ProgramData\Windhawk\Engine\Mods")) {New-Item -ItemType Directory -Path "$Env:ProgramData\Windhawk\Engine\Mods" -Force | Out-Null}
-                Stop-Process -Name Windhawk -Force
-                Copy-Item ..\config\windhawk\Mods\* "$Env:ProgramData\Windhawk\Engine\Mods" -Recurse -Force
-                $urls = @(
-                    "https://raw.githubusercontent.com/m417z/my-windhawk-mods/main/mods/explorer-details-better-file-sizes.wh.cpp",
-                    "https://raw.githubusercontent.com/m417z/my-windhawk-mods/main/mods/explorer-name-windows.wh.cpp",
-                    "https://raw.githubusercontent.com/realgam3/dot-hide-wh/main/dot-hide.wh.cpp",
-                    "https://raw.githubusercontent.com/aubymori/windhawk-mods/refs/heads/main/mods/modernize-folder-picker-dialog.wh.cpp",
-                    "https://raw.githubusercontent.com/m417z/my-windhawk-mods/refs/heads/main/mods/windows-11-notification-center-styler.wh.cpp"
-                )
-                $destinationPath = "$Env:ProgramData\Windhawk\ModsSource"
-                foreach ($url in $urls) {
-                    $fileName = [System.IO.Path]::GetFileName($url)
-                    $outputPath = Join-Path -Path $destinationPath -ChildPath $fileName
-                    Invoke-WebRequest -Uri $url -OutFile $outputPath
-                }
-                reg import ..\config\windhawk\settings.reg > $null 2>&1
-                $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
-                Move-Item -Path "C:\Users\Public\Desktop\Windhawk.lnk" -Destination $programsDir -Force
-                Start-Process "$Env:ProgramFiles\Windhawk\Windhawk.exe"
-                Write-Host "Windhawk installation completed." -ForegroundColor Green
-            }
+            reg import ..\config\windhawk\settings.reg > $null 2>&1
+            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+            Move-Item -Path "C:\Users\Public\Desktop\Windhawk.lnk" -Destination $programsDir -Force
+            Start-Process "$Env:ProgramFiles\Windhawk\Windhawk.exe"
+            Write-Host "Windhawk installation completed." -ForegroundColor Green
+            # }
         }
     # Hot Corners
         "11" {
