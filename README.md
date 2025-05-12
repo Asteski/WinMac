@@ -66,8 +66,6 @@
 
 - **Enhanced Icons** - refresh legacy and default Windows components with modern set of icons.
 
-Discover the future of computing with WinMac, where the power of Windows meets the elegance of macOS in perfect harmony. Upgrade to WinMac and elevate your computing experience to new heights!
-
 # Installation
 
 > [!IMPORTANT]  
