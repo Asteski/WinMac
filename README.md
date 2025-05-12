@@ -56,7 +56,7 @@
 ## Installation
 
 > [!IMPORTANT]  
-> **For the most reliable deployment process, I recommend to check [Installation Guide Wiki](https://github.com/Asteski/WinMac/wiki/Installation-Guide) page.**
+> **For the most reliable deployment process, I recommend to check [Installation Guide](https://github.com/Asteski/WinMac/wiki/Installation-Guide) Wiki page.**
 
 EasyLauncher batch script allows the installer to be run as a GUI or in a terminal to make the installation and configuration process simple and straightforward.
 
@@ -68,7 +68,7 @@ Here are the ways you can run different deployment mods:
 - *EasyLayncher.bat -uninstallnogui* or *-un* runs uninstaller fully in terminal
 
 > [!CAUTION]
-> **You must run batch file in Administrative session of Powershell 7 (not Windows Powershell) to ensure reliable installation/unintallation process.**
+> **You must run batch file in Administrative session of Powershell 7 (not Windows Powershell) to ensure reliable installation/uninstallation process.**
 
 You can choose between full or custom installation, if you only want to install specific WinMac components.
 
