@@ -78,7 +78,7 @@ You can also install WinMac on Windows 10 22H2+, with some caveats described [he
 ## Future plans
 
 - include *Windhawk* and *Open-Shell* for ARM-based platforms 
-- include *Customize Windows notifications placement* mod in Windhawk
+- include *Customize Windows notifications placement* mod in *Windhawk*
 - include *MacType*
 - install *Nerd Fonts* for Terminal
 - custom context menu theme for *Nexus* to match Windows 11 design
