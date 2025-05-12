@@ -48,59 +48,30 @@
 
 ## Features
 
-- **Quick Launcher**
+- **Quick Launcher** - quick launcher for power users that contains additional features, allowing users to quickly search for files, applications, and settings on your system.
 
-PowerToys brings a macOS Spotlight functionality to Windows with PowerToys Run. It allows users to quickly search for files, applications, and settings on your system. 
+- **Dock** - highly customizable and feature-rich dock application for Windows that can be used to achieve a macOS-like dock experience. 
 
-By pressing a customizable hotkey combination, a search bar appears, enabling users to type their query and quickly launch or access the desired item without navigating through menus or directories. Besides PowerToys Run, this utility allows for many OS customizations, like *FancyZones, Always On Top, Peek, Color Picker, Find My Mouse and File Explorer add-ons*, improving your workflow in many different ways.
+- **Hot Corners** - assign custom actions triggered when you hover your mouse cursor over the screen corners.
 
-- **Dock**
+- **Enhanced Start Menu** - Start Menu replaced with customized Power User menu to resemble Apple menu.
 
-Winstep Nexus is a highly customizable and feature-rich dock application for Windows that can be used to achieve a macOS-like dock experience. It offers a wide range of customization options, including size, animations, sounds, auto-hide, transparency, different themes and icons.
+- **Enhanced Taskbar** - legacy taskbar with enhanced capabilities to match Windows 11 design.
 
-By integrating Winstep Nexus into WinMac modification, it provides users with visually appealing and functional dock that resembles the macOS style, while keeping Windows 11 design principles. This will enhance the overall user experience and make the transition between Windows and macOS seamless.
+- **Enhanced Explorer** - legacy Explorer which makes explorer load faster and look clean.
 
-- **Hot Corners**
+- **Enhanced Terminal** - custom prompt and ton of custom functions which bring most commonly used MacOS/Linux commands.
 
-Make your screen corners trigger actions like on macOS, with available actions like creating/showing/hiding notes, showing launchpad, running explorer windows, task view, show desktop, hide all unfocused windows among other useful actions. With WinXCorners you can customize up to 4 custom commands.
+- **Keyboard Shortcuts** - new keyboard shortcuts which enhance Windows 11 capabilties. 
 
-- **Enhanced Start Menu**
-
-WinMac Menu is a collection of customization utilities, that allows to bring Start Menu replacement for Windows. You can replace traditional Start Menu with customized WinX menu, to resemble Apple menu, or enable enhanced classic Start Menu. More details on Wiki page [Configuration](https://github.com/Asteski/WinMac/wiki/Configuration#winmac-menu).
-
-- **Enhanced Taskbar**
-
-StartAllBack enhances the functionality of the Windows Taskbar by introducing features inspired by earlier versions of Windows, such as Windows 7 and Windows 10. It brings back familiar elements like colored title bars and different positioning options.
-
-Additionally, StartAllBack offers options for customizing the appearance and behavior of the Taskbar to suit individual user preferences, including taskbar size, position, dynamic transparency, tasks alignment and tray icons spacing.
-
-Stahky allows to create shortcuts for taskbar, that show custom context menus which can include settings and control panel shortcuts, website shortcuts or any other files and folders.
-
-- **Enhanced Explorer**
-
-StartAllBack extends its enhancements beyond the Taskbar with the Windows Explorer, providing users with more streamlined and efficient file browsing experience, by bringing back older versions of Explorer from Windows 7 or Windows 10. 
-
-Tools introduce features such as ribbons, tabs, customizable toolbar buttons, enhanced file previews, and improved navigation options. With StartAllBack and PowerToys, you can personalize your Explorer interface to better suit your workflow and access files and folders more efficiently.
-
-Windhawk introduces explorer mods, that enables to see folder size, hide dot files and folders, and set custom name for explorer windows.
-
-Additionally, deployment script includes pinning User folder, Start Menu Programs folder and Recycle Bin to Quick Access, cleaning up context menus and navigation pane.
-
-- **Enhanced Terminal**
-
-WinMac provides improved prompt with addition of completion functions and most commonly used commands in macOS or Linux, like *vim, grep, touch, ditto, top, whatis, killall, ll, tree* with additional commands like *history, computerinfo, battery, backup, ntop, rcopy, brew* among ton of other functions. More details on Wiki page [Commands Cheat Sheet](https://github.com/Asteski/WinMac/wiki/Commands-Cheat-Sheet).
-
-- **Keyboard Shortcuts**
-
-WinMac provides very useful keyboard shortcuts from macOS with use of AutoHotkey, which is an automation scripting language for Windows. Shortcuts include hiding/showing dock, minimizing single or all windows and cycling through windows of the same app. More details on Wiki page [Keyboard Shortcuts](https://github.com/Asteski/WinMac/wiki/keyboard-shortcuts).
-
-- **Enhanced Icons**
-
-Refresh your Windows 11 experience with new set of icons applied to many old and new Windows components like Explorer, Control Panel items, Windows Tools, various context menus, default and user folders, and many more.
-
-## Experience WinMac Today!
+- **Enhanced Icons** - refresh legacy and default Windows components with modern set of icons.
 
 Discover the future of computing with WinMac, where the power of Windows meets the elegance of macOS in perfect harmony. Upgrade to WinMac and elevate your computing experience to new heights!
+
+# Installation
+
+> [!IMPORTANT]  
+> For the most reliable deployment process, I recommend to check [Installation Guide Wiki](https://github.com/Asteski/WinMac/wiki/Installation-Guide) page.
 
 EasyLauncher batch script allows the installer to be run as a GUI or in a terminal to make the installation and configuration process simple and straightforward.
 
@@ -110,11 +81,6 @@ WinMac is supported by Windows 11, on both x64 and ARM based platforms.
 
 You can also install WinMac on Windows 10 22H2+, with some caveats described [here](https://github.com/Asteski/WinMac/wiki/Windows-10).
 
-## Recommendations
-
-For the most reliable deployment process, I recommend to check [Installation Guide wiki page](https://github.com/Asteski/WinMac/wiki/Installation-Guide).
-
-[Wiki](https://github.com/Asteski/WinMac/wiki) have ton of very useful information, which can help you understand WinMac components capabilities and configuration to modify them to your liking.
 
 ## Credits
 
