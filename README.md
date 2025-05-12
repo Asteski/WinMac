@@ -56,7 +56,7 @@
 ## Installation
 
 > [!IMPORTANT]  
-> For the most reliable deployment process, I recommend to check [Installation Guide Wiki](https://github.com/Asteski/WinMac/wiki/Installation-Guide) page.
+> **For the most reliable deployment process, I recommend to check [Installation Guide Wiki](https://github.com/Asteski/WinMac/wiki/Installation-Guide) page.**
 
 EasyLauncher batch script allows the installer to be run as a GUI or in a terminal to make the installation and configuration process simple and straightforward.
 
@@ -68,7 +68,8 @@ Here are the ways you can run different deployment mods:
 - *EasyLayncher.bat -uninstallnogui* or *-un* runs uninstaller fully in terminal
 
 > [!CAUTION]
-> You must run batch file in Admin session to ensure reliable installation/unintallation process! 
+> **You must run batch file in Administrative session to ensure reliable installation/unintallation process.**
+> **It is mandatory to run batch script in Powershell 7 (not Windows Powershell).**
 
 You can choose between full or custom installation, if you only want to install specific WinMac components.
 
@@ -101,7 +102,7 @@ List of utilities and their creators, included in WinMac:
 
 
 > [!NOTE]
-> Keep in mind that StartAllBack is not a free software and requires license to run permanently. Free version will stop working after 100 days.
+> **Keep in mind that StartAllBack is not a free software and requires license to run permanently. Free version will stop working after 100 days.**
 
 WinMac is not planned to be used for business/earning purposes. If you're not okay with me using your software, please let me know.
 
