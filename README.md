@@ -68,8 +68,7 @@ Here are the ways you can run different deployment mods:
 - *EasyLayncher.bat -uninstallnogui* or *-un* runs uninstaller fully in terminal
 
 > [!CAUTION]
-> **You must run batch file in Administrative session to ensure reliable installation/unintallation process.**
-> **It is mandatory to run batch script in Powershell 7 (not Windows Powershell).**
+> **You must run batch file in Administrative session of Powershell 7 (not Windows Powershell) to ensure reliable installation/unintallation process.**
 
 You can choose between full or custom installation, if you only want to install specific WinMac components.
 
