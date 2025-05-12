@@ -84,6 +84,7 @@ You can also install WinMac on Windows 10 22H2+, with some caveats described [he
 - custom context menu theme for *Nexus* to match Windows 11 design
 - migrate keyboard shortcuts as a part of *PowerToys Keyboard Shortcuts* utility
 - prepare additional *Icons Packs* with red and green folders sets
+- prepare additional *Start Orbs* with different colors and looks
 
 ## Credits
 
