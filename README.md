@@ -56,7 +56,7 @@
 ## Installation
 
 > [!IMPORTANT]  
-> **Prior to installing WinMac, it is strongly recommended that you consult the [Installation Guide](https://github.com/Asteski/WinMac/wiki/Installation-Guide) Wiki page for comprehensive guidance.**
+> **Prior to installing WinMac, it is strongly recommended that you read [Installation Guide](https://github.com/Asteski/WinMac/wiki/Installation-Guide) Wiki page for comprehensive guidance.**
 
 EasyLauncher batch script allows the installer to be run as a GUI or in a Terminal to make the installation and configuration process simple and straightforward.
 
