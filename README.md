@@ -7,6 +7,7 @@
     <a href="#Features">Features</a> |
     <a href="#Installation">Installation</a> |
     <a href="https://github.com/Asteski/WinMac/releases/">Releases</a> |
+    <a href="https://github.com/Asteski/WinMac/wiki/Additional-utilities">Additional utilities</a> |
     <a href="#Credits">Credits</a>
 </p>
 
