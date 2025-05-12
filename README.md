@@ -57,14 +57,14 @@
 > [!IMPORTANT]  
 > **For the most reliable deployment process, I recommend to check [Installation Guide](https://github.com/Asteski/WinMac/wiki/Installation-Guide) Wiki page.**
 
-EasyLauncher batch script allows the installer to be run as a GUI or in a terminal to make the installation and configuration process simple and straightforward.
+EasyLauncher batch script allows the installer to be run as a GUI or in a Terminal to make the installation and configuration process simple and straightforward.
 
 Here are the ways you can run different deployment mods:
 
 - *EasyLauncher.bat* runs installation GUI by default
-- *EasyLayncher.bat -nogui* or *-n* runs installer fully in terminal
+- *EasyLayncher.bat -nogui* or *-n* runs installer fully in Terminal
 - *EasyLayncher.bat -uninstall* or *-u* runs uninstallation GUI
-- *EasyLayncher.bat -uninstallnogui* or *-un* runs uninstaller fully in terminal
+- *EasyLayncher.bat -uninstallnogui* or *-un* runs uninstaller fully in Terminal
 
 > [!CAUTION]
 > **You must run batch file in Administrative session of Powershell 7 (not Windows Powershell) to ensure reliable installation/uninstallation process.**
