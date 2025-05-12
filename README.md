@@ -34,23 +34,23 @@
 
 ## Features
 
-- **Quick Launcher** - quick launcher for power users that contains additional features, allowing users to quickly search for files, applications, and settings on your system.
+- **Quick Launcher** - quick launcher for power users that contains additional features, allowing users to quickly search for files, applications, and settings on your system
 
-- **Dock** - highly customizable and feature-rich dock application, used to achieve macOS-like dock experience. 
+- **Dock** - highly customizable and feature-rich dock application, used to achieve macOS-like dock experience
 
-- **Hot Corners** - assign custom actions triggered when you hover your mouse cursor over the screen corners.
+- **Hot Corners** - assign custom actions triggered when you hover your mouse cursor over the screen corners
 
-- **Enhanced Start Menu** - Start Menu replaced with customized Power User menu to resemble Apple menu.
+- **Enhanced Start Menu** - Start Menu replaced with customized Power User menu to resemble Apple menu
 
-- **Enhanced Taskbar** - legacy Taskbar put on top, with enhanced capabilities and looks to match Windows 11 design.
+- **Enhanced Taskbar** - legacy Taskbar put on top, with enhanced capabilities and looks to match Windows 11 design
 
-- **Enhanced Explorer** - legacy Explorer and context menu which makes explorer load fast and look clean.
+- **Enhanced Explorer** - legacy Explorer and context menu which makes explorer load fast and look clean
 
-- **Enhanced Terminal** - custom prompt and ton of custom functions which bring most commonly used macOS/Linux commands.
+- **Enhanced Terminal** - custom prompt and ton of custom functions which bring most commonly used macOS/Linux commands
 
-- **Enhanced Icons** - refresh legacy and default Windows components with modern set of icons.
+- **Enhanced Icons** - refresh legacy and default Windows components with modern set of icons
 
-- **Keyboard Shortcuts** - new keyboard shortcuts which enhance Windows 11 capabilties.
+- **Keyboard Shortcuts** - new keyboard shortcuts which enhance Windows 11 capabilties
 
 ## Installation
 
@@ -74,7 +74,6 @@ You can choose between full or custom installation, if you only want to install 
 WinMac is supported by Windows 11, on both x64 and ARM based platforms.
 
 You can also install WinMac on Windows 10 22H2+, with some caveats described [here](https://github.com/Asteski/WinMac/wiki/Windows-10).
-
 
 ## Credits
 
