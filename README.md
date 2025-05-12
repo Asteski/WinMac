@@ -15,15 +15,9 @@
 ![winmac_dark_01](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_01.png)
 </details>
 <details>
-    <summary>Image 2</summary>
+    <summary>More Images</summary>
     <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_02.png" alt="winmac_dark_02">
-</details>
-<details>
-    <summary>Image 3</summary>
     <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_03.png" alt="winmac_dark_03">
-</details>
-<details>
-    <summary>Image 4</summary>
     <img src="https://raw.githubusercontent.com/Asteski/WinMac/6cd141e3b5a5f01b583b23ff971e0d899cb27470/img/winmac_dark_04.png" alt="winmac_dark_04">
 </details>
 
@@ -32,15 +26,9 @@
 ![winmac_light_01](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_01.jpg)
 </details>
 <details>
-    <summary>Image 2</summary>
+    <summary>More Images</summary>
     <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_02.png" alt="winmac_light_02">
-</details>
-<details>
-    <summary>Image 3</summary>
     <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_03.png" alt="winmac_light_03">
-</details>
-<details>
-    <summary>Image 4</summary>
     <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_04.png" alt="winmac_light_04">
 </details>
 
@@ -104,7 +92,8 @@ List of utilities and their creators, used with WinMac:
 
 Please support creators however you can for their wonderful work!
 
-Keep in mind that StartAllBack is not a free software and requires license to run permanently. Free version will stop working after 100 days.
+> [!NOTE]
+> Keep in mind that StartAllBack is not a free software and requires license to run permanently. Free version will stop working after 100 days.
 
 WinMac is not planned to be used for business/earning purposes. If you're not okay with me using your software by installing it (using Winget) with Powershell deployment script, please let me know.
 
