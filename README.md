@@ -36,13 +36,21 @@
 ## Features
 
 - **Quick Launcher** - Spotlight-like launcher for power users that contains additional features, allowing users to quickly search for files, applications, and settings on your system
+
 - **Dock** - highly customizable and feature-rich dock application, used to achieve macOS-like dock experience
+
 - **Hot Corners** - assign custom actions triggered when you hover your mouse cursor over the screen corners
+
 - **Enhanced Start Menu** - Start Menu replaced with customized Power User menu to resemble Apple menu
+
 - **Enhanced Taskbar** - legacy Taskbar put on top, with enhanced capabilities and looks to match Windows 11 design
+
 - **Enhanced Explorer** - legacy Explorer and context menu which makes explorer load fast and look clean
+
 - **Enhanced Terminal** - custom prompt and ton of custom functions which bring most commonly used macOS/Linux commands
+
 - **Enhanced Icons** - refresh legacy and default Windows components with modern set of icons
+
 - **Keyboard Shortcuts** - new keyboard shortcuts to enhance Windows 11 workflow
 
 ## Installation
