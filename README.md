@@ -50,7 +50,7 @@
 
 - **Enhanced Icons** - refresh legacy and default Windows components with modern set of icons
 
-- **Keyboard Shortcuts** - new keyboard shortcuts which enhance Windows 11 workflow
+- **Keyboard Shortcuts** - new keyboard shortcuts enhance the Windows 11 workflow
 
 ## Installation
 
