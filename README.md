@@ -75,10 +75,19 @@ WinMac is supported by Windows 11, on both x64 and ARM based platforms.
 
 You can also install WinMac on Windows 10 22H2+, with some caveats described [here](https://github.com/Asteski/WinMac/wiki/Windows-10).
 
+## Future plans
+
+- include *Windhawk* and *Open-Shell* for ARM-based platforms 
+- include *Customize Windows notifications placement* mod in Windhawk
+- include *MacType*
+- custom context menu theme for *Nexus*
+- migrate keyboard shortcuts as a part of *PowerToys Keyboard Shortcuts* utility
+- prepare additional Icons Packs with red and green folders sets
+
 ## Credits
 
 List of utilities and their creators, included in WinMac:
-    
+
 - [PowerToys](https://learn.microsoft.com/en-us/windows/powertoys/) by Microsoft
 - [Everything](https://www.voidtools.com/) by David Carpenter
 - [StartAllBack](https://www.startallback.com/) by Tihiy
