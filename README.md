@@ -35,7 +35,7 @@
 
 ## Features
 
-- **Quick Launcher** - Spotlight-like launcher for power users that contains additional features, allowing users to quickly search for files, applications, and settings on your system
+- **Quick Launcher** - Spotlight-like launcher for power users that contains additional features, allowing users to quickly search for files, folders, applications, and settings on your system
 
 - **Dock** - highly customizable and feature-rich dock application, used to achieve macOS-like dock experience
 
