@@ -78,14 +78,14 @@ You can also install WinMac on Windows 10 22H2+, with some caveats described [he
 
 ## Future plans
 
-- include *Windhawk* and *Open-Shell* for ARM-based platforms 
-- include *MacType*
-- replace *Peek* with *Quicklook*
-- replace *TopNotify* with *Customize Windows notifications placement* mod in *Windhawk*
+- *Windhawk* and *Open-Shell* for ARM-based platforms
+- *MacType*
+- *Quicklook*
+- *Customize Windows notifications placement* mod in *Windhawk*
 - custom context menu theme for *Nexus* to match Windows 11 design
-- migrate keyboard shortcuts as part of *PowerToys Keyboard Shortcuts* utility
-- prepare additional *Icons Packs* with red and green folders sets
-- prepare additional *Start Orbs* with different colors and looks
+- additional *Icons Packs* with red and green folders sets
+- additional *Start Orbs*
+
 
 ## Credits
 
