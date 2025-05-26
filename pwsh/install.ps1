@@ -1115,33 +1115,78 @@ foreach ($app in $selectedApps) {
                 Write-Host "Nexus Dock installation completed." -ForegroundColor Green
             }
         }
-    # Windhawk
+        # Windhawk
         "10" {
-            if ($sysType -like "*ARM*") {
-                Write-Host "Windhawk is not supported on ARM devices. Skipping installation." -ForegroundColor Red
-            }
-            else {
-                Write-Host "Installing Windhawk..." -ForegroundColor Yellow
-                Invoke-Output {Install-WinGetPackage -name Windhawk}
-                if (-not (Test-Path "$Env:ProgramData\Windhawk\ModsSource")) {New-Item -ItemType Directory -Path "$Env:ProgramData\Windhawk\ModsSource" -Force | Out-Null}
-                if (-not (Test-Path "$Env:ProgramData\Windhawk\Engine\Mods")) {New-Item -ItemType Directory -Path "$Env:ProgramData\Windhawk\Engine\Mods" -Force | Out-Null}
-                Stop-Process -Name Windhawk -Force
-                Copy-Item ..\config\windhawk\Mods\* "$Env:ProgramData\Windhawk\Engine\Mods" -Recurse -Force
-                $urls = @(
-                    "https://raw.githubusercontent.com/m417z/my-windhawk-mods/main/mods/explorer-details-better-file-sizes.wh.cpp",
-                    "https://raw.githubusercontent.com/m417z/my-windhawk-mods/main/mods/explorer-name-windows.wh.cpp",
-                    "https://raw.githubusercontent.com/realgam3/dot-hide-wh/main/dot-hide.wh.cpp",
-                    "https://raw.githubusercontent.com/aubymori/windhawk-mods/refs/heads/main/mods/modernize-folder-picker-dialog.wh.cpp",
-                    "https://raw.githubusercontent.com/m417z/my-windhawk-mods/refs/heads/main/mods/windows-11-notification-center-styler.wh.cpp"
-                )
-                $destinationPath = "$Env:ProgramData\Windhawk\ModsSource"
-                foreach ($url in $urls) {
-                    $fileName = [System.IO.Path]::GetFileName($url)
-                    $outputPath = Join-Path -Path $destinationPath -ChildPath $fileName
-                    Invoke-WebRequest -Uri $url -OutFile $outputPath
-                }
-                reg import ..\config\windhawk\settings.reg > $null 2>&1
+            Write-Host "Installing Windhawk..." -ForegroundColor Yellow
+                winget install --id "Windhawk.Windhawk" --source winget --silent | Out-Null
+                $backupZipPath = Join-Path $env:USERPROFILE "..config\windhawk-backup.zip"
+                $windhawkRoot  = "C:\ProgramData\Windhawk"
+                $registryKey   = "HKLM:\SOFTWARE\Windhawk"
                 $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+                function Restore-WH {
+                    param(
+                        [string]$WindhawkFolder,
+                        [string]$BackupPath,
+                        [string]$RegistryKey
+                    )
+
+                    Write-Host "`n--- Starting Windhawk restore ---" -ForegroundColor Cyan
+
+                    # Check if the backup zip exists
+                    if (!(Test-Path $BackupPath)) {
+                        Write-Warning "Backup zip not found at: $BackupPath"
+                        return
+                    }
+
+                    # Create a temporary folder to extract contents
+                    $timeStamp     = (Get-Date -Format 'yyyyMMddHHmmss')
+                    $extractFolder = Join-Path $env:TEMP ("WindhawkRestore_$timeStamp")
+                    New-Item -ItemType Directory -Path $extractFolder -Force | Out-Null
+
+                    Write-Host "Extracting backup zip: $BackupPath"
+                    Expand-Archive -Path $BackupPath -DestinationPath $extractFolder -Force
+
+                    # After extraction, we expect:
+                    #   ModsSource in the root of $extractFolder
+                    #   Engine\Mods in $extractFolder\Engine
+                    #   Windhawk.reg also in $extractFolder
+
+                    $modsSourceBackup = Join-Path $extractFolder "ModsSource"
+                    $modsBackup       = Join-Path $extractFolder "Engine\Mods"
+                    $regBackup        = Join-Path $extractFolder "Windhawk.reg"
+
+                    # Copy ModsSource back if present
+                    if (Test-Path $modsSourceBackup) {
+                        Write-Host "Copying ModsSource to Windhawk folder..."
+                        Copy-Item -Path $modsSourceBackup -Destination $WindhawkFolder -Recurse -Force
+                    } else {
+                        Write-Warning "ModsSource not found in backup."
+                    }
+
+                    # Copy Mods back if present
+                    if (Test-Path $modsBackup) {
+                        Write-Host "Copying Engine\Mods to Windhawk folder..."
+                        # Ensure Engine folder exists
+                        $engineFolder = Join-Path $WindhawkFolder "Engine"
+                        if (!(Test-Path $engineFolder)) {
+                            New-Item -ItemType Directory -Path $engineFolder -Force | Out-Null
+                        }
+                        Copy-Item -Path $modsBackup -Destination $engineFolder -Recurse -Force
+                    } else {
+                        Write-Warning "Mods folder not found in backup."
+                    }
+
+                    # Import registry if present
+                    if (Test-Path $regBackup) {
+                        Write-Host "Importing Windhawk registry settings..."
+                        reg import $regBackup | Out-Null
+                    } else {
+                        Write-Warning "Windhawk registry file not found in backup."
+                    }
+
+                    Write-Host "`nRestore completed successfully!"
+                }
+                Restore-WH -WindhawkFolder $windhawkRoot -BackupPath $backupZipPath -RegistryKey $registryKey
                 Move-Item -Path "C:\Users\Public\Desktop\Windhawk.lnk" -Destination $programsDir -Force
                 Start-Process "$Env:ProgramFiles\Windhawk\Windhawk.exe"
                 Write-Host "Windhawk installation completed." -ForegroundColor Green
