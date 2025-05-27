@@ -829,54 +829,10 @@ foreach ($app in $selectedApps) {
                         Write-Host "WinverUWP is already installed." -ForegroundColor Green
                     }
                     Invoke-Output {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\"}
-                    # if ($sysType -like "*ARM*"){
-                    #     if ((Get-ItemProperty -Path $sabRegPath -ErrorAction SilentlyContinue).WinKeyFunction -eq 0) {Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1}
-                    #     $exeKeyPath = "$env:LOCALAPPDATA\WinMac\WindowsKey.exe"
-                    #     $exeStartPath = "$env:LOCALAPPDATA\WinMac\StartButton.exe"
-                    #     $folderName = "WinMac"
-                    #     $taskService = New-Object -ComObject "Schedule.Service"
-                    #     $taskService.Connect() | Out-Null
-                    #     $rootFolder = $taskService.GetFolder("\")
-                    #     try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }                
-                    #     if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
-                    #     $taskFolder = "\" + $folderName
-                    #     $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
-                    #     $trigger = New-ScheduledTaskTrigger -AtLogon
-                    #     $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
-                    #     $actionWinKey = New-ScheduledTaskAction -Execute 'WindowsKey.exe' -WorkingDirectory "$env:LOCALAPPDATA\WinMac\"
-                    #     $actionStartButton = New-ScheduledTaskAction -Execute "StartButton.exe" -WorkingDirectory "$env:LOCALAPPDATA\WinMac\"
-                    #     $processes = @("windowskey", "startbutton")
-                    #     foreach ($process in $processes) {
-                    #         $runningProcess = Get-Process -Name $process
-                    #         if ($runningProcess) {Stop-Process -Name $process -Force}
-                    #     }
-                    #     Copy-Item -Path ..\bin\menu\arm64\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force
-                    #     Copy-Item -Path ..\bin\menu\startbutton.exe -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force 
-                    #     Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
-                    #     $descriptionSB = "WinMac Menu Start button trigger - WinMac/Classic start menu trigger, using these keyboard shortcuts: ctrl + esc, left, middle and right mouse click on Start orb."
-                    #     $descriptionWK = "WinMac Menu Windows key trigger - C# program to trigger WinX menu using Win key, while keeping default and custom shortcuts with Win key supported."
-                    #     $parentDirectory = Split-Path -Path $PSScriptRoot -Parent
-                    #     $winxFolderName = "config\winx\Group2"
-                    #     $winxFolderPath = Join-Path -Path $parentDirectory -ChildPath $winxFolderName
-                    #     $WinverUWP = (Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP).InstallLocation
-                    #     $shortcutPath = "$winxFolderPath\8 - System.lnk"
-                    #     $newTargetPath = "$WinverUWP\WinverUWP.exe"
-                    #     $WScriptShell = New-Object -ComObject WScript.Shell
-                    #     $shortcut = $WScriptShell.CreateShortcut($shortcutPath)
-                    #     $shortcut.TargetPath = $newTargetPath
-                    #     $shortcut.Save()
-                    #     Copy-Item -Path "..\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force 
-                    #     Invoke-Output {Register-ScheduledTask -TaskName "Start Button" -Action $actionStartButton -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -Description $descriptionSB}
-                    #     Invoke-Output {Register-ScheduledTask -TaskName "Windows Key" -Action $actionWinKey -Trigger $trigger -Principal $principal -Settings $settings -TaskPath $taskFolder -Description $descriptionWK}
-                    #     Start-Process $exeKeyPath
-                    #     Start-Process $exeStartPath    
-                    # }
-                    # else {
                     Write-Host "Installing Open-Shell..." -ForegroundColor DarkYellow
                     $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\StartMenu.exe"
-                    # winget install --id "Open-Shell.Open-Shell-Menu" --source winget --custom 'ADDLOCAL=StartMenu' --silent | Out-Null
-                    Start-Process -FilePath "..\bin\OpenShell.exe" -ArgumentList "/quiet", "/norestart,", "ADDLOCAL=StartMenu" -Wait -Verb RunAs
                     Stop-Process -Name StartMenu -Force | Out-Null
+                    Start-Process -FilePath "..\bin\OpenShell.exe" -ArgumentList "/quiet", "/norestart", "ADDLOCAL=StartMenu" -Wait -Verb RunAs
                     New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force | Out-Null
                     New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force | Out-Null
                     New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu" -Force | Out-Null
@@ -900,7 +856,6 @@ foreach ($app in $selectedApps) {
                     Copy-Item -Path ..\bin\menu\x64\osh\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force
                     Stop-Process -Name Explorer
                     Start-Process $shellExePath
-                    #}
                     Write-Host "WinMac Menu installation completed." -ForegroundColor Green
                 } else {
                     Write-Host "Skipping WinMac Menu installation." -ForegroundColor Magenta
@@ -1118,23 +1073,21 @@ foreach ($app in $selectedApps) {
         # Windhawk
         "10" {
             Write-Host "Installing Windhawk..." -ForegroundColor Yellow
-            winget install --id "RamenSoftware.Windhawk" --source winget --silent
-            $backupZipPath = Join-Path $env:USERPROFILE "..config\windhawk-backup.zip"
-            $windhawkRoot  = "C:\ProgramData\Windhawk"
-            $registryKey   = "HKLM:\SOFTWARE\Windhawk"
+            winget install --id "RamenSoftware.Windhawk" --source winget --silent | Out-Null
+            $windhawkRoot = "$Env:ProgramFiles\Windhawk"
+            $backupFile = Get-ChildItem -Path (Join-Path $PWD '..\config') -Filter 'windhawk-backup.zip' -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             function Restore-WH {
                 param(
-                    [string]$WindhawkFolder,
-                    [string]$BackupPath
+                    [string]$WindhawkFolder
                 )
                 $timeStamp     = (Get-Date -Format 'yyyyMMddHHmmss')
                 $extractFolder = Join-Path $env:TEMP ("WindhawkRestore_$timeStamp")
                 New-Item -ItemType Directory -Path $extractFolder -Force | Out-Null
-                Write-Host "Extracting backup zip: $BackupPath"
                 Expand-Archive -Path $BackupPath -DestinationPath $extractFolder -Force
                 $modsSourceBackup = Join-Path $extractFolder "ModsSource"
                 $modsBackup       = Join-Path $extractFolder "Engine\Mods"
+                $regBackup        = Join-Path $extractFolder "Windhawk.reg"
                 if (Test-Path $modsSourceBackup) {
                     Copy-Item -Path $modsSourceBackup -Destination $WindhawkFolder -Recurse -Force
                 } else {
@@ -1149,8 +1102,13 @@ foreach ($app in $selectedApps) {
                 } else {
                     Write-Warning "Mods folder not found in backup."
                 }
+                    if (Test-Path $regBackup) {
+                    reg import $regBackup | Out-Null
+                } else {
+                    Write-Warning "Windhawk registry file not found in backup."
+                }
             }
-            Restore-WH -WindhawkFolder $windhawkRoot -BackupPath $backupZipPath -RegistryKey $registryKey
+            Restore-WH -WindhawkFolder $windhawkRoot -BackupPath $backupFile.FullName
             Move-Item -Path "C:\Users\Public\Desktop\Windhawk.lnk" -Destination $programsDir -Force
             Start-Process "$Env:ProgramFiles\Windhawk\Windhawk.exe"
             Write-Host "Windhawk installation completed." -ForegroundColor Green
