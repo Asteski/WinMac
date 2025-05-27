@@ -501,7 +501,7 @@ if ($selectedApps -like '*4*') {
     }
 }
 
-if ($selectedApps -like '*9*' -or $selectedApps -like '*11*') {
+if ($selectedApps -like '*9*' -or $selectedApps -like '*6*') {
     $blueOrYellow = Read-Host "`nEnter 'B' for blue or 'Y' for yellow folders"
     if ($blueOrYellow -eq 'B' -or $blueOrYellow -eq 'b') {
         Write-Host "Using blue folders." -ForegroundColor Green
