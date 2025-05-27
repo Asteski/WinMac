@@ -486,6 +486,21 @@ if ($selectedApps -like '*4*' -or $selectedApps -like '*7*' -or $selectedApps -l
     }
 }
 
+if ($selectedApps -like '*4*') {
+    $exStyle = Read-Host "`nEnter 'X' for modern or 'C' for classic File Explorer style"
+    if ($exStyle -eq 'X' -or $exStyle -eq 'x') {
+        Write-Host "Using modern File Explorer." -ForegroundColor Green
+        # $exStyle = 'D'
+    }
+    elseif ($exStyle -eq 'C' -or $exStyle -eq 'c') {
+        Write-Host "Using classic File Explorer." -ForegroundColor Green
+    }
+    else
+    {
+        Write-Host "Invalid input. Using defaalt File Explorer." -ForegroundColor Yellow
+    }
+}
+
 if ($selectedApps -like '*9*' -or $selectedApps -like '*11*') {
     $blueOrYellow = Read-Host "`nEnter 'B' for blue or 'Y' for yellow folders"
     if ($blueOrYellow -eq 'B' -or $blueOrYellow -eq 'b') {
@@ -513,7 +528,7 @@ if ($selectedApps -like '*9*') {
     }
     else
     {
-        Write-Host "Invalid input. Using defualt Dock." -ForegroundColor Yellow
+        Write-Host "Invalid input. Using default Dock." -ForegroundColor Yellow
         # $dockDynamic = 'D'
     }
 }
@@ -767,6 +782,14 @@ foreach ($app in $selectedApps) {
                         Expand-Archive -Path "..\config\WinX-default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
                     }
                 }
+                if ($exStyle -eq 'C' -or $exStyle -eq 'c') {
+                    Set-ItemProperty -Path $sabRegPath -Name "NavBarGlass" -Value 1
+                    Set-ItemProperty -Path $sabRegPath -Name "FrameStyle" -Value 2
+                }
+                else {
+                    Set-ItemProperty -Path $sabRegPath -Name "NavBarGlass" -Value 0
+                    Set-ItemProperty -Path $sabRegPath -Name "FrameStyle" -Value 0
+                }
                 Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "(default)" -Value 1
                 Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
                 if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') {
@@ -915,7 +938,6 @@ foreach ($app in $selectedApps) {
                 $pathVarUser += ";$exePath"
                 [Environment]::SetEnvironmentVariable("Path", $pathVarUser, "User")
             }
-                        # Assuming $job contains a job ID or job object
             $job | Get-Jobif (-not ($pathVarMachine -like "* $exePath*")) {
                 $pathVarMachine += "; $exePath"
                 [Environment]::SetEnvironmentVariable("Path", $pathVarMachine, "Machine")
