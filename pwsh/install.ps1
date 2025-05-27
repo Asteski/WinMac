@@ -1074,7 +1074,8 @@ foreach ($app in $selectedApps) {
         "10" {
             Write-Host "Installing Windhawk..." -ForegroundColor Yellow
             winget install --id "RamenSoftware.Windhawk" --source winget --silent | Out-Null
-            $windhawkRoot = "$Env:ProgramFiles\Windhawk"
+            $windhawkRoot = "$Env:ProgramData\Windhawk"
+            # $windhawkProgramData = "$Env:ProgramData\Windhawk"
             $backupFile = Get-ChildItem -Path (Join-Path $PWD '..\config') -Filter 'windhawk-backup.zip' -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             $timeStamp     = (Get-Date -Format 'yyyyMMddHHmmss')
