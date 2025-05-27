@@ -1085,7 +1085,7 @@ foreach ($app in $selectedApps) {
             }
         }
     # Hot Corners
-        "11"{
+        "10"{
             Write-Host "Installing Hot Corners..." -ForegroundColor Yellow
             $outputPath = '..\temp\WinXCorners.zip'
             $winXCornersUrl = "https://github.com/vhanla/winxcorners/releases/download/1.3.2/WinXCorners1.3.2.zip"
