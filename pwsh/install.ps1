@@ -1118,49 +1118,42 @@ foreach ($app in $selectedApps) {
         # Windhawk
         "10" {
             Write-Host "Installing Windhawk..." -ForegroundColor Yellow
-                winget install --id "Windhawk.Windhawk" --source winget --silent | Out-Null
-                $backupZipPath = Join-Path $env:USERPROFILE "..config\windhawk-backup.zip"
-                $windhawkRoot  = "C:\ProgramData\Windhawk"
-                $registryKey   = "HKLM:\SOFTWARE\Windhawk"
-                $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
-                function Restore-WH {
-                    param(
-                        [string]$WindhawkFolder,
-                        [string]$BackupPath,
-                        [string]$RegistryKey
-                    )
-                    $timeStamp     = (Get-Date -Format 'yyyyMMddHHmmss')
-                    $extractFolder = Join-Path $env:TEMP ("WindhawkRestore_$timeStamp")
-                    New-Item -ItemType Directory -Path $extractFolder -Force | Out-Null
-                    Write-Host "Extracting backup zip: $BackupPath"
-                    Expand-Archive -Path $BackupPath -DestinationPath $extractFolder -Force
-                    $modsSourceBackup = Join-Path $extractFolder "ModsSource"
-                    $modsBackup       = Join-Path $extractFolder "Engine\Mods"
-                    if (Test-Path $modsSourceBackup) {
-                        Copy-Item -Path $modsSourceBackup -Destination $WindhawkFolder -Recurse -Force
-                    } else {
-                        Write-Warning "ModsSource not found in backup."
+            winget install --id "Windhawk.Windhawk" --source winget --silent | Out-Null
+            $backupZipPath = Join-Path $env:USERPROFILE "..config\windhawk-backup.zip"
+            $windhawkRoot  = "C:\ProgramData\Windhawk"
+            $registryKey   = "HKLM:\SOFTWARE\Windhawk"
+            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+            function Restore-WH {
+                param(
+                    [string]$WindhawkFolder,
+                    [string]$BackupPath
+                )
+                $timeStamp     = (Get-Date -Format 'yyyyMMddHHmmss')
+                $extractFolder = Join-Path $env:TEMP ("WindhawkRestore_$timeStamp")
+                New-Item -ItemType Directory -Path $extractFolder -Force | Out-Null
+                Write-Host "Extracting backup zip: $BackupPath"
+                Expand-Archive -Path $BackupPath -DestinationPath $extractFolder -Force
+                $modsSourceBackup = Join-Path $extractFolder "ModsSource"
+                $modsBackup       = Join-Path $extractFolder "Engine\Mods"
+                if (Test-Path $modsSourceBackup) {
+                    Copy-Item -Path $modsSourceBackup -Destination $WindhawkFolder -Recurse -Force
+                } else {
+                    Write-Warning "ModsSource not found in backup."
+                }
+                if (Test-Path $modsBackup) {
+                    $engineFolder = Join-Path $WindhawkFolder "Engine"
+                    if (!(Test-Path $engineFolder)) {
+                        New-Item -ItemType Directory -Path $engineFolder -Force | Out-Null
                     }
-                    if (Test-Path $modsBackup) {
-                        $engineFolder = Join-Path $WindhawkFolder "Engine"
-                        if (!(Test-Path $engineFolder)) {
-                            New-Item -ItemType Directory -Path $engineFolder -Force | Out-Null
-                        }
-                        Copy-Item -Path $modsBackup -Destination $engineFolder -Recurse -Force
-                    } else {
-                        Write-Warning "Mods folder not found in backup."
-                    }
-                    # if (Test-Path $regBackup) {
-                    #     reg import $regBackup | Out-Null
-                    # } else {
-                    #     Write-Warning "Windhawk registry file not found in backup."
-                    # }
-                # }
-                Restore-WH -WindhawkFolder $windhawkRoot -BackupPath $backupZipPath -RegistryKey $registryKey
-                Move-Item -Path "C:\Users\Public\Desktop\Windhawk.lnk" -Destination $programsDir -Force
-                Start-Process "$Env:ProgramFiles\Windhawk\Windhawk.exe"
-                Write-Host "Windhawk installation completed." -ForegroundColor Green
+                    Copy-Item -Path $modsBackup -Destination $engineFolder -Recurse -Force
+                } else {
+                    Write-Warning "Mods folder not found in backup."
+                }
             }
+            Restore-WH -WindhawkFolder $windhawkRoot -BackupPath $backupZipPath -RegistryKey $registryKey
+            Move-Item -Path "C:\Users\Public\Desktop\Windhawk.lnk" -Destination $programsDir -Force
+            Start-Process "$Env:ProgramFiles\Windhawk\Windhawk.exe"
+            Write-Host "Windhawk installation completed." -ForegroundColor Green
         }
     # Hot Corners
         "11" {
