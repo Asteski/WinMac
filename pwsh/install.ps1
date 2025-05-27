@@ -1136,7 +1136,6 @@ foreach ($app in $selectedApps) {
                     Expand-Archive -Path $BackupPath -DestinationPath $extractFolder -Force
                     $modsSourceBackup = Join-Path $extractFolder "ModsSource"
                     $modsBackup       = Join-Path $extractFolder "Engine\Mods"
-                    $regBackup        = Join-Path $extractFolder "Windhawk.reg"
                     if (Test-Path $modsSourceBackup) {
                         Copy-Item -Path $modsSourceBackup -Destination $WindhawkFolder -Recurse -Force
                     } else {
@@ -1156,7 +1155,7 @@ foreach ($app in $selectedApps) {
                     # } else {
                     #     Write-Warning "Windhawk registry file not found in backup."
                     # }
-                }
+                # }
                 Restore-WH -WindhawkFolder $windhawkRoot -BackupPath $backupZipPath -RegistryKey $registryKey
                 Move-Item -Path "C:\Users\Public\Desktop\Windhawk.lnk" -Destination $programsDir -Force
                 Start-Process "$Env:ProgramFiles\Windhawk\Windhawk.exe"
@@ -1165,69 +1164,69 @@ foreach ($app in $selectedApps) {
         }
     # Hot Corners
         "11" {
-            Write-Host "Installing Hot Corners..." -ForegroundColor Yellow
-            $outputPath = '..\temp\WinXCorners.zip'
-            $winXCornersUrl = "https://github.com/vhanla/winxcorners/releases/download/1.3.2/WinXCorners1.3.2.zip"
-            $winXCornersConfigPath = '..\config\hotcorners\settings.ini'
-            $destinationPath = "$env:LOCALAPPDATA\WinXCorners"
-            $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.8' -ErrorAction SilentlyContinue
-            $winLaunchUrl = "https://github.com/jensroth-git/WinLaunch/releases/download/v.0.7.3.0/WinLaunch.0.7.3.0.zip"
-            $winLaunchConfigPath = '..\config\hotcorners\Settings.xml'
-            $winLaunchOutputPath = '..\temp\WinLaunch.zip'
-            $winLaunchDestinationPath = "$env:LOCALAPPDATA\WinLaunch"
-            if ($null -eq $dotNetRuntime) {
-                Invoke-Output { Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8' }
-            } else {
-            }
-            $uiXaml = Get-WinGetPackage -Id 'Microsoft.UI.Xaml.2.7' -ErrorAction SilentlyContinue
-            if ($null -eq $uiXaml) {
-                Invoke-Output { Install-WinGetPackage -id 'Microsoft.UI.Xaml.2.7' }
-            }
-            Invoke-WebRequest -Uri $winXCornersUrl -OutFile $outputPath
-            if (-not (Test-Path -Path $destinationPath)) {
-                New-Item -ItemType Directory -Path $destinationPath -Force | Out-Null
-            }
-            Expand-Archive -Path $outputPath -DestinationPath $destinationPath -Force
-            Copy-Item -Path $winXCornersConfigPath -Destination $destinationPath -Force
-            Write-Host "Installing Simple Sticky Notes..." -ForegroundColor DarkYellow
-            Invoke-Output { winget install SimnetLtd.SimpleStickyNotes --silent --accept-source-agreements --accept-package-agreements }
-            Write-Host "Installing WinLaunch..." -ForegroundColor DarkYellow
-            Invoke-WebRequest -Uri $winLaunchUrl -OutFile $winLaunchOutputPath
-            Expand-Archive -Path $winLaunchOutputPath -DestinationPath $winLaunchDestinationPath -Force
-            Copy-Item -Path ..\config\HotCorners\winlaunch.ico -Destination $winLaunchDestinationPath -Force
-            Remove-Item $winLaunchOutputPath -Force
-            Start-Process "$winLaunchDestinationPath\WinLaunch.exe"
-            Start-Process "C:\Program Files (x86)\Simnet\Simple Sticky Notes\ssn.exe"
-            Move-Item -Path "$env:USERPROFILE\Desktop\Simple Sticky Notes.lnk" -Destination "$env:APPDATA\Microsoft\Windows\Start Menu\Programs" -Force
-            $process = Get-Process -Name WinLaunch -ErrorAction SilentlyContinue
-            if ($process) { Stop-Process -Name WinLaunch -Force }
-            New-Item -ItemType Directory -Path "$winLaunchDestinationPath\Data" -Force | Out-Null
-            Copy-Item -Path $winLaunchConfigPath -Destination "$winLaunchDestinationPath\Data\Settings.xml" -Force
-            Copy-Item -Path $winLaunchConfigPath -Destination "$env:APPDATA\WinLaunch\Settings.xml" -Force
-            $configFilePath = Join-Path -Path $destinationPath -ChildPath "settings.ini"
-            (Get-Content -Path $configFilePath) -replace "WINLAUNCH", "$($env:LOCALAPPDATA)\WinLaunch\WinLaunch.exe" | Set-Content -Path $configFilePath
-            (Get-Content -Path $configFilePath) -replace "MINIMIZEALL", "$($env:LOCALAPPDATA)\WinMac\hotcorners\MinimizeAllWindowsExceptFocused.exe" | Set-Content -Path $configFilePath
-            Remove-Item $outputPath -Force
-            Start-Process "$destinationPath\WinXCorners.exe"
-            $shortcut1Path = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\WinXCorners.lnk"
-            $target1Path = "$destinationPath\WinXCorners.exe"
-            $shell = New-Object -ComObject WScript.Shell
-            $shortcut = $shell.CreateShortcut($shortcut1Path)
-            $shortcut.TargetPath = $target1Path
-            $shortcut.Save()
-            $shortcut2Path = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\WinLaunch.lnk"
-            $target2Path = "$winLaunchDestinationPath\WinLaunch.exe"
-            $icon2Path = "$winLaunchDestinationPath\winlaunch.ico"
-            $shell = New-Object -ComObject WScript.Shell
-            $shortcut = $shell.CreateShortcut($shortcut2Path)
-            $shortcut.TargetPath = $target2Path
-            $shortcut.IconLocation = $icon2Path
-            $shortcut.Save()
-            if (-not (Test-Path -Path "$env:LOCALAPPDATA\WinMac\hotcorners")) {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\hotcorners" -Force | Out-Null}
-            if ($sysType -like "*ARM*") {Copy-Item -Path ..\bin\hotcorners\arm64\* -Destination "$env:LOCALAPPDATA\WinMac\hotcorners\" -Recurse -Force}
-            else {Copy-Item -Path ..\bin\hotcorners\x64\* -Destination "$env:LOCALAPPDATA\WinMac\hotcorners\" -Recurse -Force}
-            New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "WinXCorners" -Value "$destinationPath\WinXCorners.exe" | Out-Null
-            Write-Host "Hot Corners installation completed." -ForegroundColor Green
+                Write-Host "Installing Hot Corners..." -ForegroundColor Yellow
+                $outputPath = '..\temp\WinXCorners.zip'
+                $winXCornersUrl = "https://github.com/vhanla/winxcorners/releases/download/1.3.2/WinXCorners1.3.2.zip"
+                $winXCornersConfigPath = '..\config\hotcorners\settings.ini'
+                $destinationPath = "$env:LOCALAPPDATA\WinXCorners"
+                $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.8' -ErrorAction SilentlyContinue
+                $winLaunchUrl = "https://github.com/jensroth-git/WinLaunch/releases/download/v.0.7.3.0/WinLaunch.0.7.3.0.zip"
+                $winLaunchConfigPath = '..\config\hotcorners\Settings.xml'
+                $winLaunchOutputPath = '..\temp\WinLaunch.zip'
+                $winLaunchDestinationPath = "$env:LOCALAPPDATA\WinLaunch"
+                if ($null -eq $dotNetRuntime) {
+                    Invoke-Output { Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8' }
+                } else {
+                }
+                $uiXaml = Get-WinGetPackage -Id 'Microsoft.UI.Xaml.2.7' -ErrorAction SilentlyContinue
+                if ($null -eq $uiXaml) {
+                    Invoke-Output { Install-WinGetPackage -id 'Microsoft.UI.Xaml.2.7' }
+                }
+                Invoke-WebRequest -Uri $winXCornersUrl -OutFile $outputPath
+                if (-not (Test-Path -Path $destinationPath)) {
+                    New-Item -ItemType Directory -Path $destinationPath -Force | Out-Null
+                }
+                Expand-Archive -Path $outputPath -DestinationPath $destinationPath -Force
+                Copy-Item -Path $winXCornersConfigPath -Destination $destinationPath -Force
+                Write-Host "Installing Simple Sticky Notes..." -ForegroundColor DarkYellow
+                Invoke-Output { winget install SimnetLtd.SimpleStickyNotes --silent --accept-source-agreements --accept-package-agreements }
+                Write-Host "Installing WinLaunch..." -ForegroundColor DarkYellow
+                Invoke-WebRequest -Uri $winLaunchUrl -OutFile $winLaunchOutputPath
+                Expand-Archive -Path $winLaunchOutputPath -DestinationPath $winLaunchDestinationPath -Force
+                Copy-Item -Path ..\config\HotCorners\winlaunch.ico -Destination $winLaunchDestinationPath -Force
+                Remove-Item $winLaunchOutputPath -Force
+                Start-Process "$winLaunchDestinationPath\WinLaunch.exe"
+                Start-Process "C:\Program Files (x86)\Simnet\Simple Sticky Notes\ssn.exe"
+                Move-Item -Path "$env:USERPROFILE\Desktop\Simple Sticky Notes.lnk" -Destination "$env:APPDATA\Microsoft\Windows\Start Menu\Programs" -Force
+                $process = Get-Process -Name WinLaunch -ErrorAction SilentlyContinue
+                if ($process) { Stop-Process -Name WinLaunch -Force }
+                New-Item -ItemType Directory -Path "$winLaunchDestinationPath\Data" -Force | Out-Null
+                Copy-Item -Path $winLaunchConfigPath -Destination "$winLaunchDestinationPath\Data\Settings.xml" -Force
+                Copy-Item -Path $winLaunchConfigPath -Destination "$env:APPDATA\WinLaunch\Settings.xml" -Force
+                $configFilePath = Join-Path -Path $destinationPath -ChildPath "settings.ini"
+                (Get-Content -Path $configFilePath) -replace "WINLAUNCH", "$($env:LOCALAPPDATA)\WinLaunch\WinLaunch.exe" | Set-Content -Path $configFilePath
+                (Get-Content -Path $configFilePath) -replace "MINIMIZEALL", "$($env:LOCALAPPDATA)\WinMac\hotcorners\MinimizeAllWindowsExceptFocused.exe" | Set-Content -Path $configFilePath
+                Remove-Item $outputPath -Force
+                Start-Process "$destinationPath\WinXCorners.exe"
+                $shortcut1Path = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\WinXCorners.lnk"
+                $target1Path = "$destinationPath\WinXCorners.exe"
+                $shell = New-Object -ComObject WScript.Shell
+                $shortcut = $shell.CreateShortcut($shortcut1Path)
+                $shortcut.TargetPath = $target1Path
+                $shortcut.Save()
+                $shortcut2Path = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\WinLaunch.lnk"
+                $target2Path = "$winLaunchDestinationPath\WinLaunch.exe"
+                $icon2Path = "$winLaunchDestinationPath\winlaunch.ico"
+                $shell = New-Object -ComObject WScript.Shell
+                $shortcut = $shell.CreateShortcut($shortcut2Path)
+                $shortcut.TargetPath = $target2Path
+                $shortcut.IconLocation = $icon2Path
+                $shortcut.Save()
+                if (-not (Test-Path -Path "$env:LOCALAPPDATA\WinMac\hotcorners")) {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\hotcorners" -Force | Out-Null}
+                if ($sysType -like "*ARM*") {Copy-Item -Path ..\bin\hotcorners\arm64\* -Destination "$env:LOCALAPPDATA\WinMac\hotcorners\" -Recurse -Force}
+                else {Copy-Item -Path ..\bin\hotcorners\x64\* -Destination "$env:LOCALAPPDATA\WinMac\hotcorners\" -Recurse -Force}
+                New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "WinXCorners" -Value "$destinationPath\WinXCorners.exe" | Out-Null
+                Write-Host "Hot Corners installation completed." -ForegroundColor Green
             }
     # Other
         "12" {
