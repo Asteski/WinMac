@@ -1085,6 +1085,8 @@ foreach ($app in $selectedApps) {
             $modsSourceBackup = Join-Path $extractFolder "ModsSource"
             $modsBackup       = Join-Path $extractFolder "Engine\Mods"
             $regBackup        = Join-Path $extractFolder "Windhawk.reg"
+            Stop-Process -n Windhawk -Force
+            taskkill /im explorer.exe /f
             if (Test-Path $modsSourceBackup) {
                 Copy-Item -Path $modsSourceBackup -Destination $windhawkRoot -Recurse -Force
             } else {
