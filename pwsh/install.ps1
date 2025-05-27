@@ -4,8 +4,7 @@ param (
 )
 $version = "0.9.2"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
-$logFile = "WinMac_install_log_$date.txt"
-$transcriptFile = "WinMac_install_transcript_$date.txt"
+# $logFile = "WinMac_install_log_$date.txt"
 $blueOrYellow = "B"
 $errorActionPreference="silentlyContinue"
 $WarningPreference="silentlyContinue"
@@ -22,12 +21,6 @@ if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir 
     Write-Host "WinMac components not found. Please make sure to run the script from the correct directory." -ForegroundColor Red
     Start-Sleep 2
     exit
-}
-function Invoke-Output {
-    param ([scriptblock]$Command)
-    $output = & $Command 2>&1
-    $output | Out-File -FilePath "..\logs\$logFile" -Append
-    if ($debug -and $output) {$output}
 }
 function Get-WindowsTheme {
     try {
@@ -554,7 +547,6 @@ for ($a=3; $a -ge 0; $a--) {
 }
 Write-Host "`r" -NoNewline
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
-Start-Transcript -Path ../logs/$transcriptFile -Append | Out-Null
 # Nuget check
 Write-Host "Checking Package Provider (Nuget)" -ForegroundColor Yellow
 $nugetProvider = Get-PackageProvider -Name NuGet
@@ -628,15 +620,15 @@ foreach ($app in $selectedApps) {
     # Everything
         "2" {
             Write-Host "Installing Everything..." -ForegroundColor Yellow
-            Invoke-Output {Install-WinGetPackage -Id "Voidtools.Everything"}
+            Install-WinGetPackage -Id "Voidtools.Everything"
             Stop-Process -Name Everything.exe -ErrorAction SilentlyContinue
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
-            Invoke-Output { Move-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Destination $programsDir -Force  }
-            Invoke-Output { Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Destination $programsDir -Force }
+            Move-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Destination $programsDir -Force
+            Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Destination $programsDir -Force
             $everythingIniPath = "$env:APPDATA\Everything"
             if (-not (Test-Path -Path $everythingIniPath)) {New-Item -ItemType Directory -Path $everythingIniPath -Force | Out-Null}
             Copy-Item -Path "..\config\everything\Everything.ini" -Destination $everythingIniPath -Force
-            Invoke-Output { Start-Process -FilePath Everything.exe -WorkingDirectory $env:PROGRAMFILES\Everything -WindowStyle Hidden }
+            Start-Process -FilePath Everything.exe -WorkingDirectory $env:PROGRAMFILES\Everything -WindowStyle Hidden
             Write-Host "Everything installation completed." -ForegroundColor Green
         }
     # PowerShell Profile
@@ -654,20 +646,12 @@ foreach ($app in $selectedApps) {
                 elseif ($promptSet -eq 'M' -or $promptSet -eq 'm') { $prompt = Get-Content "..\config\terminal\macOS-prompt.ps1" -Raw }
             }
             $functions = Get-Content "..\config\terminal\functions.ps1" -Raw
-            Invoke-Output { 
-                if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell" } 
-                else { Remove-Item -Path "$profilePath\PowerShell\$profileFile" -Force } 
-                }
-            Invoke-Output { 
-                if (-not (Test-Path "$profilePath\WindowsPowerShell")) { New-Item -ItemType Directory -Path "$profilePath\WindowsPowerShell" } 
-                else { Remove-Item -Path "$profilePath\WindowsPowerShell\$profileFile" -Force } 
-                }
-            Invoke-Output { 
-                if (-not (Test-Path "$profilePath\PowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\PowerShell\$profileFile" } 
-                }
-            Invoke-Output { 
-                if (-not (Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\WindowsPowerShell\$profileFile" } 
-                }
+            if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell" } 
+            else { Remove-Item -Path "$profilePath\PowerShell\$profileFile" -Force } 
+            if (-not (Test-Path "$profilePath\WindowsPowerShell")) { New-Item -ItemType Directory -Path "$profilePath\WindowsPowerShell" } 
+            else { Remove-Item -Path "$profilePath\WindowsPowerShell\$profileFile" -Force } 
+            if (-not (Test-Path "$profilePath\PowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\PowerShell\$profileFile" } 
+            if (-not (Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\WindowsPowerShell\$profileFile" } 
             $vim = Get-WinGetPackage -Id Vim.Vim -ErrorAction SilentlyContinue
             if ($null -eq $vim) {
                 $vimVersion = (Find-WingetPackage Vim.Vim | Where-Object {$_.Id -notlike "*nightly*"}).Version
@@ -676,7 +660,7 @@ foreach ($app in $selectedApps) {
                 if (-not (Test-Path $vimRegPath)) {New-Item -Path $vimRegPath -Force | Out-Null}
                 Set-ItemProperty -Path $vimRegPath -Name "select_startmenu" -Value 0
                 Set-ItemProperty -Path $vimRegPath -Name "select_editwith" -Value 0
-                Invoke-Output {Install-WinGetPackage -Id "Vim.Vim"}
+                Install-WinGetPackage -Id "Vim.Vim"
             } else {
                 Write-Host "Vim is already installed." -ForegroundColor Green
             }
@@ -687,31 +671,37 @@ foreach ($app in $selectedApps) {
             foreach ($app in $winget) {
                 $package = Get-WinGetPackage -Id $app -ErrorAction SilentlyContinue
                 if ($null -eq $package) {
-                    Invoke-Output { Install-WinGetPackage -id $app -source winget }
+                    Install-WinGetPackage -id $app -source winget
                 } else {
                     Write-Host "$($app.split(".")[1]) is already installed." -ForegroundColor Green
                 }
             }
             $pstreeModule = Get-InstalledModule -Name PSTree -ErrorAction SilentlyContinue
             if ($null -eq $pstreeModule) {
-                Invoke-Output { Install-Module PSTree -Force }
+                Install-Module PSTree -Force
             } else {
                 Write-Host "PSTree is already installed." -ForegroundColor Green
+            }
+            $zModule = Get-InstalledModule -Name z -ErrorAction SilentlyContinue
+            if ($null -eq $zModule) {
+                Install-Module z -Force
+            } else {
+                Write-Host "z is already installed." -ForegroundColor Green
             }
             $vimParentPath = Join-Path $env:PROGRAMFILES Vim
             $latestSubfolder = Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -Property CreationTime -Descending | Select-Object -First 1
             $vimChildPath = $latestSubfolder.FullName
-            Invoke-Output { [Environment]::SetEnvironmentVariable("Path", $env:Path + ";$vimChildPath", [EnvironmentVariableTarget]::Machine) }
+            [Environment]::SetEnvironmentVariable("Path", $env:Path + ";$vimChildPath", [EnvironmentVariableTarget]::Machine)
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
-            Invoke-Output { Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $prompt }
-            if ($gitProfile -eq $true) { Invoke-Output { Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $git } }
-            Invoke-Output { Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $functions }
-            Invoke-Output { Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $prompt }
-            if ($gitProfile -eq $true) { Invoke-Output { Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $git } }
-            Invoke-Output { Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $functions }
-            Invoke-Output { Remove-Item -Path "C:\Users\Public\Desktop\gVim*" -Force }
-            Invoke-Output { Remove-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Force }
-            Invoke-Output { Remove-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\gVim*" -Force }
+            Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $prompt
+            if ($gitProfile -eq $true) { Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $git }
+            Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $functions
+            Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $prompt
+            if ($gitProfile -eq $true) { Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $git }
+            Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $functions
+            Remove-Item -Path "C:\Users\Public\Desktop\gVim*" -Force
+            Remove-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Force
+            Remove-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\gVim*" -Force
             Write-Host "PowerShell Profile configuration completed." -ForegroundColor Green
         }
     # StartAllBack
@@ -720,16 +710,16 @@ foreach ($app in $selectedApps) {
                 Write-Host "StartAllBack is supported only on Windows 11. Skipping installation." -ForegroundColor Red
             } else {
                 Write-Host "Installing StartAllBack..." -ForegroundColor Yellow
-                Invoke-Output {Install-WinGetPackage -Id "StartIsBack.StartAllBack"}
+                Install-WinGetPackage -Id "StartIsBack.StartAllBack"
                 $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
                 $sabOrbs = $env:localAPPDATA + "\StartAllBack\Orbs"
                 $sabRegPath = "HKCU:\Software\StartIsBack"
                 $taskbarOnTopPath = "$exRegPath\StuckRectsLegacy"
                 $taskbarOnTopName = "Settings"
                 $taskbarOnTopValue = @(0x30,0x00,0x00,0x00,0xfe,0xff,0xff,0xff,0x02,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x5a,0x00,0x00,0x00,0x32,0x00,0x00,0x00,0x26,0x07,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0x07,0x00,0x00,0x38,0x04,0x00,0x00,0x78,0x00,0x00,0x00,0x01,0x00,0x00,0x00)
-                Invoke-Output {New-Item -Path $taskbarOnTopPath -Force}
-                Invoke-Output {New-ItemProperty -Path $taskbarOnTopPath -Name $taskbarOnTopName -Value $taskbarOnTopValue -PropertyType Binary}
-                Invoke-Output {Copy-Item "..\config\taskbar\orbs\*" $sabOrbs -Force}
+                New-Item -Path $taskbarOnTopPath -Force
+                New-ItemProperty -Path $taskbarOnTopPath -Name $taskbarOnTopName -Value $taskbarOnTopValue -PropertyType Binary
+                Copy-Item "..\config\taskbar\orbs\*" $sabOrbs -Force
                 Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 1
                 Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSizeMove" -Value 1
                 Set-ItemProperty -Path $exRegPath\Advanced -Name "ShowStatusBar" -Value 0
@@ -768,7 +758,7 @@ foreach ($app in $selectedApps) {
                     if ($isWinXMenuActive) {
                         Stop-Process -Name WindowsKey -Force
                         Stop-Process -Name StartButton -Force
-                        Invoke-Output { Uninstall-WinGetPackage -name "Winver UWP" }
+                        Uninstall-WinGetPackage -name "Winver UWP"
                         $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -match 'startbutton|windowskey' }
                         foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
                         $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue
@@ -792,7 +782,7 @@ foreach ($app in $selectedApps) {
                 Set-ItemProperty -Path $sabRegPath -Name "OrbBitmap" -Value $orbBitmapValue
                 Set-ItemProperty -Path $exRegPath\Advanced -Name "LaunchTO" -Value 1
                 Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
-                Invoke-Output {Stop-Process -Name explorer -Force}
+                IStop-Process -Name explorer -Force
                 Start-Sleep 2
                 Write-Host "StartAllBack installation completed." -ForegroundColor Green
             }
@@ -805,14 +795,14 @@ foreach ($app in $selectedApps) {
                     $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.8' -ErrorAction SilentlyContinue
                     if ($null -eq $dotNetRuntime) {
                         Write-Host "Installing .NET Desktop Runtime 8..." -ForegroundColor DarkYellow
-                        Invoke-Output { Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8' }
+                        Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8'
                     } else {
                         Write-Host ".NET Desktop Runtime is already installed." -ForegroundColor Green
                     }
                     $uiXaml = Get-WinGetPackage -Id 'Microsoft.UI.Xaml.2.7' -ErrorAction SilentlyContinue
                     if ($null -eq $uiXaml) {
                         Write-Host "Installing Microsoft.UI.Xaml 2.7..." -ForegroundColor DarkYellow
-                        Invoke-Output { Install-WinGetPackage -id 'Microsoft.UI.Xaml.2.7' }
+                        Install-WinGetPackage -id 'Microsoft.UI.Xaml.2.7'
                     } else {
                         Write-Host "Microsoft.UI.Xaml is already installed." -ForegroundColor Green
                     }
@@ -824,7 +814,7 @@ foreach ($app in $selectedApps) {
                     } else {
                         Write-Host "WinverUWP is already installed." -ForegroundColor Green
                     }
-                    Invoke-Output {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\"}
+                    New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\"
                     Write-Host "Installing Open-Shell 4.4.196..." -ForegroundColor DarkYellow
                     $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\StartMenu.exe"
                     Stop-Process -Name StartMenu -Force | Out-Null
@@ -893,11 +883,11 @@ foreach ($app in $selectedApps) {
             $url = "https://github.com/joedf/stahky/releases/download/v0.3.9.1/stahky_U64_v0.3.9.1.zip"
             $outputPath = "..\stahky_U64.zip"
             $exePath = "$env:LOCALAPPDATA\Stahky"
-            Invoke-Output {New-Item -ItemType Directory -Path $exePath -Force}
-            Invoke-Output {New-Item -ItemType Directory -Path $exePath\config -Force}
+            New-Item -ItemType Directory -Path $exePath -Force
+            New-Item -ItemType Directory -Path $exePath\config -Force
             Invoke-WebRequest -Uri $url -OutFile $outputPath
             if (Test-Path -Path "$exePath\stahky.exe") {
-                Invoke-Output {Write-Output "Stahky already exists."}
+                Write-Output "Stahky already exists."
             } else {
                 Expand-Archive -Path $outputPath -DestinationPath $exePath
             }
@@ -1008,9 +998,9 @@ foreach ($app in $selectedApps) {
                 Copy-Item -Path "..\config\dock\themes\*" -Destination "$winStep\Themes\" -Recurse -Force 
                 Remove-Item -Path "$winStep\NeXus\Indicators\*" -Force -Recurse 
                 Copy-Item -Path "..\config\dock\indicators\*" -Destination "$winStep\NeXus\Indicators\" -Recurse -Force 
-                Invoke-Output {New-Item -ItemType Directory -Path "$winStep\Sounds" -Force}
+                New-Item -ItemType Directory -Path "$winStep\Sounds" -Force
                 Copy-Item -Path "..\config\dock\sounds\*" -Destination "$winStep\Sounds\" -Recurse -Force
-                Invoke-Output {New-Item -ItemType Directory -Path "$winStep\Icons" -Force}
+                New-Item -ItemType Directory -Path "$winStep\Icons" -Force
                 Copy-Item "..\config\icons" "$winStep" -Recurse -Force
                 $regFile = "..\config\dock\winstep.reg"
                 $downloadsPath = "$env:USERPROFILE\Downloads"
@@ -1091,11 +1081,11 @@ foreach ($app in $selectedApps) {
             $winLaunchOutputPath = '..\temp\WinLaunch.zip'
             $winLaunchDestinationPath = "$env:LOCALAPPDATA\WinLaunch"
             if ($null -eq $dotNetRuntime) {
-                Invoke-Output { Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8' }
+                Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8'
             }
             $uiXaml = Get-WinGetPackage -Id 'Microsoft.UI.Xaml.2.7' -ErrorAction SilentlyContinue
             if ($null -eq $uiXaml) {
-                Invoke-Output { Install-WinGetPackage -id 'Microsoft.UI.Xaml.2.7' }
+                Install-WinGetPackage -id 'Microsoft.UI.Xaml.2.7'
             }
             Invoke-WebRequest -Uri $winXCornersUrl -OutFile $outputPath
             if (-not (Test-Path -Path $destinationPath)) {
@@ -1104,7 +1094,7 @@ foreach ($app in $selectedApps) {
             Expand-Archive -Path $outputPath -DestinationPath $destinationPath -Force
             Copy-Item -Path $winXCornersConfigPath -Destination $destinationPath -Force
             Write-Host "Installing Simple Sticky Notes..." -ForegroundColor DarkYellow
-            Invoke-Output { winget install SimnetLtd.SimpleStickyNotes --silent --accept-source-agreements --accept-package-agreements }
+            winget install SimnetLtd.SimpleStickyNotes --silent --accept-source-agreements --accept-package-agreements
             Write-Host "Installing WinLaunch..." -ForegroundColor DarkYellow
             Invoke-WebRequest -Uri $winLaunchUrl -OutFile $winLaunchOutputPath
             Expand-Archive -Path $winLaunchOutputPath -DestinationPath $winLaunchDestinationPath -Force
@@ -1183,7 +1173,7 @@ uint pvParam,
 uint fWinIni);
 '@
             $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
-            Invoke-Output {$CursorRefresh::SystemParametersInfo(0x0057,0,$null,0)}
+            $CursorRefresh::SystemParametersInfo(0x0057,0,$null,0)
         ## Pin User folder, Programs and Recycle Bin to Quick Access
             $regPath = "HKCU:\SOFTWARE\WinMac"
             if (-not (Test-Path -Path $regPath)) {New-Item -Path $regPath -Force | Out-Null}
@@ -1197,7 +1187,7 @@ IconResource=C:\Windows\System32\SHELL32.dll,160
                 $homeIniFilePath = "$($homeDir)\desktop.ini"
                 if (Test-Path $homeIniFilePath)  {
                     Remove-Item $homeIniFilePath -Force
-                    Invoke-Output {New-Item -Path $homeIniFilePath -ItemType File -Force}
+                    New-Item -Path $homeIniFilePath -ItemType File -Force
                 }
                 Add-Content $homeIniFilePath -Value $homeIni
                 (Get-Item $homeIniFilePath -Force).Attributes = 'Hidden, System, Archive'
@@ -1214,7 +1204,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
                 $programsIniFilePath = "$($programsDir)\desktop.ini"
                 if (Test-Path $programsIniFilePath)  {
                     Remove-Item $programsIniFilePath -Force
-                    Invoke-Output {New-Item -Path $programsIniFilePath -ItemType File -Force}
+                    New-Item -Path $programsIniFilePath -ItemType File -Force
                 }
                 Add-Content $programsIniFilePath -Value $programsIni
                 (Get-Item $programsIniFilePath -Force).Attributes = 'Hidden, System, Archive'
@@ -1226,8 +1216,8 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
                 $RBPath = 'HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\pintohome\command\'
                 $name = "DelegateExecute"
                 $value = "{b455f46e-e4af-4035-b0a4-cf18d2f6f28e}"
-                Invoke-Output {New-Item -Path $RBPath -Force}
-                Invoke-Output {New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force}
+                New-Item -Path $RBPath -Force
+                New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force
                 $oShell = New-Object -ComObject Shell.Application
                 $recycleBin = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
                 if (-not ($recycleBin.Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
@@ -1239,7 +1229,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
         ## Remove shortcut arrows
             Write-Host "Removing shortcut arrows..." -ForegroundColor DarkYellow
             Copy-Item -Path "..\config\blank.ico" -Destination "C:\Windows" -Force
-            Invoke-Output {New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Force}
+            New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Force
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String
         ## Configuring context menus
             Write-Host "Configure context menus..." -ForegroundColor DarkYellow
@@ -1254,12 +1244,12 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             (Get-Content -Path $tempFilePath) -replace '%LOCALAPPDATA%', $appData | Set-Content -Path $tempFilePath
             reg import '..\temp\Add_Theme_Mode_in_Context_Menu.reg' > $null 2>&1
             reg import '..\config\contextmenu\add\Add_Hidden_items_to_context_menu.reg' > $null 2>&1
-            Invoke-Output {winget uninstall "Windows web experience Pack" --silent}
+            winget uninstall "Windows web experience Pack" --silent
         ## End Task
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
             $taskbarDevSettings = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
-            if (-not (Test-Path $taskbarDevSettings)) { Invoke-Output {New-Item -Path $taskbarDevSettings -Force} }
-            Invoke-Output {New-ItemProperty -Path $taskbarDevSettings -Name "TaskbarEndTask" -Value 1 -PropertyType DWORD -Force}
+            if (-not (Test-Path $taskbarDevSettings)) { New-Item -Path $taskbarDevSettings -Force}
+            New-ItemProperty -Path $taskbarDevSettings -Name "TaskbarEndTask" -Value 1 -PropertyType DWORD -Force
         ## Remove Home and Gallery icons
             Write-Host "Remove Home and Gallery icons..." -ForegroundColor DarkYellow
             Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" -Force | Out-Null
@@ -1316,7 +1306,6 @@ if ((Get-ChildItem -Path "$env:LOCALAPPDATA\WinMac" -Recurse | Measure-Object).C
 $explorerProcess = Get-Process -Name explorer -ErrorAction SilentlyContinue
 if ($null -eq $explorerProcess) {Start-Process -FilePath explorer.exe}
 Remove-Item "..\temp" -Recurse -Force
-Stop-Transcript | Out-Null
 Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
 Write-Host @"
 
