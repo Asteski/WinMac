@@ -487,7 +487,7 @@ if ($selectedApps -like '*4*' -or $selectedApps -like '*7*' -or $selectedApps -l
 }
 
 if ($selectedApps -like '*4*') {
-    $exStyle = Read-Host "`nEnter 'X' for modern or 'C' for classic File Explorer style"
+    $exStyle = Read-Host "`nEnter 'X' for modern or 'C' for classic file explorer style"
     if ($exStyle -eq 'X' -or $exStyle -eq 'x') {
         Write-Host "Using modern File Explorer." -ForegroundColor Green
         # $exStyle = 'D'
