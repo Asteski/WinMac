@@ -1072,32 +1072,31 @@ foreach ($app in $selectedApps) {
         }
         # Windhawk
         "10" {
-            Write-Host "Installing Windhawk..." -ForegroundColor Yellow
-            winget install --id "RamenSoftware.Windhawk" --source winget --silent | Out-Null
-            $windhawkRoot = "$Env:ProgramData\Windhawk"
-            $backupFile = Get-ChildItem -Path (Join-Path $PWD '..\config') -Filter 'windhawk-backup.zip' -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
-            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
-            $timeStamp = (Get-Date -Format 'yyyyMMddHHmmss')
-            $extractFolder = Join-Path $env:TEMP ("WindhawkRestore_$timeStamp")
-            New-Item -ItemType Directory -Path $extractFolder -Force | Out-Null
-            Expand-Archive -Path $backupFile.FullName -DestinationPath $extractFolder -Force
-            $modsSourceBackup = Join-Path $extractFolder "ModsSource"
-            $modsBackup = Join-Path $extractFolder "Engine\Mods"
-            $regBackup = Join-Path $extractFolder "Windhawk.reg"
-            Stop-Process -n Windhawk -Force
-            taskkill /im explorer.exe /f
-            Copy-Item -Path $modsSourceBackup -Destination $windhawkRoot -Recurse -Force -ErrorAction SilentlyContinue
-            $engineFolder = Join-Path $windhawkRoot "Engine"
-            New-Item -ItemType Directory -Path $engineFolder -Force | Out-Null
-            Copy-Item -Path $modsBackup -Destination $engineFolder -Recurse -Force -ErrorAction SilentlyContinue
-            Write-Warning "Mods folder not found in backup."
-            reg import $regBackup > $null 2>&1
-            Move-Item -Path "C:\Users\Public\Desktop\Windhawk.lnk" -Destination $programsDir -Force
-            explorer; Start-Process "$Env:ProgramFiles\Windhawk\Windhawk.exe"
-            Write-Host "Windhawk installation completed." -ForegroundColor Green
-        }
+                Write-Host "Installing Windhawk..." -ForegroundColor Yellow
+                winget install --id "RamenSoftware.Windhawk" --source winget --silent | Out-Null
+                $windhawkRoot = "$Env:ProgramData\Windhawk"
+                $backupFile = Get-ChildItem -Path (Join-Path $PWD '..\config') -Filter 'windhawk-backup.zip' -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+                $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+                $timeStamp = (Get-Date -Format 'yyyyMMddHHmmss')
+                $extractFolder = Join-Path $env:TEMP ("WindhawkRestore_$timeStamp")
+                New-Item -ItemType Directory -Path $extractFolder -Force | Out-Null
+                Expand-Archive -Path $backupFile.FullName -DestinationPath $extractFolder -Force
+                $modsSourceBackup = Join-Path $extractFolder "ModsSource"
+                $modsBackup = Join-Path $extractFolder "Engine\Mods"
+                $regBackup = Join-Path $extractFolder "Windhawk.reg"
+                Stop-Process -n Windhawk -Force
+                Copy-Item -Path $modsSourceBackup -Destination $windhawkRoot -Recurse -Force -ErrorAction SilentlyContinue
+                $engineFolder = Join-Path $windhawkRoot "Engine"
+                New-Item -ItemType Directory -Path $engineFolder -Force | Out-Null
+                Copy-Item -Path $modsBackup -Destination $engineFolder -Recurse -Force -ErrorAction SilentlyContinue
+                Write-Warning "Mods folder not found in backup."
+                reg import $regBackup > $null 2>&1
+                Move-Item -Path "C:\Users\Public\Desktop\Windhawk.lnk" -Destination $programsDir -Force
+                Start-Process "$Env:ProgramFiles\Windhawk\Windhawk.exe"
+                Write-Host "Windhawk installation completed." -ForegroundColor Green
+            }
     # Hot Corners
-        "11" {
+        "11"{
                 Write-Host "Installing Hot Corners..." -ForegroundColor Yellow
                 $outputPath = '..\temp\WinXCorners.zip'
                 $winXCornersUrl = "https://github.com/vhanla/winxcorners/releases/download/1.3.2/WinXCorners1.3.2.zip"
@@ -1110,7 +1109,6 @@ foreach ($app in $selectedApps) {
                 $winLaunchDestinationPath = "$env:LOCALAPPDATA\WinLaunch"
                 if ($null -eq $dotNetRuntime) {
                     Invoke-Output { Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8' }
-                } else {
                 }
                 $uiXaml = Get-WinGetPackage -Id 'Microsoft.UI.Xaml.2.7' -ErrorAction SilentlyContinue
                 if ($null -eq $uiXaml) {
