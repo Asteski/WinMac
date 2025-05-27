@@ -1098,7 +1098,7 @@ foreach ($app in $selectedApps) {
             } else {
                 Write-Warning "Mods folder not found in backup."
             }
-                if (Test-Path $regBackup) {
+            if (Test-Path $regBackup) {
                 reg import $regBackup | Out-Null
             } else {
                 Write-Warning "Windhawk registry file not found in backup."
