@@ -490,14 +490,15 @@ if ($selectedApps -like '*4*') {
     $exStyle = Read-Host "`nEnter 'X' for modern or 'C' for classic file explorer style"
     if ($exStyle -eq 'X' -or $exStyle -eq 'x') {
         Write-Host "Using modern File Explorer." -ForegroundColor Green
-        # $exStyle = 'D'
+        $exStyle = 'x'
     }
     elseif ($exStyle -eq 'C' -or $exStyle -eq 'c') {
         Write-Host "Using classic File Explorer." -ForegroundColor Green
     }
     else
     {
-        Write-Host "Invalid input. Using defaalt File Explorer." -ForegroundColor Yellow
+        Write-Host "Invalid input. Using default File Explorer." -ForegroundColor Yellow
+        $exStyle = 'x'
     }
 }
 
