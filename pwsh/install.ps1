@@ -870,7 +870,12 @@ foreach ($app in $selectedApps) {
             $engineFolder = Join-Path $windhawkRoot "Engine"
             New-Item -ItemType Directory -Path $engineFolder -Force | Out-Null
             Copy-Item -Path $modsBackup -Destination $engineFolder -Recurse -Force -ErrorAction SilentlyContinue
-            Write-Warning "Mods folder not found in backup."
+            $regContent = Get-Content $regBackup
+            $regContent = $regContent -replace "%LOCALAPPDATA%", $Env:LOCALAPPDATA
+            if ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {
+                $regContent = $regContent -replace "WinMac-blue-folders", "WinMac-yellow-folders"
+            }
+            $regContent | Set-Content $regBackup
             reg import $regBackup > $null 2>&1
             Move-Item -Path "C:\Users\Public\Desktop\Windhawk.lnk" -Destination $programsDir -Force
             Start-Process "$Env:ProgramFiles\Windhawk\Windhawk.exe"
