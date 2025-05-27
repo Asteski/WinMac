@@ -2,13 +2,13 @@ param (
     [switch]$noGUI,
     [switch]$debug
 )
-$version = "0.9.1"
+$version = "0.9.2"
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_install_log_$date.txt"
 $transcriptFile = "WinMac_install_transcript_$date.txt"
 $blueOrYellow = "B"
-$errorActionPreference="SilentlyContinue"
-$WarningPreference="SilentlyContinue"
+$errorActionPreference="silentlyContinue"
+$WarningPreference="silentlyContinue"
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName PresentationFramework
 if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null}
@@ -130,14 +130,13 @@ if (!($noGUI)) {
                         <CheckBox x:Name="chkPowershellProfile" Content="PowerShell Profile" IsChecked="True" Grid.Row="1" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkStartAllBack" Content="StartAllBack" IsChecked="True" Grid.Row="1" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkWinMacMenu" Content="WinMac Menu" IsChecked="True" Grid.Row="2" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="chkTopNotify" Content="TopNotify" IsChecked="True" Grid.Row="2" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkWindhawk" Content="Windhawk" IsChecked="True" Grid.Row="2" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkStahky" Content="Stahky" IsChecked="True" Grid.Row="3" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="chkKeyboardShortcuts" Content="Keyboard Shortcuts" IsChecked="True" Grid.Row="3" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkAutoHotKey" Content="AutoHotkey" IsChecked="True" Grid.Row="3" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkNexusDock" Content="Nexus Dock" IsChecked="True" Grid.Row="4" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="chkWindhawk" Content="Windhawk" IsChecked="True" Grid.Row="4" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkHotCorners" Content="Hot Corners" IsChecked="True" Grid.Row="4" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkGitProfile" Content="Git Profile" IsChecked="True" Grid.Row="5" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="chkHotCorners" Content="Hot Corners" IsChecked="True" Grid.Row="5" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="chkOther" Content="Other" IsChecked="True" Grid.Row="6" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkOther" Content="Other" IsChecked="True" Grid.Row="5" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                     </Grid>
                 </GroupBox>
 
@@ -230,11 +229,10 @@ if (!($noGUI)) {
     $chkPowershellProfile = $window.FindName("chkPowershellProfile")
     $chkStartAllBack = $window.FindName("chkStartAllBack")
     $chkWinMacMenu = $window.FindName("chkWinMacMenu")
-    $chkTopNotify = $window.FindName("chkTopNotify")
-    $chkStahky = $window.FindName("chkStahky")
-    $chkKeyboardShortcuts = $window.FindName("chkKeyboardShortcuts")
-    $chkNexusDock = $window.FindName("chkNexusDock")
     $chkWindhawk = $window.FindName("chkWindhawk")
+    $chkStahky = $window.FindName("chkStahky")
+    $chkAutoHotKey = $window.FindName("chkAutoHotKey")
+    $chkNexusDock = $window.FindName("chkNexusDock")
     $chkGitProfile = $window.FindName("chkGitProfile")
     $chkHotCorners = $window.FindName("chkHotCorners")
     $chkOther = $window.FindName("chkOther")
@@ -250,22 +248,21 @@ if (!($noGUI)) {
     $customInstall.Add_Checked({$componentSelection.IsEnabled = $true})
     $result = @{}
     $btnInstall.Add_Click({
-        if ($fullInstall.IsChecked) { $selection = "1","2","3","4","5","6","7","8","9","10","11","12" } 
+        if ($fullInstall.IsChecked) { $selection = "1","2","3","4","5","6","7","8","9","10","11"} 
         else {
             if ($chkPowerToys.IsChecked) { $selection += "1," }
             if ($chkEverything.IsChecked) { $selection += "2," }
             if ($chkPowershellProfile.IsChecked) { $selection += "3," }
             if ($chkStartAllBack.IsChecked) { $selection += "4," }
             if ($chkWinMacMenu.IsChecked) { $selection += "5," }
-            if ($chkTopNotify.IsChecked) { $selection += "6," }
+            if ($chkWindhawk.IsChecked) { $selection += "6," }
             if ($chkStahky.IsChecked) { $selection += "7," }
-            if ($chkKeyboardShortcuts.IsChecked) { $selection += "8," }
+            if ($chkAutoHotKey.IsChecked) { $selection += "8," }
             if ($chkNexusDock.IsChecked) { $selection += "9," }
-            if ($chkWindhawk.IsChecked) { $selection += "10," }
-            if ($chkHotCorners.IsChecked) { $selection += "11," }
-            if ($chkOther.IsChecked) { $selection += "12" }
+            if ($chkHotCorners.IsChecked) { $selection += "10," }
+            if ($chkOther.IsChecked) { $selection += "11" }
         }
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Windhawk"; "11"="Hot Corners"; "12"="Other Settings"}
+        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="Stahky"; "8"="AutoHotkey"; "9"="Nexus Dock"; "10"="Hot Corners"; "12"="Other Settings"}
         $result["selectedApps"] = $selection.Split(',').TrimEnd(',')
         $selectedAppNames = @()
         foreach ($appNumber in $selection) {
@@ -342,12 +339,12 @@ https://github.com/Asteski/WinMac/wiki
     $fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom installation"
     if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
         Write-Host "Choosing full installation." -ForegroundColor Green
-        $selectedApps = "1","2","3","4","5","6","7","8","9","10","11","12"
+        $selectedApps = "1","2","3","4","5","6","7","8","9","10","11"
     } 
     elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
         Write-Host "Choosing custom installation." -ForegroundColor Green
         Start-Sleep 1
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="TopNotify"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Windhawk"; "11"="Hot Corners"; "12"="Other"}
+        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="Stahky"; "8"="AutoHotkey"; "9"="Nexus Dock"; "10"="Hot Corners"; "12"="Other"}
 Write-Host @"
 
 `e[93m$("Please select options you want to install:")`e[0m
@@ -359,22 +356,21 @@ Write-Host @"
 3. Powershell Profile
 4. StartAllBack
 5. WinMac Menu
-6. TopNotify
+6. Windhawk
 7. Stahky
-8. Keyboard Shortcuts
+8. Autohotkey
 9. Nexus Dock
-10. Windhawk
-11. Hot Corners
-12. Other Settings
+10. Hot Corners
+11. Other Settings
 "@
     Write-Host
     do {
         $selection = Read-Host "Enter the numbers of options you want to install (separated by commas)"
         $selection = $selection.Trim()
         $selection = $selection -replace '\s*,\s*', ','
-        $valid = $selection -match '^([1-9]|10|11|12)(,([1-9]|10|11|12))*$'
+        $valid = $selection -match '^([1-9]|10|11)(,([1-9]|10|11))*$'
         if (!$valid) {
-            Write-Host "`e[91mInvalid input! Please enter numbers between 1 and 12, separated by commas.`e[0m`n"
+            Write-Host "`e[91mInvalid input! Please enter numbers between 1 and 11, separated by commas.`e[0m`n"
         }
     } while ([string]::IsNullOrWhiteSpace($selection) -or !$valid)
     $selectedApps = @()
@@ -390,7 +386,7 @@ Write-Host @"
 else
 {
     Write-Host "Invalid input. Defaulting to full installation." -ForegroundColor Yellow
-    $selectedApps = "1","2","3","4","5","6","7","8","9","10","11","12"
+    $selectedApps = "1","2","3","4","5","6","7","8","9","10","11"
 }
 
 if ($selectedApps -like '*4*' -and $selectedApps -like '*5*') {
@@ -431,7 +427,7 @@ Write-Host @"
 `e[93m$("You can choose between WinMac prompt or macOS-like prompt.")`e[0m
 
 WinMac prompt: 
-12:35:06 userName @ ~ > 
+11:35:06 userName @ ~ > 
 
 macOS prompt:
 userName@computerName ~ % 
@@ -498,7 +494,7 @@ if ($selectedApps -like '*4*' -or $selectedApps -like '*7*' -or $selectedApps -l
     }
 }
 
-if ($selectedApps -like '*9*' -or $selectedApps -like '*12*') {
+if ($selectedApps -like '*9*' -or $selectedApps -like '*11*') {
     $blueOrYellow = Read-Host "`nEnter 'B' for blue or 'Y' for yellow folders"
     if ($blueOrYellow -eq 'B' -or $blueOrYellow -eq 'b') {
         Write-Host "Using blue folders." -ForegroundColor Green
@@ -866,23 +862,31 @@ foreach ($app in $selectedApps) {
                 Write-Host "WinMac Menu requires elevated session. Please run the script as an administrator. Skipping installation." -ForegroundColor Red
             }
         }
-    # TopNotify
+    # Windhawk
         "6" {
-            Write-Host "Installing TopNotify..." -ForegroundColor Yellow
-            Invoke-Output {Install-WinGetPackage -name TopNotify}
-            $app = Get-AppxPackage *TopNotify*
-            Start-Process -FilePath TopNotify.exe -WorkingDirectory $app.InstallLocation
-            $pkgName = $app.PackageFamilyName
-            $startupTask = ($app | Get-AppxPackageManifest).Package.Applications.Application.Extensions.Extension | Where-Object -Property Category -Eq -Value windows.startupTask
-            $taskId = $startupTask.StartupTask.TaskId
-            Start-Process Taskmgr -WindowStyle Hidden
-            while (!(Get-ItemProperty -Path "HKCU:\Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\SystemAppData\$pkgName\$taskId" -Name State)) {Start-Sleep -Seconds 1}
-            Stop-Process -Name Taskmgr
-            $regKey = "HKCU:\Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\SystemAppData\$pkgName\$taskId"
-            Set-ItemProperty -Path $regKey -Name UserEnabledStartupOnce -Value 1
-            Set-ItemProperty -Path $regKey -Name State -Value 2
-            Write-Host "TopNotify installation completed." -ForegroundColor Green
-        }
+            Write-Host "Installing Windhawk..." -ForegroundColor Yellow
+            winget install --id "RamenSoftware.Windhawk" --source winget --silent | Out-Null
+            $windhawkRoot = "$Env:ProgramData\Windhawk"
+            $backupFile = Get-ChildItem -Path (Join-Path $PWD '..\config') -Filter 'windhawk-backup.zip' -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+            $timeStamp = (Get-Date -Format 'yyyyMMddHHmmss')
+            $extractFolder = Join-Path $env:TEMP ("WindhawkRestore_$timeStamp")
+            New-Item -ItemType Directory -Path $extractFolder -Force | Out-Null
+            Expand-Archive -Path $backupFile.FullName -DestinationPath $extractFolder -Force
+            $modsSourceBackup = Join-Path $extractFolder "ModsSource"
+            $modsBackup = Join-Path $extractFolder "Engine\Mods"
+            $regBackup = Join-Path $extractFolder "Windhawk.reg"
+            Stop-Process -n Windhawk -Force
+            Copy-Item -Path $modsSourceBackup -Destination $windhawkRoot -Recurse -Force -ErrorAction SilentlyContinue
+            $engineFolder = Join-Path $windhawkRoot "Engine"
+            New-Item -ItemType Directory -Path $engineFolder -Force | Out-Null
+            Copy-Item -Path $modsBackup -Destination $engineFolder -Recurse -Force -ErrorAction SilentlyContinue
+            Write-Warning "Mods folder not found in backup."
+            reg import $regBackup > $null 2>&1
+            Move-Item -Path "C:\Users\Public\Desktop\Windhawk.lnk" -Destination $programsDir -Force
+            Start-Process "$Env:ProgramFiles\Windhawk\Windhawk.exe"
+            Write-Host "Windhawk installation completed." -ForegroundColor Green
+            }
     # Stahky
         "7" {
             Write-Host "Installing Stahky..." -ForegroundColor Yellow
@@ -936,32 +940,36 @@ foreach ($app in $selectedApps) {
             Remove-Item $outputPath -Force
             Write-Host "Stahky installation completed." -ForegroundColor Green
         }
-    # Keyboard Shortcuts
+    # AutoHotkey
         "8" {
             if ($adminTest) {
-                Write-Host "Installing Keyboard Shortcuts..." -ForegroundColor Yellow
-                $fileName = 'KeyShortcuts.exe'
-                $fileDirectory = "$env:LOCALAPPDATA\WinMac"
-                New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" | Out-Null
-                if (Get-Process keyshortcuts) { Stop-Process -Name keyshortcuts }
-                Copy-Item ..\bin\$fileName "$env:LOCALAPPDATA\WinMac\" 
-                $description = "WinMac Keyboard Shortcuts - custom keyboard shortcut described in Commands cheat sheet wiki page."
+                Write-Host "Installing AutoHotkey..." -ForegroundColor Yellow  
+                winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
+                $sourceDirectory = '..\src\keyshortcuts'
+                $destinationDirectory = "$env:PROGRAMFILES\AutoHotkey\WinMac"
                 $folderName = "WinMac"
                 $taskService = New-Object -ComObject "Schedule.Service"
-                $taskService.Connect()
-                $rootFolder = $taskService.GetFolder("\") 
-                try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }              
+                $taskService.Connect() | Out-Null
+                $rootFolder = $taskService.GetFolder("\")
+                try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }                
                 if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
                 $taskFolder = "\" + $folderName
                 $trigger = New-ScheduledTaskTrigger -AtLogon
                 $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
-                $action = New-ScheduledTaskAction -Execute $fileName -WorkingDirectory $fileDirectory
-                $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
-                Invoke-Output {Register-ScheduledTask -TaskName "Keyboard Shortcuts" -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -Description $description}
-                Start-Process -FilePath "$env:LOCALAPPDATA\WinMac\KeyShortcuts.exe" -WorkingDirectory $env:LOCALAPPDATA\WinMac
-                Write-Host "Keyboard Shortcuts installation completed." -ForegroundColor Green
-            } else {
-                Write-Host "Keyboard Shortcuts requires elevated session. Please run the script as an administrator. Skipping installation." -ForegroundColor Red
+                $files = Get-ChildItem -Path $sourceDirectory -File
+                New-Item -ItemType Directory -Path $destinationDirectory | Out-Null
+                foreach ($file in $files) { 
+                    Copy-Item -Path $file.FullName -Destination $destinationDirectory
+                    $taskName = ($file.Name).replace('.ahk','')
+                    $action = New-ScheduledTaskAction -Execute $file.Name -WorkingDirectory $destinationDirectory    
+                    $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
+                    Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -ErrorAction SilentlyContinue | Out-Null
+                    Start-Process -FilePath $destinationDirectory\$($file.Name)
+                }
+                Write-Host "AutoHotkey installation completed." -ForegroundColor Green            
+            } 
+            else {
+                Write-Host "AutoHotkey requires elevated session. Please run the script as an administrator. Skipping installation." -ForegroundColor Red
             }
         }
     # Nexus Dock
@@ -1051,11 +1059,11 @@ foreach ($app in $selectedApps) {
                     Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath9" -Value "C:\Users\Public\Documents\Winstep\Icons\camera.ico"
                     Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockNoItems1" -Value "9"
                 }
-                Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "DockLabelColorHotTrack1" 
-                Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type6"
-                Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type7"
-                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path6" -Value $downloadsPath
-                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path7" -Value "$env:APPDATA\Microsoft\Windows\Recent\"
+                    Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "DockLabelColorHotTrack1" 
+                    Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type6"
+                    Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type7"
+                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path6" -Value $downloadsPath
+                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path7" -Value "$env:APPDATA\Microsoft\Windows\Recent\"
                 if ($dockDynamic -eq "X" -or $dockDynamic -eq "x") {
                     Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockAutoHideMaximized1" -Value "True"
                     Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockRespectReserved1" -Value "False"
@@ -1070,98 +1078,73 @@ foreach ($app in $selectedApps) {
                 Write-Host "Nexus Dock installation completed." -ForegroundColor Green
             }
         }
-        # Windhawk
-        "10" {
-                Write-Host "Installing Windhawk..." -ForegroundColor Yellow
-                winget install --id "RamenSoftware.Windhawk" --source winget --silent | Out-Null
-                $windhawkRoot = "$Env:ProgramData\Windhawk"
-                $backupFile = Get-ChildItem -Path (Join-Path $PWD '..\config') -Filter 'windhawk-backup.zip' -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
-                $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
-                $timeStamp = (Get-Date -Format 'yyyyMMddHHmmss')
-                $extractFolder = Join-Path $env:TEMP ("WindhawkRestore_$timeStamp")
-                New-Item -ItemType Directory -Path $extractFolder -Force | Out-Null
-                Expand-Archive -Path $backupFile.FullName -DestinationPath $extractFolder -Force
-                $modsSourceBackup = Join-Path $extractFolder "ModsSource"
-                $modsBackup = Join-Path $extractFolder "Engine\Mods"
-                $regBackup = Join-Path $extractFolder "Windhawk.reg"
-                Stop-Process -n Windhawk -Force
-                Copy-Item -Path $modsSourceBackup -Destination $windhawkRoot -Recurse -Force -ErrorAction SilentlyContinue
-                $engineFolder = Join-Path $windhawkRoot "Engine"
-                New-Item -ItemType Directory -Path $engineFolder -Force | Out-Null
-                Copy-Item -Path $modsBackup -Destination $engineFolder -Recurse -Force -ErrorAction SilentlyContinue
-                Write-Warning "Mods folder not found in backup."
-                reg import $regBackup > $null 2>&1
-                Move-Item -Path "C:\Users\Public\Desktop\Windhawk.lnk" -Destination $programsDir -Force
-                Start-Process "$Env:ProgramFiles\Windhawk\Windhawk.exe"
-                Write-Host "Windhawk installation completed." -ForegroundColor Green
-            }
     # Hot Corners
         "11"{
-                Write-Host "Installing Hot Corners..." -ForegroundColor Yellow
-                $outputPath = '..\temp\WinXCorners.zip'
-                $winXCornersUrl = "https://github.com/vhanla/winxcorners/releases/download/1.3.2/WinXCorners1.3.2.zip"
-                $winXCornersConfigPath = '..\config\hotcorners\settings.ini'
-                $destinationPath = "$env:LOCALAPPDATA\WinXCorners"
-                $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.8' -ErrorAction SilentlyContinue
-                $winLaunchUrl = "https://github.com/jensroth-git/WinLaunch/releases/download/v.0.7.3.0/WinLaunch.0.7.3.0.zip"
-                $winLaunchConfigPath = '..\config\hotcorners\Settings.xml'
-                $winLaunchOutputPath = '..\temp\WinLaunch.zip'
-                $winLaunchDestinationPath = "$env:LOCALAPPDATA\WinLaunch"
-                if ($null -eq $dotNetRuntime) {
-                    Invoke-Output { Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8' }
-                }
-                $uiXaml = Get-WinGetPackage -Id 'Microsoft.UI.Xaml.2.7' -ErrorAction SilentlyContinue
-                if ($null -eq $uiXaml) {
-                    Invoke-Output { Install-WinGetPackage -id 'Microsoft.UI.Xaml.2.7' }
-                }
-                Invoke-WebRequest -Uri $winXCornersUrl -OutFile $outputPath
-                if (-not (Test-Path -Path $destinationPath)) {
-                    New-Item -ItemType Directory -Path $destinationPath -Force | Out-Null
-                }
-                Expand-Archive -Path $outputPath -DestinationPath $destinationPath -Force
-                Copy-Item -Path $winXCornersConfigPath -Destination $destinationPath -Force
-                Write-Host "Installing Simple Sticky Notes..." -ForegroundColor DarkYellow
-                Invoke-Output { winget install SimnetLtd.SimpleStickyNotes --silent --accept-source-agreements --accept-package-agreements }
-                Write-Host "Installing WinLaunch..." -ForegroundColor DarkYellow
-                Invoke-WebRequest -Uri $winLaunchUrl -OutFile $winLaunchOutputPath
-                Expand-Archive -Path $winLaunchOutputPath -DestinationPath $winLaunchDestinationPath -Force
-                Copy-Item -Path ..\config\HotCorners\winlaunch.ico -Destination $winLaunchDestinationPath -Force
-                Remove-Item $winLaunchOutputPath -Force
-                Start-Process "$winLaunchDestinationPath\WinLaunch.exe"
-                Start-Process "C:\Program Files (x86)\Simnet\Simple Sticky Notes\ssn.exe"
-                Move-Item -Path "$env:USERPROFILE\Desktop\Simple Sticky Notes.lnk" -Destination "$env:APPDATA\Microsoft\Windows\Start Menu\Programs" -Force
-                $process = Get-Process -Name WinLaunch -ErrorAction SilentlyContinue
-                if ($process) { Stop-Process -Name WinLaunch -Force }
-                New-Item -ItemType Directory -Path "$winLaunchDestinationPath\Data" -Force | Out-Null
-                Copy-Item -Path $winLaunchConfigPath -Destination "$winLaunchDestinationPath\Data\Settings.xml" -Force
-                Copy-Item -Path $winLaunchConfigPath -Destination "$env:APPDATA\WinLaunch\Settings.xml" -Force
-                $configFilePath = Join-Path -Path $destinationPath -ChildPath "settings.ini"
-                (Get-Content -Path $configFilePath) -replace "WINLAUNCH", "$($env:LOCALAPPDATA)\WinLaunch\WinLaunch.exe" | Set-Content -Path $configFilePath
-                (Get-Content -Path $configFilePath) -replace "MINIMIZEALL", "$($env:LOCALAPPDATA)\WinMac\hotcorners\MinimizeAllWindowsExceptFocused.exe" | Set-Content -Path $configFilePath
-                Remove-Item $outputPath -Force
-                Start-Process "$destinationPath\WinXCorners.exe"
-                $shortcut1Path = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\WinXCorners.lnk"
-                $target1Path = "$destinationPath\WinXCorners.exe"
-                $shell = New-Object -ComObject WScript.Shell
-                $shortcut = $shell.CreateShortcut($shortcut1Path)
-                $shortcut.TargetPath = $target1Path
-                $shortcut.Save()
-                $shortcut2Path = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\WinLaunch.lnk"
-                $target2Path = "$winLaunchDestinationPath\WinLaunch.exe"
-                $icon2Path = "$winLaunchDestinationPath\winlaunch.ico"
-                $shell = New-Object -ComObject WScript.Shell
-                $shortcut = $shell.CreateShortcut($shortcut2Path)
-                $shortcut.TargetPath = $target2Path
-                $shortcut.IconLocation = $icon2Path
-                $shortcut.Save()
-                if (-not (Test-Path -Path "$env:LOCALAPPDATA\WinMac\hotcorners")) {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\hotcorners" -Force | Out-Null}
-                if ($sysType -like "*ARM*") {Copy-Item -Path ..\bin\hotcorners\arm64\* -Destination "$env:LOCALAPPDATA\WinMac\hotcorners\" -Recurse -Force}
-                else {Copy-Item -Path ..\bin\hotcorners\x64\* -Destination "$env:LOCALAPPDATA\WinMac\hotcorners\" -Recurse -Force}
-                New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "WinXCorners" -Value "$destinationPath\WinXCorners.exe" | Out-Null
-                Write-Host "Hot Corners installation completed." -ForegroundColor Green
+            Write-Host "Installing Hot Corners..." -ForegroundColor Yellow
+            $outputPath = '..\temp\WinXCorners.zip'
+            $winXCornersUrl = "https://github.com/vhanla/winxcorners/releases/download/1.3.2/WinXCorners1.3.2.zip"
+            $winXCornersConfigPath = '..\config\hotcorners\settings.ini'
+            $destinationPath = "$env:LOCALAPPDATA\WinXCorners"
+            $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.8' -ErrorAction SilentlyContinue
+            $winLaunchUrl = "https://github.com/jensroth-git/WinLaunch/releases/download/v.0.7.3.0/WinLaunch.0.7.3.0.zip"
+            $winLaunchConfigPath = '..\config\hotcorners\Settings.xml'
+            $winLaunchOutputPath = '..\temp\WinLaunch.zip'
+            $winLaunchDestinationPath = "$env:LOCALAPPDATA\WinLaunch"
+            if ($null -eq $dotNetRuntime) {
+                Invoke-Output { Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8' }
+            }
+            $uiXaml = Get-WinGetPackage -Id 'Microsoft.UI.Xaml.2.7' -ErrorAction SilentlyContinue
+            if ($null -eq $uiXaml) {
+                Invoke-Output { Install-WinGetPackage -id 'Microsoft.UI.Xaml.2.7' }
+            }
+            Invoke-WebRequest -Uri $winXCornersUrl -OutFile $outputPath
+            if (-not (Test-Path -Path $destinationPath)) {
+                New-Item -ItemType Directory -Path $destinationPath -Force | Out-Null
+            }
+            Expand-Archive -Path $outputPath -DestinationPath $destinationPath -Force
+            Copy-Item -Path $winXCornersConfigPath -Destination $destinationPath -Force
+            Write-Host "Installing Simple Sticky Notes..." -ForegroundColor DarkYellow
+            Invoke-Output { winget install SimnetLtd.SimpleStickyNotes --silent --accept-source-agreements --accept-package-agreements }
+            Write-Host "Installing WinLaunch..." -ForegroundColor DarkYellow
+            Invoke-WebRequest -Uri $winLaunchUrl -OutFile $winLaunchOutputPath
+            Expand-Archive -Path $winLaunchOutputPath -DestinationPath $winLaunchDestinationPath -Force
+            Copy-Item -Path ..\config\HotCorners\winlaunch.ico -Destination $winLaunchDestinationPath -Force
+            Remove-Item $winLaunchOutputPath -Force
+            Start-Process "$winLaunchDestinationPath\WinLaunch.exe"
+            Start-Process "C:\Program Files (x86)\Simnet\Simple Sticky Notes\ssn.exe"
+            Move-Item -Path "$env:USERPROFILE\Desktop\Simple Sticky Notes.lnk" -Destination "$env:APPDATA\Microsoft\Windows\Start Menu\Programs" -Force
+            $process = Get-Process -Name WinLaunch -ErrorAction SilentlyContinue
+            if ($process) { Stop-Process -Name WinLaunch -Force }
+            New-Item -ItemType Directory -Path "$winLaunchDestinationPath\Data" -Force | Out-Null
+            Copy-Item -Path $winLaunchConfigPath -Destination "$winLaunchDestinationPath\Data\Settings.xml" -Force
+            Copy-Item -Path $winLaunchConfigPath -Destination "$env:APPDATA\WinLaunch\Settings.xml" -Force
+            $configFilePath = Join-Path -Path $destinationPath -ChildPath "settings.ini"
+            (Get-Content -Path $configFilePath) -replace "WINLAUNCH", "$($env:LOCALAPPDATA)\WinLaunch\WinLaunch.exe" | Set-Content -Path $configFilePath
+            (Get-Content -Path $configFilePath) -replace "MINIMIZEALL", "$($env:LOCALAPPDATA)\WinMac\hotcorners\MinimizeAllWindowsExceptFocused.exe" | Set-Content -Path $configFilePath
+            Remove-Item $outputPath -Force
+            Start-Process "$destinationPath\WinXCorners.exe"
+            $shortcut1Path = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\WinXCorners.lnk"
+            $target1Path = "$destinationPath\WinXCorners.exe"
+            $shell = New-Object -ComObject WScript.Shell
+            $shortcut = $shell.CreateShortcut($shortcut1Path)
+            $shortcut.TargetPath = $target1Path
+            $shortcut.Save()
+            $shortcut2Path = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\WinLaunch.lnk"
+            $target2Path = "$winLaunchDestinationPath\WinLaunch.exe"
+            $icon2Path = "$winLaunchDestinationPath\winlaunch.ico"
+            $shell = New-Object -ComObject WScript.Shell
+            $shortcut = $shell.CreateShortcut($shortcut2Path)
+            $shortcut.TargetPath = $target2Path
+            $shortcut.IconLocation = $icon2Path
+            $shortcut.Save()
+            if (-not (Test-Path -Path "$env:LOCALAPPDATA\WinMac\hotcorners")) {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\hotcorners" -Force | Out-Null}
+            if ($sysType -like "*ARM*") {Copy-Item -Path ..\bin\hotcorners\arm64\* -Destination "$env:LOCALAPPDATA\WinMac\hotcorners\" -Recurse -Force}
+            else {Copy-Item -Path ..\bin\hotcorners\x64\* -Destination "$env:LOCALAPPDATA\WinMac\hotcorners\" -Recurse -Force}
+            New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "WinXCorners" -Value "$destinationPath\WinXCorners.exe" | Out-Null
+            Write-Host "Hot Corners installation completed." -ForegroundColor Green
             }
     # Other
-        "12" {
+        "11" {
         ## Black Cursor
             Write-Host "Configuring Other Settings..." -ForegroundColor Yellow
             Write-Host "Black cursor..." -ForegroundColor DarkYellow
