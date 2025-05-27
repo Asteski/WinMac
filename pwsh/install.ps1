@@ -1179,11 +1179,9 @@ foreach ($app in $selectedApps) {
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             $curSourceFolder = (Get-Item -Path "..\config\cursor").FullName
             $curDestFolder = "C:\Windows\Cursors"
-            echo 1
             Copy-Item -Path $curSourceFolder\* -Destination $curDestFolder -Recurse -Force
             $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
             $RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
-            echo 2
             $RegCursors.SetValue("","Windows Black")
             $RegCursors.SetValue("AppStarting","$curDestFolder\aero_black_working.ani")
             $RegCursors.SetValue("Arrow","$curDestFolder\aero_black_arrow.cur")
@@ -1202,7 +1200,6 @@ foreach ($app in $selectedApps) {
             $RegCursors.SetValue("Wait","$curDestFolder\aero_black_busy.ani")
             $RegCursors.SetValue("Pin","$curDestFolder\aero_black_pin.cur")
             $RegCursors.SetValue("Person","$curDestFolder\aero_black_person.cur")
-            echo 3
             $RegCursors.Close()
             $RegConnect.Close()
             $CSharpSig = @'
@@ -1214,8 +1211,8 @@ uint pvParam,
 uint fWinIni);
 '@
             echo 4
-            $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
-            $CursorRefresh::SystemParametersInfo(0x057,0,$null,0)
+            $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru | Out-Null
+            $CursorRefresh::SystemParametersInfo(0x057,0,$null,0) > $null 2>&1
         ## Pin User folder, Programs and Recycle Bin to Quick Access
             $regPath = "HKCU:\SOFTWARE\WinMac"
             if (-not (Test-Path -Path $regPath)) {New-Item -Path $regPath -Force | Out-Null}
