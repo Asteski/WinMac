@@ -26,7 +26,6 @@ Windows Registry Editor Version 5.00
 
 [HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\AppMode]
 "MUIVerb"="App mode"
-"Icon"="shell32.dll,-271"
 "SubCommands"=""
 "CommandFlags"=dword:00000020
 
@@ -47,7 +46,6 @@ Windows Registry Editor Version 5.00
 [HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\WindowsMode]
 "MUIVerb"="Windows mode"
 "SubCommands"=""
-"Icon"="mstsc.exe,-20022"
 
 [HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\WindowsMode\shell\001flyout]
 "MUIVerb"="Light"
