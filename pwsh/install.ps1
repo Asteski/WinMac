@@ -5,7 +5,6 @@ param (
 $version = "0.9.2"
 # $date = Get-Date -Format "yy-MM-ddTHHmmss"
 # $logFile = "WinMac_install_log_$date.txt"
-$blueOrYellow = "B"
 $errorActionPreference="silentlyContinue"
 $WarningPreference="silentlyContinue"
 Add-Type -AssemblyName System.Windows.Forms
