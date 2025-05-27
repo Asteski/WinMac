@@ -28,7 +28,7 @@ function Get-WindowsTheme {
         if ($appsUseLightTheme.AppsUseLightTheme -eq 0) {
             return "Dark"
         } else {
-            return "Light" 
+            return "Light"
         }
     } catch {
         return "Light"
@@ -46,167 +46,115 @@ if (!($noGUI)) {
     $iconFolderPath = Join-Path -Path $parentDirectory -ChildPath $iconFolderName
     $topTextBlock = "PowerShell GUI deployment wizard for Windows and macOS hybrid"
     $bottomTextBlock1 = 'Important Notes:'
-    $bottomTextBlock2 = 'Please disable Windows Defender/3rd party Anti-virus, to prevent issues with applying icons pack.'
-    $bottomTextBlock3 = 'PowerShell default profile will be removed and replaced with new one. Please make sure to backup your current profile if needed.'
-    $bottomTextBlock4 = 'The author of this script is not responsible for any damage caused by running it. Highly recommend to create a system restore point before proceeding with the installation process to ensure you can revert any changes if necessary.'
-    $bottomTextBlock5 = 'For guide on how to use the script, please refer to the Wiki page on WinMac GitHub page: https://github.com/Asteski/WinMac/wiki'
+    $bottomTextBlock2 = 'PowerShell default profile will be removed and replaced with new one. Please make sure to backup your current profile if needed.'
+    $bottomTextBlock3 = 'The author of this script is not responsible for any damage caused by running it. Highly recommend to create a system restore point before proceeding with the installation process to ensure you can revert any changes if necessary.'
+    $bottomTextBlock4 = 'For guide on how to use the script, please refer to the Wiki page on WinMac GitHub page:'
+    $bottomTextBlock5 = 'https://github.com/Asteski/WinMac/wiki'
 [xml]$xaml = @"
 <Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="WinMac Deployment Wizard" 
-    Height="920" Width="480" 
+    Height="700" Width="600" 
     WindowStartupLocation="CenterScreen" 
     Background="$backgroundColor" 
-    Icon="$iconFolderPath\wizard.ico">
+    Icon="$iconFolderPath\\\\wizard.ico">
     <Window.Resources>
         <SolidColorBrush x:Key="BackgroundBrush" Color="$backgroundColor"/>
         <SolidColorBrush x:Key="ForegroundBrush" Color="$foregroundColor"/>
         <SolidColorBrush x:Key="AccentBrush" Color="$accentColor"/>
         <SolidColorBrush x:Key="SecondaryBackgroundBrush" Color="$secondaryBackgroundColor"/>
         <SolidColorBrush x:Key="BorderBrush" Color="$borderColor"/>
-        <Thickness x:Key="BorderThickness">0</Thickness>  <!-- Corrected Thickness -->
+        <Thickness x:Key="BorderThickness">1</Thickness> 
     </Window.Resources>
 
     <Grid Background="{StaticResource BackgroundBrush}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/> <!-- WinMac Title -->
+            <RowDefinition Height="Auto"/> <!-- Text Boxes -->
+            <RowDefinition Height="Auto"/> <!-- Tab Titles -->
+            <RowDefinition Height="*"/>    <!-- Frame with Lists -->
+            <RowDefinition Height="Auto"/> <!-- Buttons -->
         </Grid.RowDefinitions>
         
-        <!-- Title -->
-        <StackPanel Grid.Row="0" HorizontalAlignment="Center">
-            <TextBlock FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,10,0,10">
-                <Run Text="WinMac" Foreground="#0174cf"/>
-            </TextBlock>
-                        
-            <!-- Static TextBlock below the title -->
-            <TextBlock Text="Version $version" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="0,5,0,5" TextWrapping="Wrap"/>
-            <TextBlock Text="$topTextBlock" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="0,5,0,5" TextWrapping="Wrap"/>
-        </StackPanel>
+        <!-- WinMac Title -->
+        <TextBlock Grid.Row="0" Text="WinMac" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Foreground="#0174cf" Margin="0,10,0,0"/>
+        
+        <!-- Text Boxes Row -->
+        <Grid Grid.Row="1" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <Border Grid.Column="0" BorderBrush="{StaticResource ForegroundBrush}" BorderThickness="0" Margin="0,0,0,0" Height="20">
+                <TextBlock Text="$topTextBlock" Foreground="{StaticResource ForegroundBrush}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,0,0,0"/>
+            </Border>
+        </Grid>
 
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-            <StackPanel VerticalAlignment="Top">
-                <!-- Installation Type -->
-                <GroupBox Header="Select Installation Type" Margin="0,5,0,5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
-                    <Grid Margin="5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <RadioButton x:Name="fullInstall" Content="Full" IsChecked="True" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <RadioButton x:Name="customInstall" Content="Custom" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                    </Grid>
-                </GroupBox>
+        <!-- Tab Control Placeholder -->
+        <Grid Grid.Row="2" Margin="10,0,10,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>            </Grid.ColumnDefinitions>
+            <Border x:Name="tab1Border" Grid.Column="0" BorderBrush="{StaticResource ForegroundBrush}" BorderThickness="1,1,1,0" Margin="0,0,0,0" Background="{StaticResource SecondaryBackgroundBrush}">
+                <TextBlock Text="Components" Foreground="{StaticResource ForegroundBrush}" Padding="10,5" HorizontalAlignment="Center"/>
+            </Border>
+            <Border x:Name="tab2Border" Grid.Column="1" BorderBrush="{StaticResource ForegroundBrush}" BorderThickness="1,1,1,0" Margin="-1,0,0,0" Background="{StaticResource BackgroundBrush}">
+                <TextBlock Text="Configuration" Foreground="{StaticResource ForegroundBrush}" Padding="10,5" HorizontalAlignment="Center"/>
+            </Border>
+        </Grid>
 
-                <!-- Component Selection -->
-                <GroupBox Header="Choose Components" Margin="0,5,0,5" Padding="5,5,5,5" x:Name="componentSelection" IsEnabled="False" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
-                    <Grid Margin="5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-
-                        <CheckBox x:Name="chkPowerToys" Content="PowerToys" IsChecked="True" Grid.Row="0" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="chkEverything" Content="Everything" IsChecked="True" Grid.Row="0" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="chkPowershellProfile" Content="PowerShell Profile" IsChecked="True" Grid.Row="1" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="chkStartAllBack" Content="StartAllBack" IsChecked="True" Grid.Row="1" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="chkWinMacMenu" Content="WinMac Menu" IsChecked="True" Grid.Row="2" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="chkWindhawk" Content="Windhawk" IsChecked="True" Grid.Row="2" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="chkStahky" Content="Stahky" IsChecked="True" Grid.Row="3" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="chkAutoHotKey" Content="AutoHotkey" IsChecked="True" Grid.Row="3" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="chkNexusDock" Content="Nexus Dock" IsChecked="True" Grid.Row="4" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="chkHotCorners" Content="Hot Corners" IsChecked="True" Grid.Row="4" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="chkGitProfile" Content="Git Profile" IsChecked="True" Grid.Row="5" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="chkOther" Content="Other" IsChecked="True" Grid.Row="5" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                    </Grid>
-                </GroupBox>
-
-                <!-- 2x2 GroupBox Layout -->
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="Auto"/> <!-- For the TextBlock -->
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <!-- Additional Settings: Start Menu -->
-                    <GroupBox Grid.Row="0" Grid.Column="0" Header="Start Menu Options" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
-                        <StackPanel>
-                            <RadioButton x:Name="startMenuWinMac" Content="WinMac Menu" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                            <RadioButton x:Name="startMenuClassic" Content="Classic Menu" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        </StackPanel>
-                    </GroupBox>
-
-                    <!-- Additional Settings: Prompt Style -->
-                    <GroupBox Grid.Row="0" Grid.Column="1" Header="Prompt Style Options" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
-                        <StackPanel>
-                            <RadioButton x:Name="promptStyleWinMac" Content="WinMac prompt" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                            <RadioButton x:Name="promptStylemacOS" Content="macOS prompt" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        </StackPanel>
-                    </GroupBox>
-
-                    <!-- Additional Settings: Shell Corner Style -->
-                    <GroupBox Grid.Row="1" Grid.Column="0" Header="Shell Corner Style" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
-                        <StackPanel>
-                            <RadioButton x:Name="shellCornerRounded" Content="Rounded" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                            <RadioButton x:Name="shellCornerSquared" Content="Squared" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        </StackPanel>
-                    </GroupBox>
-
-                    <!-- Additional Settings: Theme Style -->
-                    <GroupBox Grid.Row="1" Grid.Column="1" Header="Theme Style" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
-                        <StackPanel>
-                            <RadioButton x:Name="themeLight" Content="Light" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                            <RadioButton x:Name="themeDark" Content="Dark" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        </StackPanel>
-                    </GroupBox>
-
-                    <!-- Additional Settings: Folder Color -->
-                    <GroupBox Grid.Row="0" Grid.Column="2" Header="Folder Color" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
-                        <StackPanel>
-                            <RadioButton x:Name="folderColorBlue" Content="Blue" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                            <RadioButton x:Name="folderColorYellow" Content="Yellow" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        </StackPanel>
-                    </GroupBox>
-
-                    <!-- Additional Settings: Dock Style -->
-                    <GroupBox Grid.Row="1" Grid.Column="2" Header="Dock Style" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
-                        <StackPanel>
-                            <RadioButton x:Name="dockStyleDefault" Content="Default" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                            <RadioButton x:Name="dockStyleDynamic" Content="Dynamic" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        </StackPanel>
-                    </GroupBox>
+        <!-- Frame with Lists -->
+        <Border Grid.Row="3" BorderBrush="{StaticResource ForegroundBrush}" BorderThickness="1" Margin="10,0,10,10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0" Margin="0">
+                    <!-- Content for Tab 1 -->
+                    <Border x:Name="list1Content" BorderBrush="{StaticResource ForegroundBrush}" BorderThickness="1" Visibility="Visible">
+                        <TextBlock Text="list 1" Foreground="{StaticResource ForegroundBrush}" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    </Border>
+                    <!-- Content for Tab 2 -->
+                    <Border x:Name="list2Content" BorderBrush="{StaticResource ForegroundBrush}" BorderThickness="1" Visibility="Collapsed">
+                        <TextBlock Text="list 2" Foreground="{StaticResource ForegroundBrush}" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    </Border>
                 </Grid>
-                    <!-- TextBlock below the last row of GroupBoxes -->
-                    <TextBlock FontSize="14" FontWeight="Bold" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="10" Text="$bottomTextBlock1" TextWrapping="Wrap"/>
-                    <TextBlock Margin="10" Foreground="{StaticResource ForegroundBrush}" Text="$bottomTextBlock2" TextWrapping="Wrap"/>
-                    <TextBlock Margin="10" Foreground="{StaticResource ForegroundBrush}" Text="$bottomTextBlock3" TextWrapping="Wrap"/>
-                    <TextBlock Margin="10" Foreground="{StaticResource ForegroundBrush}" Text="$bottomTextBlock4" TextWrapping="Wrap"/>
-                    <TextBlock Margin="10" Foreground="{StaticResource ForegroundBrush}" Text="$bottomTextBlock5" TextWrapping="Wrap"/>
-
+            </Grid>
+        </Border>
+         <Border Grid.Row="4" BorderBrush="{StaticResource ForegroundBrush}" BorderThickness="0" Margin="10,0,10,0">
+            <StackPanel>
+                <!-- TextBlock below the last row of GroupBoxes -->
+                <TextBlock FontSize="14" FontWeight="Bold" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="10" Text="$bottomTextBlock1" TextWrapping="Wrap"/>
+                <TextBlock Margin="10" Foreground="{StaticResource ForegroundBrush}" Text="$bottomTextBlock2" TextWrapping="Wrap"/>
+                <TextBlock Margin="10" Foreground="{StaticResource ForegroundBrush}" Text="$bottomTextBlock3" TextWrapping="Wrap"/>
+                <TextBlock Margin="10" Foreground="{StaticResource ForegroundBrush}" Text="$bottomTextBlock4" TextWrapping="Wrap"/>
+                <TextBlock Margin="10" Foreground="{StaticResource ForegroundBrush}" Text="$bottomTextBlock5" TextWrapping="Wrap"/>
+                <TextBlock Margin="10" Foreground="{StaticResource ForegroundBrush}" Text="$bottomTextBlock6" TextWrapping="Wrap"/>
+            </StackPanel>    
+        </Border>  
+        <!-- Buttons -->
+        <Grid Grid.Row="5" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="-2">
+                <Button x:Name="btnCancel" Content="Cancel" Width="100" Height="30" Margin="0,0,10,0" 
+                        Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource ForegroundBrush}" BorderThickness="1"/>
+                <Button x:Name="btnInstall" Content="Install" Width="100" Height="30" 
+                        Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource AccentBrush}" BorderBrush="{StaticResource ForegroundBrush}" BorderThickness="1"/>
             </StackPanel>
+        </Grid>
+        
+        <!-- Existing ScrollViewer - Collapsed -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
+        <!-- ...existing code... -->
         </ScrollViewer>
 
         <!-- Buttons -->
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button x:Name="btnInstall" Content="Install" Width="100" Height="30" Margin="10" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource AccentBrush}"/>
-            <Button x:Name="btnCancel" Content="Cancel" Width="100" Height="30" Margin="10" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}"/>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="Collapsed">
+        <!-- ...existing code... -->
         </StackPanel>
     </Grid>
 </Window>
@@ -236,6 +184,27 @@ if (!($noGUI)) {
     $dockDynamic = $window.FindName("dockStyleDynamic")
     $btnInstall = $window.FindName("btnInstall")
     $btnCancel = $window.FindName("btnCancel")
+
+    $tab1Border = $window.FindName("tab1Border")
+    $tab2Border = $window.FindName("tab2Border")
+    $list1Content = $window.FindName("list1Content")
+    $list2Content = $window.FindName("list2Content")
+
+    # Event handlers for tab switching
+    $tab1Border.Add_MouseLeftButtonDown({
+        $list1Content.Visibility = 'Visible'
+        $list2Content.Visibility = 'Collapsed'
+        $tab1Border.Background = $window.FindResource("SecondaryBackgroundBrush")
+        $tab2Border.Background = $window.FindResource("BackgroundBrush")
+    })
+
+    $tab2Border.Add_MouseLeftButtonDown({
+        $list1Content.Visibility = 'Collapsed'
+        $list2Content.Visibility = 'Visible'
+        $tab2Border.Background = $window.FindResource("SecondaryBackgroundBrush")
+        $tab1Border.Background = $window.FindResource("BackgroundBrush")
+    })
+
     $fullInstall.Add_Checked({$componentSelection.IsEnabled = $false})
     $customInstall.Add_Checked({$componentSelection.IsEnabled = $true})
     $result = @{}
@@ -1088,6 +1057,8 @@ foreach ($app in $selectedApps) {
                     Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath9" -Value "C:\Users\Public\Documents\Winstep\Icons\camera.ico"
                     Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockNoItems1" -Value "9"
                 }
+                   
+                   
                     Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "DockLabelColorHotTrack1" 
                     Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type6"
                     Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type7"
@@ -1252,7 +1223,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
                 if (-not ($programsPin.Namespace($programsDir).Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
                     $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome") 
                 }
-                $RBPath = 'HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\pintohome\command\'
+                $RBPath = 'HKCU:\Software\WinSTEP2000\NeXuS\Docks'
                 $name = "DelegateExecute"
                 $value = "{b455f46e-e4af-4035-b0a4-cf18d2f6f28e}"
                 New-Item -Path $RBPath -Force
