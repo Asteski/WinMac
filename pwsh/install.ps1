@@ -1303,39 +1303,6 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             $shortcut.TargetPath = $targetPath
             $shortcut.IconLocation = $iconPath
             $shortcut.Save()
-        ## Icons Pack
-Write-Host @"
-`e[91m$("Please make sure that MS Defender/3rd party tool is disabled,
-otherwise MS Defender will block installation of Icon Pack!")`e[0m
-"@
-            $defender = Read-Host "Do you want to continue? (Y/n)"
-            if ($defender -eq 'Y' -or $defender -eq 'y') {       
-                if ((Get-ItemProperty -Path $regPath -Name "IconPack" -ErrorAction SilentlyContinue).IconPack -ne 1) {
-                    if ($blueOrYellow -eq "B" -or $blueOrYellow -eq "b") {
-                        $exePath = "..\bin\iconpack\iconpack_blue_folders.exe"
-                    }
-                    elseif ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {
-                        $exePath = "..\bin\iconpack\iconpack_yellow_folders.exe"
-                    }
-                    $arguments = "/S"
-                    Write-Host "Deploying icon pack..." -ForegroundColor DarkYellow
-                    Start-Process -FilePath $exePath -ArgumentList $arguments -NoNewWindow
-                    Set-ItemProperty -Path $regPath -Name "IconPack" -Value 1 | Out-Null
-                    Start-Sleep -s 55
-                    if ($blueOrYellow -eq "B" -or $blueOrYellow -eq "b") {
-                        $shortcutPath = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\File Explorer.lnk"
-                        $systemDllPath = "C:\Windows\System32\imageres.dll"
-                        $iconIndex = 265
-                        $shell = New-Object -ComObject WScript.Shell
-                        $shortcut = $shell.CreateShortcut($shortcutPath)
-                        $shortcut.IconLocation = "$systemDllPath,$iconIndex"
-                        $shortcut.Save()
-                    }
-                }
-            }
-            else {
-                Write-Host "Icon Pack installation skipped." -ForegroundColor DarkRed
-            }
         }
     }
 }
