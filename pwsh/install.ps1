@@ -7,7 +7,7 @@ $version = "0.9.2"
 # $logFile = "WinMac_install_log_$date.txt"
 $errorActionPreference="silentlyContinue"
 $WarningPreference="silentlyContinue"
-Add-Type -AssemblyName System.Windows.Forms
+Add-Type -AssemblyName System.Windows.Formstylk
 Add-Type -AssemblyName PresentationFramework
 if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null}
 if (-not (Test-Path -Path "../logs")) {New-Item -ItemType Directory -Path "../logs" | Out-Null}
@@ -350,7 +350,7 @@ Write-Host @"
 5. WinMac Menu
 6. Windhawk
 7. Stahky
-8. Autohotkey
+8. AutoHotkey
 9. Nexus Dock
 10. Hot Corners
 11. Other Settings
