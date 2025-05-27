@@ -1210,7 +1210,6 @@ uint uiParam,
 uint pvParam,
 uint fWinIni);
 '@
-            echo 4
             $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru | Out-Null
             $CursorRefresh::SystemParametersInfo(0x057,0,$null,0) > $null 2>&1
         ## Pin User folder, Programs and Recycle Bin to Quick Access
