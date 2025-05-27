@@ -860,6 +860,12 @@ foreach ($app in $selectedApps) {
             } else {
                 Write-Host "Windhawk is already installed." -ForegroundColor Green
             }
+            $windhawkProcess = Get-Process -Name Windhawk -ErrorAction SilentlyContinue
+            if ($windhawkProcess) {
+                Write-Host "Windhawk is currently running. Stopping Windhawk..." -ForegroundColor DarkYellow
+                Stop-Process -Name Windhawk -Force
+                Start-Sleep 2
+            }
             $windhawkRoot = "$Env:ProgramData\Windhawk"
             $backupFile = Get-ChildItem -Path (Join-Path $PWD '..\config') -Filter 'windhawk-backup-x64.zip' -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
