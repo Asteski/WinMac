@@ -1118,7 +1118,7 @@ foreach ($app in $selectedApps) {
         # Windhawk
         "10" {
             Write-Host "Installing Windhawk..." -ForegroundColor Yellow
-            winget install --id "Windhawk.Windhawk" --source winget --silent | Out-Null
+            winget install --id "Windhawk.Windhawk" --source winget --silent
             $backupZipPath = Join-Path $env:USERPROFILE "..config\windhawk-backup.zip"
             $windhawkRoot  = "C:\ProgramData\Windhawk"
             $registryKey   = "HKLM:\SOFTWARE\Windhawk"
