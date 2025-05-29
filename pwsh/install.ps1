@@ -635,7 +635,7 @@ foreach ($app in $selectedApps) {
     # Everything
         "2" {
             Write-Host "Installing Everything..." -ForegroundColor Yellow
-            Install-WinGetPackage -Id "Voidtools.Everything"
+            Install-WinGetPackage -Id "voidtools.Everything.Alpha"
             Stop-Process -Name Everything.exe -ErrorAction SilentlyContinue
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Move-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Destination $programsDir -Force
