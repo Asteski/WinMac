@@ -861,8 +861,18 @@ foreach ($app in $selectedApps) {
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftWin" -Value "Nothing"
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftRight" -Value 1
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "SearchBox" -Value "Hide"
+                    $parentDirectory = Split-Path -Path $PSScriptRoot -Parent
+                    $winxFolderName = "config\winx\Group2"
+                    $winxFolderPath = Join-Path -Path $parentDirectory -ChildPath $winxFolderName
+                    $WinverUWP = (Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP).InstallLocation
+                    $shortcutPath = "$winxFolderPath\8 - System.lnk"
+                    $newTargetPath = "$WinverUWP\WinverUWP.exe"
+                    $WScriptShell = New-Object -ComObject WScript.Shell
+                    $shortcut = $WScriptShell.CreateShortcut($shortcutPath)
+                    $shortcut.TargetPath = $newTargetPath
+                    $shortcut.Save()
                     Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
-                    Copy-Item -Path "..\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force
+                    Copy-Item -Path "..\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force 
                     Copy-Item -Path ..\bin\menu\x64\osh\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force
                     Stop-Process -Name Explorer
                     Start-Process $shellExePath
