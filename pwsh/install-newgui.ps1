@@ -58,7 +58,7 @@ if (!($noGUI)) {
     Height="700" Width="600" 
     WindowStartupLocation="CenterScreen" 
     Background="$backgroundColor" 
-    Icon="$iconFolderPath\\\\wizard.ico">
+    Icon="$iconFolderPath\wizard.ico">
     <Window.Resources>
         <SolidColorBrush x:Key="BackgroundBrush" Color="$backgroundColor"/>
         <SolidColorBrush x:Key="ForegroundBrush" Color="$foregroundColor"/>
