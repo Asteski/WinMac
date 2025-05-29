@@ -83,7 +83,7 @@ if (!($noGUI)) {
             <TextBlock Text="$topTextBlock" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="0,0,0,10" TextWrapping="Wrap"/>
         </StackPanel>
 
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Disabled" PanningMode="VerticalOnly" CanContentScroll="True" Focusable="True">
             <StackPanel VerticalAlignment="Top">
                 <!-- Main Grid for Components and Options -->
                 <Grid>
