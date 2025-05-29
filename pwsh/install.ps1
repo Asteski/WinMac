@@ -887,7 +887,6 @@ foreach ($app in $selectedApps) {
             }
             $windhawkProcess = Get-Process -Name Windhawk -ErrorAction SilentlyContinue
             if ($windhawkProcess) {
-                Write-Host "Windhawk is currently running. Stopping Windhawk..." -ForegroundColor DarkYellow
                 Stop-Process -Name Windhawk -Force
                 Start-Sleep 2
             }
