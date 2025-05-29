@@ -661,12 +661,12 @@ foreach ($app in $selectedApps) {
                 elseif ($promptSet -eq 'M' -or $promptSet -eq 'm') { $prompt = Get-Content "..\config\terminal\macOS-prompt.ps1" -Raw }
             }
             $functions = Get-Content "..\config\terminal\functions.ps1" -Raw
-            if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell" } 
+            if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell" | Out-Null } 
             else { Remove-Item -Path "$profilePath\PowerShell\$profileFile" -Force } 
-            if (-not (Test-Path "$profilePath\WindowsPowerShell")) { New-Item -ItemType Directory -Path "$profilePath\WindowsPowerShell" } 
+            if (-not (Test-Path "$profilePath\WindowsPowerShell")) { New-Item -ItemType Directory -Path "$profilePath\WindowsPowerShell" | Out-Null } 
             else { Remove-Item -Path "$profilePath\WindowsPowerShell\$profileFile" -Force } 
-            if (-not (Test-Path "$profilePath\PowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\PowerShell\$profileFile" } 
-            if (-not (Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\WindowsPowerShell\$profileFile" } 
+            if (-not (Test-Path "$profilePath\PowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\PowerShell\$profileFile" | Out-Null } 
+            if (-not (Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\WindowsPowerShell\$profileFile" | Out-Null } 
             $vim = Get-WinGetPackage -Id Vim.Vim -ErrorAction SilentlyContinue
             if ($null -eq $vim) {
                 $vimVersion = (Find-WingetPackage Vim.Vim | Where-Object {$_.Id -notlike "*nightly*"}).Version
@@ -1135,11 +1135,11 @@ foreach ($app in $selectedApps) {
             $winLaunchOutputPath = '..\temp\WinLaunch.zip'
             $winLaunchDestinationPath = "$env:LOCALAPPDATA\WinLaunch"
             if ($null -eq $dotNetRuntime) {
-                Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8'
+                Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8' | Out-Null
             }
             $uiXaml = Get-WinGetPackage -Id 'Microsoft.UI.Xaml.2.7' -ErrorAction SilentlyContinue
             if ($null -eq $uiXaml) {
-                Install-WinGetPackage -id 'Microsoft.UI.Xaml.2.7'
+                Install-WinGetPackage -id 'Microsoft.UI.Xaml.2.7' | Out-Null
             }
             Invoke-WebRequest -Uri $winXCornersUrl -OutFile $outputPath
             if (-not (Test-Path -Path $destinationPath)) {
@@ -1148,7 +1148,7 @@ foreach ($app in $selectedApps) {
             Expand-Archive -Path $outputPath -DestinationPath $destinationPath -Force
             Copy-Item -Path $winXCornersConfigPath -Destination $destinationPath -Force
             Write-Host "Installing Simple Sticky Notes..." -ForegroundColor DarkYellow
-            winget install SimnetLtd.SimpleStickyNotes --silent --accept-source-agreements --accept-package-agreements
+            Install-WinGetPackage -id 'SimnetLtd.SimpleStickyNotes'
             Write-Host "Installing WinLaunch..." -ForegroundColor DarkYellow
             Invoke-WebRequest -Uri $winLaunchUrl -OutFile $winLaunchOutputPath
             Expand-Archive -Path $winLaunchOutputPath -DestinationPath $winLaunchDestinationPath -Force
