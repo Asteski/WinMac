@@ -53,7 +53,7 @@ if (!($noGUI)) {
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="WinMac Deployment Wizard" 
-    Height="600" Width="740" 
+    Height="550" Width="740" 
     WindowStartupLocation="CenterScreen" 
     Background="$backgroundColor" 
     Icon="$iconFolderPath\wizard.ico">
@@ -90,7 +90,7 @@ if (!($noGUI)) {
                 <GroupBox Header="Select Installation Type" Margin="0,5,0,5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
                     <Grid Margin="5">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="145" />
+                            <ColumnDefinition Width="147" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <RadioButton x:Name="fullInstall" Content="Full" IsChecked="True" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
