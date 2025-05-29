@@ -892,7 +892,7 @@ foreach ($app in $selectedApps) {
                 Start-Sleep 2
             }
             $windhawkRoot = "$Env:ProgramData\Windhawk"
-            if ($sysType -contains "ARM") {
+            if ($sysType -like "*ARM*") {
                 $windhawkBackup = 'windhawk-backup-arm.zip'
             } else {
                 $windhawkBackup = 'windhawk-backup-x64.zip'
