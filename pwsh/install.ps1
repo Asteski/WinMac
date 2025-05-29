@@ -43,7 +43,7 @@ if (!($noGUI)) {
     $iconFolderName = "config"
     $iconFolderPath = Join-Path -Path $parentDirectory -ChildPath $iconFolderName
     $topTextBlock = "PowerShell GUI deployment wizard for Windows and macOS hybrid"
-    $bottomTextBlock1 = 'Important Notes:'
+    $bottomTextBlock1 = 'Important Notes'
     $bottomTextBlock2 = 'PowerShell default profile will be removed and replaced with new one. Please make sure to backup your current profile if needed.'
     $bottomTextBlock3 = 'The author of this script is not responsible for any damage caused by running it. Highly recommend to create a system restore point before proceeding with the installation process to ensure you can revert any changes if necessary.'
     $bottomTextBlock4 = 'For guide on how to use the script, please refer to the Wiki page on WinMac GitHub page.'
@@ -808,6 +808,7 @@ foreach ($app in $selectedApps) {
                 Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
                 Stop-Process -Name explorer -Force
                 Start-Sleep 2
+                Start-Process explorer
                 Write-Host "StartAllBack installation completed." -ForegroundColor Green
             }
         }
@@ -941,13 +942,13 @@ foreach ($app in $selectedApps) {
             $url = "https://github.com/joedf/stahky/releases/download/v0.3.9.1/stahky_U64_v0.3.9.1.zip"
             $outputPath = "..\stahky_U64.zip"
             $exePath = "$env:LOCALAPPDATA\Stahky"
-            New-Item -ItemType Directory -Path $exePath -Force
-            New-Item -ItemType Directory -Path $exePath\config -Force
+            New-Item -ItemType Directory -Path $exePath -Force | Out-Null
+            New-Item -ItemType Directory -Path $exePath\config -Force | Out-Null
             Invoke-WebRequest -Uri $url -OutFile $outputPath
             if (Test-Path -Path "$exePath\stahky.exe") {
                 Write-Output "Stahky already exists."
             } else {
-                Expand-Archive -Path $outputPath -DestinationPath $exePath
+                Expand-Archive -Path $outputPath -DestinationPath $exePath | Out-Null
             }
             Copy-Item -Path ..\config\taskbar\stacks\* -Destination $exePath\config -Recurse -Force
             Copy-Item -Path $exePath\config\themes\stahky-$stackTheme.ini -Destination $exePath\stahky.ini
@@ -1152,7 +1153,7 @@ foreach ($app in $selectedApps) {
             Expand-Archive -Path $outputPath -DestinationPath $destinationPath -Force
             Copy-Item -Path $winXCornersConfigPath -Destination $destinationPath -Force
             Write-Host "Installing Simple Sticky Notes..." -ForegroundColor DarkYellow
-            Install-WinGetPackage -id 'SimnetLtd.SimpleStickyNotes'
+            Install-WinGetPackage -id 'SimnetLtd.SimpleStickyNotes' | Out-Null
             Write-Host "Installing WinLaunch..." -ForegroundColor DarkYellow
             Invoke-WebRequest -Uri $winLaunchUrl -OutFile $winLaunchOutputPath
             Expand-Archive -Path $winLaunchOutputPath -DestinationPath $winLaunchDestinationPath -Force
