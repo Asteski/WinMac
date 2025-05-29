@@ -477,19 +477,14 @@ foreach ($app in $selectedApps) {
             Remove-Item -Path $exePath -Recurse -Force
             Write-Host "Uninstalling Stahky completed." -ForegroundColor Green
         }
-    # AutoHotkey
+    # AutoHotkey Keyboard Shortcuts
         "8" {
-            Write-Host "Uninstalling AutoHotkey..." -ForegroundColor Yellow
-            Stop-Process -Name "AutoHotkey*" -Force | Out-Null
-            $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue
-            foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false -ErrorAction SilentlyContinue }
-            $scheduleObject = New-Object -ComObject Schedule.Service
-            $scheduleObject.connect()
-            $rootFolder = $scheduleObject.GetFolder("\")
-            $rootFolder.DeleteFolder("WinMac",$null)
-            winget uninstall --id autohotkey.autohotkey --source winget --force | Out-Null
-            Remove-Item "$env:PROGRAMFILES\AutoHotkey" -Recurse -Force | Out-Null
-            Write-Host "Uninstalling AutoHotkey completed." -ForegroundColor Green
+            Write-Host "Uninstalling Keyboard Shortcuts..." -ForegroundColor Yellow
+            Stop-Process -Name KeyShortcuts -Force
+            $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -match 'Keyboard Shortcuts' }
+            foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
+            Get-ChildItem "$env:LOCALAPPDATA\WinMac" | Where-Object { $_.Name -match 'keyshortcuts' } | Remove-Item -Recurse -Force
+            Write-Host "Uninstalling Keyboard Shortcuts completed." -ForegroundColor Green
         }
     # Nexus Dock
         "9" {
