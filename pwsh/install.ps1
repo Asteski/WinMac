@@ -838,7 +838,7 @@ foreach ($app in $selectedApps) {
                     } else {
                         Write-Host "WinverUWP is already installed." -ForegroundColor DarkGreen
                     }
-                    New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\"
+                    New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" | Out-Null
                     Write-Host "Installing Open-Shell 4.4.196..." -ForegroundColor DarkYellow
                     $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\StartMenu.exe"
                     Stop-Process -Name StartMenu -Force | Out-Null
