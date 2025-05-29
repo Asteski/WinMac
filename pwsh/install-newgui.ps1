@@ -2,7 +2,7 @@ param (
     [switch]$noGUI,
     [switch]$debug
 )
-$version = "0.9.2"
+$version = "1.0.0"
 # $date = Get-Date -Format "yy-MM-ddTHHmmss"
 # $logFile = "WinMac_install_log_$date.txt"
 $errorActionPreference="silentlyContinue"
