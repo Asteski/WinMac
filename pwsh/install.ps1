@@ -1052,9 +1052,9 @@ foreach ($app in $selectedApps) {
                 Copy-Item -Path "..\config\dock\themes\*" -Destination "$winStep\Themes\" -Recurse -Force 
                 Remove-Item -Path "$winStep\NeXus\Indicators\*" -Force -Recurse 
                 Copy-Item -Path "..\config\dock\indicators\*" -Destination "$winStep\NeXus\Indicators\" -Recurse -Force 
-                New-Item -ItemType Directory -Path "$winStep\Sounds" -Force
+                New-Item -ItemType Directory -Path "$winStep\Sounds" -Force | Out-Null
                 Copy-Item -Path "..\config\dock\sounds\*" -Destination "$winStep\Sounds\" -Recurse -Force
-                New-Item -ItemType Directory -Path "$winStep\Icons" -Force
+                New-Item -ItemType Directory -Path "$winStep\Icons" -Force | Out-Null
                 Copy-Item "..\config\icons" "$winStep" -Recurse -Force
                 $regFile = "..\config\dock\winstep.reg"
                 $downloadsPath = "$env:USERPROFILE\Downloads"
