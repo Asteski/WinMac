@@ -570,7 +570,7 @@ if ($null -eq $nugetProvider) {
     Install-PackageProvider -Name NuGet -Force -Scope CurrentUser
     Write-Host "NuGet installation completed." -ForegroundColor Green
 } else {
-    Write-Host "NuGet is already installed." -ForegroundColor Green
+    Write-Host "NuGet is already installed." -ForegroundColor DarkGreen
 }
 # Winget check
 Write-Host "Checking Package Manager (Winget)" -ForegroundColor Yellow
@@ -596,7 +596,7 @@ if ($null -eq $wingetClientCheck) {
         Update-Module -Name Microsoft.WinGet.Client -Force
         Write-Host "Winget update completed." -ForegroundColor Green
     } else {
-        Write-Host "Winget is already installed." -ForegroundColor Green
+        Write-Host "Winget is already installed." -ForegroundColor DarkGreen
     }
 }
 # WinMac deployment
@@ -677,7 +677,7 @@ foreach ($app in $selectedApps) {
                 Set-ItemProperty -Path $vimRegPath -Name "select_editwith" -Value 0
                 Install-WinGetPackage -Id "Vim.Vim"
             } else {
-                Write-Host "Vim is already installed." -ForegroundColor Green
+                Write-Host "Vim is already installed." -ForegroundColor DarkGreen
             }
             $winget = @(
                 "gsass1.NTop"
@@ -688,20 +688,20 @@ foreach ($app in $selectedApps) {
                 if ($null -eq $package) {
                     Install-WinGetPackage -id $app -source winget | Out-Null
                 } else {
-                    Write-Host "$($app.split(".")[1]) is already installed." -ForegroundColor Green
+                    Write-Host "$($app.split(".")[1]) is already installed." -ForegroundColor DarkGreen
                 }
             }
             $pstreeModule = Get-InstalledModule -Name PSTree -ErrorAction SilentlyContinue
             if ($null -eq $pstreeModule) {
                 Install-Module PSTree -Force | Out-Null
             } else {
-                Write-Host "PSTree is already installed." -ForegroundColor Green
+                Write-Host "PSTree is already installed." -ForegroundColor DarkGreen
             }
             $zModule = Get-InstalledModule -Name z -ErrorAction SilentlyContinue
             if ($null -eq $zModule) {
                 Install-Module z -Force | Out-Null
             } else {
-                Write-Host "z is already installed." -ForegroundColor Green
+                Write-Host "z is already installed." -ForegroundColor DarkGreen
             }
             $vimParentPath = Join-Path $env:PROGRAMFILES Vim
             $latestSubfolder = Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -Property CreationTime -Descending | Select-Object -First 1
@@ -820,23 +820,23 @@ foreach ($app in $selectedApps) {
                         Write-Host "Installing .NET Desktop Runtime 8..." -ForegroundColor DarkYellow
                         Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8' | Out-Null
                     } else {
-                        Write-Host ".NET Desktop Runtime is already installed." -ForegroundColor Green
+                        Write-Host ".NET Desktop Runtime is already installed." -ForegroundColor DarkGreen
                     }
                     $uiXaml = Get-WinGetPackage -Id 'Microsoft.UI.Xaml.2.7' -ErrorAction SilentlyContinue
                     if ($null -eq $uiXaml) {
                         Write-Host "Installing Microsoft.UI.Xaml 2.7..." -ForegroundColor DarkYellow
                         Install-WinGetPackage -id 'Microsoft.UI.Xaml.2.7' | Out-Null
                     } else {
-                        Write-Host "Microsoft.UI.Xaml is already installed." -ForegroundColor Green
+                        Write-Host "Microsoft.UI.Xaml is already installed." -ForegroundColor DarkGreen
                     }
                     $winverUWP = Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP -ErrorAction SilentlyContinue
                     if ($null -eq $winverUWP) {
                         Write-Host "Installing WinverUWP 2.1.4..." -ForegroundColor DarkYellow
-                        Install-WinGetPackage -id 'FireCubeStudios.WinverUWP'
+                        Install-WinGetPackage -id 'FireCubeStudios.WinverUWP' | Out-Null
                         # Invoke-WebRequest -Uri 'https://github.com/dongle-the-gadget/WinverUWP/releases/download/v2.1.0.0/2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle' -OutFile '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
                         # Add-AppxPackage -Path '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
                     } else {
-                        Write-Host "WinverUWP is already installed." -ForegroundColor Green
+                        Write-Host "WinverUWP is already installed." -ForegroundColor DarkGreen
                     }
                     New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\"
                     Write-Host "Installing Open-Shell 4.4.196..." -ForegroundColor DarkYellow
@@ -893,7 +893,7 @@ foreach ($app in $selectedApps) {
             if ($null -eq $windhawkInstalled) {
                 winget install --id "RamenSoftware.Windhawk" --source winget --silent | Out-Null
             } else {
-                Write-Host "Windhawk is already installed." -ForegroundColor Green
+                Write-Host "Windhawk is already installed." -ForegroundColor DarkGreen
             }
             $windhawkProcess = Get-Process -Name Windhawk -ErrorAction SilentlyContinue
             if ($windhawkProcess) {
@@ -1218,7 +1218,8 @@ foreach ($app in $selectedApps) {
             $RegCursors.SetValue("Person","$curDestFolder\aero_black_person.cur")
             $RegCursors.Close()
             $RegConnect.Close()
-            $CSharpSig = @'
+            if ($lightOrDark -eq 'L' -or $lightOrDark -eq 'l') {
+                $CSharpSig = @'
 [DllImport("user32.dll", EntryPoint = "SystemParametersInfo")]
 public static extern bool SystemParametersInfo(
 uint uiAction,
@@ -1226,8 +1227,9 @@ uint uiParam,
 uint pvParam,
 uint fWinIni);
 '@
-            $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru | Out-Null
-            $CursorRefresh::SystemParametersInfo(0x057,0,$null,0) > $null 2>&1
+                $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru | Out-Null
+                $CursorRefresh::SystemParametersInfo(0x057,0,$null,0) > $null 2>&1
+            }
         ## Pin User folder, Programs and Recycle Bin to Quick Access
             $regPath = "HKCU:\SOFTWARE\WinMac"
             if (-not (Test-Path -Path $regPath)) {New-Item -Path $regPath -Force | Out-Null}
@@ -1241,14 +1243,14 @@ IconResource=C:\Windows\System32\SHELL32.dll,160
                 $homeIniFilePath = "$($homeDir)\desktop.ini"
                 if (Test-Path $homeIniFilePath)  {
                     Remove-Item $homeIniFilePath -Force
-                    New-Item -Path $homeIniFilePath -ItemType File -Force
+                    New-Item -Path $homeIniFilePath -ItemType File -Force | Out-Null
                 }
                 Add-Content $homeIniFilePath -Value $homeIni
                 (Get-Item $homeIniFilePath -Force).Attributes = 'Hidden, System, Archive'
                 (Get-Item $homeDir -Force).Attributes = 'ReadOnly, Directory'
                 $homePin = new-object -com shell.application
                 if (-not ($homePin.Namespace($homeDir).Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
-                    $homePin.Namespace($homeDir).Self.InvokeVerb("pintohome") 
+                    $homePin.Namespace($homeDir).Self.InvokeVerb("pintohome") | Out-Null
                 } 
 $programsIni = @"
 [.ShellClassInfo]
@@ -1275,7 +1277,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
                 $oShell = New-Object -ComObject Shell.Application
                 $recycleBin = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
                 if (-not ($recycleBin.Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
-                    $recycleBin.Self.InvokeVerb("PinToHome")
+                    $recycleBin.Self.InvokeVerb("PinToHome") | Out-Null
                 }
                 Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse
                 Set-ItemProperty -Path $regPath -Name "QuickAccess" -Value 1 | Out-Null
