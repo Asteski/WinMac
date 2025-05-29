@@ -917,7 +917,7 @@ foreach ($app in $selectedApps) {
             $modsBackup = Join-Path $extractFolder "Engine\Mods"
             $regBackup = Join-Path $extractFolder "Windhawk.reg"
             Copy-Item -Path $modsSourceBackup -Destination $windhawkRoot -Recurse -Force -ErrorAction SilentlyContinue
-            Copy-Item -Path '..\config\windhawk\resource-redirect' -Destination "$Env:LOCALAPPDATA\WinMac\resource-redirect" -Recurse -Force -ErrorAction SilentlyContinue
+            Copy-Item -Path '..\config\windhawk\resource-redirect\*' -Destination "$Env:LOCALAPPDATA\WinMac\resource-redirect" -Recurse -Force -ErrorAction SilentlyContinue
             $engineFolder = Join-Path $windhawkRoot "Engine"
             New-Item -ItemType Directory -Path $engineFolder -Force | Out-Null
             Copy-Item -Path $modsBackup -Destination $engineFolder -Recurse -Force -ErrorAction SilentlyContinue
