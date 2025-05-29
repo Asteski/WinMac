@@ -1,6 +1,5 @@
 param (
-    [switch]$noGUI,
-    [switch]$debug
+    [switch]$noGUI
 )
 $version = "1.0.0"
 $errorActionPreference="silentlyContinue"
@@ -1255,7 +1254,7 @@ IconResource=C:\Windows\System32\SHELL32.dll,160
                 } 
 $programsIni = @"
 [.ShellClassInfo]
-IconResource=C:\WINDOWS\System32\imageres.dll,-87
+IconResource=C:\WINDOWS\System32\SHELL32.dll,271
 "@
                 $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
                 $programsIniFilePath = "$($programsDir)\desktop.ini"
