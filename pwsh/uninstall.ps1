@@ -51,7 +51,7 @@ if (!($noGUI)) {
     $parentDirectory = Split-Path -Path $PSScriptRoot -Parent
     $iconFolderName = "config"
     $iconFolderPath = Join-Path -Path $parentDirectory -ChildPath $iconFolderName
-    $topTextBlock = "PowerShell GUI uninstaller wizard for Windows and macOS hybrid"
+    $topTextBlock = "PowerShell GUI uninstaller wizard for Windows 11"
     $bottomTextBlock1 = 'Important Notes'
     $bottomTextBlock2 = 'Please disable Windows Defender/3rd party Anti-virus, to prevent issues with uninsalling icons pack.'
     $bottomTextBlock3 = 'PowerShell profile files will be removed, please make sure to backup your current profiles if needed.'
@@ -81,6 +81,7 @@ if (!($noGUI)) {
         <StackPanel Grid.Row="0" HorizontalAlignment="Center">
             <TextBlock FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,10,0,10">
                 <Run Text="WinMac" Foreground="#0174cf"/>
+                <Run "$topTextBlock"/>
             </TextBlock>
             
             <!-- Static TextBlock below the title -->

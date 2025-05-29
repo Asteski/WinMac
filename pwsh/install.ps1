@@ -42,7 +42,7 @@ if (!($noGUI)) {
     $parentDirectory = Split-Path -Path $PSScriptRoot -Parent
     $iconFolderName = "config"
     $iconFolderPath = Join-Path -Path $parentDirectory -ChildPath $iconFolderName
-    $topTextBlock = "PowerShell GUI deployment wizard for Windows and macOS hybrid"
+    $topTextBlock = "PowerShell GUI deployment wizard for Windows 11"
     $bottomTextBlock1 = ' ↓ Important Notes ↓'
     $bottomTextBlock2 = 'PowerShell default profile will be removed and replaced with new one. Please make sure to backup your current profile if needed.'
     $bottomTextBlock3 = 'The author of this script is not responsible for any damage caused by running it. Highly recommend to create a system restore point before proceeding with the installation process to ensure you can revert any changes if necessary.'
