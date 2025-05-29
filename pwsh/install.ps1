@@ -686,20 +686,20 @@ foreach ($app in $selectedApps) {
             foreach ($app in $winget) {
                 $package = Get-WinGetPackage -Id $app -ErrorAction SilentlyContinue
                 if ($null -eq $package) {
-                    Install-WinGetPackage -id $app -source winget
+                    Install-WinGetPackage -id $app -source winget | Out-Null
                 } else {
                     Write-Host "$($app.split(".")[1]) is already installed." -ForegroundColor Green
                 }
             }
             $pstreeModule = Get-InstalledModule -Name PSTree -ErrorAction SilentlyContinue
             if ($null -eq $pstreeModule) {
-                Install-Module PSTree -Force
+                Install-Module PSTree -Force | Out-Null
             } else {
                 Write-Host "PSTree is already installed." -ForegroundColor Green
             }
             $zModule = Get-InstalledModule -Name z -ErrorAction SilentlyContinue
             if ($null -eq $zModule) {
-                Install-Module z -Force
+                Install-Module z -Force | Out-Null
             } else {
                 Write-Host "z is already installed." -ForegroundColor Green
             }
