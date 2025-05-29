@@ -1,13 +1,5 @@
 # WinMac: The Ultimate Windows and macOS Hybrid
 
-\Windows\WinSxS\arm64.x86_microsoft-windows-display_31bf3856ad364e35_10.0.26100.1882_none_997bd0d21726c49d
-
-C:\Windows\WinSxS\arm64.x86_microsoft-windows-display_31bf3856ad364e35_10.0.26100.1_none_fad104e1cf9333c1
-
-C:\Windows\WinSxS\arm64_microsoft-windows-display_31bf3856ad364e35_10.0.26100.1591_none_f408608992bb6358
-
-C:\Windows\WinSxS\arm64_microsoft-windows-display_31bf3856ad364e35_10.0.26100.1882_none_f3e6d9b392d4b775
-
 **WinMac** is a revolutionary customization project that brings together the best of both Windows and macOS operating systems, offering users a unique and seamless Windows experience.
 
 <p align="center">
