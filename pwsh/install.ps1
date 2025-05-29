@@ -43,7 +43,7 @@ if (!($noGUI)) {
     $iconFolderName = "config"
     $iconFolderPath = Join-Path -Path $parentDirectory -ChildPath $iconFolderName
     $topTextBlock = "PowerShell GUI deployment wizard for Windows and macOS hybrid"
-    $bottomTextBlock1 = 'Important Notes'
+    $bottomTextBlock1 = ' ↓ Important Notes ↓'
     $bottomTextBlock2 = 'PowerShell default profile will be removed and replaced with new one. Please make sure to backup your current profile if needed.'
     $bottomTextBlock3 = 'The author of this script is not responsible for any damage caused by running it. Highly recommend to create a system restore point before proceeding with the installation process to ensure you can revert any changes if necessary.'
     $bottomTextBlock4 = 'For guide on how to use the script, please refer to the Wiki page on WinMac GitHub page.'
@@ -88,7 +88,7 @@ if (!($noGUI)) {
                 <!-- Main Grid for Components and Options -->
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="150"/> <!-- Column for Installation Type and Components -->
+                        <ColumnDefinition Width="160"/> <!-- Column for Installation Type and Components -->
                         <ColumnDefinition Width="*"/> <!-- Column for Options -->
                     </Grid.ColumnDefinitions>
 
@@ -115,7 +115,7 @@ if (!($noGUI)) {
                                 <CheckBox x:Name="chkWinMacMenu" Content="WinMac Menu" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                                 <CheckBox x:Name="chkWindhawk" Content="Windhawk" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                                 <CheckBox x:Name="chkStahky" Content="Stahky" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                                <CheckBox x:Name="chkAutoHotKey" Content="AutoHotkey" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                                <CheckBox x:Name="chkAutoHotKey" Content="Keyboard Shortcuts" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                                 <CheckBox x:Name="chkNexusDock" Content="Nexus Dock" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                                 <CheckBox x:Name="chkHotCorners" Content="Hot Corners" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                                 <CheckBox x:Name="chkOther" Content="Other" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
@@ -138,7 +138,7 @@ if (!($noGUI)) {
 
                         <GroupBox Grid.Row="0" Grid.Column="0" Header="Explorer style" Margin="5" Padding="0,0,0,0" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
                             <StackPanel>
-                                <RadioButton x:Name="explorerWinMac" Content="Modern" IsChecked="True" Margin="0,10,0,13" Foreground="{StaticResource ForegroundBrush}"/>
+                                <RadioButton x:Name="explorerWinMac" Content="Modern" IsChecked="True" Margin="0,22,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                                 <RadioButton x:Name="explorerClassic" Content="Classic" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                             </StackPanel>
                         </GroupBox>
@@ -146,49 +146,49 @@ if (!($noGUI)) {
                         <!-- Additional Settings: Prompt Style -->
                         <GroupBox Grid.Row="0" Grid.Column="1" Header="Prompt style" Margin="5" Padding="0,0,0,0" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
                             <StackPanel>
-                                <RadioButton x:Name="promptStyleWinMac" Content="WinMac" IsChecked="True" Margin="0,10,0,13" Foreground="{StaticResource ForegroundBrush}"/>
+                                <RadioButton x:Name="promptStyleWinMac" Content="WinMac" IsChecked="True" Margin="0,22,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                                 <RadioButton x:Name="promptStylemacOS" Content="macOS" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                             </StackPanel>
                         </GroupBox>
                         
                         <GroupBox Grid.Row="0" Grid.Column="2" Header="Start Menu style" Margin="5" Padding="0,0,0,0" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
                             <StackPanel>
-                                <RadioButton x:Name="startMenuWinMac" Content="WinMac" IsChecked="True" Margin="0,10,0,13" Foreground="{StaticResource ForegroundBrush}"/>
+                                <RadioButton x:Name="startMenuWinMac" Content="WinMac" IsChecked="True" Margin="0,22,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                                 <RadioButton x:Name="startMenuClassic" Content="Classic" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                             </StackPanel>
                         </GroupBox>
 
                         <GroupBox Grid.Row="1" Grid.Column="0" Header="Shell corners" Margin="5" Padding="0,0,0,0" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
                             <StackPanel>
-                                <RadioButton x:Name="shellCornerRounded" Content="Rounded" IsChecked="True" Margin="0,10,0,13" Foreground="{StaticResource ForegroundBrush}"/>
+                                <RadioButton x:Name="shellCornerRounded" Content="Rounded" IsChecked="True" Margin="0,22,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                                 <RadioButton x:Name="shellCornerSquared" Content="Squared" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                             </StackPanel>
                         </GroupBox>
 
                         <GroupBox Grid.Row="1" Grid.Column="1" Header="Theme style" Margin="5" Padding="0,0,0,0" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
                             <StackPanel>
-                                <RadioButton x:Name="themeLight" Content="Light" IsChecked="True" Margin="0,10,0,13" Foreground="{StaticResource ForegroundBrush}"/>
+                                <RadioButton x:Name="themeLight" Content="Light" IsChecked="True" Margin="0,22,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                                 <RadioButton x:Name="themeDark" Content="Dark" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                             </StackPanel>
                         </GroupBox>
 
                         <GroupBox Grid.Row="1" Grid.Column="2" Header="Folder color" Margin="5" Padding="0,0,0,0" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
                             <StackPanel>
-                                <RadioButton x:Name="folderColorBlue" Content="Blue" IsChecked="True" Margin="0,10,0,13" Foreground="{StaticResource ForegroundBrush}"/>
+                                <RadioButton x:Name="folderColorBlue" Content="Blue" IsChecked="True" Margin="0,22,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                                 <RadioButton x:Name="folderColorYellow" Content="Yellow" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                             </StackPanel>
                         </GroupBox>
 
                         <GroupBox Grid.Row="2" Grid.Column="0" Header="Dock style" Margin="5" Padding="0,0,0,0" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
                             <StackPanel>
-                                <RadioButton x:Name="dockStyleDefault" Content="Default" IsChecked="True" Margin="0,10,0,13" Foreground="{StaticResource ForegroundBrush}"/>
+                                <RadioButton x:Name="dockStyleDefault" Content="Default" IsChecked="True" Margin="0,22,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                                 <RadioButton x:Name="dockStyleDynamic" Content="Dynamic" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                             </StackPanel>
                         </GroupBox>
 
                         <GroupBox Grid.Row="2" Grid.Column="1" Header="Git profile" Margin="5" Padding="0,0,0,0" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
                             <StackPanel>
-                                <RadioButton x:Name="chkGitProfileDisabled" Content="Enable" Margin="0,10,0,13" Foreground="{StaticResource ForegroundBrush}"/>
+                                <RadioButton x:Name="chkGitProfileDisabled" Content="Enable" Margin="0,22,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                                 <RadioButton x:Name="chkGitProfileEnabled" Content="Disable" IsChecked="True" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                             </StackPanel>
                         </GroupBox>
@@ -254,7 +254,7 @@ if (!($noGUI)) {
             if ($chkHotCorners.IsChecked) { $selection += "10," }
             if ($chkOther.IsChecked) { $selection += "11" }
         }
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="Stahky"; "8"="AutoHotkey"; "9"="Nexus Dock"; "10"="Hot Corners"; "12"="Other Settings"}
+        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Hot Corners"; "12"="Other Settings"}
         $result["selectedApps"] = $selection.Split(',').TrimEnd(',')
         $selectedAppNames = @()
         foreach ($appNumber in $selection) {
@@ -337,7 +337,7 @@ https://github.com/Asteski/WinMac/wiki
     elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
         Write-Host "Choosing custom installation." -ForegroundColor Green
         Start-Sleep 1
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="Stahky"; "8"="AutoHotkey"; "9"="Nexus Dock"; "10"="Hot Corners"; "11"="Other"}
+        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Hot Corners"; "11"="Other"}
 Write-Host @"
 
 `e[93m$("Please select options you want to install:")`e[0m
@@ -351,7 +351,7 @@ Write-Host @"
 5. WinMac Menu
 6. Windhawk
 7. Stahky
-8. AutoHotkey
+8. Keyboard Shortcuts
 9. Nexus Dock
 10. Hot Corners
 11. Other Settings
@@ -988,36 +988,32 @@ foreach ($app in $selectedApps) {
             Remove-Item $outputPath -Force
             Write-Host "Stahky installation completed." -ForegroundColor Green
         }
-    # AutoHotkey
+    # AutoHotkey Keyboard Shortcuts
         "8" {
             if ($adminTest) {
-                Write-Host "Installing AutoHotkey..." -ForegroundColor Yellow  
-                winget install --id autohotkey.autohotkey --source winget --silent | Out-Null
-                $sourceDirectory = '..\src\keyshortcuts'
-                $destinationDirectory = "$env:PROGRAMFILES\AutoHotkey\WinMac"
+                Write-Host "Installing Keyboard Shortcuts..." -ForegroundColor Yellow
+                $fileName = 'KeyShortcuts.exe'
+                $fileDirectory = "$env:LOCALAPPDATA\WinMac"
+                New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" | Out-Null
+                if (Get-Process keyshortcuts) { Stop-Process -Name keyshortcuts }
+                Copy-Item ..\bin\$fileName "$env:LOCALAPPDATA\WinMac\" 
+                $description = "WinMac Keyboard Shortcuts - custom keyboard shortcut described in Commands cheat sheet wiki page."
                 $folderName = "WinMac"
                 $taskService = New-Object -ComObject "Schedule.Service"
-                $taskService.Connect() | Out-Null
-                $rootFolder = $taskService.GetFolder("\")
-                try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }                
+                $taskService.Connect()
+                $rootFolder = $taskService.GetFolder("\") 
+                try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }
                 if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
                 $taskFolder = "\" + $folderName
                 $trigger = New-ScheduledTaskTrigger -AtLogon
                 $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
-                $files = Get-ChildItem -Path $sourceDirectory -File
-                New-Item -ItemType Directory -Path $destinationDirectory | Out-Null
-                foreach ($file in $files) { 
-                    Copy-Item -Path $file.FullName -Destination $destinationDirectory
-                    $taskName = ($file.Name).replace('.ahk','')
-                    $action = New-ScheduledTaskAction -Execute $file.Name -WorkingDirectory $destinationDirectory    
-                    $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
-                    Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -ErrorAction SilentlyContinue | Out-Null
-                    Start-Process -FilePath $destinationDirectory\$($file.Name)
-                }
-                Write-Host "AutoHotkey installation completed." -ForegroundColor Green            
-            } 
-            else {
-                Write-Host "AutoHotkey requires elevated session. Please run the script as an administrator. Skipping installation." -ForegroundColor Red
+                $action = New-ScheduledTaskAction -Execute $fileName -WorkingDirectory $fileDirectory
+                $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
+                Invoke-Output {Register-ScheduledTask -TaskName "Keyboard Shortcuts" -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -Description $description}
+                Start-Process -FilePath "$env:LOCALAPPDATA\WinMac\KeyShortcuts.exe" -WorkingDirectory $env:LOCALAPPDATA\WinMac
+                Write-Host "Keyboard Shortcuts installation completed." -ForegroundColor Green
+            } else {
+                Write-Host "Keyboard Shortcuts requires elevated session. Please run the script as an administrator. Skipping installation." -ForegroundColor Red
             }
         }
     # Nexus Dock

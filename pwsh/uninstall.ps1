@@ -125,7 +125,7 @@ if (!($noGUI)) {
                         <CheckBox x:Name="chkWinMacMenu" Content="WinMac Menu" IsChecked="True" Grid.Row="2" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkWindhawk" Content="Windhawk" IsChecked="True" Grid.Row="2" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkStahky" Content="Stahky" IsChecked="True" Grid.Row="3" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="chkAutoHotkey" Content="AutoHotkey" IsChecked="True" Grid.Row="3" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkAutoHotkey" Content="Keyboard Shortcuts" IsChecked="True" Grid.Row="3" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkNexusDock" Content="Nexus Dock" IsChecked="True" Grid.Row="4" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkHotCorners" Content="Hot Corners" IsChecked="True" Grid.Row="4" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkOther" Content="Other" IsChecked="True" Grid.Row="5" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
@@ -271,7 +271,7 @@ https://github.com/Asteski/WinMac/wiki
     elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
         Write-Host "Choosing custom uninstallation." -ForegroundColor Yellow
         Start-Sleep 1
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="Stahky"; "8"="AutoHotkey"; "9"="Nexus Dock"; "10"="Hot Corners"; "12"="Other"}
+        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Hot Corners"; "12"="Other"}
 Write-Host @"
 
 `e[93m$("Please select options you want to uninstall:")`e[0m
@@ -284,7 +284,7 @@ Write-Host @"
         Write-Host "5. WinMac Menu"
         Write-Host "6. Windhawk"
         Write-Host "7. Stahky"
-        Write-Host "8. AutoHotkey"
+        Write-Host "8. Keyboard Shortcuts"
         Write-Host "9. Nexus Dock"
         Write-Host "10. Hot Corners"
         Write-Host "11. Other Settings"
