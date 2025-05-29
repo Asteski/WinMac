@@ -53,7 +53,7 @@ if (!($noGUI)) {
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="WinMac Deployment Wizard" 
-    Height="550" Width="740" 
+    Height="560" Width="540" 
     WindowStartupLocation="CenterScreen" 
     Background="$backgroundColor" 
     Icon="$iconFolderPath\wizard.ico">
@@ -81,7 +81,7 @@ if (!($noGUI)) {
                         
             <!-- Static TextBlock below the title -->
             <TextBlock Text="Version $version" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap"/>
-            <TextBlock Text="$topTextBlock" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap"/>
+            <TextBlock Text="$topTextBlock" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="0,0,0,10" TextWrapping="Wrap"/>
         </StackPanel>
 
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
@@ -135,72 +135,57 @@ if (!($noGUI)) {
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <!-- Additional Settings: Start Menu -->
-                        <GroupBox Grid.Row="0" Grid.Column="0" Header="Start Menu Options" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
+                        <GroupBox Grid.Row="0" Grid.Column="0" Header="Explorer style" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
                             <StackPanel>
-                                <RadioButton x:Name="startMenuWinMac" Content="WinMac Menu" IsChecked="True" Margin="0,10,0,13" Foreground="{StaticResource ForegroundBrush}"/>
-                                <RadioButton x:Name="startMenuClassic" Content="Classic Menu" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
+                                <RadioButton x:Name="explorerWinMac" Content="Modern" IsChecked="True" Margin="0,10,0,13" Foreground="{StaticResource ForegroundBrush}"/>
+                                <RadioButton x:Name="explorerClassic" Content="Classic" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                             </StackPanel>
                         </GroupBox>
 
                         <!-- Additional Settings: Prompt Style -->
-                        <GroupBox Grid.Row="0" Grid.Column="1" Header="Prompt Style Options" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
+                        <GroupBox Grid.Row="0" Grid.Column="1" Header="Prompt style" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
                             <StackPanel>
-                                <RadioButton x:Name="promptStyleWinMac" Content="WinMac prompt" IsChecked="True" Margin="0,10,0,13" Foreground="{StaticResource ForegroundBrush}"/>
-                                <RadioButton x:Name="promptStylemacOS" Content="macOS prompt" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
+                                <RadioButton x:Name="promptStyleWinMac" Content="WinMac" IsChecked="True" Margin="0,10,0,13" Foreground="{StaticResource ForegroundBrush}"/>
+                                <RadioButton x:Name="promptStylemacOS" Content="macOS" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                             </StackPanel>
                         </GroupBox>
                         
-                        <!-- Additional Settings: Folder Color -->
-                        <GroupBox Grid.Row="0" Grid.Column="2" Header="Folder Color" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
+                        <GroupBox Grid.Row="0" Grid.Column="2" Header="Start Menu style" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
                             <StackPanel>
-                                <RadioButton x:Name="folderColorBlue" Content="Blue" IsChecked="True" Margin="0,10,0,13" Foreground="{StaticResource ForegroundBrush}"/>
-                                <RadioButton x:Name="folderColorYellow" Content="Yellow" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
+                                <RadioButton x:Name="startMenuWinMac" Content="WinMac" IsChecked="True" Margin="0,10,0,13" Foreground="{StaticResource ForegroundBrush}"/>
+                                <RadioButton x:Name="startMenuClassic" Content="Classic" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                             </StackPanel>
                         </GroupBox>
 
-                        <!-- Additional Settings: Shell Corner Style -->
-                        <GroupBox Grid.Row="1" Grid.Column="0" Header="Shell Corner Style" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
+                        <GroupBox Grid.Row="1" Grid.Column="0" Header="Shell corners" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
                             <StackPanel>
                                 <RadioButton x:Name="shellCornerRounded" Content="Rounded" IsChecked="True" Margin="0,10,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                                 <RadioButton x:Name="shellCornerSquared" Content="Squared" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                             </StackPanel>
                         </GroupBox>
 
-                        <!-- Additional Settings: Theme Style -->
-                        <GroupBox Grid.Row="1" Grid.Column="1" Header="Theme Style" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
+                        <GroupBox Grid.Row="1" Grid.Column="1" Header="Theme style" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
                             <StackPanel>
                                 <RadioButton x:Name="themeLight" Content="Light" IsChecked="True" Margin="0,10,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                                 <RadioButton x:Name="themeDark" Content="Dark" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                             </StackPanel>
                         </GroupBox>
 
-                        <!-- Additional Settings: Dock Style -->
-                        <GroupBox Grid.Row="1" Grid.Column="2" Header="Dock Style" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
+                        <GroupBox Grid.Row="1" Grid.Column="2" Header="Folder color" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
+                            <StackPanel>
+                                <RadioButton x:Name="folderColorBlue" Content="Blue" IsChecked="True" Margin="0,10,0,13" Foreground="{StaticResource ForegroundBrush}"/>
+                                <RadioButton x:Name="folderColorYellow" Content="Yellow" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
+                            </StackPanel>
+                        </GroupBox>
+
+                        <GroupBox Grid.Row="2" Grid.Column="0" Header="Dock style" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
                             <StackPanel>
                                 <RadioButton x:Name="dockStyleDefault" Content="Default" IsChecked="True" Margin="0,10,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                                 <RadioButton x:Name="dockStyleDynamic" Content="Dynamic" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                             </StackPanel>
                         </GroupBox>
 
-                        <!-- Additional Settings: Placeholder Option Group 1 -->
-                        <GroupBox Grid.Row="2" Grid.Column="0" Header="Placeholder 1" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
-                            <StackPanel>
-                                <RadioButton x:Name="placeholder1OptA" Content="Option A" IsChecked="True" Margin="0,10,0,13" Foreground="{StaticResource ForegroundBrush}"/>
-                                <RadioButton x:Name="placeholder1OptB" Content="Option B" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
-                            </StackPanel>
-                        </GroupBox>
-
-                        <!-- Additional Settings: Placeholder Option Group 2 -->
-                        <GroupBox Grid.Row="2" Grid.Column="1" Header="Placeholder 2" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
-                            <StackPanel>
-                                <RadioButton x:Name="placeholder2OptA" Content="Option C" IsChecked="True" Margin="0,10,0,13" Foreground="{StaticResource ForegroundBrush}"/>
-                                <RadioButton x:Name="placeholder2OptB" Content="Option D" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
-                            </StackPanel>
-                        </GroupBox>
-
-                        <!-- Additional Settings: Git Profile -->
-                        <GroupBox Grid.Row="2" Grid.Column="2" Header="Git Profile" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
+                        <GroupBox Grid.Row="2" Grid.Column="1" Header="Git profile" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
                             <StackPanel>
                                 <RadioButton x:Name="chkGitProfileDisabled" Content="Enable" Margin="0,10,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                                 <RadioButton x:Name="chkGitProfileEnabled" Content="Disable" IsChecked="True" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
@@ -249,6 +234,7 @@ if (!($noGUI)) {
     $theme = $window.FindName("themeLight")
     $blueOrYellow = $window.FindName("folderColorYellow")
     $dockDynamic = $window.FindName("dockStyleDynamic")
+    $explorerStyle = $window.FindName("explorerStyleModern")
     $btnInstall = $window.FindName("btnInstall")
     $btnCancel = $window.FindName("btnCancel")
     $fullInstall.Add_Checked({$componentSelection.IsEnabled = $false})
@@ -284,6 +270,7 @@ if (!($noGUI)) {
         $result["blueOrYellow"] = if ($blueOrYellow.IsChecked) { "Y" } else { "B" }
         $result["dockDynamic"] = if ($dockDynamic.IsChecked) { "X" } else { "D" }
         $result["gitProfile"] = if ($chkGitProfile.IsChecked) { $true } else { $false }
+        $result["exStyle"] = if ($explorerStyle.IsChecked) { "X" } else { "C" }
         $result = [System.Windows.MessageBox]::Show("Do you wish to continue installation?", "WinMac Deployment", [System.Windows.MessageBoxButton]::OKCancel, [System.Windows.MessageBoxImage]::Information) 
         if ($result -eq 'OK') {
             $isInstallCompleted = $true
