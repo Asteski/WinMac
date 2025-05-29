@@ -46,8 +46,7 @@ if (!($noGUI)) {
     $bottomTextBlock1 = 'Important Notes:'
     $bottomTextBlock2 = 'PowerShell default profile will be removed and replaced with new one. Please make sure to backup your current profile if needed.'
     $bottomTextBlock3 = 'The author of this script is not responsible for any damage caused by running it. Highly recommend to create a system restore point before proceeding with the installation process to ensure you can revert any changes if necessary.'
-    $bottomTextBlock4 = 'For guide on how to use the script, please refer to the Wiki page on WinMac GitHub page:'
-    $bottomTextBlock5 = 'https://github.com/Asteski/WinMac/wiki'
+    $bottomTextBlock4 = 'For guide on how to use the script, please refer to the Wiki page on WinMac GitHub page.'
 [xml]$xaml = @"
 <Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -80,54 +79,56 @@ if (!($noGUI)) {
             </TextBlock>
                         
             <!-- Static TextBlock below the title -->
-            <TextBlock Text="Version $version" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap"/>
+            <TextBlock Text="Version $version" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="0,0,0,5" TextWrapping="Wrap"/>
             <TextBlock Text="$topTextBlock" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="0,0,0,10" TextWrapping="Wrap"/>
         </StackPanel>
 
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <StackPanel VerticalAlignment="Top">
-                <!-- Installation Type -->
-                <GroupBox Header="Select Installation Type" Margin="0,5,0,5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
-                    <Grid Margin="5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="147" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <RadioButton x:Name="fullInstall" Content="Full" IsChecked="True" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <RadioButton x:Name="customInstall" Content="Custom" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                    </Grid>
-                </GroupBox>
-
                 <!-- Main Grid for Components and Options -->
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/> <!-- Column for Components -->
+                        <ColumnDefinition Width="150"/> <!-- Column for Installation Type and Components -->
                         <ColumnDefinition Width="*"/> <!-- Column for Options -->
                     </Grid.ColumnDefinitions>
 
-                    <!-- Component Selection -->
-                    <GroupBox Grid.Column="0" Header="Components" Margin="0,5,0,5" Padding="5,5,5,5" x:Name="componentSelection" IsEnabled="False" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
-                        <StackPanel Margin="5">
-                            <CheckBox x:Name="chkPowerToys" Content="PowerToys" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                            <CheckBox x:Name="chkEverything" Content="Everything" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                            <CheckBox x:Name="chkPowershellProfile" Content="PowerShell Profile" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                            <CheckBox x:Name="chkStartAllBack" Content="StartAllBack" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                            <CheckBox x:Name="chkWinMacMenu" Content="WinMac Menu" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                            <CheckBox x:Name="chkWindhawk" Content="Windhawk" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                            <CheckBox x:Name="chkStahky" Content="Stahky" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                            <CheckBox x:Name="chkAutoHotKey" Content="AutoHotkey" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                            <CheckBox x:Name="chkNexusDock" Content="Nexus Dock" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                            <CheckBox x:Name="chkHotCorners" Content="Hot Corners" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                            <CheckBox x:Name="chkOther" Content="Other" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        </StackPanel>
-                    </GroupBox>
+                    <StackPanel Grid.Column="0">
+                        <!-- Installation Type -->
+                        <GroupBox Header="Installation Type" Margin="0,5,0,5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}" Width="205">
+                            <Grid Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="110" />
+                                </Grid.ColumnDefinitions>
+                                <RadioButton x:Name="fullInstall" Content="Full" IsChecked="True" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                                <RadioButton x:Name="customInstall" Content="Custom" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                            </Grid>
+                        </GroupBox>
+
+                        <!-- Component Selection -->
+                        <GroupBox Header="Components" Margin="0,5,0,5" Padding="5,5,5,5" x:Name="componentSelection" IsEnabled="False" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
+                            <StackPanel Margin="5">
+                                <CheckBox x:Name="chkPowerToys" Content="PowerToys" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                                <CheckBox x:Name="chkEverything" Content="Everything" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                                <CheckBox x:Name="chkPowershellProfile" Content="PowerShell Profile" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                                <CheckBox x:Name="chkStartAllBack" Content="StartAllBack" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                                <CheckBox x:Name="chkWinMacMenu" Content="WinMac Menu" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                                <CheckBox x:Name="chkWindhawk" Content="Windhawk" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                                <CheckBox x:Name="chkStahky" Content="Stahky" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                                <CheckBox x:Name="chkAutoHotKey" Content="AutoHotkey" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                                <CheckBox x:Name="chkNexusDock" Content="Nexus Dock" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                                <CheckBox x:Name="chkHotCorners" Content="Hot Corners" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                                <CheckBox x:Name="chkOther" Content="Other" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                            </StackPanel>
+                        </GroupBox>
+                    </StackPanel>
 
                     <!-- Grid for Additional Settings Options -->
                     <Grid Grid.Column="1">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="105" />
-                            <RowDefinition Height="105" />
-                            <RowDefinition Height="105" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
@@ -135,7 +136,7 @@ if (!($noGUI)) {
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <GroupBox Grid.Row="0" Grid.Column="0" Header="Explorer style" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
+                        <GroupBox Grid.Row="0" Grid.Column="0" Header="Explorer style" Margin="5" Padding="0,0,0,0" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
                             <StackPanel>
                                 <RadioButton x:Name="explorerWinMac" Content="Modern" IsChecked="True" Margin="0,10,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                                 <RadioButton x:Name="explorerClassic" Content="Classic" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
@@ -143,49 +144,49 @@ if (!($noGUI)) {
                         </GroupBox>
 
                         <!-- Additional Settings: Prompt Style -->
-                        <GroupBox Grid.Row="0" Grid.Column="1" Header="Prompt style" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
+                        <GroupBox Grid.Row="0" Grid.Column="1" Header="Prompt style" Margin="5" Padding="0,0,0,0" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
                             <StackPanel>
                                 <RadioButton x:Name="promptStyleWinMac" Content="WinMac" IsChecked="True" Margin="0,10,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                                 <RadioButton x:Name="promptStylemacOS" Content="macOS" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                             </StackPanel>
                         </GroupBox>
                         
-                        <GroupBox Grid.Row="0" Grid.Column="2" Header="Start Menu style" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
+                        <GroupBox Grid.Row="0" Grid.Column="2" Header="Start Menu style" Margin="5" Padding="0,0,0,0" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
                             <StackPanel>
                                 <RadioButton x:Name="startMenuWinMac" Content="WinMac" IsChecked="True" Margin="0,10,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                                 <RadioButton x:Name="startMenuClassic" Content="Classic" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                             </StackPanel>
                         </GroupBox>
 
-                        <GroupBox Grid.Row="1" Grid.Column="0" Header="Shell corners" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
+                        <GroupBox Grid.Row="1" Grid.Column="0" Header="Shell corners" Margin="5" Padding="0,0,0,0" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
                             <StackPanel>
                                 <RadioButton x:Name="shellCornerRounded" Content="Rounded" IsChecked="True" Margin="0,10,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                                 <RadioButton x:Name="shellCornerSquared" Content="Squared" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                             </StackPanel>
                         </GroupBox>
 
-                        <GroupBox Grid.Row="1" Grid.Column="1" Header="Theme style" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
+                        <GroupBox Grid.Row="1" Grid.Column="1" Header="Theme style" Margin="5" Padding="0,0,0,0" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
                             <StackPanel>
                                 <RadioButton x:Name="themeLight" Content="Light" IsChecked="True" Margin="0,10,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                                 <RadioButton x:Name="themeDark" Content="Dark" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                             </StackPanel>
                         </GroupBox>
 
-                        <GroupBox Grid.Row="1" Grid.Column="2" Header="Folder color" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
+                        <GroupBox Grid.Row="1" Grid.Column="2" Header="Folder color" Margin="5" Padding="0,0,0,0" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
                             <StackPanel>
                                 <RadioButton x:Name="folderColorBlue" Content="Blue" IsChecked="True" Margin="0,10,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                                 <RadioButton x:Name="folderColorYellow" Content="Yellow" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                             </StackPanel>
                         </GroupBox>
 
-                        <GroupBox Grid.Row="2" Grid.Column="0" Header="Dock style" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
+                        <GroupBox Grid.Row="2" Grid.Column="0" Header="Dock style" Margin="5" Padding="0,0,0,0" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
                             <StackPanel>
                                 <RadioButton x:Name="dockStyleDefault" Content="Default" IsChecked="True" Margin="0,10,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                                 <RadioButton x:Name="dockStyleDynamic" Content="Dynamic" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                             </StackPanel>
                         </GroupBox>
 
-                        <GroupBox Grid.Row="2" Grid.Column="1" Header="Git profile" Margin="5" Padding="5,5,5,5" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
+                        <GroupBox Grid.Row="2" Grid.Column="1" Header="Git profile" Margin="5" Padding="0,0,0,0" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
                             <StackPanel>
                                 <RadioButton x:Name="chkGitProfileDisabled" Content="Enable" Margin="0,10,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                                 <RadioButton x:Name="chkGitProfileEnabled" Content="Disable" IsChecked="True" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
@@ -198,8 +199,6 @@ if (!($noGUI)) {
                 <TextBlock Margin="10" Foreground="{StaticResource ForegroundBrush}" Text="$bottomTextBlock2" TextWrapping="Wrap"/>
                 <TextBlock Margin="10" Foreground="{StaticResource ForegroundBrush}" Text="$bottomTextBlock3" TextWrapping="Wrap"/>
                 <TextBlock Margin="10" Foreground="{StaticResource ForegroundBrush}" Text="$bottomTextBlock4" TextWrapping="Wrap"/>
-                <TextBlock Margin="10" Foreground="{StaticResource ForegroundBrush}" Text="$bottomTextBlock5" TextWrapping="Wrap"/>
-
             </StackPanel>
         </ScrollViewer>
 
@@ -1029,6 +1028,7 @@ foreach ($app in $selectedApps) {
                 Write-Host "Installing Nexus Dock..." -ForegroundColor Yellow
                 $checkNexus = Get-WinGetPackage -name Nexus
                 if ($null -eq $checkNexus) {
+
                     $downloadUrl = "https://www.winstep.net/nexus.zip"
                     $downloadPath = "..\temp\Nexus.zip"
                     if (-not (Test-Path $downloadPath)) {
