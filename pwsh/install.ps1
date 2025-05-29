@@ -3,8 +3,6 @@ param (
     [switch]$debug
 )
 $version = "0.9.2"
-# $date = Get-Date -Format "yy-MM-ddTHHmmss"
-# $logFile = "WinMac_install_log_$date.txt"
 $errorActionPreference="silentlyContinue"
 $WarningPreference="silentlyContinue"
 Add-Type -AssemblyName System.Windows.Formstylk
@@ -915,7 +913,6 @@ foreach ($app in $selectedApps) {
             $modsSourceBackup = Join-Path $extractFolder "ModsSource"
             $modsBackup = Join-Path $extractFolder "Engine\Mods"
             $regBackup = Join-Path $extractFolder "Windhawk.reg"
-            Stop-Process -n Windhawk -Force
             Copy-Item -Path $modsSourceBackup -Destination $windhawkRoot -Recurse -Force -ErrorAction SilentlyContinue
             Copy-Item -Path '..\config\windhawk\resource-redirect' -Destination "$Env:LOCALAPPDATA\WinMac\resource-redirect" -Recurse -Force -ErrorAction SilentlyContinue
             $engineFolder = Join-Path $windhawkRoot "Engine"
@@ -928,6 +925,9 @@ foreach ($app in $selectedApps) {
             }
             $regContent | Set-Content $regBackup
             reg import $regBackup > $null 2>&1
+            Remove-Item "$env:LocalAppData\Microsoft\Windows\Explorer\thumbcache_*.db" -Force -Recurse -ErrorAction SilentlyContinue
+            Set-ItemProperty -Path "HKCU:\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags\AllFolders\Shell" -Name Logo -Value "imageres.dll,-3" -Type String
+            Stop-Process -Name explorer -Force
             Move-Item -Path "C:\Users\Public\Desktop\Windhawk.lnk" -Destination $programsDir -Force
             Start-Process "$Env:ProgramFiles\Windhawk\Windhawk.exe"
             Write-Host "Windhawk installation completed." -ForegroundColor Green
