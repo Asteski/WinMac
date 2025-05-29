@@ -42,7 +42,7 @@ if (!($noGUI)) {
     $parentDirectory = Split-Path -Path $PSScriptRoot -Parent
     $iconFolderName = "config"
     $iconFolderPath = Join-Path -Path $parentDirectory -ChildPath $iconFolderName
-    $topTextBlock = "PowerShell GUI deployment wizard for Windows 11"
+    $topTextBlock = "Windows and MacOS Hybrid Installation Wizard"
     $bottomTextBlock1 = ' ↓ Important Notes ↓'
     $bottomTextBlock2 = 'PowerShell default profile will be removed and replaced with new one. Please make sure to backup your current profile if needed.'
     $bottomTextBlock3 = 'The author of this script is not responsible for any damage caused by running it. Highly recommend to create a system restore point before proceeding with the installation process to ensure you can revert any changes if necessary.'
@@ -74,13 +74,13 @@ if (!($noGUI)) {
         
         <!-- Title -->
         <StackPanel Grid.Row="0" HorizontalAlignment="Center">
-            <TextBlock FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,5,0,10">
+            <TextBlock FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,10,0,10">
                 <Run Text="WinMac" Foreground="#0174cf"/>
             </TextBlock>
-                        
+            
             <!-- Static TextBlock below the title -->
-            <TextBlock Text="Version $version" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="0,0,0,5" TextWrapping="Wrap"/>
-            <TextBlock Text="$topTextBlock" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="0,0,0,10" TextWrapping="Wrap"/>
+            <TextBlock Text="Version $version" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="0,5,0,5" TextWrapping="Wrap"/>
+            <TextBlock Text="$topTextBlock" Foreground="{StaticResource ForegroundBrush}" HorizontalAlignment="Center" Margin="0,5,0,13" TextWrapping="Wrap"/>
         </StackPanel>
 
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Disabled" PanningMode="VerticalOnly" CanContentScroll="True" Focusable="True">
