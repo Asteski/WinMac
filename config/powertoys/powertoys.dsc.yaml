@@ -66,6 +66,7 @@ properties:
             - Name: "URI Handler"
               Disabled: false
             - Name: "Web Search"
+              IsGlobal: false
               Disabled: false
               ActionKeyword: "/"
             - Name: "Windows settings"
