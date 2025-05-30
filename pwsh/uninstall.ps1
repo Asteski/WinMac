@@ -583,6 +583,8 @@ uint fWinIni);
             Get-ChildItem ..\config\reg\add\* -e *theme* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
             reg import '..\config\reg\remove\Remove_Theme_Mode_in_Context_Menu.reg' > $null 2>&1
             reg import '..\config\reg\remove\Remove_Hidden_items_from_context_menu.reg' > $null 2>&1
+            Get-ChildItem "$env:LocalAppData\Microsoft\Windows\Explorer\" -Filter "thumbcache_*.db" | Remove-Item -Force -ErrorAction SilentlyContinue
+            Remove-ItemProperty -Path "HKCU:\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags\AllFolders\Shell" -Name "Logo" -ErrorAction SilentlyContinue
             Invoke-Output { Remove-Item -Path "$env:LOCALAPPDATA\WinMac\theme.ps1" }
             Remove-Item -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Hide Desktop Icons.lnk" -Force
             Remove-Item -Path "$env:LOCALAPPDATA\WinMac\HideDesktopIcons.exe" -Force
