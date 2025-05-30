@@ -583,39 +583,9 @@ uint fWinIni);
             Get-ChildItem ..\config\reg\add\* -e *theme* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
             reg import '..\config\reg\remove\Remove_Theme_Mode_in_Context_Menu.reg' > $null 2>&1
             reg import '..\config\reg\remove\Remove_Hidden_items_from_context_menu.reg' > $null 2>&1
-            New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" -Force | Out-Null # Home
-            New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Force | Out-Null # Gallery
             Invoke-Output { Remove-Item -Path "$env:LOCALAPPDATA\WinMac\theme.ps1" }
             Remove-Item -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Hide Desktop Icons.lnk" -Force
             Remove-Item -Path "$env:LOCALAPPDATA\WinMac\HideDesktopIcons.exe" -Force
-            Write-Host @"
-`e[91m$("Please make sure that MS Defender/3rd party tool is disabled,
-otherwise MS Defender will block uninstallation of Icon Pack!")`e[0m
-"@
-            $defender = Read-Host "Do you want to continue? (Y/n)"
-            if ($defender -eq 'Y' -or $defender -eq 'y') {
-                if ($null -eq $explorerProcess) {Start-Process -FilePath explorer.exe}
-                Start-Sleep -Seconds 3
-                Set-ItemProperty -Path $regPath -Name "IconPack" -Value 0 | Out-Null
-                Invoke-Output { Uninstall-WinGetPackage -name 'IconPack Installer' }
-                while (Get-WinGetPackage -name 'IconPack Installer' -ErrorAction SilentlyContinue) {
-                    Start-Sleep -Seconds 5
-                }
-                Stop-Process -Name explorer -Force
-                $endTime = (Get-Date).AddMinutes(5)
-                do {
-                    try {
-                        if ((Get-ChildItem -Path "C:\IconPack" -Recurse | Measure-Object).Count -eq 0) { 
-                            Remove-Item -Path "C:\IconPack" -Recurse -Force -ErrorAction Stop
-                        }
-                        $success = $true
-                    } catch {
-                        Start-Sleep -Seconds 5
-                    }
-                } until ($success -or (Get-Date) -ge $endTime)
-            else {
-                Write-Host "Icon Pack uninstallation skipped." -ForegroundColor DarkRed
-            }
             Write-Host "Uninstalling Other Settings completed." -ForegroundColor Green
             }
         }
