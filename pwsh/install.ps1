@@ -14,7 +14,7 @@ $user = [Security.Principal.WindowsIdentity]::GetCurrent()
 $adminTest = (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
 $checkDir = Get-ChildItem '..'
 if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir -like "*bin*" -and $checkDir -like "*pwsh*")) {
-    Write-Host "WinMac components not found. Please make sure to run the script from the correct directory." -ForegroundColor Red
+    Write-Host "WinMac components not found. Please make sure to run the script from ethe correct directory." -ForegroundColor Red
     Start-Sleep 2
     exit
 }
@@ -1308,8 +1308,8 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             New-ItemProperty -Path $taskbarDevSettings -Name "TaskbarEndTask" -Value 1 -PropertyType DWORD -Force | Out-Null
         ## Remove Home and Gallery icons
             Write-Host "Remove Home and Gallery icons..." -ForegroundColor DarkYellow
-            Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" -Force | Out-Null
-            Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Force | Out-Null
+            Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}" -Force | Out-Null # Home
+            Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}" -Force | Out-Null # Gallery
         ## Hide Desktop icons
             Write-Host "Hide Desktop Icons shortcut..." -ForegroundColor DarkYellow
             Copy-Item -Path "..\bin\HideDesktopIcons.exe" -Destination "$env:LOCALAPPDATA\WinMac" -Force
