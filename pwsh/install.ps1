@@ -1227,8 +1227,8 @@ foreach ($app in $selectedApps) {
                 RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters ,1 ,True
                 Start-Sleep -Seconds 2
                 Stop-Process -n Explorer -ErrorAction SilentlyContinue
-                Start-Sleep -Seconds 2
                 New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "MacType" -Value "$env:PROGRAMFILES\MacType\MacTray.exe" | Out-Null
+                Start-Sleep -Seconds 2
                 Start-Process -FilePath "$env:PROGRAMFILES\MacType\MacTray.exe"
                 Write-Host "MacType installation completed." -ForegroundColor Green
             }
