@@ -41,6 +41,7 @@ function Get-WindowsTheme {
     }
 }
 $windowsTheme = Get-WindowsTheme
+#* GUI
 if (!($noGUI)) {
     $backgroundColor = if ($windowsTheme -eq "Dark") { "#1E1E1E" } else { "#eff4f9" }
     $foregroundColor = if ($windowsTheme -eq "Dark") { "#f3f3f3" } else { "#1b1b1b" }
@@ -344,7 +345,7 @@ for ($a=3; $a -ge 0; $a--) {
 Write-Host "`r" -NoNewline
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
 Start-Transcript -Path ../logs/$transcriptFile -Append | Out-Null
-# Nuget check
+#* Nuget check
 Write-Host "Checking Package Provider (Nuget)" -ForegroundColor Yellow
 $nugetProvider = Get-PackageProvider -Name NuGet
 if ($null -eq $nugetProvider) {
@@ -354,7 +355,7 @@ if ($null -eq $nugetProvider) {
 } else {
     Write-Host "NuGet is already installed." -ForegroundColor Green
 }
-# Winget check
+#* Winget check
 Write-Host "Checking Package Manager (Winget)" -ForegroundColor Yellow
 $wingetCliCheck = winget -v
 if ($null -eq $wingetCliCheck) {
@@ -383,10 +384,10 @@ if ($null -eq $wingetClientCheck) {
     }
 }
 Import-Module -Name Microsoft.WinGet.Client -Force
-# WinMac deployment
+####! WinMac deployment
 foreach ($app in $selectedApps) {
     switch ($app.Trim()) {
-    # PowerToys
+    #? PowerToys
         "1" {
             Write-Host "Uninstalling PowerToys..."  -ForegroundColor Yellow
             Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force
@@ -397,7 +398,7 @@ foreach ($app in $selectedApps) {
             Remove-Item $env:LOCALAPPDATA\PowerToys -Recurse -Force
             Write-Host "Uninstalling PowerToys completed." -ForegroundColor Green
         }
-    # Everything
+    #? Everything
         "2" {
             Write-Host "Uninstalling Everything..."  -ForegroundColor Yellow
             Uninstall-WinGetPackage -id Voidtools.Everything | Out-Null
@@ -410,7 +411,7 @@ foreach ($app in $selectedApps) {
             Remove-Item $env:LOCALAPPDATA\Everything -Recurse -Force
             Write-Host "Uninstalling Everything completed." -ForegroundColor Green
         }
-    # PowerShell Profile
+    #? PowerShell Profile
         "3" {
             Write-Host "Uninstalling PowerShell Profile..." -ForegroundColor Yellow
             $profilePath = $PROFILE | Split-Path | Split-Path
@@ -426,7 +427,7 @@ foreach ($app in $selectedApps) {
             Remove-Item -Path "$programsDir\gVim*" -Force
             Write-Host "Uninstalling PowerShell Profile completed." -ForegroundColor Green
         }
-    # StartAllBack
+    #? StartAllBack
         "4" {
             Write-Host "Uninstalling StartAllBack..." -ForegroundColor Yellow
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
@@ -444,7 +445,7 @@ foreach ($app in $selectedApps) {
             Write-Host "Uninstalling StartAllBack completed." -ForegroundColor Green
             Start-Sleep 3
         }
-    # WinMac Menu
+    #? WinMac Menu
         "5" {
             Write-Host "Uninstalling WinMac Menu..." -ForegroundColor Yellow
             $sabRegPath = "HKCU:\Software\StartIsBack"
@@ -467,7 +468,7 @@ foreach ($app in $selectedApps) {
             Stop-Process -n Explorer
             Write-Host "Uninstalling WinMac Menu completed." -ForegroundColor Green
         }
-    # Windhawk
+    #? Windhawk
         "6" {
             Write-Host "Uninstalling Windhawk..." -ForegroundColor Yellow
             Stop-Process -Name windhawk -Force
@@ -475,14 +476,14 @@ foreach ($app in $selectedApps) {
             Remove-Item -Path "$programsDir\Windhawk.lnk"
             Write-Host "Uninstalling Windhawk completed." -ForegroundColor Green
         }
-    # Stahky
+    #? Stahky
         "7" {
             Write-Host "Uninstalling Stahky..." -ForegroundColor Yellow
             $exePath = "$env:LOCALAPPDATA\Stahky"
             Remove-Item -Path $exePath -Recurse -Force
             Write-Host "Uninstalling Stahky completed." -ForegroundColor Green
         }
-    # AutoHotkey Keyboard Shortcuts
+    #? AutoHotkey Keyboard Shortcuts
         "8" {
             Write-Host "Uninstalling Keyboard Shortcuts..." -ForegroundColor Yellow
             Stop-Process -Name KeyShortcuts -Force
@@ -491,7 +492,7 @@ foreach ($app in $selectedApps) {
             Get-ChildItem "$env:LOCALAPPDATA\WinMac" | Where-Object { $_.Name -match 'keyshortcuts' } | Remove-Item -Recurse -Force
             Write-Host "Uninstalling Keyboard Shortcuts completed." -ForegroundColor Green
         }
-    # Nexus Dock
+    #? Nexus Dock
         "9" {
             Write-Host "Uninstalling Nexus Dock..." -ForegroundColor Yellow
             Get-Process Nexus | Stop-Process -Force
@@ -500,7 +501,7 @@ foreach ($app in $selectedApps) {
             Remove-Item -Path "C:\Users\Public\Documents\Winstep" -Recurse -Force
             Write-Host "Uninstalling Nexus Dock completed." -ForegroundColor Green
         }
-    # Hot Corners
+    #? Hot Corners
         "10" {
             Write-Host "Uninstalling Hot Corners..." -ForegroundColor Yellow
             $regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
@@ -522,7 +523,7 @@ foreach ($app in $selectedApps) {
             Remove-Item -Path "$programsDir\Simple Sticky Notes.lnk" -Recurse -Force
             Write-Host "Uninstalling Hot Corners completed." -ForegroundColor Green
         }
-    # MacType
+    #? MacType
         "11" {
             Write-Host "Uninstalling MacType..." -ForegroundColor Yellow
             Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "MacType" | Out-Null
@@ -531,10 +532,9 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name FontSmoothingType -Type DWord -Value 2
             RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters ,1 ,True
             Stop-Process -Name Explorer -Force -ErrorAction SilentlyContinue
-             New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "MacType" -Value "$env:PROGRAMFILES\MacType\MacTray.exe" | Out-Null
             Write-Host "Uninstalling MacType completed." -ForegroundColor Green
         }
-    # Other
+    #? Other
         "12" {
             Write-Host "Uninstalling Other Settings..." -ForegroundColor Yellow
             $regPath = "HKCU:\SOFTWARE\WinMac"
