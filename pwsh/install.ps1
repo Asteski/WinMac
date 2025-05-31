@@ -1212,13 +1212,15 @@ foreach ($app in $selectedApps) {
             }
             else {
                 Write-Host "Installing MacType..." -ForegroundColor Yellow
-                $exeUrl = "https://github.com/snowie2000/mactype/releases/download/v1.2025.4.11/MacTypeInstaller_2025.4.11.exe"
-                $exePath = "..\temp\installer.exe"
-                Invoke-WebRequest -Uri $exeUrl -OutFile $exePath
-                Start-Process -FilePath $exePath -ArgumentList "/verysilent" -Wait
-                Remove-Item $exePath -Force
+                $macTypeInstalled = Get-WinGetPackage -Id "MacType.MacType" -ErrorAction SilentlyContinue
+                if ($null -eq $macTypeInstalled) {
+                    $exeUrl = "https://github.com/snowie2000/mactype/releases/download/v1.2025.4.11/MacTypeInstaller_2025.4.11.exe"
+                    $exePath = "..\temp\installer.exe"
+                    Invoke-WebRequest -Uri $exeUrl -OutFile $exePath
+                    Start-Process -FilePath $exePath -ArgumentList "/verysilent" -Wait
+                    Remove-Item $exePath -Force
+                }
                 Stop-Process -n mt64agnt, MacTray, MacType -Force -ErrorAction SilentlyContinue
-                Stop-Process mt64agnt, MacTray -ErrorAction SilentlyContinue
                 Copy-Item -Path "..\config\mactype\*" -Destination "$env:PROGRAMFILES\MacType" -Recurse -Force
                 Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name FontSmoothing -Value "0"
                 Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name FontSmoothingType -Type DWord -Value 0
