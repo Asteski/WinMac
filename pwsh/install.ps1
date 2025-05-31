@@ -190,8 +190,8 @@ if (!($noGUI)) {
 
                         <GroupBox Grid.Row="2" Grid.Column="1" Header="Git profile" Margin="5" Padding="0,0,0,0" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
                             <StackPanel>
-                                <RadioButton x:Name="chkGitProfileDisabled" Content="Enabled" Margin="0,22,0,13" Foreground="{StaticResource ForegroundBrush}"/> 
-                                <RadioButton x:Name="chkGitProfileEnabled" Content="Disabled" IsChecked="True" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
+                                <RadioButton x:Name="chkGitProfileDisabled" Content="Enabled" IsChecked="True" Margin="0,22,0,13" Foreground="{StaticResource ForegroundBrush}"/> 
+                                <RadioButton x:Name="chkGitProfileEnabled" Content="Disabled" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                             </StackPanel>
                         </GroupBox>
                     </Grid>
@@ -454,8 +454,8 @@ userName@computerName ~ %
         $gitProfile = $false
     }
     else {
-        Write-Host "Invalid input. Defaulting to disable Git profile." -ForegroundColor Yellow
-        $gitProfile = $false
+        Write-Host "Invalid input. Defaulting to enable Git profile." -ForegroundColor Yellow
+        $gitProfile = $true
     }
 }
 
