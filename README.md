@@ -136,6 +136,7 @@ List of utilities and their creators, used with WinMac:
 - [PSTree](https://github.com/santisq/PSTree) by santisq
 - [ntop](https://github.com/gsass1/NTop) by gsass1
 - [ptr](https://github.com/8LWXpg/ptr) by 8LWXpg
+- [z](https://github.com/rupa/z) by rupa
 
 Please support creators however you can for their wonderful work!
 

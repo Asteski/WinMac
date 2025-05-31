@@ -191,8 +191,8 @@ if (!($noGUI)) {
 
                         <GroupBox Grid.Row="2" Grid.Column="1" Header="Git profile" Margin="5" Padding="0,0,0,0" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
                             <StackPanel>
-                                <RadioButton x:Name="chkGitProfileDisabled" Content="Enabled" IsChecked="True" Margin="0,22,0,13" Foreground="{StaticResource ForegroundBrush}"/> 
-                                <RadioButton x:Name="chkGitProfileEnabled" Content="Disabled" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
+                                <RadioButton x:Name="chkGitProfileEnabled" Content="Enabled" IsChecked="True" Margin="0,22,0,13" Foreground="{StaticResource ForegroundBrush}"/> 
+                                <RadioButton x:Name="chkGitProfileDisabled" Content="Disabled" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                             </StackPanel>
                         </GroupBox>
                     </Grid>
