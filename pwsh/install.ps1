@@ -31,6 +31,7 @@ function Get-WindowsTheme {
         return "Light"
     }
 }
+#* GUI
 $windowsTheme = Get-WindowsTheme
 if (!($noGUI)) {
     $backgroundColor = if ($windowsTheme -eq "Dark") { "#1E1E1E" } else { "#eff4f9" }
@@ -582,7 +583,7 @@ for ($a=3; $a -ge 0; $a--) {
 }
 Write-Host "`r" -NoNewline
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
-# Nuget check
+#* Nuget check
 Write-Host "Checking Package Provider (Nuget)" -ForegroundColor Yellow
 $nugetProvider = Get-PackageProvider -Name NuGet
 if ($null -eq $nugetProvider) {
@@ -592,7 +593,7 @@ if ($null -eq $nugetProvider) {
 } else {
     Write-Host "NuGet is already installed." -ForegroundColor DarkGreen
 }
-# Winget check
+#* Winget check
 Write-Host "Checking Package Manager (Winget)" -ForegroundColor Yellow
 $wingetCliCheck = winget -v
 if ($null -eq $wingetCliCheck) {
@@ -1361,7 +1362,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
         }
     }
 }
-# Clean up
+#? Clean up
 if ((Get-ChildItem -Path "$env:LOCALAPPDATA\WinMac" -Recurse | Measure-Object).Count -eq 0) { Remove-Item -Path "$env:LOCALAPPDATA\WinMac" -Force }
 $explorerProcess = Get-Process -Name explorer -ErrorAction SilentlyContinue
 if ($null -eq $explorerProcess) {Start-Process -FilePath explorer.exe}
