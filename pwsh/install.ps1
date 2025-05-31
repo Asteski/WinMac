@@ -38,8 +38,8 @@ if (!($noGUI)) {
     $accentColor = if ($windowsTheme -eq "Dark") { "#0078D4" } else { "#fcfcfc" }
     $secondaryBackgroundColor = if ($windowsTheme -eq "Dark") { "#2D2D2D" } else { "#fcfcfc" }
     $borderColor = if ($windowsTheme -eq "Dark") { "#2D2D2D" } else { "#e5e5e5" }
-    $isCheckedLight = if ($windowsTheme -eq "Light") { "True" }
-    $isCheckedDark = if ($windowsTheme -eq "Dark") { "True" }
+    $isCheckedLight = if ($windowsTheme -eq "Light") { "True" } else { "False" }
+    $isCheckedDark = if ($windowsTheme -eq "Dark") { "True" } else { "False" }
     $parentDirectory = Split-Path -Path $PSScriptRoot -Parent
     $iconFolderName = "config"
     $iconFolderPath = Join-Path -Path $parentDirectory -ChildPath $iconFolderName
