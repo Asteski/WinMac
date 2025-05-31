@@ -902,29 +902,23 @@ foreach ($app in $selectedApps) {
                 Start-Sleep 2
             }
             $windhawkRoot = "$Env:ProgramData\Windhawk"
-            #!
-
-            # if ($sysType -like "*ARM*") {
-            #     $windhawkBackup = 'windhawk-backup-arm.zip'
-            # } else {
-            #     $windhawkBackup = 'windhawk-backup-x64.zip'
-            # }
-            # $backupFile = Get-ChildItem -Path (Join-Path $PWD '..\config') -Filter $windhawkBackup -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
-            # $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
-            # $timeStamp = (Get-Date -Format 'yyyyMMddHHmmss')
-            # $extractFolder = Join-Path $env:TEMP ("WindhawkRestore_$timeStamp")
-            # New-Item -ItemType Directory -Path $extractFolder -Force | Out-Null
-            # Expand-Archive -Path $backupFile.FullName -DestinationPath $extractFolder -Force
-            # $modsSourceBackup = Join-Path $extractFolder "ModsSource"
-            # $modsBackup = Join-Path $extractFolder "Engine\Mods"
-            # $regBackup = Join-Path $extractFolder "Windhawk.reg"
-            
-            if ($sysType -like "*ARM*") { $regBackup = 'windhawk-arm.reg' } else { $regBackup = 'windhawk-x64.reg' }
+            if ($sysType -like "*ARM*") {
+                $windhawkBackup = 'windhawk-backup-arm.zip'
+            } else {
+                $windhawkBackup = 'windhawk-backup-x64.zip'
+            }
+            $backupFile = Get-ChildItem -Path (Join-Path $PWD '..\config') -Filter $windhawkBackup -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+            $timeStamp = (Get-Date -Format 'yyyyMMddHHmmss')
+            $extractFolder = Join-Path $env:TEMP ("WindhawkRestore_$timeStamp")
+            New-Item -ItemType Directory -Path $extractFolder -Force | Out-Null
+            Expand-Archive -Path $backupFile.FullName -DestinationPath $extractFolder -Force
+            $modsSourceBackup = Join-Path $extractFolder "ModsSource"
+            $modsBackup = Join-Path $extractFolder "Engine\Mods"
+            $regBackup = Join-Path $extractFolder "Windhawk.reg"
             $modsSourceBackup = Join-Path $PSScriptRoot "..\config\Windhawk\ModsSource"
             $modsBackup = Join-Path $PSScriptRoot "..\config\Windhawk\Engine\Mods"
             $regBackup = Join-Path $PSScriptRoot "..\config\Windhawk\$regBackup"
-
-            #!
             Copy-Item -Path $modsSourceBackup -Destination $windhawkRoot -Recurse -Force -ErrorAction SilentlyContinue
             Copy-Item -Path '..\config\windhawk\resource-redirect\*' -Destination "$Env:LOCALAPPDATA\WinMac\resource-redirect" -Recurse -Force -ErrorAction SilentlyContinue
             $engineFolder = Join-Path $windhawkRoot "Engine"
