@@ -190,7 +190,7 @@ if (!($noGUI)) {
 
                         <GroupBox Grid.Row="2" Grid.Column="1" Header="Git profile" Margin="5" Padding="0,0,0,0" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
                             <StackPanel>
-                                <RadioButton x:Name="chkGitProfileDisabled" Content="Enabled" Margin="0,22,0,13" Foreground="{StaticResource ForegroundBrush}"/>
+                                <RadioButton x:Name="chkGitProfileDisabled" Content="Enabled" Margin="0,22,0,13" Foreground="{StaticResource ForegroundBrush}"/> 
                                 <RadioButton x:Name="chkGitProfileEnabled" Content="Disabled" IsChecked="True" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                             </StackPanel>
                         </GroupBox>
@@ -1317,7 +1317,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             $tempFilePath = "..\temp\Add_Theme_Mode_in_Context_Menu.reg"
             $ps1FilePath = "..\config\reg\theme.ps1"
             if (-not (Test-Path -Path "$env:LOCALAPPDATA\WinMac")) {New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac" -Force | Out-Null}
-            Copy-Item -Path $ps1FilePath -Destination "$env:LOCALAPPDATA\WinMac" -Force     
+            Copy-Item -Path $ps1FilePath -Destination "$env:LOCALAPPDATA\WinMac" -Force
             Copy-Item -Path $sourceFilePath -Destination '..\temp\' -Force
             $appData = $env:LOCALAPPDATA -replace '\\', '\\'
             (Get-Content -Path $tempFilePath) -replace '%LOCALAPPDATA%', $appData | Set-Content -Path $tempFilePath
