@@ -1226,29 +1226,30 @@ foreach ($app in $selectedApps) {
             $curSourceFolder = (Get-Item -Path "..\config\cursor").FullName
             $curDestFolder = "C:\Windows\Cursors"
             Copy-Item -Path $curSourceFolder\* -Destination $curDestFolder -Recurse -Force
-            $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
-            $RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
-            $RegCursors.SetValue("","Windows Black")
-            $RegCursors.SetValue("AppStarting","$curDestFolder\aero_black_working.ani")
-            $RegCursors.SetValue("Arrow","$curDestFolder\aero_black_arrow.cur")
-            $RegCursors.SetValue("Crosshair","$curDestFolder\aero_black_cross.cur")
-            $RegCursors.SetValue("Hand","$curDestFolder\aero_black_link.cur")
-            $RegCursors.SetValue("Help","$curDestFolder\aero_black_helpsel.cur")
-            $RegCursors.SetValue("IBeam","$curDestFolder\aero_black_beam.cur")
-            $RegCursors.SetValue("No","$curDestFolder\aero_black_unavail.cur")
-            $RegCursors.SetValue("NWPen","$curDestFolder\aero_black_pen.cur")
-            $RegCursors.SetValue("SizeAll","$curDestFolder\aero_black_move.cur")
-            $RegCursors.SetValue("SizeNESW","$curDestFolder\aero_black_nesw.cur")
-            $RegCursors.SetValue("SizeNS","$curDestFolder\aero_black_ns.cur")
-            $RegCursors.SetValue("SizeNWSE","$curDestFolder\aero_black_nwse.cur")
-            $RegCursors.SetValue("SizeWE","$curDestFolder\aero_black_ew.cur")
-            $RegCursors.SetValue("UpArrow","$curDestFolder\aero_black_up.cur")
-            $RegCursors.SetValue("Wait","$curDestFolder\aero_black_busy.ani")
-            $RegCursors.SetValue("Pin","$curDestFolder\aero_black_pin.cur")
-            $RegCursors.SetValue("Person","$curDestFolder\aero_black_person.cur")
-            $RegCursors.Close()
-            $RegConnect.Close()
-            $CSharpSig = @'
+            if ( $lightOrDark = "L") {
+                $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
+                $RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
+                $RegCursors.SetValue("","Windows Black")
+                $RegCursors.SetValue("AppStarting","$curDestFolder\aero_black_working.ani")
+                $RegCursors.SetValue("Arrow","$curDestFolder\aero_black_arrow.cur")
+                $RegCursors.SetValue("Crosshair","$curDestFolder\aero_black_cross.cur")
+                $RegCursors.SetValue("Hand","$curDestFolder\aero_black_link.cur")
+                $RegCursors.SetValue("Help","$curDestFolder\aero_black_helpsel.cur")
+                $RegCursors.SetValue("IBeam","$curDestFolder\aero_black_beam.cur")
+                $RegCursors.SetValue("No","$curDestFolder\aero_black_unavail.cur")
+                $RegCursors.SetValue("NWPen","$curDestFolder\aero_black_pen.cur")
+                $RegCursors.SetValue("SizeAll","$curDestFolder\aero_black_move.cur")
+                $RegCursors.SetValue("SizeNESW","$curDestFolder\aero_black_nesw.cur")
+                $RegCursors.SetValue("SizeNS","$curDestFolder\aero_black_ns.cur")
+                $RegCursors.SetValue("SizeNWSE","$curDestFolder\aero_black_nwse.cur")
+                $RegCursors.SetValue("SizeWE","$curDestFolder\aero_black_ew.cur")
+                $RegCursors.SetValue("UpArrow","$curDestFolder\aero_black_up.cur")
+                $RegCursors.SetValue("Wait","$curDestFolder\aero_black_busy.ani")
+                $RegCursors.SetValue("Pin","$curDestFolder\aero_black_pin.cur")
+                $RegCursors.SetValue("Person","$curDestFolder\aero_black_person.cur")
+                $RegCursors.Close()
+                $RegConnect.Close()
+                $CSharpSig = @'
 [DllImport("user32.dll", EntryPoint = "SystemParametersInfo")]
 public static extern bool SystemParametersInfo(
 uint uiAction,
@@ -1256,7 +1257,6 @@ uint uiParam,
 uint pvParam,
 uint fWinIni);
 '@           
-            if ( $lightOrDark = "L") {
                 $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru # | Out-Null
                 $CursorRefresh::SystemParametersInfo(0x057,0,$null,0) > $null 2>&1
             }
