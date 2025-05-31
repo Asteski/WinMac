@@ -912,8 +912,6 @@ foreach ($app in $selectedApps) {
             $windhawkInstalled = Get-WinGetPackage -Id "RamenSoftware.Windhawk" -ErrorAction SilentlyContinue
             if ($null -eq $windhawkInstalled) {
                 winget install --id "RamenSoftware.Windhawk" --source winget --silent | Out-Null
-            } else {
-                Write-Host "Windhawk is already installed." -ForegroundColor DarkGreen
             }
             $windhawkProcess = Get-Process -Name Windhawk -ErrorAction SilentlyContinue
             if ($windhawkProcess) {
