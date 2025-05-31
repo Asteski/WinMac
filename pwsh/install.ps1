@@ -820,7 +820,7 @@ foreach ($app in $selectedApps) {
     # WinMac Menu
         "5" {
             if ($adminTest -and $osVersion -like '*Windows 11*') {
-                if ($menuSet -eq 'X'-or $menuSet -eq 'x') {s
+                if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
                     Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
                     $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.8' -ErrorAction SilentlyContinue
                     if ($null -eq $dotNetRuntime) {
@@ -999,21 +999,28 @@ foreach ($app in $selectedApps) {
                 Write-Host "Installing Keyboard Shortcuts..." -ForegroundColor Yellow
                 $fileName = 'KeyShortcuts.exe'
                 $fileDirectory = "$env:LOCALAPPDATA\WinMac"
+                echo 1
                 New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" -ErrorAction SilentlyContinue | Out-Null
                 if (Get-Process keyshortcuts) { Stop-Process -Name keyshortcuts }
                 Copy-Item ..\bin\$fileName "$env:LOCALAPPDATA\WinMac\" 
                 $description = "WinMac Keyboard Shortcuts - custom keyboard shortcut described in Commands cheat sheet wiki page."
                 $folderName = "WinMac"
+                echo 2
                 $taskService = New-Object -ComObject "Schedule.Service"
+                echo 3
                 $taskService.Connect()
+                echo 4
                 $rootFolder = $taskService.GetFolder("\") 
+                echo 5
                 try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }
                 if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
+                echo 6
                 $taskFolder = "\" + $folderName
                 $trigger = New-ScheduledTaskTrigger -AtLogon
                 $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
                 $action = New-ScheduledTaskAction -Execute $fileName -WorkingDirectory $fileDirectory
                 $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
+                echo 7
                 Register-ScheduledTask -TaskName "Keyboard Shortcuts" -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -Description $description
                 Start-Process -FilePath "$env:LOCALAPPDATA\WinMac\KeyShortcuts.exe" -WorkingDirectory $env:LOCALAPPDATA\WinMac
                 Write-Host "Keyboard Shortcuts installation completed." -ForegroundColor Green
