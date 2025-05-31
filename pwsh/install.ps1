@@ -917,7 +917,7 @@ foreach ($app in $selectedApps) {
             $modsBackup = Join-Path $extractFolder "Engine\Mods"
             $regBackup = Join-Path $extractFolder "Windhawk.reg"
             Copy-Item -Path $modsSourceBackup -Destination $windhawkRoot -Recurse -Force -ErrorAction SilentlyContinue
-            Copy-Item -Path '..\config\windhawk\resource-redirect\*' -Destination "$Env:LOCALAPPDATA\WinMac\resource-redirect\" -Recurse -Force -ErrorAction SilentlyContinue
+            Copy-Item -Path '..\config\windhawk\resource-redirect\' -Destination "$Env:LOCALAPPDATA\WinMac\" -Recurse -Force -ErrorAction SilentlyContinue
             $engineFolder = Join-Path $windhawkRoot "Engine"
             New-Item -ItemType Directory -Path $engineFolder -Force | Out-Null
             Copy-Item -Path $modsBackup -Destination $engineFolder -Recurse -Force -ErrorAction SilentlyContinue
@@ -1326,6 +1326,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             Start-Sleep -Seconds 2
             Start-Process -n Explorer -ErrorAction SilentlyContinue
             Start-Process -FilePath "$env:PROGRAMFILES\MacType\MacTray.exe"
+            New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "MacType" -Value "$env:PROGRAMFILES\MacType\MacTray.exe" | Out-Null
         #!
         }
     }
