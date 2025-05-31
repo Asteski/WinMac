@@ -128,6 +128,7 @@ if (!($noGUI)) {
                         <CheckBox x:Name="chkAutoHotkey" Content="Keyboard Shortcuts" IsChecked="True" Grid.Row="3" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkNexusDock" Content="Nexus Dock" IsChecked="True" Grid.Row="4" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkHotCorners" Content="Hot Corners" IsChecked="True" Grid.Row="4" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkMacType" Content="MacType" IsChecked="True" Grid.Row="4" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkOther" Content="Other" IsChecked="True" Grid.Row="5" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                     </Grid>
                 </GroupBox>
@@ -176,6 +177,7 @@ if (!($noGUI)) {
     $chkAutoHotkey = $window.FindName("chkAutoHotkey")
     $chkNexusDock = $window.FindName("chkNexusDock")
     $chkHotCorners = $window.FindName("chkHotCorners")
+    $chkMacType = $window.FindName("chkMacType")
     $chkOther = $window.FindName("chkOther")
     $btnUninstall = $window.FindName("btnUninstall")
     $btnCancel = $window.FindName("btnCancel")
@@ -183,7 +185,7 @@ if (!($noGUI)) {
     $customUninstall.Add_Checked({$componentSelection.IsEnabled = $true})
     $result = @{}
     $btnUninstall.Add_Click({
-        if ($fullUninstall.IsChecked) { $selection = "1","2","3","4","5","6","7","8","9","10","11" } 
+        if ($fullUninstall.IsChecked) { $selection = "1","2","3","4","5","6","7","8","9","10","11","12" } 
         else {
             if ($chkPowerToys.IsChecked) { $selection += "1," }
             if ($chkEverything.IsChecked) { $selection += "2," }
@@ -195,9 +197,10 @@ if (!($noGUI)) {
             if ($chkAutoHotkey.IsChecked) { $selection += "8," }
             if ($chkNexusDock.IsChecked) { $selection += "9," }
             if ($chkHotCorners.IsChecked) { $selection += "10" }
-            if ($chkOther.IsChecked) { $selection += "11" }
+            if ($chkMacType.IsChecked) { $selection += "11" }
+            if ($chkOther.IsChecked) { $selection += "12" }
         }
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="Stahky"; "8"="AutoHotkey"; "9"="Nexus Dock"; "10"="Hot Corners"; "11"="Other Settings"}
+        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="Stahky"; "8"="AutoHotkey"; "9"="Nexus Dock"; "10"="Hot Corners"; "11"="MacType"; "12"="Other"}
         $result["selectedApps"] = $selection.Split(',').TrimEnd(',')
         $selectedAppNames = @()
         foreach ($appNumber in $selection) {
@@ -265,13 +268,13 @@ https://github.com/Asteski/WinMac/wiki
     # WinMac configuration
     $fullOrCustom = Read-Host "`nEnter 'F' for full or 'C' for custom uninstallation"
     if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
-        $selectedApps = "1","2","3","4","5","6","7","8","9","10","11"
+        $selectedApps = "1","2","3","4","5","6","7","8","9","10","11","12"
         Write-Host "Choosing full uninstallation." -ForegroundColor Yellow
     }
     elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
         Write-Host "Choosing custom uninstallation." -ForegroundColor Yellow
         Start-Sleep 1
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Hot Corners"; "12"="Other"}
+        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Hot Corners"; "11"="MacType"; "12"="Other"}
 Write-Host @"
 
 `e[93m$("Please select options you want to uninstall:")`e[0m
@@ -287,15 +290,16 @@ Write-Host @"
         Write-Host "8. Keyboard Shortcuts"
         Write-Host "9. Nexus Dock"
         Write-Host "10. Hot Corners"
-        Write-Host "11. Other Settings"
+        Write-Host "11. MacType"
+        Write-Host "12. Other Settings"
         Write-Host
         do {
             $selection = Read-Host "Enter the numbers of options you want to uninstall (separated by commas)"
             $selection = $selection.Trim()
             $selection = $selection -replace '\s*,\s*', ','
-            $valid = $selection -match '^([1-9]|10|11)(,([1-9]|10|11))*$'
+            $valid = $selection -match '^([1-9]|10|11|12)(,([1-9]|10|11|12))*$'
             if (!$valid) {
-                Write-Host "`e[91mInvalid input! Please enter numbers between 1 and 11, separated by commas.`e[0m`n"
+                Write-Host "`e[91mInvalid input! Please enter numbers between 1 and 12, separated by commas.`e[0m`n"
             }
         } while ([string]::IsNullOrWhiteSpace($selection) -or !$valid)
         $selectedApps = @()
@@ -318,7 +322,7 @@ Write-Host @"
     }
     else
     {
-        $selectedApps = "1","2","3","4","5","6","7","8","9","10","11"
+        $selectedApps = "1","2","3","4","5","6","7","8","9","10","11","12"
         Write-Host "Invalid input. Defaulting to full uninstallation." -ForegroundColor Yellow
     }
     Start-Sleep 1
@@ -517,8 +521,12 @@ foreach ($app in $selectedApps) {
             Remove-Item -Path "$programsDir\Simple Sticky Notes.lnk" -Recurse -Force
             Write-Host "Uninstalling Hot Corners completed." -ForegroundColor Green
         }
-    # Other
+    # MacType
         "11" {
+            
+        }
+    # Other
+        "12" {
             Write-Host "Uninstalling Other Settings..." -ForegroundColor Yellow
             $regPath = "HKCU:\SOFTWARE\WinMac"
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
