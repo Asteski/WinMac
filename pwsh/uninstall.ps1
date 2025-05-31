@@ -392,7 +392,7 @@ foreach ($app in $selectedApps) {
             Write-Host "Uninstalling PowerToys..."  -ForegroundColor Yellow
             Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force
             $everythingPT = Get-WingetPackage -name EverythingPT -ErrorAction SilentlyContinue
-            Uninstall-WinGetPackage -$everythingPT.name | Out-Null
+            Uninstall-WinGetPackage -name $everythingPT.name | Out-Null
             Uninstall-WinGetPackage -id Microsoft.PowerToys | Out-Null
             Remove-Item $env:LOCALAPPDATA\Microsoft\PowerToys -Recurse -Force
             Remove-Item $env:LOCALAPPDATA\PowerToys -Recurse -Force
