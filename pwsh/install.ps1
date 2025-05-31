@@ -243,7 +243,7 @@ if (!($noGUI)) {
     $customInstall.Add_Checked({$componentSelection.IsEnabled = $true})
     $result = @{}
     $btnInstall.Add_Click({
-        if ($fullInstall.IsChecked) { $selection = "1","2","3","4","5","6","7","8","9","10","11"} 
+        if ($fullInstall.IsChecked) { $selection = "1","2","3","4","5","6","7","8","9","10","11","12"} 
         else {
             if ($chkPowerToys.IsChecked) { $selection += "1," }
             if ($chkEverything.IsChecked) { $selection += "2," }
@@ -619,10 +619,10 @@ if ($null -eq $wingetClientCheck) {
         Write-Host "Winget is already installed." -ForegroundColor DarkGreen
     }
 }
-# WinMac deployment
+####! WinMac deployment
 foreach ($app in $selectedApps) {
     switch ($app.Trim()) {
-    # PowerToys
+    #* PowerToys
         "1" {
             Write-Host "Installing PowerToys..." -ForegroundColor Yellow
             winget configure --enable | Out-Null
@@ -652,7 +652,7 @@ foreach ($app in $selectedApps) {
             Start-Process "$env:LOCALAPPDATA\PowerToys\PowerToys.exe" -ArgumentList "--start-minimized" -WorkingDirectory "$env:LOCALAPPDATA\PowerToys" -WindowStyle Hidden
             Write-Host "PowerToys installation completed." -ForegroundColor Green
         }
-    # Everything
+    #* Everything
         "2" {
             Write-Host "Installing Everything..." -ForegroundColor Yellow
             Install-WinGetPackage -Id "voidtools.Everything" | Out-Null
@@ -666,7 +666,7 @@ foreach ($app in $selectedApps) {
             Start-Process -FilePath Everything.exe -WorkingDirectory $env:PROGRAMFILES\Everything -WindowStyle Hidden
             Write-Host "Everything installation completed." -ForegroundColor Green
         }
-    # PowerShell Profile
+    #* PowerShell Profile
         "3" {
             Write-Host "Configuring PowerShell Profile..." -ForegroundColor Yellow
             $profilePath = $PROFILE | Split-Path | Split-Path
@@ -739,7 +739,7 @@ foreach ($app in $selectedApps) {
             Remove-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\gVim*" -Force
             Write-Host "PowerShell Profile configuration completed." -ForegroundColor Green
         }
-    # StartAllBack
+    #* StartAllBack
         "4" {
             if (!($osVersion -like '*Windows 11*')) {
                 Write-Host "StartAllBack is supported only on Windows 11. Skipping installation." -ForegroundColor Red
@@ -831,7 +831,7 @@ foreach ($app in $selectedApps) {
                 Write-Host "StartAllBack installation completed." -ForegroundColor Green
             }
         }
-    # WinMac Menu
+    #* WinMac Menu
         "5" {
             if ($adminTest -and $osVersion -like '*Windows 11*') {
                 if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
@@ -905,7 +905,7 @@ foreach ($app in $selectedApps) {
                 Write-Host "WinMac Menu requires elevated session. Please run the script as an administrator. Skipping installation." -ForegroundColor Red
             }
         }
-    # Windhawk
+    #* Windhawk
         "6" {
             Write-Host "Installing Windhawk..." -ForegroundColor Yellow
             $windhawkInstalled = Get-WinGetPackage -Id "RamenSoftware.Windhawk" -ErrorAction SilentlyContinue
@@ -953,7 +953,7 @@ foreach ($app in $selectedApps) {
             Start-Process "$Env:ProgramFiles\Windhawk\Windhawk.exe"
             Write-Host "Windhawk installation completed." -ForegroundColor Green
             }
-    # Stahky
+    #* Stahky
         "7" {
             Write-Host "Installing Stahky..." -ForegroundColor Yellow
             $url = "https://github.com/joedf/stahky/releases/download/v0.3.9.1/stahky_U64_v0.3.9.1.zip"
@@ -1005,13 +1005,13 @@ foreach ($app in $selectedApps) {
             Remove-Item $outputPath -Force
             Write-Host "Stahky installation completed." -ForegroundColor Green
         }
-    # AutoHotkey Keyboard Shortcuts
+    #* AutoHotkey Keyboard Shortcuts
         "8" {
             if ($adminTest) {
                 Write-Host "Installing Keyboard Shortcuts..." -ForegroundColor Yellow
                 $fileName = 'KeyShortcuts.exe'
                 $fileDirectory = "$env:LOCALAPPDATA\WinMac"
-                New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" -ErrorAction SilentlyContinue #| Out-Null
+                New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" -ErrorAction SilentlyContinue | Out-Null
                 if (Get-Process keyshortcuts) { Stop-Process -Name keyshortcuts }
                 Copy-Item ..\bin\$fileName "$env:LOCALAPPDATA\WinMac\" 
                 $description = "WinMac Keyboard Shortcuts - custom keyboard shortcut described in Commands cheat sheet wiki page."
@@ -1020,20 +1020,20 @@ foreach ($app in $selectedApps) {
                 $taskService.Connect()
                 $rootFolder = $taskService.GetFolder("\") 
                 try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }
-                if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName)} #| Out-Null }
+                if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
                 $taskFolder = "\" + $folderName
                 $trigger = New-ScheduledTaskTrigger -AtLogon
                 $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
                 $action = New-ScheduledTaskAction -Execute $fileName -WorkingDirectory $fileDirectory
                 $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
-                Register-ScheduledTask -TaskName "Keyboard Shortcuts" -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -Description $description #| Out-Null
+                Register-ScheduledTask -TaskName "Keyboard Shortcuts" -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -Description $description | Out-Null
                 Start-Process -FilePath "$env:LOCALAPPDATA\WinMac\KeyShortcuts.exe" -WorkingDirectory $env:LOCALAPPDATA\WinMac
                 Write-Host "Keyboard Shortcuts installation completed." -ForegroundColor Green
             } else {
                 Write-Host "Keyboard Shortcuts requires elevated session. Please run the script as an administrator. Skipping installation." -ForegroundColor Red
             }
         }
-    # Nexus Dock
+    #* Nexus Dock
         "9" {
             if ($adminTest) {
                 Write-Host "Winstep Nexus must be installed without admin rights. Skipping installation." -ForegroundColor Red
@@ -1140,7 +1140,7 @@ foreach ($app in $selectedApps) {
                 Write-Host "Nexus Dock installation completed." -ForegroundColor Green
             }
         }
-    # Hot Corners
+    #* Hot Corners
         "10"{
             Write-Host "Installing Hot Corners..." -ForegroundColor Yellow
             $outputPath = '..\temp\WinXCorners.zip'
@@ -1205,7 +1205,7 @@ foreach ($app in $selectedApps) {
             New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "WinXCorners" -Value "$destinationPath\WinXCorners.exe" | Out-Null
             Write-Host "Hot Corners installation completed." -ForegroundColor Green
             }
-    # MacType
+    #* MacType
         "11" {
             if ($sysType -like "*ARM*") {
                 Write-Host "MacType is not supported on ARM devices. Skipping installation." -ForegroundColor Red
@@ -1233,9 +1233,9 @@ foreach ($app in $selectedApps) {
                 Write-Host "MacType installation completed." -ForegroundColor Green
             }
             }
-    #? Other
+    #* Other
         "12" {
-        ##! Black Cursor
+        #? Black Cursor
             Write-Host "Configuring Other Settings..." -ForegroundColor Yellow
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             $curSourceFolder = (Get-Item -Path "..\config\cursor").FullName
@@ -1275,7 +1275,7 @@ uint fWinIni);
             $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru  | Out-Null
             $CursorRefresh::SystemParametersInfo(0x057,0,$null,0) > $null 2>&1
             }
-        ##! Pin User folder, Programs and Recycle Bin to Quick Access
+        #? Pin User folder, Programs and Recycle Bin to Quick Access
             $regPath = "HKCU:\SOFTWARE\WinMac"
             if (-not (Test-Path -Path $regPath)) {New-Item -Path $regPath -Force  | Out-Null}
             if ((Get-ItemProperty -Path $regPath -Name "QuickAccess" -ErrorAction SilentlyContinue).QuickAccess -ne 1) {
@@ -1300,14 +1300,12 @@ $programsIni = @"
 [.ShellClassInfo]
 IconResource=C:\WINDOWS\System32\imageres.dll,-87
 "@
-            echo 2
             $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             $programsIniFilePath = "$($programsDir)\desktop.ini"
             if (Test-Path $programsIniFilePath)  {
                 Remove-Item $programsIniFilePath -Force
                 New-Item -Path $programsIniFilePath -ItemType File -Force | Out-Null
             }
-            echo 3
             Add-Content $programsIniFilePath -Value $programsIni  | Out-Null
             (Get-Item $programsIniFilePath -Force).Attributes = 'Hidden, System, Archive'
             (Get-Item $programsDir -Force).Attributes = 'ReadOnly, Directory'
@@ -1315,30 +1313,24 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             if (-not ($programsPin.Namespace($programsDir).Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
                 $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome")
             }
-            echo 4
             $RBPath = 'HKCU:\Software\WinSTEP2000\NeXuS\Docks' 
             $name = "DelegateExecute"
             $value = "{b455f46e-e4af-4035-b0a4-cf18d2f6f28e}"
-            echo 5
             New-Item -Path $RBPath -Force  | Out-Null
-            echo 5
             New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force | Out-Null
-            echo 5
             $oShell = New-Object -ComObject Shell.Application
-            echo 6
             $recycleBin = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
             if (-not ($recycleBin.Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
                 $recycleBin.Self.InvokeVerb("PinToHome")
             }
-            echo 7
             Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse
             Set-ItemProperty -Path $regPath -Name "QuickAccess" -Value 1 | Out-Null
             }
-        ## Remove shortcut arrows
+        #? Remove shortcut arrows
             Copy-Item -Path "..\config\blank.ico" -Destination "C:\Windows" -Force
             New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Force | Out-Null
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String | Out-Null
-        ## Configuring file explorer and context menus
+        #? Configuring file explorer and context menus
             Get-ChildItem ..\config\reg\remove\* -e *theme* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
             $sourceFilePath = "..\config\reg\add\Add_Theme_Mode_in_Context_Menu.reg"
             $tempFilePath = "..\temp\Add_Theme_Mode_in_Context_Menu.reg"
@@ -1351,12 +1343,12 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             reg import '..\temp\Add_Theme_Mode_in_Context_Menu.reg' > $null 2>&1
             reg import '..\config\reg\add\Add_Hidden_items_to_context_menu.reg' > $null 2>&1
             winget uninstall "Windows web experience Pack" --silent > $null 2>&1
-        ## End Task
+        #? End Task
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
             $taskbarDevSettings = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
             if (-not (Test-Path $taskbarDevSettings)) { New-Item -Path $taskbarDevSettings -Force}
             New-ItemProperty -Path $taskbarDevSettings -Name "TaskbarEndTask" -Value 1 -PropertyType DWORD -Force | Out-Null
-        ## Hide Desktop icons
+        #? Hide Desktop icons
             Copy-Item -Path "..\bin\HideDesktopIcons.exe" -Destination "$env:LOCALAPPDATA\WinMac" -Force
             $shortcutPath = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Hide Desktop Icons.lnk"
             $targetPath = "$env:LOCALAPPDATA\WinMac\HideDesktopIcons.exe"
