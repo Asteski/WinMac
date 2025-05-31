@@ -117,6 +117,7 @@ if (!($noGUI)) {
                                 <CheckBox x:Name="chkAutoHotKey" Content="Keyboard Shortcuts" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                                 <CheckBox x:Name="chkNexusDock" Content="Nexus Dock" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                                 <CheckBox x:Name="chkHotCorners" Content="Hot Corners" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                                <CheckBox x:Name="chkMacType" Content="MacType" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                                 <CheckBox x:Name="chkOther" Content="Other" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                             </StackPanel>
                         </GroupBox>
@@ -225,6 +226,7 @@ if (!($noGUI)) {
     $chkNexusDock = $window.FindName("chkNexusDock")
     $chkGitProfile = $window.FindName("chkGitProfile")
     $chkHotCorners = $window.FindName("chkHotCorners")
+    $chkMacType = $window.FindName("chkMacType")
     $chkOther = $window.FindName("chkOther")
     $startMenu = $window.FindName("startMenuWinMac")
     $promptStyle = $window.FindName("promptStyleWinMac")
@@ -251,9 +253,10 @@ if (!($noGUI)) {
             if ($chkAutoHotKey.IsChecked) { $selection += "8," }
             if ($chkNexusDock.IsChecked) { $selection += "9," }
             if ($chkHotCorners.IsChecked) { $selection += "10," }
-            if ($chkOther.IsChecked) { $selection += "11" }
+            if ($chkMacType.IsChecked) { $selection += "11," }
+            if ($chkOther.IsChecked) { $selection += "12" }
         }
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Hot Corners"; "12"="Other Settings"}
+        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Hot Corners"; "11"="MacType"; "12"="Other Settings"}
         $result["selectedApps"] = $selection.Split(',').TrimEnd(',')
         $selectedAppNames = @()
         foreach ($appNumber in $selection) {
@@ -331,12 +334,12 @@ https://github.com/Asteski/WinMac/wiki
     $fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom installation"
     if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
         Write-Host "Choosing full installation." -ForegroundColor Green
-        $selectedApps = "1","2","3","4","5","6","7","8","9","10","11"
+        $selectedApps = "1","2","3","4","5","6","7","8","9","10","11","12"
     } 
     elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
         Write-Host "Choosing custom installation." -ForegroundColor Green
         Start-Sleep 1
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Hot Corners"; "11"="Other"}
+        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Hot Corners"; "11"="MacType"; "12"="Other"}
 Write-Host @"
 
 `e[93m$("Please select options you want to install:")`e[0m
@@ -353,16 +356,17 @@ Write-Host @"
 8. Keyboard Shortcuts
 9. Nexus Dock
 10. Hot Corners
-11. Other Settings
+11. MacType
+12. Other Settings
 "@
     Write-Host
     do {
         $selection = Read-Host "Enter the numbers of options you want to install (separated by commas)"
         $selection = $selection.Trim()
         $selection = $selection -replace '\s*,\s*', ','
-        $valid = $selection -match '^([1-9]|10|11)(,([1-9]|10|11))*$'
+        $valid = $selection -match '^([1-9]|10|11|12)(,([1-9]|10|11|12))*$'
         if (!$valid) {
-            Write-Host "`e[91mInvalid input! Please enter numbers between 1 and 11, separated by commas.`e[0m`n"
+            Write-Host "`e[91mInvalid input! Please enter numbers between 1 and 12, separated by commas.`e[0m`n"
         }
     } while ([string]::IsNullOrWhiteSpace($selection) -or !$valid)
     $selectedApps = @()
@@ -378,7 +382,7 @@ Write-Host @"
 else
 {
     Write-Host "Invalid input. Defaulting to full installation." -ForegroundColor Yellow
-    $selectedApps = "1","2","3","4","5","6","7","8","9","10","11"
+    $selectedApps = "1","2","3","4","5","6","7","8","9","10","11","12"
 }
 
 if ($selectedApps -like '*4*' -and $selectedApps -like '*5*') {
@@ -1187,8 +1191,26 @@ foreach ($app in $selectedApps) {
             New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "WinXCorners" -Value "$destinationPath\WinXCorners.exe" | Out-Null
             Write-Host "Hot Corners installation completed." -ForegroundColor Green
             }
-    # Other
+    # MacType
         "11" {
+            Write-Host "Installing MacType..." -ForegroundColor Yellow
+            $exeUrl = "https://github.com/snowie2000/mactype/releases/download/v1.2025.4.11/MacTypeInstaller_2025.4.11.exe"
+            $exePath = "..\temp\installer.exe"
+            Invoke-WebRequest -Uri $exeUrl -OutFile $exePath
+            Start-Process -FilePath $exePath -ArgumentList "/verysilent" -Wait
+            Remove-Item $exePath -Force
+            Stop-Process -n mt64agnt, MacTray, MacType -Force -ErrorAction SilentlyContinue
+            Stop-Process mt64agnt, MacTray -ErrorAction SilentlyContinue
+            Copy-Item -Path "..\config\mactype\*" -Destination "$env:PROGRAMFILES\MacType" -Recurse -Force
+            taskkill /IM explorer.exe /F > $null 2>&1
+            Start-Sleep -Seconds 2
+            Start-Process -n Explorer -ErrorAction SilentlyContinue
+            Start-Process -FilePath "$env:PROGRAMFILES\MacType\MacTray.exe"
+            New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "MacType" -Value "$env:PROGRAMFILES\MacType\MacTray.exe" | Out-Null
+            Write-Host "MacType installation completed." -ForegroundColor Green
+            }
+    # Other
+        "12" {
         ## Black Cursor
             Write-Host "Configuring Other Settings..." -ForegroundColor Yellow
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
@@ -1312,22 +1334,6 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             $shortcut.TargetPath = $targetPath
             $shortcut.IconLocation = $iconPath
             $shortcut.Save()
-        #!
-        ## MacType
-            $exeUrl = "https://github.com/snowie2000/mactype/releases/download/v1.2025.4.11/MacTypeInstaller_2025.4.11.exe"
-            $exePath = "..\temp\installer.exe"
-            Invoke-WebRequest -Uri $exeUrl -OutFile $exePath
-            Start-Process -FilePath $exePath -ArgumentList "/verysilent" -Wait
-            Remove-Item $exePath -Force
-            Stop-Process -n mt64agnt, MacTray, MacType -Force -ErrorAction SilentlyContinue
-            Stop-Process mt64agnt, MacTray -ErrorAction SilentlyContinue
-            Copy-Item -Path "..\config\mactype\*" -Destination "$env:PROGRAMFILES\MacType" -Recurse -Force
-            taskkill /IM explorer.exe /F > $null 2>&1
-            Start-Sleep -Seconds 2
-            Start-Process -n Explorer -ErrorAction SilentlyContinue
-            Start-Process -FilePath "$env:PROGRAMFILES\MacType\MacTray.exe"
-            New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "MacType" -Value "$env:PROGRAMFILES\MacType\MacTray.exe" | Out-Null
-        #!
         }
     }
 }
