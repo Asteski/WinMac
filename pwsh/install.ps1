@@ -1211,7 +1211,7 @@ foreach ($app in $selectedApps) {
             Stop-Process -n Explorer -ErrorAction SilentlyContinue
             Start-Sleep -Seconds 2
             Start-Process -FilePath "$env:PROGRAMFILES\MacType\MacTray.exe"
-            New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "MacType" -Value "$env:PROGRAMFILES\MacType\MacTray.exe" | Out-Null
+            Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "MacType" | Out-Null
             Write-Host "MacType installation completed." -ForegroundColor Green
             }
     # Other

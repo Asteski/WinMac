@@ -523,12 +523,13 @@ foreach ($app in $selectedApps) {
     # MacType
         "11" {
             Write-Host "Uninstalling MacType..." -ForegroundColor Yellow
-            # Uninstall-WinGetPackage -name "MacType" | Out-Null
+            Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "MacType" | Out-Null
             winget uninstall MacType --silent | Out-Null
             Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name FontSmoothing -Value "2"
             Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name FontSmoothingType -Type DWord -Value 2
             RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters ,1 ,True
             Stop-Process -Name Explorer -Force -ErrorAction SilentlyContinue
+             New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "MacType" -Value "$env:PROGRAMFILES\MacType\MacTray.exe" | Out-Null
             Write-Host "Uninstalling MacType completed." -ForegroundColor Green
         }
     # Other
