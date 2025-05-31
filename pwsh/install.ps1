@@ -38,6 +38,8 @@ if (!($noGUI)) {
     $accentColor = if ($windowsTheme -eq "Dark") { "#0078D4" } else { "#fcfcfc" }
     $secondaryBackgroundColor = if ($windowsTheme -eq "Dark") { "#2D2D2D" } else { "#fcfcfc" }
     $borderColor = if ($windowsTheme -eq "Dark") { "#2D2D2D" } else { "#e5e5e5" }
+    isCheckedLight = if ($windowsTheme -eq "Light") { "True" } else { "False" }
+    isCheckedDark = if ($windowsTheme -eq "Dark") { "False" } else { "True" }
     $parentDirectory = Split-Path -Path $PSScriptRoot -Parent
     $iconFolderName = "config"
     $iconFolderPath = Join-Path -Path $parentDirectory -ChildPath $iconFolderName
@@ -167,8 +169,8 @@ if (!($noGUI)) {
 
                         <GroupBox Grid.Row="1" Grid.Column="1" Header="Theme style" Margin="5" Padding="0,0,0,0" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
                             <StackPanel>
-                                <RadioButton x:Name="themeLight" Content="Light" IsChecked="True" Margin="0,22,0,13" Foreground="{StaticResource ForegroundBrush}"/>
-                                <RadioButton x:Name="themeDark" Content="Dark" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
+                                <RadioButton x:Name="themeLight" Content="Light" IsChecked="$isCheckedLight" Margin="0,22,0,13" Foreground="{StaticResource ForegroundBrush}"/>
+                                <RadioButton x:Name="themeDark" Content="Dark" IsChecked="$isCheckedDark" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                             </StackPanel>
                         </GroupBox>
 

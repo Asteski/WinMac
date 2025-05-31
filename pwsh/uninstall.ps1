@@ -429,7 +429,7 @@ foreach ($app in $selectedApps) {
             Write-Host "Uninstalling StartAllBack..." -ForegroundColor Yellow
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             $sabRegPath = "HKCU:\Software\StartIsBack"
-            taskkill /f /im explorer.exe
+            taskkill /f /im explorer.exe > $null 2>&1
             Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0
             Start-Sleep 5
             Start-Process -name explorer
