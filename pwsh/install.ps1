@@ -237,7 +237,7 @@ if (!($noGUI)) {
     $theme = $window.FindName("themeLight")
     $blueOrYellow = $window.FindName("folderColorYellow")
     $dockDynamic = $window.FindName("dockStyleDynamic")
-    $explorerStyle = $window.FindName("explorerStyleModern")
+    $exStyle = $window.FindName("explorerStyleModern")
     $btnInstall = $window.FindName("btnInstall")
     $btnCancel = $window.FindName("btnCancel")
     $fullInstall.Add_Checked({$componentSelection.IsEnabled = $false})
@@ -274,7 +274,7 @@ if (!($noGUI)) {
         $result["blueOrYellow"] = if ($blueOrYellow.IsChecked) { "Y" } else { "B" }
         $result["dockDynamic"] = if ($dockDynamic.IsChecked) { "X" } else { "D" }
         $result["gitProfile"] = if ($chkGitProfile.IsChecked) { $true } else { $false }
-        $result["exStyle"] = if ($explorerStyle.IsChecked) { "X" } else { "C" }
+        $result["exStyle"] = if ($exStyle.IsChecked) { "X" } else { "C" }
         $result = [System.Windows.MessageBox]::Show("Do you wish to continue installation?", "WinMac Deployment", [System.Windows.MessageBoxButton]::OKCancel, [System.Windows.MessageBoxImage]::Information) 
         if ($result -eq 'OK') {
             $isInstallCompleted = $true
