@@ -1286,7 +1286,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
                 $recycleBin = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
                 if (-not ($recycleBin.Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
                     $recycleBin.Self.InvokeVerb("PinToHome") | Out-Null
-                
+                }
                 Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse
                 Set-ItemProperty -Path $regPath -Name "QuickAccess" -Value 1 | Out-Null
             }
