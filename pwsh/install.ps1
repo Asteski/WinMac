@@ -237,7 +237,7 @@ if (!($noGUI)) {
     $theme = $window.FindName("themeLight")
     $blueOrYellow = $window.FindName("folderColorYellow")
     $dockDynamic = $window.FindName("dockStyleDynamic")
-    $exStyle = $window.FindName("explorerStyleModern")
+    $exStyle = $window.FindName("explorerWinMac")
     $btnInstall = $window.FindName("btnInstall")
     $btnCancel = $window.FindName("btnCancel")
     $fullInstall.Add_Checked({$componentSelection.IsEnabled = $false})
