@@ -1202,9 +1202,12 @@ foreach ($app in $selectedApps) {
             Stop-Process -n mt64agnt, MacTray, MacType -Force -ErrorAction SilentlyContinue
             Stop-Process mt64agnt, MacTray -ErrorAction SilentlyContinue
             Copy-Item -Path "..\config\mactype\*" -Destination "$env:PROGRAMFILES\MacType" -Recurse -Force
-            taskkill /IM explorer.exe /F > $null 2>&1
+            Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name FontSmoothing -Value "0"
+            Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name FontSmoothingType -Type DWord -Value 0
+            RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters ,1 ,True
             Start-Sleep -Seconds 2
-            Start-Process -n Explorer -ErrorAction SilentlyContinue
+            Stop-Process -n Explorer -ErrorAction SilentlyContinue
+            Start-Sleep -Seconds 2
             Start-Process -FilePath "$env:PROGRAMFILES\MacType\MacTray.exe"
             New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "MacType" -Value "$env:PROGRAMFILES\MacType\MacTray.exe" | Out-Null
             Write-Host "MacType installation completed." -ForegroundColor Green
