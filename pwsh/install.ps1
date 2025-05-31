@@ -920,9 +920,9 @@ foreach ($app in $selectedApps) {
             # $regBackup = Join-Path $extractFolder "Windhawk.reg"
             
             if ($sysType -like "*ARM*") { $regBackup = 'windhawk-arm.reg' } else { $regBackup = 'windhawk-x64.reg' }
-            $modsSourceBackup = Join-Path $PSScriptRoot "..config\Windhawk\ModsSource"
-            $modsBackup = Join-Path $PSScriptRoot "..config\Windhawk\Engine\Mods"
-            $regBackup = Join-Path $PSScriptRoot "..config\Windhawk\$regBackup"
+            $modsSourceBackup = Join-Path $PSScriptRoot "..\config\Windhawk\ModsSource"
+            $modsBackup = Join-Path $PSScriptRoot "..\config\Windhawk\Engine\Mods"
+            $regBackup = Join-Path $PSScriptRoot "..\config\Windhawk\$regBackup"
 
             #!
             Copy-Item -Path $modsSourceBackup -Destination $windhawkRoot -Recurse -Force -ErrorAction SilentlyContinue
@@ -1286,7 +1286,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
                 $recycleBin = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
                 if (-not ($recycleBin.Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
                     $recycleBin.Self.InvokeVerb("PinToHome") | Out-Null
-                }
+                
                 Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse
                 Set-ItemProperty -Path $regPath -Name "QuickAccess" -Value 1 | Out-Null
             }
