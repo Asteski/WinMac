@@ -1,6 +1,5 @@
 param (
-    [switch]$noGUI,
-    [switch]$debug
+    [switch]$noGUI
 )
 $version = "1.0.0"
 $sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
@@ -521,7 +520,7 @@ foreach ($app in $selectedApps) {
             Remove-Item -Path "$programsDir\Simple Sticky Notes.lnk" -Recurse -Force
             Write-Host "Uninstalling Hot Corners completed." -ForegroundColor Green
         }
-        # MacType
+    # MacType
         "11" {
             Write-Host "Uninstalling MacType..." -ForegroundColor Yellow
             Uninstall-WinGetPackage -name "MacType" | Out-Null
