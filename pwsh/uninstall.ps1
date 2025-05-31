@@ -576,20 +576,20 @@ uint pvParam,
 uint fWinIni);
 '@
             $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
-            $CursorRefresh::SystemParametersInfo(0x0057,0,$null,0)  | Out-Null
+            $CursorRefresh::SystemParametersInfo(0x0057,0,$null,0) | Out-Null
             $homeDir = "C:\Users\$env:USERNAME"
             $homePin = new-object -com shell.application
-            $homePin.Namespace($homeDir).Self.InvokeVerb("pintohome")  | Out-Null
+            $homePin.Namespace($homeDir).Self.InvokeVerb("pintohome") | Out-Null
             $programsPin = new-object -com shell.application
-            $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome")  | Out-Null
+            $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome") | Out-Null
             $RBPath = 'HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\pintohome\command\'
             $name = "DelegateExecute"
             $value = "{b455f46e-e4af-4035-b0a4-cf18d2f6f28e}"
-            New-Item -Path $RBPath -Force  | Out-Null
-            New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force  | Out-Null
+            New-Item -Path $RBPath -Force | Out-Null
+            New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force | Out-Null
             $oShell = New-Object -ComObject Shell.Application
             $recycleBin = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
-            $recycleBin.Self.InvokeVerb("PinToHome") }
+            $recycleBin.Self.InvokeVerb("PinToHome") | Out-Null
             Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse | Out-Null
             Remove-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
             Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings" -Recurse | Out-Null
