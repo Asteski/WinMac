@@ -1250,7 +1250,8 @@ uint uiAction,
 uint uiParam,
 uint pvParam,
 uint fWinIni);
-'@
+'@           
+            if ( $lightOrDark = "L") {
                 $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru | Out-Null
                 $CursorRefresh::SystemParametersInfo(0x057,0,$null,0) > $null 2>&1
             }
@@ -1337,6 +1338,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             $shortcut.TargetPath = $targetPath
             $shortcut.IconLocation = $iconPath
             $shortcut.Save()
+            }
         }
     }
 }

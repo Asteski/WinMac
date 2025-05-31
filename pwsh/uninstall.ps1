@@ -195,8 +195,8 @@ if (!($noGUI)) {
             if ($chkStahky.IsChecked) { $selection += "7," }
             if ($chkAutoHotkey.IsChecked) { $selection += "8," }
             if ($chkNexusDock.IsChecked) { $selection += "9," }
-            if ($chkHotCorners.IsChecked) { $selection += "10" }
-            if ($chkMacType.IsChecked) { $selection += "11" }
+            if ($chkHotCorners.IsChecked) { $selection += "10," }
+            if ($chkMacType.IsChecked) { $selection += "11," }
             if ($chkOther.IsChecked) { $selection += "12" }
         }
         $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="Stahky"; "8"="AutoHotkey"; "9"="Nexus Dock"; "10"="Hot Corners"; "11"="MacType"; "12"="Other"}
