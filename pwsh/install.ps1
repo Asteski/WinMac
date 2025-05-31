@@ -1216,7 +1216,7 @@ foreach ($app in $selectedApps) {
                 Start-Sleep -Seconds 2
                 Start-Process -FilePath "$env:PROGRAMFILES\MacType\MacTray.exe"
                 Write-Host "MacType installation completed." -ForegroundColor Green
-                }
+            }
             }
     # Other
         "12" {
