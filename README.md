@@ -95,19 +95,19 @@ List of utilities and their creators, included in WinMac:
 - [Everything](https://www.voidtools.com/) by David Carpenter
 - [StartAllBack](https://www.startallback.com/) by Tihiy
 - [Open-Shell](https://open-shell.github.io/Open-Shell-Menu/) by Open-Shell
-- [TopNotify](https://github.com/SamsidParty/TopNotify) by SamsidParty
+- [Windhawk](https://github.com/ramensoftware/windhawk) by Ramen Software
 - [Stahky](https://github.com/joedf/stahky) by joedf
 - [AutoHotkey](https://www.autohotkey.com/) by AutoHotkey Foundation
 - [Nexus](https://www.winstep.net/nexus.asp) by Winstep
 - [NewModernWinver](https://github.com/torchgm/NewModernWinver) by torchgm
-- [Windhawk](https://github.com/ramensoftware/windhawk) by Ramen Software
 - [WinXCorners](https://github.com/vhanla/winxcorners) by vhanla
 - [Simple Sticky Notes](https://www.simplestickynotes.com/) by Simnet
 - [WinLaunch](https://github.com/jensroth-git/WinLaunch) by jensroth
-- [Icon Pack Maker](https://uxthemepatcher.com/icon-pack-maker/) by UXThemePatcher
+- [MacType](https://www.mactype.net/) by snowie2000
 - [PSTree](https://github.com/santisq/PSTree) by santisq
 - [ntop](https://github.com/gsass1/NTop) by gsass1
 - [ptr](https://github.com/8LWXpg/ptr) by 8LWXpg
+- [z](https://github.com/rupa/z) by rupa
 
 
 > [!NOTE]
