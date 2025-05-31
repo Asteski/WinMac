@@ -1233,9 +1233,9 @@ foreach ($app in $selectedApps) {
                 Write-Host "MacType installation completed." -ForegroundColor Green
             }
             }
-    # Other
+    #? Other
         "12" {
-        ## Black Cursor
+        ##! Black Cursor
             Write-Host "Configuring Other Settings..." -ForegroundColor Yellow
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             $curSourceFolder = (Get-Item -Path "..\config\cursor").FullName
@@ -1272,27 +1272,46 @@ uint uiParam,
 uint pvParam,
 uint fWinIni);
 '@           
-                $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru  | Out-Null
-                $CursorRefresh::SystemParametersInfo(0x057,0,$null,0) > $null 2>&1
+            $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru  | Out-Null
+            $CursorRefresh::SystemParametersInfo(0x057,0,$null,0) > $null 2>&1
+            } else {
+                $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
+                $RegCursors.SetValue("","Windows Aero (default)")
+                $RegCursors.SetValue("AppStarting","$curDestFolder\aero_working.ani")
+                $RegCursors.SetValue("Arrow","$curDestFolder\aero_arrow.cur")
+                $RegCursors.SetValue("Crosshair","$curDestFolder\aero_cross.cur")
+                $RegCursors.SetValue("Hand","$curDestFolder\aero_link.cur")
+                $RegCursors.SetValue("Help","$curDestFolder\aero_helpsel.cur")
+                $RegCursors.SetValue("IBeam","$curDestFolder\aero_beam.cur")
+                $RegCursors.SetValue("No","$curDestFolder\aero_unavail.cur")
+                $RegCursors.SetValue("NWPen","$curDestFolder\aero_pen.cur")
+                $RegCursors.SetValue("SizeAll","$curDestFolder\aero_move.cur")
+                $RegCursors.SetValue("SizeNESW","$curDestFolder\aero_nesw.cur")
+                $RegCursors.SetValue("SizeNS","$curDestFolder\aero_ns.cur")
+                $RegCursors.SetValue("SizeNWSE","$curDestFolder\aero_nwse.cur")
+                $RegCursors.SetValue("SizeWE","$curDestFolder\aero_ew.cur")
+                $RegCursors.SetValue("UpArrow","$curDestFolder\aero_up.cur")
+                $RegCursors.SetValue("Wait","$curDestFolder\aero_busy.ani")
+                $RegCursors.SetValue("Pin","$curDestFolder\aero_pin.cur")
+                $RegCursors.SetValue("Person","$curDestFolder\aero_person.cur")
+                $RegCursors.Close()
+                $RegConnect.Close()
             }
-        ## Pin User folder, Programs and Recycle Bin to Quick Access
-                $regPath = "HKCU:\SOFTWARE\WinMac"
-                echo 1
-            if (-not (Test-Path -Path $regPath)) {New-Item -Path $regPath -Force  } # | Out-Null}
+        ##! Pin User folder, Programs and Recycle Bin to Quick Access
+            $regPath = "HKCU:\SOFTWARE\WinMac"
+            if (-not (Test-Path -Path $regPath)) {New-Item -Path $regPath -Force  | Out-Null
             if ((Get-ItemProperty -Path $regPath -Name "QuickAccess" -ErrorAction SilentlyContinue).QuickAccess -ne 1) {
 $homeIni = @"
 [.ShellClassInfo]
 IconResource=C:\Windows\System32\SHELL32.dll,160
 "@
-                echo 2
                 $homeDir = "C:\Users\$env:USERNAME"
                 $homeIniFilePath = "$($homeDir)\desktop.ini"
                 if (Test-Path $homeIniFilePath)  {
                     Remove-Item $homeIniFilePath -Force
-                    New-Item -Path $homeIniFilePath -ItemType File -Force #| Out-Null
+                    New-Item -Path $homeIniFilePath -ItemType File -Force | Out-Null
                 }
-                Add-Content $homeIniFilePath -Value $homeIni #| Out-Null
-                echo 3
+                Add-Content $homeIniFilePath -Value $homeIni | Out-Null
                 (Get-Item $homeIniFilePath -Force).Attributes = 'Hidden, System, Archive'
                 (Get-Item $homeDir -Force).Attributes = 'ReadOnly, Directory'
                 $homePin = new-object -com shell.application
@@ -1303,12 +1322,14 @@ $programsIni = @"
 [.ShellClassInfo]
 IconResource=C:\WINDOWS\System32\imageres.dll,-87
 "@
+                echo 2
                 $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
                 $programsIniFilePath = "$($programsDir)\desktop.ini"
                 if (Test-Path $programsIniFilePath)  {
                     Remove-Item $programsIniFilePath -Force
-                    New-Item -Path $programsIniFilePath -ItemType File -Force #| Out-Null
+                    New-Item -Path $programsIniFilePath -ItemType File -Force | Out-Null
                 }
+                echo 3
                 Add-Content $programsIniFilePath -Value $programsIni  | Out-Null
                 (Get-Item $programsIniFilePath -Force).Attributes = 'Hidden, System, Archive'
                 (Get-Item $programsDir -Force).Attributes = 'ReadOnly, Directory'
@@ -1320,16 +1341,20 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
                 $RBPath = 'HKCU:\Software\WinSTEP2000\NeXuS\Docks' 
                 $name = "DelegateExecute"
                 $value = "{b455f46e-e4af-4035-b0a4-cf18d2f6f28e}"
+                echo 5
                 New-Item -Path $RBPath -Force  | Out-Null
-                New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force #| Out-Null
+                echo 5
+                New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force | Out-Null
+                echo 5
                 $oShell = New-Object -ComObject Shell.Application
+                echo 6
                 $recycleBin = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
                 if (-not ($recycleBin.Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
                     $recycleBin.Self.InvokeVerb("PinToHome")
                 }
-                echo 5
+                echo 7
                 Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse
-                Set-ItemProperty -Path $regPath -Name "QuickAccess" -Value 1 #| Out-Null
+                Set-ItemProperty -Path $regPath -Name "QuickAccess" -Value 1 | Out-Null
             }
         ## Remove shortcut arrows
             Copy-Item -Path "..\config\blank.ico" -Destination "C:\Windows" -Force
