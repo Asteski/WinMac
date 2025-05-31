@@ -419,7 +419,7 @@ foreach ($app in $selectedApps) {
                 "Vim.Vim",
                 "gsass1.NTop"
             )
-            foreach ($app in $winget) { Uninstall-WinGetPackage -id $app }
+            foreach ($app in $winget) { Uninstall-WinGetPackage -id $app | Out-Null}
             Uninstall-Module PSTree -Force | Out-Null
             if ((Test-Path "$profilePath\PowerShell\$profileFile")) { Remove-Item -Path "$profilePath\PowerShell\$profileFile" }
             if ((Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { Remove-Item -Path "$profilePath\WindowsPowerShell\$profileFile" }
