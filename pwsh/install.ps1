@@ -38,8 +38,8 @@ if (!($noGUI)) {
     $accentColor = if ($windowsTheme -eq "Dark") { "#0078D4" } else { "#fcfcfc" }
     $secondaryBackgroundColor = if ($windowsTheme -eq "Dark") { "#2D2D2D" } else { "#fcfcfc" }
     $borderColor = if ($windowsTheme -eq "Dark") { "#2D2D2D" } else { "#e5e5e5" }
-    isCheckedLight = if ($windowsTheme -eq "Light") { "True" } else { "False" }
-    isCheckedDark = if ($windowsTheme -eq "Dark") { "False" } else { "True" }
+    isCheckedLight = if ($windowsTheme -eq "Light") { True } else { False }
+    isCheckedDark = if ($windowsTheme -eq "Dark") { False } else { True }
     $parentDirectory = Split-Path -Path $PSScriptRoot -Parent
     $iconFolderName = "config"
     $iconFolderPath = Join-Path -Path $parentDirectory -ChildPath $iconFolderName
@@ -1211,7 +1211,6 @@ foreach ($app in $selectedApps) {
             Stop-Process -n Explorer -ErrorAction SilentlyContinue
             Start-Sleep -Seconds 2
             Start-Process -FilePath "$env:PROGRAMFILES\MacType\MacTray.exe"
-            Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "MacType" | Out-Null
             Write-Host "MacType installation completed." -ForegroundColor Green
             }
     # Other
