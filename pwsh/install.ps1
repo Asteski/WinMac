@@ -1263,7 +1263,7 @@ foreach ($app in $selectedApps) {
                 $RegCursors.SetValue("Person","$curDestFolder\aero_black_person.cur")
                 $RegCursors.Close()
                 $RegConnect.Close()
-                $CSharpSig = @'
+$CSharpSig = @'
 [DllImport("user32.dll", EntryPoint = "SystemParametersInfo")]
 public static extern bool SystemParametersInfo(
 uint uiAction,
