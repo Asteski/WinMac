@@ -1313,6 +1313,18 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             $shortcut.TargetPath = $targetPath
             $shortcut.IconLocation = $iconPath
             $shortcut.Save()
+        #!
+        ## MacType
+            $exeUrl = "https://github.com/snowie2000/mactype/releases/download/v1.2025.4.11/MacTypeInstaller_2025.4.11.exe"
+            $exePath = "..\temp\installer.exe"
+            Invoke-WebRequest -Uri $exeUrl -OutFile $exePath
+            Start-Process -FilePath $exePath -ArgumentList "/verysilent" -Wait
+            Remove-Item $exePath -Force
+            Stop-Process mt64agnt, MacTray -ErrorAction SilentlyContinue
+            Copy-Item -Path "..\config\mactype\*" -Destination "$env:PROGRAMFILES\MacType" -Recurse -Force
+            Stop-Process -n Explorer -ErrorAction SilentlyContinue
+            Start-Sleep -Seconds 2
+        #!
         }
     }
 }
