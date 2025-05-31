@@ -38,12 +38,12 @@ if (!($noGUI)) {
     $accentColor = if ($windowsTheme -eq "Dark") { "#0078D4" } else { "#fcfcfc" }
     $secondaryBackgroundColor = if ($windowsTheme -eq "Dark") { "#2D2D2D" } else { "#fcfcfc" }
     $borderColor = if ($windowsTheme -eq "Dark") { "#2D2D2D" } else { "#e5e5e5" }
-    isCheckedLight = if ($windowsTheme -eq "Light") { True } else { False }
-    isCheckedDark = if ($windowsTheme -eq "Dark") { False } else { True }
+    isCheckedLight = if ($windowsTheme -eq "Light") { "True" } else { "False" }
+    isCheckedDark = if ($windowsTheme -eq "Dark") { "True" } else { "False" }
     $parentDirectory = Split-Path -Path $PSScriptRoot -Parent
     $iconFolderName = "config"
     $iconFolderPath = Join-Path -Path $parentDirectory -ChildPath $iconFolderName
-    $topTextBlock = "Windows and MacOS Hybrid Installation Wizard"
+    $topTextBlock = "Windows and macOS Hybrid Installation Wizard"
     $bottomTextBlock1 = ' ↓ Important Notes ↓'
     $bottomTextBlock2 = 'PowerShell default profile will be removed and replaced with new one. Please make sure to backup your current profile if needed.'
     $bottomTextBlock3 = 'The author of this script is not responsible for any damage caused by running it. Highly recommend to create a system restore point before proceeding with the installation process to ensure you can revert any changes if necessary.'

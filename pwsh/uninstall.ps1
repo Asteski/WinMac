@@ -50,7 +50,7 @@ if (!($noGUI)) {
     $parentDirectory = Split-Path -Path $PSScriptRoot -Parent
     $iconFolderName = "config"
     $iconFolderPath = Join-Path -Path $parentDirectory -ChildPath $iconFolderName
-    $topTextBlock = "Windows and MacOS Hybrid Uninstallation Wizard"
+    $topTextBlock = "Windows and macOS Hybrid Uninstallation Wizard"
     $bottomTextBlock1 = 'Important Notes'
     $bottomTextBlock2 = 'Please disable Windows Defender/3rd party Anti-virus, to prevent issues with uninsalling icons pack.'
     $bottomTextBlock3 = 'PowerShell profile files will be removed, please make sure to backup your current profiles if needed.'
