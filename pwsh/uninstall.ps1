@@ -614,6 +614,7 @@ uint fWinIni);
 if ((Get-ChildItem -Path "$env:LOCALAPPDATA\WinMac" -Recurse | Measure-Object).Count -eq 0) { Remove-Item -Path "$env:LOCALAPPDATA\WinMac" -Force }
 $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue
 if ($null -eq $tasksFolder) { schtasks /DELETE /TN \WinMac /F > $null 2>&1 }
+Start-Sleep 3
 $explorerProcess = Get-Process -Name explorer -ErrorAction SilentlyContinue
 if ($null -eq $explorerProcess) {Start-Process -FilePath explorer.exe}
 Stop-Transcript | Out-Null
