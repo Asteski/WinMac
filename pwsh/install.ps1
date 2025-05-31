@@ -1285,14 +1285,14 @@ IconResource=C:\Windows\System32\SHELL32.dll,160
                 $homeIniFilePath = "$($homeDir)\desktop.ini"
                 if (Test-Path $homeIniFilePath)  {
                     Remove-Item $homeIniFilePath -Force
-                    New-Item -Path $homeIniFilePath -ItemType File -Force  | Out-Null
+                    New-Item -Path $homeIniFilePath -ItemType File -Force | Out-Null
                 }
-                Add-Content $homeIniFilePath -Value $homeIni  | Out-Null
+                Add-Content $homeIniFilePath -Value $homeIni | Out-Null
                 (Get-Item $homeIniFilePath -Force).Attributes = 'Hidden, System, Archive'
                 (Get-Item $homeDir -Force).Attributes = 'ReadOnly, Directory'
                 $homePin = new-object -com shell.application
                 if (-not ($homePin.Namespace($homeDir).Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
-                    $homePin.Namespace($homeDir).Self.InvokeVerb("pintohome")  | Out-Null
+                    $homePin.Namespace($homeDir).Self.InvokeVerb("pintohome")
                 } 
 $programsIni = @"
 [.ShellClassInfo]
@@ -1302,14 +1302,14 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
                 $programsIniFilePath = "$($programsDir)\desktop.ini"
                 if (Test-Path $programsIniFilePath)  {
                     Remove-Item $programsIniFilePath -Force
-                    New-Item -Path $programsIniFilePath -ItemType File -Force  | Out-Null
+                    New-Item -Path $programsIniFilePath -ItemType File -Force | Out-Null
                 }
                 Add-Content $programsIniFilePath -Value $programsIni  | Out-Null
                 (Get-Item $programsIniFilePath -Force).Attributes = 'Hidden, System, Archive'
                 (Get-Item $programsDir -Force).Attributes = 'ReadOnly, Directory'
                 $programsPin = new-object -com shell.application
                 if (-not ($programsPin.Namespace($programsDir).Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
-                    $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome")  | Out-Null
+                    $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome")
                 }
                 $RBPath = 'HKCU:\Software\WinSTEP2000\NeXuS\Docks' 
                 $name = "DelegateExecute"
@@ -1319,7 +1319,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
                 $oShell = New-Object -ComObject Shell.Application
                 $recycleBin = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
                 if (-not ($recycleBin.Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
-                    $recycleBin.Self.InvokeVerb("PinToHome")  | Out-Null
+                    $recycleBin.Self.InvokeVerb("PinToHome")
                 }
                 Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse
                 Set-ItemProperty -Path $regPath -Name "QuickAccess" -Value 1  | Out-Null
