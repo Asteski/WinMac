@@ -141,7 +141,7 @@ if (!($noGUI)) {
 
                         <GroupBox Grid.Row="0" Grid.Column="0" Header="Explorer style" Margin="5" Padding="0,0,0,0" Foreground="{StaticResource ForegroundBrush}" Background="{StaticResource SecondaryBackgroundBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
                             <StackPanel>
-                                <RadioButton x:Name="explorerWinMac" Content="Modern" IsChecked="True" Margin="0,22,0,13" Foreground="{StaticResource ForegroundBrush}"/>
+                                <RadioButton x:Name="explorerModern" Content="Modern" IsChecked="True" Margin="0,22,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                                 <RadioButton x:Name="explorerClassic" Content="Classic" Margin="0,0,0,13" Foreground="{StaticResource ForegroundBrush}"/>
                             </StackPanel>
                         </GroupBox>
@@ -237,7 +237,7 @@ if (!($noGUI)) {
     $theme = $window.FindName("themeLight")
     $blueOrYellow = $window.FindName("folderColorYellow")
     $dockDynamic = $window.FindName("dockStyleDynamic")
-    $exStyle = $window.FindName("explorerWinMac")
+    $exStyle = $window.FindName("explorerModern")
     $btnInstall = $window.FindName("btnInstall")
     $btnCancel = $window.FindName("btnCancel")
     $fullInstall.Add_Checked({$componentSelection.IsEnabled = $false})
