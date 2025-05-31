@@ -702,7 +702,7 @@ foreach ($app in $selectedApps) {
             $winget = @(
                 "gsass1.NTop"
                 )
-            if ($gitProfile -eq $true) { $winget += "Git.Git" }   
+            if ($gitProfile -eq $true) { $winget += "Git.Git" }
             foreach ($app in $winget) {
                 $package = Get-WinGetPackage -Id $app -ErrorAction SilentlyContinue
                 if ($null -eq $package) {
@@ -854,8 +854,6 @@ foreach ($app in $selectedApps) {
                     if ($null -eq $winverUWP) {
                         Write-Host "Installing WinverUWP 2.1.4..." -ForegroundColor DarkYellow
                         Install-WinGetPackage -id 'FireCubeStudios.WinverUWP' | Out-Null
-                        # Invoke-WebRequest -Uri 'https://github.com/dongle-the-gadget/WinverUWP/releases/download/v2.1.0.0/2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle' -OutFile '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
-                        # Add-AppxPackage -Path '..\temp\2505FireCubeStudios.WinverUWP_2.1.4.0_neutral_._k45w5yt88e21j.AppxBundle'
                     } else {
                         Write-Host "WinverUWP is already installed." -ForegroundColor DarkGreen
                     }
@@ -1228,6 +1226,7 @@ foreach ($app in $selectedApps) {
                 Start-Sleep -Seconds 2
                 Stop-Process -n Explorer -ErrorAction SilentlyContinue
                 Start-Sleep -Seconds 2
+                New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "MacType" -Value "$env:PROGRAMFILES\MacType\MacTray.exe" | Out-Null
                 Start-Process -FilePath "$env:PROGRAMFILES\MacType\MacTray.exe"
                 Write-Host "MacType installation completed." -ForegroundColor Green
             }
