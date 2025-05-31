@@ -1276,20 +1276,23 @@ uint fWinIni);
                 $CursorRefresh::SystemParametersInfo(0x057,0,$null,0) > $null 2>&1
             }
         ## Pin User folder, Programs and Recycle Bin to Quick Access
-            $regPath = "HKCU:\SOFTWARE\WinMac"
-            if (-not (Test-Path -Path $regPath)) {New-Item -Path $regPath -Force  | Out-Null}
+                $regPath = "HKCU:\SOFTWARE\WinMac"
+                echo 1
+            if (-not (Test-Path -Path $regPath)) {New-Item -Path $regPath -Force  } # | Out-Null}
             if ((Get-ItemProperty -Path $regPath -Name "QuickAccess" -ErrorAction SilentlyContinue).QuickAccess -ne 1) {
 $homeIni = @"
 [.ShellClassInfo]
 IconResource=C:\Windows\System32\SHELL32.dll,160
 "@
+                echo 2
                 $homeDir = "C:\Users\$env:USERNAME"
                 $homeIniFilePath = "$($homeDir)\desktop.ini"
                 if (Test-Path $homeIniFilePath)  {
                     Remove-Item $homeIniFilePath -Force
-                    New-Item -Path $homeIniFilePath -ItemType File -Force | Out-Null
+                    New-Item -Path $homeIniFilePath -ItemType File -Force #| Out-Null
                 }
-                Add-Content $homeIniFilePath -Value $homeIni | Out-Null
+                Add-Content $homeIniFilePath -Value $homeIni #| Out-Null
+                echo 3
                 (Get-Item $homeIniFilePath -Force).Attributes = 'Hidden, System, Archive'
                 (Get-Item $homeDir -Force).Attributes = 'ReadOnly, Directory'
                 $homePin = new-object -com shell.application
@@ -1304,7 +1307,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
                 $programsIniFilePath = "$($programsDir)\desktop.ini"
                 if (Test-Path $programsIniFilePath)  {
                     Remove-Item $programsIniFilePath -Force
-                    New-Item -Path $programsIniFilePath -ItemType File -Force | Out-Null
+                    New-Item -Path $programsIniFilePath -ItemType File -Force #| Out-Null
                 }
                 Add-Content $programsIniFilePath -Value $programsIni  | Out-Null
                 (Get-Item $programsIniFilePath -Force).Attributes = 'Hidden, System, Archive'
@@ -1313,23 +1316,25 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
                 if (-not ($programsPin.Namespace($programsDir).Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
                     $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome")
                 }
+                echo 4
                 $RBPath = 'HKCU:\Software\WinSTEP2000\NeXuS\Docks' 
                 $name = "DelegateExecute"
                 $value = "{b455f46e-e4af-4035-b0a4-cf18d2f6f28e}"
                 New-Item -Path $RBPath -Force  | Out-Null
-                New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force  | Out-Null
+                New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force #| Out-Null
                 $oShell = New-Object -ComObject Shell.Application
                 $recycleBin = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
                 if (-not ($recycleBin.Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
                     $recycleBin.Self.InvokeVerb("PinToHome")
                 }
+                echo 5
                 Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse
-                Set-ItemProperty -Path $regPath -Name "QuickAccess" -Value 1  | Out-Null
+                Set-ItemProperty -Path $regPath -Name "QuickAccess" -Value 1 #| Out-Null
             }
         ## Remove shortcut arrows
             Copy-Item -Path "..\config\blank.ico" -Destination "C:\Windows" -Force
-            New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Force  | Out-Null
-            Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String  | Out-Null
+            New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Force | Out-Null
+            Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String | Out-Null
         ## Configuring file explorer and context menus
             Get-ChildItem ..\config\reg\remove\* -e *theme* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
             $sourceFilePath = "..\config\reg\add\Add_Theme_Mode_in_Context_Menu.reg"
@@ -1347,7 +1352,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
             $taskbarDevSettings = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
             if (-not (Test-Path $taskbarDevSettings)) { New-Item -Path $taskbarDevSettings -Force}
-            New-ItemProperty -Path $taskbarDevSettings -Name "TaskbarEndTask" -Value 1 -PropertyType DWORD -Force  | Out-Null
+            New-ItemProperty -Path $taskbarDevSettings -Name "TaskbarEndTask" -Value 1 -PropertyType DWORD -Force | Out-Null
         ## Hide Desktop icons
             Copy-Item -Path "..\bin\HideDesktopIcons.exe" -Destination "$env:LOCALAPPDATA\WinMac" -Force
             $shortcutPath = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Hide Desktop Icons.lnk"
