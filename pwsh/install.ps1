@@ -1345,6 +1345,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             $shortcut.IconLocation = $iconPath
             $shortcut.Save()
             }
+            }
         }
     }
 }
