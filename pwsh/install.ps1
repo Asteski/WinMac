@@ -480,28 +480,33 @@ if ($selectedApps -like '*4*' -or $selectedApps -like '*7*' -or $selectedApps -l
     if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
         Write-Host "Using light theme." -ForegroundColor Green
         $stackTheme = 'light'
+        $recycleBinTheme = 'dark'
         $orbTheme = 'black'
     } elseif ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
         Write-Host "Using dark theme." -ForegroundColor Green
         $stackTheme = 'dark'
+        $recycleBinTheme = 'light'
         $orbTheme = 'white'
     } else {
         if ($windowsTheme -eq "Light") { 
             Write-Host "Invalid input. Defaulting to light theme." -ForegroundColor Yellow
             $stackTheme = 'light'
             $orbTheme = 'black'
+            $recycleBinTheme = 'dark'
             $lightOrDark = "L"
         }
         elseif ($windowsTheme -eq "Dark") {
             Write-Host "Invalid input. Defaulting to dark theme." -ForegroundColor Yellow
             $stackTheme = 'dark'
             $orbTheme = 'white'
+            $recycleBinTheme = 'light'
             $lightOrDark = "D"
         }
         else {
             Write-Host "Invalid input. Defaulting to light theme." -ForegroundColor Yellow
             $stackTheme = 'light'
             $orbTheme = 'black'
+            $recycleBinTheme = 'dark'
             $lightOrDark = "L"
         }
     }
@@ -1324,9 +1329,9 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
                 Copy-Item -Path $_.FullName -Destination $filePath -Force
             }
             $recycleBin             = (Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon")
-            $recycleBin.'(default)' = "$($env:LOCALAPPDATA)\WinMac\Icons\recycle_bin_empty_$stackTheme.ico"
-		    $recycleBin.empty   	= "$($env:LOCALAPPDATA)\WinMac\Icons\recycle_bin_empty_$stackTheme.ico"
-		    $recycleBin.full    	= "$($env:LOCALAPPDATA)\WinMac\Icons\recycle_bin_full_$stackTheme.ico"
+            $recycleBin.'(default)' = "$($env:LOCALAPPDATA)\WinMac\Icons\recycle_bin_empty_$recycleBinTheme.ico"
+		    $recycleBin.empty   	= "$($env:LOCALAPPDATA)\WinMac\Icons\recycle_bin_empty_$recycleBinTheme.ico"
+		    $recycleBin.full    	= "$($env:LOCALAPPDATA)\WinMac\Icons\recycle_bin_full_$recycleBinTheme.ico"
             Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "(default)" -Value $recycleBin.'(default)' -Force
             Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "empty" -Value $recycleBin.empty -Force
             Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "full" -Value $recycleBin.full -Force
