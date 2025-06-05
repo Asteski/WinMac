@@ -1320,10 +1320,13 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             $value = "{b455f46e-e4af-4035-b0a4-cf18d2f6f28e}"
             New-Item -Path $RBPath -Force  | Out-Null
             New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force | Out-Null
-            $recycleBin = (Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon")
+            $recycleBin             = (Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon")
             $recycleBin.'(default)' = $env:PUBLIC + "\Documents\WinStep\Icons\recycle_bin_empty_$recycleBinTheme.ico"
 		    $recycleBin.empty   	= $env:PUBLIC + "\Documents\WinStep\Icons\recycle_bin_empty_$recycleBinTheme.ico"
 		    $recycleBin.full    	= $env:PUBLIC + "\Documents\WinStep\Icons\recycle_bin_full_$recycleBinTheme.ico"
+            Set-ItemProperty -Path $recycleBinDefaultIconPath -Name "(default)" -Value $recycleBin.'(default)' -Force
+            Set-ItemProperty -Path $recycleBinDefaultIconPath -Name "empty" -Value $recycleBin.empty -Force
+            Set-ItemProperty -Path $recycleBinDefaultIconPath -Name "full" -Value $recycleBin.full -Force
             $oShell = New-Object -ComObject Shell.Application
             $recycleBin = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
             if (-not ($recycleBin.Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
