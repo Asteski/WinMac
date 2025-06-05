@@ -475,7 +475,7 @@ if ($selectedApps -like '*4*' -or $selectedApps -like '*9*') {
     }
 }
 
-if ($selectedApps -like '*4*' -or $selectedApps -like '*7*' -or $selectedApps -like '*9*') {
+if ($selectedApps -like '*4*' -or $selectedApps -like '*7*' -or $selectedApps -like '*9*' -or $selectedApps -like '*12*') {
     $lightOrDark = Read-Host "`nEnter 'L' for light or 'D' for dark themed Windows"
     if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
         Write-Host "Using light theme." -ForegroundColor Green
