@@ -1320,10 +1320,19 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             $value = "{b455f46e-e4af-4035-b0a4-cf18d2f6f28e}"
             New-Item -Path $RBPath -Force  | Out-Null
             New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force | Out-Null
+            Get-ChildItem -Path '..\config\icons\recycle_bin*' -File | ForEach-Object {
+                $fileName = $_.Name
+                $filePath = "$($env:LOCALAPPDATA)\WinMac\Icons\$fileName"
+                if (-not (Test-Path -Path $filePath)) {
+                    New-Item -Path $filePath -ItemType File -Force | Out-Null
+                }
+                Copy-Item -Path $_.FullName -Destination $filePath -Force
+            }
+
             $recycleBin             = (Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon")
-            $recycleBin.'(default)' = "$($env:PUBLIC)\Documents\WinStep\Icons\recycle_bin_empty_$recycleBinTheme.ico"
-		    $recycleBin.empty   	= "$($env:PUBLIC)\Documents\WinStep\Icons\recycle_bin_empty_$recycleBinTheme.ico"
-		    $recycleBin.full    	= "$($env:PUBLIC)\Documents\WinStep\Icons\recycle_bin_full_$recycleBinTheme.ico"
+            $recycleBin.'(default)' = "$($env:LOCALAPPDATA)\WinMac\Icons\recycle_bin_empty_$recycleBinTheme.ico"
+		    $recycleBin.empty   	= "$($env:LOCALAPPDATA)\WinMac\Icons\recycle_bin_empty_$recycleBinTheme.ico"
+		    $recycleBin.full    	= "$($env:LOCALAPPDATA)\WinMac\Icons\recycle_bin_full_$recycleBinTheme.ico"
             Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "(default)" -Value $recycleBin.'(default)' -Force
             Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "empty" -Value $recycleBin.empty -Force
             Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "full" -Value $recycleBin.full -Force

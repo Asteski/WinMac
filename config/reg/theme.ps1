@@ -37,7 +37,6 @@ if ($mode -eq 'Light') {
 	$theme = $themeStyle -replace 'Dark', 'Light'
 	$dockRunningIndicator = $dockRunningIndicator -replace 'Dark', 'Light'
 	$orbBitmap = $orbBitmap -replace 'white', 'black'
-	$recycleBin.'(default)' = $recycleBin.'(default)' -replace 'dark', 'light'
 	$recycleBin.empty   	= $recycleBin.empty -replace 'dark', 'light'
 	$recycleBin.full    	= $recycleBin.full -replace 'dark', 'light'
 }
@@ -45,7 +44,6 @@ if ($mode -eq 'Dark') {
 	$theme = $themeStyle -replace 'Light', 'Dark'
 	$dockRunningIndicator = $dockRunningIndicator -replace 'Light', 'Dark'
 	$orbBitmap = $orbBitmap -replace 'black', 'white'
-	$recycleBin.'(default)' = $recycleBin.'(default)' -replace 'light', 'dark'
 	$recycleBin.empty   	= $recycleBin.empty -replace 'light', 'dark'
 	$recycleBin.full    	= $recycleBin.full -replace 'light', 'dark'
 }
@@ -82,7 +80,7 @@ uint fWinIni);
 '@
 	$CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
 	$CursorRefresh::SystemParametersInfo(0x0057,0,$null,0) > $null 2>&1
-	Set-ItemProperty -Path $recycleBinDefaultIconPath -Name "(default)" -Value $recycleBin.'(default)' -Force
+	Set-ItemProperty -Path $recycleBinDefaultIconPath -Name "(default)" -Value $recycleBin.empty -Force
 	Set-ItemProperty -Path $recycleBinDefaultIconPath -Name "empty" -Value $recycleBin.empty -Force
 	Set-ItemProperty -Path $recycleBinDefaultIconPath -Name "full" -Value $recycleBin.full -Force
 	Set-ItemProperty -Path $registryPath0 -Name "GenThemeName" -Value $theme -ErrorAction SilentlyContinue
