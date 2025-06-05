@@ -82,6 +82,7 @@ You can also install WinMac on Windows 10 22H2+, with some caveats described [he
 - disable keyboard shortcuts in full-screen apps
 - additional *Icons Packs* with red and green folders sets
 - additional *Start Orbs*
+- *AltSnap*
 
 ## Credits
 
