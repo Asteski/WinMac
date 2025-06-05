@@ -1329,10 +1329,9 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
                 Copy-Item -Path $_.FullName -Destination $filePath -Force
             }
             $recycleBin             = (Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon")
-            $recycleBin.'(default)' = "$($env:LOCALAPPDATA)\WinMac\Icons\recycle_bin_empty_$recycleBinTheme.ico"
 		    $recycleBin.empty   	= "$($env:LOCALAPPDATA)\WinMac\Icons\recycle_bin_empty_$recycleBinTheme.ico"
 		    $recycleBin.full    	= "$($env:LOCALAPPDATA)\WinMac\Icons\recycle_bin_full_$recycleBinTheme.ico"
-            Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "(default)" -Value $recycleBin.'(default)' -Force
+            Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "(default)" -Value $recycleBin.empty -Force
             Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "empty" -Value $recycleBin.empty -Force
             Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "full" -Value $recycleBin.full -Force
             $oShell = New-Object -ComObject Shell.Application
