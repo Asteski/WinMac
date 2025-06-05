@@ -14,6 +14,7 @@ if ($mode -eq 'Dark')
 	$UIDarkMode = '1'
 	$DockLabelColor1 = '15658734'
 	$DockLabelBackColor1 = '2563870'
+	
 }
 if ($mode -eq 'Light')
 {
@@ -28,22 +29,26 @@ taskkill /IM nexus.exe /F > $null 2>&1
 $registryPath0 = "HKCU:\Software\WinSTEP2000\NeXuS"
 $registryPath1 = "HKCU:\Software\WinSTEP2000\NeXuS\Docks"
 $registryPath2 = "HKCU:\Software\WinSTEP2000\Shared"
-try {
-	$dockRunningIndicator = (Get-ItemProperty -Path $registryPath1 -Name "DockRunningIndicator1" -ErrorAction SilentlyContinue).DockRunningIndicator1
-	$themeStyle = (Get-ItemProperty -Path $registryPath0 -Name "GenThemeName" -ErrorAction SilentlyContinue).GenThemeName
-	$orbBitmap = (Get-ItemProperty -Path "HKCU:\Software\StartIsBack" -Name "OrbBitmap").OrbBitmap
-}
-catch {}
+$recycleBin = (Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon")
+$dockRunningIndicator = (Get-ItemProperty -Path $registryPath1 -Name "DockRunningIndicator1" -ErrorAction SilentlyContinue).DockRunningIndicator1
+$themeStyle = (Get-ItemProperty -Path $registryPath0 -Name "GenThemeName" -ErrorAction SilentlyContinue).GenThemeName
+$orbBitmap = (Get-ItemProperty -Path "HKCU:\Software\StartIsBack" -Name "OrbBitmap").OrbBitmap
 if ($mode -eq 'Light') {
 	$theme = $themeStyle -replace 'Dark', 'Light'
 	$dockRunningIndicator = $dockRunningIndicator -replace 'Dark', 'Light'
 	$orbBitmap = $orbBitmap -replace 'white', 'black'
+	$recycleBin.'(default)' = $recycleBin.'(default)' -replace 'dark', 'light'
+	$recycleBin.empty   	= $recycleBin.empty -replace 'dark', 'light'
+	$recycleBin.full    	= $recycleBin.full -replace 'dark', 'light'
 }
 if ($mode -eq 'Dark') {
 	$theme = $themeStyle -replace 'Light', 'Dark'
 	$dockRunningIndicator = $dockRunningIndicator -replace 'Light', 'Dark'
 	$orbBitmap = $orbBitmap -replace 'black', 'white'
-	}
+	$recycleBin.'(default)' = $recycleBin.'(default)' -replace 'light', 'dark'
+	$recycleBin.empty   	= $recycleBin.empty -replace 'light', 'dark'
+	$recycleBin.full    	= $recycleBin.full -replace 'light', 'dark'
+}
 try {
 	$RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
 	$RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
@@ -77,6 +82,9 @@ uint fWinIni);
 '@
 	$CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
 	$CursorRefresh::SystemParametersInfo(0x0057,0,$null,0) > $null 2>&1
+	Set-ItemProperty -Path $recycleBinDefaultIconPath -Name "(default)" -Value $recycleBin.'(default)' -Force
+	Set-ItemProperty -Path $recycleBinDefaultIconPath -Name "empty" -Value $recycleBin.empty -Force
+	Set-ItemProperty -Path $recycleBinDefaultIconPath -Name "full" -Value $recycleBin.full -Force
 	Set-ItemProperty -Path $registryPath0 -Name "GenThemeName" -Value $theme -ErrorAction SilentlyContinue
 	Set-ItemProperty -Path $registryPath0 -Name "BitmapsFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\" -ErrorAction SilentlyContinue
 	Set-ItemProperty -Path $registryPath0 -Name "GlobalBitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\" -ErrorAction SilentlyContinue
