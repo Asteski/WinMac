@@ -1340,7 +1340,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             Copy-Item -Path "..\bin\HideDesktopIcons.exe" -Destination "$env:LOCALAPPDATA\WinMac" -Force
             $shortcutPath = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Hide Desktop Icons.lnk"
             $targetPath = "$env:LOCALAPPDATA\WinMac\HideDesktopIcons.exe"
-            $iconPath = "$env:LOCALAPPDATA\WinMac\HideDesktopIcons.exe"
+            $iconPath = "$env:SYSTEMROOT\System32\imageres.dll,-5314"
             $shell = New-Object -ComObject WScript.Shell
             $shortcut = $shell.CreateShortcut($shortcutPath)
             $shortcut.TargetPath = $targetPath
@@ -1350,7 +1350,6 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             $registryPath1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon"
             $registryPath2 = "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\empty"
             if (-not (Test-Path -Path $registryPath2)) {New-Item -Path $registryPath2 -Force -ErrorAction SilentlyContinue | Out-Null}
-            # New-ItemProperty -Path $registryPath2 -Name "Icon" -PropertyType String -Force -ErrorAction SilentlyContinue | Out-Null
             if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
                 Set-ItemProperty -Path $registryPath1 -Name "(default)" -Value "%SystemRoot%\System32\imageres.dll,-1017"
                 Set-ItemProperty -Path $registryPath1 -Name "empty" -Value "%SystemRoot%\System32\imageres.dll,-1015"
