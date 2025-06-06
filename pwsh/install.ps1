@@ -1258,6 +1258,10 @@ uint fWinIni);
 '@           
                 $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
                 $CursorRefresh::SystemParametersInfo(0x057,0,$null,0) > $null 2>&1
+            } else {
+                
+                $infPath = Get-ChildItem -Path (Join-Path $PWD '..\config\cursor\') -Filter 'install.inf' -Recurse -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName
+                rundll32.exe setupapi.dll,InstallHinfSection DefaultInstall 128 "$infPath"
             }
         #? Recycle Bin Icons
             $registryPath1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon"
