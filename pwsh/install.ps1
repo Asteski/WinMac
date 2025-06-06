@@ -811,8 +811,8 @@ foreach ($app in $selectedApps) {
                 Set-ItemProperty -Path $exRegPath\Advanced -Name "LaunchTO" -Value 1
                 Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
                 Stop-Process -Name explorer -Force
-                Start-Sleep 2
-                Start-Process explorer
+                Start-Sleep 5
+                if (-not (Get-Process -Name explorer -ErrorAction SilentlyContinue)) { Start-Process explorer }
                 Write-Host "StartAllBack installation completed." -ForegroundColor Green
             }
         }
@@ -1368,7 +1368,7 @@ Start-Sleep 2
 Stop-Process -n explorer -ErrorAction SilentlyContinue
 Start-Sleep 2
 Remove-Item "..\temp" -Recurse -Force
-Start-Sleep 2
+Start-Sleep 5
 if (-not (Get-Process -Name explorer -ErrorAction SilentlyContinue)) { Start-Process explorer }
 Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
 Write-Host @"
