@@ -111,5 +111,5 @@ Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\P
 if ($mode2 -eq 'App') {
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "AppsUseLightTheme" -Type DWord -Value $OSMode -ErrorAction SilentlyContinue
 }
-Start-Process explorer -ErrorAction SilentlyContinue | Out-Null
-Start-Process "C:\Program Files (x86)\Winstep\Nexus.exe" -ErrorAction SilentlyContinue | Out-Null
+Start-Process explorer > $null 2>&1
+Start-Process "C:\Program Files (x86)\Winstep\Nexus.exe" > $null 2>&1
