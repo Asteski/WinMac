@@ -14,7 +14,6 @@ if ($mode -eq 'Dark')
 	$UIDarkMode = '1'
 	$DockLabelColor1 = '15658734'
 	$DockLabelBackColor1 = '2563870'
-	
 }
 if ($mode -eq 'Light')
 {
