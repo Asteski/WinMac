@@ -832,7 +832,6 @@ foreach ($app in $selectedApps) {
                 Set-ItemProperty -Path $registryPath0 -Name 'PaddedBorderWidth' -Value '-60'
                 Set-ItemProperty -Path $registryPath0 -Name 'AppliedDPI' -Value 96 -Type DWord
                 Set-ItemProperty -Path $registryPath0 -Name 'MinAnimate' -Value '1'
-
                 *!
                 Stop-Process -Name explorer -Force
                 Start-Sleep 5
