@@ -1210,7 +1210,6 @@ foreach ($app in $selectedApps) {
                 Copy-Item -Path "..\config\mactype\*" -Destination "$env:PROGRAMFILES\MacType" -Recurse -Force
                 Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name FontSmoothing -Value "0"
                 Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name FontSmoothingType -Type DWord -Value 0
-                # RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters ,1 ,True
                 Start-Sleep -Seconds 2
                 Stop-Process -n Explorer -ErrorAction SilentlyContinue
                 Start-Sleep -Seconds 4
