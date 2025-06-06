@@ -51,7 +51,6 @@ elseif ($mode -eq 'Dark') {
 	Set-ItemProperty -Path $registryPath3 -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-54"
 	Set-ItemProperty -Path $registryPath4 -Name "Icon" -Value "%SystemRoot%\System32\imageres.dll,-55"
 }
-# try {
 $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
 $RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
 $RegCursors.SetValue("","Windows Black")
@@ -112,8 +111,5 @@ Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\P
 if ($mode2 -eq 'App') {
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "AppsUseLightTheme" -Type DWord -Value $OSMode -ErrorAction SilentlyContinue
 }
-# } catch {}
-# try {
 Start-Process explorer -ErrorAction SilentlyContinue
 Start-Process "C:\Program Files (x86)\Winstep\Nexus.exe"
-# } catch {}

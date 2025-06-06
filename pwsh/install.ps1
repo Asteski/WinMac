@@ -1,7 +1,7 @@
 param (
     [switch]$noGUI
 )
-$version = "1.0.0"
+$version = "1.0.1"
 $errorActionPreference="silentlyContinue"
 $WarningPreference="silentlyContinue"
 Add-Type -AssemblyName System.Windows.Formstylk
@@ -1347,7 +1347,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
         #? End Task
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
             $taskbarDevSettings = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
-            if (-not (Test-Path $taskbarDevSettings)) { New-Item -Path $taskbarDevSettings -Force}
+            if (-not (Test-Path $taskbarDevSettings)) { New-Item -Path $taskbarDevSettings -Force }
             New-ItemProperty -Path $taskbarDevSettings -Name "TaskbarEndTask" -Value 1 -PropertyType DWORD -Force | Out-Null
         #? Hide Desktop icons
             Copy-Item -Path "..\bin\HideDesktopIcons.exe" -Destination "$env:LOCALAPPDATA\WinMac" -Force
