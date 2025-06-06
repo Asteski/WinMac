@@ -1346,6 +1346,8 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             $shortcut.TargetPath = $targetPath
             $shortcut.IconLocation = $iconPath
             $shortcut.Save()
+            $file = Get-Item $shortcutPath
+            $file.Attributes = $file.Attributes -bor [System.IO.FileAttributes]::Hidden
         #? Recycle Bin Icons
             $registryPath1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon"
             $registryPath2 = "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\empty"
