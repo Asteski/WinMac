@@ -1259,6 +1259,38 @@ uint fWinIni);
                 $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
                 $CursorRefresh::SystemParametersInfo(0x057,0,$null,0) > $null 2>&1
             } else {
+                $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
+                $RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
+                $RegCursors.SetValue("","Windows Default (system scheme)")
+                $RegCursors.SetValue("AppStarting","$curDestFolder\aero_working.ani")
+                $RegCursors.SetValue("Arrow","$curDestFolder\aero_arrow.cur")
+                $RegCursors.SetValue("Crosshair","$curDestFolder\aero_cross.cur")
+                $RegCursors.SetValue("Hand","$curDestFolder\aero_link.cur")
+                $RegCursors.SetValue("Help","$curDestFolder\aero_helpsel.cur")
+                $RegCursors.SetValue("IBeam","$curDestFolder\aero_beam.cur")
+                $RegCursors.SetValue("No","$curDestFolder\aero_unavail.cur")
+                $RegCursors.SetValue("NWPen","$curDestFolder\aero_pen.cur")
+                $RegCursors.SetValue("SizeAll","$curDestFolder\aero_move.cur")
+                $RegCursors.SetValue("SizeNESW","$curDestFolder\aero_nesw.cur")
+                $RegCursors.SetValue("SizeNS","$curDestFolder\aero_ns.cur")
+                $RegCursors.SetValue("SizeNWSE","$curDestFolder\aero_nwse.cur")
+                $RegCursors.SetValue("SizeWE","$curDestFolder\aero_ew.cur")
+                $RegCursors.SetValue("UpArrow","$curDestFolder\aero_up.cur")
+                $RegCursors.SetValue("Wait","$curDestFolder\aero_busy.ani")
+                $RegCursors.SetValue("Pin","$curDestFolder\aero_pin.cur")
+                $RegCursors.SetValue("Person","$curDestFolder\aero_person.cur")
+                $RegCursors.Close()
+                $RegConnect.Close()
+                $CSharpSig = @'
+[DllImport("user32.dll", EntryPoint = "SystemParametersInfo")]
+public static extern bool SystemParametersInfo(
+uint uiAction,
+uint uiParam,
+uint pvParam,
+uint fWinIni);
+'@           
+                $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
+                $CursorRefresh::SystemParametersInfo(0x057,0,$null,0) > $null 2>&1
                 $infPath = Get-ChildItem -Path (Join-Path $PWD '..\config\cursor\') -Filter 'install.inf' -Recurse -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName
                 rundll32.exe setupapi.dll,InstallHinfSection DefaultInstall 128 "$infPath"
             }
