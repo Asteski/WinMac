@@ -1259,28 +1259,21 @@ uint fWinIni);
                 $CursorRefresh::SystemParametersInfo(0x057,0,$null,0) > $null 2>&1
             }
         #? Recycle Bin Icons
+            $registryPath1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon"
+            $registryPath2 = "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\empty"
             New-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Force | Out-Null
-            Set-ItemProperty -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Name "AppID" -Value "{E10F6C3A-F1AE-4ADC-AA9D-2FE65525666E}"
-            Set-ItemProperty -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Name "InfoTip" -Value ([System.Text.Encoding]::Unicode.GetString([byte[]](0x40,0x00,0x43,0x00,0x3a,0x00,0x5c,0x00,0x57,0x00,0x49,0x00,0x4e,0x00,0x44,0x00,0x4f,0x00,0x57,0x00,0x53,0x00,0x5c,0x00,0x73,0x00,0x79,0x00,0x73,0x00,0x74,0x00,0x65,0x00,0x6d,0x00,0x33,0x00,0x32,0x00,0x5c,0x00,0x73,0x00,0x68,0x00,0x65,0x00,0x6c,0x00,0x6c,0x00,0x33,0x00,0x32,0x00,0x2e,0x00,0x64,0x00,0x6c,0x00,0x6c,0x00,0x2c,0x00,0x2d,0x00,0x32,0x00,0x32,0x00,0x39,0x00,0x31,0x00,0x35,0x00,0x00,0x00)))
-            Set-ItemProperty -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Name "LocalizedString" -Value ([System.Text.Encoding]::Unicode.GetString([byte[]](0x40,0x00,0x43,0x00,0x3a,0x00,0x5c,0x00,0x57,0x00,0x49,0x00,0x4e,0x00,0x44,0x00,0x4f,0x00,0x57,0x00,0x53,0x00,0x5c,0x00,0x73,0x00,0x79,0x00,0x73,0x00,0x74,0x00,0x65,0x00,0x6d,0x00,0x33,0x00,0x32,0x00,0x5c,0x00,0x73,0x00,0x68,0x00,0x65,0x00,0x6c,0x00,0x6c,0x00,0x33,0x00,0x32,0x00,0x2e,0x00,0x64,0x00,0x6c,0x00,0x6c,0x00,0x2c,0x00,0x2d,0x00,0x38,0x00,0x39,0x00,0x36,0x00,0x34,0x00,0x00,0x00)))
-            Set-ItemProperty -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Name "SortOrderIndex" -Value 120 -Type DWord
             New-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell" -Force | Out-Null
             New-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\empty" -Force | Out-Null
-            Set-ItemProperty -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\empty" -Name "CommandStateHandler" -Value "{c9298eef-69dd-4cdd-b153-bdbc38486781}"
-            Set-ItemProperty -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\empty" -Name "Description" -Value "@shell32.dll,-31332"
-            Set-ItemProperty -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\empty" -Name "MUIVerb" -Value "@shell32.dll,-10564"
-            New-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\empty\command" -Force | Out-Null
-            Set-ItemProperty -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\empty\command" -Name "DelegateExecute" -Value "{48527bb3-e8de-450b-8910-8c4099cb8624}"
             if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
-                Set-ItemProperty -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\empty" -Name "Icon" -Value "%SystemRoot%\System32\imageres.dll,-1015"
-                Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "(default)" -Value "%SystemRoot%\System32\imageres.dll,-1017"
-                Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "empty" -Value "%SystemRoot%\System32\imageres.dll,-1015"
-                Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-1017"
+                Set-ItemProperty -Path $registryPath1 -Name "(default)" -Value "%SystemRoot%\System32\imageres.dll,-1017"
+                Set-ItemProperty -Path $registryPath1 -Name "empty" -Value "%SystemRoot%\System32\imageres.dll,-1015"
+                Set-ItemProperty -Path $registryPath1 -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-1017"
+                Set-ItemProperty -Path $registryPath2 -Name "Icon" -Value "%SystemRoot%\System32\imageres.dll,-1015"
             } else {
-                Set-ItemProperty -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\empty" -Name "Icon" -Value "%SystemRoot%\System32\imageres.dll,-55"
-                Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "(default)" -Value "%SystemRoot%\System32\imageres.dll,-54"
-                Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "empty" -Value "%SystemRoot%\System32\imageres.dll,-55"
-                Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-54"
+                Set-ItemProperty -Path $registryPath1 -Name "(default)" -Value "%SystemRoot%\System32\imageres.dll,-54"
+                Set-ItemProperty -Path $registryPath1 -Name "empty" -Value "%SystemRoot%\System32\imageres.dll,-55"
+                Set-ItemProperty -Path $registryPath1 -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-54"
+                Set-ItemProperty -Path $registryPath2 -Name "Icon" -Value "%SystemRoot%\System32\imageres.dll,-55"
             }
         #? Pin User folder, Programs and Recycle Bin to Quick Access
             $regPath = "HKCU:\SOFTWARE\WinMac"

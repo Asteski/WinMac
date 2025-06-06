@@ -29,6 +29,7 @@ $registryPath0 = "HKCU:\Software\WinSTEP2000\NeXuS"
 $registryPath1 = "HKCU:\Software\WinSTEP2000\NeXuS\Docks"
 $registryPath2 = "HKCU:\Software\WinSTEP2000\Shared"
 $registryPath3 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon"
+$registryPath4 = "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\empty"
 $dockRunningIndicator = (Get-ItemProperty -Path $registryPath1 -Name "DockRunningIndicator1" -ErrorAction SilentlyContinue).DockRunningIndicator1
 $themeStyle = (Get-ItemProperty -Path $registryPath0 -Name "GenThemeName" -ErrorAction SilentlyContinue).GenThemeName
 $orbBitmap = (Get-ItemProperty -Path "HKCU:\Software\StartIsBack" -Name "OrbBitmap").OrbBitmap
@@ -39,6 +40,7 @@ if ($mode -eq 'Light') {
 	Set-ItemProperty -Path $registryPath3 -Name "(default)" -Value "%SystemRoot%\System32\imageres.dll,-1017"
 	Set-ItemProperty -Path $registryPath3 -Name "empty" -Value "%SystemRoot%\System32\imageres.dll,-1015"
 	Set-ItemProperty -Path $registryPath3 -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-1017"
+	Set-ItemProperty -Path $registryPath4 -Name "Icon" -Value "%SystemRoot%\System32\imageres.dll,-1015"
 }
 elseif ($mode -eq 'Dark') {
 	$theme = $themeStyle -replace 'Light', 'Dark'
@@ -47,6 +49,7 @@ elseif ($mode -eq 'Dark') {
 	Set-ItemProperty -Path $registryPath3 -Name "(default)" -Value "%SystemRoot%\System32\imageres.dll,-54"
 	Set-ItemProperty -Path $registryPath3 -Name "empty" -Value "%SystemRoot%\System32\imageres.dll,-55"
 	Set-ItemProperty -Path $registryPath3 -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-54"
+	Set-ItemProperty -Path $registryPath4 -Name "Icon" -Value "%SystemRoot%\System32\imageres.dll,-55"
 }
 # try {
 $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
