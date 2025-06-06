@@ -1258,16 +1258,31 @@ uint fWinIni);
                 $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
                 $CursorRefresh::SystemParametersInfo(0x057,0,$null,0) > $null 2>&1
             }
-        #? Pin User folder, Programs and Recycle Bin to Quick Access
+        #? Recycle Bin Icons
+            New-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Force | Out-Null
+            Set-ItemProperty -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Name "AppID" -Value "{E10F6C3A-F1AE-4ADC-AA9D-2FE65525666E}"
+            Set-ItemProperty -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Name "InfoTip" -Value ([System.Text.Encoding]::Unicode.GetString([byte[]](0x40,0x00,0x43,0x00,0x3a,0x00,0x5c,0x00,0x57,0x00,0x49,0x00,0x4e,0x00,0x44,0x00,0x4f,0x00,0x57,0x00,0x53,0x00,0x5c,0x00,0x73,0x00,0x79,0x00,0x73,0x00,0x74,0x00,0x65,0x00,0x6d,0x00,0x33,0x00,0x32,0x00,0x5c,0x00,0x73,0x00,0x68,0x00,0x65,0x00,0x6c,0x00,0x6c,0x00,0x33,0x00,0x32,0x00,0x2e,0x00,0x64,0x00,0x6c,0x00,0x6c,0x00,0x2c,0x00,0x2d,0x00,0x32,0x00,0x32,0x00,0x39,0x00,0x31,0x00,0x35,0x00,0x00,0x00)))
+            Set-ItemProperty -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Name "LocalizedString" -Value ([System.Text.Encoding]::Unicode.GetString([byte[]](0x40,0x00,0x43,0x00,0x3a,0x00,0x5c,0x00,0x57,0x00,0x49,0x00,0x4e,0x00,0x44,0x00,0x4f,0x00,0x57,0x00,0x53,0x00,0x5c,0x00,0x73,0x00,0x79,0x00,0x73,0x00,0x74,0x00,0x65,0x00,0x6d,0x00,0x33,0x00,0x32,0x00,0x5c,0x00,0x73,0x00,0x68,0x00,0x65,0x00,0x6c,0x00,0x6c,0x00,0x33,0x00,0x32,0x00,0x2e,0x00,0x64,0x00,0x6c,0x00,0x6c,0x00,0x2c,0x00,0x2d,0x00,0x38,0x00,0x39,0x00,0x36,0x00,0x34,0x00,0x00,0x00)))
+            Set-ItemProperty -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Name "SortOrderIndex" -Value 120 -Type DWord
+            New-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell" -Force | Out-Null
+            New-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\empty" -Force | Out-Null
+            Set-ItemProperty -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\empty" -Name "CommandStateHandler" -Value "{c9298eef-69dd-4cdd-b153-bdbc38486781}"
+            Set-ItemProperty -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\empty" -Name "Description" -Value "@shell32.dll,-31332"
+            Set-ItemProperty -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\empty" -Name "MUIVerb" -Value "@shell32.dll,-10564"
+            New-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\empty\command" -Force | Out-Null
+            Set-ItemProperty -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\empty\command" -Name "DelegateExecute" -Value "{48527bb3-e8de-450b-8910-8c4099cb8624}"
             if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
+                Set-ItemProperty -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\empty" -Name "Icon" -Value "%SystemRoot%\System32\imageres.dll,-1015"
                 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "(default)" -Value "%SystemRoot%\System32\imageres.dll,-1017"
                 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "empty" -Value "%SystemRoot%\System32\imageres.dll,-1015"
                 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-1017"
             } else {
+                Set-ItemProperty -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\empty" -Name "Icon" -Value "%SystemRoot%\System32\imageres.dll,-55"
                 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "(default)" -Value "%SystemRoot%\System32\imageres.dll,-54"
                 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "empty" -Value "%SystemRoot%\System32\imageres.dll,-55"
                 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-54"
             }
+        #? Pin User folder, Programs and Recycle Bin to Quick Access
             $regPath = "HKCU:\SOFTWARE\WinMac"
             if (-not (Test-Path -Path $regPath)) {New-Item -Path $regPath -Force  | Out-Null}
             if ((Get-ItemProperty -Path $regPath -Name "QuickAccess" -ErrorAction SilentlyContinue).QuickAccess -ne 1) {
@@ -1305,7 +1320,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             if (-not ($programsPin.Namespace($programsDir).Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
                 $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome")
             }
-            $RBPath = 'HKCU:\Software\WinSTEP2000\NeXuS\Docks' 
+            $RBPath = 'HKCU:\Software\WinSTEP2000\NeXuS\Docks'
             $name = "DelegateExecute"
             $value = "{b455f46e-e4af-4035-b0a4-cf18d2f6f28e}"
             New-Item -Path $RBPath -Force  | Out-Null
