@@ -1238,7 +1238,7 @@ foreach ($app in $selectedApps) {
             $curSourceFolder = (Get-Item -Path "..\config\cursor").FullName
             $curDestFolder = "C:\Windows\Cursors"
             Copy-Item -Path $curSourceFolder\* -Destination $curDestFolder -Recurse -Force
-            if ( $lightOrDark -eq "L" -or $lightOrDark -eq "l") {
+            if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
                 $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
                 $RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
                 $RegCursors.SetValue("","Windows Black")
@@ -1261,7 +1261,7 @@ foreach ($app in $selectedApps) {
                 $RegCursors.SetValue("Person","$curDestFolder\aero_black_person.cur")
                 $RegCursors.Close()
                 $RegConnect.Close()
-$CSharpSig = @'
+                $CSharpSig = @'
 [DllImport("user32.dll", EntryPoint = "SystemParametersInfo")]
 public static extern bool SystemParametersInfo(
 uint uiAction,
@@ -1269,8 +1269,8 @@ uint uiParam,
 uint pvParam,
 uint fWinIni);
 '@           
-            $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru  | Out-Null
-            $CursorRefresh::SystemParametersInfo(0x057,0,$null,0) > $null 2>&1
+                $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru  | Out-Null
+                $CursorRefresh::SystemParametersInfo(0x057,0,$null,0) > $null 2>&1
             }
         #? Pin User folder, Programs and Recycle Bin to Quick Access
             $recycleBinTheme = if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {"dark"} else {"light"}
