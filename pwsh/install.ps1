@@ -844,9 +844,9 @@ foreach ($app in $selectedApps) {
                     }
                     New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" | Out-Null
                     Write-Host "Installing Open-Shell..." -ForegroundColor DarkYellow
-                    Install-WinGetPackage -id 'Open-Shell.Open-Shell-Menu' | Out-Null
-                    Stop-Process -Name StartMenu -Force | Out-Null
-                    Start-Process -FilePath "..\bin\OpenShell.exe" -ArgumentList "/quiet", "/norestart", "ADDLOCAL=StartMenu" -Wait -Verb RunAs
+                    $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\StartMenu.exe"
+                    winget install --id "Open-Shell.Open-Shell-Menu" --source winget --custom 'ADDLOCAL=StartMenu' --silent | Out-Null
+                    Stop-Process -Name StartMenu -Force -ErrorAction SilentlyContinue | Out-Null
                     New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force | Out-Null
                     New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force | Out-Null
                     New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu" -Force | Out-Null
@@ -880,6 +880,8 @@ foreach ($app in $selectedApps) {
                     Copy-Item -Path ..\bin\menu\x64\osh\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force
                     Stop-Process -Name Explorer
                     Start-Process $shellExePath
+                    Start-Sleep 5
+                    if (-not (Get-Process -Name explorer -ErrorAction SilentlyContinue)) { Start-Process explorer }
                     Write-Host "WinMac Menu installation completed." -ForegroundColor Green
                 } else {
                     Write-Host "Skipping WinMac Menu installation." -ForegroundColor Magenta
