@@ -1365,7 +1365,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
 #? Clean up
 if ((Get-ChildItem -Path "$env:LOCALAPPDATA\WinMac" -Recurse | Measure-Object).Count -eq 0) { Remove-Item -Path "$env:LOCALAPPDATA\WinMac" -Force }
 Start-Sleep 2
-explorer
+Stop-Process -n explorer -ErrorAction SilentlyContinue
 Start-Sleep 2
 Remove-Item "..\temp" -Recurse -Force
 Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
