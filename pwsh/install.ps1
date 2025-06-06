@@ -486,24 +486,10 @@ if ($selectedApps -like '*4*' -or $selectedApps -like '*7*' -or $selectedApps -l
         $stackTheme = 'dark'
         $orbTheme = 'white'
     } else {
-        if ($windowsTheme -eq "Light") { 
-            Write-Host "Invalid input. Defaulting to light theme." -ForegroundColor Yellow
-            $stackTheme = 'light'
-            $orbTheme = 'black'
-            $lightOrDark = "L"
-        }
-        elseif ($windowsTheme -eq "Dark") {
-            Write-Host "Invalid input. Defaulting to dark theme." -ForegroundColor Yellow
-            $stackTheme = 'dark'
-            $orbTheme = 'white'
-            $lightOrDark = "D"
-        }
-        else {
-            Write-Host "Invalid input. Defaulting to light theme." -ForegroundColor Yellow
-            $stackTheme = 'light'
-            $orbTheme = 'black'
-            $lightOrDark = "L"
-        }
+        Write-Host "Invalid input. Defaulting to light theme." -ForegroundColor Yellow
+        $stackTheme = 'light'
+        $orbTheme = 'black'
+        $lightOrDark = "L"
     }
 }
 
