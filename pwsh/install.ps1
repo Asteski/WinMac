@@ -1259,31 +1259,28 @@ uint fWinIni);
                 $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
                 $CursorRefresh::SystemParametersInfo(0x057,0,$null,0) > $null 2>&1
             } else {
-                
                 $infPath = Get-ChildItem -Path (Join-Path $PWD '..\config\cursor\') -Filter 'install.inf' -Recurse -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName
                 rundll32.exe setupapi.dll,InstallHinfSection DefaultInstall 128 "$infPath"
             }
         #? Recycle Bin Icons
             $registryPath1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon"
             $registryPath2 = "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\empty"
-            New-Item -Path $registryPath2 -Force | Out-Null
+            if (-not (Test-Path -Path $registryPath2)) {New-Item -Path $registryPath2 -Force | Out-Null}
             if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
-                write-host 'LIGHT' -ForegroundColor Yellow
                 Set-ItemProperty -Path $registryPath1 -Name "(default)" -Value "%SystemRoot%\System32\imageres.dll,-1017"
                 Set-ItemProperty -Path $registryPath1 -Name "empty" -Value "%SystemRoot%\System32\imageres.dll,-1015"
                 Set-ItemProperty -Path $registryPath1 -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-1017"
                 Set-ItemProperty -Path $registryPath2 -Name "Icon" -Value "%SystemRoot%\System32\imageres.dll,-1015"
             } elseif ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
-                write-host 'NOTLIGHT' -ForegroundColor Yellow
                 Set-ItemProperty -Path $registryPath1 -Name "(default)" -Value "%SystemRoot%\System32\imageres.dll,-54"
                 Set-ItemProperty -Path $registryPath1 -Name "empty" -Value "%SystemRoot%\System32\imageres.dll,-55"
                 Set-ItemProperty -Path $registryPath1 -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-54"
                 Set-ItemProperty -Path $registryPath2 -Name "Icon" -Value "%SystemRoot%\System32\imageres.dll,-55"
             }
         #? Pin User folder, Programs and Recycle Bin to Quick Access
-            $regPath = "HKCU:\SOFTWARE\WinMac"
-            if (-not (Test-Path -Path $regPath)) {New-Item -Path $regPath -Force  | Out-Null}
-            if ((Get-ItemProperty -Path $regPath -Name "QuickAccess" -ErrorAction SilentlyContinue).QuickAccess -ne 1) {
+            $registryPath3 = "HKCU:\SOFTWARE\WinMac"
+            if (-not (Test-Path -Path $registryPath3)) {New-Item -Path $registryPath3 -Force  | Out-Null}
+            if ((Get-ItemProperty -Path $registryPath3 -Name "QuickAccess" -ErrorAction SilentlyContinue).QuickAccess -ne 1) {
 $homeIni = @"
 [.ShellClassInfo]
 IconResource=C:\Windows\System32\SHELL32.dll,160
