@@ -1328,9 +1328,14 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
                 }
                 Copy-Item -Path $_.FullName -Destination $filePath -Force
             }
-            Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "(default)" -Value "$env:LOCALAPPDATA\WinMac\Icons\recycle_bin_empty_$recycleBinTheme.ico"
-            Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "empty" -Value "$env:LOCALAPPDATA\WinMac\Icons\recycle_bin_empty_$recycleBinTheme.ico"
-            Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "full" -Value "$env:LOCALAPPDATA\WinMac\Icons\recycle_bin_full_$recycleBinTheme.ico"
+            try {
+                Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "(default)" -Value "$env:LOCALAPPDATA\WinMac\Icons\recycle_bin_empty_$recycleBinTheme.ico"
+                Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "empty" -Value "$env:LOCALAPPDATA\WinMac\Icons\recycle_bin_empty_$recycleBinTheme.ico"
+                Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "full" -Value "$env:LOCALAPPDATA\WinMac\Icons\recycle_bin_full_$recycleBinTheme.ico"
+            }
+            catch {
+                Write-Host "Error details: $($_.Exception.Message)" -ForegroundColor Red
+            }
             $oShell = New-Object -ComObject Shell.Application
             $recycleBin = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
             if (-not ($recycleBin.Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
