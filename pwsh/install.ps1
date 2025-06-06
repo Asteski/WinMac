@@ -1273,19 +1273,15 @@ uint fWinIni);
                 $CursorRefresh::SystemParametersInfo(0x057,0,$null,0) > $null 2>&1
             }
         #? Pin User folder, Programs and Recycle Bin to Quick Access
-            $recycleBinTheme = if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {"dark"} else {"light"}
-            Get-ChildItem -Path '..\config\icons\recycle_bin*' -File | ForEach-Object {
-                $fileName = $_.Name
-                $filePath = "$($env:LOCALAPPDATA)\WinMac\Icons\$fileName"
-                if (-not (Test-Path -Path $filePath)) {
-                    New-Item -Path $filePath -ItemType File -Force | Out-Null
-                }
-                Copy-Item -Path $_.FullName -Destination $filePath -Force
+            if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
+                Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "(default)" -Value "%SystemRoot%\System32\imageres.dll,-1017"
+                Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "empty" -Value "%SystemRoot%\System32\imageres.dll,-1015"
+                Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-1017"
+            } else {
+                Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "(default)" -Value "%SystemRoot%\System32\imageres.dll,-54"
+                Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "empty" -Value "%SystemRoot%\System32\imageres.dll,-55"
+                Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-54"
             }
-            Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "(default)" -Value "$env:LOCALAPPDATA\WinMac\Icons\recycle_bin_empty_$recycleBinTheme.ico"
-            Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "empty" -Value "$env:LOCALAPPDATA\WinMac\Icons\recycle_bin_empty_$recycleBinTheme.ico"
-            Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "full" -Value "$env:LOCALAPPDATA\WinMac\Icons\recycle_bin_full_$recycleBinTheme.ico"
-
             $regPath = "HKCU:\SOFTWARE\WinMac"
             if (-not (Test-Path -Path $regPath)) {New-Item -Path $regPath -Force  | Out-Null}
             if ((Get-ItemProperty -Path $regPath -Name "QuickAccess" -ErrorAction SilentlyContinue).QuickAccess -ne 1) {
