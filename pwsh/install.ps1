@@ -1273,6 +1273,19 @@ uint fWinIni);
             $CursorRefresh::SystemParametersInfo(0x057,0,$null,0) > $null 2>&1
             }
         #? Pin User folder, Programs and Recycle Bin to Quick Access
+            $recycleBinTheme = if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {"dark"} else {"light"}
+            Get-ChildItem -Path '..\config\icons\recycle_bin*' -File | ForEach-Object {
+                $fileName = $_.Name
+                $filePath = "$($env:LOCALAPPDATA)\WinMac\Icons\$fileName"
+                if (-not (Test-Path -Path $filePath)) {
+                    New-Item -Path $filePath -ItemType File -Force | Out-Null
+                }
+                Copy-Item -Path $_.FullName -Destination $filePath -Force
+            }
+            Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "(default)" -Value "$env:LOCALAPPDATA\WinMac\Icons\recycle_bin_empty_$recycleBinTheme.ico"
+            Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "empty" -Value "$env:LOCALAPPDATA\WinMac\Icons\recycle_bin_empty_$recycleBinTheme.ico"
+            Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "full" -Value "$env:LOCALAPPDATA\WinMac\Icons\recycle_bin_full_$recycleBinTheme.ico"
+
             $regPath = "HKCU:\SOFTWARE\WinMac"
             if (-not (Test-Path -Path $regPath)) {New-Item -Path $regPath -Force  | Out-Null}
             if ((Get-ItemProperty -Path $regPath -Name "QuickAccess" -ErrorAction SilentlyContinue).QuickAccess -ne 1) {
@@ -1315,18 +1328,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             $value = "{b455f46e-e4af-4035-b0a4-cf18d2f6f28e}"
             New-Item -Path $RBPath -Force  | Out-Null
             New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force | Out-Null
-            Get-ChildItem -Path '..\config\icons\recycle_bin*' -File | ForEach-Object {
-                $fileName = $_.Name
-                $filePath = "$($env:LOCALAPPDATA)\WinMac\Icons\$fileName"
-                if (-not (Test-Path -Path $filePath)) {
-                    New-Item -Path $filePath -ItemType File -Force | Out-Null
-                }
-                Copy-Item -Path $_.FullName -Destination $filePath -Force
-            }
-            $recycleBinTheme = if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {"dark"} else {"light"}
-            Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "(default)" -Value "$env:LOCALAPPDATA\WinMac\Icons\recycle_bin_empty_$recycleBinTheme.ico"
-            Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "empty" -Value "$env:LOCALAPPDATA\WinMac\Icons\recycle_bin_empty_$recycleBinTheme.ico"
-            Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon" -Name "full" -Value "$env:LOCALAPPDATA\WinMac\Icons\recycle_bin_full_$recycleBinTheme.ico"
+
             $oShell = New-Object -ComObject Shell.Application
             $recycleBin = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
             if (-not ($recycleBin.Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
