@@ -1343,7 +1343,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             (Get-Content -Path $tempFilePath) -replace '%LOCALAPPDATA%', $appData | Set-Content -Path $tempFilePath
             reg import '..\temp\Add_Theme_Mode_in_Context_Menu.reg'
             reg import '..\config\reg\add\Add_Hidden_items_to_context_menu.reg'
-            winget uninstall "Windows web experience Pack" --silent
+            winget uninstall "Windows web experience Pack" --silent --accept-source-agreements
         #? End Task
             echo 5
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
