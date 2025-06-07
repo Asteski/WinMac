@@ -10,7 +10,7 @@ param
 if ($mode -eq 'Dark')
 {
 	$CursorMode 			= 'aero'
-	$cursorName 			= 'aero'
+	$cursorName 			= 'Windows Default (system scheme)'
 	$OSMode 				= 0
 	$UIDarkMode 			= '1'
 	$DockLabelColor1 		= '15658734'
@@ -55,13 +55,13 @@ elseif ($mode -eq 'Dark') {
 }
 $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
 $RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
-$RegCursors.SetValue("","Windows Black")
+$RegCursors.SetValue("",$cursorName)
 $RegCursors.SetValue("AppStarting","C:\Windows\Cursors\$($CursorMode)_working.ani")
 $RegCursors.SetValue("Arrow","C:\Windows\Cursors\$($CursorMode)_arrow.cur")
-$RegCursors.SetValue("Crosshair","C:\Windows\Cursors\$($CursorMode)_cross.cur")
+$RegCursors.SetValue("Crosshair","C:\Windows\Cursors\cross_r.cur")
 $RegCursors.SetValue("Hand","C:\Windows\Cursors\$($CursorMode)_link.cur")
 $RegCursors.SetValue("Help","C:\Windows\Cursors\$($CursorMode)_helpsel.cur")
-$RegCursors.SetValue("IBeam","C:\Windows\Cursors\$($CursorMode)_beam.cur")
+$RegCursors.SetValue("IBeam","C:\Windows\Cursors\beam_r.cur")
 $RegCursors.SetValue("No","C:\Windows\Cursors\$($CursorMode)_unavail.cur")
 $RegCursors.SetValue("NWPen","C:\Windows\Cursors\$($CursorMode)_pen.cur")
 $RegCursors.SetValue("SizeAll","C:\Windows\Cursors\$($CursorMode)_move.cur")
