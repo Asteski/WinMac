@@ -565,7 +565,7 @@ foreach ($app in $selectedApps) {
             $RegCursors.SetValue("SizeWE","$curDestFolder\aero_ew.cur")
             $RegCursors.SetValue("UpArrow","$curDestFolder\aero_up.cur")
             $RegCursors.SetValue("Wait","$curDestFolder\aero_busy.ani")
-            $RegCursors.SetValue("Pin","$curDestFolder\aero_pin.ani")
+            $RegCursors.SetValue("Pin","$curDestFolder\aero_pin.cur")
             $RegCursors.SetValue("Person","$curDestFolder\aero_person.ani")
             $RegCursors.Close()
             $RegConnect.Close()
