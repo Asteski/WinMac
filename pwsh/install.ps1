@@ -838,7 +838,7 @@ foreach ($app in $selectedApps) {
                     $winverUWP = Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP -ErrorAction SilentlyContinue
                     if ($null -eq $winverUWP) {
                         Write-Host "Installing WinverUWP 2.1.4..." -ForegroundColor DarkYellow
-                        Install-WinGetPackage -id 'FireCubeStudios.WinverUWP'
+                        winget install 'FireCubeStudios.WinverUWP'
                     } else {
                         Write-Host "WinverUWP is already installed." -ForegroundColor DarkGreen
                     }
