@@ -566,7 +566,7 @@ foreach ($app in $selectedApps) {
             $RegCursors.SetValue("UpArrow","$curDestFolder\aero_up.cur")
             $RegCursors.SetValue("Wait","$curDestFolder\aero_busy.ani")
             $RegCursors.SetValue("Pin","$curDestFolder\aero_pin.cur")
-            $RegCursors.SetValue("Person","$curDestFolder\aero_person.ani")
+            $RegCursors.SetValue("Person","$curDestFolder\aero_person.cur")
             $RegCursors.Close()
             $RegConnect.Close()
             $CSharpSig = @'
