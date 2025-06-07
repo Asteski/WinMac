@@ -52,10 +52,10 @@ if (!($noGUI)) {
     $iconFolderName = "config"
     $iconFolderPath = Join-Path -Path $parentDirectory -ChildPath $iconFolderName
     $topTextBlock = "Windows and macOS Hybrid Uninstallation Wizard"
-    $bottomTextBlock1 = 'Important Notes'
-    $bottomTextBlock2 = 'Please disable Windows Defender/3rd party Anti-virus, to prevent issues with uninsalling icons pack.'
-    $bottomTextBlock3 = 'PowerShell profile files will be removed, please make sure to backup your current profiles if needed.'
-    $bottomTextBlock4 = 'Vim, Nexus, Windhawk and Icons Pack will show prompt to uninstall, please confirm the uninstallations manually.'
+    $bottomTextBlock1 = '↓ Important Notes ↓'
+    $bottomTextBlock2 = 'PowerShell default profile will be removed and replaced with new one. Please make sure to backup your current profile if needed.'
+    $bottomTextBlock3 = 'The author of this script is not responsible for any damage caused by running it. Highly recommend to create a system restore point before proceeding with the installation process to ensure you can revert any changes if necessary.'
+    $bottomTextBlock4 = 'For guide on how to use the script, please refer to the Wiki page on WinMac GitHub page.'
 [xml]$xaml = @"
 <Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
