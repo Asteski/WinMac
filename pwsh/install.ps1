@@ -1344,10 +1344,9 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             New-ItemProperty -Path $taskbarDevSettings -Name "TaskbarEndTask" -Value 1 -PropertyType DWORD -Force | Out-Null
         #? Hide Desktop icons
             Copy-Item -Path "..\bin\HideDesktopIcons.exe" -Destination "$env:LOCALAPPDATA\WinMac" -Force
-            Copy-Item -Path "..\config\icons\hidedesktopicons.ico" -Destination "$env:LOCALAPPDATA\WinMac" -Force
             $shortcutPath = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Hide Desktop Icons.lnk"
             $targetPath = "$env:LOCALAPPDATA\WinMac\HideDesktopIcons.exe"
-            $iconPath = "$env:LOCALAPPDATA\WinMac\HideDesktopIcons.ico"
+            $iconPath = "$env:LOCALAPPDATA\WinMac\HideDesktopIcons.exe"
             $shell = New-Object -ComObject WScript.Shell
             $shortcut = $shell.CreateShortcut($shortcutPath)
             $shortcut.TargetPath = $targetPath
