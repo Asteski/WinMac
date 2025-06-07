@@ -821,7 +821,6 @@ foreach ($app in $selectedApps) {
             if ($adminTest -and $osVersion -like '*Windows 11*') {
                 if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
                     Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
-                    echo 1
                     $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.8' -ErrorAction SilentlyContinue
                     if ($null -eq $dotNetRuntime) {
                         Write-Host "Installing .NET Desktop Runtime 8..." -ForegroundColor DarkYellow
@@ -829,7 +828,6 @@ foreach ($app in $selectedApps) {
                     } else {
                         Write-Host ".NET Desktop Runtime is already installed." -ForegroundColor DarkGreen
                     }
-                    echo 2
                     $uiXaml = Get-WinGetPackage -Id 'Microsoft.UI.Xaml.2.7' -ErrorAction SilentlyContinue
                     if ($null -eq $uiXaml) {
                         Write-Host "Installing Microsoft.UI.Xaml 2.7..." -ForegroundColor DarkYellow
@@ -837,7 +835,6 @@ foreach ($app in $selectedApps) {
                     } else {
                         Write-Host "Microsoft.UI.Xaml is already installed." -ForegroundColor DarkGreen
                     }
-                    echo 3
                     $winverUWP = Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP -ErrorAction SilentlyContinue
                     if ($null -eq $winverUWP) {
                         Write-Host "Installing WinverUWP 2.1.4..." -ForegroundColor DarkYellow
@@ -845,12 +842,10 @@ foreach ($app in $selectedApps) {
                     } else {
                         Write-Host "WinverUWP is already installed." -ForegroundColor DarkGreen
                     }
-                    echo 4
                     New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" | Out-Null
                     Write-Host "Installing Open-Shell..." -ForegroundColor DarkYellow
                     $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\StartMenu.exe"
                     winget install --id "Open-Shell.Open-Shell-Menu" --source winget --custom 'ADDLOCAL=StartMenu' --silent | Out-Null
-                    echo 5
                     Stop-Process -Name StartMenu -Force -ErrorAction SilentlyContinue | Out-Null
                     New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force | Out-Null
                     New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force | Out-Null
@@ -874,21 +869,18 @@ foreach ($app in $selectedApps) {
                     $winxFolderName = "config\winx\Group2"
                     $winxFolderPath = Join-Path -Path $parentDirectory -ChildPath $winxFolderName
                     $WinverUWP = (Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP).InstallLocation
-                    echo 6
                     $shortcutPath = "$winxFolderPath\8 - System.lnk"
                     $newTargetPath = "$WinverUWP\WinverUWP.exe"
                     $WScriptShell = New-Object -ComObject WScript.Shell
                     $shortcut = $WScriptShell.CreateShortcut($shortcutPath)
                     $shortcut.TargetPath = $newTargetPath
                     $shortcut.Save()
-                    echo 7
                     Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
                     Copy-Item -Path "..\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force 
                     Copy-Item -Path ..\bin\menu\x64\osh\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force
                     Stop-Process -Name Explorer
                     Start-Process $shellExePath
                     Start-Sleep 5
-                    echo 8
                     if (-not (Get-Process -Name explorer -ErrorAction SilentlyContinue)) { Start-Process explorer }
                     Write-Host "WinMac Menu installation completed." -ForegroundColor Green
                 } else {
