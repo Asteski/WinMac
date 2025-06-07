@@ -9,19 +9,21 @@ param
 )
 if ($mode -eq 'Dark')
 {
-	$CursorMode = 'aero'
-	$OSMode = 0
-	$UIDarkMode = '1'
-	$DockLabelColor1 = '15658734'
-	$DockLabelBackColor1 = '2563870'
+	$CursorMode 			= 'aero'
+	$cursorName 			= 'aero'
+	$OSMode 				= 0
+	$UIDarkMode 			= '1'
+	$DockLabelColor1 		= '15658734'
+	$DockLabelBackColor1 	= '2563870'
 }
 if ($mode -eq 'Light')
 {
-	$CursorMode = 'aero_black'
-	$OSMode = 1
-	$UIDarkMode = '3'
-	$DockLabelColor1 = '1644825'
-	$DockLabelBackColor1 = '16119283'
+	$CursorMode 			= 'aero_black'
+	$cursorName 			= 'Windows Black'
+	$OSMode 				= 1
+	$UIDarkMode 			= '3'
+	$DockLabelColor1 		= '1644825'
+	$DockLabelBackColor1 	= '16119283'
 }
 taskkill /IM explorer.exe /F > $null 2>&1
 taskkill /IM nexus.exe /F > $null 2>&1

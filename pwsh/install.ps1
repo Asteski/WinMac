@@ -1226,74 +1226,46 @@ foreach ($app in $selectedApps) {
             $curDestFolder = "C:\Windows\Cursors"
             Copy-Item -Path $curSourceFolder\* -Destination $curDestFolder -Recurse -Force
             if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
-                $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
-                $RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
-                $RegCursors.SetValue("","Windows Black")
-                $RegCursors.SetValue("AppStarting","$curDestFolder\aero_black_working.ani")
-                $RegCursors.SetValue("Arrow","$curDestFolder\aero_black_arrow.cur")
-                $RegCursors.SetValue("Crosshair","$curDestFolder\aero_black_cross.cur")
-                $RegCursors.SetValue("Hand","$curDestFolder\aero_black_link.cur")
-                $RegCursors.SetValue("Help","$curDestFolder\aero_black_helpsel.cur")
-                $RegCursors.SetValue("IBeam","$curDestFolder\aero_black_beam.cur")
-                $RegCursors.SetValue("No","$curDestFolder\aero_black_unavail.cur")
-                $RegCursors.SetValue("NWPen","$curDestFolder\aero_black_pen.cur")
-                $RegCursors.SetValue("SizeAll","$curDestFolder\aero_black_move.cur")
-                $RegCursors.SetValue("SizeNESW","$curDestFolder\aero_black_nesw.cur")
-                $RegCursors.SetValue("SizeNS","$curDestFolder\aero_black_ns.cur")
-                $RegCursors.SetValue("SizeNWSE","$curDestFolder\aero_black_nwse.cur")
-                $RegCursors.SetValue("SizeWE","$curDestFolder\aero_black_ew.cur")
-                $RegCursors.SetValue("UpArrow","$curDestFolder\aero_black_up.cur")
-                $RegCursors.SetValue("Wait","$curDestFolder\aero_black_busy.ani")
-                $RegCursors.SetValue("Pin","$curDestFolder\aero_black_pin.cur")
-                $RegCursors.SetValue("Person","$curDestFolder\aero_black_person.cur")
-                $RegCursors.Close()
-                $RegConnect.Close()
-                $CSharpSig = @'
-[DllImport("user32.dll", EntryPoint = "SystemParametersInfo")]
-public static extern bool SystemParametersInfo(
-uint uiAction,
-uint uiParam,
-uint pvParam,
-uint fWinIni);
-'@           
-                $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
-                $CursorRefresh::SystemParametersInfo(0x057,0,$null,0) > $null 2>&1
+                $cursorMode = 'aero_black'
+		        $cursorName = 'Windows Black'
             } else {
-                $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
-                $RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
-                $RegCursors.SetValue("","Windows Default (system scheme)")
-                $RegCursors.SetValue("AppStarting","$curDestFolder\aero_working.ani")
-                $RegCursors.SetValue("Arrow","$curDestFolder\aero_arrow.cur")
-                $RegCursors.SetValue("Crosshair","$curDestFolder\aero_cross.cur")
-                $RegCursors.SetValue("Hand","$curDestFolder\aero_link.cur")
-                $RegCursors.SetValue("Help","$curDestFolder\aero_helpsel.cur")
-                $RegCursors.SetValue("IBeam","$curDestFolder\aero_beam.cur")
-                $RegCursors.SetValue("No","$curDestFolder\aero_unavail.cur")
-                $RegCursors.SetValue("NWPen","$curDestFolder\aero_pen.cur")
-                $RegCursors.SetValue("SizeAll","$curDestFolder\aero_move.cur")
-                $RegCursors.SetValue("SizeNESW","$curDestFolder\aero_nesw.cur")
-                $RegCursors.SetValue("SizeNS","$curDestFolder\aero_ns.cur")
-                $RegCursors.SetValue("SizeNWSE","$curDestFolder\aero_nwse.cur")
-                $RegCursors.SetValue("SizeWE","$curDestFolder\aero_ew.cur")
-                $RegCursors.SetValue("UpArrow","$curDestFolder\aero_up.cur")
-                $RegCursors.SetValue("Wait","$curDestFolder\aero_busy.ani")
-                $RegCursors.SetValue("Pin","$curDestFolder\aero_pin.cur")
-                $RegCursors.SetValue("Person","$curDestFolder\aero_person.cur")
-                $RegCursors.Close()
-                $RegConnect.Close()
-                $CSharpSig = @'
-[DllImport("user32.dll", EntryPoint = "SystemParametersInfo")]
-public static extern bool SystemParametersInfo(
-uint uiAction,
-uint uiParam,
-uint pvParam,
-uint fWinIni);
-'@           
-                $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
-                $CursorRefresh::SystemParametersInfo(0x057,0,$null,0) > $null 2>&1
+                $cursorMode = 'aero'
+		        $cursorName = 'Windows Default (system scheme)'
                 $infPath = Get-ChildItem -Path (Join-Path $PWD '..\config\cursor\') -Filter 'install.inf' -Recurse -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName
                 rundll32.exe setupapi.dll,InstallHinfSection DefaultInstall 128 "$infPath"
             }
+            $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
+            $RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
+            $RegCursors.SetValue("",$cursorName)
+            $RegCursors.SetValue("AppStarting","$curDestFolder\$($cursorMode)_working.ani")
+            $RegCursors.SetValue("Arrow","$curDestFolder\$($cursorMode)_arrow.cur")
+            $RegCursors.SetValue("Crosshair","$curDestFolder\$($cursorMode)_cross.cur")
+            $RegCursors.SetValue("Hand","$curDestFolder\$($cursorMode)_link.cur")
+            $RegCursors.SetValue("Help","$curDestFolder\$($cursorMode)_helpsel.cur")
+            $RegCursors.SetValue("IBeam","$curDestFolder\$($cursorMode)_beam.cur")
+            $RegCursors.SetValue("No","$curDestFolder\$($cursorMode)_unavail.cur")
+            $RegCursors.SetValue("NWPen","$curDestFolder\$($cursorMode)_pen.cur")
+            $RegCursors.SetValue("SizeAll","$curDestFolder\$($cursorMode)_move.cur")
+            $RegCursors.SetValue("SizeNESW","$curDestFolder\$($cursorMode)_nesw.cur")
+            $RegCursors.SetValue("SizeNS","$curDestFolder\$($cursorMode)_ns.cur")
+            $RegCursors.SetValue("SizeNWSE","$curDestFolder\$($cursorMode)_nwse.cur")
+            $RegCursors.SetValue("SizeWE","$curDestFolder\$($cursorMode)_ew.cur")
+            $RegCursors.SetValue("UpArrow","$curDestFolder\$($cursorMode)_up.cur")
+            $RegCursors.SetValue("Wait","$curDestFolder\$($cursorMode)_busy.ani")
+            $RegCursors.SetValue("Pin","$curDestFolder\$($cursorMode)_pin.cur")
+            $RegCursors.SetValue("Person","$curDestFolder\$($cursorMode)_person.cur")
+            $RegCursors.Close()
+            $RegConnect.Close()
+            $CSharpSig = @'
+[DllImport("user32.dll", EntryPoint = "SystemParametersInfo")]
+public static extern bool SystemParametersInfo(
+uint uiAction,
+uint uiParam,
+uint pvParam,
+uint fWinIni);
+'@           
+            $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
+            $CursorRefresh::SystemParametersInfo(0x057,0,$null,0) > $null 2>&1
         #? Pin User folder, Programs and Recycle Bin to Quick Access
             $registryPath3 = "HKCU:\SOFTWARE\WinMac"
             if (-not (Test-Path -Path $registryPath3)) {New-Item -Path $registryPath3 -Force | Out-Null}
