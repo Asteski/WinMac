@@ -385,6 +385,7 @@ if ($null -eq $wingetClientCheck) {
 }
 Import-Module -Name Microsoft.WinGet.Client -Force
 ####! WinMac deployment
+try { taskkill /IM nexus.exe /F > $null 2>&1 } catch { }
 foreach ($app in $selectedApps) {
     switch ($app.Trim()) {
     #? PowerToys
