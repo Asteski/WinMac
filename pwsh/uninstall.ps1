@@ -549,7 +549,7 @@ foreach ($app in $selectedApps) {
             $curDestFolder = "C:\Windows\Cursors"
             $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
             $RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
-            $RegCursors.SetValue("","Windows Aero")
+            $RegCursors.SetValue("","Windows Default (system scheme)")
             $RegCursors.SetValue("AppStarting","$curDestFolder\aero_working.ani")
             $RegCursors.SetValue("Arrow","$curDestFolder\aero_arrow.cur")
             $RegCursors.SetValue("Crosshair","cross_r.cur")
