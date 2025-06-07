@@ -1234,6 +1234,7 @@ foreach ($app in $selectedApps) {
         "12" {
         #? Black Cursor
             Write-Host "Configuring Other Settings..." -ForegroundColor Yellow
+            echo 1
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             $curSourceFolder = (Get-Item -Path "..\config\cursor").FullName
             $curDestFolder = "C:\Windows\Cursors"
@@ -1273,6 +1274,7 @@ uint fWinIni);
             $CursorRefresh::SystemParametersInfo(0x057,0,$null,0) > $null 2>&1
             }
         #? Pin User folder, Programs and Recycle Bin to Quick Access
+            echo 2
             $regPath = "HKCU:\SOFTWARE\WinMac"
             if (-not (Test-Path -Path $regPath)) {New-Item -Path $regPath -Force  | Out-Null}
             if ((Get-ItemProperty -Path $regPath -Name "QuickAccess" -ErrorAction SilentlyContinue).QuickAccess -ne 1) {
@@ -1324,10 +1326,12 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             Set-ItemProperty -Path $regPath -Name "QuickAccess" -Value 1 | Out-Null
             }
         #? Remove shortcut arrows
+            echo 3
             Copy-Item -Path "..\config\blank.ico" -Destination "C:\Windows" -Force
             New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Force | Out-Null
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String | Out-Null
         #? Configuring file explorer and context menus
+            echo 4
             Get-ChildItem ..\config\reg\remove\* -e *theme* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
             $sourceFilePath = "..\config\reg\add\Add_Theme_Mode_in_Context_Menu.reg"
             $tempFilePath = "..\temp\Add_Theme_Mode_in_Context_Menu.reg"
@@ -1341,11 +1345,13 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             reg import '..\config\reg\add\Add_Hidden_items_to_context_menu.reg' > $null 2>&1
             winget uninstall "Windows web experience Pack" --silent > $null 2>&1
         #? End Task
+            echo 5
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
             $taskbarDevSettings = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
             if (-not (Test-Path $taskbarDevSettings)) { New-Item -Path $taskbarDevSettings -Force}
             New-ItemProperty -Path $taskbarDevSettings -Name "TaskbarEndTask" -Value 1 -PropertyType DWORD -Force | Out-Null
         #? Hide Desktop icons
+            echo 6
             Copy-Item -Path "..\bin\HideDesktopIcons.exe" -Destination "$env:LOCALAPPDATA\WinMac" -Force
             $shortcutPath = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Hide Desktop Icons.lnk"
             $targetPath = "$env:LOCALAPPDATA\WinMac\HideDesktopIcons.exe"
@@ -1359,6 +1365,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
     }
 }
 #? Clean up
+echo 7
 if ((Get-ChildItem -Path "$env:LOCALAPPDATA\WinMac" -Recurse | Measure-Object).Count -eq 0) { Remove-Item -Path "$env:LOCALAPPDATA\WinMac" -Force }
 Start-Sleep 2
 explorer
