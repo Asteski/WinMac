@@ -683,7 +683,7 @@ foreach ($app in $selectedApps) {
                 if (-not (Test-Path $vimRegPath)) {New-Item -Path $vimRegPath -Force | Out-Null}
                 Set-ItemProperty -Path $vimRegPath -Name "select_startmenu" -Value 0
                 Set-ItemProperty -Path $vimRegPath -Name "select_editwith" -Value 0
-                Install-WinGetPackage -Id "Vim.Vim"
+                Install-WinGetPackage -Id "Vim.Vim" | Out-Null
             } else {
                 Write-Host "Vim is already installed." -ForegroundColor DarkGreen
             }
@@ -1334,7 +1334,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             (Get-Content -Path $tempFilePath) -replace '%LOCALAPPDATA%', $appData | Set-Content -Path $tempFilePath
             reg import '..\temp\Add_Theme_Mode_in_Context_Menu.reg' > $null 2>&1
             reg import '..\config\reg\add\Add_Hidden_items_to_context_menu.reg' > $null 2>&1
-            winget uninstall "Windows web experience Pack" --silent > $null 2>&1
+            winget uninstall "Windows web experience Pack" --silent --accept-source-agreements --accept-package-agreements > $null 2>&1
         #? End Task
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
             $taskbarDevSettings = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
