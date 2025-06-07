@@ -1332,7 +1332,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String | Out-Null
         #? Configuring file explorer and context menus
             echo 4
-            Get-ChildItem ..\config\reg\remove\* -e *theme* | ForEach-Object { reg import $_.FullName }
+            Get-ChildItem ..\config\reg\remove\* -e *theme* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
             $sourceFilePath = "..\config\reg\add\Add_Theme_Mode_in_Context_Menu.reg"
             $tempFilePath = "..\temp\Add_Theme_Mode_in_Context_Menu.reg"
             $ps1FilePath = "..\config\reg\theme.ps1"
@@ -1341,9 +1341,9 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             Copy-Item -Path $sourceFilePath -Destination '..\temp\' -Force
             $appData = $env:LOCALAPPDATA -replace '\\', '\\'
             (Get-Content -Path $tempFilePath) -replace '%LOCALAPPDATA%', $appData | Set-Content -Path $tempFilePath
-            reg import '..\temp\Add_Theme_Mode_in_Context_Menu.reg'
-            reg import '..\config\reg\add\Add_Hidden_items_to_context_menu.reg'
-            winget uninstall "Windows web experience Pack" --silent --accept-source-agreements
+            reg import '..\temp\Add_Theme_Mode_in_Context_Menu.reg' > $null 2>&1
+            reg import '..\config\reg\add\Add_Hidden_items_to_context_menu.reg' > $null 2>&1
+            winget uninstall "Windows web experience Pack" --silent --accept-source-agreements > $null 2>&1
         #? End Task
             echo 5
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
