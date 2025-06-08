@@ -1,7 +1,7 @@
 param (
     [switch]$noGUI
 )
-$version = "1.0.0"
+$version = "1.0.1"
 $sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_uninstall_log_$date.txt"
@@ -52,10 +52,10 @@ if (!($noGUI)) {
     $iconFolderName = "config"
     $iconFolderPath = Join-Path -Path $parentDirectory -ChildPath $iconFolderName
     $topTextBlock = "Windows and macOS Hybrid Uninstallation Wizard"
-    $bottomTextBlock1 = 'Important Notes'
-    $bottomTextBlock2 = 'Please disable Windows Defender/3rd party Anti-virus, to prevent issues with uninsalling icons pack.'
-    $bottomTextBlock3 = 'PowerShell profile files will be removed, please make sure to backup your current profiles if needed.'
-    $bottomTextBlock4 = 'Vim, Nexus, Windhawk and Icons Pack will show prompt to uninstall, please confirm the uninstallations manually.'
+    $bottomTextBlock1 = '↓ Important Notes ↓'
+    $bottomTextBlock2 = 'PowerShell default profile will be removed and replaced with new one. Please make sure to backup your current profile if needed.'
+    $bottomTextBlock3 = 'The author of this script is not responsible for any damage caused by running it. Highly recommend to create a system restore point before proceeding with the installation process to ensure you can revert any changes if necessary.'
+    $bottomTextBlock4 = 'For guide on how to use the script, please refer to the Wiki page on WinMac GitHub page.'
 [xml]$xaml = @"
 <Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -539,7 +539,6 @@ foreach ($app in $selectedApps) {
             Write-Host "Uninstalling Other Settings..." -ForegroundColor Yellow
             $regPath = "HKCU:\SOFTWARE\WinMac"
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
-            Get-ChildItem "C:\Windows\Cursors" -filter aero_black* | ForEach-Object { Remove-Item $_.FullName -Force }
             Set-ItemProperty -Path $regPath -Name "QuickAccess" -Value 0
             Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 0
             $homeDir = "C:\Users\$env:USERNAME"
@@ -550,13 +549,13 @@ foreach ($app in $selectedApps) {
             $curDestFolder = "C:\Windows\Cursors"
             $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
             $RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
-            $RegCursors.SetValue("","Windows Aero")
+            $RegCursors.SetValue("","Windows Default (system scheme)")
             $RegCursors.SetValue("AppStarting","$curDestFolder\aero_working.ani")
             $RegCursors.SetValue("Arrow","$curDestFolder\aero_arrow.cur")
-            $RegCursors.SetValue("Crosshair","$curDestFolder\aero_cross.cur")
+            $RegCursors.SetValue("Crosshair","$curDestFolder\cross_r.cur")
             $RegCursors.SetValue("Hand","$curDestFolder\aero_link.cur")
             $RegCursors.SetValue("Help","$curDestFolder\aero_helpsel.cur")
-            $RegCursors.SetValue("IBeam","$curDestFolder\aero_beam.cur")
+            $RegCursors.SetValue("IBeam","$curDestFolder\beam_r.cur")
             $RegCursors.SetValue("No","$curDestFolder\aero_unavail.cur")
             $RegCursors.SetValue("NWPen","$curDestFolder\aero_pen.cur")
             $RegCursors.SetValue("SizeAll","$curDestFolder\aero_move.cur")
@@ -566,12 +565,11 @@ foreach ($app in $selectedApps) {
             $RegCursors.SetValue("SizeWE","$curDestFolder\aero_ew.cur")
             $RegCursors.SetValue("UpArrow","$curDestFolder\aero_up.cur")
             $RegCursors.SetValue("Wait","$curDestFolder\aero_busy.ani")
-            $RegCursors.SetValue("Pin","$curDestFolder\aero_pin.ani")
-            $RegCursors.SetValue("Person","$curDestFolder\aero_person.ani")
+            $RegCursors.SetValue("Pin","$curDestFolder\aero_pin.cur")
+            $RegCursors.SetValue("Person","$curDestFolder\aero_person.cur")
             $RegCursors.Close()
             $RegConnect.Close()
             $CSharpSig = @'
-
 [DllImport("user32.dll", EntryPoint = "SystemParametersInfo")]
 public static extern bool SystemParametersInfo(
 uint uiAction,
@@ -581,6 +579,7 @@ uint fWinIni);
 '@
             $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
             $CursorRefresh::SystemParametersInfo(0x0057,0,$null,0) | Out-Null
+            Get-ChildItem "C:\Windows\Cursors" -filter aero_black* | ForEach-Object { Remove-Item $_.FullName -Force }
             $homeDir = "C:\Users\$env:USERNAME"
             $homePin = new-object -com shell.application
             $homePin.Namespace($homeDir).Self.InvokeVerb("pintohome") | Out-Null
@@ -606,6 +605,12 @@ uint fWinIni);
             Remove-Item -Path "$env:LOCALAPPDATA\WinMac\theme.ps1"
             Remove-Item -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Hide Desktop Icons.lnk" -Force
             Remove-Item -Path "$env:LOCALAPPDATA\WinMac\HideDesktopIcons.exe" -Force
+            $registryPath1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon"
+            $registryPath2 = "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}"
+            Set-ItemProperty -Path $registryPath1 -Name "(default)" -Value "%SystemRoot%\System32\imageres.dll,-54"
+            Set-ItemProperty -Path $registryPath1 -Name "empty" -Value "%SystemRoot%\System32\imageres.dll,-55"
+            Set-ItemProperty -Path $registryPath1 -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-54"
+            Remove-Item -Path $registryPath2 -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
             Write-Host "Uninstalling Other Settings completed." -ForegroundColor Green
         }
     }

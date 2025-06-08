@@ -1,7 +1,7 @@
 param (
     [switch]$noGUI
 )
-$version = "1.0.0"
+$version = "1.0.1"
 $errorActionPreference="silentlyContinue"
 $WarningPreference="silentlyContinue"
 Add-Type -AssemblyName System.Windows.Formstylk
@@ -25,7 +25,7 @@ function Get-WindowsTheme {
         if ($appsUseLightTheme.AppsUseLightTheme -eq 0) {
             return "Dark"
         } else {
-            return "Light" 
+            return "Light"
         }
     } catch {
         return "Light"
@@ -45,7 +45,7 @@ if (!($noGUI)) {
     $iconFolderName = "config"
     $iconFolderPath = Join-Path -Path $parentDirectory -ChildPath $iconFolderName
     $topTextBlock = "Windows and macOS Hybrid Installation Wizard"
-    $bottomTextBlock1 = ' ↓ Important Notes ↓'
+    $bottomTextBlock1 = '↓ Important Notes ↓'
     $bottomTextBlock2 = 'PowerShell default profile will be removed and replaced with new one. Please make sure to backup your current profile if needed.'
     $bottomTextBlock3 = 'The author of this script is not responsible for any damage caused by running it. Highly recommend to create a system restore point before proceeding with the installation process to ensure you can revert any changes if necessary.'
     $bottomTextBlock4 = 'For guide on how to use the script, please refer to the Wiki page on WinMac GitHub page.'
@@ -475,7 +475,7 @@ if ($selectedApps -like '*4*' -or $selectedApps -like '*9*') {
     }
 }
 
-if ($selectedApps -like '*4*' -or $selectedApps -like '*7*' -or $selectedApps -like '*9*') {
+if ($selectedApps -like '*4*' -or $selectedApps -like '*7*' -or $selectedApps -like '*9*' -or $selectedApps -like '*12*') {
     $lightOrDark = Read-Host "`nEnter 'L' for light or 'D' for dark themed Windows"
     if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
         Write-Host "Using light theme." -ForegroundColor Green
@@ -486,24 +486,10 @@ if ($selectedApps -like '*4*' -or $selectedApps -like '*7*' -or $selectedApps -l
         $stackTheme = 'dark'
         $orbTheme = 'white'
     } else {
-        if ($windowsTheme -eq "Light") { 
-            Write-Host "Invalid input. Defaulting to light theme." -ForegroundColor Yellow
-            $stackTheme = 'light'
-            $orbTheme = 'black'
-            $lightOrDark = "L"
-        }
-        elseif ($windowsTheme -eq "Dark") {
-            Write-Host "Invalid input. Defaulting to dark theme." -ForegroundColor Yellow
-            $stackTheme = 'dark'
-            $orbTheme = 'white'
-            $lightOrDark = "D"
-        }
-        else {
-            Write-Host "Invalid input. Defaulting to light theme." -ForegroundColor Yellow
-            $stackTheme = 'light'
-            $orbTheme = 'black'
-            $lightOrDark = "L"
-        }
+        Write-Host "Invalid input. Defaulting to light theme." -ForegroundColor Yellow
+        $stackTheme = 'light'
+        $orbTheme = 'black'
+        $lightOrDark = "L"
     }
 }
 
@@ -697,7 +683,7 @@ foreach ($app in $selectedApps) {
                 if (-not (Test-Path $vimRegPath)) {New-Item -Path $vimRegPath -Force | Out-Null}
                 Set-ItemProperty -Path $vimRegPath -Name "select_startmenu" -Value 0
                 Set-ItemProperty -Path $vimRegPath -Name "select_editwith" -Value 0
-                Install-WinGetPackage -Id "Vim.Vim"
+                Install-WinGetPackage -Id "Vim.Vim" | Out-Null
             } else {
                 Write-Host "Vim is already installed." -ForegroundColor DarkGreen
             }
@@ -825,8 +811,8 @@ foreach ($app in $selectedApps) {
                 Set-ItemProperty -Path $exRegPath\Advanced -Name "LaunchTO" -Value 1
                 Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
                 Stop-Process -Name explorer -Force
-                Start-Sleep 2
-                Start-Process explorer
+                Start-Sleep 5
+                if (-not (Get-Process -Name explorer -ErrorAction SilentlyContinue)) { Start-Process explorer }
                 Write-Host "StartAllBack installation completed." -ForegroundColor Green
             }
         }
@@ -852,15 +838,15 @@ foreach ($app in $selectedApps) {
                     $winverUWP = Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP -ErrorAction SilentlyContinue
                     if ($null -eq $winverUWP) {
                         Write-Host "Installing WinverUWP 2.1.4..." -ForegroundColor DarkYellow
-                        Install-WinGetPackage -id 'FireCubeStudios.WinverUWP' | Out-Null
+                        winget install 'FireCubeStudios.WinverUWP' --accept-source-agreements --accept-package-agreements | Out-Null
                     } else {
                         Write-Host "WinverUWP is already installed." -ForegroundColor DarkGreen
                     }
                     New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" | Out-Null
-                    Write-Host "Installing Open-Shell 4.4.196..." -ForegroundColor DarkYellow
+                    Write-Host "Installing Open-Shell..." -ForegroundColor DarkYellow
                     $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\StartMenu.exe"
-                    Stop-Process -Name StartMenu -Force | Out-Null
-                    Start-Process -FilePath "..\bin\OpenShell.exe" -ArgumentList "/quiet", "/norestart", "ADDLOCAL=StartMenu" -Wait -Verb RunAs
+                    winget install --id "Open-Shell.Open-Shell-Menu" --source winget --custom 'ADDLOCAL=StartMenu' --silent | Out-Null
+                    Stop-Process -Name StartMenu -Force -ErrorAction SilentlyContinue | Out-Null
                     New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force | Out-Null
                     New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force | Out-Null
                     New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu" -Force | Out-Null
@@ -894,6 +880,8 @@ foreach ($app in $selectedApps) {
                     Copy-Item -Path ..\bin\menu\x64\osh\* -Destination "$env:LOCALAPPDATA\WinMac\" -Recurse -Force
                     Stop-Process -Name Explorer
                     Start-Process $shellExePath
+                    Start-Sleep 5
+                    if (-not (Get-Process -Name explorer -ErrorAction SilentlyContinue)) { Start-Process explorer }
                     Write-Host "WinMac Menu installation completed." -ForegroundColor Green
                 } else {
                     Write-Host "Skipping WinMac Menu installation." -ForegroundColor Magenta
@@ -1085,6 +1073,7 @@ foreach ($app in $selectedApps) {
                         $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "16119283", "2563870" }
                         $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "store_light", "store_dark" }
                         $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "recycle_bin_empty_light", "recycle_bin_empty_dark" }
+                        $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "recycle_bin_full_light", "recycle_bin_full_dark" }
                         $modifiedFile = "..\temp\winstep.reg"
                         $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 
                     }
@@ -1096,6 +1085,7 @@ foreach ($app in $selectedApps) {
                     $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "16119283", "2563870" }
                     $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "store_light", "store_dark" }
                     $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "recycle_bin_empty_light", "recycle_bin_empty_dark" }
+                    $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "recycle_bin_full_light", "recycle_bin_full_dark" }
                     $modifiedFile = "..\temp\winstep.reg"
                     $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 
                     $regFile = $modifiedFile
@@ -1222,7 +1212,6 @@ foreach ($app in $selectedApps) {
                 Copy-Item -Path "..\config\mactype\*" -Destination "$env:PROGRAMFILES\MacType" -Recurse -Force
                 Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name FontSmoothing -Value "0"
                 Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name FontSmoothingType -Type DWord -Value 0
-                # RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters ,1 ,True
                 Start-Sleep -Seconds 2
                 Stop-Process -n Explorer -ErrorAction SilentlyContinue
                 Start-Sleep -Seconds 4
@@ -1238,30 +1227,38 @@ foreach ($app in $selectedApps) {
             $curSourceFolder = (Get-Item -Path "..\config\cursor").FullName
             $curDestFolder = "C:\Windows\Cursors"
             Copy-Item -Path $curSourceFolder\* -Destination $curDestFolder -Recurse -Force
-            if ( $lightOrDark -eq "L" -or $lightOrDark -eq "l") {
-                $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
-                $RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
-                $RegCursors.SetValue("","Windows Black")
-                $RegCursors.SetValue("AppStarting","$curDestFolder\aero_black_working.ani")
-                $RegCursors.SetValue("Arrow","$curDestFolder\aero_black_arrow.cur")
-                $RegCursors.SetValue("Crosshair","$curDestFolder\aero_black_cross.cur")
-                $RegCursors.SetValue("Hand","$curDestFolder\aero_black_link.cur")
-                $RegCursors.SetValue("Help","$curDestFolder\aero_black_helpsel.cur")
-                $RegCursors.SetValue("IBeam","$curDestFolder\aero_black_beam.cur")
-                $RegCursors.SetValue("No","$curDestFolder\aero_black_unavail.cur")
-                $RegCursors.SetValue("NWPen","$curDestFolder\aero_black_pen.cur")
-                $RegCursors.SetValue("SizeAll","$curDestFolder\aero_black_move.cur")
-                $RegCursors.SetValue("SizeNESW","$curDestFolder\aero_black_nesw.cur")
-                $RegCursors.SetValue("SizeNS","$curDestFolder\aero_black_ns.cur")
-                $RegCursors.SetValue("SizeNWSE","$curDestFolder\aero_black_nwse.cur")
-                $RegCursors.SetValue("SizeWE","$curDestFolder\aero_black_ew.cur")
-                $RegCursors.SetValue("UpArrow","$curDestFolder\aero_black_up.cur")
-                $RegCursors.SetValue("Wait","$curDestFolder\aero_black_busy.ani")
-                $RegCursors.SetValue("Pin","$curDestFolder\aero_black_pin.cur")
-                $RegCursors.SetValue("Person","$curDestFolder\aero_black_person.cur")
-                $RegCursors.Close()
-                $RegConnect.Close()
-$CSharpSig = @'
+            if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
+                $cursorMode = 'aero_black'
+		        $cursorName = 'Windows Black'
+            } else {
+                $cursorMode = 'aero'
+		        $cursorName = 'Windows Default (system scheme)'
+                $infPath = Get-ChildItem -Path (Join-Path $PWD '..\config\cursor\') -Filter 'install.inf' -Recurse -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName
+                rundll32.exe setupapi.dll,InstallHinfSection DefaultInstall 128 "$infPath"
+            }
+            $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
+            $RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
+            $RegCursors.SetValue("",$cursorName)
+            $RegCursors.SetValue("AppStarting","$curDestFolder\$($cursorMode)_working.ani")
+            $RegCursors.SetValue("Arrow","$curDestFolder\$($cursorMode)_arrow.cur")
+            $RegCursors.SetValue("Crosshair","$curDestFolder\cross_r.cur")
+            $RegCursors.SetValue("Hand","$curDestFolder\$($cursorMode)_link.cur")
+            $RegCursors.SetValue("Help","$curDestFolder\$($cursorMode)_helpsel.cur")
+            $RegCursors.SetValue("IBeam","$curDestFolder\beam_r.cur")
+            $RegCursors.SetValue("No","$curDestFolder\$($cursorMode)_unavail.cur")
+            $RegCursors.SetValue("NWPen","$curDestFolder\$($cursorMode)_pen.cur")
+            $RegCursors.SetValue("SizeAll","$curDestFolder\$($cursorMode)_move.cur")
+            $RegCursors.SetValue("SizeNESW","$curDestFolder\$($cursorMode)_nesw.cur")
+            $RegCursors.SetValue("SizeNS","$curDestFolder\$($cursorMode)_ns.cur")
+            $RegCursors.SetValue("SizeNWSE","$curDestFolder\$($cursorMode)_nwse.cur")
+            $RegCursors.SetValue("SizeWE","$curDestFolder\$($cursorMode)_ew.cur")
+            $RegCursors.SetValue("UpArrow","$curDestFolder\$($cursorMode)_up.cur")
+            $RegCursors.SetValue("Wait","$curDestFolder\$($cursorMode)_busy.ani")
+            $RegCursors.SetValue("Pin","$curDestFolder\$($cursorMode)_pin.cur")
+            $RegCursors.SetValue("Person","$curDestFolder\$($cursorMode)_person.cur")
+            $RegCursors.Close()
+            $RegConnect.Close()
+            $CSharpSig = @'
 [DllImport("user32.dll", EntryPoint = "SystemParametersInfo")]
 public static extern bool SystemParametersInfo(
 uint uiAction,
@@ -1269,59 +1266,59 @@ uint uiParam,
 uint pvParam,
 uint fWinIni);
 '@           
-            $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru  | Out-Null
+            $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
             $CursorRefresh::SystemParametersInfo(0x057,0,$null,0) > $null 2>&1
-            }
         #? Pin User folder, Programs and Recycle Bin to Quick Access
-            $regPath = "HKCU:\SOFTWARE\WinMac"
-            if (-not (Test-Path -Path $regPath)) {New-Item -Path $regPath -Force  | Out-Null}
-            if ((Get-ItemProperty -Path $regPath -Name "QuickAccess" -ErrorAction SilentlyContinue).QuickAccess -ne 1) {
+            $registryPath3 = "HKCU:\SOFTWARE\WinMac"
+            if (-not (Test-Path -Path $registryPath3)) {New-Item -Path $registryPath3 -Force | Out-Null}
+            if ((Get-ItemProperty -Path $registryPath3 -Name "QuickAccess" -ErrorAction SilentlyContinue).QuickAccess -ne 1) {
 $homeIni = @"
 [.ShellClassInfo]
 IconResource=C:\Windows\System32\SHELL32.dll,160
 "@
-            $homeDir = "C:\Users\$env:USERNAME"
-            $homeIniFilePath = "$($homeDir)\desktop.ini"
-            if (Test-Path $homeIniFilePath)  {
-                Remove-Item $homeIniFilePath -Force
-                New-Item -Path $homeIniFilePath -ItemType File -Force | Out-Null
-            }
-            Add-Content $homeIniFilePath -Value $homeIni | Out-Null
-            (Get-Item $homeIniFilePath -Force).Attributes = 'Hidden, System, Archive'
-            (Get-Item $homeDir -Force).Attributes = 'ReadOnly, Directory'
-            $homePin = new-object -com shell.application
-            if (-not ($homePin.Namespace($homeDir).Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
-                $homePin.Namespace($homeDir).Self.InvokeVerb("pintohome")
-            } 
+                $homeDir = "C:\Users\$env:USERNAME"
+                $homeIniFilePath = "$($homeDir)\desktop.ini"
+                if (Test-Path $homeIniFilePath)  {
+                    Remove-Item $homeIniFilePath -Force
+                    New-Item -Path $homeIniFilePath -ItemType File -Force | Out-Null
+                }
+                Add-Content $homeIniFilePath -Value $homeIni | Out-Null
+                (Get-Item $homeIniFilePath -Force).Attributes = 'Hidden, System, Archive'
+                (Get-Item $homeDir -Force).Attributes = 'ReadOnly, Directory'
+                $homePin = new-object -com shell.application
+                if (-not ($homePin.Namespace($homeDir).Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
+                    $homePin.Namespace($homeDir).Self.InvokeVerb("pintohome")
+                } 
 $programsIni = @"
 [.ShellClassInfo]
 IconResource=C:\WINDOWS\System32\imageres.dll,-87
 "@
-            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
-            $programsIniFilePath = "$($programsDir)\desktop.ini"
-            if (Test-Path $programsIniFilePath)  {
-                Remove-Item $programsIniFilePath -Force
-                New-Item -Path $programsIniFilePath -ItemType File -Force | Out-Null
-            }
-            Add-Content $programsIniFilePath -Value $programsIni  | Out-Null
-            (Get-Item $programsIniFilePath -Force).Attributes = 'Hidden, System, Archive'
-            (Get-Item $programsDir -Force).Attributes = 'ReadOnly, Directory'
-            $programsPin = new-object -com shell.application
-            if (-not ($programsPin.Namespace($programsDir).Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
-                $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome")
-            }
-            $RBPath = 'HKCU:\Software\WinSTEP2000\NeXuS\Docks' 
-            $name = "DelegateExecute"
-            $value = "{b455f46e-e4af-4035-b0a4-cf18d2f6f28e}"
-            New-Item -Path $RBPath -Force  | Out-Null
-            New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force | Out-Null
-            $oShell = New-Object -ComObject Shell.Application
-            $recycleBin = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
-            if (-not ($recycleBin.Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
-                $recycleBin.Self.InvokeVerb("PinToHome")
-            }
-            Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse
-            Set-ItemProperty -Path $regPath -Name "QuickAccess" -Value 1 | Out-Null
+                $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+                $programsIniFilePath = "$($programsDir)\desktop.ini"
+                if (Test-Path $programsIniFilePath)  {
+                    Remove-Item $programsIniFilePath -Force
+                    New-Item -Path $programsIniFilePath -ItemType File -Force | Out-Null
+                }
+                Add-Content $programsIniFilePath -Value $programsIni  | Out-Null
+                (Get-Item $programsIniFilePath -Force).Attributes = 'Hidden, System, Archive'
+                (Get-Item $programsDir -Force).Attributes = 'ReadOnly, Directory'
+                $programsPin = new-object -com shell.application
+                if (-not ($programsPin.Namespace($programsDir).Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
+                    $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome")
+                }
+                $RBPath = 'HKCU:\Software\WinSTEP2000\NeXuS\Docks'
+                $name = "DelegateExecute"
+                $value = "{b455f46e-e4af-4035-b0a4-cf18d2f6f28e}"
+                New-Item -Path $RBPath -Force  | Out-Null
+                New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force | Out-Null
+
+                $oShell = New-Object -ComObject Shell.Application
+                $recycleBin = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
+                if (-not ($recycleBin.Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
+                    $recycleBin.Self.InvokeVerb("PinToHome")
+                }
+                Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse
+                Set-ItemProperty -Path $registryPath3 -Name "QuickAccess" -Value 1 | Out-Null
             }
         #? Remove shortcut arrows
             Copy-Item -Path "..\config\blank.ico" -Destination "C:\Windows" -Force
@@ -1343,7 +1340,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
         #? End Task
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value ""
             $taskbarDevSettings = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
-            if (-not (Test-Path $taskbarDevSettings)) { New-Item -Path $taskbarDevSettings -Force}
+            if (-not (Test-Path $taskbarDevSettings)) { New-Item -Path $taskbarDevSettings -Force }
             New-ItemProperty -Path $taskbarDevSettings -Name "TaskbarEndTask" -Value 1 -PropertyType DWORD -Force | Out-Null
         #? Hide Desktop icons
             Copy-Item -Path "..\bin\HideDesktopIcons.exe" -Destination "$env:LOCALAPPDATA\WinMac" -Force
@@ -1355,15 +1352,34 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             $shortcut.TargetPath = $targetPath
             $shortcut.IconLocation = $iconPath
             $shortcut.Save()
+            $file = Get-Item $shortcutPath
+            $file.Attributes = $file.Attributes -bor [System.IO.FileAttributes]::Hidden
+        #? Recycle Bin Icons
+            $registryPath1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon"
+            $registryPath2 = "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\empty"
+            if (-not (Test-Path -Path $registryPath2)) {New-Item -Path $registryPath2 -Force -ErrorAction SilentlyContinue | Out-Null}
+            if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
+                Set-ItemProperty -Path $registryPath1 -Name "(default)" -Value "%SystemRoot%\System32\imageres.dll,-1017"
+                Set-ItemProperty -Path $registryPath1 -Name "empty" -Value "%SystemRoot%\System32\imageres.dll,-1015"
+                Set-ItemProperty -Path $registryPath1 -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-1017"
+                Set-ItemProperty -Path $registryPath2 -Name "Icon" -Value "%SystemRoot%\System32\imageres.dll,-1015"
+            } elseif ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
+                Set-ItemProperty -Path $registryPath1 -Name "(default)" -Value "%SystemRoot%\System32\imageres.dll,-54"
+                Set-ItemProperty -Path $registryPath1 -Name "empty" -Value "%SystemRoot%\System32\imageres.dll,-55"
+                Set-ItemProperty -Path $registryPath1 -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-54"
+                Set-ItemProperty -Path $registryPath2 -Name "Icon" -Value "%SystemRoot%\System32\imageres.dll,-55"
+            }
         }
     }
 }
 #? Clean up
 if ((Get-ChildItem -Path "$env:LOCALAPPDATA\WinMac" -Recurse | Measure-Object).Count -eq 0) { Remove-Item -Path "$env:LOCALAPPDATA\WinMac" -Force }
 Start-Sleep 2
-explorer
+Stop-Process -n explorer -ErrorAction SilentlyContinue
 Start-Sleep 2
 Remove-Item "..\temp" -Recurse -Force
+Start-Sleep 5
+if (-not (Get-Process -Name explorer -ErrorAction SilentlyContinue)) { Start-Process explorer }
 Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
 Write-Host @"
 
