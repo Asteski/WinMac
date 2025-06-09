@@ -338,7 +338,7 @@ https://github.com/Asteski/WinMac/wiki
 
 "@ -ForegroundColor Yellow
     # if (-not $adminTest) {Write-Host "Script is not running in elevated session." -ForegroundColor Red} else {Write-Host "Script is running in elevated session." -ForegroundColor Green}
-    Write-Host "`n-----------------------------------------------------------------------" -ForegroundColor Cyan
+    Write-Host "-----------------------------------------------------------------------" -ForegroundColor Cyan
     # WinMac configuration
     Write-Host
     $fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom installation"
