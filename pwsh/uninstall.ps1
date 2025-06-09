@@ -1,7 +1,7 @@
 param (
     [switch]$noGUI
 )
-$version = "1.0.1"
+$version = "1.0.2"
 $sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
 $date = Get-Date -Format "yy-MM-ddTHHmmss"
 $logFile = "WinMac_uninstall_log_$date.txt"

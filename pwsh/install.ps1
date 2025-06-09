@@ -1,7 +1,7 @@
 param (
     [switch]$noGUI
 )
-$version = "1.0.1"
+$version = "1.0.2"
 $errorActionPreference="silentlyContinue"
 $WarningPreference="silentlyContinue"
 Add-Type -AssemblyName System.Windows.Formstylk
@@ -31,6 +31,13 @@ function Get-WindowsTheme {
         return "Light"
     }
 }
+
+if (-not $adminTest) {
+    Add-Type -AssemblyName PresentationFramework
+    [System.Windows.MessageBox]::Show("This script must be run as Administrator.", "Insufficient Privileges", 'OK', 'Error')
+    exit
+}
+
 #* GUI
 $windowsTheme = Get-WindowsTheme
 if (!($noGUI)) {
@@ -330,7 +337,7 @@ on WinMac GitHub page:
 https://github.com/Asteski/WinMac/wiki
 
 "@ -ForegroundColor Yellow
-    if (-not $adminTest) {Write-Host "Script is not running in elevated session." -ForegroundColor Red} else {Write-Host "Script is running in elevated session." -ForegroundColor Green}
+    # if (-not $adminTest) {Write-Host "Script is not running in elevated session." -ForegroundColor Red} else {Write-Host "Script is running in elevated session." -ForegroundColor Green}
     Write-Host "`n-----------------------------------------------------------------------" -ForegroundColor Cyan
     # WinMac configuration
     Write-Host
@@ -725,6 +732,7 @@ foreach ($app in $selectedApps) {
             Remove-Item -Path "C:\Users\Public\Desktop\gVim*" -Force
             Remove-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Force
             Remove-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\gVim*" -Force
+
             Write-Host "PowerShell Profile configuration completed." -ForegroundColor Green
         }
     #* StartAllBack
