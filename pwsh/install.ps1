@@ -34,7 +34,7 @@ function Get-WindowsTheme {
 
 if (-not $adminTest) {
     Add-Type -AssemblyName PresentationFramework
-    [System.Windows.MessageBox]::Show("This script must be run as Administrator.", "Insufficient Privileges", ' ', 'Error')
+    [System.Windows.MessageBox]::Show("This script must be run as Administrator.", "Insufficient Privileges", 'OK', 'Error')
     exit
 }
 
