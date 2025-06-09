@@ -1405,7 +1405,7 @@ Start-Sleep 2
 Stop-Process -n explorer -ErrorAction SilentlyContinue
 Start-Sleep 2
 Remove-Item "..\temp" -Recurse -Force
-Start-Sleep 5
+Start-Sleep 3
 if (-not (Get-Process -Name explorer -ErrorAction SilentlyContinue)) { Start-Process explorer }
 Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
 Write-Host @"
