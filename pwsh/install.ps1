@@ -1020,81 +1020,65 @@ foreach ($app in $selectedApps) {
         }
     #* Nexus Dock
         "9" {
-            if ($adminTest) {
-                Write-Host "Winstep Nexus must be installed without admin rights. Skipping installation." -ForegroundColor Red
-            }
-            else {
-                Write-Host "Installing Nexus Dock..." -ForegroundColor Yellow
-                $checkNexus = Get-WinGetPackage -name Nexus
-                if ($null -eq $checkNexus) {
-                    $downloadUrl = "https://www.winstep.net/nexus.zip"
-                    $downloadPath = "..\temp\Nexus.zip"
-                    if (-not (Test-Path $downloadPath)) {
-                        Invoke-WebRequest -Uri $downloadUrl -OutFile $downloadPath
-                    }
-                    Expand-Archive -Path $downloadPath -DestinationPath ..\temp -Force
+            Write-Host "Installing Nexus Dock..." -ForegroundColor Yellow
+            $checkNexus = Get-WinGetPackage -name Nexus
+            if ($null -eq $checkNexus) {
+                $downloadUrl = "https://www.winstep.net/nexus.zip"
+                $downloadPath = "..\temp\Nexus.zip"
+                if (-not (Test-Path $downloadPath)) {
+                    Invoke-WebRequest -Uri $downloadUrl -OutFile $downloadPath
                 }
-                if (Get-Process -n Nexus) { Stop-Process -n Nexus }
-                $currentDir = (Get-Location).Path
-                $scriptBlock1 = "Start-Process -FilePath '..\temp\NexusSetup.exe' -ArgumentList '/silent'"
-                $tempScript = Join-Path $env:TEMP "nonadmin_$([guid]::NewGuid().ToString()).ps1"
-                Set-Content -Path $tempScript -Value $scriptBlock1 -Encoding UTF8
+                Expand-Archive -Path $downloadPath -DestinationPath ..\temp -Force
+            }
+            if (Get-Process -n Nexus) { Stop-Process -n Nexus }
+            $currentDir = (Get-Location).Path
+            $scriptBlock1 = "Start-Process -FilePath '..\temp\NexusSetup.exe' -ArgumentList '/silent'"
+            $tempScript = Join-Path $env:TEMP "nonadmin_$([guid]::NewGuid().ToString()).ps1"
+            Set-Content -Path $tempScript -Value $scriptBlock1 -Encoding UTF8
 $batchContent = @"
 @echo off
 pushd "$currentDir"
 pwsh.exe -NoProfile -ExecutionPolicy Bypass -File "`"$tempScript`""
 "@
-                $tempBatch = Join-Path $env:TEMP "run_nonadmin_$([guid]::NewGuid().ToString()).cmd"
-                Set-Content -Path $tempBatch -Value $batchContent -Encoding ASCII
-                $tempVbs = Join-Path $env:TEMP "run_silent_$([guid]::NewGuid().ToString()).vbs"
+            $tempBatch = Join-Path $env:TEMP "run_nonadmin_$([guid]::NewGuid().ToString()).cmd"
+            Set-Content -Path $tempBatch -Value $batchContent -Encoding ASCII
+            $tempVbs = Join-Path $env:TEMP "run_silent_$([guid]::NewGuid().ToString()).vbs"
 $vbsContent = @"
 Set WshShell = CreateObject("WScript.Shell")
 WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
 "@
-                Set-Content -Path $tempVbs -Value $vbsContent -Encoding ASCII
-                Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""
-                Start-Sleep 10
+            Set-Content -Path $tempVbs -Value $vbsContent -Encoding ASCII
+            Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""
+            Start-Sleep 10
+            $process1 = Get-Process -Name "NexusSetup"
+            while ($process1) {
+                Start-Sleep 5
                 $process1 = Get-Process -Name "NexusSetup"
-                while ($process1) {
-                    Start-Sleep 5
-                    $process1 = Get-Process -Name "NexusSetup"
-                }
-                Start-Sleep 10
+            }
+            Start-Sleep 10
+            $process2 = Get-Process -Name "Nexus"
+            if (!($process2)) {
+                Start-Sleep 5
                 $process2 = Get-Process -Name "Nexus"
-                if (!($process2)) {
-                    Start-Sleep 5
-                    $process2 = Get-Process -Name "Nexus"
-                } else { Start-Sleep 10 }
-                Get-Process -n Nexus | Stop-Process
-                $winStep = 'C:\Users\Public\Documents\WinStep'
-                Remove-Item -Path "$winStep\Themes\*" -Recurse -Force
-                Copy-Item -Path "..\config\dock\themes\*" -Destination "$winStep\Themes\" -Recurse -Force 
-                Remove-Item -Path "$winStep\NeXus\Indicators\*" -Force -Recurse 
-                Copy-Item -Path "..\config\dock\indicators\*" -Destination "$winStep\NeXus\Indicators\" -Recurse -Force 
-                New-Item -ItemType Directory -Path "$winStep\Sounds" -Force | Out-Null
-                Copy-Item -Path "..\config\dock\sounds\*" -Destination "$winStep\Sounds\" -Recurse -Force
-                New-Item -ItemType Directory -Path "$winStep\Icons" -Force | Out-Null
-                Copy-Item "..\config\icons" "$winStep" -Recurse -Force
-                $regFile = "..\config\dock\winstep.reg"
-                $downloadsPath = "$env:USERPROFILE\Downloads"
-                if ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
-                    $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "Rounded", "Squared" }
-                    $modifiedFile = "..\temp\winstep.reg"
-                    $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 
-                    $regFile = $modifiedFile
-                    if ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
-                        $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "Light", "Dark" }
-                        $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace '"UIDarkMode"="3"', '"UIDarkMode"="1"' }
-                        $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "1644825", "15658734" }
-                        $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "16119283", "2563870" }
-                        $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "store_light", "store_dark" }
-                        $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "recycle_bin_empty_light", "recycle_bin_empty_dark" }
-                        $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "recycle_bin_full_light", "recycle_bin_full_dark" }
-                        $modifiedFile = "..\temp\winstep.reg"
-                        $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 
-                    }
-                }
-                elseif (($roundedOrSquared -ne "S" -or $roundedOrSquared -ne "s") -and ($lightOrDark -eq "D" -or $lightOrDark -eq "d")) {
+            } else { Start-Sleep 10 }
+            Get-Process -n Nexus | Stop-Process
+            $winStep = 'C:\Users\Public\Documents\WinStep'
+            Remove-Item -Path "$winStep\Themes\*" -Recurse -Force
+            Copy-Item -Path "..\config\dock\themes\*" -Destination "$winStep\Themes\" -Recurse -Force 
+            Remove-Item -Path "$winStep\NeXus\Indicators\*" -Force -Recurse 
+            Copy-Item -Path "..\config\dock\indicators\*" -Destination "$winStep\NeXus\Indicators\" -Recurse -Force 
+            New-Item -ItemType Directory -Path "$winStep\Sounds" -Force | Out-Null
+            Copy-Item -Path "..\config\dock\sounds\*" -Destination "$winStep\Sounds\" -Recurse -Force
+            New-Item -ItemType Directory -Path "$winStep\Icons" -Force | Out-Null
+            Copy-Item "..\config\icons" "$winStep" -Recurse -Force
+            $regFile = "..\config\dock\winstep.reg"
+            $downloadsPath = "$env:USERPROFILE\Downloads"
+            if ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
+                $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "Rounded", "Squared" }
+                $modifiedFile = "..\temp\winstep.reg"
+                $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 
+                $regFile = $modifiedFile
+                if ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
                     $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "Light", "Dark" }
                     $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace '"UIDarkMode"="3"', '"UIDarkMode"="1"' }
                     $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "1644825", "15658734" }
@@ -1104,61 +1088,72 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                     $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "recycle_bin_full_light", "recycle_bin_full_dark" }
                     $modifiedFile = "..\temp\winstep.reg"
                     $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 
-                    $regFile = $modifiedFile
                 }
-                reg import $regFile > $null 2>&1
-                if (Test-Path -Path "$env:LOCALAPPDATA\WinLaunch") {
-                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Label9" -Value "Launchpad"
-                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path9" -Value "$env:LOCALAPPDATA\WinLaunch\WinLaunch.exe"
-                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath9" -Value "C:\Users\Public\Documents\Winstep\Icons\launchpad.ico"
-                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type9" -Value "1"
-                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Label10" -Value "Capture Desktop"
-                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path10" -Value "*78"
-                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type10" -Value "2"
-                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath10" -Value "C:\Users\Public\Documents\Winstep\Icons\camera.ico"
-                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockNoItems1" -Value "10"
-                } else {
-                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Label9" -Value "Capture Desktop"
-                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path9" -Value "*78"
-                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type9" -Value "2"
-                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath9" -Value "C:\Users\Public\Documents\Winstep\Icons\camera.ico"
-                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockNoItems1" -Value "9"
-                }
-                    Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "DockLabelColorHotTrack1" 
-                    Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type6"
-                    Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type7"
-                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path6" -Value $downloadsPath
-                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path7" -Value "$env:APPDATA\Microsoft\Windows\Recent\"
-                if ($dockDynamic -eq "X" -or $dockDynamic -eq "x") {
-                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockAutoHideMaximized1" -Value "True"
-                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockRespectReserved1" -Value "False"
-                    Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockReserveScreen1" -Value "False"
             }
-                if ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath0" -Value "C:\\Users\\Public\\Documents\\Winstep\\Icons\\explorer_default.ico"}
-                $scriptBlock2 = "Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe'"
-                $tempScript = Join-Path $env:TEMP "nonadmin_$([guid]::NewGuid().ToString()).ps1"
-                Set-Content -Path $tempScript -Value $scriptBlock2 -Encoding UTF8
+            elseif (($roundedOrSquared -ne "S" -or $roundedOrSquared -ne "s") -and ($lightOrDark -eq "D" -or $lightOrDark -eq "d")) {
+                $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "Light", "Dark" }
+                $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace '"UIDarkMode"="3"', '"UIDarkMode"="1"' }
+                $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "1644825", "15658734" }
+                $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "16119283", "2563870" }
+                $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "store_light", "store_dark" }
+                $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "recycle_bin_empty_light", "recycle_bin_empty_dark" }
+                $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "recycle_bin_full_light", "recycle_bin_full_dark" }
+                $modifiedFile = "..\temp\winstep.reg"
+                $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 
+                $regFile = $modifiedFile
+            }
+            reg import $regFile > $null 2>&1
+            if (Test-Path -Path "$env:LOCALAPPDATA\WinLaunch") {
+                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Label9" -Value "Launchpad"
+                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path9" -Value "$env:LOCALAPPDATA\WinLaunch\WinLaunch.exe"
+                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath9" -Value "C:\Users\Public\Documents\Winstep\Icons\launchpad.ico"
+                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type9" -Value "1"
+                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Label10" -Value "Capture Desktop"
+                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path10" -Value "*78"
+                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type10" -Value "2"
+                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath10" -Value "C:\Users\Public\Documents\Winstep\Icons\camera.ico"
+                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockNoItems1" -Value "10"
+            } else {
+                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Label9" -Value "Capture Desktop"
+                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path9" -Value "*78"
+                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type9" -Value "2"
+                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath9" -Value "C:\Users\Public\Documents\Winstep\Icons\camera.ico"
+                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockNoItems1" -Value "9"
+            }
+                Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "DockLabelColorHotTrack1" 
+                Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type6"
+                Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type7"
+                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path6" -Value $downloadsPath
+                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path7" -Value "$env:APPDATA\Microsoft\Windows\Recent\"
+            if ($dockDynamic -eq "X" -or $dockDynamic -eq "x") {
+                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockAutoHideMaximized1" -Value "True"
+                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockRespectReserved1" -Value "False"
+                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockReserveScreen1" -Value "False"
+        }
+            if ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath0" -Value "C:\\Users\\Public\\Documents\\Winstep\\Icons\\explorer_default.ico"}
+            $scriptBlock2 = "Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe'"
+            $tempScript = Join-Path $env:TEMP "nonadmin_$([guid]::NewGuid().ToString()).ps1"
+            Set-Content -Path $tempScript -Value $scriptBlock2 -Encoding UTF8
 $batchContent = @"
 @echo off
 pushd "$currentDir"
 pwsh.exe -NoProfile -ExecutionPolicy Bypass -File "`"$tempScript`""
 "@
-                $tempBatch = Join-Path $env:TEMP "run_nonadmin_$([guid]::NewGuid().ToString()).cmd"
-                Set-Content -Path $tempBatch -Value $batchContent -Encoding ASCII
-                $tempVbs = Join-Path $env:TEMP "run_silent_$([guid]::NewGuid().ToString()).vbs"
+            $tempBatch = Join-Path $env:TEMP "run_nonadmin_$([guid]::NewGuid().ToString()).cmd"
+            Set-Content -Path $tempBatch -Value $batchContent -Encoding ASCII
+            $tempVbs = Join-Path $env:TEMP "run_silent_$([guid]::NewGuid().ToString()).vbs"
 $vbsContent = @"
 Set WshShell = CreateObject("WScript.Shell")
 WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
 "@
-                Set-Content -Path $tempVbs -Value $vbsContent -Encoding ASCII
-                Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""
-                while (!(Get-Process "nexus")) { Start-Sleep 1 }
-                $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
-                Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Nexus.lnk" -Destination $programsDir -Force 
-                Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\Nexus.lnk" -Destination $programsDir -Force 
-                Write-Host "Nexus Dock installation completed." -ForegroundColor Green
+            Set-Content -Path $tempVbs -Value $vbsContent -Encoding ASCII
+            Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""
+            while (!(Get-Process "nexus")) { Start-Sleep 1 }
+            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+            Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Nexus.lnk" -Destination $programsDir -Force 
+            Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\Nexus.lnk" -Destination $programsDir -Force 
+            Write-Host "Nexus Dock installation completed." -ForegroundColor Green
             }
-        }
     #* Hot Corners
         "10"{
             Write-Host "Installing Hot Corners..." -ForegroundColor Yellow
