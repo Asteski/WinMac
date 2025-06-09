@@ -107,7 +107,7 @@ Set-ItemProperty -Path $registryPath1 -Name "DockBitmapFolder1" -Value "C:\Users
 Set-ItemProperty -Path $registryPath1 -Name "DockBack3Image1" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\NxBack.png" # -ErrorAction SilentlyContinue
 Set-ItemProperty -Path $registryPath1 -Name "DockLabelColor1" -Value $DockLabelColor # -ErrorAction SilentlyContinue
 Set-ItemProperty -Path $registryPath1 -Name "DockLabelBackColor1" -Value $DockLabelBackColor # -ErrorAction SilentlyContinue
-Set-ItemProperty -Path $registryPath1 -Name "DockRunningIndicator1" -Value $dockRunningIndicator # -ErrorAction SilentlyContinue
+# Set-ItemProperty -Path $registryPath1 -Name "DockRunningIndicator1" -Value $dockRunningIndicator # -ErrorAction SilentlyContinue
 Set-ItemProperty -Path $registryPath2 -Name "UIDarkMode" -Value $UIDarkMode # -ErrorAction SilentlyContinue
 Set-ItemProperty -Path $registryPath2 -Name "TaskIcon2" -Value "C:\\Users\\Public\\Documents\\WinStep\\Icons\\store_$mode.ico" # -ErrorAction SilentlyContinue
 Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "SystemUsesLightTheme" -Type DWord -Value $OSMode # -ErrorAction SilentlyContinue
