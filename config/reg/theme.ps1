@@ -111,7 +111,9 @@ Set-ItemProperty -Path $registryPath1 -Name "DockRunningIndicator1" -Value $dock
 Set-ItemProperty -Path $registryPath2 -Name "UIDarkMode" -Value $UIDarkMode # -ErrorAction SilentlyContinue
 Set-ItemProperty -Path $registryPath2 -Name "TaskIcon2" -Value "C:\\Users\\Public\\Documents\\WinStep\\Icons\\store_$mode.ico" # -ErrorAction SilentlyContinue
 Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "SystemUsesLightTheme" -Type DWord -Value $OSMode # -ErrorAction SilentlyContinue
-if ($mode2 -eq 'App') {	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "AppsUseLightTheme" -Type DWord -Value $OSMode # -ErrorAction SilentlyContinue }
+if ($mode2 -eq 'App') {	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "AppsUseLightTheme" -Type DWord -Value $OSMode } # -ErrorAction SilentlyContinue
 
 Start-Process explorer
 try { Start-Process "C:\Program Files (x86)\Winstep\Nexus.exe" } catch {}
+
+start-sleep 5
