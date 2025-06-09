@@ -56,7 +56,7 @@ set-alias -name alias -value Set-Alias
 set-alias -name df -value Get-Volume
 
 # Functions
-function home { Set-Location $home }
+function home { Set-Location $env:USERPROFILE }
 function desktop { Set-Location "$env:USERPROFILE\Desktop" }
 function wua { winget upgrade --all }
 function wuu { winget upgrade --include-unknown --all }
