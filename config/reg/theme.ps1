@@ -24,8 +24,8 @@ if ($mode -eq 'Light') {
 	$cursorName 			= 'Windows Black'
 	$OSMode 				= 1
 	$UIDarkMode 			= '3'
-	$DockLabelColor1 		= '1644825'
-	$DockLabelBackColor1 	= '16119283'
+	$DockLabelColor 		= '1644825'
+	$DockLabelBackColor 	= '16119283'
 	$theme = $themeStyle -replace 'Dark', 'Light'
 	$dockRunningIndicator = $dockRunningIndicator -replace 'Dark', 'Light'
 	$orbBitmap = $orbBitmap -replace 'white', 'black'
@@ -39,8 +39,8 @@ elseif ($mode -eq 'Dark') {
 	$cursorName 			= 'Windows Default (system scheme)'
 	$OSMode 				= 0
 	$UIDarkMode 			= '1'
-	$DockLabelColor1 		= '15658734'
-	$DockLabelBackColor1 	= '2563870'
+	$DockLabelColor 		= '15658734'
+	$DockLabelBackColor 	= '2563870'
 	$theme = $themeStyle -replace 'Light', 'Dark'
 	$dockRunningIndicator = $dockRunningIndicator -replace 'Light', 'Dark'
 	$orbBitmap = $orbBitmap -replace 'black', 'white'
@@ -83,6 +83,7 @@ uint fWinIni);
 $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
 $CursorRefresh::SystemParametersInfo(0x0057,0,$null,0) > $null 2>&1
 
+Set-ItemProperty -Path "HKCU:\Software\StartIsBack" -Name "OrbBitmap" -Value $orbBitmap -ErrorAction SilentlyContinue
 Set-ItemProperty -Path $registryPath0 -Name "GenThemeName" -Value $theme -ErrorAction SilentlyContinue
 Set-ItemProperty -Path $registryPath0 -Name "BitmapsFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\" -ErrorAction SilentlyContinue
 Set-ItemProperty -Path $registryPath0 -Name "GlobalBitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\" -ErrorAction SilentlyContinue
@@ -99,11 +100,13 @@ Set-ItemProperty -Path $registryPath0 -Name "RAMBitmapFolder" -Value "C:\Users\P
 Set-ItemProperty -Path $registryPath0 -Name "WANDABitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\" -ErrorAction SilentlyContinue
 Set-ItemProperty -Path $registryPath0 -Name "TrashEmptyIcon" -Value "C:\Users\Public\Documents\Winstep\Icons\recycle_bin_empty_$mode.ico" -ErrorAction SilentlyContinue
 Set-ItemProperty -Path $registryPath0 -Name "TrashFullIcon" -Value "C:\Users\Public\Documents\Winstep\Icons\recycle_bin_full_$mode.ico" -ErrorAction SilentlyContinue
-Set-ItemProperty -Path "HKCU:\Software\StartIsBack" -Name "OrbBitmap" -Value $orbBitmap -ErrorAction SilentlyContinue
+Set-ItemProperty -Path $registryPath0 -Name "NeXuSImage27" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\NxSep.png" -ErrorAction SilentlyContinue
+Set-ItemProperty -Path $registryPath0 -Name "DockBack27Image1" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\NxSep.png" -ErrorAction SilentlyContinue
+Set-ItemProperty -Path $registryPath1 -Name "DockBack27Image1" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\NxSep.png" -ErrorAction SilentlyContinue
 Set-ItemProperty -Path $registryPath1 -Name "DockBitmapFolder1" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\" -ErrorAction SilentlyContinue
 Set-ItemProperty -Path $registryPath1 -Name "DockBack3Image1" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\NxBack.png" -ErrorAction SilentlyContinue
-Set-ItemProperty -Path $registryPath1 -Name "DockLabelColor1" -Value $DockLabelColor1 -ErrorAction SilentlyContinue
-Set-ItemProperty -Path $registryPath1 -Name "DockLabelBackColor1" -Value $DockLabelBackColor1 -ErrorAction SilentlyContinue
+Set-ItemProperty -Path $registryPath1 -Name "DockLabelColor1" -Value $DockLabelColor -ErrorAction SilentlyContinue
+Set-ItemProperty -Path $registryPath1 -Name "DockLabelBackColor1" -Value $DockLabelBackColor -ErrorAction SilentlyContinue
 Set-ItemProperty -Path $registryPath1 -Name "DockRunningIndicator1" -Value $dockRunningIndicator -ErrorAction SilentlyContinue
 Set-ItemProperty -Path $registryPath2 -Name "UIDarkMode" -Value $UIDarkMode -ErrorAction SilentlyContinue
 Set-ItemProperty -Path $registryPath2 -Name "TaskIcon2" -Value "C:\\Users\\Public\\Documents\\WinStep\\Icons\\store_$mode.ico" -ErrorAction SilentlyContinue
