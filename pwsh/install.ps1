@@ -14,8 +14,12 @@ $user = [Security.Principal.WindowsIdentity]::GetCurrent()
 $adminTest = (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
 $checkDir = Get-ChildItem '..'
 if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir -like "*bin*" -and $checkDir -like "*pwsh*")) {
-    Write-Host "WinMac components not found. Please make sure to run the script from ethe correct directory." -ForegroundColor Red
-    Start-Sleep 2
+    [void][System.Windows.MessageBox]::Show("WinMac components not found. Please make sure to run the script from the correct directory.", "Missing Components", 'OK', 'Error')
+    exit
+}
+if (-not $adminTest) {
+    Add-Type -AssemblyName PresentationFramework
+   [void][System.Windows.MessageBox]::Show("This script must be run as Administrator.", "Insufficient Privileges", 'OK', 'Error')
     exit
 }
 function Get-WindowsTheme {
@@ -32,11 +36,6 @@ function Get-WindowsTheme {
     }
 }
 
-if (-not $adminTest) {
-    Add-Type -AssemblyName PresentationFramework
-   [void][System.Windows.MessageBox]::Show("This script must be run as Administrator.", "Insufficient Privileges", 'OK', 'Error')
-    exit
-}
 
 #* GUI
 $windowsTheme = Get-WindowsTheme
@@ -319,9 +318,6 @@ Write-Host @"
 
 This script is responsible for installing all or specific WinMac 
 components.
-
-Please disable Windows Defender/3rd party Anti-virus, to prevent issues 
-with applying icons pack.
 
 PowerShell profile files will be removed and replaced with new ones.
 Please make sure to backup your current profiles if needed.

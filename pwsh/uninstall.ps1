@@ -17,15 +17,13 @@ $user = [Security.Principal.WindowsIdentity]::GetCurrent()
 $adminTest = (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
 $checkDir = Get-ChildItem '..'
 if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir -like "*bin*" -and $checkDir -like "*pwsh*")) {
-    Write-Host "WinMac components not found. Please make sure to run the script from the correct directory." -ForegroundColor Red
-    Start-Sleep 2
+    [void][System.Windows.MessageBox]::Show("WinMac components not found. Please make sure to run the script from the correct directory.", "Missing Components", 'OK', 'Error')
     exit
 }
-function Invoke-Output {
-    param ([scriptblock]$Command)
-    $output = & $Command 2>&1
-    $output | Out-File -FilePath "..\logs\$logFile" -Append
-    if ($debug -and $output) {$output}
+if (-not $adminTest) {
+    Add-Type -AssemblyName PresentationFramework
+   [void][System.Windows.MessageBox]::Show("This script must be run as Administrator.", "Insufficient Privileges", 'OK', 'Error')
+    exit
 }
 function Get-WindowsTheme {
     try {
