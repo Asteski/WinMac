@@ -7,24 +7,7 @@ param
 	[string]
 	$mode2
 )
-if ($mode -eq 'Dark')
-{
-	$CursorMode 			= 'aero'
-	$cursorName 			= 'Windows Default (system scheme)'
-	$OSMode 				= 0
-	$UIDarkMode 			= '1'
-	$DockLabelColor1 		= '15658734'
-	$DockLabelBackColor1 	= '2563870'
-}
-if ($mode -eq 'Light')
-{
-	$CursorMode 			= 'aero_black'
-	$cursorName 			= 'Windows Black'
-	$OSMode 				= 1
-	$UIDarkMode 			= '3'
-	$DockLabelColor1 		= '1644825'
-	$DockLabelBackColor1 	= '16119283'
-}
+
 taskkill /IM explorer.exe /F > $null 2>&1
 taskkill /IM nexus.exe /F > $null 2>&1
 $registryPath0 = "HKCU:\Software\WinSTEP2000\NeXuS"
@@ -35,7 +18,14 @@ $registryPath4 = "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F
 $dockRunningIndicator = (Get-ItemProperty -Path $registryPath1 -Name "DockRunningIndicator1" -ErrorAction SilentlyContinue).DockRunningIndicator1
 $themeStyle = (Get-ItemProperty -Path $registryPath0 -Name "GenThemeName" -ErrorAction SilentlyContinue).GenThemeName
 $orbBitmap = (Get-ItemProperty -Path "HKCU:\Software\StartIsBack" -Name "OrbBitmap").OrbBitmap
+
 if ($mode -eq 'Light') {
+	$CursorMode 			= 'aero_black'
+	$cursorName 			= 'Windows Black'
+	$OSMode 				= 1
+	$UIDarkMode 			= '3'
+	$DockLabelColor1 		= '1644825'
+	$DockLabelBackColor1 	= '16119283'
 	$theme = $themeStyle -replace 'Dark', 'Light'
 	$dockRunningIndicator = $dockRunningIndicator -replace 'Dark', 'Light'
 	$orbBitmap = $orbBitmap -replace 'white', 'black'
@@ -45,6 +35,12 @@ if ($mode -eq 'Light') {
 	Set-ItemProperty -Path $registryPath4 -Name "Icon" -Value "%SystemRoot%\System32\imageres.dll,-1015"
 }
 elseif ($mode -eq 'Dark') {
+	$CursorMode 			= 'aero'
+	$cursorName 			= 'Windows Default (system scheme)'
+	$OSMode 				= 0
+	$UIDarkMode 			= '1'
+	$DockLabelColor1 		= '15658734'
+	$DockLabelBackColor1 	= '2563870'
 	$theme = $themeStyle -replace 'Light', 'Dark'
 	$dockRunningIndicator = $dockRunningIndicator -replace 'Light', 'Dark'
 	$orbBitmap = $orbBitmap -replace 'black', 'white'
@@ -53,6 +49,7 @@ elseif ($mode -eq 'Dark') {
 	Set-ItemProperty -Path $registryPath3 -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-54"
 	Set-ItemProperty -Path $registryPath4 -Name "Icon" -Value "%SystemRoot%\System32\imageres.dll,-55"
 }
+
 $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
 $RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
 $RegCursors.SetValue("",$cursorName)
@@ -85,6 +82,7 @@ uint fWinIni);
 '@
 $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
 $CursorRefresh::SystemParametersInfo(0x0057,0,$null,0) > $null 2>&1
+
 Set-ItemProperty -Path $registryPath0 -Name "GenThemeName" -Value $theme -ErrorAction SilentlyContinue
 Set-ItemProperty -Path $registryPath0 -Name "BitmapsFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\" -ErrorAction SilentlyContinue
 Set-ItemProperty -Path $registryPath0 -Name "GlobalBitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\" -ErrorAction SilentlyContinue
@@ -110,8 +108,7 @@ Set-ItemProperty -Path $registryPath1 -Name "DockRunningIndicator1" -Value $dock
 Set-ItemProperty -Path $registryPath2 -Name "UIDarkMode" -Value $UIDarkMode -ErrorAction SilentlyContinue
 Set-ItemProperty -Path $registryPath2 -Name "TaskIcon2" -Value "C:\\Users\\Public\\Documents\\WinStep\\Icons\\store_$mode.ico" -ErrorAction SilentlyContinue
 Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "SystemUsesLightTheme" -Type DWord -Value $OSMode -ErrorAction SilentlyContinue
-if ($mode2 -eq 'App') {
-	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "AppsUseLightTheme" -Type DWord -Value $OSMode -ErrorAction SilentlyContinue
-}
+if ($mode2 -eq 'App') {	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "AppsUseLightTheme" -Type DWord -Value $OSMode -ErrorAction SilentlyContinue }
+
 Start-Process explorer
 try { Start-Process "C:\Program Files (x86)\Winstep\Nexus.exe" } catch {}
