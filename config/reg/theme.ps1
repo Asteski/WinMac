@@ -106,17 +106,17 @@ try {
 
 	echo 'Variables:'
 	echo "Mode: $mode"
-	CursorMode
-	$OSMode
-	$UIDarkMode
-	$DockLabelColor1
-	$DockLabelBackColor1
-	$themeStyle
-	$theme
-	$dockRunningIndicator
-	$orbBitmap
-	$registryPath0
-	$registryPath1
-	$registryPath2
+	echo "CursorMode: $CursorMode"
+	echo "OSMode: $OSMode"
+	echo "UIDarkMode: $UIDarkMode"
+	echo "DockLabelColor1: $DockLabelColor1"
+	echo "DockLabelBackColor1: $DockLabelBackColor1"
+	echo "themeStyle: $themeStyle"
+	echo "theme: $theme"
+	echo "dockRunningIndicator: $dockRunningIndicator"
+	echo "orbBitmap: $orbBitmap"
+	echo "registryPath0: $registryPath0"
+	echo "registryPath1: $registryPath1"
+	echo "registryPath2: $registryPath2"
 
 	start-sleep 10
