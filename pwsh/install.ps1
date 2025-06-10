@@ -1142,7 +1142,8 @@ Set WshShell = CreateObject("WScript.Shell")
 WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
 "@
             Set-Content -Path $tempVbs -Value $vbsContent -Encoding ASCII
-            Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""            Write-Host "Nexus Dock installation completed." -ForegroundColor Green
+            Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""            
+            Write-Host "Nexus Dock installation completed." -ForegroundColor Green
             }
     #* Hot Corners
         "10"{
