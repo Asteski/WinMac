@@ -103,3 +103,20 @@ try {
 	Start-Process explorer -ErrorAction SilentlyContinue
 	Start-Process "C:\Program Files (x86)\Winstep\Nexus.exe"
 } catch {}
+
+	echo 'Variables:'
+	echo "Mode: $mode"
+	CursorMode
+	$OSMode
+	$UIDarkMode
+	$DockLabelColor1
+	$DockLabelBackColor1
+	$themeStyle
+	$theme
+	$dockRunningIndicator
+	$orbBitmap
+	$registryPath0
+	$registryPath1
+	$registryPath2
+
+	start-sleep 10
