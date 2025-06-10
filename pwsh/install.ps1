@@ -1024,13 +1024,11 @@ foreach ($app in $selectedApps) {
     #* Nexus Dock
         "9" {
             Write-Host "Installing Nexus Dock..." -ForegroundColor Yellow
-            $currentDir = (Get-Location).Path
-$scriptBlock = @"
-$checkNexus = Get-WinGetPackage -name Nexus
+$nonAdminScript = @'
+$checkNexus = Get-WinGetPackage -name Nexus -ErrorAction SilentlyContinue
 if ($null -eq $checkNexus) {
-
-    $downloadUrl = "https://www.winstep.net/nexus.zip"
-    $downloadPath = "..\temp\Nexus.zip"
+    $downloadUrl    = "https://www.winstep.net/nexus.zip"
+    $downloadPath   = "..\temp\Nexus.zip"
     if (-not (Test-Path $downloadPath)) {
         Invoke-WebRequest -Uri $downloadUrl -OutFile $downloadPath
     }
@@ -1039,27 +1037,21 @@ if ($null -eq $checkNexus) {
 if (Get-Process -n Nexus) { Stop-Process -n Nexus }
 Start-Process -FilePath "..\temp\NexusSetup.exe" -ArgumentList "/silent"
 Start-Sleep 10
-$process1 = Get-Process -Name "NexusSetup"
-while ($process1) {
-    Start-Sleep 5
-    $process1 = Get-Process -Name "NexusSetup"
-}
+while (Get-Process -Name "NexusSetup") { Start-Sleep 5 }
 Start-Sleep 10
-$process2 = Get-Process -Name "Nexus"
-if (!($process2)) {
+if (-not (Get-Process -Name "Nexus")) {
     Start-Sleep 5
-    $process2 = Get-Process -Name "Nexus"
-} else { Start-Sleep 10 }
+}
 Get-Process -n Nexus | Stop-Process
 $winStep = 'C:\Users\Public\Documents\WinStep'
-Remove-Item -Path "$winStep\Themes\*" -Recurse -Force
-Copy-Item -Path "..\config\dock\themes\*" -Destination "$winStep\Themes\" -Recurse -Force 
-Remove-Item -Path "$winStep\NeXus\Indicators\*" -Force -Recurse 
-Copy-Item -Path "..\config\dock\indicators\*" -Destination "$winStep\NeXus\Indicators\" -Recurse -Force 
-New-Item -ItemType Directory -Path "$winStep\Sounds" -Force | Out-Null
-Copy-Item -Path "..\config\dock\sounds\*" -Destination "$winStep\Sounds\" -Recurse -Force
-New-Item -ItemType Directory -Path "$winStep\Icons" -Force | Out-Null
-Copy-Item "..\config\icons" "$winStep" -Recurse -Force
+Remove-Item -Path "$winStep\Themes\*"           -Recurse -Force
+Copy-Item   -Path "..\config\dock\themes\*"     -Destination "$winStep\Themes\"     -Recurse -Force 
+Remove-Item -Path "$winStep\NeXus\Indicators\*" -Recurse -Force
+Copy-Item   -Path "..\config\dock\indicators\*" -Destination "$winStep\NeXus\Indicators\" -Recurse -Force 
+New-Item    -ItemType Directory -Path "$winStep\Sounds" -Force | Out-Null
+Copy-Item   -Path "..\config\dock\sounds\*"     -Destination "$winStep\Sounds\"     -Recurse -Force
+New-Item    -ItemType Directory -Path "$winStep\Icons"  -Force | Out-Null
+Copy-Item   "..\config\icons" "$winStep" -Recurse -Force
 $regFile = "..\config\dock\winstep.reg"
 $downloadsPath = "$env:USERPROFILE\Downloads"
 if ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
@@ -1122,28 +1114,23 @@ if ($dockDynamic -eq "X" -or $dockDynamic -eq "x") {
 if ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath0" -Value "C:\\Users\\Public\\Documents\\Winstep\\Icons\\explorer_default.ico"}
 Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe'
 while (!(Get-Process "nexus")) { Start-Sleep 1 }
-$programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
-Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Nexus.lnk" -Destination $programsDir -Force 
-Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\Nexus.lnk" -Destination $programsDir -Force 
-"@
+'@
+                $tempFile = Join-Path $env:TEMP 'NexusNonElevated.ps1'
+                $nonAdminScript | Out-File -FilePath $tempFile -Encoding UTF8
 
-$tempScript = Join-Path $env:TEMP "nonadmin_$([guid]::NewGuid().ToString()).ps1"
-Set-Content -Path $tempScript -Value $scriptBlock -Encoding UTF8
-$batchContent = @"
-@echo off
-pushd "$currentDir"
-pwsh.exe -NoProfile -ExecutionPolicy Bypass -File "`"$tempScript`""
-"@
-            $tempBatch = Join-Path $env:TEMP "run_nonadmin_$([guid]::NewGuid().ToString()).cmd"
-            Set-Content -Path $tempBatch -Value $batchContent -Encoding ASCII
-            $tempVbs = Join-Path $env:TEMP "run_silent_$([guid]::NewGuid().ToString()).vbs"
-$vbsContent = @"
-Set WshShell = CreateObject("WScript.Shell")
-WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
-"@
-            Set-Content -Path $tempVbs -Value $vbsContent -Encoding ASCII
-            Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""            
-            Write-Host "Nexus Dock installation completed." -ForegroundColor Green
+                # Use the Explorer shell to launch PowerShell under the normal user token
+                $shell = New-Object -ComObject Shell.Application
+                $shell.ShellExecute(
+                'powershell.exe',
+                "-NoProfile -ExecutionPolicy Bypass -File `"$tempFile`"",
+                '',
+                'open',
+                1
+                )
+                $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+                Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Nexus.lnk" -Destination $programsDir -Force 
+                Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\Nexus.lnk" -Destination $programsDir -Force 
+                Write-Host "Nexus Dock installation completed." -ForegroundColor Green
             }
     #* Hot Corners
         "10"{
