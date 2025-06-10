@@ -1105,7 +1105,23 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                 $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 
                 $regFile = $modifiedFile
             }
-            reg import $regFile
+            $scriptBlock2 = "reg import $regFile"
+            $tempScript = Join-Path $env:TEMP "nonadmin_$([guid]::NewGuid().ToString()).ps1"
+            Set-Content -Path $tempScript -Value $scriptBlock2 -Encoding UTF8
+$batchContent = @"
+@echo off
+pushd "$currentDir"
+pwsh.exe -NoProfile -ExecutionPolicy Bypass -File "`"$tempScript`""
+"@
+            $tempBatch = Join-Path $env:TEMP "run_nonadmin_$([guid]::NewGuid().ToString()).cmd"
+            Set-Content -Path $tempBatch -Value $batchContent -Encoding ASCII
+            $tempVbs = Join-Path $env:TEMP "run_silent_$([guid]::NewGuid().ToString()).vbs"
+$vbsContent = @"
+Set WshShell = CreateObject("WScript.Shell")
+WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
+"@
+            Set-Content -Path $tempVbs -Value $vbsContent -Encoding ASCII
+            Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""
             if (Test-Path -Path "$env:LOCALAPPDATA\WinLaunch") {
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Label9" -Value "Launchpad"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path9" -Value "$env:LOCALAPPDATA\WinLaunch\WinLaunch.exe"
@@ -1134,9 +1150,9 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockReserveScreen1" -Value "False"
         }
             if ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath0" -Value "C:\\Users\\Public\\Documents\\Winstep\\Icons\\explorer_default.ico"}
-            $scriptBlock2 = "Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe'"
+            $scriptBlock3 = "Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe'"
             $tempScript = Join-Path $env:TEMP "nonadmin_$([guid]::NewGuid().ToString()).ps1"
-            Set-Content -Path $tempScript -Value $scriptBlock2 -Encoding UTF8
+            Set-Content -Path $tempScript -Value $scriptBlock3 -Encoding UTF8
 $batchContent = @"
 @echo off
 pushd "$currentDir"
