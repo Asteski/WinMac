@@ -1173,6 +1173,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             if ($null -eq $uiXaml) {
                 Install-WinGetPackage -id 'Microsoft.UI.Xaml.2.7' | Out-Null
             }
+            Write-Host "Installing WinXCorners..." -ForegroundColor DarkYellow
             Invoke-WebRequest -Uri $winXCornersUrl -OutFile $outputPath
             if (-not (Test-Path -Path $destinationPath)) {
                 New-Item -ItemType Directory -Path $destinationPath -Force | Out-Null
