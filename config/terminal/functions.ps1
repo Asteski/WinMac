@@ -54,8 +54,10 @@ set-alias -name fi -value ffind
 set-alias -name ss -value Select-String
 set-alias -name alias -value Set-Alias
 set-alias -name df -value Get-Volume
+set-alias -name desk -value desktop
 
 # Functions
+function onedrive { cd $env:ONEDRIVE }
 function home { Set-Location $env:USERPROFILE }
 function desktop { Set-Location "$env:USERPROFILE\Desktop" }
 function wua { winget upgrade --all }
