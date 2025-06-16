@@ -1103,7 +1103,8 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                 $regFile = $modifiedFile
             }
             reg import $regFile > $null 2>&1
-            if (Test-Path -Path "$env:LOCALAPPDATA\WinLaunch") {
+            # if (Test-Path -Path "$env:LOCALAPPDATA\WinLaunch") {
+            if ($selectedApps -like '*10*') {
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Label9" -Value "Launchpad"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path9" -Value "$env:LOCALAPPDATA\WinLaunch\WinLaunch.exe"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath9" -Value "C:\Users\Public\Documents\Winstep\Icons\launchpad.ico"
