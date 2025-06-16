@@ -35,7 +35,6 @@ function Get-WindowsTheme {
     }
 }
 
-
 #* GUI
 $windowsTheme = Get-WindowsTheme
 if (!($noGUI)) {
@@ -332,9 +331,7 @@ on WinMac GitHub page:
 https://github.com/Asteski/WinMac/wiki
 
 "@ -ForegroundColor Yellow
-    # if (-not $adminTest) {Write-Host "Script is not running in elevated session." -ForegroundColor Red} else {Write-Host "Script is running in elevated session." -ForegroundColor Green}
     Write-Host "-----------------------------------------------------------------------" -ForegroundColor Cyan
-    # WinMac configuration
     Write-Host
     $fullOrCustom = Read-Host "Enter 'F' for full or 'C' for custom installation"
     if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
@@ -609,7 +606,7 @@ if ($null -eq $wingetClientCheck) {
         Write-Host "Winget is already installed." -ForegroundColor DarkGreen
     }
 }
-####! WinMac deployment
+#! WinMac deployment
 foreach ($app in $selectedApps) {
     switch ($app.Trim()) {
     #* PowerToys
@@ -1401,7 +1398,6 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
         }
     }
 }
-#? Clean up
 if ((Get-ChildItem -Path "$env:LOCALAPPDATA\WinMac" -Recurse | Measure-Object).Count -eq 0) { Remove-Item -Path "$env:LOCALAPPDATA\WinMac" -Force }
 Start-Sleep 2
 Stop-Process -n explorer -ErrorAction SilentlyContinue
