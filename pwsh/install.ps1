@@ -1161,11 +1161,11 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             $winXCornersUrl = "https://github.com/vhanla/winxcorners/releases/download/1.3.2/WinXCorners1.3.2.zip"
             $winXCornersConfigPath = '..\config\hotcorners\settings.ini'
             $destinationPath = "$env:LOCALAPPDATA\WinXCorners"
-            $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.8' -ErrorAction SilentlyContinue
             $winLaunchUrl = "https://github.com/jensroth-git/WinLaunch/releases/download/v.0.7.3.0/WinLaunch.0.7.3.0.zip"
             $winLaunchConfigPath = '..\config\hotcorners\Settings.xml'
             $winLaunchOutputPath = '..\temp\WinLaunch.zip'
             $winLaunchDestinationPath = "$env:LOCALAPPDATA\WinLaunch"
+            $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.8' -ErrorAction SilentlyContinue
             if ($null -eq $dotNetRuntime) {
                 Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8' | Out-Null
             }
