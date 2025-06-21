@@ -9,7 +9,7 @@ $WarningPreference="SilentlyContinue"
 $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
 Add-Type -AssemblyName PresentationFramework
 Add-Type -AssemblyName System.Windows.Forms
-if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null}
+if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" }
 $user = [Security.Principal.WindowsIdentity]::GetCurrent()
 $adminTest = (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
 $checkDir = Get-ChildItem '..'
@@ -218,7 +218,7 @@ if (!($noGUI)) {
         $window.Close()
         exit
     })
-    $window.ShowDialog() | Out-Null
+    $window.ShowDialog() 
 }
 else {
     Clear-Host
@@ -386,8 +386,8 @@ foreach ($app in $selectedApps) {
             Write-Host "Uninstalling PowerToys..."  -ForegroundColor Yellow
             Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force
             $everythingPT = Get-WingetPackage -name EverythingPT -ErrorAction SilentlyContinue
-            Uninstall-WinGetPackage -name $everythingPT.name | Out-Null
-            Uninstall-WinGetPackage -id Microsoft.PowerToys | Out-Null
+            Uninstall-WinGetPackage -name $everythingPT.name 
+            Uninstall-WinGetPackage -id Microsoft.PowerToys 
             Remove-Item $env:LOCALAPPDATA\Microsoft\PowerToys -Recurse -Force
             Remove-Item $env:LOCALAPPDATA\PowerToys -Recurse -Force
             Write-Host "Uninstalling PowerToys completed." -ForegroundColor Green
@@ -395,9 +395,9 @@ foreach ($app in $selectedApps) {
     #? Everything
         "2" {
             Write-Host "Uninstalling Everything..."  -ForegroundColor Yellow
-            Uninstall-WinGetPackage -id Voidtools.Everything | Out-Null
+            Uninstall-WinGetPackage -id Voidtools.Everything 
             Remove-Item -Path "$programsDir\Everything.lnk" -Force
-            Remove-Item -Path "HKLM:\SYSTEM\CurrentControlSet\Services\Everything" -Recurse | Out-Null
+            Remove-Item -Path "HKLM:\SYSTEM\CurrentControlSet\Services\Everything" -Recurse 
             while (Get-WinGetPackage -id Voidtools.Everything -ErrorAction SilentlyContinue) {
                 Start-Sleep -Seconds 5
             }
@@ -414,8 +414,8 @@ foreach ($app in $selectedApps) {
                 "Vim.Vim",
                 "gsass1.NTop"
             )
-            foreach ($app in $winget) { Uninstall-WinGetPackage -id $app | Out-Null}
-            Uninstall-Module PSTree -Force | Out-Null
+            foreach ($app in $winget) { Uninstall-WinGetPackage -id $app }
+            Uninstall-Module PSTree -Force 
             if ((Test-Path "$profilePath\PowerShell\$profileFile")) { Remove-Item -Path "$profilePath\PowerShell\$profileFile" }
             if ((Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { Remove-Item -Path "$profilePath\WindowsPowerShell\$profileFile" }
             Remove-Item -Path "$programsDir\gVim*" -Force
@@ -430,7 +430,7 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0
             Start-Sleep 5
             Start-Process -name explorer
-            Uninstall-WinGetPackage -id "StartIsBack.StartAllBack" | Out-Null
+            Uninstall-WinGetPackage -id "StartIsBack.StartAllBack" 
             Set-ItemProperty -Path $exRegPath\Advanced -Name "UseCompactMode" -Value 0
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarAl" -Value 1
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarGlomLevel" -Value 0
@@ -451,10 +451,10 @@ foreach ($app in $selectedApps) {
                 Get-ChildItem "$env:LOCALAPPDATA\WinMac" | Where-Object { $_.Name -match 'startbutton|windowskey' } | Remove-Item -Recurse -Force
             }
             else {
-                Stop-Process -Name startmenu -Force | Out-Null
-                winget uninstall --id "Open-Shell.Open-Shell-Menu" --source winget --force | Out-Null    
+                Stop-Process -Name startmenu -Force 
+                winget uninstall --id "Open-Shell.Open-Shell-Menu" --source winget --force     
             }
-            Uninstall-WinGetPackage -name "Winver UWP" | Out-Null
+            Uninstall-WinGetPackage -name "Winver UWP" 
             Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
             Expand-Archive -Path "..\config\WinX-default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
             Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 0 -ErrorAction SilentlyContinue
@@ -466,7 +466,7 @@ foreach ($app in $selectedApps) {
         "6" {
             Write-Host "Uninstalling Windhawk..." -ForegroundColor Yellow
             Stop-Process -Name windhawk -Force
-            Uninstall-WinGetPackage -name Windhawk | Out-Null
+            Uninstall-WinGetPackage -name Windhawk 
             Remove-Item -Path "$programsDir\Windhawk.lnk"
             Write-Host "Uninstalling Windhawk completed." -ForegroundColor Green
         }
@@ -490,7 +490,7 @@ foreach ($app in $selectedApps) {
         "9" {
             Write-Host "Uninstalling Nexus Dock..." -ForegroundColor Yellow
             Get-Process Nexus | Stop-Process -Force
-            Uninstall-WinGetPackage -name Nexus | Out-Null
+            Uninstall-WinGetPackage -name Nexus 
             Remove-Item -Path "$programsDir\Nexus.lnk" -Force
             Remove-Item -Path "C:\Users\Public\Documents\Winstep" -Recurse -Force
             Write-Host "Uninstalling Nexus Dock completed." -ForegroundColor Green
@@ -502,8 +502,8 @@ foreach ($app in $selectedApps) {
             Stop-Process -n WinXCorners -Force
             Stop-Process -n WinLaunch -Force
             Stop-Process -n ssn -Force
-            Uninstall-WinGetPackage -name "Simple Sticky Notes"  | Out-Null
-            winget install 9NBLGGH4QGHW --silent | Out-Null
+            Uninstall-WinGetPackage -name "Simple Sticky Notes"  
+            winget install 9NBLGGH4QGHW --silent 
             Remove-ItemProperty -Path $regPath -Name "WinLaunch"
             Remove-ItemProperty -Path $regPath -Name "WinXCorners"
             Remove-ItemProperty -Path $regPath -Name "Simple Sticky Notes"
@@ -520,8 +520,8 @@ foreach ($app in $selectedApps) {
     #? MacType
         "11" {
             Write-Host "Uninstalling MacType..." -ForegroundColor Yellow
-            Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "MacType" | Out-Null
-            winget uninstall MacType --silent | Out-Null
+            Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "MacType" 
+            winget uninstall MacType --silent 
             Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name FontSmoothing -Value "2"
             Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name FontSmoothingType -Type DWord -Value 2
             RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters ,1 ,True
@@ -537,9 +537,9 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 0
             $homeDir = "C:\Users\$env:USERNAME"
             $homeIniFilePath = "$($homeDir)\desktop.ini"
-            Remove-Item -Path $homeIniFilePath -Force | Out-Null
+            Remove-Item -Path $homeIniFilePath -Force 
             $programsIniFilePath = "$($programsDir)\desktop.ini"
-            Remove-Item -Path $programsIniFilePath -Force  | Out-Null
+            Remove-Item -Path $programsIniFilePath -Force  
             $curDestFolder = "C:\Windows\Cursors"
             $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
             $RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
@@ -572,25 +572,25 @@ uint pvParam,
 uint fWinIni);
 '@
             $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
-            $CursorRefresh::SystemParametersInfo(0x0057,0,$null,0) | Out-Null
+            $CursorRefresh::SystemParametersInfo(0x0057,0,$null,0) 
             Get-ChildItem "C:\Windows\Cursors" -filter aero_black* | ForEach-Object { Remove-Item $_.FullName -Force }
             $homeDir = "C:\Users\$env:USERNAME"
             $homePin = new-object -com shell.application
-            $homePin.Namespace($homeDir).Self.InvokeVerb("pintohome") | Out-Null
+            $homePin.Namespace($homeDir).Self.InvokeVerb("pintohome") 
             $programsPin = new-object -com shell.application
-            $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome") | Out-Null
+            $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome") 
             $RBPath = 'HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\pintohome\command\'
             $name = "DelegateExecute"
             $value = "{b455f46e-e4af-4035-b0a4-cf18d2f6f28e}"
-            New-Item -Path $RBPath -Force | Out-Null
-            New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force | Out-Null
+            New-Item -Path $RBPath -Force 
+            New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force 
             $oShell = New-Object -ComObject Shell.Application
             $recycleBin = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
-            $recycleBin.Self.InvokeVerb("PinToHome") | Out-Null
-            Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse | Out-Null
-            Remove-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
-            Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings" -Recurse | Out-Null
-            Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarSmallIcons" | Out-Null
+            $recycleBin.Self.InvokeVerb("PinToHome") 
+            Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse 
+            Remove-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" 
+            Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings" -Recurse 
+            Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarSmallIcons" 
             Get-ChildItem ..\config\reg\add\* -e *theme* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
             reg import '..\config\reg\remove\Remove_Theme_Mode_in_Context_Menu.reg' > $null 2>&1
             reg import '..\config\reg\remove\Remove_Hidden_items_from_context_menu.reg' > $null 2>&1
@@ -604,7 +604,7 @@ uint fWinIni);
             Set-ItemProperty -Path $registryPath1 -Name "(default)" -Value "%SystemRoot%\System32\imageres.dll,-54"
             Set-ItemProperty -Path $registryPath1 -Name "empty" -Value "%SystemRoot%\System32\imageres.dll,-55"
             Set-ItemProperty -Path $registryPath1 -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-54"
-            Remove-Item -Path $registryPath2 -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
+            Remove-Item -Path $registryPath2 -Recurse -Force -ErrorAction SilentlyContinue 
             Write-Host "Uninstalling Other Settings completed." -ForegroundColor Green
         }
     }
