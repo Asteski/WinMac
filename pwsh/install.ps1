@@ -1071,7 +1071,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Copy-Item -Path "..\config\dock\sounds\*" -Destination "$winStep\Sounds\" -Recurse -Force
             New-Item -ItemType Directory -Path "$winStep\Icons" -Force 
             Copy-Item "..\config\icons" "$winStep" -Recurse -Force
-            $regFile = "..\config\dock\winstep.reg"t
+            $regFile = "..\config\dock\winstep.reg"
             $downloadsPath = "$env:USERPROFILE\Downloads"
             if ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
                 $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "Rounded", "Squared" }
