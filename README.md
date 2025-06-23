@@ -86,8 +86,6 @@ You can also install WinMac on Windows 10 22H2+, with some caveats described [he
 
 ## Credits
 
-List of utilities and their creators, included in WinMac:
-
 - [PowerToys](https://learn.microsoft.com/en-us/windows/powertoys/) by Microsoft
 - [Everything](https://www.voidtools.com/) by David Carpenter
 - [StartAllBack](https://www.startallback.com/) by Tihiy
