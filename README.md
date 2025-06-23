@@ -45,7 +45,7 @@
 
 - **Enhanced Taskbar** - legacy Taskbar put on top, with enhanced capabilities and looks to match Windows 11 design
 
-- **Enhanced Explorer** - legacy Explorer and context menu which makes explorer load fast and look clean
+- **Enhanced Explorer** - improved Explorer and context menus which makes explorer load fast and look clean
 
 - **Enhanced Terminal** - custom prompt and ton of custom functions which bring most commonly used macOS/Linux commands
 
