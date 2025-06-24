@@ -59,7 +59,7 @@ else {
 if (Test-Path -Path $registryPath0) {
 	Set-ItemProperty -Path $registryPath0 -Name "GenThemeName" -Value $theme
 	Set-ItemProperty -Path $registryPath0 -Name "BitmapsFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
-	Set-ItemProperty -Path $registryPath0 -Name "GlobalBitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
+	Set-ItemProperty -Path $registryPath0 -Name "GlobalBitmafpFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
 	Set-ItemProperty -Path $registryPath0 -Name "NeXuSBitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
 	Set-ItemProperty -Path $registryPath0 -Name "NeXuSThemeName" -Value $theme
 	Set-ItemProperty -Path $registryPath0 -Name "NeXuSImage3" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\NxBack.png"
@@ -73,10 +73,10 @@ if (Test-Path -Path $registryPath0) {
 	Set-ItemProperty -Path $registryPath0 -Name "WANDABitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
 	Set-ItemProperty -Path $registryPath0 -Name "TrashEmptyIcon" -Value "C:\Users\Public\Documents\Winstep\Icons\recycle_bin_empty_$mode.ico"
 	Set-ItemProperty -Path $registryPath0 -Name "TrashFullIcon" -Value "C:\Users\Public\Documents\Winstep\Icons\recycle_bin_full_$mode.ico"
-	Set-ItemProperty -Path $registryPath0 -Name "NeXuSImage27" -Value $dockRunningIndicator
-	Set-ItemProperty -Path $registryPath0 -Name "DockBack27Image1" -Value $dockRunningIndicator
+	Set-ItemProperty -Path $registryPath0 -Name "NeXuSImage27" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\NxSep.png"
 	Set-ItemProperty -Path $registryPath1 -Name "DockBitmapFolder1" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
 	Set-ItemProperty -Path $registryPath1 -Name "DockBack3Image1" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\NxBack.png"
+	Set-ItemProperty -Path $registryPath1 -Name "DockBack27Image1" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\NxSep.png"
 	Set-ItemProperty -Path $registryPath1 -Name "DockLabelColor1" -Value $DockLabelColor1
 	Set-ItemProperty -Path $registryPath1 -Name "DockLabelBackColor1" -Value $DockLabelBackColor1
 	Set-ItemProperty -Path $registryPath1 -Name "DockBack27Image1" -Value $dockRunningIndicator
