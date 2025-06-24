@@ -2,7 +2,7 @@
 function Test-Admin
 {
     $user = [Security.Principal.WindowsIdentity]::GetCurrent();
-    (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)  
+    (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
 }
 
 # Completion settings
@@ -57,7 +57,7 @@ set-alias -name df -value Get-Volume
 set-alias -name desk -value desktop
 
 # Functions
-function onedrive { cd $env:ONEDRIVE }
+function onedrive { Set-Location $env:ONEDRIVE }
 function home { Set-Location $env:USERPROFILE }
 function desktop { Set-Location "$env:USERPROFILE\Desktop" }
 function wua { winget upgrade --all }
@@ -83,7 +83,6 @@ function ld {
     param (
         [string[]]$Paths = "."
     )
-
     foreach ($Path in $Paths) {
         if (Test-Path $Path) {
             $item = Get-Item -LiteralPath $Path -Force -ErrorAction SilentlyContinue
@@ -108,11 +107,13 @@ function lls {
         [string]$Path = ".",
         [Switch][alias('-v')]$vertical
         )
-        $items = Get-ChildItem $Path -ErrorAction SilentlyContinue | Where-Object { $_.PSIsContainer -and $_.Name -notmatch '^\.' -or $_.PSIsContainer -eq $false }
-        if (-not $items) {
-            Write-Host "No items found in $Path" -ForegroundColor Red
-            return
-        }
+    $items = Get-ChildItem $Path -ErrorAction SilentlyContinue | Where-Object { $_.PSIsContainer -and $_.Name -notmatch '^\.' -or $_.PSIsContainer -eq $false }
+    if (-not $items) {
+        if ($Path -eq ".") { $Path = $pwd.path.split('\')[-1] }
+        else { $Path = Split-Path -Leaf $Path }
+        Write-Host "No items found in $Path" -ForegroundColor Red
+        return
+    }
     if ($vertical) {lsx $items -v} else {lsx $items}
 }
 function lsv {lls $args -v}
@@ -121,13 +122,15 @@ function lla {
         [string]$Path = ".",
         [Switch][alias('-v')]$vertical
         )
-        $items = Get-ChildItem $Path -Force -ErrorAction SilentlyContinue
-        if (-not $items) {
-            Write-Host "No items found in $Path" -ForegroundColor Red
-            return
-        }
-        if ($vertical) {lsx $items -v} else {lsx $items}
+    $items = Get-ChildItem $Path -Force -ErrorAction SilentlyContinue
+    if (-not $items) {
+        if ($Path -eq ".") { $Path = $pwd.path.split('\')[-1] }
+        else { $Path = Split-Path -Leaf $Path }
+        Write-Host "No items found in $Path" -ForegroundColor Red
+        return
     }
+    if ($vertical) {lsx $items -v} else {lsx $items}
+}
 function lav {lls $args -v}
 function lsx {
     param (
@@ -194,15 +197,14 @@ function psversion { $PSVersionTable }
 function ppwd { $pwd.path }
 function ffind {
     param (
-        [string]$Name,                    # The string to search for in file names
-        [Alias('r')][switch]$Recurse      # The -Recurse switch (with alias -r) to enable recursive search
+        [string]$Name,
+        [Alias('r')][switch]$Recurse
     )
     if ($Name) {
         if ($Name.StartsWith('.\')) {
             $Name = $Name.Substring(2)
         }
         $filter = "*$Name*"
-        # Extract the actual search term without wildcards and leading dot
         $searchTerm = $Name -replace '^\*+' -replace '\*+$' -replace '^\.'
         
         if ($Recurse) {
@@ -408,7 +410,7 @@ function printenv {
     }
 }
 
-function setenv { 
+function setenv {
     param(
         [Parameter(Mandatory = $true, Position=0)] [string] $name,
         [Parameter(Mandatory = $true, Position=1)] [string] $value
@@ -416,7 +418,7 @@ function setenv {
     [Environment]::SetEnvironmentVariable($name, $value, "User")
 }
 
-function rmenv { 
+function rmenv {
     param(
         [Parameter(Mandatory = $true, Position=0)] [string] $name
     )
@@ -605,23 +607,21 @@ function open {
 
 function ansi-reverse {
     param(
-        [Parameter(Mandatory = $true, Position=0)] [string] $txt,   # raw text string
-        [Parameter(Mandatory = $true, Position=1)] [string] $pat    # Pattern string
+        [Parameter(Mandatory = $true, Position=0)] [string] $txt,
+        [Parameter(Mandatory = $true, Position=1)] [string] $pat
     )
     $RED = "`e[91m"
     $GRY = "`e[90m"
-    # Replace text pattern with ANSI Reversed version (and using capture group for case preserve)
-    # https://stackoverflow.com/a/40683667/1147688
     $txt = "$txt" -replace "($pat)", "$RED`$1$GRY"
     Return "$txt"
 }
 
 function print-color {
     param( 
-        [Parameter(Mandatory = $true, Position=0)] [string] $i,     # Filename
-        [Parameter(Mandatory = $true, Position=1)] [string] $j,     # Linenumber
-        [Parameter(Mandatory = $true, Position=2)] [string] $k,     # Line
-        [Parameter(Mandatory = $true, Position=3)] [string] $p      # Pattern
+        [Parameter(Mandatory = $true, Position=0)] [string] $i,
+        [Parameter(Mandatory = $true, Position=1)] [string] $j,
+        [Parameter(Mandatory = $true, Position=2)] [string] $k,
+        [Parameter(Mandatory = $true, Position=3)] [string] $p
     )
     
     $fn = "{0}  " -f $i
@@ -698,5 +698,4 @@ function grep {
         Write-Host "Error: $_" -ForegroundColor Red
     }
 }
-
 #EOF
