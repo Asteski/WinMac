@@ -15,7 +15,7 @@
 ![winmac_dark_01](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_01.png)
 </details>
 <details>
-    <summary><small>Click for more images</small></summary>
+    <summary><small style="font-size: 0.8em;">Click for more images</small></summary>
     <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_02.png" alt="winmac_dark_02">
     <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_03.png" alt="winmac_dark_03">
     <img src="https://raw.githubusercontent.com/Asteski/WinMac/refs/heads/main/img/winmac_dark_04.png" alt="winmac_dark_04">
