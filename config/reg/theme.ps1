@@ -74,6 +74,7 @@ if ((Test-Path -Path $registryPath0) -eq $true) {
 	Set-ItemProperty -Path $registryPath0 -Name "TrashEmptyIcon" -Value "C:\Users\Public\Documents\Winstep\Icons\recycle_bin_empty_$mode.ico"
 	Set-ItemProperty -Path $registryPath0 -Name "TrashFullIcon" -Value "C:\Users\Public\Documents\Winstep\Icons\recycle_bin_full_$mode.ico"
 	Set-ItemProperty -Path $registryPath0 -Name "NeXuSImage27" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\NxSep.png"
+	Set-ItemProperty -Path $registryPath0 -Name "DockBack27Image1" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\NxSep.png"
 	Set-ItemProperty -Path $registryPath1 -Name "DockBitmapFolder1" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
 	Set-ItemProperty -Path $registryPath1 -Name "DockBack3Image1" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\NxBack.png"
 	Set-ItemProperty -Path $registryPath1 -Name "DockBack27Image1" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\NxSep.png"
