@@ -9,7 +9,7 @@ param
 )
 taskkill /IM explorer.exe /F > $null 2>&1
 taskkill /IM nexus.exe /F > $null 2>&1
-$ErrorActionPreference = 'SilentlyContinue'
+# $ErrorActionPreference = 'SilentlyContinue'
 $registryPath0 = 'HKCU:\Software\WinSTEP2000\NeXuS'
 $registryPath1 = 'HKCU:\Software\WinSTEP2000\NeXuS\Docks'
 $registryPath2 = 'HKCU:\Software\WinSTEP2000\Shared'
