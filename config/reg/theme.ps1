@@ -56,7 +56,7 @@ else {
 		Start-Sleep -Milliseconds 100
 	}
 }
-if (Test-Path -Path $registryPath0) {
+if ((Test-Path -Path $registryPath0) -eq $true) {
 	Set-ItemProperty -Path $registryPath0 -Name "GenThemeName" -Value $theme
 	Set-ItemProperty -Path $registryPath0 -Name "BitmapsFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
 	Set-ItemProperty -Path $registryPath0 -Name "GlobalBitmafpFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
