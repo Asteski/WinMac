@@ -1,15 +1,14 @@
 param (
     [switch]$noGUI
 )
-$version = "1.0.2"
-$sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
-$date = Get-Date -Format "yy-MM-ddTHHmmss"
+$version = "1.0.3"
 $errorActionPreference="SilentlyContinue"
 $WarningPreference="SilentlyContinue"
 $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
 Add-Type -AssemblyName PresentationFramework
 Add-Type -AssemblyName System.Windows.Forms
 if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null}
+$sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
 $user = [Security.Principal.WindowsIdentity]::GetCurrent()
 $adminTest = (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
 $checkDir = Get-ChildItem '..'
@@ -231,8 +230,6 @@ Version: $version
 Author: Asteski
 GitHub: https://github.com/Asteski/WinMac
 
-This is work in progress. You're using this script at your own risk.
-
 -----------------------------------------------------------------------
 "@ -ForegroundColor Cyan
 Write-Host @"
@@ -240,17 +237,16 @@ Write-Host @"
 This script is responsible for uninstalling all or specific WinMac 
 components.
 
-Please disable Windows Defender/3rd party Anti-virus, to prevent issues 
-with uninstalling icons pack.
-
 PowerShell profile files will be removed, please make sure to backup 
-your current profiles if needed.
+your current profile if needed.
 
-Vim and Nexus packages will show prompt to uninstall, please confirm the
-uninstallations manually.
+Vim, Nexus, Windhawk and MacType packages will show prompt to uninstall,
+please confirm the uninstallations manually.
 
 The author of this script is not responsible for any damage caused by 
-running it.
+running it. Highly recommend to create a system restore point 
+before proceeding with the installation process to ensure you can 
+revert any changes if necessary.
 
 For guide on how to use the script, please refer to the Wiki page 
 on WinMac GitHub page:
@@ -258,9 +254,7 @@ on WinMac GitHub page:
 https://github.com/Asteski/WinMac/wiki
 
 "@ -ForegroundColor Yellow
-    if (-not $adminTest) {Write-Host "Script is not running in elevated session." -ForegroundColor Red} else {Write-Host "Script is running in elevated session." -ForegroundColor Green}
     Write-Host "`n-----------------------------------------------------------------------" -ForegroundColor Cyan
-    # WinMac configuration
     $fullOrCustom = Read-Host "`nEnter 'F' for full or 'C' for custom uninstallation"
     if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
         $selectedApps = "1","2","3","4","5","6","7","8","9","10","11","12"
@@ -381,7 +375,7 @@ Import-Module -Name Microsoft.WinGet.Client -Force
 ####! WinMac deployment
 foreach ($app in $selectedApps) {
     switch ($app.Trim()) {
-    #? PowerToys
+    #* PowerToys
         "1" {
             Write-Host "Uninstalling PowerToys..."  -ForegroundColor Yellow
             Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force
@@ -392,7 +386,7 @@ foreach ($app in $selectedApps) {
             Remove-Item $env:LOCALAPPDATA\PowerToys -Recurse -Force
             Write-Host "Uninstalling PowerToys completed." -ForegroundColor Green
         }
-    #? Everything
+    #* Everything
         "2" {
             Write-Host "Uninstalling Everything..."  -ForegroundColor Yellow
             Uninstall-WinGetPackage -id Voidtools.Everything | Out-Null
@@ -405,7 +399,7 @@ foreach ($app in $selectedApps) {
             Remove-Item $env:LOCALAPPDATA\Everything -Recurse -Force
             Write-Host "Uninstalling Everything completed." -ForegroundColor Green
         }
-    #? PowerShell Profile
+    #* PowerShell Profile
         "3" {
             Write-Host "Uninstalling PowerShell Profile..." -ForegroundColor Yellow
             $profilePath = $PROFILE | Split-Path | Split-Path
@@ -421,7 +415,7 @@ foreach ($app in $selectedApps) {
             Remove-Item -Path "$programsDir\gVim*" -Force
             Write-Host "Uninstalling PowerShell Profile completed." -ForegroundColor Green
         }
-    #? StartAllBack
+    #* StartAllBack
         "4" {
             Write-Host "Uninstalling StartAllBack..." -ForegroundColor Yellow
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
@@ -439,7 +433,7 @@ foreach ($app in $selectedApps) {
             Write-Host "Uninstalling StartAllBack completed." -ForegroundColor Green
             Start-Sleep 3
         }
-    #? WinMac Menu
+    #* WinMac Menu
         "5" {
             Write-Host "Uninstalling WinMac Menu..." -ForegroundColor Yellow
             $sabRegPath = "HKCU:\Software\StartIsBack"
@@ -462,7 +456,7 @@ foreach ($app in $selectedApps) {
             Stop-Process -n Explorer
             Write-Host "Uninstalling WinMac Menu completed." -ForegroundColor Green
         }
-    #? Windhawk
+    #* Windhawk
         "6" {
             Write-Host "Uninstalling Windhawk..." -ForegroundColor Yellow
             Stop-Process -Name windhawk -Force
@@ -470,14 +464,14 @@ foreach ($app in $selectedApps) {
             Remove-Item -Path "$programsDir\Windhawk.lnk"
             Write-Host "Uninstalling Windhawk completed." -ForegroundColor Green
         }
-    #? Stahky
+    #* Stahky
         "7" {
             Write-Host "Uninstalling Stahky..." -ForegroundColor Yellow
             $exePath = "$env:LOCALAPPDATA\Stahky"
             Remove-Item -Path $exePath -Recurse -Force
             Write-Host "Uninstalling Stahky completed." -ForegroundColor Green
         }
-    #? AutoHotkey Keyboard Shortcuts
+    #* AutoHotkey Keyboard Shortcuts
         "8" {
             Write-Host "Uninstalling Keyboard Shortcuts..." -ForegroundColor Yellow
             Stop-Process -Name KeyShortcuts -Force
@@ -486,7 +480,7 @@ foreach ($app in $selectedApps) {
             Get-ChildItem "$env:LOCALAPPDATA\WinMac" | Where-Object { $_.Name -match 'keyshortcuts' } | Remove-Item -Recurse -Force
             Write-Host "Uninstalling Keyboard Shortcuts completed." -ForegroundColor Green
         }
-    #? Nexus Dock
+    #* Nexus Dock
         "9" {
             Write-Host "Uninstalling Nexus Dock..." -ForegroundColor Yellow
             Get-Process Nexus | Stop-Process -Force
@@ -495,7 +489,7 @@ foreach ($app in $selectedApps) {
             Remove-Item -Path "C:\Users\Public\Documents\Winstep" -Recurse -Force
             Write-Host "Uninstalling Nexus Dock completed." -ForegroundColor Green
         }
-    #? Hot Corners
+    #* Hot Corners
         "10" {
             Write-Host "Uninstalling Hot Corners..." -ForegroundColor Yellow
             $regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
@@ -517,7 +511,7 @@ foreach ($app in $selectedApps) {
             Remove-Item -Path "$programsDir\Simple Sticky Notes.lnk" -Recurse -Force
             Write-Host "Uninstalling Hot Corners completed." -ForegroundColor Green
         }
-    #? MacType
+    #* MacType
         "11" {
             Write-Host "Uninstalling MacType..." -ForegroundColor Yellow
             Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "MacType" | Out-Null
@@ -528,7 +522,7 @@ foreach ($app in $selectedApps) {
             Stop-Process -Name Explorer -Force -ErrorAction SilentlyContinue
             Write-Host "Uninstalling MacType completed." -ForegroundColor Green
         }
-    #? Other
+    #* Other
         "12" {
             Write-Host "Uninstalling Other Settings..." -ForegroundColor Yellow
             $regPath = "HKCU:\SOFTWARE\WinMac"
@@ -613,9 +607,10 @@ uint fWinIni);
 if ((Get-ChildItem -Path "$env:LOCALAPPDATA\WinMac" -Recurse | Measure-Object).Count -eq 0) { Remove-Item -Path "$env:LOCALAPPDATA\WinMac" -Force }
 $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue
 if ($null -eq $tasksFolder) { schtasks /DELETE /TN \WinMac /F > $null 2>&1 }
+Start-Sleep 2
+Stop-Process -n explorer -ErrorAction SilentlyContinue
 Start-Sleep 3
-$explorerProcess = Get-Process -Name explorer -ErrorAction SilentlyContinue
-if ($null -eq $explorerProcess) {Start-Process -FilePath explorer.exe}
+if (-not (Get-Process -Name explorer -ErrorAction SilentlyContinue)) { Start-Process explorer }
 Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
 Write-Host @"
 
@@ -629,8 +624,8 @@ If you have any questions or suggestions, please contact me on GitHub.
 "@ -ForegroundColor Cyan
 
 Write-Host "-----------------------------------------------------------------------------"  -ForegroundColor Cyan
-Write-Host
-$restartConfirmation = Read-Host "Restart computer now? It's recommended to fully apply all the changes (Y/n)"
+Start-Sleep 2
+$restartConfirmation = Read-Host "`nRestart computer now? It's recommended to fully apply all the changes (Y/n)"
 if ($restartConfirmation -eq "Y" -or $restartConfirmation -eq "y") {
     Write-Host
     for ($a=9; $a -ge 0; $a--) {

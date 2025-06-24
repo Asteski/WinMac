@@ -1,9 +1,10 @@
 param (
     [switch]$noGUI
 )
-$version = "1.0.2"
-$errorActionPreference="silentlyContinue"
-$WarningPreference="silentlyContinue"
+$version = "1.0.3"
+$errorActionPreference="SilentlyContinue"
+$WarningPreference="SilentlyContinue"
+$programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
 Add-Type -AssemblyName System.Windows.Formstylk
 Add-Type -AssemblyName PresentationFramework
 if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null}
@@ -34,9 +35,8 @@ function Get-WindowsTheme {
         return "Light"
     }
 }
-
-#* GUI
 $windowsTheme = Get-WindowsTheme
+#* GUI
 if (!($noGUI)) {
     $backgroundColor = if ($windowsTheme -eq "Dark") { "#1E1E1E" } else { "#eff4f9" }
     $foregroundColor = if ($windowsTheme -eq "Dark") { "#f3f3f3" } else { "#1b1b1b" }
@@ -308,8 +308,6 @@ Version: $version
 Author: Asteski
 GitHub: https://github.com/Asteski/WinMac
 
-This is work in progress. You're using this script at your own risk.
-
 -----------------------------------------------------------------------
 "@ -ForegroundColor Cyan
 Write-Host @"
@@ -318,7 +316,7 @@ This script is responsible for installing all or specific WinMac
 components.
 
 PowerShell profile files will be removed and replaced with new ones.
-Please make sure to backup your current profiles if needed.
+Please make sure to backup your current profile if needed.
 
 The author of this script is not responsible for any damage caused by 
 running it. Highly recommend to create a system restore point 
@@ -644,7 +642,7 @@ foreach ($app in $selectedApps) {
             Write-Host "Installing Everything..." -ForegroundColor Yellow
             Install-WinGetPackage -Id "voidtools.Everything" | Out-Null
             Stop-Process -Name Everything.exe -ErrorAction SilentlyContinue
-            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+            # $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Move-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Destination $programsDir -Force
             Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Destination $programsDir -Force
             $everythingIniPath = "$env:APPDATA\Everything"
@@ -714,7 +712,7 @@ foreach ($app in $selectedApps) {
             $latestSubfolder = Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -Property CreationTime -Descending | Select-Object -First 1
             $vimChildPath = $latestSubfolder.FullName
             [Environment]::SetEnvironmentVariable("Path", $env:Path + ";$vimChildPath", [EnvironmentVariableTarget]::Machine)
-            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+            # $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $prompt
             if ($gitProfile -eq $true) { Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $git }
             Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $functions
@@ -911,7 +909,7 @@ foreach ($app in $selectedApps) {
                 $windhawkBackup = 'windhawk-backup-x64.zip'
             }
             $backupFile = Get-ChildItem -Path (Join-Path $PWD '..\config') -Filter $windhawkBackup -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
-            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+            # $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             $timeStamp = (Get-Date -Format 'yyyyMMddHHmmss')
             $extractFolder = Join-Path $env:TEMP ("WindhawkRestore_$timeStamp")
             New-Item -ItemType Directory -Path $extractFolder -Force | Out-Null
@@ -1150,7 +1148,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Set-Content -Path $tempVbs -Value $vbsContent -Encoding ASCII
             Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""
             while (!(Get-Process "nexus")) { Start-Sleep 1 }
-            $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+            # $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Nexus.lnk" -Destination $programsDir -Force 
             Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\Nexus.lnk" -Destination $programsDir -Force 
             Write-Host "Nexus Dock installation completed." -ForegroundColor Green
@@ -1322,7 +1320,7 @@ $programsIni = @"
 [.ShellClassInfo]
 IconResource=C:\WINDOWS\System32\imageres.dll,-87
 "@
-                $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+                # $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
                 $programsIniFilePath = "$($programsDir)\desktop.ini"
                 if (Test-Path $programsIniFilePath)  {
                     Remove-Item $programsIniFilePath -Force
