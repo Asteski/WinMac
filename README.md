@@ -15,7 +15,7 @@
 ![winmac_dark_01](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_01.png)
 </details>
 <details>
-    <summary><small style="font-size: 0.8em;">Click for more images</small></summary>
+    <summary>Click for more images</summary>
     <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_02.png" alt="winmac_dark_02">
     <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_03.png" alt="winmac_dark_03">
     <img src="https://raw.githubusercontent.com/Asteski/WinMac/refs/heads/main/img/winmac_dark_04.png" alt="winmac_dark_04">
@@ -26,7 +26,7 @@
 ![winmac_light_01](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_01.jpg)
 </details>
 <details>
-    <summary><small>Click for more images</small></summary>
+    <summary>Click for more images</summary>
     <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_02.png" alt="winmac_light_02">
     <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_03.png" alt="winmac_light_03">
     <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_04.png" alt="winmac_light_04">
@@ -73,6 +73,7 @@ Here are the ways you can run different deployment mods:
 You can choose between full or custom installation, if you only want to install specific WinMac components.
 
 WinMac is supported by Windows 11, on both x64 and ARM based platforms.
+
 
 ## Future plans
 
