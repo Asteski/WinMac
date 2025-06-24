@@ -15,7 +15,7 @@
 ![winmac_dark_01](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_01.png)
 </details>
 <details>
-    <summary>Images</summary>
+    <summary><small>Click for more images</small></summary>
     <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_02.png" alt="winmac_dark_02">
     <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_03.png" alt="winmac_dark_03">
     <img src="https://raw.githubusercontent.com/Asteski/WinMac/refs/heads/main/img/winmac_dark_04.png" alt="winmac_dark_04">
@@ -26,7 +26,7 @@
 ![winmac_light_01](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_01.jpg)
 </details>
 <details>
-    <summary>Images</summary>
+    <summary><small>Click for more images</small></summary>
     <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_02.png" alt="winmac_light_02">
     <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_03.png" alt="winmac_light_03">
     <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_04.png" alt="winmac_light_04">
@@ -79,10 +79,9 @@ You can also install WinMac on Windows 10 22H2+, with some caveats described [he
 ## Future plans
 
 - custom context menu theme for *Nexus* to match Windows 11 design
-- disable keyboard shortcuts in full-screen apps
+- disable keyboard shortcuts for full-screen apps
 - additional *Icons Packs* with red and green folders sets
 - additional *Start Orbs*
-- *AltSnap*
 
 ## Credits
 
