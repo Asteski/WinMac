@@ -74,8 +74,6 @@ You can choose between full or custom installation, if you only want to install 
 
 WinMac is supported by Windows 11, on both x64 and ARM based platforms.
 
-You can also install WinMac on Windows 10 22H2+, with some caveats described [here](https://github.com/Asteski/WinMac/wiki/Windows-10).
-
 ## Future plans
 
 - custom context menu theme for *Nexus* to match Windows 11 design
