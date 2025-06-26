@@ -53,38 +53,38 @@ elseif ($mode -eq 'Dark') {
 	Set-ItemProperty -Path $registryPath3 -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-54"
 	Set-ItemProperty -Path $registryPath4 -Name "Icon" -Value "%SystemRoot%\System32\imageres.dll,-55"
 }
-$RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
-$RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
-$RegCursors.SetValue("",$cursorName)
-$RegCursors.SetValue("AppStarting","C:\Windows\Cursors\$($CursorMode)_working.ani")
-$RegCursors.SetValue("Arrow","C:\Windows\Cursors\$($CursorMode)_arrow.cur")
-$RegCursors.SetValue("Crosshair","C:\Windows\Cursors\cross_r.cur")
-$RegCursors.SetValue("Hand","C:\Windows\Cursors\$($CursorMode)_link.cur")
-$RegCursors.SetValue("Help","C:\Windows\Cursors\$($CursorMode)_helpsel.cur")
-$RegCursors.SetValue("IBeam","C:\Windows\Cursors\beam_r.cur")
-$RegCursors.SetValue("No","C:\Windows\Cursors\$($CursorMode)_unavail.cur")
-$RegCursors.SetValue("NWPen","C:\Windows\Cursors\$($CursorMode)_pen.cur")
-$RegCursors.SetValue("SizeAll","C:\Windows\Cursors\$($CursorMode)_move.cur")
-$RegCursors.SetValue("SizeNESW","C:\Windows\Cursors\$($CursorMode)_nesw.cur")
-$RegCursors.SetValue("SizeNS","C:\Windows\Cursors\$($CursorMode)_ns.cur")
-$RegCursors.SetValue("SizeNWSE","C:\Windows\Cursors\$($CursorMode)_nwse.cur")
-$RegCursors.SetValue("SizeWE","C:\Windows\Cursors\$($CursorMode)_ew.cur")
-$RegCursors.SetValue("UpArrow","C:\Windows\Cursors\$($CursorMode)_up.cur")
-$RegCursors.SetValue("Wait","C:\Windows\Cursors\$($CursorMode)_busy.ani")
-$RegCursors.SetValue("Pin","C:\Windows\Cursors\$($CursorMode)_pin.cur")
-$RegCursors.SetValue("Person","C:\Windows\Cursors\$($CursorMode)_person.cur")
-$RegCursors.Close()
-$RegConnect.Close()
-$CSharpSig = @'
-[DllImport("user32.dll", EntryPoint = "SystemParametersInfo")]
-public static extern bool SystemParametersInfo(
-uint uiAction,
-uint uiParam,
-uint pvParam,
-uint fWinIni);
-'@
-$CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
-$CursorRefresh::SystemParametersInfo(0x0057,0,$null,0) > $null 2>&1
+# $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
+# $RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
+# $RegCursors.SetValue("",$cursorName)
+# $RegCursors.SetValue("AppStarting","C:\Windows\Cursors\$($CursorMode)_working.ani")
+# $RegCursors.SetValue("Arrow","C:\Windows\Cursors\$($CursorMode)_arrow.cur")
+# $RegCursors.SetValue("Crosshair","C:\Windows\Cursors\cross_r.cur")
+# $RegCursors.SetValue("Hand","C:\Windows\Cursors\$($CursorMode)_link.cur")
+# $RegCursors.SetValue("Help","C:\Windows\Cursors\$($CursorMode)_helpsel.cur")
+# $RegCursors.SetValue("IBeam","C:\Windows\Cursors\beam_r.cur")
+# $RegCursors.SetValue("No","C:\Windows\Cursors\$($CursorMode)_unavail.cur")
+# $RegCursors.SetValue("NWPen","C:\Windows\Cursors\$($CursorMode)_pen.cur")
+# $RegCursors.SetValue("SizeAll","C:\Windows\Cursors\$($CursorMode)_move.cur")
+# $RegCursors.SetValue("SizeNESW","C:\Windows\Cursors\$($CursorMode)_nesw.cur")
+# $RegCursors.SetValue("SizeNS","C:\Windows\Cursors\$($CursorMode)_ns.cur")
+# $RegCursors.SetValue("SizeNWSE","C:\Windows\Cursors\$($CursorMode)_nwse.cur")
+# $RegCursors.SetValue("SizeWE","C:\Windows\Cursors\$($CursorMode)_ew.cur")
+# $RegCursors.SetValue("UpArrow","C:\Windows\Cursors\$($CursorMode)_up.cur")
+# $RegCursors.SetValue("Wait","C:\Windows\Cursors\$($CursorMode)_busy.ani")
+# $RegCursors.SetValue("Pin","C:\Windows\Cursors\$($CursorMode)_pin.cur")
+# $RegCursors.SetValue("Person","C:\Windows\Cursors\$($CursorMode)_person.cur")
+# $RegCursors.Close()
+# $RegConnect.Close()
+# $CSharpSig = @'
+# [DllImport("user32.dll", EntryPoint = "SystemParametersInfo")]
+# public static extern bool SystemParametersInfo(
+# uint uiAction,
+# uint uiParam,
+# uint pvParam,
+# uint fWinIni);
+# '@
+# $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
+# $CursorRefresh::SystemParametersInfo(0x0057,0,$null,0) > $null 2>&1
 Set-ItemProperty -Path $registryPath0 -Name "GenThemeName" -Value $theme -ErrorAction SilentlyContinue
 Set-ItemProperty -Path $registryPath0 -Name "BitmapsFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\" -ErrorAction SilentlyContinue
 Set-ItemProperty -Path $registryPath0 -Name "GlobalBitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\" -ErrorAction SilentlyContinue
@@ -109,9 +109,18 @@ Set-ItemProperty -Path $registryPath1 -Name "DockLabelBackColor1" -Value $DockLa
 Set-ItemProperty -Path $registryPath1 -Name "DockRunningIndicator1" -Value $dockRunningIndicator -ErrorAction SilentlyContinue
 Set-ItemProperty -Path $registryPath2 -Name "UIDarkMode" -Value $UIDarkMode -ErrorAction SilentlyContinue
 Set-ItemProperty -Path $registryPath2 -Name "TaskIcon2" -Value "C:\\Users\\Public\\Documents\\WinStep\\Icons\\store_$mode.ico" -ErrorAction SilentlyContinue
-Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "SystemUsesLightTheme" -Type DWord -Value $OSMode -ErrorAction SilentlyContinue
 if ($mode2 -eq 'App') {
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "AppsUseLightTheme" -Type DWord -Value $OSMode -ErrorAction SilentlyContinue
+}
+else {
+	Start-Process "$env:WINDIR\Resources\Themes\WinMac_$mode.theme"
+	while ($true) {
+		if (Get-Process -Name 'SystemSettings') {
+			Stop-Process -Name 'SystemSettings' -Force
+			break
+		}
+		Start-Sleep -Milliseconds 100
+	}
 }
 Start-Process explorer
 try { Start-Process "C:\Program Files (x86)\Winstep\Nexus.exe" } catch {}
