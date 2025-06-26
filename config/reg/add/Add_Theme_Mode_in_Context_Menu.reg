@@ -15,14 +15,14 @@ Windows Registry Editor Version 5.00
 "Icon"="imageres.dll,-5411"
 
 [HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\AppANDWindowsMode\shell\001flyout\command]
-@="pwsh -NoProfile -ExecutionPolicy Bypass -File %LOCALAPPDATA%\\WinMac\\theme.ps1 -mode Light"
+@="pwsh -NoProfile -ExecutionPolicy Bypass -File %LOCALAPPDATA%\\WinMac\\theme.ps1 -mode Light -mode2 App"
 
 [HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\AppANDWindowsMode\shell\002flyout]
 "MUIVerb"="Dark"
 "Icon"="imageres.dll,-5412"
 
 [HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\AppANDWindowsMode\shell\002flyout\command]
-@="pwsh -NoProfile -ExecutionPolicy Bypass -File %LOCALAPPDATA%\\WinMac\\theme.ps1 -mode Dark"
+@="pwsh -NoProfile -ExecutionPolicy Bypass -File %LOCALAPPDATA%\\WinMac\\theme.ps1 -mode Dark -mode2 App"
 
 [HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\AppMode]
 "MUIVerb"="App mode"
@@ -52,11 +52,11 @@ Windows Registry Editor Version 5.00
 "Icon"="imageres.dll,-5411"
 
 [HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\WindowsMode\shell\001flyout\command]
-@="pwsh -NoProfile -ExecutionPolicy Bypass -File %LOCALAPPDATA%\\WinMac\\theme.ps1 -mode Light -mode2 NoApp"
+@="pwsh -NoProfile -ExecutionPolicy Bypass -File %LOCALAPPDATA%\\WinMac\\theme.ps1 -mode Light"
 
 [HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\WindowsMode\shell\002flyout]
 "MUIVerb"="Dark"
 "Icon"="imageres.dll,-5412"
 
 [HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\WindowsMode\shell\002flyout\command]
-@="pwsh -NoProfile -ExecutionPolicy Bypass -File %LOCALAPPDATA%\\WinMac\\theme.ps1 -mode Dark -mode2 NoApp"
+@="pwsh -NoProfile -ExecutionPolicy Bypass -File %LOCALAPPDATA%\\WinMac\\theme.ps1 -mode Dark"  
