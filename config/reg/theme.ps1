@@ -9,8 +9,6 @@ param
 )
 if ($mode -eq 'Dark')
 {
-	$CursorMode 			= 'aero'
-	$cursorName 			= 'Windows Default (system scheme)'
 	$OSMode 				= 0
 	$UIDarkMode 			= '1'
 	$DockLabelColor1 		= '15658734'
@@ -18,8 +16,6 @@ if ($mode -eq 'Dark')
 }
 if ($mode -eq 'Light')
 {
-	$CursorMode 			= 'aero_black'
-	$cursorName 			= 'Windows Black'
 	$OSMode 				= 1
 	$UIDarkMode 			= '3'
 	$DockLabelColor1 		= '1644825'
@@ -109,8 +105,8 @@ Set-ItemProperty -Path $registryPath1 -Name "DockLabelBackColor1" -Value $DockLa
 Set-ItemProperty -Path $registryPath1 -Name "DockRunningIndicator1" -Value $dockRunningIndicator -ErrorAction SilentlyContinue
 Set-ItemProperty -Path $registryPath2 -Name "UIDarkMode" -Value $UIDarkMode -ErrorAction SilentlyContinue
 Set-ItemProperty -Path $registryPath2 -Name "TaskIcon2" -Value "C:\\Users\\Public\\Documents\\WinStep\\Icons\\store_$mode.ico" -ErrorAction SilentlyContinue
-if ($mode2 -eq 'App') {
-	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "AppsUseLightTheme" -Type DWord -Value $OSMode -ErrorAction SilentlyContinue
+if ($mode2 -eq 'NoApp') {
+	Set-ItemProperty -Path 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize' -Name 'SystemUsesLightTheme' -Type DWord -Value $OSMode
 }
 else {
 	Start-Process "$env:WINDIR\Resources\Themes\WinMac_$mode.theme"
