@@ -81,6 +81,19 @@ elseif ($mode -eq 'Dark') {
 # '@
 # $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
 # $CursorRefresh::SystemParametersInfo(0x0057,0,$null,0) > $null 2>&1
+if ($mode2 -eq 'NoApp') {
+	Set-ItemProperty -Path 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize' -Name 'SystemUsesLightTheme' -Type DWord -Value $OSMode
+}
+else {
+	Start-Process "$env:WINDIR\Resources\Themes\WinMac_$mode.theme"
+	while ($true) {
+		if (Get-Process -Name 'SystemSettings') {
+			Stop-Process -Name 'SystemSettings' -Force
+			break
+		}
+		Start-Sleep -Milliseconds 100
+	}
+}
 Set-ItemProperty -Path $registryPath0 -Name "GenThemeName" -Value $theme -ErrorAction SilentlyContinue
 Set-ItemProperty -Path $registryPath0 -Name "BitmapsFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\" -ErrorAction SilentlyContinue
 Set-ItemProperty -Path $registryPath0 -Name "GlobalBitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\" -ErrorAction SilentlyContinue
@@ -105,18 +118,5 @@ Set-ItemProperty -Path $registryPath1 -Name "DockLabelBackColor1" -Value $DockLa
 Set-ItemProperty -Path $registryPath1 -Name "DockRunningIndicator1" -Value $dockRunningIndicator -ErrorAction SilentlyContinue
 Set-ItemProperty -Path $registryPath2 -Name "UIDarkMode" -Value $UIDarkMode -ErrorAction SilentlyContinue
 Set-ItemProperty -Path $registryPath2 -Name "TaskIcon2" -Value "C:\\Users\\Public\\Documents\\WinStep\\Icons\\store_$mode.ico" -ErrorAction SilentlyContinue
-if ($mode2 -eq 'NoApp') {
-	Set-ItemProperty -Path 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize' -Name 'SystemUsesLightTheme' -Type DWord -Value $OSMode
-}
-else {
-	Start-Process "$env:WINDIR\Resources\Themes\WinMac_$mode.theme"
-	while ($true) {
-		if (Get-Process -Name 'SystemSettings') {
-			Stop-Process -Name 'SystemSettings' -Force
-			break
-		}
-		Start-Sleep -Milliseconds 100
-	}
-}
 Start-Process explorer
 try { Start-Process "C:\Program Files (x86)\Winstep\Nexus.exe" } catch {}
