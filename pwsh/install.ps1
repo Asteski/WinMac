@@ -1228,11 +1228,12 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                 Write-Host "Installing MacType..." -ForegroundColor Yellow
                 $macTypeInstalled = Get-WinGetPackage -Id "MacType.MacType" -ErrorAction SilentlyContinue
                 if ($null -eq $macTypeInstalled) {
-                    $exeUrl = "https://github.com/snowie2000/mactype/releases/download/v1.2025.4.11/MacTypeInstaller_2025.4.11.exe"
-                    $exePath = "..\temp\installer.exe"
-                    Invoke-WebRequest -Uri $exeUrl -OutFile $exePath
-                    Start-Process -FilePath $exePath -ArgumentList "/verysilent" -Wait
-                    Remove-Item $exePath -Force
+                    winget install --id "MacType.MacType" --source winget --silent | Out-Null
+                    # $exeUrl = "https://github.com/snowie2000/mactype/releases/download/v1.2025.4.11/MacTypeInstaller_2025.4.11.exe"
+                    # $exePath = "..\temp\installer.exe"
+                    # Invoke-WebRequest -Uri $exeUrl -OutFile $exePath
+                    # Start-Process -FilePath $exePath -ArgumentList "/verysilent" -Wait
+                    # Remove-Item $exePath -Force
                 }
                 Stop-Process -n mt64agnt, MacTray, MacType -Force -ErrorAction SilentlyContinue
                 New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "MacType" -Value "$env:PROGRAMFILES\MacType\MacTray.exe" | Out-Null
