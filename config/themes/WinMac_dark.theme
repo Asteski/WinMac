@@ -17,11 +17,6 @@ DefaultValue=%SystemRoot%\System32\imageres.dll,-123
 [CLSID\{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}\DefaultIcon]
 DefaultValue=%SystemRoot%\System32\imageres.dll,-25
 
-; Recycle Bin - SHIDI_RECYCLERFULL SHIDI_RECYCLER
-[CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon]
-Full=%SystemDrive%\\Users\\Public\\Documents\\Winstep\\Icons\\recycle_bin_full_light.ico
-Empty=%SystemDrive%\\Users\\Public\\Documents\\Winstep\\Icons\\recycle_bin_empty_light.ico
-
 [Control Panel\Cursors]
 AppStarting=%SystemRoot%\cursors\aero_working.ani
 Arrow=%SystemRoot%\cursors\aero_arrow.cur
