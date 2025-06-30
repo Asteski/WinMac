@@ -590,6 +590,11 @@ if ($null -eq $wingetCliCheck) {
     Add-AppxPackage '..\temp\Microsoft.UI.Xaml.2.8.x64.appx'
     Add-AppxPackage '..\temp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
 }
+$wingetCliCheck = winget -v
+if ($null -eq $wingetCliCheck) {
+    Write-Host "Winget installation failed. Aborting installation." -ForegroundColor Red
+    exit 1
+}
 $wingetClientCheck = Get-InstalledModule -Name Microsoft.WinGet.Client -ErrorAction SilentlyContinue
 if ($null -eq $wingetClientCheck) {
     Write-Host "Winget is not installed. Installing Winget..." -ForegroundColor DarkYellow
@@ -606,11 +611,6 @@ if ($null -eq $wingetClientCheck) {
     }
 }
 Import-Module -Name Microsoft.WinGet.Client -Force
-$wingetCliCheck = winget -v
-if ($null -eq $wingetCliCheck) {
-    Write-Host "Winget installation failed. Aborting installation." -ForegroundColor Red
-    exit 1
-}
 #! WinMac deployment
 foreach ($app in $selectedApps) {
     switch ($app.Trim()) {
