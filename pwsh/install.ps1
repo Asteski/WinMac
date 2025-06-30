@@ -638,9 +638,10 @@ foreach ($app in $selectedApps) {
                 [System.Environment]::SetEnvironmentVariable("Path", $envPath, [System.EnvironmentVariableTarget]::User)
             }
             Stop-Process -Name PowerToys* -ErrorAction SilentlyContinue
-            start-sleep 5
+            Start-Sleep 5
             Stop-Process -Name Microsoft.CmdPal.UI -ErrorAction SilentlyContinue
             (Get-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json") -replace '"CmdPal":true', '"CmdPal": false' | Set-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json" -Force
+            New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" | Out-Null
             Copy-Item '..\config\powertoys\TriggerPeekWithSpacebar.exe' "$env:LOCALAPPDATA\WinMac\" 
             $description = "Trigger PowerToys Peek with Space bar."
             $folderName = "WinMac"
