@@ -388,6 +388,10 @@ foreach ($app in $selectedApps) {
             $everythingPT = Get-WingetPackage -name EverythingPT -ErrorAction SilentlyContinue
             Uninstall-WinGetPackage -name $everythingPT.name | Out-Null
             Uninstall-WinGetPackage -id Microsoft.PowerToys | Out-Null
+            Stop-Process -Name TriggerPeekWithSpacebar -Force
+            $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -match 'Peek' }
+            foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
+            Get-ChildItem "$env:LOCALAPPDATA\WinMac" | Where-Object { $_.Name -match 'TriggerPeekWithSpacebar' } | Remove-Item -Recurse -Force
             Remove-Item $env:LOCALAPPDATA\Microsoft\PowerToys -Recurse -Force
             Remove-Item $env:LOCALAPPDATA\PowerToys -Recurse -Force
             Write-Host "Uninstalling PowerToys completed." -ForegroundColor Green
