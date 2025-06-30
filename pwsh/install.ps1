@@ -641,6 +641,21 @@ foreach ($app in $selectedApps) {
             start-sleep 5
             Stop-Process -Name Microsoft.CmdPal.UI -ErrorAction SilentlyContinue
             (Get-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json") -replace '"CmdPal":true', '"CmdPal": false' | Set-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json" -Force
+            Copy-Item '..\config\powertoys\TriggerPeekWithSpacebar.exe' "$env:LOCALAPPDATA\WinMac\" 
+            $description = "Trigger PowerToys Peek with Space bar."
+            $folderName = "WinMac"
+            $taskService = New-Object -ComObject "Schedule.Service"
+            $taskService.Connect()
+            $rootFolder = $taskService.GetFolder("\") 
+            try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }
+            if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
+            $taskFolder = "\" + $folderName
+            $trigger = New-ScheduledTaskTrigger -AtLogon
+            $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
+            $action = New-ScheduledTaskAction -Execute $fileName -WorkingDirectory $fileDirectory
+            $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
+            Register-ScheduledTask -TaskName "Keyboard Shortcuts" -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -Description $description | Out-Null
+            Start-Process -FilePath "$env:LOCALAPPDATA\WinMac\TriggerPeekWithSpacebar.exe" -WorkingDirectory "$env:LOCALAPPDATA\WinMac"
             Start-Process "$env:LOCALAPPDATA\PowerToys\PowerToys.exe" -ArgumentList "--start-minimized" -WorkingDirectory "$env:LOCALAPPDATA\PowerToys" -WindowStyle Hidden
             Write-Host "PowerToys installation completed." -ForegroundColor Green
         }
