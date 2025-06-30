@@ -853,7 +853,7 @@ foreach ($app in $selectedApps) {
                         Install-WinGetPackage -id 'Microsoft.UI.Xaml.2.7' | Out-Null
                     }
                     $runtime = Get-AppxPackage -Name 'Microsoft.NET.Native.Runtime.2.2' -ErrorAction SilentlyContinue
-                    if ($null -eq $framework) {
+                    if ($null -eq $runtime) {
                         Write-Host "Installing Microsoft.NET.Native.Runtime.2.2..." -ForegroundColor DarkYellow
                         Add-AppxPackage -Path '..\bin\Microsoft.NET.Native.Runtime.2.2_2.2.28604.0_x64__8wekyb3d8bbwe.appx' | Out-Null
                     }
