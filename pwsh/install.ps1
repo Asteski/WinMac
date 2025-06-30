@@ -845,34 +845,34 @@ foreach ($app in $selectedApps) {
                     $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.8' -ErrorAction SilentlyContinue
                     if ($null -eq $dotNetRuntime) {
                         Write-Host "Installing .NET Desktop Runtime 8..." -ForegroundColor DarkYellow
-                        Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8' | Out-Null
+                        Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8' # | Out-Null
                     } else {
                         Write-Host ".NET Desktop Runtime is already installed." -ForegroundColor DarkGreen
                     }
                     $uiXaml = Get-WinGetPackage -Id 'Microsoft.UI.Xaml.2.7' -ErrorAction SilentlyContinue
                     if ($null -eq $uiXaml) {
                         Write-Host "Installing Microsoft.UI.Xaml 2.7..." -ForegroundColor DarkYellow
-                        Install-WinGetPackage -id 'Microsoft.UI.Xaml.2.7' | Out-Null
+                        Install-WinGetPackage -id 'Microsoft.UI.Xaml.2.7' # | Out-Null
                     } else {
                         Write-Host "Microsoft.UI.Xaml is already installed." -ForegroundColor DarkGreen
                     }
                     $winverUWP = Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP -ErrorAction SilentlyContinue
                     if ($null -eq $winverUWP) {
                         Write-Host "Installing WinverUWP 2.1.4..." -ForegroundColor DarkYellow
-                        winget install 'FireCubeStudios.WinverUWP' --accept-source-agreements --accept-package-agreements | Out-Null
+                        winget install 'FireCubeStudios.WinverUWP' --accept-source-agreements --accept-package-agreements # | Out-Null
                     } else {
                         Write-Host "WinverUWP is already installed." -ForegroundColor DarkGreen
                     }
-                    New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" | Out-Null
+                    New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" # | Out-Null
                     Write-Host "Installing Open-Shell..." -ForegroundColor DarkYellow
                     $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\StartMenu.exe"
-                    winget install --id "Open-Shell.Open-Shell-Menu" --source winget --custom 'ADDLOCAL=StartMenu' --silent | Out-Null
-                    Stop-Process -Name StartMenu -Force -ErrorAction SilentlyContinue | Out-Null
-                    New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force | Out-Null
-                    New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force | Out-Null
-                    New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu" -Force | Out-Null
-                    New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell\Settings" -Force | Out-Null
-                    New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu\Settings" -Force | Out-Null
+                    winget install --id "Open-Shell.Open-Shell-Menu" --source winget --custom 'ADDLOCAL=StartMenu' --silent # | Out-Null
+                    Stop-Process -Name StartMenu -Force -ErrorAction SilentlyContinue # | Out-Null
+                    New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force # | Out-Null
+                    New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force # | Out-Null
+                    New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu" -Force # | Out-Null
+                    New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell\Settings" -Force # | Out-Null
+                    New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu\Settings" -Force # | Out-Null
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\OpenShell\Settings" -Name "Nightly" -Value 0x00000001
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "Version" -Value 0x040400bf
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "DisablePinExt" -Value 1
