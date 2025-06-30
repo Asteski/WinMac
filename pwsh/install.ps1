@@ -653,7 +653,7 @@ foreach ($app in $selectedApps) {
             $taskFolder = "\" + $folderName
             $trigger = New-ScheduledTaskTrigger -AtLogon
             $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
-            $action = New-ScheduledTaskAction -Execute $fileName -WorkingDirectory $fileDirectory
+            $action = New-ScheduledTaskAction -Execute TriggerPeekWithSpacebar.exe -WorkingDirectory $fileDirectory
             $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
             Register-ScheduledTask -TaskName "Trigger Peek With Spacebar" -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -Description $description | Out-Null
             Start-Process -FilePath "$env:LOCALAPPDATA\WinMac\TriggerPeekWithSpacebar.exe" -WorkingDirectory "$env:LOCALAPPDATA\WinMac"
