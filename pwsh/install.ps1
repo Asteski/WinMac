@@ -617,8 +617,8 @@ foreach ($app in $selectedApps) {
     #* PowerToys
         "1" {
             Write-Host "Installing PowerToys..." -ForegroundColor Yellow
-            winget configure --enable # | Out-Null
-            pwsh -NoProfile -Command "winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements" # | Out-Null
+            winget configure --enable | Out-Null
+            pwsh -NoProfile -Command "winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements" | Out-Null
             Copy-Item -Path "..\config\powertoys\ptr\ptr.exe" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
             Copy-Item -Path "..\config\powertoys\Assets" -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
             Copy-Item -Path "..\config\powertoys\Plugins" -Destination "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\" -Recurse -Force
@@ -647,13 +647,12 @@ foreach ($app in $selectedApps) {
     #* Everything
         "2" {
             Write-Host "Installing Everything..." -ForegroundColor Yellow
-            Install-WinGetPackage -Id "voidtools.Everything" # | Out-Null
+            Install-WinGetPackage -Id "voidtools.Everything" | Out-Null
             Stop-Process -Name Everything.exe -ErrorAction SilentlyContinue
-            # $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Move-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Destination $programsDir -Force
             Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Destination $programsDir -Force
             $everythingIniPath = "$env:APPDATA\Everything"
-            if (-not (Test-Path -Path $everythingIniPath)) {New-Item -ItemType Directory -Path $everythingIniPath -Force } # | Out-Null}
+            if (-not (Test-Path -Path $everythingIniPath)) {New-Item -ItemType Directory -Path $everythingIniPath -Force | Out-Null}
             Copy-Item -Path "..\config\everything\Everything.ini" -Destination $everythingIniPath -Force
             Start-Process -FilePath Everything.exe -WorkingDirectory $env:PROGRAMFILES\Everything -WindowStyle Hidden
             Write-Host "Everything installation completed." -ForegroundColor Green
