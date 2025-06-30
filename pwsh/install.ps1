@@ -855,6 +855,7 @@ foreach ($app in $selectedApps) {
                     $framework = Get-AppxPackage -Name Microsoft.NET.Native.Framework.2.2 -ErrorAction SilentlyContinue
                     if ($null -eq $framework) {
                         Write-Host "Installing Microsoft.NET.Native.Framework.2.2..." -ForegroundColor DarkYellow
+                        Add-AppxPackage -Path '..\bin\Microsoft.NET.Native.Runtime.2.2_2.2.28604.0_x64__8wekyb3d8bbwe.appx' | Out-Null
                         Add-AppxPackage -Path '..\bin\Microsoft.NET.Native.Framework.2.2_2.2.29512.0_x64__8wekyb3d8bbwe.appx' | Out-Null
                     }
                     $winverUWP = Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP -ErrorAction SilentlyContinue
