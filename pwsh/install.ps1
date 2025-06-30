@@ -641,8 +641,9 @@ foreach ($app in $selectedApps) {
             Start-Sleep 5
             Stop-Process -Name Microsoft.CmdPal.UI -ErrorAction SilentlyContinue
             (Get-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json") -replace '"CmdPal":true', '"CmdPal": false' | Set-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json" -Force
-            New-Item -ItemType Directory -Path "$env:LOCALAPPDATA\WinMac\" | Out-Null
-            Copy-Item '..\config\powertoys\TriggerPeekWithSpacebar.exe' "$env:LOCALAPPDATA\WinMac\" 
+            $fileDirectory = "$env:LOCALAPPDATA\WinMac"
+            New-Item -ItemType Directory -Path $fileDirectory | Out-Null
+            Copy-Item '..\config\powertoys\TriggerPeekWithSpacebar.exe' $fileDirectory 
             $description = "Trigger PowerToys Peek with Space bar."
             $folderName = "WinMac"
             $taskService = New-Object -ComObject "Schedule.Service"
@@ -656,7 +657,7 @@ foreach ($app in $selectedApps) {
             $action = New-ScheduledTaskAction -Execute TriggerPeekWithSpacebar.exe -WorkingDirectory $fileDirectory
             $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
             Register-ScheduledTask -TaskName "Trigger Peek With Spacebar" -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -Description $description | Out-Null
-            Start-Process -FilePath "$env:LOCALAPPDATA\WinMac\TriggerPeekWithSpacebar.exe" -WorkingDirectory "$env:LOCALAPPDATA\WinMac"
+            Start-Process -FilePath "$env:LOCALAPPDATA\WinMac\TriggerPeekWithSpacebar.exe" -WorkingDirectory $fileDirectory
             Start-Process "$env:LOCALAPPDATA\PowerToys\PowerToys.exe" -ArgumentList "--start-minimized" -WorkingDirectory "$env:LOCALAPPDATA\PowerToys" -WindowStyle Hidden
             Write-Host "PowerToys installation completed." -ForegroundColor Green
         }
@@ -1077,11 +1078,15 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             }
             Start-Sleep 10
             $process2 = Get-Process -Name "Nexus"
-            if (!($process2)) {
+            if (!($process2)) {`
                 Start-Sleep 5
                 $process2 = Get-Process -Name "Nexus"
             } else { Start-Sleep 10 }
             Get-Process -n Nexus | Stop-Process
+            $wingetTerminalCheck = Get-WinGetPackage -id Microsoft.WindowsTerminal
+            if ($null -eq $wingetTerminalCheck) {
+                winget install Microsoft.WindowsTerminal
+            }
             $winStep = 'C:\Users\Public\Documents\WinStep'
             Remove-Item -Path "$winStep\Themes\*" -Recurse -Force
             Copy-Item -Path "..\config\dock\themes\*" -Destination "$winStep\Themes\" -Recurse -Force 
@@ -1123,7 +1128,6 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                 $regFile = $modifiedFile
             }
             reg import $regFile > $null 2>&1
-            # if (Test-Path -Path "$env:LOCALAPPDATA\WinLaunch") {
             if ($selectedApps -like '*10*') {
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Label9" -Value "Launchpad"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path9" -Value "$env:LOCALAPPDATA\WinLaunch\WinLaunch.exe"
@@ -1170,7 +1174,6 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Set-Content -Path $tempVbs -Value $vbsContent -Encoding ASCII
             Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""
             while (!(Get-Process "nexus")) { Start-Sleep 1 }
-            # $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
             Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Nexus.lnk" -Destination $programsDir -Force 
             Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\Nexus.lnk" -Destination $programsDir -Force 
             Write-Host "Nexus Dock installation completed." -ForegroundColor Green
