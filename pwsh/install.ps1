@@ -1058,24 +1058,6 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Set-Content -Path $tempVbs -Value $vbsContent -Encoding ASCII
             Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""
             Start-Sleep 10
-#             $scriptBlock2 = "Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe'"
-#             $tempScript = Join-Path $env:TEMP "nonadmin_$([guid]::NewGuid().ToString()).ps1"
-#             Set-Content -Path $tempScript -Value $scriptBlock2 -Encoding UTF8
-# $batchContent = @"
-# @echo off
-# pushd "$currentDir"
-# pwsh.exe -NoProfile -ExecutionPolicy Bypass -File "`"$tempScript`""
-# "@
-#             $tempBatch = Join-Path $env:TEMP "run_nonadmin_$([guid]::NewGuid().ToString()).cmd"
-#             Set-Content -Path $tempBatch -Value $batchContent -Encoding ASCII
-#             $tempVbs = Join-Path $env:TEMP "run_silent_$([guid]::NewGuid().ToString()).vbs"
-# $vbsContent = @"
-# Set WshShell = CreateObject("WScript.Shell")
-# WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
-# "@
-#             Set-Content -Path $tempVbs -Value $vbsContent -Encoding ASCII
-#             Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""
-#             Start-Sleep 10
             $nexusProcess = Get-Process -Name "Nexus"
             if (!($nexusProcess)) {
                 Start-Sleep 5
@@ -1414,8 +1396,6 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
         }
     }
 }
-if ((Get-ChildItem -Path $winMacDirectory -Recurse | Measure-Object).Count -eq 0) { Remove-Item -Path $winMacDirectory -Force }
-Start-Sleep 2
 Stop-Process -n explorer -ErrorAction SilentlyContinue
 Start-Sleep 2
 Remove-Item "..\temp" -Recurse -Force
