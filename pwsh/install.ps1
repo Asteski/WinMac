@@ -2,8 +2,8 @@ param (
     [switch]$noGUI
 )
 $version = "1.1.0"
-$errorActionPreference="SilentlyContinue"
-$WarningPreference="SilentlyContinue"
+# $errorActionPreference="SilentlyContinue"
+# $WarningPreference="SilentlyContinue"
 $programsDir = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs"
 $winMacDirectory = "$env:LOCALAPPDATA\WinMac"
 Add-Type -AssemblyName System.Windows.Formstylk
@@ -914,7 +914,7 @@ foreach ($app in $selectedApps) {
                     if (-not (Get-Process -Name explorer -ErrorAction SilentlyContinue)) { Start-Process explorer }
                     Write-Host "WinMac Menu installation completed." -ForegroundColor Green
                 } else {
-                    Write-Host "Skipping WinMac Menu installation." -ForegroundColor Magenta
+                    Write-Host "Skipping WinMac Menu installation." -ForegroundColor DarkYellow
                 }
             } elseif ($osVersion -notlike '*Windows 11*') {
                 Write-Host "WinMac Menu is supported only on Windows 11. Skipping installation." -ForegroundColor Red
@@ -1076,7 +1076,6 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                 $process2 = Get-Process -Name "Nexus"
             } else { Start-Sleep 10 }
             Get-Process -n Nexus | Stop-Process
-            $wingetTerminalCheck = Get-WinGetPackage -id Microsoft.WindowsTerminal
             if ($null -eq $wingetTerminalCheck) {
                 winget install Microsoft.WindowsTerminal
             }
