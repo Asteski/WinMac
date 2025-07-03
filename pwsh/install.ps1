@@ -1043,18 +1043,10 @@ foreach ($app in $selectedApps) {
     #* Nexus Dock
         "9" {
             Write-Host "Installing Nexus Dock..." -ForegroundColor Yellow
-            $checkNexus = Get-WinGetPackage -name Nexus
-            if ($null -eq $checkNexus) {
-                $downloadUrl = "https://www.winstep.net/nexus.zip"
-                $downloadPath = "..\temp\Nexus.zip"
-                if (-not (Test-Path $downloadPath)) {
-                    Invoke-WebRequest -Uri $downloadUrl -OutFile $downloadPath
-                }
-                Expand-Archive -Path $downloadPath -DestinationPath ..\temp -Force
-            }
             if (Get-Process -n Nexus) { Stop-Process -n Nexus }
             $currentDir = (Get-Location).Path
-            $scriptBlock1 = "Start-Process -FilePath '..\temp\NexusSetup.exe' -ArgumentList '/silent'"
+            # $scriptBlock1 = "Start-Process -FilePath '..\temp\NexusSetup.exe' -ArgumentList '/silent'"
+            $scriptBlock1 = "winget install WinStep.Nexus --silent"
             $tempScript = Join-Path $env:TEMP "nonadmin_$([guid]::NewGuid().ToString()).ps1"
             Set-Content -Path $tempScript -Value $scriptBlock1 -Encoding UTF8
 $batchContent = @"
