@@ -2,8 +2,8 @@ param (
     [switch]$noGUI
 )
 $version = "1.1.0"
-# $ErrorActionPreference="SilentlyContinue"
-# $WarningPreference="SilentlyContinue"
+$ErrorActionPreference="SilentlyContinue"
+$WarningPreference="SilentlyContinue"
 $programsDir = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs"
 $winMacDirectory = "$env:LOCALAPPDATA\WinMac"
 Add-Type -AssemblyName System.Windows.Forms
