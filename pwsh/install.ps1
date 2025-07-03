@@ -1357,7 +1357,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             Copy-Item -Path "..\config\blank.ico" -Destination "C:\Windows" -Force
             New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Force | Out-Null
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String | Out-Null
-        #? Configuring file explorer and context menus
+            #? Configuring file explorer and context menus
             Get-ChildItem ..\config\reg\remove\* -e *theme* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
             $sourceFilePath = "..\config\reg\add\Add_Theme_Mode_in_Context_Menu.reg"
             $tempFilePath = "..\temp\Add_Theme_Mode_in_Context_Menu.reg"
@@ -1370,6 +1370,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             reg import '..\temp\Add_Theme_Mode_in_Context_Menu.reg' > $null 2>&1
             reg import '..\config\reg\add\Add_Hidden_items_to_context_menu.reg' > $null 2>&1
             Copy-Item -Path "..\config\themes\*" -Destination "$env:WINDIR\Resources\Themes" -Force
+            New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowIconOverlay" -Value 0 -PropertyType DWord -Force | Out-Null
             winget uninstall "Windows web experience Pack" --silent --accept-source-agreements --accept-package-agreements > $null 2>&1
         #? End Task
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value "" 
