@@ -1057,23 +1057,23 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
 "@
             Set-Content -Path $tempVbs -Value $vbsContent -Encoding ASCII
             Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""
-            echo 'wait 10'
-            Start-Sleep 10
-            echo 'wait stop' 
-            $nexusProcess1 = Get-Process -Name "Nexus"
-            if (!($nexusProcess1)) {
-                Start-Process -Name "Nexus"
+            #!!!!
+            while (-not (Get-Process -Name "Nexus" -ErrorAction SilentlyContinue)) {
+                Start-Sleep -Seconds 1
             }
-            echo 'wait 10'
-            Start-Sleep 10
-            echo 'wait stop' 
-            $nexusProcess2 = Get-Process -Name "Nexus"
-            if (!($nexusProcess2)) {
-                echo 'wait 5'
-                Start-Sleep 5
-                echo 'wait stop' 
-                $nexusProcess2 = Get-Process -Name "Nexus"
-            } else { Stop-Process -Name "Nexus" -Force }
+            # Start-Sleep 10
+            # $nexusProcess1 = Get-Process -Name "Nexus"
+            # if (!($nexusProcess1)) {
+            #     Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe'
+            # }
+            # Start-Sleep 10
+            # $nexusProcess2 = Get-Process -Name "Nexus"
+            # if (!($nexusProcess2)) {
+            #     Start-Sleep 5
+            #     $nexusProcess2 = Get-Process -Name "Nexus"
+            # } else { Stop-Process -Name "Nexus" -Force }
+
+            #!!!!
             $wingetTerminalCheck = Get-WinGetPackage -Id "Microsoft.WindowsTerminal"
             if ($null -eq $wingetTerminalCheck) {
                 winget install Microsoft.WindowsTerminal
