@@ -1071,7 +1071,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             }
             Start-Sleep 10
             $process2 = Get-Process -Name "Nexus"
-            if (!($process2)) {`
+            if (!($process2)) {
                 Start-Sleep 5
                 $process2 = Get-Process -Name "Nexus"
             } else { Start-Sleep 10 }
@@ -1082,9 +1082,9 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             }
             $winStep = 'C:\Users\Public\Documents\WinStep'
             Remove-Item -Path "$winStep\Themes\*" -Recurse -Force
-            Copy-Item -Path "..\config\dock\themes\*" -Destination "$winStep\Themes\" -Recurse -Force 
+            Copy-Item -Path "..\config\dock\themes\*" -Destination "$winStep\Themes\" -Recurse -Force
             Remove-Item -Path "$winStep\NeXus\Indicators\*" -Force -Recurse 
-            Copy-Item -Path "..\config\dock\indicators\*" -Destination "$winStep\NeXus\Indicators\" -Recurse -Force 
+            Copy-Item -Path "..\config\dock\indicators\*" -Destination "$winStep\NeXus\Indicators\" -Recurse -Force
             New-Item -ItemType Directory -Path "$winStep\Sounds" -Force | Out-Null
             Copy-Item -Path "..\config\dock\sounds\*" -Destination "$winStep\Sounds\" -Recurse -Force
             New-Item -ItemType Directory -Path "$winStep\Icons" -Force | Out-Null
