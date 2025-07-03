@@ -1057,7 +1057,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
 "@
             Set-Content -Path $tempVbs -Value $vbsContent -Encoding ASCII
             Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""
-            Start-Sleep 5
+            Start-Sleep 10
             $nexusProcess = Get-Process -Name "Nexus"
             if (!($nexusProcess)) {
                 Start-Process -Name "Nexus"
