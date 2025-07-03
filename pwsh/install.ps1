@@ -1398,12 +1398,72 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
         }
     }
 }
+Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
 Stop-Process -n explorer -ErrorAction SilentlyContinue
 Start-Sleep 2
 Remove-Item "..\temp" -Recurse -Force
 Start-Sleep 3
 if (-not (Get-Process -Name explorer -ErrorAction SilentlyContinue)) { Start-Process explorer }
-Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
+Write-Host "`n---------------------------- Installation Summary ---------------------------" -ForegroundColor Cyan
+Write-Host "Installed Packages:" -ForegroundColor Green
+foreach ($app in $selectedApps) {
+    switch ($app.Trim()) {
+        "1" { Write-Host "- PowerToys" -ForegroundColor DarkGreen }
+        "2" { Write-Host "- Everything" -ForegroundColor DarkGreen }
+        "3" { Write-Host "- PowerShell Profile" -ForegroundColor DarkGreen }
+        "4" { Write-Host "- StartAllBack" -ForegroundColor DarkGreen }
+        "5" { Write-Host "- WinMac Menu" -ForegroundColor DarkGreen }
+        "6" { Write-Host "- Windhawk" -ForegroundColor DarkGreen }
+        "7" { Write-Host "- Stahky" -ForegroundColor DarkGreen }
+        "8" { Write-Host "- Keyboard Shortcuts" -ForegroundColor DarkGreen }
+        "9" { Write-Host "- Nexus Dock" -ForegroundColor DarkGreen }
+        "10" { Write-Host "- Hot Corners" -ForegroundColor DarkGreen }
+        "11" { Write-Host "- MacType" -ForegroundColor DarkGreen }
+        "12" { Write-Host "- Other Settings" -ForegroundColor DarkGreen }
+    }
+}
+Write-Host "`nConfiguration Summary:" -ForegroundColor Yellow
+switch ($exStyle) {
+    'X' { Write-Host "- Explorer Style: Modern" -ForegroundColor DarkYellow }
+    'C' { Write-Host "- Explorer Style: Classic" -ForegroundColor DarkYellow }
+    Default { }
+}
+switch ($promptStyle) {
+    'W' { Write-Host "- Prompt Style: WinMac" -ForegroundColor DarkYellow }
+    'M' { Write-Host "- Prompt Style: macOS" -ForegroundColor DarkYellow }
+    Default { }
+}
+switch ($menuSet) {
+    'X' { Write-Host "- Start Menu Style: WinMac" -ForegroundColor DarkYellow }
+    'C' { Write-Host "- Start Menu Style: Classic" -ForegroundColor DarkYellow }
+    Default { }
+}
+switch ($roundedOrSquared) {
+    'R' { Write-Host "- Shell Corners: Rounded" -ForegroundColor DarkYellow }
+    'S' { Write-Host "- Shell Corners: Squared" -ForegroundColor DarkYellow }
+    Default { }
+}
+switch ($lightOrDark) {
+    'L' { Write-Host "- Theme Style: Light" -ForegroundColor DarkYellow }
+    'D' { Write-Host "- Theme Style: Dark" -ForegroundColor DarkYellow }
+    Default { }
+}
+switch ($blueOrYellow) {
+    'B' { Write-Host "- Folder Color: Blue" -ForegroundColor DarkYellow }
+    'Y' { Write-Host "- Folder Color: Yellow" -ForegroundColor DarkYellow }
+    Default { }
+}
+switch ($dockDynamic) {
+    'X' { Write-Host "- Dock Style: Default" -ForegroundColor DarkYellow }
+    'D' { Write-Host "- Dock Style: Dynamic" -ForegroundColor DarkYellow }
+    Default { }
+}
+switch ($gitProfile) {
+    $true { Write-Host "- Git Profile Enabled" -ForegroundColor DarkYellow }
+    $false { }
+    Default { }
+}
+Write-Host "`n-----------------------------------------------------------------------------" -ForegroundColor Cyan
 Write-Host @"
 
 Enjoy and support by giving feedback and contributing to the project!
