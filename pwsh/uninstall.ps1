@@ -494,7 +494,7 @@ foreach ($app in $selectedApps) {
         "9" {
             Write-Host "Uninstalling Nexus Dock..." -ForegroundColor Yellow
             Get-Process Nexus | Stop-Process -Force
-            Uninstall-WinGetPackage -name WinStep.Nexus | Out-Null
+            Uninstall-WinGetPackage -name Nexus | Out-Null
             Remove-Item -Path "$programsDir\Nexus.lnk" -Force
             Remove-Item -Path "C:\Users\Public\Documents\Winstep" -Recurse -Force
             Write-Host "Uninstalling Nexus Dock completed." -ForegroundColor Green
