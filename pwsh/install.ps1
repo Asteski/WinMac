@@ -1406,20 +1406,10 @@ Start-Sleep 3
 if (-not (Get-Process -Name explorer -ErrorAction SilentlyContinue)) { Start-Process explorer }
 Write-Host "`n---------------------------- Installation Summary ---------------------------" -ForegroundColor Cyan
 Write-Host "Installed Packages:" -ForegroundColor Green
-foreach ($app in $selectedApps) {
-    switch ($app.Trim()) {
-        "1" { Write-Host "- PowerToys" -ForegroundColor DarkGreen }
-        "2" { Write-Host "- Everything" -ForegroundColor DarkGreen }
-        "3" { Write-Host "- PowerShell Profile" -ForegroundColor DarkGreen }
-        "4" { Write-Host "- StartAllBack" -ForegroundColor DarkGreen }
-        "5" { Write-Host "- WinMac Menu" -ForegroundColor DarkGreen }
-        "6" { Write-Host "- Windhawk" -ForegroundColor DarkGreen }
-        "7" { Write-Host "- Stahky" -ForegroundColor DarkGreen }
-        "8" { Write-Host "- Keyboard Shortcuts" -ForegroundColor DarkGreen }
-        "9" { Write-Host "- Nexus Dock" -ForegroundColor DarkGreen }
-        "10" { Write-Host "- Hot Corners" -ForegroundColor DarkGreen }
-        "11" { Write-Host "- MacType" -ForegroundColor DarkGreen }
-        "12" { Write-Host "- Other Settings" -ForegroundColor DarkGreen }
+Write-Host "- Installed Packages:" -ForegroundColor DarkGreen
+foreach ($appNumber in $selectedApps) {
+    if ($appList.ContainsKey($appNumber)) {
+        Write-Host "$($appList[$appNumber])" -ForegroundColor DarkGreen
     }
 }
 Write-Host "`nConfiguration Summary:" -ForegroundColor Yellow
