@@ -2,8 +2,8 @@ param (
     [switch]$noGUI
 )
 $version = "1.1.0"
-# $errorActionPreference="SilentlyContinue"
-# $WarningPreference="SilentlyContinue"
+$ErrorActionPreference="SilentlyContinue"
+$WarningPreference="SilentlyContinue"
 $programsDir = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs"
 $winMacDirectory = "$env:LOCALAPPDATA\WinMac"
 Add-Type -AssemblyName System.Windows.Forms
@@ -1045,7 +1045,6 @@ foreach ($app in $selectedApps) {
             Write-Host "Installing Nexus Dock..." -ForegroundColor Yellow
             if (Get-Process -n Nexus) { Stop-Process -n Nexus }
             $currentDir = (Get-Location).Path
-            # $scriptBlock1 = "Start-Process -FilePath '..\temp\NexusSetup.exe' -ArgumentList '/silent'"
             $scriptBlock1 = "winget install WinStep.Nexus --silent"
             $tempScript = Join-Path $env:TEMP "nonadmin_$([guid]::NewGuid().ToString()).ps1"
             Set-Content -Path $tempScript -Value $scriptBlock1 -Encoding UTF8
@@ -1064,18 +1063,13 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Set-Content -Path $tempVbs -Value $vbsContent -Encoding ASCII
             Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""
             Start-Sleep 10
-            $process1 = Get-Process -Name "NexusSetup"
-            while ($process1) {
+            $nexusProcess = Get-Process -Name "Nexus"
+            if (!($nexusProcess)) {
                 Start-Sleep 5
-                $process1 = Get-Process -Name "NexusSetup"
-            }
-            Start-Sleep 10
-            $process2 = Get-Process -Name "Nexus"
-            if (!($process2)) {
-                Start-Sleep 5
-                $process2 = Get-Process -Name "Nexus"
+                $nexusProcess = Get-Process -Name "Nexus"
             } else { Start-Sleep 10 }
             Get-Process -n Nexus | Stop-Process
+            $wingetTerminalCheck = Get-WinGetPackage -Id "Microsoft.WindowsTerminal"
             if ($null -eq $wingetTerminalCheck) {
                 winget install Microsoft.WindowsTerminal
             }
