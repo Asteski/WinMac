@@ -1184,10 +1184,6 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Copy-Item -Path $winXCornersConfigPath -Destination $destinationPath -Force
             Write-Host "Installing Simple Sticky Notes..." -ForegroundColor DarkYellow
             Install-WinGetPackage -id 'SimnetLtd.SimpleStickyNotes' | Out-Null
-            while (-not (Get-Process -Name "msedge")) {
-                Start-Sleep -Seconds 1
-            }
-            Stop-Process -Name msedge.exe -Force
             Write-Host "Installing WinLaunch..." -ForegroundColor DarkYellow
             Invoke-WebRequest -Uri $winLaunchUrl -OutFile $winLaunchOutputPath
             Expand-Archive -Path $winLaunchOutputPath -DestinationPath $winLaunchDestinationPath -Force
@@ -1403,11 +1399,10 @@ Start-Sleep 2
 Remove-Item "..\temp" -Recurse -Force
 Start-Sleep 3
 if (-not (Get-Process -Name explorer -ErrorAction SilentlyContinue)) { Start-Process explorer }
-Write-Host "`n---------------------------- Installation Summary ---------------------------" -ForegroundColor Cyan
-Write-Host "Selected Packages:" -ForegroundColor Green
+Write-Host "`nSelected Packages:" -ForegroundColor Green
 foreach ($appNumber in $selectedApps) {
     if ($appList.ContainsKey($appNumber)) {
-        Write-Host "$($appList[$appNumber])" -ForegroundColor DarkGreen
+        Write-Host "- $($appList[$appNumber])" -NoNewline -ForegroundColor DarkGreen
     }
 }
 Write-Host "`nConfiguration:" -ForegroundColor Yellow
