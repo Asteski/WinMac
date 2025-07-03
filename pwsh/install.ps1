@@ -802,19 +802,14 @@ foreach ($app in $selectedApps) {
                 }
                 else {
                     Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 0
-                    $isWinXMenuActive = (Get-Process -Name WindowsKey -ErrorAction SilentlyContinue) -or (Get-Process -Name WinMac_StartButton -ErrorAction SilentlyContinue)
-                    if ($isWinXMenuActive) {
-                        # Stop-Process -Name WindowsKey -Force
-                        # Stop-Process -Name WinMac_StartButton -Force
-                        Uninstall-WinGetPackage -name "Winver UWP"
-                        # $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -match 'WinMac_StartButton' }
-                        # foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
-                        # $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue
-                        # if ($null -eq $tasksFolder) { schtasks /DELETE /TN \WinMac /F > $null 2>&1 }
-                        # Get-ChildItem $winMacDirectory | Where-Object { $_.Name -match 'WinMac_StartButton' } | Remove-Item -Recurse -Force
-                        Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
-                        Expand-Archive -Path "..\config\WinX-default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
-                    }
+                    Uninstall-WinGetPackage -name "Winver UWP"
+                    # $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -match 'WinMac_StartButton' }
+                    # foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
+                    # $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue
+                    # if ($null -eq $tasksFolder) { schtasks /DELETE /TN \WinMac /F > $null 2>&1 }
+                    # Get-ChildItem $winMacDirectory | Where-Object { $_.Name -match 'WinMac_StartButton' } | Remove-Item -Recurse -Force
+                    Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
+                    Expand-Archive -Path "..\config\WinX-default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
                 }
                 if ($exStyle -eq 'C' -or $exStyle -eq 'c') {
                     Set-ItemProperty -Path $sabRegPath -Name "NavBarGlass" -Value 1
@@ -1068,6 +1063,24 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                 Start-Sleep 5
                 $nexusProcess = Get-Process -Name "Nexus"
             } else { Start-Sleep 10 }
+            $scriptBlock2 = "Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe'"
+            $tempScript = Join-Path $env:TEMP "nonadmin_$([guid]::NewGuid().ToString()).ps1"
+            Set-Content -Path $tempScript -Value $scriptBlock2 -Encoding UTF8
+$batchContent = @"
+@echo off
+pushd "$currentDir"
+pwsh.exe -NoProfile -ExecutionPolicy Bypass -File "`"$tempScript`""
+"@
+            $tempBatch = Join-Path $env:TEMP "run_nonadmin_$([guid]::NewGuid().ToString()).cmd"
+            Set-Content -Path $tempBatch -Value $batchContent -Encoding ASCII
+            $tempVbs = Join-Path $env:TEMP "run_silent_$([guid]::NewGuid().ToString()).vbs"
+$vbsContent = @"
+Set WshShell = CreateObject("WScript.Shell")
+WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
+"@
+            Set-Content -Path $tempVbs -Value $vbsContent -Encoding ASCII
+            Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""
+            Start-Sleep 10
             Get-Process -n Nexus | Stop-Process
             $wingetTerminalCheck = Get-WinGetPackage -Id "Microsoft.WindowsTerminal"
             if ($null -eq $wingetTerminalCheck) {
@@ -1204,7 +1217,6 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             if ($process) { Stop-Process -Name WinLaunch -Force }
             New-Item -ItemType Directory -Path "$winLaunchDestinationPath\Data" -Force | Out-Null
             Copy-Item -Path $winLaunchConfigPath -Destination "$winLaunchDestinationPath\Data\Settings.xml" -Force
-            Copy-Item -Path $winLaunchConfigPath -Destination "$env:APPDATA\WinLaunch\Settings.xml" -Force
             $configFilePath = Join-Path -Path $destinationPath -ChildPath "settings.ini"
             (Get-Content -Path $configFilePath) -replace "WINLAUNCH", "$($env:LOCALAPPDATA)\WinLaunch\WinLaunch.exe" | Set-Content -Path $configFilePath
             (Get-Content -Path $configFilePath) -replace "MINIMIZEALL", "$($env:LOCALAPPDATA)\WinMac\hotcorners\MinimizeAllWindowsExceptFocused.exe" | Set-Content -Path $configFilePath
