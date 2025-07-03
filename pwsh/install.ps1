@@ -1058,11 +1058,6 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Set-Content -Path $tempVbs -Value $vbsContent -Encoding ASCII
             Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""
             Start-Sleep 10
-            $nexusProcess = Get-Process -Name "Nexus"
-            if (!($nexusProcess)) {
-                Start-Sleep 5
-                $nexusProcess = Get-Process -Name "Nexus"
-            } else { Start-Sleep 10 }
             $scriptBlock2 = "Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe'"
             $tempScript = Join-Path $env:TEMP "nonadmin_$([guid]::NewGuid().ToString()).ps1"
             Set-Content -Path $tempScript -Value $scriptBlock2 -Encoding UTF8
@@ -1081,7 +1076,11 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Set-Content -Path $tempVbs -Value $vbsContent -Encoding ASCII
             Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""
             Start-Sleep 10
-            Get-Process -n Nexus | Stop-Process
+            $nexusProcess = Get-Process -Name "Nexus"
+            if (!($nexusProcess)) {
+                Start-Sleep 5
+                $nexusProcess = Get-Process -Name "Nexus"
+            } else { Start-Sleep 10 }
             $wingetTerminalCheck = Get-WinGetPackage -Id "Microsoft.WindowsTerminal"
             if ($null -eq $wingetTerminalCheck) {
                 winget install Microsoft.WindowsTerminal
