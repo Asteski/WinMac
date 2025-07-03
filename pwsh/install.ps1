@@ -2,8 +2,8 @@ param (
     [switch]$noGUI
 )
 $version = "1.1.0"
-# $ErrorActionPreference="SilentlyContinue"
-# $WarningPreference="SilentlyContinue"
+$ErrorActionPreference="SilentlyContinue"
+$WarningPreference="SilentlyContinue"
 $programsDir = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs"
 $winMacDirectory = "$env:LOCALAPPDATA\WinMac"
 Add-Type -AssemblyName System.Windows.Forms
@@ -1057,6 +1057,11 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
 "@
             Set-Content -Path $tempVbs -Value $vbsContent -Encoding ASCII
             Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""
+            Start-Sleep 5
+            $nexusProcess = Get-Process -Name "Nexus"
+            if (!($nexusProcess)) {
+                Start-Process -Name "Nexus"
+            }
             Start-Sleep 10
             $nexusProcess = Get-Process -Name "Nexus"
             if (!($nexusProcess)) {
