@@ -254,7 +254,7 @@ on WinMac GitHub page:
 https://github.com/Asteski/WinMac/wiki
 
 "@ -ForegroundColor Yellow
-    Write-Host "`n-----------------------------------------------------------------------" -ForegroundColor Cyan
+    Write-Host "-----------------------------------------------------------------------" -ForegroundColor Cyan
     $fullOrCustom = Read-Host "`nEnter 'F' for full or 'C' for custom uninstallation"
     if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
         $selectedApps = "1","2","3","4","5","6","7","8","9","10","11","12"
@@ -494,7 +494,7 @@ foreach ($app in $selectedApps) {
         "9" {
             Write-Host "Uninstalling Nexus Dock..." -ForegroundColor Yellow
             Get-Process Nexus | Stop-Process -Force
-            Uninstall-WinGetPackage -name Nexus | Out-Null
+            Uninstall-WinGetPackage -name WinStep.Nexus | Out-Null
             Remove-Item -Path "$programsDir\Nexus.lnk" -Force
             Remove-Item -Path "C:\Users\Public\Documents\Winstep" -Recurse -Force
             Write-Host "Uninstalling Nexus Dock completed." -ForegroundColor Green
