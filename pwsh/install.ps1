@@ -799,16 +799,16 @@ foreach ($app in $selectedApps) {
                 }
                 else {
                     Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 0
-                    $isWinXMenuActive = (Get-Process -Name WindowsKey -ErrorAction SilentlyContinue) -or (Get-Process -Name StartButton -ErrorAction SilentlyContinue)
+                    $isWinXMenuActive = (Get-Process -Name WindowsKey -ErrorAction SilentlyContinue) -or (Get-Process -Name WinMac_StartButton -ErrorAction SilentlyContinue)
                     if ($isWinXMenuActive) {
                         Stop-Process -Name WindowsKey -Force
-                        Stop-Process -Name StartButton -Force
+                        Stop-Process -Name WinMac_StartButton -Force
                         Uninstall-WinGetPackage -name "Winver UWP"
-                        $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -match 'startbutton|windowskey' }
+                        $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -match 'WinMac_StartButton|windowskey' }
                         foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
                         $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue
                         if ($null -eq $tasksFolder) { schtasks /DELETE /TN \WinMac /F > $null 2>&1 }
-                        Get-ChildItem "$env:LOCALAPPDATA\WinMac" | Where-Object { $_.Name -match 'startbutton|windowskey' } | Remove-Item -Recurse -Force
+                        Get-ChildItem "$env:LOCALAPPDATA\WinMac" | Where-Object { $_.Name -match 'WinMac_StartButton|windowskey' } | Remove-Item -Recurse -Force
                         Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
                         Expand-Archive -Path "..\config\WinX-default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
                     }

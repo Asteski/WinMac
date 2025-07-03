@@ -449,10 +449,10 @@ foreach ($app in $selectedApps) {
             $sabRegPath = "HKCU:\Software\StartIsBack"
             if ($sysType -like "*ARM*"){
                 Stop-Process -Name WindowsKey -Force
-                Stop-Process -Name StartButton -Force
+                Stop-Process -Name WinMac_StartButton -Force
                 $tasks = Get-ScheduledTask -TaskPath "\WinMac\" -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -match 'Start Button|Windows Key' }
                 foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
-                Get-ChildItem "$env:LOCALAPPDATA\WinMac" | Where-Object { $_.Name -match 'startbutton|windowskey' } | Remove-Item -Recurse -Force
+                Get-ChildItem "$env:LOCALAPPDATA\WinMac" | Where-Object { $_.Name -match 'WinMac_StartButton|windowskey' } | Remove-Item -Recurse -Force
             }
             else {
                 Stop-Process -Name startmenu -Force | Out-Null
