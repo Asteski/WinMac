@@ -1063,7 +1063,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Stop-Process -Name "Nexus" -Force
             $wingetTerminalCheck = Get-WinGetPackage -Id "Microsoft.WindowsTerminal"
             if ($null -eq $wingetTerminalCheck) {
-                $null = winget install Microsoft.WindowsTerminal
+                winget install Microsoft.WindowsTerminal | Out-Null
             }
             $winStep = 'C:\Users\Public\Documents\WinStep'
             Remove-Item -Path "$winStep\Themes\*" -Recurse -Force
