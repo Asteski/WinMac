@@ -628,8 +628,8 @@ foreach ($app in $selectedApps) {
                         Copy-Item -Path $_.FullName -Destination $destinationPath -Force
                     }
                 }
-                Get-ChildItem -Path "..\config\powertoys\RunPlugins" -Recurse | Where-Object { $_.Name -ne "folder.png" } | ForEach-Object {
-                    $destinationPath = Join-Path -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -ChildPath $_.FullName.Substring((Get-Item "..\config\powertoys\RunPlugins\Everything").FullName.Length + 1)
+                Get-ChildItem -Path "..\config\powertoys\RunPlugins\Everything" -Recurse | Where-Object { $_.Name -ne "folder.png" } | ForEach-Object {
+                    $destinationPath = Join-Path -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -ChildPath $_.FullName.Substring((Get-Item "..\config\powertoys\RunPlugins").FullName.Length + 1)
                     if ($_.PSIsContainer) {
                         New-Item -ItemType Directory -Path $destinationPath -Force | Out-Null
                     } else {
