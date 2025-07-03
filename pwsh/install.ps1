@@ -1057,22 +1057,9 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
 "@
             Set-Content -Path $tempVbs -Value $vbsContent -Encoding ASCII
             Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""
-            #!!!!
             while (-not (Get-Process -Name "Nexus")) {
                 Start-Sleep -Seconds 1
             }
-            # Start-Sleep 10
-            # $nexusProcess1 = Get-Process -Name "Nexus"
-            # if (!($nexusProcess1)) {
-            #     Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe'
-            # }
-            # Start-Sleep 10
-            # $nexusProcess2 = Get-Process -Name "Nexus"
-            # if (!($nexusProcess2)) {
-            #     Start-Sleep 5
-            #     $nexusProcess2 = Get-Process -Name "Nexus"
-            # } else { Stop-Process -Name "Nexus" -Force }
-            #!!!!
             Stop-Process -Name "Nexus" -Force
             $wingetTerminalCheck = Get-WinGetPackage -Id "Microsoft.WindowsTerminal"
             if ($null -eq $wingetTerminalCheck) {
@@ -1197,6 +1184,10 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Copy-Item -Path $winXCornersConfigPath -Destination $destinationPath -Force
             Write-Host "Installing Simple Sticky Notes..." -ForegroundColor DarkYellow
             Install-WinGetPackage -id 'SimnetLtd.SimpleStickyNotes' | Out-Null
+            while (-not (Get-Process -Name "Nexus")) {
+                Start-Sleep -Seconds 1
+            }
+            Stop-Process -Name msedge -Force
             Write-Host "Installing WinLaunch..." -ForegroundColor DarkYellow
             Invoke-WebRequest -Uri $winLaunchUrl -OutFile $winLaunchOutputPath
             Expand-Archive -Path $winLaunchOutputPath -DestinationPath $winLaunchDestinationPath -Force
