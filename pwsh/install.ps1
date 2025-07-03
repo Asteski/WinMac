@@ -1405,14 +1405,13 @@ Remove-Item "..\temp" -Recurse -Force
 Start-Sleep 3
 if (-not (Get-Process -Name explorer -ErrorAction SilentlyContinue)) { Start-Process explorer }
 Write-Host "`n---------------------------- Installation Summary ---------------------------" -ForegroundColor Cyan
-Write-Host "Installed Packages:" -ForegroundColor Green
-Write-Host "- Installed Packages:" -ForegroundColor DarkGreen
+Write-Host "Selected Packages:" -ForegroundColor Green
 foreach ($appNumber in $selectedApps) {
     if ($appList.ContainsKey($appNumber)) {
         Write-Host "$($appList[$appNumber])" -ForegroundColor DarkGreen
     }
 }
-Write-Host "`nConfiguration Summary:" -ForegroundColor Yellow
+Write-Host "`nConfiguration:" -ForegroundColor Yellow
 switch ($exStyle) {
     'X' { Write-Host "- Explorer Style: Modern" -ForegroundColor DarkYellow }
     'C' { Write-Host "- Explorer Style: Classic" -ForegroundColor DarkYellow }
