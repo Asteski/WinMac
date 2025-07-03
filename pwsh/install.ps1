@@ -1057,15 +1057,21 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
 "@
             Set-Content -Path $tempVbs -Value $vbsContent -Encoding ASCII
             Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""
+            echo 'wait 10'
             Start-Sleep 10
+            echo 'wait stop' 
             $nexusProcess = Get-Process -Name "Nexus"
             if (!($nexusProcess)) {
                 Start-Process -Name "Nexus"
             }
+            echo 'wait 10'
             Start-Sleep 10
+            echo 'wait stop' 
             $nexusProcess = Get-Process -Name "Nexus"
             if (!($nexusProcess)) {
+                echo 'wait 5'
                 Start-Sleep 5
+                echo 'wait stop' 
                 $nexusProcess = Get-Process -Name "Nexus"
             } else { Stop-Process -Name "Nexus" -Force }
             $wingetTerminalCheck = Get-WinGetPackage -Id "Microsoft.WindowsTerminal"
