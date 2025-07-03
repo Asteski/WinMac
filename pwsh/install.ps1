@@ -6,7 +6,7 @@ $version = "1.1.0"
 # $WarningPreference="SilentlyContinue"
 $programsDir = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs"
 $winMacDirectory = "$env:LOCALAPPDATA\WinMac"
-Add-Type -AssemblyName System.Windows.Formstylk
+Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName PresentationFramework
 if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null}
 $sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
