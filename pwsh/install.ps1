@@ -620,10 +620,22 @@ foreach ($app in $selectedApps) {
                 Copy-Item -Path "..\config\powertoys\RunPlugins\Everything" "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -Recurse -Force
             }
             else {
-                $filesList1 = Get-ChildItem -path "..\config\powertoys\RunPlugins" -Recurse -Exclude "folder.png"
-                Copy-Item $filesList1 -Destination "$env:LOCALAPPDATA\PowerToys\" -Recurse -Force
-                $filesList2 = Get-ChildItem -path "..\config\powertoys\RunPlugins\Everything" -Recurse -Exclude "folder.png"
-                Copy-Item $filesList2 "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -Recurse -Force
+                Get-ChildItem -Path "..\config\powertoys\RunPlugins" -Recurse | Where-Object { $_.Name -ne "folder.png" } | ForEach-Object {
+                    $destinationPath = Join-Path -Path "$env:LOCALAPPDATA\PowerToys\RunPlugins" -ChildPath $_.FullName.Substring((Get-Item "..\config\powertoys\RunPlugins").FullName.Length + 1)
+                    if ($_.PSIsContainer) {
+                        New-Item -ItemType Directory -Path $destinationPath -Force | Out-Null
+                    } else {
+                        Copy-Item -Path $_.FullName -Destination $destinationPath -Force
+                    }
+                }
+                Get-ChildItem -Path "..\config\powertoys\RunPlugins" -Recurse | Where-Object { $_.Name -ne "folder.png" } | ForEach-Object {
+                    $destinationPath = Join-Path -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -ChildPath $_.FullName.Substring((Get-Item "..\config\powertoys\RunPlugins\Everything").FullName.Length + 1)
+                    if ($_.PSIsContainer) {
+                        New-Item -ItemType Directory -Path $destinationPath -Force | Out-Null
+                    } else {
+                        Copy-Item -Path $_.FullName -Destination $destinationPath -Force
+                    }
+                }
             }
             $envPath = [System.Environment]::GetEnvironmentVariable("Path", [System.EnvironmentVariableTarget]::User)
             if (-not ($envPath -like "*$env:LOCALAPPDATA\PowerToys*")) {
