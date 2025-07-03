@@ -1063,7 +1063,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Stop-Process -Name "Nexus" -Force
             $wingetTerminalCheck = Get-WinGetPackage -Id "Microsoft.WindowsTerminal"
             if ($null -eq $wingetTerminalCheck) {
-                winget install Microsoft.WindowsTerminal
+                $null = winget install Microsoft.WindowsTerminal
             }
             $winStep = 'C:\Users\Public\Documents\WinStep'
             Remove-Item -Path "$winStep\Themes\*" -Recurse -Force
@@ -1414,7 +1414,6 @@ Write-Host "--------------------------------------------------------------------
 Start-Sleep 2
 $restartConfirmation = Read-Host "`nRestart computer now? It's recommended to fully apply all the changes (Y/n)"
 if ($restartConfirmation -eq "Y" -or $restartConfirmation -eq "y") {
-    Write-Host "" -ForegroundColor Red
     for ($a=9; $a -ge 0; $a--) {
         Write-Host "`rRestarting computer in $a" -NoNewLine -ForegroundColor Red
         Start-Sleep 1
