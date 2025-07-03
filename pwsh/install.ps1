@@ -1184,7 +1184,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Copy-Item -Path $winXCornersConfigPath -Destination $destinationPath -Force
             Write-Host "Installing Simple Sticky Notes..." -ForegroundColor DarkYellow
             Install-WinGetPackage -id 'SimnetLtd.SimpleStickyNotes' | Out-Null
-            while (-not (Get-Process -Name "msedge.exe")) {
+            while (-not (Get-Process -Name "msedge")) {
                 Start-Sleep -Seconds 1
             }
             Stop-Process -Name msedge.exe -Force
