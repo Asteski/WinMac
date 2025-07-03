@@ -1060,19 +1060,19 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             echo 'wait 10'
             Start-Sleep 10
             echo 'wait stop' 
-            $nexusProcess = Get-Process -Name "Nexus"
-            if (!($nexusProcess)) {
+            $nexusProcess1 = Get-Process -Name "Nexus"
+            if (!($nexusProcess1)) {
                 Start-Process -Name "Nexus"
             }
             echo 'wait 10'
             Start-Sleep 10
             echo 'wait stop' 
-            $nexusProcess = Get-Process -Name "Nexus"
-            if (!($nexusProcess)) {
+            $nexusProcess2 = Get-Process -Name "Nexus"
+            if (!($nexusProcess2)) {
                 echo 'wait 5'
                 Start-Sleep 5
                 echo 'wait stop' 
-                $nexusProcess = Get-Process -Name "Nexus"
+                $nexusProcess2 = Get-Process -Name "Nexus"
             } else { Stop-Process -Name "Nexus" -Force }
             $wingetTerminalCheck = Get-WinGetPackage -Id "Microsoft.WindowsTerminal"
             if ($null -eq $wingetTerminalCheck) {
