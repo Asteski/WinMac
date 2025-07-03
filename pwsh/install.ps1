@@ -1393,60 +1393,12 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
         }
     }
 }
-Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
 Stop-Process -n explorer
 Start-Sleep 2
 Remove-Item "..\temp" -Recurse -Force
 Start-Sleep 3
 if (-not (Get-Process -Name explorer)) { Start-Process explorer }
-Write-Host "`nSelected Packages:" -ForegroundColor Green
-foreach ($appNumber in $selectedApps) {
-    if ($appList.ContainsKey($appNumber)) {
-        Write-Host "- $($appList[$appNumber])" -ForegroundColor DarkGreen
-    }
-}
-Write-Host "`nConfiguration:" -ForegroundColor Yellow
-switch ($exStyle) {
-    'X' { Write-Host "- Explorer Style: Modern" -ForegroundColor DarkYellow }
-    'C' { Write-Host "- Explorer Style: Classic" -ForegroundColor DarkYellow }
-    Default { }
-}
-switch ($promptStyle) {
-    'W' { Write-Host "- Prompt Style: WinMac" -ForegroundColor DarkYellow }
-    'M' { Write-Host "- Prompt Style: macOS" -ForegroundColor DarkYellow }
-    Default { }
-}
-switch ($menuSet) {
-    'X' { Write-Host "- Start Menu Style: WinMac" -ForegroundColor DarkYellow }
-    'C' { Write-Host "- Start Menu Style: Classic" -ForegroundColor DarkYellow }
-    Default { }
-}
-switch ($roundedOrSquared) {
-    'R' { Write-Host "- Shell Corners: Rounded" -ForegroundColor DarkYellow }
-    'S' { Write-Host "- Shell Corners: Squared" -ForegroundColor DarkYellow }
-    Default { }
-}
-switch ($lightOrDark) {
-    'L' { Write-Host "- Theme Style: Light" -ForegroundColor DarkYellow }
-    'D' { Write-Host "- Theme Style: Dark" -ForegroundColor DarkYellow }
-    Default { }
-}
-switch ($blueOrYellow) {
-    'B' { Write-Host "- Folder Color: Blue" -ForegroundColor DarkYellow }
-    'Y' { Write-Host "- Folder Color: Yellow" -ForegroundColor DarkYellow }
-    Default { }
-}
-switch ($dockDynamic) {
-    'X' { Write-Host "- Dock Style: Default" -ForegroundColor DarkYellow }
-    'D' { Write-Host "- Dock Style: Dynamic" -ForegroundColor DarkYellow }
-    Default { }
-}
-switch ($gitProfile) {
-    $true { Write-Host "- Git Profile Enabled" -ForegroundColor DarkYellow }
-    $false { }
-    Default { }
-}
-Write-Host "`n-----------------------------------------------------------------------------" -ForegroundColor Cyan
+Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
 Write-Host @"
 
 Enjoy and support by giving feedback and contributing to the project!
