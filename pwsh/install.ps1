@@ -1402,7 +1402,7 @@ if (-not (Get-Process -Name explorer)) { Start-Process explorer }
 Write-Host "`nSelected Packages:" -ForegroundColor Green
 foreach ($appNumber in $selectedApps) {
     if ($appList.ContainsKey($appNumber)) {
-        Write-Host "- $($appList[$appNumber])" -NoNewline -ForegroundColor DarkGreen
+        Write-Host "- $($appList[$appNumber])" -ForegroundColor DarkGreen
     }
 }
 Write-Host "`nConfiguration:" -ForegroundColor Yellow
