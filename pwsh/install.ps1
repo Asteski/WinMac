@@ -566,7 +566,10 @@ Write-Host "Checking Package Provider (Nuget)" -ForegroundColor Yellow
 $nugetProvider = Get-PackageProvider -Name NuGet
 if ($null -eq $nugetProvider) {
     Write-Host "NuGet is not installed. Installing NuGet..." -ForegroundColor DarkYellow
-    Install-PackageProvider -Name NuGet -Force -Scope CurrentUser
+    $dest = "$env:ProgramFiles\PackageManagement\ProviderAssemblies\nuget\2.8.5.208"
+    $null = New-Item -ItemType Directory -Path $dest -Force
+    $null = Expand-Archive -Path "..\bin\nuget.zip" -DestinationPath $dest -Force
+    Import-PackageProvider -Name NuGet -Force
     Write-Host "NuGet installation completed." -ForegroundColor Green
 } else {
     Write-Host "NuGet is already installed." -ForegroundColor DarkGreen
