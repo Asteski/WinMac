@@ -333,7 +333,7 @@ for ($a=3; $a -ge 0; $a--) {
     Write-Host "`rStarting uninstallation process in $a" -NoNewLine -ForegroundColor Yellow
     Start-Sleep 1
 }
-Write-Host "`r" -NoNewline
+# Write-Host "`r" -NoNewline
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
 #* Nuget check
 Write-Host "Checking Package Provider (Nuget)" -ForegroundColor Yellow

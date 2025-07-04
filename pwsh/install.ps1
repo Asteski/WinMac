@@ -559,7 +559,7 @@ for ($a=3; $a -ge 0; $a--) {
     Write-Host "`rStarting installation process in $a" -NoNewLine -ForegroundColor Yellow
     Start-Sleep 1
 }
-Write-Host "`r" -NoNewline
+# Write-Host "`r" -NoNewline
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
 #* Nuget check
 Write-Host "Checking Package Provider (Nuget)" -ForegroundColor Yellow
@@ -583,7 +583,7 @@ if ($null -eq $wingetCliCheck) {
     Add-AppxPackage '..\temp\Microsoft.UI.Xaml.2.8.x64.appx'
     Add-AppxPackage '..\temp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
 }
-$wingetClientCheck = Get-InstalledModule -Name Microsoft.WinGet.Client -ErrorAction SilentlyContinue
+$wingetClientCheck = Get-InstalledModule -Name Microsoft.WinGet.Client
 if ($null -eq $wingetClientCheck) {
     Write-Host "Winget is not installed. Installing Winget..." -ForegroundColor DarkYellow
     Install-Module -Name Microsoft.WinGet.Client -Force
@@ -592,7 +592,6 @@ if ($null -eq $wingetClientCheck) {
     if ($wingetFind.Version -gt $wingetClientCheck.Version) {
         Write-Host "A newer version of Winget is available. Updating Winget..." -ForegroundColor DarkYellow
         Update-Module -Name Microsoft.WinGet.Client -Force
-        Write-Host "Winget update completed." -ForegroundColor Green
     }
 }
 Import-Module -Name Microsoft.WinGet.Client -Force
