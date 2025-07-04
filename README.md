@@ -72,15 +72,15 @@ Here are the ways you can run different deployment mods:
 
 You can choose between full or custom installation, if you only want to install specific WinMac components.
 
-WinMac is supported by Windows 11, on both x64 and ARM based platforms.
+WinMac is supported by Windows 11 Home, Pro, LTSC, IoT LTSC, on both x64 and ARM based platforms.
 
 
 ## Future plans
 
-- custom context menu theme for *Nexus* to match Windows 11 design
+- *Nexus Xtreme* theme with customised context menu to match Windows 11 design and resemble macOS options that are available under Dock context menu
+- enforce dark theme on legacy Windows components
 - disable keyboard shortcuts for full-screen apps
-- additional *Icons Packs* with red and green folders sets
-- additional *Start Orbs*
+- additional *Start Orbs* and *Icons Packs* for red and green colors
 
 ## Credits
 
