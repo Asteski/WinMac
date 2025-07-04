@@ -387,8 +387,8 @@ foreach ($app in $selectedApps) {
             Write-Host "Uninstalling PowerToys..."  -ForegroundColor Yellow
             Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force
             $everythingPT = Get-WingetPackage -name EverythingPT
-            Uninstall-WinGetPackage -name $everythingPT.name | Out-Null
             Uninstall-WinGetPackage -id Microsoft.PowerToys | Out-Null
+            Uninstall-WinGetPackage -name $everythingPT.name | Out-Null
             Stop-Process -Name TriggerPeekWithSpacebar -Force
             $tasks = Get-ScheduledTask -TaskPath "\WinMac\" | Where-Object { $_.TaskName -match 'Peek' }
             foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
@@ -494,9 +494,9 @@ foreach ($app in $selectedApps) {
         "10" {
             Write-Host "Uninstalling Hot Corners..." -ForegroundColor Yellow
             $regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
-            Stop-Process -n WinXCorners.exe -Force
-            Stop-Process -n WinLaunch.exe -Force
-            Stop-Process -n ssn.exe -Force
+            Stop-Process -n WinXCorners -Force
+            Stop-Process -n WinLaunch -Force
+            Stop-Process -n ssn -Force
             Uninstall-WinGetPackage -name "Simple Sticky Notes"
             Remove-ItemProperty -Path $regPath -Name "WinLaunch"
             Remove-ItemProperty -Path $regPath -Name "WinXCorners"
