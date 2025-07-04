@@ -5,9 +5,10 @@ $version = "1.1.0"
 # $errorActionPreference="SilentlyContinue"
 # $WarningPreference="SilentlyContinue"
 $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
+$winMacDirectory = "$env:LOCALAPPDATA\WinMac"
 Add-Type -AssemblyName PresentationFramework
 Add-Type -AssemblyName System.Windows.Forms
-if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null}
+if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp"it it | Out-Null}
 $sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
 $user = [Security.Principal.WindowsIdentity]::GetCurrent()
 $adminTest = (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
@@ -391,7 +392,7 @@ foreach ($app in $selectedApps) {
             Stop-Process -Name TriggerPeekWithSpacebar -Force
             $tasks = Get-ScheduledTask -TaskPath "\WinMac\" | Where-Object { $_.TaskName -match 'Peek' }
             foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
-            Get-ChildItem "$env:LOCALAPPDATA\WinMac" | Where-Object { $_.Name -match 'TriggerPeekWithSpacebar' } | Remove-Item -Recurse -Force
+            Get-ChildItem $winMacDirectory | Where-Object { $_.Name -match 'TriggerPeekWithSpacebar' } | Remove-Item -Recurse -Force
             Remove-Item $env:LOCALAPPDATA\Microsoft\PowerToys -Recurse -Force
             Remove-Item $env:LOCALAPPDATA\PowerToys -Recurse -Force
             Write-Host "Uninstalling PowerToys completed." -ForegroundColor Green
@@ -447,22 +448,13 @@ foreach ($app in $selectedApps) {
         "5" {
             Write-Host "Uninstalling WinMac Menu..." -ForegroundColor Yellow
             $sabRegPath = "HKCU:\Software\StartIsBack"
-            if ($sysType -like "*ARM*"){
-                Stop-Process -Name WindowsKey -Force
-                Stop-Process -Name WinMac_StartButton -Force
-                $tasks = Get-ScheduledTask -TaskPath "\WinMac\" | Where-Object { $_.TaskName -match 'Start Button|Windows Key' }
-                foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
-                Get-ChildItem "$env:LOCALAPPDATA\WinMac" | Where-Object { $_.Name -match 'WinMac_StartButton|windowskey' } | Remove-Item -Recurse -Force
-            }
-            else {
-                Stop-Process -Name startmenu -Force | Out-Null
-                winget uninstall --id "Open-Shell.Open-Shell-Menu" --source winget --force | Out-Null    
-            }
+            Stop-Process -Name WinMacMenu -Force | Out-Null
+            winget uninstall --id "Open-Shell.Open-Shell-Menu" --source winget --force | Out-Null
             Uninstall-WinGetPackage -name "Winver UWP" | Out-Null
             Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
             Expand-Archive -Path "..\config\WinX-default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
             Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 0
-            Remove-Item -Path "$env:LOCALAPPDATA\WinMac\start.exe" -Force
+            Remove-Item -Path "$winMacDirectory\WinMacMenu.exe" -Force
             Stop-Process -n Explorer
             Write-Host "Uninstalling WinMac Menu completed." -ForegroundColor Green
         }
@@ -487,7 +479,7 @@ foreach ($app in $selectedApps) {
             Stop-Process -Name KeyShortcuts -Force
             $tasks = Get-ScheduledTask -TaskPath "\WinMac\" | Where-Object { $_.TaskName -match 'Keyboard Shortcuts' }
             foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
-            Get-ChildItem "$env:LOCALAPPDATA\WinMac" | Where-Object { $_.Name -match 'keyshortcuts' } | Remove-Item -Recurse -Force
+            Get-ChildItem $winMacDirectory | Where-Object { $_.Name -match 'keyshortcuts' } | Remove-Item -Recurse -Force
             Write-Host "Uninstalling Keyboard Shortcuts completed." -ForegroundColor Green
         }
     #* Nexus Dock
@@ -506,8 +498,8 @@ foreach ($app in $selectedApps) {
             Stop-Process -n WinXCorners -Force
             Stop-Process -n WinLaunch -Force
             Stop-Process -n ssn -Force
-            Uninstall-WinGetPackage -name "Simple Sticky Notes"  | Out-Null
-            winget install 9NBLGGH4QGHW --silent | Out-Null
+            Uninstall-WinGetPackage -name "Simple Sticky Notes" # | Out-Null
+            winget install 9NBLGGH4QGHW --silent # | Out-Null
             Remove-ItemProperty -Path $regPath -Name "WinLaunch"
             Remove-ItemProperty -Path $regPath -Name "WinXCorners"
             Remove-ItemProperty -Path $regPath -Name "Simple Sticky Notes"
@@ -600,9 +592,9 @@ uint fWinIni);
             reg import '..\config\reg\remove\Remove_Hidden_items_from_context_menu.reg' > $null 2>&1
             Get-ChildItem "$env:LocalAppData\Microsoft\Windows\Explorer\" -Filter "thumbcache_*.db" | Remove-Item -Force
             Remove-ItemProperty -Path "HKCU:\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags\AllFolders\Shell" -Name "Logo"
-            Remove-Item -Path "$env:LOCALAPPDATA\WinMac\theme.ps1"
+            Remove-Item -Path "$winMacDirectory\theme.ps1"
             Remove-Item -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Hide Desktop Icons.lnk" -Force
-            Remove-Item -Path "$env:LOCALAPPDATA\WinMac\HideDesktopIcons.exe" -Force
+            Remove-Item -Path "$winMacDirectory\HideDesktopIcons.exe" -Force
             $registryPath1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon"
             $registryPath2 = "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}"
             Set-ItemProperty -Path $registryPath1 -Name "(default)" -Value "%SystemRoot%\System32\imageres.dll,-54"
