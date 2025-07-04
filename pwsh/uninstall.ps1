@@ -381,6 +381,7 @@ if ($null -eq $wingetCliCheck) {
     exit 1
 }
 #! WinMac deployment
+if ($selectedApps -like '*9*'){ Get-Process Nexus | Stop-Process -Force }
 foreach ($app in $selectedApps) {
     switch ($app.Trim()) {
     #* PowerToys
@@ -488,7 +489,6 @@ foreach ($app in $selectedApps) {
     #* Nexus Dock
         "9" {
             Write-Host "Uninstalling Nexus Dock..." -ForegroundColor Yellow
-            Get-Process Nexus | Stop-Process -Force
             Uninstall-WinGetPackage -name Nexus | Out-Null
             Remove-Item -Path "$programsDir\Nexus.lnk" -Force
             Remove-Item -Path "C:\Users\Public\Documents\Winstep" -Recurse -Force
