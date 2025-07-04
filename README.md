@@ -77,10 +77,10 @@ WinMac is supported by Windows 11 Home, Pro, LTSC, IoT LTSC, on both x64 and ARM
 
 ## Future plans
 
-- custom context menu theme for *Nexus Dock* to match Windows 11 design
+- *Nexus Xtreme* theme with customised context menu to match Windows 11 design and resemble macOS options that are available under Dock context menu
 - enforce dark theme on legacy Windows components
 - disable keyboard shortcuts for full-screen apps
-- additional *Start Orbs* and *Icons Packs* with red and green colors
+- additional *Start Orbs* and *Icons Packs* for red and green colors
 
 ## Credits
 
