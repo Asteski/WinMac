@@ -604,6 +604,7 @@ if ($null -eq $wingetClientCheck) {
     }
 }
 Import-Module -Name Microsoft.WinGet.Client -Force
+Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
 #! WinMac deployment
 foreach ($app in $selectedApps) {
     switch ($app.Trim()) {

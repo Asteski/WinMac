@@ -374,6 +374,7 @@ if ($null -eq $wingetClientCheck) {
     }
 }
 Import-Module -Name Microsoft.WinGet.Client
+Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
 $wingetCliCheck = winget -v
 if ($null -eq $wingetCliCheck) {
     Write-Host "Winget installation failed. Aborting installation." -ForegroundColor Red
@@ -460,9 +461,12 @@ foreach ($app in $selectedApps) {
     #* Windhawk
         "6" {
             Write-Host "Uninstalling Windhawk..." -ForegroundColor Yellow
+            taskkill /IM explorer.exe /F > $null 2>&1
             Stop-Process -Name windhawk -Force
             Uninstall-WinGetPackage -name Windhawk | Out-Null
             Remove-Item -Path "$programsDir\Windhawk.lnk"
+            Remove-Item "$env:LOCALAPPDATA\IconCache.db" -Force -ErrorAction SilentlyContinue
+            Start-Process explorer
             Write-Host "Uninstalling Windhawk completed." -ForegroundColor Green
         }
     #* Stahky
