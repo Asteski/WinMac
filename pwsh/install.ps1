@@ -669,13 +669,18 @@ foreach ($app in $selectedApps) {
         "2" {
             Write-Host "Installing Everything..." -ForegroundColor Yellow
             Install-WinGetPackage -Id "voidtools.Everything" | Out-Null
-            Stop-Process -Name Everything.exe
+            Start-Process -FilePath Everything.exe -WorkingDirectory $env:PROGRAMFILES\Everything -WindowStyle Hidden
             Move-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Destination $programsDir -Force
             Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Destination $programsDir -Force
-            $everythingIniPath = "$env:APPDATA\Everything"
-            if (-not (Test-Path -Path $everythingIniPath)) {New-Item -ItemType Directory -Path $everythingIniPath -Force | Out-Null}
-            Copy-Item -Path "..\config\everything\Everything.ini" -Destination $everythingIniPath -Force
-            Start-Process -FilePath Everything.exe -WorkingDirectory $env:PROGRAMFILES\Everything -WindowStyle Hidden
+            Stop-Process -Name Everything.exe
+            if (-not (Test-Path -Path "$env:APPDATA\Everything")) {
+                New-Item -ItemType Directory -Path "$env:APPDATA\Everything" -Force | Out-Null
+                Copy-Item -Path "..\config\everything\Everything.ini" -Destination "$env:APPDATA\Everything" -Force
+            }
+            else {
+                (Get-Content -Path "$env:APPDATA\Everything\Everything.ini") -replace "index_folder_size=0", "index_folder_size=1" | Set-Content -Path "$env:APPDATA\Everything\Everything.ini"
+            }
+            Start-Process -FilePath Everything.exe -WorkingDirectory "$env:PROGRAMFILES\Everything" -WindowStyle Hidden
             Write-Host "Everything installation completed." -ForegroundColor Green
         }
     #* PowerShell Profile
