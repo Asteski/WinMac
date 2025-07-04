@@ -2,8 +2,9 @@ param (
     [switch]$noGUI
 )
 $version = "1.1.0"
-$errorActionPreference="SilentlyContinue"
-$WarningPreference="SilentlyContinue"
+$ErrorActionPreference = "SilentlyContinue"
+$WarningPreference = "SilentlyContinue"
+$ProgressPreference = "SilentlyContinue"
 $programsDir = "$($env:APPDATA)\Microsoft\Windows\Start Menu\Programs"
 $winMacDirectory = "$env:LOCALAPPDATA\WinMac"
 Add-Type -AssemblyName PresentationFramework

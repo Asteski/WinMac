@@ -2,8 +2,9 @@ param (
     [switch]$noGUI
 )
 $version = "1.1.0"
-# $ErrorActionPreference="SilentlyContinue"
-# $WarningPreference="SilentlyContinue"
+# $ErrorActionPreference = "SilentlyContinue"
+# $WarningPreference = "SilentlyContinue"
+# $ProgressPreference = "SilentlyContinue"
 $programsDir = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs"
 $winMacDirectory = "$env:LOCALAPPDATA\WinMac"
 Add-Type -AssemblyName System.Windows.Forms
@@ -574,7 +575,6 @@ if ($null -eq $nugetProvider) {
 Write-Host "Checking Package Manager (Winget)" -ForegroundColor Yellow
 $wingetCliCheck = winget -v
 if ($null -eq $wingetCliCheck) {
-    $progressPreference = 'silentlyContinue'
     Invoke-WebRequest -Uri 'https://aka.ms/getwinget' -OutFile '..\temp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
     Invoke-WebRequest -Uri 'https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx' -OutFile '..\temp\Microsoft.VCLibs.x64.14.00.Desktop.appx'
     Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.6/Microsoft.UI.Xaml.2.8.x64.appx' -OutFile '..\temp\Microsoft.UI.Xaml.2.8.x64.appx'
