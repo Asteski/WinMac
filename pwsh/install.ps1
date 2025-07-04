@@ -566,10 +566,7 @@ Write-Host "Checking Package Provider (Nuget)" -ForegroundColor Yellow
 $nugetProvider = Get-PackageProvider -Name NuGet
 if ($null -eq $nugetProvider) {
     Write-Host "NuGet is not installed. Installing NuGet..." -ForegroundColor DarkYellow
-    $dest = "$env:ProgramFiles\PackageManagement\ProviderAssemblies\nuget\2.8.5.208"
-    New-Item -ItemType Directory -Path $dest -Force
-    Expand-Archive -Path "..\bin\nuget.zip" -DestinationPath $dest -Force
-    Import-PackageProvider -Name NuGet -Force
+    Install-PackageProvider -Name NuGet -Force -Scope CurrentUser
     Write-Host "NuGet installation completed." -ForegroundColor Green
 } else {
     Write-Host "NuGet is already installed." -ForegroundColor DarkGreen
@@ -578,27 +575,24 @@ if ($null -eq $nugetProvider) {
 Write-Host "Checking Package Manager (Winget)" -ForegroundColor Yellow
 $wingetCliCheck = winget -v
 if ($null -eq $wingetCliCheck) {
+    $progressPreference = 'silentlyContinue'
     Invoke-WebRequest -Uri 'https://aka.ms/getwinget' -OutFile '..\temp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
     Invoke-WebRequest -Uri 'https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx' -OutFile '..\temp\Microsoft.VCLibs.x64.14.00.Desktop.appx'
     Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.6/Microsoft.UI.Xaml.2.8.x64.appx' -OutFile '..\temp\Microsoft.UI.Xaml.2.8.x64.appx'
-    Add-AppxPackage '..\bin\Microsoft.VCLibs.140.00.UWPDesktop_14.0.33728.0_x64__8wekyb3d8bbwe.appx'
     Add-AppxPackage '..\temp\Microsoft.VCLibs.x64.14.00.Desktop.appx'
     Add-AppxPackage '..\temp\Microsoft.UI.Xaml.2.8.x64.appx'
     Add-AppxPackage '..\temp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
 }
-$wingetClientCheck = Get-InstalledModule -Name Microsoft.WinGet.Client
+$wingetClientCheck = Get-InstalledModule -Name Microsoft.WinGet.Client -ErrorAction SilentlyContinue
 if ($null -eq $wingetClientCheck) {
     Write-Host "Winget is not installed. Installing Winget..." -ForegroundColor DarkYellow
     Install-Module -Name Microsoft.WinGet.Client -Force
-    Write-Host "Winget installation completed." -ForegroundColor Green
 } else {
     $wingetFind = Find-Module -Name Microsoft.WinGet.Client
     if ($wingetFind.Version -gt $wingetClientCheck.Version) {
         Write-Host "A newer version of Winget is available. Updating Winget..." -ForegroundColor DarkYellow
         Update-Module -Name Microsoft.WinGet.Client -Force
         Write-Host "Winget update completed." -ForegroundColor Green
-    } else {
-        Write-Host "Winget is already installed." -ForegroundColor DarkGreen
     }
 }
 Import-Module -Name Microsoft.WinGet.Client -Force
@@ -607,6 +601,10 @@ if ($null -eq $wingetCliCheck) {
     Write-Host "Winget installation failed. Aborting installation." -ForegroundColor Red
     exit 1
 }
+else {
+    Write-Host "Winget installation completed." -ForegroundColor Green
+}
+
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
 #! WinMac deployment
 foreach ($app in $selectedApps) {
