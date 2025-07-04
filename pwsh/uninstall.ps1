@@ -373,7 +373,7 @@ if ($null -eq $wingetClientCheck) {
         Write-Host "Winget is already installed." -ForegroundColor Green
     }
 }
-Import-Module -Name Microsoft.WinGet.Client -Force
+Import-Module -Name Microsoft.WinGet.Client
 $wingetCliCheck = winget -v
 if ($null -eq $wingetCliCheck) {
     Write-Host "Winget installation failed. Aborting installation." -ForegroundColor Red
@@ -448,7 +448,6 @@ foreach ($app in $selectedApps) {
         "5" {
             Write-Host "Uninstalling WinMac Menu..." -ForegroundColor Yellow
             $sabRegPath = "HKCU:\Software\StartIsBack"
-            Stop-Process -Name WinMacMenu -Force | Out-Null
             winget uninstall --id "Open-Shell.Open-Shell-Menu" --source winget --force | Out-Null
             Uninstall-WinGetPackage -name "Winver UWP" | Out-Null
             Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
@@ -498,8 +497,8 @@ foreach ($app in $selectedApps) {
             Stop-Process -n WinXCorners -Force
             Stop-Process -n WinLaunch -Force
             Stop-Process -n ssn -Force
-            Uninstall-WinGetPackage -name "Simple Sticky Notes" # | Out-Null
-            winget install 9NBLGGH4QGHW --silent # | Out-Null
+            Uninstall-WinGetPackage -name "Simple Sticky Notes" -Force | Out-Null
+            winget install 9NBLGGH4QGHW --silent --accept-source-agreements --accept-package-agreements | Out-Null
             Remove-ItemProperty -Path $regPath -Name "WinLaunch"
             Remove-ItemProperty -Path $regPath -Name "WinXCorners"
             Remove-ItemProperty -Path $regPath -Name "Simple Sticky Notes"
