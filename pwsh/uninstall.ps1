@@ -434,7 +434,7 @@ foreach ($app in $selectedApps) {
             taskkill /f /im explorer.exe > $null 2>&1
             Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0
             Start-Sleep 5
-            Start-Process -name explorer
+            Start-Process explorer
             Uninstall-WinGetPackage -id "StartIsBack.StartAllBack" | Out-Null
             Set-ItemProperty -Path $exRegPath\Advanced -Name "UseCompactMode" -Value 0
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarAl" -Value 1
@@ -454,7 +454,7 @@ foreach ($app in $selectedApps) {
             Expand-Archive -Path "..\config\WinX-default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
             Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 0
             Remove-Item -Path "$winMacDirectory\WinMacMenu.exe" -Force
-            Stop-Process -n Explorer
+            Stop-Process -Name explorer -Force
             Write-Host "Uninstalling WinMac Menu completed." -ForegroundColor Green
         }
     #* Windhawk
@@ -478,7 +478,7 @@ foreach ($app in $selectedApps) {
             Stop-Process -Name KeyShortcuts -Force
             $tasks = Get-ScheduledTask -TaskPath "\WinMac\" | Where-Object { $_.TaskName -match 'Keyboard Shortcuts' }
             foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
-            Get-ChildItem $winMacDirectory | Where-Object { $_.Name -match 'keyshortcuts' } | Remove-Item -Recurse -Force
+            Remove-Item "$winMacDirectory\KeyShortcuts.exe" -Force
             Write-Host "Uninstalling Keyboard Shortcuts completed." -ForegroundColor Green
         }
     #* Nexus Dock
@@ -494,9 +494,9 @@ foreach ($app in $selectedApps) {
         "10" {
             Write-Host "Uninstalling Hot Corners..." -ForegroundColor Yellow
             $regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
-            Stop-Process -n WinXCorners -Force
-            Stop-Process -n WinLaunch -Force
-            Stop-Process -n ssn -Force
+            Stop-Process -n WinXCorners.exe -Force
+            Stop-Process -n WinLaunch.exe -Force
+            Stop-Process -n ssn.exe -Force
             Uninstall-WinGetPackage -name "Simple Sticky Notes"
             Remove-ItemProperty -Path $regPath -Name "WinLaunch"
             Remove-ItemProperty -Path $regPath -Name "WinXCorners"
