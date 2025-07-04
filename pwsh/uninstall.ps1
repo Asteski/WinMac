@@ -497,8 +497,7 @@ foreach ($app in $selectedApps) {
             Stop-Process -n WinXCorners -Force
             Stop-Process -n WinLaunch -Force
             Stop-Process -n ssn -Force
-            Uninstall-WinGetPackage -name "Simple Sticky Notes" -Force | Out-Null
-            winget install 9NBLGGH4QGHW --silent --accept-source-agreements --accept-package-agreements | Out-Null
+            Uninstall-WinGetPackage -name "Simple Sticky Notes"
             Remove-ItemProperty -Path $regPath -Name "WinLaunch"
             Remove-ItemProperty -Path $regPath -Name "WinXCorners"
             Remove-ItemProperty -Path $regPath -Name "Simple Sticky Notes"
@@ -514,14 +513,16 @@ foreach ($app in $selectedApps) {
         }
     #* MacType
         "11" {
-            Write-Host "Uninstalling MacType..." -ForegroundColor Yellow
-            Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "MacType" | Out-Null
-            winget uninstall MacType --silent | Out-Null
-            Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name FontSmoothing -Value "2"
-            Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name FontSmoothingType -Type DWord -Value 2
-            RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters ,1 ,True
-            Stop-Process -Name Explorer -Force
-            Write-Host "Uninstalling MacType completed." -ForegroundColor Green
+            if (!($sysType -like "*ARM*")) {
+                Write-Host "Uninstalling MacType..." -ForegroundColor Yellow
+                Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "MacType" | Out-Null
+                winget uninstall MacType --silent | Out-Null
+                Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name FontSmoothing -Value "2"
+                Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name FontSmoothingType -Type DWord -Value 2
+                RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters ,1 ,True
+                Stop-Process -Name Explorer -Force
+                Write-Host "Uninstalling MacType completed." -ForegroundColor Green
+            }
         }
     #* Other
         "12" {
