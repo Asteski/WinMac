@@ -598,12 +598,12 @@ if ($null -eq $wingetClientCheck) {
         Write-Host "Winget is already installed." -ForegroundColor DarkGreen
     }
 }
+Import-Module -Name Microsoft.WinGet.Client -Force
 $wingetClientCheck = Get-InstalledModule -Name Microsoft.WinGet.Client
-if ($null -eq $wingetClientCheck) {
+if ($null -eq $wingetCliCheck) {
     Write-Host "Winget installation failed. Aborting installation." -ForegroundColor Red
     exit 1
 }
-Import-Module -Name Microsoft.WinGet.Client -Force
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
 #! WinMac deployment
 foreach ($app in $selectedApps) {
