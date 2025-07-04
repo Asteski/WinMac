@@ -1,10 +1,10 @@
 {
   "ID": "93A140605B1B49EFBE4312FED59E2569",
-  "ActionKeyword": "]",
+  "ActionKeyword": "}",
   "IsGlobal": false,
   "Name": "Edge Workspaces",
   "Author": "Pascal Quach",
-  "Version": "1.0.0",
+  "Version": "1.0.2",
   "Language": "csharp",
   "Website": "https://github.com/quachpas",
   "ExecuteFileName": "Community.PowerToys.Run.Plugin.EdgeWorkspaces.dll",

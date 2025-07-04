@@ -19,22 +19,7 @@
           "Community.PowerToys.Run.Plugin.EdgeWorkspaces.dll": {}
         }
       },
-      "Microsoft.Win32.SystemEvents/8.0.0": {
-        "runtime": {
-          "lib/net8.0/Microsoft.Win32.SystemEvents.dll": {
-            "assemblyVersion": "8.0.0.0",
-            "fileVersion": "8.0.23.53103"
-          }
-        },
-        "runtimeTargets": {
-          "runtimes/win/lib/net8.0/Microsoft.Win32.SystemEvents.dll": {
-            "rid": "win",
-            "assetType": "runtime",
-            "assemblyVersion": "8.0.0.0",
-            "fileVersion": "8.0.23.53103"
-          }
-        }
-      },
+      "Microsoft.Win32.SystemEvents/8.0.0": {},
       "System.Drawing.Common/8.0.4": {
         "dependencies": {
           "Microsoft.Win32.SystemEvents": "8.0.0"
