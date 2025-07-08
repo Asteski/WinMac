@@ -1351,7 +1351,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             Copy-Item -Path "..\config\blank.ico" -Destination "C:\Windows" -Force
             New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Force | Out-Null
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String | Out-Null
-            #? Configuring file explorer and context menus
+        #? Configuring file explorer and context menus
             Get-ChildItem ..\config\reg\remove\* -e *theme* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
             $sourceFilePath = "..\config\reg\add\Add_Theme_Mode_in_Context_Menu.reg"
             $tempFilePath = "..\temp\Add_Theme_Mode_in_Context_Menu.reg"
