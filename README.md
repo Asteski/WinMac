@@ -72,7 +72,7 @@ Here are the ways you can run different deployment mods:
 
 You can choose between full or custom installation, if you only want to install specific WinMac components.
 
-WinMac is supported by Windows 11 Home, Pro, LTSC, IoT LTSC, on both x64 and ARM based platforms.
+WinMac is supported by Windows 11 Home, Pro, LTSC, IoT LTSC, on both x86 and ARM based platforms.
 
 
 ## Future plans
