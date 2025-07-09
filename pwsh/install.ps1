@@ -669,11 +669,8 @@ foreach ($app in $selectedApps) {
         "2" {
             Write-Host "Installing Everything..." -ForegroundColor Yellow
             Install-WinGetPackage -Id "voidtools.Everything" | Out-Null
-            # Start-Process -FilePath Everything.exe -WorkingDirectory $env:PROGRAMFILES\Everything -WindowStyle Hidden
             Move-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Destination $programsDir -Force
             Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Destination $programsDir -Force
-            # Start-Sleep 10
-            # Stop-Process -Name Everything.exe -Force
             if (-not (Test-Path -Path "$env:APPDATA\Everything")) {
                 New-Item -ItemType Directory -Path "$env:APPDATA\Everything" -Force | Out-Null
                 Copy-Item -Path "..\config\everything\Everything.ini" -Destination "$env:APPDATA\Everything" -Force
