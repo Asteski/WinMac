@@ -79,7 +79,6 @@ WinMac is supported by Windows 11 Home, Pro, LTSC, IoT LTSC, on both x86 and ARM
 
 - *Nexus Xtreme* theme with customised context menu to match Windows 11 design
 - enforce dark theme on legacy Windows components
-- custom PowerToys Run macros
 - disable keyboard shortcuts for full-screen apps
 - additional *Start Orbs* and *Icons Packs* for red and green colors
 
