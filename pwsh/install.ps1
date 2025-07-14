@@ -1085,6 +1085,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                 $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 
                 $regFile = $modifiedFile
                 if ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
+                    Set-ItemProperty -Path $registryPath2 -Name "Windows10Style" -Value 'True'
                     $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "Light", "Dark" }
                     $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace '"UIDarkMode"="3"', '"UIDarkMode"="1"' }
                     $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "1644825", "15658734" }
@@ -1093,7 +1094,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                     $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "recycle_bin_empty_light", "recycle_bin_empty_dark" }
                     $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "recycle_bin_full_light", "recycle_bin_full_dark" }
                     $modifiedFile = "..\temp\winstep.reg"
-                    $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 
+                    $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8
                 }
             }
             elseif (($roundedOrSquared -ne "S" -or $roundedOrSquared -ne "s") -and ($lightOrDark -eq "D" -or $lightOrDark -eq "d")) {

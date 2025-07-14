@@ -34,7 +34,7 @@ if ($mode -eq 'Dark')
 	$orbBitmap 				= $orbBitmap -replace 'black', 'white'
 	$recycleBinEmptyIcon 	= $recycleBinEmptyIcon -replace 'Light', 'Dark'
 	$recycleBinFullIcon 	= $recycleBinFullIcon -replace 'Light', 'Dark'
-	Set-ItemProperty -Path $registryPath2 -Name "Windows10Style" -Value 'False'
+	Set-ItemProperty -Path $registryPath2 -Name "Windows10Style" -Value 'True'
 }
 if ($mode -eq 'Light')
 {
@@ -45,9 +45,9 @@ if ($mode -eq 'Light')
 	$theme 					= $themeStyle -replace 'Dark', 'Light'
 	$dockRunningIndicator 	= $dockRunningIndicator -replace 'Dark', 'Light'
 	$orbBitmap 				= $orbBitmap -replace 'white', 'black'
-	$recycleBinEmptyIcon 	= $recycleBinEmptyIcon -replace 'Light', 'Dark'
-	$recycleBinFullIcon 	= $recycleBinFullIcon -replace 'Light', 'Dark'
-	Set-ItemProperty -Path $registryPath2 -Name "Windows10Style" -Value 'True'
+	$recycleBinEmptyIcon 	= $recycleBinEmptyIcon -replace 'Dark', 'Light'
+	$recycleBinFullIcon 	= $recycleBinFullIcon -replace 'Dark', 'Light'
+	Set-ItemProperty -Path $registryPath2 -Name "Windows10Style" -Value 'False'
 }
 if ($mode2 -eq 'NoApp') {
 	Set-ItemProperty -Path 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize' -Name 'SystemUsesLightTheme' -Type DWord -Value $OSMode
