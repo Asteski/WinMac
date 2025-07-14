@@ -1393,6 +1393,11 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
                 Set-ItemProperty -Path $registryPath1 -Name "full" -Value "C:\Users\Public\Documents\Winstep\Icons\recycle_bin_full_dark.ico"
                 Set-ItemProperty -Path $registryPath2 -Name "Icon" -Value "C:\Users\Public\Documents\Winstep\Icons\recycle_bin_empty_dark.ico"
             }
+        #? Send To Programs (create shortcut)
+            $sendToPath = "$env:APPDATA\Microsoft\Windows\SendTo"
+            Copy-Item -Path "..\bin\Programs (create shortcut).lnk" -Destination $sendToPath -Recurse -Force
+            Copy-Item -Path "..\bin\WinMacSendToPrograms.exe" -Destination $winMacDirectory -Recurse -Force
+            Write-Host "Other settings configuration completed." -ForegroundColor Green
         }
     }
 }
