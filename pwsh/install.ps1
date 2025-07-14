@@ -1018,7 +1018,7 @@ foreach ($app in $selectedApps) {
     #* AutoHotkey Keyboard Shortcuts
         "8" {
             Write-Host "Installing Keyboard Shortcuts..." -ForegroundColor Yellow
-            $fileName = 'KeyShortcuts.exe'
+            $fileName = 'WinMacKeyShortcuts.exe'
             New-Item -ItemType Directory -Path "$winMacDirectory\" | Out-Null
             if (Get-Process keyshortcuts) { Stop-Process -Name keyshortcuts }
             Copy-Item ..\bin\$fileName "$winMacDirectory" 
@@ -1035,7 +1035,7 @@ foreach ($app in $selectedApps) {
             $action = New-ScheduledTaskAction -Execute $fileName -WorkingDirectory $winMacDirectory
             $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
             Register-ScheduledTask -TaskName "Keyboard Shortcuts" -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -Description $description | Out-Null
-            Start-Process -FilePath "$winMacDirectory\KeyShortcuts.exe" -WorkingDirectory $winMacDirectory
+            Start-Process -FilePath "$winMacDirectory\WinMacKeyShortcuts.exe" -WorkingDirectory $winMacDirectory
             Write-Host "Keyboard Shortcuts installation completed." -ForegroundColor Green
         }
     #* Nexus Dock
@@ -1383,15 +1383,15 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             $registryPath2 = "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\empty"
             if (-not (Test-Path -Path $registryPath2)) {New-Item -Path $registryPath2 -Force | Out-Null}
             if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
-                Set-ItemProperty -Path $registryPath1 -Name "(default)" -Value "%SystemRoot%\System32\imageres.dll,-1017"
-                Set-ItemProperty -Path $registryPath1 -Name "empty" -Value "%SystemRoot%\System32\imageres.dll,-1015"
-                Set-ItemProperty -Path $registryPath1 -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-1017"
-                Set-ItemProperty -Path $registryPath2 -Name "Icon" -Value "%SystemRoot%\System32\imageres.dll,-1015"
+                Set-ItemProperty -Path $registryPath1 -Name "(default)" -Value "C:\Users\Public\Documents\Winstep\Icons\recycle_bin_full_light.ico"
+                Set-ItemProperty -Path $registryPath1 -Name "empty" -Value "C:\Users\Public\Documents\Winstep\Icons\recycle_bin_empty_light.ico"
+                Set-ItemProperty -Path $registryPath1 -Name "full" -Value "C:\Users\Public\Documents\Winstep\Icons\recycle_bin_full_light.ico"
+                Set-ItemProperty -Path $registryPath2 -Name "Icon" -Value "C:\Users\Public\Documents\Winstep\Icons\recycle_bin_empty_light.ico"
             } elseif ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
-                Set-ItemProperty -Path $registryPath1 -Name "(default)" -Value "%SystemRoot%\System32\imageres.dll,-54"
-                Set-ItemProperty -Path $registryPath1 -Name "empty" -Value "%SystemRoot%\System32\imageres.dll,-55"
-                Set-ItemProperty -Path $registryPath1 -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-54"
-                Set-ItemProperty -Path $registryPath2 -Name "Icon" -Value "%SystemRoot%\System32\imageres.dll,-55"
+                Set-ItemProperty -Path $registryPath1 -Name "(default)" -Value "C:\Users\Public\Documents\Winstep\Icons\recycle_bin_full_dark.ico"
+                Set-ItemProperty -Path $registryPath1 -Name "empty" -Value "C:\Users\Public\Documents\Winstep\Icons\recycle_bin_empty_dark.ico"
+                Set-ItemProperty -Path $registryPath1 -Name "full" -Value "C:\Users\Public\Documents\Winstep\Icons\recycle_bin_full_dark.ico"
+                Set-ItemProperty -Path $registryPath2 -Name "Icon" -Value "C:\Users\Public\Documents\Winstep\Icons\recycle_bin_empty_dark.ico"
             }
         }
     }

@@ -483,7 +483,7 @@ foreach ($app in $selectedApps) {
             Stop-Process -Name KeyShortcuts -Force
             $tasks = Get-ScheduledTask -TaskPath "\WinMac\" | Where-Object { $_.TaskName -match 'Keyboard Shortcuts' }
             foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
-            Remove-Item "$winMacDirectory\KeyShortcuts.exe" -Force
+            Remove-Item "$winMacDirectory\WinMacKeyShortcuts.exe" -Force
             Write-Host "Uninstalling Keyboard Shortcuts completed." -ForegroundColor Green
         }
     #* Nexus Dock
