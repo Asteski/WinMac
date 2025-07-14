@@ -53,6 +53,32 @@ if ($mode -eq 'Light')
 	$recycleBinFullIcon 	= $recycleBinFullIcon -replace 'Dark', 'Light'
 	Set-ItemProperty -Path $registryPath2 -Name "Windows10Style" -Value 'False'
 }
+
+if ($mode2 -eq 'NoApp') {
+	Set-ItemProperty -Path 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize' -Name 'SystemUsesLightTheme' -Type DWord -Value $OSMode
+}
+else {
+	#! IF statement below is used for custom themes like Rectify11 Dark theme
+	#! Rectify11 Dark theme allows to force dark theme on Windows legacy apps like Registry Editor, Disk Management, Event Viewer and etc.
+	#! Registry modification below allows to make title bars dark in legacy apps
+	#! In order for custom themes to work properly, we need to install SecureUXTheme and enable *Fix control panel white header/sidebar* option in UXTheme Hook Windhawk mod
+	#? Once above are done:
+	#? - clone Rectify11Installer-V4 GitHub repository locally using Git
+	#? - copy Rectify11 themes folder content to C:\Windows\Resources\Themes
+	#? - rename darkrectified.theme to WinMac_Dark.theme (backup default WinMac_Dark.theme first)
+	#? - copy Rectify11 System32 folder content to C:\Windows\System32 folder
+	#? - additionally you can copy [Control Panel\Cursors] content from default WinMac_Dark.theme to Rectify11 dark theme file using text editor, to apply default Windows cursors
+	# if ($mode -eq 'Light') {
+	# 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value 0
+	# 	Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "AccentColorInactive"
+ 	# }
+	# else {
+	# 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value 1
+	# 	New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "AccentColorInactive" -PropertyType DWord -Value 0xFF444444
+	# }
+	Start-Process "$env:WINDIR\Resources\Themes\WinMac_$mode.theme"
+}
+
 $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
 $RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
 $RegCursors.SetValue("",$cursorName)
@@ -85,31 +111,6 @@ uint fWinIni);
 '@
 $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
 $CursorRefresh::SystemParametersInfo(0x057,0,$null,0) > $null 2>&1
-
-if ($mode2 -eq 'NoApp') {
-	Set-ItemProperty -Path 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize' -Name 'SystemUsesLightTheme' -Type DWord -Value $OSMode
-}
-else {
-	#! IF statement below is used for custom themes like Rectify11 Dark theme
-	#! Rectify11 Dark theme allows to force dark theme on Windows legacy apps like Registry Editor, Disk Management, Event Viewer and etc.
-	#! Registry modification below allows to make title bars dark in legacy apps
-	#! In order for custom themes to work properly, we need to install SecureUXTheme and enable *Fix control panel white header/sidebar* option in UXTheme Hook Windhawk mod
-	#? Once above are done:
-	#? - clone Rectify11Installer-V4 GitHub repository locally using Git
-	#? - copy Rectify11 themes folder content to C:\Windows\Resources\Themes
-	#? - rename darkrectified.theme to WinMac_Dark.theme (backup default WinMac_Dark.theme first)
-	#? - copy Rectify11 System32 folder content to C:\Windows\System32 folder
-	#? - additionally you can copy [Control Panel\Cursors] content from default WinMac_Dark.theme to Rectify11 dark theme file using text editor, to apply default Windows cursors
-	# if ($mode -eq 'Light') {
-	# 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value 0
-	# 	Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "AccentColorInactive"
- 	# }
-	# else {
-	# 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value 1
-	# 	New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "AccentColorInactive" -PropertyType DWord -Value 0xFF444444
-	# }
-	Start-Process "$env:WINDIR\Resources\Themes\WinMac_$mode.theme"
-}
 
 $registry1Properties = Get-ItemProperty -Path $registryPath1
 $storeIcon = 'C:\Users\Public\Documents\Winstep\Icons\store'

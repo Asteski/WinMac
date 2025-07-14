@@ -18,8 +18,8 @@ DefaultValue=%SystemRoot%\System32\imageres.dll,-123
 DefaultValue=%SystemRoot%\System32\imageres.dll,-25
 
 [Control Panel\Cursors]
-AppStarting=%SystemRoot%\Cursors\aero_black_working.ani
 Arrow=%SystemRoot%\Cursors\aero_black_arrow.cur
+AppStarting=%SystemRoot%\Cursors\aero_black_working.ani
 Crosshair=%SystemRoot%\Cursors\aero_black_cross.cur
 Hand=%SystemRoot%\Cursors\aero_black_link.cur
 Help=%SystemRoot%\Cursors\aero_black_helpsel.cur
