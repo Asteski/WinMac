@@ -1,7 +1,7 @@
 param (
     [switch]$noGUI
 )
-$version = "1.1.0"
+$version = "1.1.1"
 $ErrorActionPreference = "SilentlyContinue"
 $WarningPreference = "SilentlyContinue"
 $ProgressPreference = "SilentlyContinue"
