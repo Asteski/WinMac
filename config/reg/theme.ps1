@@ -56,7 +56,7 @@ else {
 	#! IF statement below is used for custom themes like Rectify11 Dark theme
 	#! Rectify11 Dark theme allows to force dark theme on Windows legacy apps like Registry Editor, Disk Management, Event Viewer and etc.
 	#! Registry modification below allows to make title bars dark in legacy apps
-	#! In order for custom themes to work properly, we need to install SecureUXTheme and enable UXTheme Hook Windhawk mod
+	#! In order for custom themes to work properly, we need to install SecureUXTheme and enable *Fix control panel white header/sidebar* option in UXTheme Hook Windhawk mod
 	#? Once above are done:
 	#? - clone Rectify11Installer-V4 GitHub repository locally using Git
 	#? - copy Rectify11 themes folder content to C:\Windows\Resources\Themes
