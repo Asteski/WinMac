@@ -7,9 +7,9 @@ param
 	[string]
 	$mode2
 )
-# $ErrorActionPreference = 'SilentlyContinue'
-# $WarningPreference = 'SilentlyContinue'
-# $ProgressPreference = 'SilentlyContinue'
+$ErrorActionPreference = 'SilentlyContinue'
+$WarningPreference = 'SilentlyContinue'
+$ProgressPreference = 'SilentlyContinue'
 taskkill /IM nexus.exe /F > $null 2>&1
 taskkill /IM explorer.exe /F > $null 2>&1
 $registryPath0 = "HKCU:\Software\WinSTEP2000\NeXuS"
@@ -68,6 +68,7 @@ else {
 	#? - rename darkrectified.theme to WinMac_Dark.theme (backup default WinMac_Dark.theme first)
 	#? - copy Rectify11 System32 folder content to C:\Windows\System32 folder
 	#? - additionally you can copy [Control Panel\Cursors] content from default WinMac_Dark.theme to Rectify11 dark theme file using text editor, to apply default Windows cursors
+	#? - uncomment below if and else statements
 	# if ($mode -eq 'Light') {
 	# 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value 0
 	# 	Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "AccentColorInactive"
@@ -142,11 +143,10 @@ Set-ItemProperty -Path $registryPath1 -Name "DockRunningIndicator1" -Value $dock
 if ($storeIcon)   { Set-ItemProperty -Path $registryPath1 -Name $storeIcon -Value "C:\Users\Public\Documents\Winstep\Icons\store_$mode.ico" }
 Set-ItemProperty -Path $registryPath2 -Name "UIDarkMode" -Value $UIDarkMode
 Set-ItemProperty -Path $registryPath2 -Name "TaskIcon2" -Value "C:\\Users\\Public\\Documents\\WinStep\\Icons\\store_$mode.ico"
-Set-ItemProperty -Path $registryPath3 -Name "(default)" -Value $recycleBinFullIcon
+Set-ItemProperty -Path $registryPath3 -Name "(default)" -Value $recycleBinEmptyIcon
 Set-ItemProperty -Path $registryPath3 -Name "empty" -Value $recycleBinEmptyIcon
 Set-ItemProperty -Path $registryPath3 -Name "full" -Value $recycleBinFullIcon
 Set-ItemProperty -Path $registryPath4 -Name "Icon" -Value $recycleBinEmptyIcon
 Set-ItemProperty -Path $registryPath5 -Name "OrbBitmap" -Value $orbBitmap
 Start-Process explorer
 try { Start-Process "C:\Program Files (x86)\Winstep\Nexus.exe" } catch {}
-start-sleep 10
