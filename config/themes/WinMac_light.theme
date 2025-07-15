@@ -1,21 +1,8 @@
 ; Copyright � Microsoft Corp.
 
 [Theme]
-; Windows - IDS_THEME_DISPLAYNAME_AERO_LIGHT
-DisplayName=winmac_light
-ThemeId={847B7405-A7FF-4436-AA80-CEB8BCD82C9A}
-
-; Computer - SHIDI_SERVER
-[CLSID\{20D04FE0-3AEA-1069-A2D8-08002B30309D}\DefaultIcon]
-DefaultValue=%SystemRoot%\System32\imageres.dll,-109
-
-; UsersFiles - SHIDI_USERFILES
-[CLSID\{59031A47-3F72-44A7-89C5-5595FE6B30EE}\DefaultIcon]
-DefaultValue=%SystemRoot%\System32\imageres.dll,-123
-
-; Network - SHIDI_MYNETWORK
-[CLSID\{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}\DefaultIcon]
-DefaultValue=%SystemRoot%\System32\imageres.dll,-25
+; Windows - IDS_THEME_DISPLAYNAME_WINMAC_LIGHT
+DisplayName=WinmacLight
 
 [Control Panel\Cursors]
 Arrow=%SystemRoot%\Cursors\aero_black_arrow.cur
@@ -35,21 +22,11 @@ UpArrow=%SystemRoot%\Cursors\aero_black_up.cur
 Wait=%SystemRoot%\Cursors\aero_black_busy.ani
 DefaultValue=Windows black
 
-[Control Panel\Desktop]
-Wallpaper=0
-WallpaperStyle=10
-Pattern=
-MultimonBackgrounds=0
-PicturePosition=4
-WallpaperWriteTime=133531971320000000
-WindowsSpotlight=0
-
 [VisualStyles]
 Path=%SystemRoot%\resources\themes\Aero\Aero.msstyles
 ColorStyle=NormalColor
 Size=NormalSize
 AutoColorization=0
-ColorizationColor=0XC40078D4
 SystemMode=Light
 AppMode=Light
 VisualStyleVersion=10
@@ -62,37 +39,4 @@ MTSM=RJSPBS
 
 [Sounds]
 ; IDS_SCHEME_DEFAULT
-SchemeName=@mmres.dll,-800
-
-[Control Panel\Colors]
-Scrollbar=200 200 200
-Background=0 0 0
-ActiveTitle=153 180 209
-InactiveTitle=191 205 219
-Menu=240 240 240
-Window=255 255 255
-WindowFrame=100 100 100
-MenuText=0 0 0
-WindowText=0 0 0
-TitleText=0 0 0
-ActiveBorder=180 180 180
-InactiveBorder=244 247 252
-AppWorkspace=171 171 171
-Hilight=0 120 213
-HilightText=255 255 255
-ButtonFace=240 240 240
-ButtonShadow=160 160 160
-GrayText=109 109 109
-ButtonText=0 0 0
-InactiveTitleText=0 0 0
-ButtonHilight=255 255 255
-ButtonDkShadow=105 105 105
-ButtonLight=227 227 227
-InfoText=0 0 0
-InfoWindow=255 255 225
-ButtonAlternateFace=0 0 0
-HotTrackingColor=0 95 184
-GradientActiveTitle=185 209 234
-GradientInactiveTitle=215 228 242
-MenuHilight=0 120 213
-MenuBar=240 240 240
+SchemeName=WinMacLight
