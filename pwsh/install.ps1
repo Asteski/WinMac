@@ -791,7 +791,7 @@ foreach ($app in $selectedApps) {
                 Set-ItemProperty -Path $sabRegPath -Name "TaskbarCenterIcons" -Value 1
                 Set-ItemProperty -Path $sabRegPath -Name "TaskbarLargerIcons" -Value 0
                 Set-ItemProperty -Path $sabRegPath -Name "TaskbarSpacierIcons" -Value (-1)
-                Set-ItemProperty -Path $sabRegPath -Name "TaskbarControlCenter" -Value 1
+                Set-ItemProperty -Path $sabRegPath -Name "TaskbarControlCenter" -Value 0
                 Set-ItemProperty -Path $sabRegPath -Name "SysTrayStyle" -Value 0
                 Set-ItemProperty -Path $sabRegPath -Name "SysTrayActionCenter" -Value 1
                 Set-ItemProperty -Path $sabRegPath -Name "SysTraySpacierIcons" -Value 1
@@ -805,12 +805,7 @@ foreach ($app in $selectedApps) {
                 }
                 else {
                     Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 0
-                    Uninstall-WinGetPackage -name "Winver UWP"
-                    # $tasks = Get-ScheduledTask -TaskPath "\WinMac\" | Where-Object { $_.TaskName -match 'WinMac_StartButton' }
-                    # foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
-                    # $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\"
-                    # if ($null -eq $tasksFolder) { schtasks /DELETE /TN \WinMac /F > $null 2>&1 }
-                    # Get-ChildItem $winMacDirectory | Where-Object { $_.Name -match 'WinMac_StartButton' } | Remove-Item -Recurse -Force
+                    Uninstall-WinGetPackage -name "Winver UWP" | Out-Null
                     Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
                     Expand-Archive -Path "..\config\WinX-default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
                 }
