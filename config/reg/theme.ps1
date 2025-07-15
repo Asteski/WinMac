@@ -58,17 +58,18 @@ if ($mode2 -eq 'NoApp') {
 	Set-ItemProperty -Path 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize' -Name 'SystemUsesLightTheme' -Type DWord -Value $OSMode
 }
 else {
-	#! IF statement below is used for custom themes like Rectify11 Dark theme
-	#! Rectify11 Dark theme allows to force dark theme on Windows legacy apps like Registry Editor, Disk Management, Event Viewer and etc.
-	#! Registry modification below allows to make title bars dark in legacy apps
-	#! In order for custom themes to work properly, we need to install SecureUXTheme and enable *Fix control panel white header/sidebar* option in UXTheme Hook Windhawk mod
+	#* IF statement below is used for custom themes like Rectify11 Dark theme
+	#* Rectify11 Dark theme allows to force dark theme on Windows legacy apps like Registry Editor, Disk Management, Event Viewer and etc.
+	#* Registry modification below allows to make title bars dark in legacy apps
+	#* In order for custom themes to work properly, we need to install SecureUXTheme and enable *Fix control panel white header/sidebar* option in UXTheme Hook Windhawk mod
+	#! I may consider adding required files from Rectify11 Dark theme to the WinMac in the future, but for now you can use it as a reference
 	#? Once above are done:
 	#? - clone Rectify11Installer-V4 GitHub repository locally using Git
 	#? - copy Rectify11 themes folder content to C:\Windows\Resources\Themes
 	#? - rename darkrectified.theme to WinMac_Dark.theme (backup default WinMac_Dark.theme first)
 	#? - copy Rectify11 System32 folder content to C:\Windows\System32 folder
-	#? - additionally you can copy [Control Panel\Cursors] content from default WinMac_Dark.theme to Rectify11 dark theme file using text editor, to apply default Windows cursors
-	#? - uncomment below if and else statements
+	#? - additionally you can copy [Control Panel\Cursors] content from default WinMac_Dark.theme to Rectify11 dark theme file using text editor, to apply default Windows 11 cursors
+	#? - uncomment below if and else statements (lines from 73 to 80)
 	# if ($mode -eq 'Light') {
 	# 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value 0
 	# 	Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "AccentColorInactive"
