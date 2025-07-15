@@ -792,7 +792,7 @@ foreach ($app in $selectedApps) {
                 Set-ItemProperty -Path $sabRegPath -Name "TaskbarLargerIcons" -Value 0
                 Set-ItemProperty -Path $sabRegPath -Name "TaskbarSpacierIcons" -Value (-1)
                 Set-ItemProperty -Path $sabRegPath -Name "TaskbarControlCenter" -Value 1
-                Set-ItemProperty -Path $sabRegPath -Name "SysTrayStyle" -Value 1
+                Set-ItemProperty -Path $sabRegPath -Name "SysTrayStyle" -Value 0
                 Set-ItemProperty -Path $sabRegPath -Name "SysTrayActionCenter" -Value 1
                 Set-ItemProperty -Path $sabRegPath -Name "SysTraySpacierIcons" -Value 1
                 Set-ItemProperty -Path $sabRegPath -Name "DriveGrouping" -Value 1
