@@ -7,9 +7,9 @@ param
 	[string]
 	$mode2
 )
-$ErrorActionPreference = 'SilentlyContinue'
-$WarningPreference = 'SilentlyContinue'
-$ProgressPreference = 'SilentlyContinue'
+# $ErrorActionPreference = 'SilentlyContinue'
+# $WarningPreference = 'SilentlyContinue'
+# $ProgressPreference = 'SilentlyContinue'
 taskkill /IM nexus.exe /F > $null 2>&1
 taskkill /IM explorer.exe /F > $null 2>&1
 $registryPath0 = "HKCU:\Software\WinSTEP2000\NeXuS"
@@ -149,3 +149,4 @@ Set-ItemProperty -Path $registryPath4 -Name "Icon" -Value $recycleBinEmptyIcon
 Set-ItemProperty -Path $registryPath5 -Name "OrbBitmap" -Value $orbBitmap
 Start-Process explorer
 try { Start-Process "C:\Program Files (x86)\Winstep\Nexus.exe" } catch {}
+start-sleep 10
