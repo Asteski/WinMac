@@ -2,7 +2,7 @@
 
 [Theme]
 ; Windows - IDS_THEME_DISPLAYNAME_AERO_LIGHT
-DisplayName=winmac_dark
+DisplayName=winmacdark
 ThemeId={672171B0-9692-4D40-B557-79243AF99D5F}
 
 ; Computer - SHIDI_SERVER
