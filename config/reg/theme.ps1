@@ -62,7 +62,6 @@ else {
 	#* Rectify11 Dark theme allows to force dark theme on Windows legacy apps like Registry Editor, Disk Management, Event Viewer and etc.
 	#* Registry modification below allows to make title bars dark in legacy apps
 	#* In order for custom themes to work properly, we need to install SecureUXTheme and enable *Fix control panel white header/sidebar* option in UXTheme Hook Windhawk mod
-	#! I may consider adding required files from Rectify11 Dark theme to the WinMac in the future, but for now you can use it as a reference
 	#? Once above are done:
 	#? - clone Rectify11Installer-V4 GitHub repository locally using Git
 	#? - copy Rectify11 themes folder content to C:\Windows\Resources\Themes
