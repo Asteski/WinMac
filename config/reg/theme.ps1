@@ -7,9 +7,9 @@ param
 	[string]
 	$mode2
 )
-# $ErrorActionPreference = 'SilentlyContinue'
-# $WarningPreference = 'SilentlyContinue'
-# $ProgressPreference = 'SilentlyContinue'
+$ErrorActionPreference = 'SilentlyContinue'
+$WarningPreference = 'SilentlyContinue'
+$ProgressPreference = 'SilentlyContinue'
 taskkill /IM explorer.exe /F > $null 2>&1
 taskkill /IM nexus.exe /F > $null 2>&1
 $registryPath0 = "HKCU:\Software\WinSTEP2000\NeXuS"
@@ -29,8 +29,6 @@ if ($mode -eq 'Dark')
 	$UIDarkMode 			= '1'
 	$DockLabelColor1 		= '15658734'
 	$DockLabelBackColor1 	= '2563870'
-	# $cursorMode 			= 'aero'
-	# $cursorName 			= 'Windows Default (system scheme)'
 	$theme 					= $themeStyle -replace 'Light', 'Dark'
 	$dockRunningIndicator 	= $dockRunningIndicator -replace 'Light', 'Dark'
 	$orbBitmap 				= $orbBitmap -replace 'black', 'white'
@@ -44,8 +42,6 @@ if ($mode -eq 'Light')
 	$UIDarkMode 			= '3'
 	$DockLabelColor1 		= '1644825'
 	$DockLabelBackColor1 	= '16119283'
-	# $cursorMode 			= 'aero_black'
-	# $cursorName 			= 'Windows Black'
 	$theme 					= $themeStyle -replace 'Dark', 'Light'
 	$dockRunningIndicator 	= $dockRunningIndicator -replace 'Dark', 'Light'
 	$orbBitmap 				= $orbBitmap -replace 'white', 'black'
@@ -68,7 +64,7 @@ else {
 	#? - rename darkrectified.theme to WinMac_Dark.theme (backup default WinMac_Dark.theme first)
 	#? - copy Rectify11 System32 folder content to C:\Windows\System32 folder
 	#? - additionally you can copy [Control Panel\Cursors] content from default WinMac_Dark.theme to Rectify11 dark theme file using text editor, to apply default Windows 11 cursors
-	#? - uncomment below if and else statements (lines from 73 to 80)
+	#? - uncomment if/else statement below
 	# if ($mode -eq 'Light') {
 	# 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value 0
 	# 	Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "AccentColorInactive"
@@ -79,39 +75,6 @@ else {
 	# }
 	Start-Process "$env:WINDIR\Resources\Themes\WinMac_$mode.theme"
 }
-
-# $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
-# $RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
-# $RegCursors.SetValue("",$cursorName)
-# $RegCursors.SetValue("AppStarting","$curDestFolder\$($cursorMode)_working.ani")
-# $RegCursors.SetValue("Arrow","$curDestFolder\$($cursorMode)_arrow.cur")
-# $RegCursors.SetValue("Crosshair","$curDestFolder\cross_r.cur")
-# $RegCursors.SetValue("Hand","$curDestFolder\$($cursorMode)_link.cur")
-# $RegCursors.SetValue("Help","$curDestFolder\$($cursorMode)_helpsel.cur")
-# $RegCursors.SetValue("IBeam","$curDestFolder\beam_r.cur")
-# $RegCursors.SetValue("No","$curDestFolder\$($cursorMode)_unavail.cur")
-# $RegCursors.SetValue("NWPen","$curDestFolder\$($cursorMode)_pen.cur")
-# $RegCursors.SetValue("SizeAll","$curDestFolder\$($cursorMode)_move.cur")
-# $RegCursors.SetValue("SizeNESW","$curDestFolder\$($cursorMode)_nesw.cur")
-# $RegCursors.SetValue("SizeNS","$curDestFolder\$($cursorMode)_ns.cur")
-# $RegCursors.SetValue("SizeNWSE","$curDestFolder\$($cursorMode)_nwse.cur")
-# $RegCursors.SetValue("SizeWE","$curDestFolder\$($cursorMode)_ew.cur")
-# $RegCursors.SetValue("UpArrow","$curDestFolder\$($cursorMode)_up.cur")
-# $RegCursors.SetValue("Wait","$curDestFolder\$($cursorMode)_busy.ani")
-# $RegCursors.SetValue("Pin","$curDestFolder\$($cursorMode)_pin.cur")
-# $RegCursors.SetValue("Person","$curDestFolder\$($cursorMode)_person.cur")
-# $RegCursors.Close()
-# $RegConnect.Close()
-# $CSharpSig = @'
-# [DllImport("user32.dll", EntryPoint = "SystemParametersInfo")]
-# public static extern bool SystemParametersInfo(
-# uint uiAction,
-# uint uiParam,
-# uint pvParam,
-# uint fWinIni);
-# '@
-# $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
-# $CursorRefresh::SystemParametersInfo(0x057,0,$null,0) > $null 2>&1
 
 $registry1Properties = Get-ItemProperty -Path $registryPath1
 $storeIcon = 'C:\Users\Public\Documents\Winstep\Icons\store'
