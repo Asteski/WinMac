@@ -75,7 +75,7 @@ else {
  	# }
 	# else {
 	# 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value 1
-	# 	New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "AccentColorInactive" -PropertyType DWord -Value 0xFF444444
+	# 	New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "AccentColorInactive" -PropertyType DWord -Value 0xFF444444 > $null 2>&1
 	# }
 	Start-Process "$env:WINDIR\Resources\Themes\WinMac_$mode.theme"
 }
