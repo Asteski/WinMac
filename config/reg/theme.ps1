@@ -18,6 +18,7 @@ $recycleBinEmptyIcon = (Get-ItemProperty -Path $registryPath0 -Name "TrashEmptyI
 $recycleBinFullIcon = (Get-ItemProperty -Path $registryPath0 -Name "TrashFullIcon").TrashFullIcon
 switch ($mode) {
 	"-light" {
+		$shade 					= 'Light'
 		$OSMode 				= 0
 		$UIDarkMode 			= '1'
 		$DockLabelColor1 		= '15658734'
@@ -30,24 +31,25 @@ switch ($mode) {
 		$contextMenuStyle 		= 'False'
 		# $cursorTheme 			= 'Windows Default'
 		# $cursorMappings 		= @{
-		# 	Arrow       		= 'C:\WINDOWS\cursors\aero_arrow.cur'
-		# 	Help        		= 'C:\WINDOWS\cursors\aero_helpsel.cur'
-		# 	Hand        		= 'C:\WINDOWS\cursors\aero_link.cur'
-		# 	AppStarting 		= 'C:\WINDOWS\cursors\aero_working.ani'
-		# 	Wait        		= 'C:\WINDOWS\cursors\aero_busy.ani'
-		# 	NWPen       		= 'C:\WINDOWS\cursors\aero_pen.cur'
-		# 	No          		= 'C:\WINDOWS\cursors\aero_unavail.cur'
-		# 	SizeNS      		= 'C:\WINDOWS\cursors\aero_ns.cur'
-		# 	SizeWE      		= 'C:\WINDOWS\cursors\aero_ew.cur'
-		# 	SizeNWSE    		= 'C:\WINDOWS\cursors\aero_nwse.cur'
-		# 	SizeNESW    		= 'C:\WINDOWS\cursors\aero_nesw.cur'
-		# 	SizeAll     		= 'C:\WINDOWS\cursors\aero_move.cur'
-		# 	UpArrow     		= 'C:\WINDOWS\cursors\aero_up.cur'
-		# 	Pin         		= 'C:\WINDOWS\cursors\aero_pin.cur'
-		# 	Person      		= 'C:\WINDOWS\cursors\aero_person.cur'
-		# }
-	}
+			# 	Arrow       		= 'C:\WINDOWS\cursors\aero_arrow.cur'
+			# 	Help        		= 'C:\WINDOWS\cursors\aero_helpsel.cur'
+			# 	Hand        		= 'C:\WINDOWS\cursors\aero_link.cur'
+			# 	AppStarting 		= 'C:\WINDOWS\cursors\aero_working.ani'
+			# 	Wait        		= 'C:\WINDOWS\cursors\aero_busy.ani'
+			# 	NWPen       		= 'C:\WINDOWS\cursors\aero_pen.cur'
+			# 	No          		= 'C:\WINDOWS\cursors\aero_unavail.cur'
+			# 	SizeNS      		= 'C:\WINDOWS\cursors\aero_ns.cur'
+			# 	SizeWE      		= 'C:\WINDOWS\cursors\aero_ew.cur'
+			# 	SizeNWSE    		= 'C:\WINDOWS\cursors\aero_nwse.cur'
+			# 	SizeNESW    		= 'C:\WINDOWS\cursors\aero_nesw.cur'
+			# 	SizeAll     		= 'C:\WINDOWS\cursors\aero_move.cur'
+			# 	UpArrow     		= 'C:\WINDOWS\cursors\aero_up.cur'
+			# 	Pin         		= 'C:\WINDOWS\cursors\aero_pin.cur'
+			# 	Person      		= 'C:\WINDOWS\cursors\aero_person.cur'
+			# }
+		}
 	"-dark" {
+		$shade 					= 'Dark'
 		$OSMode 				= 1
 		$UIDarkMode 			= '3'
 		$DockLabelColor1 		= '1644825'
@@ -110,7 +112,7 @@ switch ($mode2) {
 # 	public static extern bool SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
 # }
 # "@
-[NativeMethods]::SystemParametersInfo(0x57, 0, $null, 0x03)
+# [NativeMethods]::SystemParametersInfo(0x57, 0, $null, 0x03)
 
 $registry1Properties = Get-ItemProperty -Path $registryPath1
 $storeIcon = 'C:\Users\Public\Documents\Winstep\Icons\store'
@@ -139,7 +141,7 @@ Set-ItemProperty -Path $registryPath1 -Name "DockBack3Image1" -Value "C:\Users\P
 Set-ItemProperty -Path $registryPath1 -Name "DockLabelColor1" -Value $DockLabelColor1
 Set-ItemProperty -Path $registryPath1 -Name "DockLabelBackColor1" -Value $DockLabelBackColor1
 Set-ItemProperty -Path $registryPath1 -Name "DockRunningIndicator1" -Value $dockRunningIndicator
-if ($storeIcon)   { Set-ItemProperty -Path $registryPath1 -Name $storeIcon -Value "C:\Users\Public\Documents\Winstep\Icons\store_$mode.ico" }
+if ($storeIcon)   { Set-ItemProperty -Path $registryPath1 -Name $storeIcon -Value "C:\Users\Public\Documents\Winstep\Icons\store_$shade.ico" }
 Set-ItemProperty -Path $registryPath2 -Name "UIDarkMode" -Value $UIDarkMode
 Set-ItemProperty -Path $registryPath2 -Name "Windows10Style" -Value $contextMenuStyle
 Set-ItemProperty -Path $registryPath3 -Name "(default)" -Value $recycleBinEmptyIcon
