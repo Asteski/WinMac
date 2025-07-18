@@ -798,8 +798,8 @@ foreach ($app in $selectedApps) {
                 Set-ItemProperty -Path $sabRegPath -Name "DriveGrouping" -Value 1
                 Set-ItemProperty -Path $sabRegPath -Name "SysTrayClockFormat" -Value 3
                 Set-ItemProperty -Path $sabRegPath -Name "SysTrayInputSwitch" -Value 0
-                Set-ItemProperty -Path $sabRegPath -Name "NavBarGlass" -Value 0
-                Set-ItemProperty -Path $sabRegPath -Name "FrameStyle" -Value 0
+                Set-ItemProperty -Path $sabRegPath -Name "NavBarGlass" -Value 1
+                if ($exStyle -eq 'C' -or $exStyle -eq 'c') { Set-ItemProperty -Path $sabRegPath -Name "FrameStyle" -Value 2 } else { Set-ItemProperty -Path $sabRegPath -Name "FrameStyle" -Value 0 }
                 if ($menuSet -eq 'X' -or $menuSet -eq 'x') {
                     Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1
                 }
@@ -808,10 +808,6 @@ foreach ($app in $selectedApps) {
                     Uninstall-WinGetPackage -name "Winver UWP" | Out-Null
                     Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
                     Expand-Archive -Path "..\config\WinX-default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
-                }
-                if ($exStyle -eq 'C' -or $exStyle -eq 'c') {
-                    Set-ItemProperty -Path $sabRegPath -Name "NavBarGlass" -Value 1
-                    Set-ItemProperty -Path $sabRegPath -Name "FrameStyle" -Value 2
                 }
                 Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "(default)" -Value 1
                 Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
@@ -898,8 +894,8 @@ foreach ($app in $selectedApps) {
                     $shortcut = $WScriptShell.CreateShortcut($shortcutPath)
                     $shortcut.TargetPath = $newTargetPath
                     $shortcut.Save()
-                    Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX" -Recurse -Force
-                    Copy-Item -Path "..\config\winx\" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Recurse -Force 
+                    Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX\*" -Recurse -Force
+                    Expand-Archive -Path "..\config\menu\WinMac_menu.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\WinX\" -Force
                     Copy-Item -Path "..\bin\WinMacMenu.exe" -Destination $winMacDirectory -Recurse -Force
                     Stop-Process -Name Explorer
                     Start-Process $shellExePath

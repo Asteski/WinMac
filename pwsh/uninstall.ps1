@@ -453,7 +453,7 @@ foreach ($app in $selectedApps) {
             winget uninstall --id "Open-Shell.Open-Shell-Menu" --source winget --force | Out-Null
             Uninstall-WinGetPackage -name "Winver UWP" | Out-Null
             Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
-            Expand-Archive -Path "..\config\WinX-default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
+            Expand-Archive -Path "..\config\menu\WinX_default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
             Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 0
             Remove-Item -Path "$winMacDirectory\WinMacMenu.exe" -Force
             Stop-Process -Name explorer -Force
