@@ -97,19 +97,19 @@ switch ($mode2) {
    }
 }
 
-Set-ItemProperty -Path "HKCU:\Control Panel\Cursors" -Name '(default)' -Value $cursorTheme
-foreach ($cursorName in $cursorMappings.Keys) {
-	$cursorPath = $cursorMappings[$cursorName]
-	Set-ItemProperty -Path "HKCU:\Control Panel\Cursors" -Name $cursorName -Value $cursorPath
-}
-Add-Type @"
-using System;
-using System.Runtime.InteropServices;
-public class NativeMethods {
-	[DllImport("user32.dll", SetLastError = true)]
-	public static extern bool SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
-}
-"@
+# Set-ItemProperty -Path "HKCU:\Control Panel\Cursors" -Name '(default)' -Value $cursorTheme
+# foreach ($cursorName in $cursorMappings.Keys) {
+# 	$cursorPath = $cursorMappings[$cursorName]
+# 	Set-ItemProperty -Path "HKCU:\Control Panel\Cursors" -Name $cursorName -Value $cursorPath
+# }
+# Add-Type @"
+# using System;
+# using System.Runtime.InteropServices;
+# public class NativeMethods {
+# 	[DllImport("user32.dll", SetLastError = true)]
+# 	public static extern bool SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
+# }
+# "@
 [NativeMethods]::SystemParametersInfo(0x57, 0, $null, 0x03)
 
 $registry1Properties = Get-ItemProperty -Path $registryPath1
