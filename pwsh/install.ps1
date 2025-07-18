@@ -1356,7 +1356,10 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             Copy-Item -Path "..\config\themes\*" -Destination "$env:WINDIR\Resources\Themes" -Recurse -Force
             Copy-Item -Path "..\bin\system32\*" -Destination "$env:WINDIR\System32\" -Recurse -Force
             New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowIconOverlay" -Value 0 -PropertyType DWord -Force | Out-Null
-            Start-Process -FilePath '..\bin\SecureUxTheme_x64.msi' -ArgumentList '/quiet /norestart' -Wait
+            
+            # Check if SecureUxTheme is installed
+            $secureUxThemeInstalled = Get-WmiObject -Class Win32_Product | Where-Object { $_.Name -like "SecureUxTheme*" }
+            if (-not $secureUxThemeInstalled) { Start-Process -FilePath '..\bin\SecureUxTheme_x64.msi' -ArgumentList '/quiet /norestart' -Wait }
         #? End Task
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value "" 
             $taskbarDevSettings = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
