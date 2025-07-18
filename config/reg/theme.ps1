@@ -91,12 +91,14 @@ else {
 	if ($mode -eq 'Light') {
 		Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value 0
 		Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "AccentColorInactive"
+		Start-Process "$env:WINDIR\Resources\Themes\WinMac_light.theme"
  	}
 	else {
 		Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value 1
 		New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "AccentColorInactive" -PropertyType DWord -Value 0xFF444444 > $null 2>&1
+		Start-Process "$env:WINDIR\Resources\Themes\darkrectified.theme"
 	}
-	Start-Process "$env:WINDIR\Resources\Themes\WinMac_$mode.theme"
+	
 }
 
 Set-ItemProperty -Path "HKCU:\Control Panel\Cursors" -Name '(default)' -Value $cursorTheme

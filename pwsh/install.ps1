@@ -696,21 +696,21 @@ foreach ($app in $selectedApps) {
                 elseif ($promptSet -eq 'M' -or $promptSet -eq 'm') { $prompt = Get-Content "..\config\terminal\macOS-prompt.ps1" -Raw }
             }
             $functions = Get-Content "..\config\terminal\functions.ps1" -Raw
-            if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell" }#| Out-Null }
+            if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell" | Out-Null }
             else { Remove-Item -Path "$profilePath\PowerShell\$profileFile" -Force } 
-            if (-not (Test-Path "$profilePath\WindowsPowerShell")) { New-Item -ItemType Directory -Path "$profilePath\WindowsPowerShell" }#| Out-Null }
+            if (-not (Test-Path "$profilePath\WindowsPowerShell")) { New-Item -ItemType Directory -Path "$profilePath\WindowsPowerShell" | Out-Null }
             else { Remove-Item -Path "$profilePath\WindowsPowerShell\$profileFile" -Force } 
-            if (-not (Test-Path "$profilePath\PowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\PowerShell\$profileFile" }#| Out-Null }
-            if (-not (Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\WindowsPowerShell\$profileFile" }#| Out-Null }
+            if (-not (Test-Path "$profilePath\PowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\PowerShell\$profileFile" | Out-Null }
+            if (-not (Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\WindowsPowerShell\$profileFile" | Out-Null }
             $vim = Get-WinGetPackage -Id Vim.Vim
             if ($null -eq $vim) {
                 $vimVersion = (Find-WingetPackage Vim.Vim | Where-Object {$_.Id -notlike "*nightly*"}).Version
                 $vimVersion = ($vimVersion -split '\.')[0..1] -join '.'
                 $vimRegPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Vim $vimVersion"
-                if (-not (Test-Path $vimRegPath)) {New-Item -Path $vimRegPath -Force  }#| Out-Null }
+                if (-not (Test-Path $vimRegPath)) {New-Item -Path $vimRegPath -Force  | Out-Null }
                 Set-ItemProperty -Path $vimRegPath -Name "select_startmenu" -Value 0
                 Set-ItemProperty -Path $vimRegPath -Name "select_editwith" -Value 0
-                Install-WinGetPackage -Id "Vim.Vim" #| Out-Null
+                Install-WinGetPackage -Id "Vim.Vim" | Out-Null
             } else {
                 Write-Host "Vim is already installed." -ForegroundColor DarkGreen
             }
@@ -721,20 +721,20 @@ foreach ($app in $selectedApps) {
             foreach ($app in $winget) {
                 $package = Get-WinGetPackage -Id $app
                 if ($null -eq $package) {
-                    Install-WinGetPackage -id $app -source winget #| Out-Null
+                    Install-WinGetPackage -id $app -source winget | Out-Null
                 } else {
                     Write-Host "$($app.split(".")[1]) is already installed." -ForegroundColor DarkGreen
                 }
             }
             $pstreeModule = Get-InstalledModule -Name PSTree
             if ($null -eq $pstreeModule) {
-                Install-Module PSTree -Force #| Out-Null
+                Install-Module PSTree -Force | Out-Null
             } else {
                 Write-Host "PSTree is already installed." -ForegroundColor DarkGreen
             }
             $zModule = Get-InstalledModule -Name z
             if ($null -eq $zModule) {
-                Install-Module z -Force #| Out-Null
+                Install-Module z -Force | Out-Null
             } else {
                 Write-Host "z is already installed." -ForegroundColor DarkGreen
             }
@@ -935,8 +935,9 @@ foreach ($app in $selectedApps) {
             $modsSourceBackup = Join-Path $extractFolder "ModsSource"
             $modsBackup = Join-Path $extractFolder "Engine\Mods"
             $regBackup = Join-Path $extractFolder "Windhawk.reg"
+            New-Item -ItemType Directory -Path "$winMacDirectory\resource-redirect\" -Force | Out-Null
             Copy-Item -Path $modsSourceBackup -Destination $windhawkRoot -Recurse -Force
-            Copy-Item -Path '..\config\windhawk\resource-redirect\' -Destination "$winMacDirectory\" -Recurse -Force
+            Copy-Item -Path '..\config\windhawk\resource-redirect\' -Destination "$winMacDirectory\resource-redirect\" -Recurse -Force
             $engineFolder = Join-Path $windhawkRoot "Engine"
             New-Item -ItemType Directory -Path $engineFolder -Force | Out-Null
             Copy-Item -Path $modsBackup -Destination $engineFolder -Recurse -Force
@@ -1356,7 +1357,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowIconOverlay" -Value 0 -PropertyType DWord -Force | Out-Null
             # Install-WingetPackage -id namazso.SecureUXTheme
             Invoke-WebRequest -Uri 'https://github.com/namazso/SecureUxTheme/releases/download/v4.0.0/SecureUxTheme_x64.msi' -OutFile '..\temp\SecureUxTheme_x64.msi'
-            Start-Process -FilePath '..\temp\SecureUxTheme_x64.msi' -ArgumentList '/quiet /norestart' -Wait
+            Start-Process -FilePath '..\temp\SecureUxTheme_x64.msi'
             Remove-Item -Path '..\temp\SecureUxTheme_x64.msi' -Force
         #? End Task
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value "" 
