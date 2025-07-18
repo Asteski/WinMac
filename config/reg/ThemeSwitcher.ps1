@@ -89,14 +89,15 @@ if ($mode2 -eq 'NoApp') {
 }
 else {
 	if ($mode -eq 'Light') {
-		Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value 0
-		Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "AccentColorInactive"
-		Start-Process "$env:WINDIR\Resources\Themes\WinMac_$mode.theme"
+		Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value 0 												#? comment out this line when using default WinMac theme
+		Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "AccentColorInactive" 												#? comment out this line when using default WinMac theme
+		Start-Process "$env:WINDIR\Resources\Themes\WinMac_light.theme"
 	}
 	else {
-		Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value 1
-		New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "AccentColorInactive" -PropertyType DWord -Value 0xFF444444 > $null 2>&1
-		Start-Process "$env:WINDIR\Resources\Themes\darkrectified.theme"
+		Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value 1 												 #? comment out this line when using default WinMac theme
+		New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "AccentColorInactive" -PropertyType DWord -Value 0xFF444444 > $null 2>&1 #? comment out this line when using default WinMac theme
+		Start-Process "$env:WINDIR\Resources\Themes\darkrectified.theme" 																			 #? comment out this line when using default WinMac theme
+		# Start-Process "$env:WINDIR\Resources\Themes\WinMac_dark.theme" 																			 #* uncomment this line to use default WinMac dark theme
 	}
 }
 
