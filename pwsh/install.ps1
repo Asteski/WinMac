@@ -645,7 +645,7 @@ foreach ($app in $selectedApps) {
             Stop-Process -Name PowerToys*
             Start-Sleep 5
             Stop-Process -Name Microsoft.CmdPal.UI
-            (Get-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json") -replace '"CmdPal":true', '"CmdPal": false' | Set-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json" -Force
+            (Get-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json") -replace '"CmdPal":true', '"CmdPal":false' -replace '"show_tray_icon":true', '"show_tray_icon":false' | Set-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json" -Force
             New-Item -ItemType Directory -Path $winMacDirectory | Out-Null
             Copy-Item '..\bin\TriggerPeekWithSpacebar.exe' $winMacDirectory
             $description = "Trigger PowerToys Peek with Space bar."
@@ -793,7 +793,7 @@ foreach ($app in $selectedApps) {
                 Set-ItemProperty -Path $sabRegPath -Name "TaskbarSpacierIcons" -Value (-1)
                 Set-ItemProperty -Path $sabRegPath -Name "TaskbarControlCenter" -Value 0
                 Set-ItemProperty -Path $sabRegPath -Name "SysTrayStyle" -Value 0
-                Set-ItemProperty -Path $sabRegPath -Name "SysTrayActionCenter" -Value 1
+                Set-ItemProperty -Path $sabRegPath -Name "SysTrayActionCenter" -Value 0
                 Set-ItemProperty -Path $sabRegPath -Name "SysTraySpacierIcons" -Value 1
                 Set-ItemProperty -Path $sabRegPath -Name "DriveGrouping" -Value 1
                 Set-ItemProperty -Path $sabRegPath -Name "SysTrayClockFormat" -Value 3
@@ -930,6 +930,7 @@ foreach ($app in $selectedApps) {
             $backupFile = Get-ChildItem -Path (Join-Path $PWD '..\config') -Filter $windhawkBackup -Recurse | Select-Object -First 1
             $timeStamp = (Get-Date -Format 'yyyyMMddHHmmss')
             $extractFolder = Join-Path $env:TEMP ("WindhawkRestore_$timeStamp")
+            Copy-Item -Path '..\bin\ModernShutDownWindows.exe' -Destination "$env:WINDIR\System32\" -Recurse -Force
             New-Item -ItemType Directory -Path $extractFolder -Force | Out-Null
             Expand-Archive -Path $backupFile.FullName -DestinationPath $extractFolder -Force
             $modsSourceBackup = Join-Path $extractFolder "ModsSource"
