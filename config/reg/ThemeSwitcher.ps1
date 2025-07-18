@@ -143,7 +143,8 @@ Set-ItemProperty -Path $registryPath1 -Name "DockBack3Image1" -Value "C:\Users\P
 Set-ItemProperty -Path $registryPath1 -Name "DockLabelColor1" -Value $DockLabelColor1
 Set-ItemProperty -Path $registryPath1 -Name "DockLabelBackColor1" -Value $DockLabelBackColor1
 Set-ItemProperty -Path $registryPath1 -Name "DockRunningIndicator1" -Value $dockRunningIndicator
-if ($storeIcon)   { Set-ItemProperty -Path $registryPath1 -Name $storeIcon -Value "C:\Users\Public\Documents\Winstep\Icons\store_$mode.ico" }
+if ($storeIcon) { Set-ItemProperty -Path $registryPath1 -Name $storeIcon -Value "C:\Users\Public\Documents\Winstep\Icons\store_$mode.ico" }
+Set-ItemProperty -Path $registryPath2 -Name "TaskIcon2" -Value "C:\\Users\\Public\\Documents\\WinStep\\Icons\\store_$mode.ico"
 Set-ItemProperty -Path $registryPath2 -Name "UIDarkMode" -Value $UIDarkMode
 Set-ItemProperty -Path $registryPath2 -Name "Windows10Style" -Value $contextMenuStyle
 Set-ItemProperty -Path $registryPath3 -Name "(default)" -Value $recycleBinEmptyIcon
