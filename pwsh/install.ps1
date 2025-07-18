@@ -937,7 +937,7 @@ foreach ($app in $selectedApps) {
             $regBackup = Join-Path $extractFolder "Windhawk.reg"
             New-Item -ItemType Directory -Path "$winMacDirectory\resource-redirect\" -Force | Out-Null
             Copy-Item -Path $modsSourceBackup -Destination $windhawkRoot -Recurse -Force
-            Copy-Item -Path '..\config\windhawk\resource-redirect\' -Destination "$winMacDirectory\resource-redirect\" -Recurse -Force
+            Copy-Item -Path '..\config\windhawk\resource-redirect\*' -Destination "$winMacDirectory\resource-redirect\" -Recurse -Force
             $engineFolder = Join-Path $windhawkRoot "Engine"
             New-Item -ItemType Directory -Path $engineFolder -Force | Out-Null
             Copy-Item -Path $modsBackup -Destination $engineFolder -Recurse -Force
@@ -1353,7 +1353,8 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             (Get-Content -Path $tempFilePath) -replace '%LOCALAPPDATA%', $appData | Set-Content -Path $tempFilePath
             reg import '..\temp\Add_Theme_Mode_in_Context_Menu.reg' > $null 2>&1
             reg import '..\config\reg\add\Add_Hidden_items_to_context_menu.reg' > $null 2>&1
-            Copy-Item -Path "..\config\themes\*" -Destination "$env:WINDIR\Resources\Themes" -Force
+            Copy-Item -Path "..\config\themes\*" -Destination "$env:WINDIR\Resources\Themes" -Recurse -Force
+            Copy-Item -Path "..\bin\system32\*" -Destination "$env:WINDIR\System32\" -Recurse -Force
             New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowIconOverlay" -Value 0 -PropertyType DWord -Force | Out-Null
             Start-Process -FilePath '..\bin\SecureUxTheme_x64.msi' -ArgumentList '/quiet /norestart' -Wait
         #? End Task

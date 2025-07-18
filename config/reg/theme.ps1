@@ -114,7 +114,7 @@ public class NativeMethods {
     public static extern bool SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
 }
 "@
-[NativeMethods]::SystemParametersInfo(0x57, 0, $null, 0x03) > $null 2>&1
+[NativeMethods]::SystemParametersInfo(0x57, 0, $null, 0x03)
 
 $registry1Properties = Get-ItemProperty -Path $registryPath1
 $storeIcon = 'C:\Users\Public\Documents\Winstep\Icons\store'
