@@ -128,7 +128,7 @@ properties:
           Enabled: false
         PowerPreview:
           EnableSvgPreview: false
-          EnableSvgThumbnail: true
+          EnableSvgThumbnail: false
           EnableMdPreview: false
           EnableMonacoPreview: false
           EnablePdfPreview: false
