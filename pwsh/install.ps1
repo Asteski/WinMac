@@ -696,21 +696,21 @@ foreach ($app in $selectedApps) {
                 elseif ($promptSet -eq 'M' -or $promptSet -eq 'm') { $prompt = Get-Content "..\config\terminal\macOS-prompt.ps1" -Raw }
             }
             $functions = Get-Content "..\config\terminal\functions.ps1" -Raw
-            if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell" | Out-Null }
+            if (-not (Test-Path "$profilePath\PowerShell")) { New-Item -ItemType Directory -Path "$profilePath\PowerShell" }#| Out-Null }
             else { Remove-Item -Path "$profilePath\PowerShell\$profileFile" -Force } 
-            if (-not (Test-Path "$profilePath\WindowsPowerShell")) { New-Item -ItemType Directory -Path "$profilePath\WindowsPowerShell" | Out-Null }
+            if (-not (Test-Path "$profilePath\WindowsPowerShell")) { New-Item -ItemType Directory -Path "$profilePath\WindowsPowerShell" }#| Out-Null }
             else { Remove-Item -Path "$profilePath\WindowsPowerShell\$profileFile" -Force } 
-            if (-not (Test-Path "$profilePath\PowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\PowerShell\$profileFile" | Out-Null }
-            if (-not (Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\WindowsPowerShell\$profileFile" | Out-Null }
+            if (-not (Test-Path "$profilePath\PowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\PowerShell\$profileFile" }#| Out-Null }
+            if (-not (Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { New-Item -ItemType File -Path "$profilePath\WindowsPowerShell\$profileFile" }#| Out-Null }
             $vim = Get-WinGetPackage -Id Vim.Vim
             if ($null -eq $vim) {
                 $vimVersion = (Find-WingetPackage Vim.Vim | Where-Object {$_.Id -notlike "*nightly*"}).Version
                 $vimVersion = ($vimVersion -split '\.')[0..1] -join '.'
                 $vimRegPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Vim $vimVersion"
-                if (-not (Test-Path $vimRegPath)) {New-Item -Path $vimRegPath -Force  | Out-Null }
+                if (-not (Test-Path $vimRegPath)) {New-Item -Path $vimRegPath -Force  }#| Out-Null }
                 Set-ItemProperty -Path $vimRegPath -Name "select_startmenu" -Value 0
                 Set-ItemProperty -Path $vimRegPath -Name "select_editwith" -Value 0
-                Install-WinGetPackage -Id "Vim.Vim" | Out-Null
+                Install-WinGetPackage -Id "Vim.Vim" #| Out-Null
             } else {
                 Write-Host "Vim is already installed." -ForegroundColor DarkGreen
             }
@@ -721,20 +721,20 @@ foreach ($app in $selectedApps) {
             foreach ($app in $winget) {
                 $package = Get-WinGetPackage -Id $app
                 if ($null -eq $package) {
-                    Install-WinGetPackage -id $app -source winget | Out-Null
+                    Install-WinGetPackage -id $app -source winget #| Out-Null
                 } else {
                     Write-Host "$($app.split(".")[1]) is already installed." -ForegroundColor DarkGreen
                 }
             }
             $pstreeModule = Get-InstalledModule -Name PSTree
             if ($null -eq $pstreeModule) {
-                Install-Module PSTree -Force | Out-Null
+                Install-Module PSTree -Force #| Out-Null
             } else {
                 Write-Host "PSTree is already installed." -ForegroundColor DarkGreen
             }
             $zModule = Get-InstalledModule -Name z
             if ($null -eq $zModule) {
-                Install-Module z -Force | Out-Null
+                Install-Module z -Force #| Out-Null
             } else {
                 Write-Host "z is already installed." -ForegroundColor DarkGreen
             }
@@ -751,7 +751,6 @@ foreach ($app in $selectedApps) {
             Remove-Item -Path "C:\Users\Public\Desktop\gVim*" -Force
             Remove-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Force
             Remove-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\gVim*" -Force
-
             Write-Host "PowerShell Profile configuration completed." -ForegroundColor Green
         }
     #* StartAllBack
