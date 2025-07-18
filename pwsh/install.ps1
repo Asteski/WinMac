@@ -676,7 +676,7 @@ foreach ($app in $selectedApps) {
                 Copy-Item -Path "..\config\everything\Everything.ini" -Destination "$env:APPDATA\Everything" -Force
             }
             else {
-                (Get-Content -Path "$env:APPDATA\Everything\Everything.ini") -replace "index_folder_size=0", "index_folder_size=1" | Set-Content -Path "$env:APPDATA\Everything\Everything.ini"
+                (Get-Content -Path "$env:APPDATA\Everything\Everything.ini") -replace "index_folder_size=0", "index_folder_size=1" -replace 'show_tray_icon=1' , 'show_tray_icon=0' | Set-Content -Path "$env:APPDATA\Everything\Everything.ini"
             }
             Start-Process -FilePath Everything.exe -WorkingDirectory "$env:PROGRAMFILES\Everything" -WindowStyle Hidden
             Write-Host "Everything installation completed." -ForegroundColor Green
