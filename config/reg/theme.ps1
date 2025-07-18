@@ -1,5 +1,12 @@
-$mode = $args[0]
-$mode2 = $args[1]
+param
+(
+	[Parameter(Mandatory=$true)]
+	[string]
+	$mode,
+	[Parameter(Mandatory=$false)]
+	[string]
+	$mode2
+)
 $ErrorActionPreference = 'SilentlyContinue'
 $WarningPreference = 'SilentlyContinue'
 $ProgressPreference = 'SilentlyContinue'
@@ -16,103 +23,96 @@ $themeStyle = (Get-ItemProperty -Path $registryPath0 -Name "GenThemeName").GenTh
 $orbBitmap = (Get-ItemProperty -Path $registryPath5 -Name "OrbBitmap").OrbBitmap
 $recycleBinEmptyIcon = (Get-ItemProperty -Path $registryPath0 -Name "TrashEmptyIcon").TrashEmptyIcon
 $recycleBinFullIcon = (Get-ItemProperty -Path $registryPath0 -Name "TrashFullIcon").TrashFullIcon
-switch ($mode) {
-	"-light" {
-		$shade 					= 'Light'
-		$OSMode 				= 0
-		$UIDarkMode 			= '1'
-		$DockLabelColor1 		= '15658734'
-		$DockLabelBackColor1 	= '2563870'
-		$theme 					= $themeStyle -replace 'Light', 'Dark'
-		$orbBitmap 				= $orbBitmap -replace 'black', 'white'
-		$dockRunningIndicator 	= $dockRunningIndicator -replace 'Light', 'Dark'
-		$recycleBinEmptyIcon 	= $recycleBinEmptyIcon -replace 'Light', 'Dark'
-		$recycleBinFullIcon 	= $recycleBinFullIcon -replace 'Light', 'Dark'
-		$contextMenuStyle 		= 'False'
-		# $cursorTheme 			= 'Windows Default'
-		# $cursorMappings 		= @{
-			# 	Arrow       		= 'C:\WINDOWS\cursors\aero_arrow.cur'
-			# 	Help        		= 'C:\WINDOWS\cursors\aero_helpsel.cur'
-			# 	Hand        		= 'C:\WINDOWS\cursors\aero_link.cur'
-			# 	AppStarting 		= 'C:\WINDOWS\cursors\aero_working.ani'
-			# 	Wait        		= 'C:\WINDOWS\cursors\aero_busy.ani'
-			# 	NWPen       		= 'C:\WINDOWS\cursors\aero_pen.cur'
-			# 	No          		= 'C:\WINDOWS\cursors\aero_unavail.cur'
-			# 	SizeNS      		= 'C:\WINDOWS\cursors\aero_ns.cur'
-			# 	SizeWE      		= 'C:\WINDOWS\cursors\aero_ew.cur'
-			# 	SizeNWSE    		= 'C:\WINDOWS\cursors\aero_nwse.cur'
-			# 	SizeNESW    		= 'C:\WINDOWS\cursors\aero_nesw.cur'
-			# 	SizeAll     		= 'C:\WINDOWS\cursors\aero_move.cur'
-			# 	UpArrow     		= 'C:\WINDOWS\cursors\aero_up.cur'
-			# 	Pin         		= 'C:\WINDOWS\cursors\aero_pin.cur'
-			# 	Person      		= 'C:\WINDOWS\cursors\aero_person.cur'
-			# }
-		}
-	"-dark" {
-		$shade 					= 'Dark'
-		$OSMode 				= 1
-		$UIDarkMode 			= '3'
-		$DockLabelColor1 		= '1644825'
-		$DockLabelBackColor1 	= '16119283'
-		$theme 					= $themeStyle -replace 'Dark', 'Light'
-		$orbBitmap 				= $orbBitmap -replace 'white', 'black'
-		$dockRunningIndicator 	= $dockRunningIndicator -replace 'Dark', 'Light'
-		$recycleBinEmptyIcon 	= $recycleBinEmptyIcon -replace 'Dark', 'Light'
-		$recycleBinFullIcon 	= $recycleBinFullIcon -replace 'Dark', 'Light'
-		# $cursorTheme 			= 'Windows Black'
-		# $cursorMappings 		= @{
-		# 	Arrow       		= 'C:\WINDOWS\cursors\aero_black_arrow.cur'
-		# 	Help        		= 'C:\WINDOWS\cursors\aero_black_helpsel.cur'
-		# 	Hand        		= 'C:\WINDOWS\cursors\aero_black_link.cur'
-		# 	AppStarting 		= 'C:\WINDOWS\cursors\aero_black_working.ani'
-		# 	Wait        		= 'C:\WINDOWS\cursors\aero_black_busy.ani'
-		# 	NWPen       		= 'C:\WINDOWS\cursors\aero_black_pen.cur'
-		# 	No          		= 'C:\WINDOWS\cursors\aero_black_unavail.cur'
-		# 	SizeNS      		= 'C:\WINDOWS\cursors\aero_black_ns.cur'
-		# 	SizeWE      		= 'C:\WINDOWS\cursors\aero_black_ew.cur'
-		# 	SizeNWSE    		= 'C:\WINDOWS\cursors\aero_black_nwse.cur'
-		# 	SizeNESW    		= 'C:\WINDOWS\cursors\aero_black_nesw.cur'
-		# 	SizeAll     		= 'C:\WINDOWS\cursors\aero_black_move.cur'
-		# 	UpArrow     		= 'C:\WINDOWS\cursors\aero_black_up.cur'
-		# 	Pin         		= 'C:\WINDOWS\cursors\aero_black_pin.cur'
-		# 	Person      		= 'C:\WINDOWS\cursors\aero_black_person.cur'
-		# }
+if ($mode -eq 'Dark')
+{
+	$OSMode 				= 0
+	$UIDarkMode 			= '1'
+	$DockLabelColor1 		= '15658734'
+	$DockLabelBackColor1 	= '2563870'
+	$theme 					= $themeStyle -replace 'Light', 'Dark'
+	$orbBitmap 				= $orbBitmap -replace 'black', 'white'
+	$dockRunningIndicator 	= $dockRunningIndicator -replace 'Light', 'Dark'
+	$recycleBinEmptyIcon 	= $recycleBinEmptyIcon -replace 'Light', 'Dark'
+	$recycleBinFullIcon 	= $recycleBinFullIcon -replace 'Light', 'Dark'
+	$contextMenuStyle 		= 'False'
+	$cursorTheme 			= 'Windows Default'
+	$cursorMappings 		= @{
+		Arrow       		= 'C:\WINDOWS\cursors\aero_arrow.cur'
+		Help        		= 'C:\WINDOWS\cursors\aero_helpsel.cur'
+		Hand        		= 'C:\WINDOWS\cursors\aero_link.cur'
+		AppStarting 		= 'C:\WINDOWS\cursors\aero_working.ani'
+		Wait        		= 'C:\WINDOWS\cursors\aero_busy.ani'
+		NWPen       		= 'C:\WINDOWS\cursors\aero_pen.cur'
+		No          		= 'C:\WINDOWS\cursors\aero_unavail.cur'
+		SizeNS      		= 'C:\WINDOWS\cursors\aero_ns.cur'
+		SizeWE      		= 'C:\WINDOWS\cursors\aero_ew.cur'
+		SizeNWSE    		= 'C:\WINDOWS\cursors\aero_nwse.cur'
+		SizeNESW    		= 'C:\WINDOWS\cursors\aero_nesw.cur'
+		SizeAll     		= 'C:\WINDOWS\cursors\aero_move.cur'
+		UpArrow     		= 'C:\WINDOWS\cursors\aero_up.cur'
+		Pin         		= 'C:\WINDOWS\cursors\aero_pin.cur'
+		Person      		= 'C:\WINDOWS\cursors\aero_person.cur'
 	}
 }
-switch ($mode2) {
-   "-noapp" {
-	   Set-ItemProperty -Path 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize' -Name 'SystemUsesLightTheme' -Type DWord -Value $OSMode
-   }
-   default {
-	   switch ($mode) {
-		   "-light" {
-			   Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value 0
-			   Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "AccentColorInactive"
-			   Start-Process "$env:WINDIR\Resources\Themes\WinMac_light.theme"
-		   }
-		   "-dark" {
-			   Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value 1
-			   New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "AccentColorInactive" -PropertyType DWord -Value 0xFF444444 > $null 2>&1
-			   Start-Process "$env:WINDIR\Resources\Themes\darkrectified.theme"
-		   }
-	   }
-   }
+if ($mode -eq 'Light')
+{
+	$OSMode 				= 1
+	$UIDarkMode 			= '3'
+	$DockLabelColor1 		= '1644825'
+	$DockLabelBackColor1 	= '16119283'
+	$theme 					= $themeStyle -replace 'Dark', 'Light'
+	$orbBitmap 				= $orbBitmap -replace 'white', 'black'
+	$dockRunningIndicator 	= $dockRunningIndicator -replace 'Dark', 'Light'
+	$recycleBinEmptyIcon 	= $recycleBinEmptyIcon -replace 'Dark', 'Light'
+	$recycleBinFullIcon 	= $recycleBinFullIcon -replace 'Dark', 'Light'
+	$cursorTheme 			= 'Windows Black'
+	$cursorMappings 		= @{
+		Arrow       		= 'C:\WINDOWS\cursors\aero_black_arrow.cur'
+		Help        		= 'C:\WINDOWS\cursors\aero_black_helpsel.cur'
+		Hand        		= 'C:\WINDOWS\cursors\aero_black_link.cur'
+		AppStarting 		= 'C:\WINDOWS\cursors\aero_black_working.ani'
+		Wait        		= 'C:\WINDOWS\cursors\aero_black_busy.ani'
+		NWPen       		= 'C:\WINDOWS\cursors\aero_black_pen.cur'
+		No          		= 'C:\WINDOWS\cursors\aero_black_unavail.cur'
+		SizeNS      		= 'C:\WINDOWS\cursors\aero_black_ns.cur'
+		SizeWE      		= 'C:\WINDOWS\cursors\aero_black_ew.cur'
+		SizeNWSE    		= 'C:\WINDOWS\cursors\aero_black_nwse.cur'
+		SizeNESW    		= 'C:\WINDOWS\cursors\aero_black_nesw.cur'
+		SizeAll     		= 'C:\WINDOWS\cursors\aero_black_move.cur'
+		UpArrow     		= 'C:\WINDOWS\cursors\aero_black_up.cur'
+		Pin         		= 'C:\WINDOWS\cursors\aero_black_pin.cur'
+		Person      		= 'C:\WINDOWS\cursors\aero_black_person.cur'
+	}
+}
+if ($mode2 -eq 'NoApp') {
+	Set-ItemProperty -Path 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize' -Name 'SystemUsesLightTheme' -Type DWord -Value $OSMode
+}
+else {
+	if ($mode -eq 'Light') {
+		Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value 0
+		Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "AccentColorInactive"
+ 	}
+	else {
+		Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value 1
+		New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "AccentColorInactive" -PropertyType DWord -Value 0xFF444444 > $null 2>&1
+	}
+	Start-Process "$env:WINDIR\Resources\Themes\WinMac_$mode.theme"
 }
 
-# Set-ItemProperty -Path "HKCU:\Control Panel\Cursors" -Name '(default)' -Value $cursorTheme
-# foreach ($cursorName in $cursorMappings.Keys) {
-# 	$cursorPath = $cursorMappings[$cursorName]
-# 	Set-ItemProperty -Path "HKCU:\Control Panel\Cursors" -Name $cursorName -Value $cursorPath
-# }
-# Add-Type @"
-# using System;
-# using System.Runtime.InteropServices;
-# public class NativeMethods {
-# 	[DllImport("user32.dll", SetLastError = true)]
-# 	public static extern bool SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
-# }
-# "@
-# [NativeMethods]::SystemParametersInfo(0x57, 0, $null, 0x03)
+Set-ItemProperty -Path "HKCU:\Control Panel\Cursors" -Name '(default)' -Value $cursorTheme
+foreach ($cursorName in $cursorMappings.Keys) {
+	$cursorPath = $cursorMappings[$cursorName]
+	Set-ItemProperty -Path "HKCU:\Control Panel\Cursors" -Name $cursorName -Value $cursorPath
+}
+Add-Type @"
+using System;
+using System.Runtime.InteropServices;
+public class NativeMethods {
+    [DllImport("user32.dll", SetLastError = true)]
+    public static extern bool SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
+}
+"@
+[NativeMethods]::SystemParametersInfo(0x57, 0, $null, 0x03) > $null 2>&1
 
 $registry1Properties = Get-ItemProperty -Path $registryPath1
 $storeIcon = 'C:\Users\Public\Documents\Winstep\Icons\store'
@@ -141,7 +141,7 @@ Set-ItemProperty -Path $registryPath1 -Name "DockBack3Image1" -Value "C:\Users\P
 Set-ItemProperty -Path $registryPath1 -Name "DockLabelColor1" -Value $DockLabelColor1
 Set-ItemProperty -Path $registryPath1 -Name "DockLabelBackColor1" -Value $DockLabelBackColor1
 Set-ItemProperty -Path $registryPath1 -Name "DockRunningIndicator1" -Value $dockRunningIndicator
-if ($storeIcon)   { Set-ItemProperty -Path $registryPath1 -Name $storeIcon -Value "C:\Users\Public\Documents\Winstep\Icons\store_$shade.ico" }
+if ($storeIcon)   { Set-ItemProperty -Path $registryPath1 -Name $storeIcon -Value "C:\Users\Public\Documents\Winstep\Icons\store_$mode.ico" }
 Set-ItemProperty -Path $registryPath2 -Name "UIDarkMode" -Value $UIDarkMode
 Set-ItemProperty -Path $registryPath2 -Name "Windows10Style" -Value $contextMenuStyle
 Set-ItemProperty -Path $registryPath3 -Name "(default)" -Value $recycleBinEmptyIcon
