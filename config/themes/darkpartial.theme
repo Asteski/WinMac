@@ -2,7 +2,7 @@
 
 [Theme]
 ; Windows - IDS_THEME_DISPLAYNAME_THEMEA
-DisplayName=Rectify11 dark theme
+DisplayName=Rectify11 partial dark theme
 SetLogonBackground=0
 
 ; Computer - SHIDI_SERVER
@@ -23,22 +23,22 @@ Full=%SystemRoot%\System32\imageres.dll,-54
 Empty=%SystemRoot%\System32\imageres.dll,-55
 
 [Control Panel\Cursors]
-AppStarting=%SystemRoot%\cursors\WindowsRectifiedDark\working.ani
-Arrow=%SystemRoot%\cursors\WindowsRectifiedDark\arrow.cur
-Crosshair=%SystemRoot%\cursors\WindowsRectifiedDark\cross.cur
-Hand=%SystemRoot%\cursors\WindowsRectifiedDark\link.cur
-Help=%SystemRoot%\cursors\WindowsRectifiedDark\helpsel.cur
-IBeam=%SystemRoot%\cursors\WindowsRectifiedDark\ibeam.cur
-No=%SystemRoot%\cursors\WindowsRectifiedDark\unavail.cur
-NWPen=%SystemRoot%\cursors\WindowsRectifiedDark\pen.cur
-SizeAll=%SystemRoot%\cursors\WindowsRectifiedDark\move.cur
-SizeNESW=%SystemRoot%\cursors\WindowsRectifiedDark\nesw.cur
-SizeNS=%SystemRoot%\cursors\WindowsRectifiedDark\ns.cur
-SizeNWSE=%SystemRoot%\cursors\WindowsRectifiedDark\nwse.cur
-SizeWE=%SystemRoot%\cursors\WindowsRectifiedDark\ew.cur
-UpArrow=%SystemRoot%\cursors\WindowsRectifiedDark\up.cur
-Wait=%SystemRoot%\cursors\WindowsRectifiedDark\busy.ani
-DefaultValue=Windows Rectified Dark
+AppStarting=%SystemRoot%\cursors\WindowsRectified\working.ani
+Arrow=%SystemRoot%\cursors\WindowsRectified\arrow.cur
+Crosshair=%SystemRoot%\cursors\WindowsRectified\cross.cur
+Hand=%SystemRoot%\cursors\WindowsRectified\link.cur
+Help=%SystemRoot%\cursors\WindowsRectified\helpsel.cur
+IBeam=%SystemRoot%\cursors\WindowsRectified\ibeam.cur
+No=%SystemRoot%\cursors\WindowsRectified\unavail.cur
+NWPen=%SystemRoot%\cursors\WindowsRectified\pen.cur
+SizeAll=%SystemRoot%\cursors\WindowsRectified\move.cur
+SizeNESW=%SystemRoot%\cursors\WindowsRectified\nesw.cur
+SizeNS=%SystemRoot%\cursors\WindowsRectified\ns.cur
+SizeNWSE=%SystemRoot%\cursors\WindowsRectified\nwse.cur
+SizeWE=%SystemRoot%\cursors\WindowsRectified\ew.cur
+UpArrow=%SystemRoot%\cursors\WindowsRectified\up.cur
+Wait=%SystemRoot%\cursors\WindowsRectified\busy.ani
+DefaultValue=Windows Rectified
 
 [Control Panel\Desktop]
 Wallpaper=%windir%\Web\Wallpaper\Rectified\img19.png
@@ -47,7 +47,7 @@ WallpaperStyle=10
 Pattern=
 
 [VisualStyles]
-Path=%ResourceDir%\Themes\Rectified\Dark.msstyles
+Path=%ResourceDir%\Themes\Rectified\Aero.msstyles
 ColorStyle=NormalColor
 Size=NormalSize
 AutoColorization=0

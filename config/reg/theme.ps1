@@ -30,11 +30,29 @@ if ($mode -eq 'Dark')
 	$DockLabelColor1 		= '15658734'
 	$DockLabelBackColor1 	= '2563870'
 	$theme 					= $themeStyle -replace 'Light', 'Dark'
-	$dockRunningIndicator 	= $dockRunningIndicator -replace 'Light', 'Dark'
 	$orbBitmap 				= $orbBitmap -replace 'black', 'white'
+	$dockRunningIndicator 	= $dockRunningIndicator -replace 'Light', 'Dark'
 	$recycleBinEmptyIcon 	= $recycleBinEmptyIcon -replace 'Light', 'Dark'
 	$recycleBinFullIcon 	= $recycleBinFullIcon -replace 'Light', 'Dark'
-	Set-ItemProperty -Path $registryPath2 -Name "Windows10Style" -Value 'True'
+	$contextMenuStyle 		= 'False'
+	$cursorTheme 			= 'Windows Default'
+	$cursorMappings 		= @{
+		Arrow       		= 'C:\WINDOWS\cursors\aero_arrow.cur'
+		Help        		= 'C:\WINDOWS\cursors\aero_helpsel.cur'
+		Hand        		= 'C:\WINDOWS\cursors\aero_link.cur'
+		AppStarting 		= 'C:\WINDOWS\cursors\aero_working.ani'
+		Wait        		= 'C:\WINDOWS\cursors\aero_busy.ani'
+		NWPen       		= 'C:\WINDOWS\cursors\aero_pen.cur'
+		No          		= 'C:\WINDOWS\cursors\aero_unavail.cur'
+		SizeNS      		= 'C:\WINDOWS\cursors\aero_ns.cur'
+		SizeWE      		= 'C:\WINDOWS\cursors\aero_ew.cur'
+		SizeNWSE    		= 'C:\WINDOWS\cursors\aero_nwse.cur'
+		SizeNESW    		= 'C:\WINDOWS\cursors\aero_nesw.cur'
+		SizeAll     		= 'C:\WINDOWS\cursors\aero_move.cur'
+		UpArrow     		= 'C:\WINDOWS\cursors\aero_up.cur'
+		Pin         		= 'C:\WINDOWS\cursors\aero_pin.cur'
+		Person      		= 'C:\WINDOWS\cursors\aero_person.cur'
+	}
 }
 if ($mode -eq 'Light')
 {
@@ -43,38 +61,58 @@ if ($mode -eq 'Light')
 	$DockLabelColor1 		= '1644825'
 	$DockLabelBackColor1 	= '16119283'
 	$theme 					= $themeStyle -replace 'Dark', 'Light'
-	$dockRunningIndicator 	= $dockRunningIndicator -replace 'Dark', 'Light'
 	$orbBitmap 				= $orbBitmap -replace 'white', 'black'
+	$dockRunningIndicator 	= $dockRunningIndicator -replace 'Dark', 'Light'
 	$recycleBinEmptyIcon 	= $recycleBinEmptyIcon -replace 'Dark', 'Light'
 	$recycleBinFullIcon 	= $recycleBinFullIcon -replace 'Dark', 'Light'
-	Set-ItemProperty -Path $registryPath2 -Name "Windows10Style" -Value 'False'
+	$cursorTheme 			= 'Windows Black'
+	$cursorMappings 		= @{
+		Arrow       		= 'C:\WINDOWS\cursors\aero_black_arrow.cur'
+		Help        		= 'C:\WINDOWS\cursors\aero_black_helpsel.cur'
+		Hand        		= 'C:\WINDOWS\cursors\aero_black_link.cur'
+		AppStarting 		= 'C:\WINDOWS\cursors\aero_black_working.ani'
+		Wait        		= 'C:\WINDOWS\cursors\aero_black_busy.ani'
+		NWPen       		= 'C:\WINDOWS\cursors\aero_black_pen.cur'
+		No          		= 'C:\WINDOWS\cursors\aero_black_unavail.cur'
+		SizeNS      		= 'C:\WINDOWS\cursors\aero_black_ns.cur'
+		SizeWE      		= 'C:\WINDOWS\cursors\aero_black_ew.cur'
+		SizeNWSE    		= 'C:\WINDOWS\cursors\aero_black_nwse.cur'
+		SizeNESW    		= 'C:\WINDOWS\cursors\aero_black_nesw.cur'
+		SizeAll     		= 'C:\WINDOWS\cursors\aero_black_move.cur'
+		UpArrow     		= 'C:\WINDOWS\cursors\aero_black_up.cur'
+		Pin         		= 'C:\WINDOWS\cursors\aero_black_pin.cur'
+		Person      		= 'C:\WINDOWS\cursors\aero_black_person.cur'
+	}
 }
-
 if ($mode2 -eq 'NoApp') {
 	Set-ItemProperty -Path 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize' -Name 'SystemUsesLightTheme' -Type DWord -Value $OSMode
 }
 else {
-	#* IF statement below is used for custom themes like Rectify11 Dark theme
-	#* Rectify11 Dark theme allows to force dark theme on Windows legacy apps like Registry Editor, Disk Management, Event Viewer and etc.
-	#* Registry modification below allows to make title bars dark in legacy apps
-	#* In order for custom themes to work properly, we need to install SecureUXTheme and enable *Fix control panel white header/sidebar* option in UXTheme Hook Windhawk mod
-	#? Once above are done:
-	#? - clone Rectify11Installer-V4 GitHub repository locally using Git
-	#? - copy Rectify11 themes folder content to C:\Windows\Resources\Themes
-	#? - rename darkrectified.theme to WinMac_Dark.theme (backup default WinMac_Dark.theme first)
-	#? - copy Rectify11 System32 folder content to C:\Windows\System32 folder
-	#? - additionally you can copy [Control Panel\Cursors] content from default WinMac_Dark.theme to Rectify11 dark theme file using text editor, to apply default Windows 11 cursors
-	#? - uncomment if/else statement below
-	# if ($mode -eq 'Light') {
-	# 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value 0
-	# 	Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "AccentColorInactive"
- 	# }
-	# else {
-	# 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value 1
-	# 	New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "AccentColorInactive" -PropertyType DWord -Value 0xFF444444 > $null 2>&1
-	# }
+	if ($mode -eq 'Light') {
+		Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value 0
+		Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "AccentColorInactive"
+ 	}
+	else {
+		Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value 1
+		New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "AccentColorInactive" -PropertyType DWord -Value 0xFF444444 > $null 2>&1
+	}
 	Start-Process "$env:WINDIR\Resources\Themes\WinMac_$mode.theme"
 }
+
+Set-ItemProperty -Path "HKCU:\Control Panel\Cursors" -Name '(default)' -Value $cursorTheme
+foreach ($cursorName in $cursorMappings.Keys) {
+	$cursorPath = $cursorMappings[$cursorName]
+	Set-ItemProperty -Path "HKCU:\Control Panel\Cursors" -Name $cursorName -Value $cursorPath
+}
+Add-Type @"
+using System;
+using System.Runtime.InteropServices;
+public class NativeMethods {
+    [DllImport("user32.dll", SetLastError = true)]
+    public static extern bool SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
+}
+"@
+[NativeMethods]::SystemParametersInfo(0x57, 0, $null, 0x03)
 
 $registry1Properties = Get-ItemProperty -Path $registryPath1
 $storeIcon = 'C:\Users\Public\Documents\Winstep\Icons\store'
@@ -105,7 +143,7 @@ Set-ItemProperty -Path $registryPath1 -Name "DockLabelBackColor1" -Value $DockLa
 Set-ItemProperty -Path $registryPath1 -Name "DockRunningIndicator1" -Value $dockRunningIndicator
 if ($storeIcon)   { Set-ItemProperty -Path $registryPath1 -Name $storeIcon -Value "C:\Users\Public\Documents\Winstep\Icons\store_$mode.ico" }
 Set-ItemProperty -Path $registryPath2 -Name "UIDarkMode" -Value $UIDarkMode
-Set-ItemProperty -Path $registryPath2 -Name "TaskIcon2" -Value "C:\\Users\\Public\\Documents\\WinStep\\Icons\\store_$mode.ico"
+Set-ItemProperty -Path $registryPath2 -Name "Windows10Style" -Value $contextMenuStyle
 Set-ItemProperty -Path $registryPath3 -Name "(default)" -Value $recycleBinEmptyIcon
 Set-ItemProperty -Path $registryPath3 -Name "empty" -Value $recycleBinEmptyIcon
 Set-ItemProperty -Path $registryPath3 -Name "full" -Value $recycleBinFullIcon
@@ -113,4 +151,3 @@ Set-ItemProperty -Path $registryPath4 -Name "Icon" -Value $recycleBinEmptyIcon
 Set-ItemProperty -Path $registryPath5 -Name "OrbBitmap" -Value $orbBitmap
 Start-Process explorer
 try { Start-Process "C:\Program Files (x86)\Winstep\Nexus.exe" } catch {}
-start-sleep 5

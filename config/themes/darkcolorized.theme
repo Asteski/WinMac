@@ -2,7 +2,7 @@
 
 [Theme]
 ; Windows - IDS_THEME_DISPLAYNAME_THEMEA
-DisplayName=Rectify11 dark theme
+DisplayName=Rectify11 dark theme for accent color titlebars
 SetLogonBackground=0
 
 ; Computer - SHIDI_SERVER
@@ -47,13 +47,14 @@ WallpaperStyle=10
 Pattern=
 
 [VisualStyles]
-Path=%ResourceDir%\Themes\Rectified\Dark.msstyles
+Path=%ResourceDir%\Themes\Rectified\DarkColorized.msstyles
 ColorStyle=NormalColor
 Size=NormalSize
 AutoColorization=0
 ColorizationColor=0XC40078D4
 SystemMode=Dark
 AppMode=Dark
+ColorPrevalence=1
 
 [boot]
 SCRNSAVE.EXE=
