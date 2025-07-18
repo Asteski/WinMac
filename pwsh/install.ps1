@@ -1345,7 +1345,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             Get-ChildItem ..\config\reg\remove\* -e *theme* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
             $sourceFilePath = "..\config\reg\add\Add_Theme_Mode_in_Context_Menu.reg"
             $tempFilePath = "..\temp\Add_Theme_Mode_in_Context_Menu.reg"
-            $ps1FilePath = "..\config\reg\theme.ps1"
+            $ps1FilePath = "..\config\reg\ThemeSwitcher.ps1"
             if (-not (Test-Path -Path $winMacDirectory)) {New-Item -ItemType Directory -Path $winMacDirectory -Force | Out-Null }
             Copy-Item -Path $ps1FilePath -Destination $winMacDirectory -Force
             Copy-Item -Path $sourceFilePath -Destination '..\temp\' -Force
@@ -1356,8 +1356,6 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             Copy-Item -Path "..\config\themes\*" -Destination "$env:WINDIR\Resources\Themes" -Recurse -Force
             Copy-Item -Path "..\bin\system32\*" -Destination "$env:WINDIR\System32\" -Recurse -Force
             New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowIconOverlay" -Value 0 -PropertyType DWord -Force | Out-Null
-            
-            # Check if SecureUxTheme is installed
             $secureUxThemeInstalled = Get-WmiObject -Class Win32_Product | Where-Object { $_.Name -like "SecureUxTheme*" }
             if (-not $secureUxThemeInstalled) { Start-Process -FilePath '..\bin\SecureUxTheme_x64.msi' -ArgumentList '/quiet /norestart' -Wait }
         #? End Task
