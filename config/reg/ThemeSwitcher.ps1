@@ -89,15 +89,15 @@ if ($mode2 -eq 'NoApp') {
 }
 else {
 	if ($mode -eq 'Light') {
-		Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value 0 												#? comment out this line when using default WinMac theme
-		Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "AccentColorInactive" 												#? comment out this line when using default WinMac theme
+		# Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value 0 #* uncomment this line to force dark color on title bar with darkrectified theme
+		# Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "AccentColorInactive" #* uncomment this line to force dark color on title bar with darkrectified theme
 		Start-Process "$env:WINDIR\Resources\Themes\WinMac_light.theme"
 	}
 	else {
-		Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value 1 												 #? comment out this line when using default WinMac theme
-		New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "AccentColorInactive" -PropertyType DWord -Value 0xFF444444 > $null 2>&1 #? comment out this line when using default WinMac theme
-		Start-Process "$env:WINDIR\Resources\Themes\darkrectified.theme" 																			 #? comment out this line when using default WinMac theme
-		# Start-Process "$env:WINDIR\Resources\Themes\WinMac_dark.theme" 																			 #* uncomment this line to use default WinMac dark theme
+		# Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value 1 #* uncomment this line to force dark color on title bar with darkrectified theme
+		# New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "AccentColorInactive" -PropertyType DWord -Value 0xFF444444 > $null 2>&1 #* uncomment this line to force dark color on title bar with darkrectified theme
+		Start-Process "$env:WINDIR\Resources\Themes\darkrectified.theme" #* comment this line to use default WinMac dark theme
+		# Start-Process "$env:WINDIR\Resources\Themes\WinMac_dark.theme" #* uncomment this line to use default WinMac dark theme
 	}
 }
 
@@ -117,8 +117,14 @@ public class NativeMethods {
 [NativeMethods]::SystemParametersInfo(0x57, 0, $null, 0x03) > $null 2>&1
 
 $registry1Properties = Get-ItemProperty -Path $registryPath1
-$storeIcon = 'C:\Users\Public\Documents\Winstep\Icons\store'
-$storeIcon = $registry1Properties.PSObject.Properties |
+$storeIcon1 = 'C:\Users\Public\Documents\Winstep\Icons\store'
+$storeIcon1 = $registry1Properties.PSObject.Properties |
+	Where-Object { $_.Value -like "$storeIcon*" } |
+	Select-Object -ExpandProperty Name
+
+$registry2Properties = Get-ItemProperty -Path $registryPath2
+$storeIcon2 = 'C:\Users\Public\Documents\Winstep\Icons\store'
+$storeIcon2 = $registry2Properties.PSObject.Properties |
 	Where-Object { $_.Value -like "$storeIcon*" } |
 	Select-Object -ExpandProperty Name
 
@@ -143,8 +149,8 @@ Set-ItemProperty -Path $registryPath1 -Name "DockBack3Image1" -Value "C:\Users\P
 Set-ItemProperty -Path $registryPath1 -Name "DockLabelColor1" -Value $DockLabelColor1
 Set-ItemProperty -Path $registryPath1 -Name "DockLabelBackColor1" -Value $DockLabelBackColor1
 Set-ItemProperty -Path $registryPath1 -Name "DockRunningIndicator1" -Value $dockRunningIndicator
-if ($storeIcon) { Set-ItemProperty -Path $registryPath1 -Name $storeIcon -Value "C:\Users\Public\Documents\Winstep\Icons\store_$mode.ico" }
-Set-ItemProperty -Path $registryPath2 -Name "TaskIcon2" -Value "C:\\Users\\Public\\Documents\\WinStep\\Icons\\store_$mode.ico"
+if ($storeIcon1) { Set-ItemProperty -Path $registryPath1 -Name $storeIcon1 -Value "C:\Users\Public\Documents\Winstep\Icons\store_$mode.ico" }
+if ($storeIcon2) { Set-ItemProperty -Path $registryPath2 -Name $storeIcon2 -Value "C:\Users\Public\Documents\Winstep\Icons\store_$mode.ico" }
 Set-ItemProperty -Path $registryPath2 -Name "UIDarkMode" -Value $UIDarkMode
 Set-ItemProperty -Path $registryPath2 -Name "Windows10Style" -Value $contextMenuStyle
 Set-ItemProperty -Path $registryPath3 -Name "(default)" -Value $recycleBinEmptyIcon
