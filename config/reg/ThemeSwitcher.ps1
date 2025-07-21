@@ -122,12 +122,6 @@ $storeIcon1 = $registry1Properties.PSObject.Properties |
 	Where-Object { $_.Value -like "$storeIcon*" } |
 	Select-Object -ExpandProperty Name
 
-$registry2Properties = Get-ItemProperty -Path $registryPath2
-$storeIcon2 = 'C:\Users\Public\Documents\Winstep\Icons\store'
-$storeIcon2 = $registry2Properties.PSObject.Properties |
-	Where-Object { $_.Value -like "$storeIcon*" } |
-	Select-Object -ExpandProperty Name
-
 Set-ItemProperty -Path $registryPath0 -Name "GenThemeName" -Value $theme
 Set-ItemProperty -Path $registryPath0 -Name "BitmapsFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
 Set-ItemProperty -Path $registryPath0 -Name "GlobalBitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
@@ -150,7 +144,7 @@ Set-ItemProperty -Path $registryPath1 -Name "DockLabelColor1" -Value $DockLabelC
 Set-ItemProperty -Path $registryPath1 -Name "DockLabelBackColor1" -Value $DockLabelBackColor1
 Set-ItemProperty -Path $registryPath1 -Name "DockRunningIndicator1" -Value $dockRunningIndicator
 if ($storeIcon1) { Set-ItemProperty -Path $registryPath1 -Name $storeIcon1 -Value "C:\Users\Public\Documents\Winstep\Icons\store_$mode.ico" }
-if ($storeIcon2) { Set-ItemProperty -Path $registryPath2 -Name $storeIcon2 -Value "C:\Users\Public\Documents\Winstep\Icons\store_$mode.ico" }
+Set-ItemProperty -Path $registryPath2 -Name "TaskIcon2" -Value "C:\\Users\\Public\\Documents\\WinStep\\Icons\\store_$mode.ico"
 Set-ItemProperty -Path $registryPath2 -Name "UIDarkMode" -Value $UIDarkMode
 Set-ItemProperty -Path $registryPath2 -Name "Windows10Style" -Value $contextMenuStyle
 Set-ItemProperty -Path $registryPath3 -Name "(default)" -Value $recycleBinEmptyIcon
