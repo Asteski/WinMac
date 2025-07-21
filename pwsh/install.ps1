@@ -1212,7 +1212,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             $shortcut.TargetPath = $target2Path
             $shortcut.IconLocation = $icon2Path
             $shortcut.Save()
-            if (-not (Test-Path -Path "$winMacDirectory\hotcorners")) {New-Item -ItemType Directory -Path "$winMacDirectory\hotcorners" -Force | Out-Null }
+            if (-not (Test-Path -Path "$winMacDirectory\hotcorners")) { New-Item -ItemType Directory -Path "$winMacDirectory\hotcorners" -Force | Out-Null }
             if ($sysType -like "*ARM*") {Copy-Item -Path ..\bin\hotcorners\arm64\* -Destination "$winMacDirectory\hotcorners\" -Recurse -Force}
             else {Copy-Item -Path ..\bin\hotcorners\x64\* -Destination "$winMacDirectory\hotcorners\" -Recurse -Force}
             New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "WinXCorners" -Value "$destinationPath\WinXCorners.exe" | Out-Null
