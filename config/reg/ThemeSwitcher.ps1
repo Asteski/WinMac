@@ -117,8 +117,8 @@ public class NativeMethods {
 [NativeMethods]::SystemParametersInfo(0x57, 0, $null, 0x03) > $null 2>&1
 
 $registry1Properties = Get-ItemProperty -Path $registryPath1
-$storeIcon1 = 'C:\Users\Public\Documents\Winstep\Icons\store'
-$storeIcon1 = $registry1Properties.PSObject.Properties |
+$storeIcon = 'C:\\Users\\Public\\Documents\\WinStep\\Icons\\store'
+$storeIcon = $registry1Properties.PSObject.Properties |
 	Where-Object { $_.Value -like "$storeIcon*" } |
 	Select-Object -ExpandProperty Name
 
@@ -143,7 +143,7 @@ Set-ItemProperty -Path $registryPath1 -Name "DockBack3Image1" -Value "C:\Users\P
 Set-ItemProperty -Path $registryPath1 -Name "DockLabelColor1" -Value $DockLabelColor1
 Set-ItemProperty -Path $registryPath1 -Name "DockLabelBackColor1" -Value $DockLabelBackColor1
 Set-ItemProperty -Path $registryPath1 -Name "DockRunningIndicator1" -Value $dockRunningIndicator
-if ($storeIcon1) { Set-ItemProperty -Path $registryPath1 -Name $storeIcon1 -Value "C:\Users\Public\Documents\Winstep\Icons\store_$mode.ico" }
+if ($storeIcon1) { Set-ItemProperty -Path $registryPath1 -Name $storeIcon -Value "C:\Users\Public\Documents\Winstep\Icons\store_$mode.ico" }
 Set-ItemProperty -Path $registryPath2 -Name "TaskIcon2" -Value "C:\\Users\\Public\\Documents\\WinStep\\Icons\\store_$mode.ico"
 Set-ItemProperty -Path $registryPath2 -Name "UIDarkMode" -Value $UIDarkMode
 Set-ItemProperty -Path $registryPath2 -Name "Windows10Style" -Value $contextMenuStyle
