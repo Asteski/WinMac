@@ -1085,6 +1085,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                     $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "store_light", "store_dark" }
                     $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "recycle_bin_empty_light", "recycle_bin_empty_dark" }
                     $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "recycle_bin_full_light", "recycle_bin_full_dark" }
+                    $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace '"Windows10Style"="False"', '"Windows10Style"="True"' }
                     $modifiedFile = "..\temp\winstep.reg"
                     $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8
                 }
@@ -1097,6 +1098,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                 $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "store_light", "store_dark" }
                 $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "recycle_bin_empty_light", "recycle_bin_empty_dark" }
                 $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "recycle_bin_full_light", "recycle_bin_full_dark" }
+                $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace '"Windows10Style"="False"', '"Windows10Style"="True"' }
                 $modifiedFile = "..\temp\winstep.reg"
                 $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 
                 $regFile = $modifiedFile
