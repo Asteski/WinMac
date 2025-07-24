@@ -895,7 +895,7 @@ foreach ($app in $selectedApps) {
                     $shortcut.Save()
                     Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX\*" -Recurse -Force
                     Expand-Archive -Path "..\config\menu\WinMac_menu.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\WinX\" -Force
-                    Copy-Item -Path "..\bin\WinMacMenu.exe" -Destination $winMacDirectory -Recurse -Force
+                    if ($sysType -like "*ARM*") { Copy-Item -Path "..\bin\menu\arm64\WinMacMenu.exe" -Destination $winMacDirectory -Recurse -Force } else { Copy-Item -Path "..\bin\menu\x64\WinMacMenu.exe" -Destination $winMacDirectory -Recurse -Force }
                     Stop-Process -Name Explorer
                     Start-Process $shellExePath
                     Start-Sleep 5
