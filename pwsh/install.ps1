@@ -883,9 +883,12 @@ foreach ($app in $selectedApps) {
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftWin" -Value "Nothing"
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftRight" -Value 1
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "SearchBox" -Value "Hide"
+                    if ($sysType -like "*ARM*") { Copy-Item -Path "..\bin\menu\arm64\WinMacMenu.exe" -Destination $winMacDirectory -Recurse -Force } else { Copy-Item -Path "..\bin\menu\x64\WinMacMenu.exe" -Destination $winMacDirectory -Recurse -Force }
                     $parentDirectory = Split-Path -Path $PSScriptRoot -Parent
-                    $winxFolderName = "config\winx\Group2"
+                    $winxFolderName = "config\winx\Group1"
                     $winxFolderPath = Join-Path -Path $parentDirectory -ChildPath $winxFolderName
+                    Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX\*" -Recurse -Force
+                    Expand-Archive -Path "..\config\menu\WinMac_menu.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\WinX\" -Force
                     $WinverUWP = (Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP).InstallLocation
                     $shortcutPath = "$winxFolderPath\8 - System.lnk"
                     $newTargetPath = "$WinverUWP\WinverUWP.exe"
@@ -893,9 +896,6 @@ foreach ($app in $selectedApps) {
                     $shortcut = $WScriptShell.CreateShortcut($shortcutPath)
                     $shortcut.TargetPath = $newTargetPath
                     $shortcut.Save()
-                    Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX\*" -Recurse -Force
-                    Expand-Archive -Path "..\config\menu\WinMac_menu.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\WinX\" -Force
-                    if ($sysType -like "*ARM*") { Copy-Item -Path "..\bin\menu\arm64\WinMacMenu.exe" -Destination $winMacDirectory -Recurse -Force } else { Copy-Item -Path "..\bin\menu\x64\WinMacMenu.exe" -Destination $winMacDirectory -Recurse -Force }
                     Stop-Process -Name Explorer
                     Start-Process $shellExePath
                     Start-Sleep 5
