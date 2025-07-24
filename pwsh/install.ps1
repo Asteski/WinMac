@@ -889,7 +889,7 @@ foreach ($app in $selectedApps) {
                     Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX\*" -Recurse -Force
                     Expand-Archive -Path "..\config\menu\WinMac_menu.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\WinX\" -Force
                     $WinverUWP = (Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP).InstallLocation
-                    $shortcutPath = "$winxFolderPath\8 - System.lnk"
+                    $shortcutPath = "$winxFolderPath\20 - WinverUWP.lnk"
                     $newTargetPath = "$WinverUWP\WinverUWP.exe"
                     $WScriptShell = New-Object -ComObject WScript.Shell
                     $shortcut = $WScriptShell.CreateShortcut($shortcutPath)
