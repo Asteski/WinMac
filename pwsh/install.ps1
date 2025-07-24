@@ -1254,6 +1254,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             $curSourceFolder = (Get-Item -Path "..\config\cursors").FullName
             $curDestFolder = "C:\Windows\Cursors"
             Copy-Item -Path "$curSourceFolder\windows-modern-v2" -Destination $curDestFolder -Recurse -Force
+            reg import ..\config\cursors\scheme.reg > $null 2>&1
             if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
 		        $cursorSchemeName = 'Windows Modern v2 - Aero Black - (x1)'
             } else {
@@ -1268,7 +1269,7 @@ public class User32 {
     public static extern IntPtr SystemParametersInfo(int uAction, int uParam, IntPtr lpvParam, int fuWinIni);
 }
 "@
-            [User32]::SystemParametersInfo(0x0057, 0, [IntPtr]::Zero, 0x0001)
+            [User32]::SystemParametersInfo(0x0057, 0, [IntPtr]::Zero, 0x0001) > $null 2>&1
         #? Pin User folder, Programs and Recycle Bin to Quick Access
             $registryPath3 = "HKCU:\SOFTWARE\WinMac"
             if (-not (Test-Path -Path $registryPath3)) {New-Item -Path $registryPath3 -Force | Out-Null }
