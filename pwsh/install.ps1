@@ -1250,51 +1250,25 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
         "12" {
         #? Black Cursor
             Write-Host "Configuring Other Settings..." -ForegroundColor Yellow
-            $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
-            $curSourceFolder = (Get-Item -Path "..\config\cursor").FullName
+            $regPath = "HKCU:\Control Panel\Cursors"
+            $curSourceFolder = (Get-Item -Path "..\config\cursors").FullName
             $curDestFolder = "C:\Windows\Cursors"
-            Copy-Item -Path $curSourceFolder\* -Destination $curDestFolder -Recurse -Force
+            Copy-Item -Path "$curSourceFolder\windows-modern-v2" -Destination $curDestFolder -Recurse -Force
             if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
-                $cursorMode = 'aero_black'
-		        $cursorName = 'Windows Black'
+		        $cursorSchemeName = 'Windows Modern v2 - Aero Black - (x1)'
             } else {
-                $cursorMode = 'aero'
-		        $cursorName = 'Windows Default (system scheme)'
-                $infPath = Get-ChildItem -Path (Join-Path $PWD '..\config\cursor\') -Filter 'install.inf' -Recurse | Select-Object -ExpandProperty FullName
-                rundll32.exe setupapi.dll,InstallHinfSection DefaultInstall 128 "$infPath"
+		        $cursorSchemeName = 'Windows Modern v2 - Aero White - (x1)'
             }
-            $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
-            $RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
-            $RegCursors.SetValue("",$cursorName)
-            $RegCursors.SetValue("AppStarting","$curDestFolder\$($cursorMode)_working.ani")
-            $RegCursors.SetValue("Arrow","$curDestFolder\$($cursorMode)_arrow.cur")
-            $RegCursors.SetValue("Crosshair","$curDestFolder\cross_r.cur")
-            $RegCursors.SetValue("Hand","$curDestFolder\$($cursorMode)_link.cur")
-            $RegCursors.SetValue("Help","$curDestFolder\$($cursorMode)_helpsel.cur")
-            $RegCursors.SetValue("IBeam","$curDestFolder\beam_r.cur")
-            $RegCursors.SetValue("No","$curDestFolder\$($cursorMode)_unavail.cur")
-            $RegCursors.SetValue("NWPen","$curDestFolder\$($cursorMode)_pen.cur")
-            $RegCursors.SetValue("SizeAll","$curDestFolder\$($cursorMode)_move.cur")
-            $RegCursors.SetValue("SizeNESW","$curDestFolder\$($cursorMode)_nesw.cur")
-            $RegCursors.SetValue("SizeNS","$curDestFolder\$($cursorMode)_ns.cur")
-            $RegCursors.SetValue("SizeNWSE","$curDestFolder\$($cursorMode)_nwse.cur")
-            $RegCursors.SetValue("SizeWE","$curDestFolder\$($cursorMode)_ew.cur")
-            $RegCursors.SetValue("UpArrow","$curDestFolder\$($cursorMode)_up.cur")
-            $RegCursors.SetValue("Wait","$curDestFolder\$($cursorMode)_busy.ani")
-            $RegCursors.SetValue("Pin","$curDestFolder\$($cursorMode)_pin.cur")
-            $RegCursors.SetValue("Person","$curDestFolder\$($cursorMode)_person.cur")
-            $RegCursors.Close()
-            $RegConnect.Close()
-            $CSharpSig = @'
-[DllImport("user32.dll", EntryPoint = "SystemParametersInfo")]
-public static extern bool SystemParametersInfo(
-uint uiAction,
-uint uiParam,
-uint pvParam,
-uint fWinIni);
-'@           
-            $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
-            $CursorRefresh::SystemParametersInfo(0x057,0,$null,0) > $null 2>&1
+            Set-ItemProperty -Path $regPath -Name "Scheme Source" -Value $cursorSchemeName
+            Add-Type -TypeDefinition @"
+using System;
+using System.Runtime.InteropServices;
+public class User32 {
+    [DllImport("user32.dll")]
+    public static extern IntPtr SystemParametersInfo(int uAction, int uParam, IntPtr lpvParam, int fuWinIni);
+}
+"@
+            [User32]::SystemParametersInfo(0x0057, 0, [IntPtr]::Zero, 0x0001)
         #? Pin User folder, Programs and Recycle Bin to Quick Access
             $registryPath3 = "HKCU:\SOFTWARE\WinMac"
             if (-not (Test-Path -Path $registryPath3)) {New-Item -Path $registryPath3 -Force | Out-Null }
