@@ -577,7 +577,7 @@ if ($null -eq $wingetCliCheck) {
     Invoke-WebRequest -Uri 'https://aka.ms/getwinget' -OutFile '..\temp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
     Invoke-WebRequest -Uri 'https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx' -OutFile '..\temp\Microsoft.VCLibs.x64.14.00.Desktop.appx'
     Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.6/Microsoft.UI.Xaml.2.8.x64.appx' -OutFile '..\temp\Microsoft.UI.Xaml.2.8.x64.appx'
-    Add-AppxPackage '..\bin\Microsoft.VCLibs.140.00.UWPDesktop_14.0.33728.0_x64__8wekyb3d8bbwe.appx'
+    Add-AppxPackage '..\bin\appx\Microsoft.VCLibs.140.00.UWPDesktop_14.0.33728.0_x64__8wekyb3d8bbwe.appx'
     Add-AppxPackage '..\temp\Microsoft.VCLibs.x64.14.00.Desktop.appx'
     Add-AppxPackage '..\temp\Microsoft.UI.Xaml.2.8.x64.appx'
     Add-AppxPackage '..\temp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
@@ -647,7 +647,7 @@ foreach ($app in $selectedApps) {
             Stop-Process -Name Microsoft.CmdPal.UI
             (Get-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json") -replace '"CmdPal":true', '"CmdPal":false' -replace '"show_tray_icon":true', '"show_tray_icon":false' | Set-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json" -Force
             New-Item -ItemType Directory -Path $winMacDirectory | Out-Null
-            Copy-Item '..\bin\TriggerPeekWithSpacebar.exe' $winMacDirectory
+            Copy-Item '..\bin\ahk\TriggerPeekWithSpacebar.exe' $winMacDirectory
             $description = "Trigger PowerToys Peek with Space bar."
             $folderName = "WinMac"
             $taskService = New-Object -ComObject "Schedule.Service"
@@ -846,12 +846,12 @@ foreach ($app in $selectedApps) {
                     $runtime = Get-AppxPackage -Name 'Microsoft.NET.Native.Runtime.2.2'
                     if ($null -eq $runtime) {
                         Write-Host "Installing Microsoft.NET.Native.Runtime.2.2..." -ForegroundColor DarkYellow
-                        Add-AppxPackage -Path '..\bin\Microsoft.NET.Native.Runtime.2.2_2.2.28604.0_x64__8wekyb3d8bbwe.appx' | Out-Null
+                        Add-AppxPackage -Path '..\bin\appx\Microsoft.NET.Native.Runtime.2.2_2.2.28604.0_x64__8wekyb3d8bbwe.appx' | Out-Null
                     }
                     $framework = Get-AppxPackage -Name Microsoft.NET.Native.Framework.2.2
                     if ($null -eq $framework) {
                         Write-Host "Installing Microsoft.NET.Native.Framework.2.2..." -ForegroundColor DarkYellow
-                        Add-AppxPackage -Path '..\bin\Microsoft.NET.Native.Framework.2.2_2.2.29512.0_x64__8wekyb3d8bbwe.appx' | Out-Null
+                        Add-AppxPackage -Path '..\bin\appx\Microsoft.NET.Native.Framework.2.2_2.2.29512.0_x64__8wekyb3d8bbwe.appx' | Out-Null
                     }
                     $winverUWP = Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP
                     if ($null -eq $winverUWP) {
@@ -863,7 +863,8 @@ foreach ($app in $selectedApps) {
                     New-Item -ItemType Directory -Path "$winMacDirectory\" | Out-Null
                     Write-Host "Installing Open-Shell..." -ForegroundColor DarkYellow
                     $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\StartMenu.exe"
-                    winget install --id "Open-Shell.Open-Shell-Menu" --source winget --custom 'ADDLOCAL=StartMenu' --silent | Out-Null
+                    # winget install --id "Open-Shell.Open-Shell-Menu" --source winget --custom 'ADDLOCAL=StartMenu' --silent | Out-Null
+                    Start-Process -FilePath "..\bin\osh\osh.exe" -ArgumentList "/SILENT", "ADDLOCAL=StartMenu" -Wait -NoNewWindow | Out-Null
                     Stop-Process -Name StartMenu -Force | Out-Null
                     New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force | Out-Null
                     New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force | Out-Null
@@ -949,7 +950,13 @@ foreach ($app in $selectedApps) {
             Remove-Item "$env:LocalAppData\Microsoft\Windows\Explorer\thumbcache_*.db" -Force -Recurse
             Set-ItemProperty -Path "HKCU:\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags\AllFolders\Shell" -Name Logo -Value "imageres.dll,-3" -Type String
             $secureUxThemeInstalled = Get-WmiObject -Class Win32_Product | Where-Object { $_.Name -like "SecureUxTheme*" }
-            if (-not $secureUxThemeInstalled) { Start-Process -FilePath '..\bin\SecureUxTheme_x64.msi' -ArgumentList '/quiet /norestart' -Wait }
+            if (-not $secureUxThemeInstalled) { 
+                if ($sysType -like "*ARM*") { 
+                    Start-Process -FilePath '..\bin\secureuxtheme\SecureUxTheme_ARM64.msi' -ArgumentList '/quiet /norestart' -Wait 
+                }
+                else {
+                    Start-Process -FilePath '..\bin\secureuxtheme\SecureUxTheme_x64.msi' -ArgumentList '/quiet /norestart' -Wait
+                }
             Stop-Process -Name explorer -Force
             Move-Item -Path "C:\Users\Public\Desktop\Windhawk.lnk" -Destination $programsDir -Force
             Start-Process "$Env:ProgramFiles\Windhawk\Windhawk.exe"
@@ -1010,10 +1017,9 @@ foreach ($app in $selectedApps) {
     #* AutoHotkey Keyboard Shortcuts
         "8" {
             Write-Host "Installing Keyboard Shortcuts..." -ForegroundColor Yellow
-            $fileName = 'WinMacKeyShortcuts.exe'
             New-Item -ItemType Directory -Path "$winMacDirectory\" | Out-Null
             if (Get-Process keyshortcuts) { Stop-Process -Name keyshortcuts }
-            Copy-Item ..\bin\$fileName "$winMacDirectory" 
+            Copy-Item '..\bin\ahk\WinMacKeyShortcuts.exe' "$winMacDirectory" 
             $description = "WinMac Keyboard Shortcuts - custom keyboard shortcut described in Commands cheat sheet wiki page."
             $folderName = "WinMac"
             $taskService = New-Object -ComObject "Schedule.Service"
@@ -1024,7 +1030,7 @@ foreach ($app in $selectedApps) {
             $taskFolder = "\" + $folderName
             $trigger = New-ScheduledTaskTrigger -AtLogon
             $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
-            $action = New-ScheduledTaskAction -Execute $fileName -WorkingDirectory $winMacDirectory
+            $action = New-ScheduledTaskAction -Execute WinMacKeyShortcuts.exe -WorkingDirectory $winMacDirectory
             $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
             Register-ScheduledTask -TaskName "Keyboard Shortcuts" -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -Description $description | Out-Null
             Start-Process -FilePath "$winMacDirectory\WinMacKeyShortcuts.exe" -WorkingDirectory $winMacDirectory
