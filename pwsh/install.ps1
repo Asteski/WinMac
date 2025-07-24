@@ -1260,7 +1260,8 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             } else {
 		        $cursorSchemeName = 'Windows Modern v2 - Aero White - (x1)'
             }
-            Set-ItemProperty -Path $regPath -Name "Scheme Source" -Value $cursorSchemeName
+            Set-ItemProperty -Path $regPath -Name "Scheme Source" -Value 1
+            Set-ItemProperty -Path $regPath -Name "(Default)" -Value $cursorSchemeName
             Add-Type -TypeDefinition @"
 using System;
 using System.Runtime.InteropServices;
