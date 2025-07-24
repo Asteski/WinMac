@@ -864,7 +864,7 @@ foreach ($app in $selectedApps) {
                     Write-Host "Installing Open-Shell..." -ForegroundColor DarkYellow
                     $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\StartMenu.exe"
                     # winget install --id "Open-Shell.Open-Shell-Menu" --source winget --custom 'ADDLOCAL=StartMenu' --silent | Out-Null
-                    Start-Process -FilePath "..\bin\osh\osh.exe" -ArgumentList "/SILENT", "ADDLOCAL=StartMenu" -Wait -NoNewWindow | Out-Null
+                    Start-Process -FilePath "..\bin\osh\osh.exe" -ArgumentList "/QUIET", "ADDLOCAL=StartMenu" -Wait -NoNewWindow | Out-Null
                     Stop-Process -Name StartMenu -Force | Out-Null
                     New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force | Out-Null
                     New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell" -Force | Out-Null
