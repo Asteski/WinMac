@@ -957,6 +957,7 @@ foreach ($app in $selectedApps) {
                 else {
                     Start-Process -FilePath '..\bin\secureuxtheme\SecureUxTheme_x64.msi' -ArgumentList '/quiet /norestart' -Wait
                 }
+            }
             Stop-Process -Name explorer -Force
             Move-Item -Path "C:\Users\Public\Desktop\Windhawk.lnk" -Destination $programsDir -Force
             Start-Process "$Env:ProgramFiles\Windhawk\Windhawk.exe"
