@@ -29,30 +29,14 @@ if ($mode -eq 'Dark')
 	$UIDarkMode 			= '1'
 	$DockLabelColor1 		= '15658734'
 	$DockLabelBackColor1 	= '2563870'
+	$cursorName 			= 'Windows Modern v2 - Aero White - (x1)'
+	$cursorColor 			= 'white'
 	$theme 					= $themeStyle -replace 'Light', 'Dark'
 	$orbBitmap 				= $orbBitmap -replace 'black', 'white'
 	$dockRunningIndicator 	= $dockRunningIndicator -replace 'Light', 'Dark'
 	$recycleBinEmptyIcon 	= $recycleBinEmptyIcon -replace 'Light', 'Dark'
 	$recycleBinFullIcon 	= $recycleBinFullIcon -replace 'Light', 'Dark'
 	$contextMenuStyle 		= 'True'
-	$cursorTheme 			= 'Windows Default'
-	$cursorMappings 		= @{
-		Arrow       		= 'C:\WINDOWS\cursors\aero_arrow.cur'
-		Help        		= 'C:\WINDOWS\cursors\aero_helpsel.cur'
-		Hand        		= 'C:\WINDOWS\cursors\aero_link.cur'
-		AppStarting 		= 'C:\WINDOWS\cursors\aero_working.ani'
-		Wait        		= 'C:\WINDOWS\cursors\aero_busy.ani'
-		NWPen       		= 'C:\WINDOWS\cursors\aero_pen.cur'
-		No          		= 'C:\WINDOWS\cursors\aero_unavail.cur'
-		SizeNS      		= 'C:\WINDOWS\cursors\aero_ns.cur'
-		SizeWE      		= 'C:\WINDOWS\cursors\aero_ew.cur'
-		SizeNWSE    		= 'C:\WINDOWS\cursors\aero_nwse.cur'
-		SizeNESW    		= 'C:\WINDOWS\cursors\aero_nesw.cur'
-		SizeAll     		= 'C:\WINDOWS\cursors\aero_move.cur'
-		UpArrow     		= 'C:\WINDOWS\cursors\aero_up.cur'
-		Pin         		= 'C:\WINDOWS\cursors\aero_pin.cur'
-		Person      		= 'C:\WINDOWS\cursors\aero_person.cur'
-	}
 }
 if ($mode -eq 'Light')
 {
@@ -60,30 +44,14 @@ if ($mode -eq 'Light')
 	$UIDarkMode 			= '3'
 	$DockLabelColor1 		= '1644825'
 	$DockLabelBackColor1 	= '16119283'
+	$cursorName 			= 'Windows Modern v2 - Aero Black - (x1)'
+	$cursorColor 			= 'black'
 	$theme 					= $themeStyle -replace 'Dark', 'Light'
 	$orbBitmap 				= $orbBitmap -replace 'white', 'black'
 	$dockRunningIndicator 	= $dockRunningIndicator -replace 'Dark', 'Light'
 	$recycleBinEmptyIcon 	= $recycleBinEmptyIcon -replace 'Dark', 'Light'
 	$recycleBinFullIcon 	= $recycleBinFullIcon -replace 'Dark', 'Light'
 	$contextMenuStyle 		= 'False'
-	$cursorTheme 			= 'Windows Black'
-	$cursorMappings 		= @{
-		Arrow       		= 'C:\WINDOWS\cursors\aero_black_arrow.cur'
-		Help        		= 'C:\WINDOWS\cursors\aero_black_helpsel.cur'
-		Hand        		= 'C:\WINDOWS\cursors\aero_black_link.cur'
-		AppStarting 		= 'C:\WINDOWS\cursors\aero_black_working.ani'
-		Wait        		= 'C:\WINDOWS\cursors\aero_black_busy.ani'
-		NWPen       		= 'C:\WINDOWS\cursors\aero_black_pen.cur'
-		No          		= 'C:\WINDOWS\cursors\aero_black_unavail.cur'
-		SizeNS      		= 'C:\WINDOWS\cursors\aero_black_ns.cur'
-		SizeWE      		= 'C:\WINDOWS\cursors\aero_black_ew.cur'
-		SizeNWSE    		= 'C:\WINDOWS\cursors\aero_black_nwse.cur'
-		SizeNESW    		= 'C:\WINDOWS\cursors\aero_black_nesw.cur'
-		SizeAll     		= 'C:\WINDOWS\cursors\aero_black_move.cur'
-		UpArrow     		= 'C:\WINDOWS\cursors\aero_black_up.cur'
-		Pin         		= 'C:\WINDOWS\cursors\aero_black_pin.cur'
-		Person      		= 'C:\WINDOWS\cursors\aero_black_person.cur'
-	}
 }
 if ($mode2 -eq 'NoApp') {
 	Set-ItemProperty -Path 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize' -Name 'SystemUsesLightTheme' -Type DWord -Value $OSMode
@@ -102,20 +70,37 @@ else {
 	}
 }
 
-Set-ItemProperty -Path "HKCU:\Control Panel\Cursors" -Name '(default)' -Value $cursorTheme
-foreach ($cursorName in $cursorMappings.Keys) {
-	$cursorPath = $cursorMappings[$cursorName]
-	Set-ItemProperty -Path "HKCU:\Control Panel\Cursors" -Name $cursorName -Value $cursorPath
-}
-Add-Type @"
+$RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
+$RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
+$RegCursors.SetValue("",$cursorName)
+$RegCursors.SetValue("AppStarting","%SYSTEMROOT%\Cursors\windows-modern-v2\x1\working-in-background_$cursorColor.ani")
+$RegCursors.SetValue("Arrow","%SYSTEMROOT%\Cursors\windows-modern-v2\x1\normal-select_$cursorColor.cur")
+$RegCursors.SetValue("Crosshair","%SYSTEMROOT%\Cursors\windows-modern-v2\x1\precision-select_default.cur")
+$RegCursors.SetValue("Hand","%SYSTEMROOT%\Cursors\windows-modern-v2\x1\link-select_$cursorColor.cur")
+$RegCursors.SetValue("Help","%SYSTEMROOT%\Cursors\windows-modern-v2\x1\help-select_$cursorColor.cur")
+$RegCursors.SetValue("IBeam","%SYSTEMROOT%\Cursors\windows-modern-v2\x1\text-select_$cursorColor.cur")
+$RegCursors.SetValue("No","%SYSTEMROOT%\Cursors\windows-modern-v2\x1\unavailable_$cursorColor.cur")
+$RegCursors.SetValue("NWPen","%SYSTEMROOT%\Cursors\windows-modern-v2\x1\handwriting_$cursorColor.cur")
+$RegCursors.SetValue("SizeAll","%SYSTEMROOT%\Cursors\windows-modern-v2\x1\move_$cursorColor.cur")
+$RegCursors.SetValue("SizeNESW","%SYSTEMROOT%\Cursors\windows-modern-v2\x1\diagonal-resize-2_$cursorColor.cur")
+$RegCursors.SetValue("SizeNS","%SYSTEMROOT%\Cursors\windows-modern-v2\x1\vertical-resize_$cursorColor.cur")
+$RegCursors.SetValue("SizeNWSE","%SYSTEMROOT%\Cursors\windows-modern-v2\x1\diagonal-resize-1_$cursorColor.cur")
+$RegCursors.SetValue("SizeWE","%SYSTEMROOT%\Cursors\windows-modern-v2\x1\horizontal-resize_$cursorColor.cur")
+$RegCursors.SetValue("UpArrow","%SYSTEMROOT%\Cursors\windows-modern-v2\x1\alternate-select_$cursorColor.cur")
+$RegCursors.SetValue("Wait","%SYSTEMROOT%\Cursors\windows-modern-v2\x1\busy.ani")
+$RegCursors.SetValue("Pin","%SYSTEMROOT%\Cursors\windows-modern-v2\x1\link-select_$cursorColor.cur")
+$RegCursors.SetValue("Person","%SYSTEMROOT%\Cursors\windows-modern-v2\x1\link-select_$cursorColor.cur")
+$RegCursors.Close()
+$RegConnect.Close()
+Add-Type -TypeDefinition @"
 using System;
 using System.Runtime.InteropServices;
-public class NativeMethods {
-    [DllImport("user32.dll", SetLastError = true)]
-    public static extern bool SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
+public class User32 {
+    [DllImport("user32.dll")]
+    public static extern IntPtr SystemParametersInfo(int uAction, int uParam, IntPtr lpvParam, int fuWinIni);
 }
 "@
-[NativeMethods]::SystemParametersInfo(0x57, 0, $null, 0x03) > $null 2>&1
+[User32]::SystemParametersInfo(0x0057, 0, [IntPtr]::Zero, 0x0001) > $null 2>&1
 
 $registry1Properties = Get-ItemProperty -Path $registryPath1
 $storeIcon = 'C:\Users\Public\Documents\WinStep\Icons\store'
