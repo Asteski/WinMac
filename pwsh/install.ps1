@@ -1358,6 +1358,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             (Get-Content -Path $tempFilePath) -replace '%LOCALAPPDATA%', $appData | Set-Content -Path $tempFilePath
             reg import '..\temp\Add_Theme_Mode_in_Context_Menu.reg' > $null 2>&1
             reg import '..\config\reg\add\Add_Hidden_items_to_context_menu.reg' > $null 2>&1
+            reg import '..\config\reg\add\Add_Navigation_pane_to_context_menu.reg' > $null 2>&1
             Copy-Item -Path "..\config\themes\*" -Destination "$env:WINDIR\Resources\Themes" -Recurse -Force
             Copy-Item -Path "..\bin\system32\*" -Destination "$env:WINDIR\System32\" -Recurse -Force
             New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowIconOverlay" -Value 0 -PropertyType DWord -Force | Out-Null

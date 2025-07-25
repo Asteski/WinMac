@@ -595,6 +595,7 @@ uint fWinIni);
             Get-ChildItem ..\config\reg\add\* -e *theme* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
             reg import '..\config\reg\remove\Remove_Theme_Mode_in_Context_Menu.reg' > $null 2>&1
             reg import '..\config\reg\remove\Remove_Hidden_items_from_context_menu.reg' > $null 2>&1
+            reg import '..\config\reg\remove\Remove_Navigation_pane_from_context_menu.reg' > $null 2>&1
             Get-ChildItem "$env:LocalAppData\Microsoft\Windows\Explorer\" -Filter "thumbcache_*.db" | Remove-Item -Force
             Remove-ItemProperty -Path "HKCU:\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags\AllFolders\Shell" -Name "Logo"
             Remove-Item -Path "$winMacDirectory\theme.ps1"
