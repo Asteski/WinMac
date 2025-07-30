@@ -21,7 +21,7 @@ if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir 
 }
 if (-not $adminTest) {
     Add-Type -AssemblyName PresentationFramework
-   [void][System.Windows.MessageBox]::Show("This script must be run as Administrator.", "Insufficient Privileges", 'OK', 'Error')
+    [void][System.Windows.MessageBox]::Show("This script must be run as Administrator.", "Insufficient Privileges", 'OK', 'Error')
     exit
 }
 function Get-WindowsTheme {
