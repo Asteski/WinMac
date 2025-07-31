@@ -57,17 +57,19 @@ if ($mode2 -eq 'NoApp') {
 	Set-ItemProperty -Path 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize' -Name 'SystemUsesLightTheme' -Type DWord -Value $OSMode
 }
 else {
-	#! comment line 71 and uncomment lines 63, 64, 67, 68 and 70 to force dark colored title bars with darkrectified theme
-	#! comment above mentioned lines and uncomment line 71 to restore to default WinMac themes 
+	#! comment line 73 and remove multiline comment in lines 62 and 72 to force dark colored title bars with darkrectified theme
+	#! comment above mentioned multiline comment lines and uncomment line 73 to restore to default WinMac themes
+	<#
 	if ($mode -eq 'Light') {
-		# Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value 0 
-		# Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "AccentColorInactive"
+		Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value 0 
+		Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "AccentColorInactive"
 	}
 	else {
-		# Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value 1
-		# New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "AccentColorInactive" -PropertyType DWord -Value 0xFF444444 > $null 2>&1
+		Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value 1
+		New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "AccentColorInactive" -PropertyType DWord -Value 0xFF444444 > $null 2>&1
 	}
-	# Start-Process "$env:WINDIR\Resources\Themes\$($mode)rectified.theme"
+	Start-Process "$env:WINDIR\Resources\Themes\$($mode)rectified.theme"
+	#>
 	Start-Process "$env:WINDIR\Resources\Themes\WinMac_$($mode).theme"
 }
 
