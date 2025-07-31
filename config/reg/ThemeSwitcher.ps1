@@ -34,8 +34,8 @@ if ($mode -eq 'Dark')
 	$theme 					= $themeStyle -replace 'Light', 'Dark'
 	$orbBitmap 				= $orbBitmap -replace 'black', 'white'
 	$dockRunningIndicator 	= $dockRunningIndicator -replace 'Light', 'Dark'
-	$recycleBinEmptyIcon 	= $recycleBinEmptyIcon -replace 'Light', 'Dark'
-	$recycleBinFullIcon 	= $recycleBinFullIcon -replace 'Light', 'Dark'
+	$recycleBinEmptyIcon 	= '%SystemRoot%\System32\imageres.dll,-55'
+	$recycleBinFullIcon 	= '%SystemRoot%\System32\imageres.dll,-54'
 	$contextMenuStyle 		= 'True'
 }
 if ($mode -eq 'Light')
@@ -49,8 +49,8 @@ if ($mode -eq 'Light')
 	$theme 					= $themeStyle -replace 'Dark', 'Light'
 	$orbBitmap 				= $orbBitmap -replace 'white', 'black'
 	$dockRunningIndicator 	= $dockRunningIndicator -replace 'Dark', 'Light'
-	$recycleBinEmptyIcon 	= $recycleBinEmptyIcon -replace 'Dark', 'Light'
-	$recycleBinFullIcon 	= $recycleBinFullIcon -replace 'Dark', 'Light'
+	$recycleBinEmptyIcon 	= '%SystemRoot%\System32\imageres.dll,-1015'
+	$recycleBinFullIcon 	= '%SystemRoot%\System32\imageres.dll,-1017'
 	$contextMenuStyle 		= 'False'
 }
 if ($mode2 -eq 'NoApp') {
