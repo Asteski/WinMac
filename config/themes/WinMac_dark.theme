@@ -17,24 +17,6 @@ DefaultValue=%SystemRoot%\System32\imageres.dll,-123
 [CLSID\{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}\DefaultIcon]
 DefaultValue=%SystemRoot%\System32\imageres.dll,-25
 
-[Control Panel\Cursors]
-AppStarting=%SystemRoot%\cursors\aero_working.ani
-Arrow=%SystemRoot%\cursors\aero_arrow.cur
-Crosshair=%SystemRoot%\CUR_DIR\aero_black_cross.cur
-Hand=%SystemRoot%\cursors\aero_link.cur
-Help=%SystemRoot%\cursors\aero_helpsel.cur
-IBeam=%SystemRoot%\CUR_DIR\aero_black_beam.cur
-No=%SystemRoot%\cursors\aero_unavail.cur
-NWPen=%SystemRoot%\cursors\aero_pen.cur
-SizeAll=%SystemRoot%\cursors\aero_move.cur
-SizeNESW=%SystemRoot%\cursors\aero_nesw.cur
-SizeNS=%SystemRoot%\cursors\aero_ns.cur
-SizeNWSE=%SystemRoot%\cursors\aero_nwse.cur
-SizeWE=%SystemRoot%\cursors\aero_ew.cur
-UpArrow=%SystemRoot%\cursors\aero_up.cur
-Wait=%SystemRoot%\cursors\aero_busy.ani
-DefaultValue=Windows Default
-
 [Control Panel\Desktop]
 Wallpaper=0
 WallpaperStyle=10
