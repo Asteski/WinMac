@@ -848,7 +848,7 @@ foreach ($app in $selectedApps) {
                         Write-Host "Installing Microsoft.NET.Native.Runtime.2.2..." -ForegroundColor DarkYellow
                         Add-AppxPackage -Path '..\bin\appx\Microsoft.NET.Native.Runtime.2.2_2.2.28604.0_x64__8wekyb3d8bbwe.appx' | Out-Null
                     }
-                    $framework = Get-AppxPackage -Name Microsoft.NET.Native.Framework.2.2
+                    $framework = Get-AppxPackage -Name 'Microsoft.NET.Native.Framework.2.2'
                     if ($null -eq $framework) {
                         Write-Host "Installing Microsoft.NET.Native.Framework.2.2..." -ForegroundColor DarkYellow
                         Add-AppxPackage -Path '..\bin\appx\Microsoft.NET.Native.Framework.2.2_2.2.29512.0_x64__8wekyb3d8bbwe.appx' | Out-Null
@@ -856,7 +856,7 @@ foreach ($app in $selectedApps) {
                     $winverUWP = Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP
                     if ($null -eq $winverUWP) {
                         Write-Host "Installing WinverUWP 2.1.4..." -ForegroundColor DarkYellow
-                        winget install 'FireCubeStudios.WinverUWP' --accept-source-agreements --accept-package-agreements | Out-Null
+                        winget install 'FireCubeStudios.WinverUWP' --accept-source-agreements --accept-package-agreements --skip-dependencies | Out-Null
                     } else {
                         Write-Host "WinverUWP is already installed." -ForegroundColor DarkGreen
                     }
@@ -1350,13 +1350,13 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             $sourceFilePath = "..\config\reg\add\Add_Theme_Mode_in_Context_Menu.reg"
             $tempFilePath = "..\temp\Add_Theme_Mode_in_Context_Menu.reg"
             $ps1FilePath = "..\config\reg\ThemeSwitcher.ps1"
+            reg import '..\temp\Add_Theme_Mode_in_Context_Menu.reg' > $null 2>&1
         #? Configuring file explorer and context menus
             if (-not (Test-Path -Path $winMacDirectory)) {New-Item -ItemType Directory -Path $winMacDirectory -Force | Out-Null }
             Copy-Item -Path $ps1FilePath -Destination $winMacDirectory -Force
             Copy-Item -Path $sourceFilePath -Destination '..\temp\' -Force
             $appData = $env:LOCALAPPDATA -replace '\\', '\\'
             (Get-Content -Path $tempFilePath) -replace '%LOCALAPPDATA%', $appData | Set-Content -Path $tempFilePath
-            reg import '..\temp\Add_Theme_Mode_in_Context_Menu.reg' > $null 2>&1
             reg import '..\config\reg\add\Add_Hidden_items_to_context_menu.reg' > $null 2>&1
             reg import '..\config\reg\add\Add_Navigation_pane_to_context_menu.reg' > $null 2>&1
             Copy-Item -Path "..\config\themes\*" -Destination "$env:WINDIR\Resources\Themes" -Recurse -Force
@@ -1393,8 +1393,6 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
                 Set-ItemProperty -Path $registryPath1 -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-54"
                 Set-ItemProperty -Path $registryPath2 -Name "Icon" -Value "%SystemRoot%\System32\imageres.dll,-55"
             }
-        #? Hide Home page from Settings
-            New-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name SettingsPageVisibility -Value "hide:home" -Force | Out-Null
         }
     }
 }
