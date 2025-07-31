@@ -155,3 +155,4 @@ if (Test-Path "C:\Program Files (x86)\Winstep\Nexus.exe") {
 }
 Write-Host "Theme switch completed!" -ForegroundColor Green
 Start-Sleep 2
+#EOF
