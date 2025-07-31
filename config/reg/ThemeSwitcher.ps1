@@ -57,7 +57,8 @@ if ($mode2 -eq 'NoApp') {
 	Set-ItemProperty -Path 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize' -Name 'SystemUsesLightTheme' -Type DWord -Value $OSMode
 }
 else {
-	#! comment line 72 and remove multiline comment in lines 61 and 71 to force dark colored title bars with darkrectified theme
+	#! Comment line 73 and remove multiline comment in lines 62 and 72 to force dark colored title bars with darkrectified theme
+	#! More info: https://github.com/Asteski/WinMac/wiki/Configuration#rectify11-themes
 	<#
 	if ($mode -eq 'Light') {
 		Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value 0 
