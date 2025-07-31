@@ -1350,7 +1350,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             $sourceFilePath = "..\config\reg\add\Add_Theme_Mode_in_Context_Menu.reg"
             $tempFilePath = "..\temp\Add_Theme_Mode_in_Context_Menu.reg"
             $ps1FilePath = "..\config\reg\ThemeSwitcher.ps1"
-            #? Configuring file explorer and context menus
+        #? Configuring file explorer and context menus
             if (-not (Test-Path -Path $winMacDirectory)) {New-Item -ItemType Directory -Path $winMacDirectory -Force | Out-Null }
             Copy-Item -Path $ps1FilePath -Destination $winMacDirectory -Force
             Copy-Item -Path $sourceFilePath -Destination '..\temp\' -Force
