@@ -13,10 +13,6 @@ $WarningPreference = 'SilentlyContinue'
 $ProgressPreference = 'SilentlyContinue'
 Write-Host "Shutting down Windows Explorer..." -ForegroundColor Yellow
 taskkill /IM explorer.exe /F > $null 2>&1
-Start-Sleep 1
-Write-Host "Restarting Desktop Windows Manager..." -ForegroundColor Yellow
-Stop-Process -Name DWM.exe -Force
-Start-Sleep 2
 if (Test-Path "C:\Program Files (x86)\Winstep\Nexus.exe") {
 	Write-Host "Shutting down Nexus Dock..." -ForegroundColor Yellow
 	taskkill /IM nexus.exe /F > $null 2>&1
@@ -32,6 +28,9 @@ $themeStyle = (Get-ItemProperty -Path $registryPath0 -Name "GenThemeName").GenTh
 $orbBitmap = (Get-ItemProperty -Path $registryPath5 -Name "OrbBitmap").OrbBitmap
 $dockTrashEmptyIcon = (Get-ItemProperty -Path $registryPath0 -Name "TrashEmptyIcon").TrashEmptyIcon
 $dockTrashFullIcon = (Get-ItemProperty -Path $registryPath0 -Name "TrashFullIcon").TrashFullIcon
+Write-Host "Restarting Desktop Windows Manager..." -ForegroundColor Yellow
+Stop-Process -Name DWM.exe -Force
+Start-Sleep 2
 if ($mode -eq 'Dark')
 {
 	$OSMode 				= 0
