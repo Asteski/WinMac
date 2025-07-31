@@ -607,6 +607,7 @@ uint fWinIni);
             Set-ItemProperty -Path $registryPath1 -Name "empty" -Value "%SystemRoot%\System32\imageres.dll,-55"
             Set-ItemProperty -Path $registryPath1 -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-54"
             Remove-Item -Path $registryPath2 -Recurse -Force | Out-Null
+            Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name SettingsPageVisibility -Force | Out-Null
             Write-Host "Uninstalling Other Settings completed." -ForegroundColor Green
         }
     }
