@@ -58,30 +58,10 @@ if ($mode2 -eq 'NoApp') {
 	Set-ItemProperty -Path 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize' -Name 'SystemUsesLightTheme' -Type DWord -Value $OSMode
 }
 else {
-	#! Comment line 73 and remove multiline comment in lines 62 and 72 to force dark colored title bars with darkrectified theme
-	#! More info: https://github.com/Asteski/WinMac/wiki/Configuration#rectify11-themes
-	<#
+	#! Comment line 63 and uncomment line 64 to apply Rectify11 themes
+	#! In order to force dark titlebars with darkrectified theme, enable 'Show accent colour on title bars and window borders' in Settings > Personalization > Colours, or use application like MicaForEveryone
 	Start-Process "$env:WINDIR\Resources\Themes\WinMac_$($mode).theme"
-	Start-Sleep 3  # Wait for theme to apply
-	if ($mode -eq 'Light') {
-		Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value 0 
-		Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "AccentColorInactive"
-	}
-	else {
-		Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value 1
-		New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "AccentColorInactive" -PropertyType DWord -Value 0xFF444444 > $null 2>&1
-	}
-	Start-Process "$env:WINDIR\Resources\Themes\$($mode)rectified.theme"
-	#>
-	
-	# Force DWM to apply the accent color changes by temporarily toggling the setting
-	# $currentColorPrevalence = Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -ErrorAction SilentlyContinue
-	# if ($currentColorPrevalence) {
-	# 	$oppositeValue = if ($currentColorPrevalence.ColorPrevalence -eq 1) { 0 } else { 1 }
-	# 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value $oppositeValue
-	# 	Start-Sleep 1
-	# 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value $currentColorPrevalence.ColorPrevalence
-	# }
+	#Start-Process "$env:WINDIR\Resources\Themes\$($mode)rectified.theme"
 }
 
 $registry1Properties = Get-ItemProperty -Path $registryPath1
