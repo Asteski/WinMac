@@ -26,8 +26,8 @@ $registryPath5 = "HKCU:\Software\StartIsBack"
 $dockRunningIndicator = (Get-ItemProperty -Path $registryPath1 -Name "DockRunningIndicator1").DockRunningIndicator1
 $themeStyle = (Get-ItemProperty -Path $registryPath0 -Name "GenThemeName").GenThemeName
 $orbBitmap = (Get-ItemProperty -Path $registryPath5 -Name "OrbBitmap").OrbBitmap
-$recycleBinEmptyIcon = (Get-ItemProperty -Path $registryPath0 -Name "TrashEmptyIcon").TrashEmptyIcon
-$recycleBinFullIcon = (Get-ItemProperty -Path $registryPath0 -Name "TrashFullIcon").TrashFullIcon
+$dockTrashEmptyIcon = (Get-ItemProperty -Path $registryPath0 -Name "TrashEmptyIcon").TrashEmptyIcon
+$dockTrashFullIcon = (Get-ItemProperty -Path $registryPath0 -Name "TrashFullIcon").TrashFullIcon
 if ($mode -eq 'Dark')
 {
 	$OSMode 				= 0
@@ -39,6 +39,8 @@ if ($mode -eq 'Dark')
 	$theme 					= $themeStyle -replace 'Light', 'Dark'
 	$orbBitmap 				= $orbBitmap -replace 'black', 'white'
 	$dockRunningIndicator 	= $dockRunningIndicator -replace 'Light', 'Dark'
+	$dockTrashEmptyIcon 	= $dockTrashEmptyIcon -replace 'Light', 'Dark'
+	$dockTrashFullIcon 		= $dockTrashFullIcon -replace 'Light', 'Dark'
 	$recycleBinEmptyIcon 	= '%SystemRoot%\System32\imageres.dll,-55'
 	$recycleBinFullIcon 	= '%SystemRoot%\System32\imageres.dll,-54'
 	$contextMenuStyle 		= 'True'
@@ -54,6 +56,8 @@ if ($mode -eq 'Light')
 	$theme 					= $themeStyle -replace 'Dark', 'Light'
 	$orbBitmap 				= $orbBitmap -replace 'white', 'black'
 	$dockRunningIndicator 	= $dockRunningIndicator -replace 'Dark', 'Light'
+	$dockTrashEmptyIcon 	= $dockTrashEmptyIcon -replace 'Dark', 'Light'
+	$dockTrashFullIcon 		= $dockTrashFullIcon -replace 'Dark', 'Light'
 	$recycleBinEmptyIcon 	= '%SystemRoot%\System32\imageres.dll,-1015'
 	$recycleBinFullIcon 	= '%SystemRoot%\System32\imageres.dll,-1017'
 	$contextMenuStyle 		= 'False'
@@ -92,8 +96,8 @@ if (Test-Path "C:\Program Files (x86)\Winstep\Nexus.exe") {
 	Set-ItemProperty -Path $registryPath0 -Name "NetBitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
 	Set-ItemProperty -Path $registryPath0 -Name "RAMBitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
 	Set-ItemProperty -Path $registryPath0 -Name "WANDABitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
-	Set-ItemProperty -Path $registryPath0 -Name "TrashEmptyIcon" -Value $recycleBinEmptyIcon
-	Set-ItemProperty -Path $registryPath0 -Name "TrashFullIcon" -Value $recycleBinFullIcon
+	Set-ItemProperty -Path $registryPath0 -Name "TrashEmptyIcon" -Value $dockTrashEmptyIcon
+	Set-ItemProperty -Path $registryPath0 -Name "TrashFullIcon" -Value $dockTrashFullIcon
 	Set-ItemProperty -Path $registryPath1 -Name "DockBitmapFolder1" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
 	Set-ItemProperty -Path $registryPath1 -Name "DockBack3Image1" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\NxBack.png"
 	Set-ItemProperty -Path $registryPath1 -Name "DockLabelColor1" -Value $DockLabelColor1
