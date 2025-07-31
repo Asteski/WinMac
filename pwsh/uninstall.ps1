@@ -574,7 +574,8 @@ uint fWinIni);
 '@
             $CursorRefresh = Add-Type -MemberDefinition $CSharpSig -Name WinAPICall -Namespace SystemParamInfo –PassThru
             $CursorRefresh::SystemParametersInfo(0x0057,0,$null,0) | Out-Null
-            Get-ChildItem "C:\Windows\Cursors" -filter aero_black* | ForEach-Object { Remove-Item $_.FullName -Force }
+            Get-ChildItem "C:\Windows\Cursors\windows-modern-v2" | Remove-Item -Recurse -Force
+            reg import ..\config\cursors\Remove_Modern_Cursors_Scheme.reg > $null 2>&1
             $homeDir = "C:\Users\$env:USERNAME"
             $homePin = new-object -com shell.application
             $homePin.Namespace($homeDir).Self.InvokeVerb("pintohome") | Out-Null

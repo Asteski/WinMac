@@ -1247,12 +1247,12 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             }
     #* Other
         "12" {
-        #? Black Cursor
             Write-Host "Configuring Other Settings..." -ForegroundColor Yellow
+        #? Black Cursor
             $curSourceFolder = (Get-Item -Path "..\config\cursors").FullName
             $curDestFolder = "C:\Windows\Cursors"
             Copy-Item -Path "$curSourceFolder\windows-modern-v2" -Destination $curDestFolder -Recurse -Force
-            reg import ..\config\cursors\scheme.reg > $null 2>&1
+            reg import ..\config\cursors\Add_Modern_Cursors_Scheme.reg > $null 2>&1
             if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
                 $cursorName = 'Windows Modern v2 - Aero Black - (x1)'
                 $cursorColor = 'black'
