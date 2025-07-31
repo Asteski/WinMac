@@ -58,7 +58,7 @@ if ($mode -eq 'Light')
 	$recycleBinFullIcon 	= '%SystemRoot%\System32\imageres.dll,-1017'
 	$contextMenuStyle 		= 'False'
 }
-Write-Host "Changing theme..." -ForegroundColor Yellow
+Write-Host "Changing Windows theme..." -ForegroundColor Yellow
 if ($mode2 -eq 'NoApp') {
 	Set-ItemProperty -Path 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize' -Name 'SystemUsesLightTheme' -Type DWord -Value $OSMode
 }
