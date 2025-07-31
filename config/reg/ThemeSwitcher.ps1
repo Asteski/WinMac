@@ -28,9 +28,6 @@ $themeStyle = (Get-ItemProperty -Path $registryPath0 -Name "GenThemeName").GenTh
 $orbBitmap = (Get-ItemProperty -Path $registryPath5 -Name "OrbBitmap").OrbBitmap
 $dockTrashEmptyIcon = (Get-ItemProperty -Path $registryPath0 -Name "TrashEmptyIcon").TrashEmptyIcon
 $dockTrashFullIcon = (Get-ItemProperty -Path $registryPath0 -Name "TrashFullIcon").TrashFullIcon
-Write-Host "Restarting Desktop Windows Manager..." -ForegroundColor Yellow
-Stop-Process -Name DWM.exe -Force
-Start-Sleep 2
 if ($mode -eq 'Dark')
 {
 	$OSMode 				= 0
