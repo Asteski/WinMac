@@ -7,12 +7,16 @@ param
 	[string]
 	$mode2
 )
-Write-Host "Switching to $mode mode..."
+Write-Host "Switching to $mode mode..." -ForegroundColor Green
 $ErrorActionPreference = 'SilentlyContinue'
 $WarningPreference = 'SilentlyContinue'
 $ProgressPreference = 'SilentlyContinue'
+Write-Host "Shutting down Windows Explorer..." -ForegroundColor Yellow
 taskkill /IM explorer.exe /F > $null 2>&1
-taskkill /IM nexus.exe /F > $null 2>&1
+if (Test-Path "C:\Program Files (x86)\Winstep\Nexus.exe") {
+	Write-Host "Shutting down Nexus Dock..." -ForegroundColor Yellow
+	taskkill /IM nexus.exe /F > $null 2>&1
+}
 $registryPath0 = "HKCU:\Software\WinSTEP2000\NeXuS"
 $registryPath1 = "HKCU:\Software\WinSTEP2000\NeXuS\Docks"
 $registryPath2 = "HKCU:\Software\WinSTEP2000\Shared"
@@ -54,47 +58,55 @@ if ($mode -eq 'Light')
 	$recycleBinFullIcon 	= '%SystemRoot%\System32\imageres.dll,-1017'
 	$contextMenuStyle 		= 'False'
 }
+Write-Host "Changing theme..." -ForegroundColor Yellow
 if ($mode2 -eq 'NoApp') {
 	Set-ItemProperty -Path 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize' -Name 'SystemUsesLightTheme' -Type DWord -Value $OSMode
 }
 else {
-	#! Comment line 63 and uncomment line 64 to apply Rectify11 themes
-	#! In order to force dark titlebars with darkrectified theme, enable 'Show accent colour on title bars and window borders' in Settings > Personalization > Colours, or use application like MicaForEveryone
+	#! Comment line 68 and uncomment line 69 to apply Rectify11 themes. In order to force dark titlebars with darkrectified theme,
+	#! enable 'Show accent colour on title bars and window borders' in Settings > Personalization > Colours, or use application like MicaForEveryone
 	Start-Process "$env:WINDIR\Resources\Themes\WinMac_$($mode).theme"
 	#Start-Process "$env:WINDIR\Resources\Themes\$($mode)rectified.theme"
 }
 
-$registry1Properties = Get-ItemProperty -Path $registryPath1
-$storeIcon = 'C:\Users\Public\Documents\WinStep\Icons\store'
-$storeIcon = $registry1Properties.PSObject.Properties |
-	Where-Object { $_.Value -like "$storeIcon*" } |
-	Select-Object -ExpandProperty Name
+if (Test-Path "C:\Program Files (x86)\Winstep\Nexus.exe") {
+	Write-Host "Changing Nexus Dock theme..." -ForegroundColor Yellow
 
-Set-ItemProperty -Path $registryPath0 -Name "GenThemeName" -Value $theme
-Set-ItemProperty -Path $registryPath0 -Name "BitmapsFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
-Set-ItemProperty -Path $registryPath0 -Name "GlobalBitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
-Set-ItemProperty -Path $registryPath0 -Name "NeXuSBitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
-Set-ItemProperty -Path $registryPath0 -Name "NeXuSThemeName" -Value $theme
-Set-ItemProperty -Path $registryPath0 -Name "NeXuSImage3" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\NxBack.png"
-Set-ItemProperty -Path $registryPath0 -Name "ClockBitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
-Set-ItemProperty -Path $registryPath0 -Name "TrashBitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
-Set-ItemProperty -Path $registryPath0 -Name "CPUBitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
-Set-ItemProperty -Path $registryPath0 -Name "POP3BitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
-Set-ItemProperty -Path $registryPath0 -Name "METARBitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
-Set-ItemProperty -Path $registryPath0 -Name "NetBitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
-Set-ItemProperty -Path $registryPath0 -Name "RAMBitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
-Set-ItemProperty -Path $registryPath0 -Name "WANDABitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
-Set-ItemProperty -Path $registryPath0 -Name "TrashEmptyIcon" -Value $recycleBinEmptyIcon
-Set-ItemProperty -Path $registryPath0 -Name "TrashFullIcon" -Value $recycleBinFullIcon
-Set-ItemProperty -Path $registryPath1 -Name "DockBitmapFolder1" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
-Set-ItemProperty -Path $registryPath1 -Name "DockBack3Image1" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\NxBack.png"
-Set-ItemProperty -Path $registryPath1 -Name "DockLabelColor1" -Value $DockLabelColor1
-Set-ItemProperty -Path $registryPath1 -Name "DockLabelBackColor1" -Value $DockLabelBackColor1
-Set-ItemProperty -Path $registryPath1 -Name "DockRunningIndicator1" -Value $dockRunningIndicator
-if ($storeIcon) { Set-ItemProperty -Path $registryPath1 -Name $storeIcon -Value "C:\Users\Public\Documents\WinStep\Icons\store_$mode.ico" }
-Set-ItemProperty -Path $registryPath2 -Name "TaskIcon2" -Value "C:\Users\Public\Documents\WinStep\Icons\store_$mode.ico"
-Set-ItemProperty -Path $registryPath2 -Name "UIDarkMode" -Value $UIDarkMode
-Set-ItemProperty -Path $registryPath2 -Name "Windows10Style" -Value $contextMenuStyle
+	$registry1Properties = Get-ItemProperty -Path $registryPath1
+	$storeIcon = 'C:\Users\Public\Documents\WinStep\Icons\store'
+	$storeIcon = $registry1Properties.PSObject.Properties |
+		Where-Object { $_.Value -like "$storeIcon*" } |
+		Select-Object -ExpandProperty Name
+
+	Set-ItemProperty -Path $registryPath0 -Name "GenThemeName" -Value $theme
+	Set-ItemProperty -Path $registryPath0 -Name "BitmapsFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
+	Set-ItemProperty -Path $registryPath0 -Name "GlobalBitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
+	Set-ItemProperty -Path $registryPath0 -Name "NeXuSBitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
+	Set-ItemProperty -Path $registryPath0 -Name "NeXuSThemeName" -Value $theme
+	Set-ItemProperty -Path $registryPath0 -Name "NeXuSImage3" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\NxBack.png"
+	Set-ItemProperty -Path $registryPath0 -Name "ClockBitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
+	Set-ItemProperty -Path $registryPath0 -Name "TrashBitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
+	Set-ItemProperty -Path $registryPath0 -Name "CPUBitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
+	Set-ItemProperty -Path $registryPath0 -Name "POP3BitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
+	Set-ItemProperty -Path $registryPath0 -Name "METARBitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
+	Set-ItemProperty -Path $registryPath0 -Name "NetBitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
+	Set-ItemProperty -Path $registryPath0 -Name "RAMBitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
+	Set-ItemProperty -Path $registryPath0 -Name "WANDABitmapFolder" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
+	Set-ItemProperty -Path $registryPath0 -Name "TrashEmptyIcon" -Value $recycleBinEmptyIcon
+	Set-ItemProperty -Path $registryPath0 -Name "TrashFullIcon" -Value $recycleBinFullIcon
+	Set-ItemProperty -Path $registryPath1 -Name "DockBitmapFolder1" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\"
+	Set-ItemProperty -Path $registryPath1 -Name "DockBack3Image1" -Value "C:\Users\Public\Documents\WinStep\Themes\$theme\NxBack.png"
+	Set-ItemProperty -Path $registryPath1 -Name "DockLabelColor1" -Value $DockLabelColor1
+	Set-ItemProperty -Path $registryPath1 -Name "DockLabelBackColor1" -Value $DockLabelBackColor1
+	Set-ItemProperty -Path $registryPath1 -Name "DockRunningIndicator1" -Value $dockRunningIndicator
+	if ($storeIcon) { Set-ItemProperty -Path $registryPath1 -Name $storeIcon -Value "C:\Users\Public\Documents\WinStep\Icons\store_$mode.ico" }
+	Set-ItemProperty -Path $registryPath2 -Name "TaskIcon2" -Value "C:\Users\Public\Documents\WinStep\Icons\store_$mode.ico"
+	Set-ItemProperty -Path $registryPath2 -Name "UIDarkMode" -Value $UIDarkMode
+	Set-ItemProperty -Path $registryPath2 -Name "Windows10Style" -Value $contextMenuStyle
+}
+
+Write-Host "Changing Recycle Bin icons and Start Orb color..." -ForegroundColor Yellow
+
 Set-ItemProperty -Path $registryPath3 -Name "(default)" -Value $recycleBinEmptyIcon
 Set-ItemProperty -Path $registryPath3 -Name "empty" -Value $recycleBinEmptyIcon
 Set-ItemProperty -Path $registryPath3 -Name "full" -Value $recycleBinFullIcon
@@ -102,6 +114,7 @@ Set-ItemProperty -Path $registryPath4 -Name "Icon" -Value $recycleBinEmptyIcon
 Set-ItemProperty -Path $registryPath5 -Name "OrbBitmap" -Value $orbBitmap
 
 Start-Sleep 2
+Write-Host "Changing Cursor color..." -ForegroundColor Yellow
 
 $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
 $RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
@@ -134,6 +147,11 @@ public class User32 {
 }
 "@
 [User32]::SystemParametersInfo(0x0057, 0, [IntPtr]::Zero, 0x0001) > $null 2>&1
-
+Write-Host "Starting Explorer..." -ForegroundColor Yellow
 Start-Process explorer
-try { Start-Process "C:\Program Files (x86)\Winstep\Nexus.exe" } catch {}
+if (Test-Path "C:\Program Files (x86)\Winstep\Nexus.exe") {
+	Write-Host "Changing Nexus Dock theme..." -ForegroundColor Yellow
+	try { Start-Process "C:\Program Files (x86)\Winstep\Nexus.exe" } catch {}
+}
+Write-Host "Theme switch completed!" -ForegroundColor Green
+Start-Sleep 2
