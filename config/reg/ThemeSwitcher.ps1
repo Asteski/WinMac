@@ -7,6 +7,7 @@ param
 	[string]
 	$mode2
 )
+Write-Host "Switching to $mode mode..."
 $ErrorActionPreference = 'SilentlyContinue'
 $WarningPreference = 'SilentlyContinue'
 $ProgressPreference = 'SilentlyContinue'
@@ -109,6 +110,8 @@ Set-ItemProperty -Path $registryPath3 -Name "empty" -Value $recycleBinEmptyIcon
 Set-ItemProperty -Path $registryPath3 -Name "full" -Value $recycleBinFullIcon
 Set-ItemProperty -Path $registryPath4 -Name "Icon" -Value $recycleBinEmptyIcon
 Set-ItemProperty -Path $registryPath5 -Name "OrbBitmap" -Value $orbBitmap
+
+Start-Sleep 2
 
 $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
 $RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
