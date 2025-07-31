@@ -391,7 +391,7 @@ foreach ($app in $selectedApps) {
             $everythingPT = Get-WingetPackage -name EverythingPT
             Uninstall-WinGetPackage -id Microsoft.PowerToys | Out-Null
             Uninstall-WinGetPackage -name $everythingPT.name | Out-Null
-            Uninstall-WinGetPackage -name ThioJoe.SvgThumbnailExtension | Out-Null
+            Uninstall-WinGetPackage -id ThioJoe.SvgThumbnailExtension | Out-Null
             Stop-Process -Name TriggerPeekWithSpacebar -Force
             $tasks = Get-ScheduledTask -TaskPath "\WinMac\" | Where-Object { $_.TaskName -match 'Peek' }
             foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
@@ -468,6 +468,7 @@ foreach ($app in $selectedApps) {
             Uninstall-WinGetPackage -name Windhawk | Out-Null
             Remove-Item -Path "$programsDir\Windhawk.lnk"
             Remove-Item "$env:LOCALAPPDATA\IconCache.db" -Force -ErrorAction SilentlyContinue
+            Uninstall-WinGetPackage -name SecureUxTheme | Out-Null
             Start-Process explorer
             Write-Host "Uninstalling Windhawk completed." -ForegroundColor Green
         }
