@@ -61,6 +61,8 @@ else {
 	#! Comment line 73 and remove multiline comment in lines 62 and 72 to force dark colored title bars with darkrectified theme
 	#! More info: https://github.com/Asteski/WinMac/wiki/Configuration#rectify11-themes
 	<#
+	Start-Process "$env:WINDIR\Resources\Themes\WinMac_$($mode).theme"
+	Start-Sleep 3  # Wait for theme to apply
 	if ($mode -eq 'Light') {
 		Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value 0 
 		Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "AccentColorInactive"
@@ -71,7 +73,15 @@ else {
 	}
 	Start-Process "$env:WINDIR\Resources\Themes\$($mode)rectified.theme"
 	#>
-	Start-Process "$env:WINDIR\Resources\Themes\WinMac_$($mode).theme"
+	
+	# Force DWM to apply the accent color changes by temporarily toggling the setting
+	# $currentColorPrevalence = Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -ErrorAction SilentlyContinue
+	# if ($currentColorPrevalence) {
+	# 	$oppositeValue = if ($currentColorPrevalence.ColorPrevalence -eq 1) { 0 } else { 1 }
+	# 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value $oppositeValue
+	# 	Start-Sleep 1
+	# 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\DWM" -Name "ColorPrevalence" -Value $currentColorPrevalence.ColorPrevalence
+	# }
 }
 
 $registry1Properties = Get-ItemProperty -Path $registryPath1
