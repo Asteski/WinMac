@@ -1,3 +1,5 @@
 #SingleInstance Force
 #NoTrayIcon
-!Backspace::Send("{Del}")
+!Backspace:: {
+    Send("{Del}")
+}
