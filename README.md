@@ -11,16 +11,6 @@
     <a href="#Credits">Credits</a>
 </p>
 
-## Dark
-![winmac_dark_01](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_01.png)
-</details>
-<details>
-    <summary>Click for more images</summary>
-    <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_02.png" alt="winmac_dark_02">
-    <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_03.png" alt="winmac_dark_03">
-    <img src="https://raw.githubusercontent.com/Asteski/WinMac/refs/heads/main/img/winmac_dark_04.png" alt="winmac_dark_04">
-</details>
-
 ## Light
 
 ![winmac_light_01](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_01.jpg)
@@ -32,6 +22,16 @@
     <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_04.png" alt="winmac_light_04">
 </details>
 
+## Dark
+
+![winmac_dark_01](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_01.png)
+</details>
+<details>
+    <summary>Click for more images</summary>
+    <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_02.png" alt="winmac_dark_02">
+    <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_03.png" alt="winmac_dark_03">
+    <img src="https://raw.githubusercontent.com/Asteski/WinMac/refs/heads/main/img/winmac_dark_04.png" alt="winmac_dark_04">
+</details>
 
 ## Features
 
