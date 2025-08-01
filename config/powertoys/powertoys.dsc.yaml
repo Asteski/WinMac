@@ -29,7 +29,7 @@ properties:
           ActivationMethod: 2
         Peek:
           Enabled: true
-          ActivationShortcut: "Alt+Space"
+          ActivationShortcut: "Alt+Shift+Space"
           CloseAfterLosingFocus: true
         AlwaysOnTop:
           Enabled: true
@@ -128,7 +128,7 @@ properties:
           Enabled: false
         PowerPreview:
           EnableSvgPreview: false
-          EnableSvgThumbnail: true
+          EnableSvgThumbnail: false
           EnableMdPreview: false
           EnableMonacoPreview: false
           EnablePdfPreview: false

@@ -1,6 +1,6 @@
 ﻿#SingleInstance Force
 #NoTrayIcon
-!m::
+#m::
 {
     If Not WinActive("ahk_class Shell_TrayWnd") and Not WinActive("ahk_exe Nexus.exe")
     {

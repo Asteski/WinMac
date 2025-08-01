@@ -11,10 +11,10 @@ WinX() {
 	WGT := WinGetTitle(id)
 	If (WGC = "Shell_TrayWnd" And control = "Start1") 
 	{
-    	return True
+		return True
 	}
 	Else If (WGC = "Button" And WGT = "Start") 
 	{
-	    return True
+		return True
 	} 
 }
