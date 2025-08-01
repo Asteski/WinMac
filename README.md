@@ -13,7 +13,7 @@
 
 ## Light
 
-![winmac_light_01](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_01.jpg)
+![winmac_light_01](https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_01.png)
 </details>
 <details>
     <summary>Click for more images</summary>
