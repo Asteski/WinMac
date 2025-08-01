@@ -468,8 +468,8 @@ foreach ($app in $selectedApps) {
             Stop-Process -Name windhawk -Force
             Uninstall-WinGetPackage -name Windhawk | Out-Null
             Remove-Item -Path "$programsDir\Windhawk.lnk"
-            Remove-Item -Path "$env:WINDIR\System32\ModernShutDownWindows.exe -Destination " -Recurse -Force
-            Remove-Item "$env:LOCALAPPDATA\IconCache.db" -Force -ErrorAction SilentlyContinue
+            Remove-Item -Path "$env:WINDIR\System32\ModernShutDownWindows.exe" -Force
+            Remove-Item -Path "$env:LOCALAPPDATA\IconCache.db" -Force
             Uninstall-WinGetPackage -name SecureUxTheme | Out-Null
             Start-Process explorer
             Write-Host "Uninstalling Windhawk completed." -ForegroundColor Green
