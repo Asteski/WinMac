@@ -67,7 +67,7 @@ if ($mode2 -eq 'NoApp') {
 	Set-ItemProperty -Path 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize' -Name 'SystemUsesLightTheme' -Type DWord -Value $OSMode
 }
 else {
-	#! Comment line 68 and uncomment line 69 to apply Rectify11 themes. In order to force dark titlebars with darkrectified theme,
+	#! Comment line 72 and uncomment line 73 to apply Rectify11 themes. In order to force dark titlebars with darkrectified theme,
 	#! enable 'Show accent colour on title bars and window borders' in Settings > Personalization > Colours, or use application like MicaForEveryone
 	Start-Process "$env:WINDIR\Resources\Themes\WinMac_$($mode).theme"
 	#Start-Process "$env:WINDIR\Resources\Themes\$($mode)rectified.theme"
