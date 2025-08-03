@@ -63,9 +63,9 @@ EasyLauncher batch script allows the installer to be run as a GUI or in a Termin
 Here are the ways you can run different deployment mods:
 
 - *EasyLauncher.bat* runs installation GUI by default
-- *EasyLayncher.bat -nogui* or *-n* runs installer fully in Terminal
-- *EasyLayncher.bat -uninstall* or *-u* runs uninstallation GUI
-- *EasyLayncher.bat -uninstallnogui* or *-un* runs uninstaller fully in Terminal
+- *EasyLauncher.bat -nogui* or *-n* runs installer fully in Terminal
+- *EasyLauncher.bat -uninstall* or *-u* runs uninstallation GUI
+- *EasyLauncher.bat -uninstallnogui* or *-un* runs uninstaller fully in Terminal
 
 > [!CAUTION]
 > **You must run batch file in Administrative session of Powershell 7 (not Windows Powershell) to ensure reliable installation/uninstallation process.**
