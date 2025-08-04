@@ -68,7 +68,7 @@ Here are the ways you can run different deployment mods:
 - *EasyLauncher.bat -uninstallnogui* or *-un* runs uninstaller fully in Terminal
 
 > [!CAUTION]
-> **You must run batch file in Administrative session of Powershell 7 (not Windows Powershell) to ensure reliable installation/uninstallation process.**
+> **You must run batch file in Administrative session of Powershell 7, not Windows Powershell!**
 
 You can choose between full or custom installation, if you only want to install specific WinMac components.
 
@@ -80,7 +80,8 @@ WinMac is supported by Windows 11 Home, Pro, LTSC, IoT LTSC, on both x86 and ARM
 - *Nexus Xtreme* theme with customised context menu to match Windows 11 design
 - enforce dark theme on legacy Windows components
 - disable keyboard shortcuts for full-screen apps
-- additional *Start Orbs* and *Icons Packs* for red and green colors
+- additional *Start Orbs* and *Icons Packs*, incl. red and green colored folders, and MacOS theme
+- 
 
 ## Credits
 
