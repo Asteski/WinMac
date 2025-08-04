@@ -81,7 +81,6 @@ WinMac is supported by Windows 11 Home, Pro, LTSC, IoT LTSC, on both x86 and ARM
 - enforce dark theme on legacy Windows components
 - disable keyboard shortcuts for full-screen apps
 - additional *Start Orbs* and *Icons Packs*, incl. red and green colored folders, and MacOS theme
-- 
 
 ## Credits
 
