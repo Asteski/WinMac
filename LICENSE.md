@@ -7,7 +7,7 @@ This project is a personal customization pack that modifies the look and feel of
 ## 📜 Licensing Breakdown
 
 ### 🔹 1. Scripts
-All PowerShell scripts created by me (Asteski) in this repository are licensed under the [MIT License](https://opensource.org/licenses/MIT).
+PowerShell, AutoHotkey scripts, and C programming language code created by me (Asteski) in this repository are licensed under the [MIT License](https://opensource.org/licenses/MIT).
 
 **MIT License Terms:**
 Permission is hereby granted, free of charge, to any person obtaining a copy of these scripts, to deal in the scripts without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the scripts, subject to the following conditions:
@@ -42,7 +42,7 @@ These items are:
 
 Please refer to each tool’s own [repository or website](https://github.com/Asteski/WinMac?tab=readme-ov-file#credits) for license terms.
 
-If you are a copyright holder and want your work removed or properly attributed, please open an issue or contact me.
+If you are a copyright holder and want your work removed or properly attributed, please open an issue or [contact me](mailto:asteski@gmail.com).
 
 ---
 
@@ -52,10 +52,9 @@ If you are a copyright holder and want your work removed or properly attributed,
 - It is **not affiliated with or endorsed by Apple Inc.**
 - Any icons or UI elements inspired by macOS are used for **educational and aesthetic purposes only**
 - Apple, macOS, and macOS icons are trademarks of Apple Inc., registered in the U.S. and other countries
-- Windows and Microsoft icons are trademarks of Microsoft Inc., registered in the U.S. and other countries
 
 ---
 
 ## 📬 Contact
 
-If you're a creator or license holder and want to discuss credit, removal, or attribution, please contact me by opening an issue on GitHub or messaging me directly.
+If you're a creator or license holder and want to discuss credit, removal, or attribution, please contact me by opening an issue on GitHub or [messaging me](mailto:asteski@gmail.com) directly.
