@@ -12,7 +12,7 @@ All PowerShell scripts created by me (Asteski) in this repository are licensed u
 **MIT License Terms:**
 Permission is hereby granted, free of charge, to any person obtaining a copy of these scripts, to deal in the scripts without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the scripts, subject to the following conditions:
 
-> The above copyright notice and this permission notice shall be included in all copies or substantial portions of the scripts.
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the scripts.
 
 The scripts are provided "as is", without warranty of any kind.
 
