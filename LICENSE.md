@@ -33,7 +33,7 @@ For full license details, see:
 ---
 
 ### 🔹 3. Third-Party Software and Assets
-This repository includes references to or installation scripts for [third-party tools](https://github.com/Asteski/WinMac?tab=readme-ov-file#credits) and may include third-party images or icons.
+This repository includes references to or installation commands for [third-party tools](https://github.com/Asteski/WinMac?tab=readme-ov-file#credits) and may include third-party images or icons.
 
 These items are:
 - Owned and licensed by their original creators
