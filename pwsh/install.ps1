@@ -884,16 +884,37 @@ foreach ($app in $selectedApps) {
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftRight" -Value 1
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "SearchBox" -Value "Hide"
                     if ($sysType -like "*ARM*") { Copy-Item -Path "..\bin\menu\arm64\WinMacMenu.exe" -Destination $winMacDirectory -Recurse -Force } else { Copy-Item -Path "..\bin\menu\x64\WinMacMenu.exe" -Destination $winMacDirectory -Recurse -Force }
-                    $winxFolderPath = "$env:LOCALAPPDATA\Microsoft\Windows\WinX\Group1"
-                    Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX\*" -Recurse -Force
-                    Expand-Archive -Path "..\config\menu\WinMac_menu.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\WinX\" -Force
-                    $WinverUWP = (Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP).InstallLocation
-                    $shortcutPath = "$winxFolderPath\20 - WinverUWP.lnk"
-                    $newTargetPath = "$WinverUWP\WinverUWP.exe"
-                    $WScriptShell = New-Object -ComObject WScript.Shell
-                    $shortcut = $WScriptShell.CreateShortcut($shortcutPath)
-                    $shortcut.TargetPath = $newTargetPath
-                    $shortcut.Save()
+                    Copy-Item -Path "..\config\menu\config.ini" -Destination "$winMacDirectory" -Force
+                    Copy-Item -Path "..\config\menu\WinMacMenu_RMB.ahk" -Destination "$winMacDirectory" -Force
+
+                    #!!
+                    
+                    $folderName = "WinMac"
+                    $taskFolder = "\" + $folderName
+                    $description = "WinMac Menu."
+                    $taskService = New-Object -ComObject "Schedule.Service"
+                    $taskService.Connect()
+                    $rootFolder = $taskService.GetFolder("\") 
+                    try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }
+                    if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
+                    $trigger = New-ScheduledTaskTrigger -AtLogon
+                    $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
+                    $action = New-ScheduledTaskAction -Execute WinMacKeyShortcuts.exe -WorkingDirectory $winMacDirectory
+                    $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
+                    Register-ScheduledTask -TaskName "Keyboard Shortcuts" -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -Description $description | Out-Null
+                    
+                    #!!
+                    
+                    # $winxFolderPath = "$env:LOCALAPPDATA\Microsoft\Windows\WinX\Group1"
+                    # Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX\*" -Recurse -Force
+                    # Expand-Archive -Path "..\config\menu\WinMac_menu.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\WinX\" -Force
+                    # $WinverUWP = (Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP).InstallLocation
+                    # $shortcutPath = "$winxFolderPath\20 - WinverUWP.lnk"
+                    # $newTargetPath = "$WinverUWP\WinverUWP.exe"
+                    # $WScriptShell = New-Object -ComObject WScript.Shell
+                    # $shortcut = $WScriptShell.CreateShortcut($shortcutPath)
+                    # $shortcut.TargetPath = $newTargetPath
+                    # $shortcut.Save()
                     Stop-Process -Name Explorer
                     Start-Process $shellExePath
                     Start-Sleep 5
