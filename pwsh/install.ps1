@@ -1020,7 +1020,7 @@ foreach ($app in $selectedApps) {
             New-Item -ItemType Directory -Path "$winMacDirectory\" | Out-Null
             if (Get-Process keyshortcuts) { Stop-Process -Name keyshortcuts }
             Copy-Item '..\bin\ahk\WinMacKeyShortcuts.exe' "$winMacDirectory" 
-            Copy-Item '..\bin\windowswitcher\' "$winMacDirectory" -Recurse
+            Copy-Item '..\bin\windowswitcher\' "$winMacDirectory"
             $description = "WinMac Keyboard Shortcuts - custom keyboard shortcut described in Commands cheat sheet wiki page."
             $folderName = "WinMac"
             $taskService = New-Object -ComObject "Schedule.Service"
@@ -1036,7 +1036,6 @@ foreach ($app in $selectedApps) {
             Register-ScheduledTask -TaskName "Keyboard Shortcuts" -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -Description $description | Out-Null
             Start-Process -FilePath "$winMacDirectory\WinMacKeyShortcuts.exe" -WorkingDirectory $winMacDirectory
             $description = "Window Switcher - Cycle between windows of the same app like in macOS - Alt+backtick."
-            $folderName = "WinMac"
             $taskService = New-Object -ComObject "Schedule.Service"
             $taskService.Connect()
             $rootFolder = $taskService.GetFolder("\") 
