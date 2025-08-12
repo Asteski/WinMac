@@ -1415,8 +1415,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
                 Set-ItemProperty -Path $registryPath2 -Name "Icon" -Value "%SystemRoot%\System32\imageres.dll,-55"
             }
         #? Send To Programs (create shortcut)
-            Copy-Item -Path "..\bin\Programs (create shortcut).exe" -Destination $winMacDirectory -Recurse -Force
-            # Create shortcut for "Programs (create shortcut).exe" in SendTo folder
+            Expand-Archive -Path '..\bin\Programs (create shortcut).zip' -DestinationPath $winMacDirectory -Force
             $sendToPath = Join-Path $env:APPDATA 'Microsoft\Windows\SendTo\Programs (create shortcut).lnk'
             $targetPath = Join-Path $winMacDirectory 'Programs (create shortcut).exe'
             $shell = New-Object -ComObject WScript.Shell
