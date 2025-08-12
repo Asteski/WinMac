@@ -1,7 +1,7 @@
 param (
     [switch]$noGUI
 )
-$version = "1.2.1"
+$version = "1.3.0"
 $ErrorActionPreference = "SilentlyContinue"
 $WarningPreference = "SilentlyContinue"
 $ProgressPreference = "SilentlyContinue"
@@ -885,36 +885,24 @@ foreach ($app in $selectedApps) {
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "SearchBox" -Value "Hide"
                     if ($sysType -like "*ARM*") { Copy-Item -Path "..\bin\menu\arm64\WinMacMenu.exe" -Destination $winMacDirectory -Recurse -Force } else { Copy-Item -Path "..\bin\menu\x64\WinMacMenu.exe" -Destination $winMacDirectory -Recurse -Force }
                     Copy-Item -Path "..\config\menu\config.ini" -Destination "$winMacDirectory" -Force
-                    Copy-Item -Path "..\config\menu\WinMacMenu_RMB.ahk" -Destination "$winMacDirectory" -Force
-
-                    #!!
-                    
+                    Copy-Item -Path "..\config\menu\WinMac_Menu_RMB_Trigger.exe" -Destination "$winMacDirectory" -Force
                     $folderName = "WinMac"
                     $taskFolder = "\" + $folderName
-                    $description = "WinMac Menu."
+                    $description = "WinMac Menu right mouse button trigger. Currently used as a workaround for the WinMac Menu being able to be opened with the right mouse button using Open-Shell, as it doesn't currently support that."
                     $taskService = New-Object -ComObject "Schedule.Service"
                     $taskService.Connect()
-                    $rootFolder = $taskService.GetFolder("\") 
+                    $rootFolder = $taskService.GetFolder("\")
                     try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }
                     if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
                     $trigger = New-ScheduledTaskTrigger -AtLogon
                     $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
-                    $action = New-ScheduledTaskAction -Execute WinMacKeyShortcuts.exe -WorkingDirectory $winMacDirectory
+                    $action = New-ScheduledTaskAction -Execute WinMac_Menu_RMB_Trigger.exe -WorkingDirectory $winMacDirectory
                     $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
-                    Register-ScheduledTask -TaskName "Keyboard Shortcuts" -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -Description $description | Out-Null
-                    
-                    #!!
-                    
-                    # $winxFolderPath = "$env:LOCALAPPDATA\Microsoft\Windows\WinX\Group1"
-                    # Remove-Item "$env:LOCALAPPDATA\Microsoft\Windows\WinX\*" -Recurse -Force
-                    # Expand-Archive -Path "..\config\menu\WinMac_menu.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\WinX\" -Force
-                    # $WinverUWP = (Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP).InstallLocation
-                    # $shortcutPath = "$winxFolderPath\20 - WinverUWP.lnk"
-                    # $newTargetPath = "$WinverUWP\WinverUWP.exe"
-                    # $WScriptShell = New-Object -ComObject WScript.Shell
-                    # $shortcut = $WScriptShell.CreateShortcut($shortcutPath)
-                    # $shortcut.TargetPath = $newTargetPath
-                    # $shortcut.Save()
+                    Register-ScheduledTask -TaskName "WinMac Menu RMB Trigger" -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -Description $description | Out-Null
+                    Start-Process -FilePath "$winMacDirectory\WinMac_Menu_RMB_Trigger.exe" -WorkingDirectory $winMacDirectory | Out-Null
+                    $WinverUWP = ((Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP).InstallLocation) + "\WinverUWP.exe"
+                    New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\winver.exe" -Force | Out-Null
+                    Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\winver.exe" -Name "Debugger" -Value $WinverUWP -Type String
                     Stop-Process -Name Explorer
                     Start-Process $shellExePath
                     Start-Sleep 5
@@ -1426,6 +1414,16 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
                 Set-ItemProperty -Path $registryPath1 -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-54"
                 Set-ItemProperty -Path $registryPath2 -Name "Icon" -Value "%SystemRoot%\System32\imageres.dll,-55"
             }
+        #? Send To Programs (create shortcut)
+            Copy-Item -Path "..\bin\Programs (create shortcut).exe" -Destination $winMacDirectory -Recurse -Force
+            # Create shortcut for "Programs (create shortcut).exe" in SendTo folder
+            $sendToPath = Join-Path $env:APPDATA 'Microsoft\Windows\SendTo\Programs (create shortcut).lnk'
+            $targetPath = Join-Path $winMacDirectory 'Programs (create shortcut).exe'
+            $shell = New-Object -ComObject WScript.Shell
+            $shortcut = $shell.CreateShortcut($sendToPath)
+            $shortcut.TargetPath = $targetPath
+            $shortcut.IconLocation = $targetPath
+            $shortcut.Save()   
         }
     }
 }
