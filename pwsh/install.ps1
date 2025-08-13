@@ -893,7 +893,7 @@ foreach ($app in $selectedApps) {
                     $taskService.Connect()
                     $rootFolder = $taskService.GetFolder("\")
                     try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }
-                    if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
+                    if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) |w Out-Null }
                     $trigger = New-ScheduledTaskTrigger -AtLogon
                     $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
                     $action = New-ScheduledTaskAction -Execute WinMac_Menu_RMB_Trigger.exe -WorkingDirectory $winMacDirectory
