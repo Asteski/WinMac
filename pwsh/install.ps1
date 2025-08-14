@@ -1417,7 +1417,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             }
         #? Send To Programs (create shortcut)
             Expand-Archive -Path '..\bin\ProgramsShortcut.zip' -DestinationPath $winMacDirectory -Force
-            $sendToPath = Join-Path $env:APPDATA 'Microsoft\Windows\SendTo\ProgramsShortcut.lnk'
+            $sendToPath = Join-Path $env:APPDATA 'Microsoft\Windows\SendTo\Programs (create shortcut).lnk'
             $targetPath = Join-Path $winMacDirectory 'ProgramsShortcut.exe'
             $shell = New-Object -ComObject WScript.Shell
             $shortcut = $shell.CreateShortcut($sendToPath)
