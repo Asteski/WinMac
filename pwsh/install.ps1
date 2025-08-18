@@ -388,6 +388,7 @@ else
 }
 
 if ($selectedApps -like '*4*' -and $selectedApps -like '*5*') {
+    Clear-Host
 Write-Host @"
 
 `e[93m$("You can choose between WinMac start menu or Classic start menu.")`e[0m
@@ -420,6 +421,7 @@ elseif ($selectedApps -notlike '*4*' -and $selectedApps -like '*5*'){
 }
 
 if ($selectedApps -like '*3*') {
+    Clear-Host
 Write-Host @"
 
 `e[93m$("You can choose between WinMac prompt or macOS-like prompt.")`e[0m
@@ -459,6 +461,7 @@ userName@computerName ~ %
     }
 }
 if ($selectedApps -like '*4*' -or $selectedApps -like '*9*') {
+    Clear-Host
     $roundedOrSquared = Read-Host "`nEnter 'R' for rounded or 'S' for squared shell corners"
     if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') {
         Write-Host "Using rounded corners." -ForegroundColor Green
@@ -473,6 +476,7 @@ if ($selectedApps -like '*4*' -or $selectedApps -like '*9*') {
     }
 }
 if ($selectedApps -like '*4*' -or $selectedApps -like '*7*' -or $selectedApps -like '*9*' -or $selectedApps -like '*12*') {
+    Clear-Host
     $lightOrDark = Read-Host "`nEnter 'L' for light or 'D' for dark themed Windows"
     if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
         Write-Host "Using light theme." -ForegroundColor Green
@@ -490,6 +494,7 @@ if ($selectedApps -like '*4*' -or $selectedApps -like '*7*' -or $selectedApps -l
     }
 }
 if ($selectedApps -like '*4*') {
+    Clear-Host
     $exStyle = Read-Host "`nEnter 'X' for modern or 'C' for classic file explorer style"
     if ($exStyle -eq 'X' -or $exStyle -eq 'x') {
         Write-Host "Using modern File Explorer." -ForegroundColor Green
@@ -505,6 +510,7 @@ if ($selectedApps -like '*4*') {
     }
 }
 if ($selectedApps -like '*9*' -or $selectedApps -like '*6*'-or $selectedApps -like '1') {
+    Clear-Host
     $blueOrYellow = Read-Host "`nEnter 'B' for blue or 'Y' for yellow folders"
     if ($blueOrYellow -eq 'B' -or $blueOrYellow -eq 'b') {
         Write-Host "Using blue folders." -ForegroundColor Green
@@ -520,6 +526,7 @@ if ($selectedApps -like '*9*' -or $selectedApps -like '*6*'-or $selectedApps -li
     }
 }
 if ($selectedApps -like '*9*') {
+    Clear-Host
     $dockDynamic = Read-Host "`nEnter 'D' for default or 'X' for dynamic dock"
     if ($dockDynamic -eq 'D' -or $dockDynamic -eq 'd') {
         Write-Host "Using default Dock." -ForegroundColor Green
