@@ -20,7 +20,7 @@ if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir 
 }
 if (-not $adminTest) {
     Add-Type -AssemblyName PresentationFramework
-   [void][System.Windows.MessageBox]::Show("This script must be run as Administrator.", "Insufficient Privileges", 'OK', 'Error')
+    [void][System.Windows.MessageBox]::Show("This script must be run as Administrator.", "Insufficient Privileges", 'OK', 'Error')
     exit
 }
 function Get-WindowsTheme {
@@ -235,20 +235,18 @@ GitHub: https://github.com/Asteski/WinMac
 -----------------------------------------------------------------------
 "@ -ForegroundColor Cyan
 Write-Host @"
-
-This script is responsible for uninstalling all or specific WinMac 
-components.
+The author of this script is not responsible for any damage caused by 
+running it. Highly recommend to create a system restore point 
+before proceeding with the installation process to ensure you can 
+revert any changes if necessary.
+"@ -ForegroundColor Black -BackgroundColor Red
+Write-Host @"
 
 PowerShell profile files will be removed, please make sure to backup 
 your current profile if needed.
 
 Vim, Nexus, Windhawk and MacType packages will show prompt to uninstall,
 please confirm the uninstallations manually.
-
-The author of this script is not responsible for any damage caused by 
-running it. Highly recommend to create a system restore point 
-before proceeding with the installation process to ensure you can 
-revert any changes if necessary.
 
 For guide on how to use the script, please refer to the Wiki page 
 on WinMac GitHub page:
