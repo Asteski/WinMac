@@ -264,6 +264,8 @@ on WinMac GitHub page: https://github.com/Asteski/WinMac/wiki
         Write-Host "Choosing custom uninstallation." -ForegroundColor Yellow
         Start-Sleep 2
         $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Hot Corners"; "11"="MacType"; "12"="Other"}
+    Clear-Host
+    Show-Header
 Write-Host @"
 
 `e[93m$("Please select options you want to uninstall:")`e[0m
@@ -316,8 +318,8 @@ Write-Host @"
         Write-Host "Invalid input. Defaulting to full uninstallation." -ForegroundColor Yellow
         Start-Sleep 2
     }
-    Start-Sleep 1
-    Write-Host
+    Clear-Host
+    Show-Header
     $installConfirmation = Read-Host "Are you sure you want to start the uninstallation process (Y/n)"
 
     if ($installConfirmation -ne 'y' -or $installConfirmation -ne 'Y') {
@@ -333,8 +335,8 @@ for ($a=3; $a -ge 0; $a--) {
     Write-Host "`rStarting uninstallation process in $a" -NoNewLine -ForegroundColor Yellow
     Start-Sleep 1
 }
-Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
 #* Nuget check
+Write-Host
 Write-Host "Checking Package Provider (Nuget)" -ForegroundColor Yellow
 $nugetProvider = Get-PackageProvider -Name NuGet
 if ($null -eq $nugetProvider) {

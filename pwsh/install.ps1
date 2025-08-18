@@ -614,6 +614,7 @@ if ($null -eq $nugetProvider) {
     Write-Host "NuGet is already installed." -ForegroundColor DarkGreen
 }
 #* Winget check
+Write-Host
 Write-Host "Checking Package Manager (Winget)" -ForegroundColor Yellow
 $wingetCliCheck = winget -v
 if ($null -eq $wingetCliCheck) {
