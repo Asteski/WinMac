@@ -6,7 +6,8 @@ $MButton::Send("#{x}")
 Return
 #HotIf
 
-WinX() {
+WinX()
+{
     MouseGetPos , , &id, &control
 	WGC := WinGetClass(id)
 	WGT := WinGetTitle(id)
