@@ -245,8 +245,11 @@ revert any changes if necessary.
 PowerShell profile files will be removed, please make sure to backup 
 your current profile if needed.
 
-Vim, Nexus, Windhawk and MacType packages will show prompt to uninstall,
-please confirm the uninstallations manually.
+PowerToys, Vim, Nexus, Windhawk and MacType packages will show prompt
+to uninstall, please confirm the uninstallations manually.
+
+Do not restart your computer after uninstallation of MacType when 
+prompted!
 
 For guide on how to use the script, please refer to the Wiki page 
 on WinMac GitHub page: https://github.com/Asteski/WinMac/wiki
