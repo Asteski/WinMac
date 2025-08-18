@@ -603,7 +603,6 @@ for ($a=3; $a -ge 0; $a--) {
 }
     Clear-Host
     Show-Header
-Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
 #* Nuget check
 Write-Host "Checking Package Provider (Nuget)" -ForegroundColor Yellow
 $nugetProvider = Get-PackageProvider -Name NuGet
