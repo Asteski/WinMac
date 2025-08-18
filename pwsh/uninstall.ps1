@@ -1,7 +1,7 @@
 param (
     [switch]$noGUI
 )
-$version = "1.2.0"
+$version = "1.3.0"
 $ErrorActionPreference = "SilentlyContinue"
 $WarningPreference = "SilentlyContinue"
 $ProgressPreference = "SilentlyContinue"
@@ -20,7 +20,7 @@ if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir 
 }
 if (-not $adminTest) {
     Add-Type -AssemblyName PresentationFramework
-   [void][System.Windows.MessageBox]::Show("This script must be run as Administrator.", "Insufficient Privileges", 'OK', 'Error')
+    [void][System.Windows.MessageBox]::Show("This script must be run as Administrator.", "Insufficient Privileges", 'OK', 'Error')
     exit
 }
 function Get-WindowsTheme {
@@ -35,6 +35,17 @@ function Get-WindowsTheme {
     } catch {
         return "Light"
     }
+}
+function Show-Header {
+    Write-Host "-----------------------------------------------------------------------" -ForegroundColor Cyan
+    Write-Host "                Welcome to WinMac Uninstallation Wizard                " -ForegroundColor Cyan
+    Write-Host "                            Version: $version                          " -ForegroundColor Cyan
+    Write-Host "                            Author: Asteski                            " -ForegroundColor Cyan
+    Write-Host "               GitHub: https://github.com/Asteski/WinMac               " -ForegroundColor Cyan
+    Write-Host "-----------------------------------------------------------------------" -ForegroundColor Cyan
+    Write-Host "             " -NoNewline
+    Write-Host "NO LIABILITY ACCEPTED, PROCEED WITH CAUTION!" -ForegroundColor Black -BackgroundColor Red -NoNewline
+    Write-Host "              "
 }
 $windowsTheme = Get-WindowsTheme
 #* GUI
@@ -223,37 +234,25 @@ if (!($noGUI)) {
 }
 else {
     Clear-Host
+    Show-Header
 Write-Host @"
------------------------------------------------------------------------
-
-Welcome to WinMac Deployment!
-
-Version: $version
-Author: Asteski
-GitHub: https://github.com/Asteski/WinMac
-
------------------------------------------------------------------------
-"@ -ForegroundColor Cyan
-Write-Host @"
-
-This script is responsible for uninstalling all or specific WinMac 
-components.
-
-PowerShell profile files will be removed, please make sure to backup 
-your current profile if needed.
-
-Vim, Nexus, Windhawk and MacType packages will show prompt to uninstall,
-please confirm the uninstallations manually.
 
 The author of this script is not responsible for any damage caused by 
 running it. Highly recommend to create a system restore point 
 before proceeding with the installation process to ensure you can 
 revert any changes if necessary.
 
-For guide on how to use the script, please refer to the Wiki page 
-on WinMac GitHub page:
+PowerShell profile files will be removed, please make sure to backup 
+your current profile if needed.
 
-https://github.com/Asteski/WinMac/wiki
+PowerToys, Vim, Nexus, Windhawk and MacType packages will show prompt
+to uninstall, please confirm the uninstallations manually.
+
+Do not restart your computer after uninstallation of MacType when 
+prompted!
+
+For guide on how to use the script, please refer to the Wiki page 
+on WinMac GitHub page: https://github.com/Asteski/WinMac/wiki
 
 "@ -ForegroundColor Yellow
     Write-Host "-----------------------------------------------------------------------" -ForegroundColor Cyan
@@ -261,11 +260,15 @@ https://github.com/Asteski/WinMac/wiki
     if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
         $selectedApps = "1","2","3","4","5","6","7","8","9","10","11","12"
         Write-Host "Choosing full uninstallation." -ForegroundColor Yellow
+        Start-Sleep 2
+
     }
     elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
         Write-Host "Choosing custom uninstallation." -ForegroundColor Yellow
-        Start-Sleep 1
+        Start-Sleep 2
         $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Hot Corners"; "11"="MacType"; "12"="Other"}
+    Clear-Host
+    Show-Header
 Write-Host @"
 
 `e[93m$("Please select options you want to uninstall:")`e[0m
@@ -310,15 +313,17 @@ Write-Host @"
             }
         }
         Write-Host "`e[92m$("Selected options:")`e[0m $($selectedAppNames -join ', ')"
+        Start-Sleep 2
     }
     else
     {
         $selectedApps = "1","2","3","4","5","6","7","8","9","10","11","12"
         Write-Host "Invalid input. Defaulting to full uninstallation." -ForegroundColor Yellow
+        Start-Sleep 2
     }
-    Start-Sleep 1
-    Write-Host
-    $installConfirmation = Read-Host "Are you sure you want to start the uninstallation process (Y/n)"
+    Clear-Host
+    Show-Header
+    $installConfirmation = Read-Host "`nAre you sure you want to start the uninstallation process (Y/n)"
 
     if ($installConfirmation -ne 'y' -or $installConfirmation -ne 'Y') {
         Write-Host "Uninstallation process aborted." -ForegroundColor Red
@@ -333,8 +338,10 @@ for ($a=3; $a -ge 0; $a--) {
     Write-Host "`rStarting uninstallation process in $a" -NoNewLine -ForegroundColor Yellow
     Start-Sleep 1
 }
-Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
 #* Nuget check
+Clear-Host
+Show-Header
+Write-Host
 Write-Host "Checking Package Provider (Nuget)" -ForegroundColor Yellow
 $nugetProvider = Get-PackageProvider -Name NuGet
 if ($null -eq $nugetProvider) {

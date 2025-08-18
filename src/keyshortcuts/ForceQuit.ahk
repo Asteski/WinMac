@@ -1,4 +1,5 @@
-﻿#SingleInstance Force
+﻿#Requires AutoHotkey v2.0
+#SingleInstance Force
 #NoTrayIcon
 ^!Esc::
 {
@@ -8,4 +9,12 @@
         active_window_process_name := WinGetProcessName("ahk_id " active_window_id)
         Run("taskkill /F /IM " active_window_process_name, , "Hide")
     }
+    Else If WinActive("ahk_exe explorer.exe") and WinActive("ahk_class CabinetWClass")
+    {
+        active_window_id := WinGetID("A")
+        active_window_process_name := WinGetProcessName("ahk_id " active_window_id)
+        Run("taskkill /F /IM " active_window_process_name, , "Hide")
+    }
 }
+
+#q::Send("!{F4}")

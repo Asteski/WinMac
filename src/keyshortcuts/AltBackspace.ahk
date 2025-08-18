@@ -1,5 +1,7 @@
+#Requires AutoHotkey v2.0
 #SingleInstance Force
 #NoTrayIcon
-!Backspace:: {
+!Backspace::
+{
     Send("{Del}")
 }

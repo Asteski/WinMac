@@ -1,3 +1,4 @@
+#Requires AutoHotkey v2.0
 #SingleInstance Force
 #NoTrayIcon
 #HotIf WinX()
@@ -5,7 +6,8 @@ $MButton::Send("#{x}")
 Return
 #HotIf
 
-WinX() {
+WinX()
+{
     MouseGetPos , , &id, &control
 	WGC := WinGetClass(id)
 	WGT := WinGetTitle(id)

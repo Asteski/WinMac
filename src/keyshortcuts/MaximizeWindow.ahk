@@ -1,10 +1,15 @@
+#Requires AutoHotkey v2.0
 #SingleInstance Force
 #NoTrayIcon
 #Enter::
 {
-    If Not WinActive("ahk_class Shell_TrayWnd") and Not WinActive("ahk_exe Nexus.exe")
+    if WinExist("A") ; Check if any window is active
     {
-        WinMaximize("A")
+        if not WinActive("ahk_class Shell_TrayWnd") and not WinActive("ahk_exe Nexus.exe")
+        {
+            WinMaximize("A")
+        }
     }
+    ; Do nothing if no window is focused 
     return
 }
