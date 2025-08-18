@@ -36,6 +36,17 @@ function Get-WindowsTheme {
         return "Light"
     }
 }
+function Show-Header {
+    Write-Host "-----------------------------------------------------------------------" -ForegroundColor Cyan
+    Write-Host "                Welcome to WinMac Uninstallation Wizard                " -ForegroundColor Cyan
+    Write-Host "                            Version: $version                          " -ForegroundColor Cyan
+    Write-Host "                            Author: Asteski                            " -ForegroundColor Cyan
+    Write-Host "               GitHub: https://github.com/Asteski/WinMac               " -ForegroundColor Cyan
+    Write-Host "-----------------------------------------------------------------------" -ForegroundColor Cyan
+    Write-Host "             " -NoNewline
+    Write-Host "NO LIABILITY ACCEPTED, PROCEED WITH CAUTION!" -ForegroundColor Black -BackgroundColor Red -NoNewline
+    Write-Host "              "
+}
 $windowsTheme = Get-WindowsTheme
 #* GUI
 if (!($noGUI)) {

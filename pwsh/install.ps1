@@ -39,10 +39,10 @@ function Get-WindowsTheme {
 }
 function Show-Header {
     Write-Host "-----------------------------------------------------------------------" -ForegroundColor Cyan
-    Write-Host "                 Welcome to WinMac Installation Wizard                 " -ForegroundColor Green
-    Write-Host "                            Version: $version                          " -ForegroundColor Green
-    Write-Host "                            Author: Asteski                            " -ForegroundColor Green
-    Write-Host "               GitHub: https://github.com/Asteski/WinMac               " -ForegroundColor Green
+    Write-Host "                 Welcome to WinMac Installation Wizard                 " -ForegroundColor Cyan
+    Write-Host "                            Version: $version                          " -ForegroundColor Cyan
+    Write-Host "                            Author: Asteski                            " -ForegroundColor Cyan
+    Write-Host "               GitHub: https://github.com/Asteski/WinMac               " -ForegroundColor Cyan
     Write-Host "-----------------------------------------------------------------------" -ForegroundColor Cyan
     Write-Host "             " -NoNewline
     Write-Host "NO LIABILITY ACCEPTED, PROCEED WITH CAUTION!" -ForegroundColor Black -BackgroundColor Red -NoNewline
@@ -378,7 +378,7 @@ Write-Host @"
         }
     }
     Write-Host "`e[92m$("Selected options:")`e[0m $($selectedAppNames -join ', ')"
-    Start-Sleep 1
+    Start-Sleep 2
 }
 else
 {
@@ -600,6 +600,8 @@ for ($a=3; $a -ge 0; $a--) {
     Write-Host "`rStarting installation process in $a" -NoNewLine -ForegroundColor Yellow
     Start-Sleep 1
 }
+    Clear-Host
+    Show-Header
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
 #* Nuget check
 Write-Host "Checking Package Provider (Nuget)" -ForegroundColor Yellow
