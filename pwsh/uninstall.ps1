@@ -320,7 +320,7 @@ Write-Host @"
     }
     Clear-Host
     Show-Header
-    $installConfirmation = Read-Host "Are you sure you want to start the uninstallation process (Y/n)"
+    $installConfirmation = Read-Host "`nAre you sure you want to start the uninstallation process (Y/n)"
 
     if ($installConfirmation -ne 'y' -or $installConfirmation -ne 'Y') {
         Write-Host "Uninstallation process aborted." -ForegroundColor Red
