@@ -257,10 +257,12 @@ on WinMac GitHub page: https://github.com/Asteski/WinMac/wiki
     if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
         $selectedApps = "1","2","3","4","5","6","7","8","9","10","11","12"
         Write-Host "Choosing full uninstallation." -ForegroundColor Yellow
+        Start-Sleep 2
+
     }
     elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
         Write-Host "Choosing custom uninstallation." -ForegroundColor Yellow
-        Start-Sleep 1
+        Start-Sleep 2
         $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Hot Corners"; "11"="MacType"; "12"="Other"}
 Write-Host @"
 
@@ -306,11 +308,13 @@ Write-Host @"
             }
         }
         Write-Host "`e[92m$("Selected options:")`e[0m $($selectedAppNames -join ', ')"
+        Start-Sleep 2
     }
     else
     {
         $selectedApps = "1","2","3","4","5","6","7","8","9","10","11","12"
         Write-Host "Invalid input. Defaulting to full uninstallation." -ForegroundColor Yellow
+        Start-Sleep 2
     }
     Start-Sleep 1
     Write-Host
