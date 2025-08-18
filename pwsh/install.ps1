@@ -315,13 +315,13 @@ else {
     Show-Header
 Write-Host @"
 
-PowerShell profile files will be removed and replaced with new ones.
-Please make sure to backup your current profile if needed.
-
 The author of this script is not responsible for any damage caused by 
 running it. Highly recommend to create a system restore point 
 before proceeding with the installation process to ensure you can 
 revert any changes if necessary.
+
+PowerShell profile files will be removed and replaced with new ones.
+Please make sure to backup your current profile if needed.
 
 For guide on how to use the script, please refer to the Wiki page 
 on WinMac GitHub page: https://github.com/Asteski/WinMac/wiki

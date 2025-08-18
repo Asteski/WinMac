@@ -234,24 +234,13 @@ if (!($noGUI)) {
 }
 else {
     Clear-Host
+    Show-Header
 Write-Host @"
------------------------------------------------------------------------
 
-Welcome to WinMac Deployment!
-
-Version: $version
-Author: Asteski
-GitHub: https://github.com/Asteski/WinMac
-
------------------------------------------------------------------------
-"@ -ForegroundColor Cyan
-Write-Host @"
 The author of this script is not responsible for any damage caused by 
 running it. Highly recommend to create a system restore point 
 before proceeding with the installation process to ensure you can 
 revert any changes if necessary.
-"@ -ForegroundColor Black -BackgroundColor Red
-Write-Host @"
 
 PowerShell profile files will be removed, please make sure to backup 
 your current profile if needed.
@@ -260,9 +249,7 @@ Vim, Nexus, Windhawk and MacType packages will show prompt to uninstall,
 please confirm the uninstallations manually.
 
 For guide on how to use the script, please refer to the Wiki page 
-on WinMac GitHub page:
-
-https://github.com/Asteski/WinMac/wiki
+on WinMac GitHub page: https://github.com/Asteski/WinMac/wiki
 
 "@ -ForegroundColor Yellow
     Write-Host "-----------------------------------------------------------------------" -ForegroundColor Cyan
