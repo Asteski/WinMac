@@ -101,6 +101,7 @@ WinMac is supported by Windows 11 Home, Pro, LTSC, IoT LTSC, on both x86 and ARM
 - [SVG Thumbnail Extension](https://github.com/ThioJoe/win-svg-thumbs-rust) by ThioJoe
 - [SecureUxTheme](https://github.com/namazso/SecureUxTheme) by namazso
 - [Windows Modern Cursors](https://github.com/imshvc/windows-cursors-modern) by imshvc
+- [Window Switcher](https://github.com/sigoden/window-switcher) by sigoden
 - [PSTree](https://github.com/santisq/PSTree) by santisq
 - [ntop](https://github.com/gsass1/NTop) by gsass1
 - [ptr](https://github.com/8LWXpg/ptr) by 8LWXpg
