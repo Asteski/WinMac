@@ -2,7 +2,7 @@
 
 [Theme]
 ; Windows - IDS_THEME_DISPLAYNAME_AERO_LIGHT
-DisplayName=Windows XP Light Theme
+DisplayName=Windows XP Light theme
 SetLogonBackground=1
 
 ; Computer - SHIDI_SERVER

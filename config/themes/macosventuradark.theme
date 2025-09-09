@@ -2,7 +2,7 @@
 
 [Theme]
 ; Windows - IDS_THEME_DISPLAYNAME_THEMEA
-DisplayName=MacOS Ventura Dark Theme
+DisplayName=macOS Ventura Dark theme
 SetLogonBackground=1
 
 ; Computer - SHIDI_SERVER

@@ -2,7 +2,7 @@
 
 [Theme]
 ; Windows - IDS_THEME_DISPLAYNAME_THEMEA
-DisplayName=Windows 10 Dark Theme
+DisplayName=Windows 10 Dark theme
 SetLogonBackground=1
 
 ; Computer - SHIDI_SERVER

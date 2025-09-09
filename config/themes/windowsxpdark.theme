@@ -2,7 +2,7 @@
 
 [Theme]
 ; Windows - IDS_THEME_DISPLAYNAME_THEMEA
-DisplayName=Windows XP Dark Theme
+DisplayName=Windows XP Dark theme
 SetLogonBackground=1
 
 ; Computer - SHIDI_SERVER

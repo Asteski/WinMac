@@ -656,9 +656,18 @@ else {
 
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
 #! WinMac deployment
-#* Create Icons directory and copy icons
+#* Copy Common Resources files like icons, themes and wallpapers
+takeown /F "%WINDIR%\Resources" /A /R /D Y
+icacls "%WINDIR%\Resources" /grant Administrators:F /T
+takeown /F "%WINDIR%\Web" /A /R /D Y
+icacls "%WINDIR%\Web" /grant Administrators:F /T
 New-Item -ItemType Directory -Path "$ENV:WINDIR\Resources\Icons" -Force | Out-Null
 Copy-Item "..\config\icons\*" "$ENV:WINDIR\Resources\Icons\" -Recurse -Force
+Copy-Item "..\config\themes\*" "$ENV:WINDIR\Resources\Themes\" -Recurse -Force
+Expand-Archive -Path "..\config\wallpapers\wallpapers.zip" -DestinationPath "$ENV:WINDIR\Web\Wallpaper" -Force
+icacls "%WINDIR%\Cursors" /inheritance:e /T
+icacls "%WINDIR%\Resources" /inheritance:e /T
+icacls "%WINDIR%\Web" /inheritance:e /T
 #* Install WinMac components
 foreach ($app in $selectedApps) {
     switch ($app.Trim()) {

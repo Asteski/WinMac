@@ -2,7 +2,7 @@
 
 [Theme]
 ; Windows - IDS_THEME_DISPLAYNAME_THEMEA
-DisplayName=MacOS Monterey Dark Theme
+DisplayName=macOS Monterey Dark theme
 SetLogonBackground=1
 
 ; Computer - SHIDI_SERVER
