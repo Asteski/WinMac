@@ -1,7 +1,12 @@
 Windows Registry Editor Version 5.00 
 
+; Created by: Shawn Brink
+; Created on: August 14, 2022
+; Updated on: September 24, 2022
+; Tutorial: https://www.elevenforum.com/t/add-choose-light-or-dark-mode-context-menu-in-windows-11.8316/
+
 [HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode]
-"MUIVerb"="Theme"
+"MUIVerb"="Theme mode"
 "Position"="Bottom"
 "SubCommands"=""
 "Icon"="themeui.dll,-701"
@@ -15,14 +20,14 @@ Windows Registry Editor Version 5.00
 "Icon"="imageres.dll,-5411"
 
 [HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\AppANDWindowsMode\shell\001flyout\command]
-@="pwsh -NoProfile -ExecutionPolicy Bypass -File %LOCALAPPDATA%\\WinMac\\ThemeSwitcher.ps1 -mode Light"
+@="cmd.exe /c reg add HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize /v AppsUseLightTheme /t REG_DWORD /d 1 /f & reg add HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize /v SystemUsesLightTheme /t REG_DWORD /d 1 /f & taskkill /f /im explorer.exe & start \"\" powershell.exe -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File \"C:\\Windows\\Resources\\Scripts\\ThemeSwitcher.ps1\" -light"
 
 [HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\AppANDWindowsMode\shell\002flyout]
 "MUIVerb"="Dark"
 "Icon"="imageres.dll,-5412"
 
 [HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\AppANDWindowsMode\shell\002flyout\command]
-@="pwsh -NoProfile -ExecutionPolicy Bypass -File %LOCALAPPDATA%\\WinMac\\ThemeSwitcher.ps1 -mode Dark"
+@="cmd.exe /c reg add HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize /v AppsUseLightTheme /t REG_DWORD /d 0 /f & reg add HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize /v SystemUsesLightTheme /t REG_DWORD /d 0 /f & taskkill /f /im explorer.exe & start \"\" powershell.exe -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File \"C:\\Windows\\Resources\\Scripts\\ThemeSwitcher.ps1\" -dark"
 
 [HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\AppMode]
 "MUIVerb"="App mode"
@@ -52,11 +57,11 @@ Windows Registry Editor Version 5.00
 "Icon"="imageres.dll,-5411"
 
 [HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\WindowsMode\shell\001flyout\command]
-@="pwsh -NoProfile -ExecutionPolicy Bypass -File %LOCALAPPDATA%\\WinMac\\ThemeSwitcher.ps1 -mode Light -mode2 NoApp"
+@="cmd.exe /c reg add HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize /v SystemUsesLightTheme /t REG_DWORD /d 1 /f & taskkill /f /im explorer.exe & start \"\" powershell.exe -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File \"C:\\Windows\\Resources\\Scripts\\ThemeSwitcher.ps1\" -light"
 
 [HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\WindowsMode\shell\002flyout]
 "MUIVerb"="Dark"
 "Icon"="imageres.dll,-5412"
 
 [HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\WindowsMode\shell\002flyout\command]
-@="pwsh -NoProfile -ExecutionPolicy Bypass -File %LOCALAPPDATA%\\WinMac\\ThemeSwitcher.ps1 -mode Dark -mode2 NoApp"
+@="cmd.exe /c reg add HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize /v SystemUsesLightTheme /t REG_DWORD /d 0 /f & taskkill /f /im explorer.exe & start \"\" powershell.exe -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File \"C:\\Windows\\Resources\\Scripts\\ThemeSwitcher.ps1\" -dark"

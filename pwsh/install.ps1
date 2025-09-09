@@ -1494,6 +1494,15 @@ IconResource=C:\Windows\Resources\Icons\programs.ico
             $shortcut.TargetPath = $targetPath
             $shortcut.IconLocation = $targetPath
             $shortcut.Save()
+        #? Set Theme
+            if ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
+                Start-Process -FilePath "$ENV:WINDIR\Resources\Themes\dark.theme"
+                reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v Wallpaper /t REG_SZ /d "$ENV:WINDIR\Web\Wallpaper\Surface\img19.jpg" /f
+            } else {
+                Start-Process -FilePath "$ENV:WINDIR\Resources\Themes\aero.theme"
+                reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v Wallpaper /t REG_SZ /d "$ENV:WINDIR\Web\Wallpaper\Surface\img0.jpg" /f
+            }
+            Stop-Process -n SystemSettings -Force
         }
     }
 }
