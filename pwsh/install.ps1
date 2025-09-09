@@ -1447,17 +1447,11 @@ IconResource=C:\Windows\Resources\Icons\programs.ico
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\Resources\Icons\blank.ico" -Type String | Out-Null
         #? Configuring file explorer and context menus
             Get-ChildItem ..\config\reg\remove\* -e *theme* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
-            $sourceFilePath = "..\config\reg\add\Add_Theme_Mode_in_Context_Menu.reg"
-            $tempFilePath = "$wmTemp\Add_Theme_Mode_in_Context_Menu.reg"
-            $ps1FilePath = "..\config\reg\ThemeSwitcher.ps1"
             if (-not (Test-Path -Path $winMacDirectory)) {New-Item -ItemType Directory -Path $winMacDirectory -Force | Out-Null }
-            Copy-Item -Path $ps1FilePath -Destination "$ENV:WINDIR\Resources\Themes" -Force
-            Copy-Item -Path $sourceFilePath -Destination $wmTemp -Force
-            $appData = $ENV:LOCALAPPDATA -replace '\\', '\\'
-            (Get-Content -Path $tempFilePath) -replace '%LOCALAPPDATA%', $appData | Set-Content -Path $tempFilePath
+            Copy-Item -Path '..\config\reg\ThemeSwitcher.ps1' -Destination "$ENV:WINDIR\Resources\Themes" -Force
             reg import '..\config\reg\add\Add_Hidden_items_to_context_menu.reg' > $null 2>&1
             reg import '..\config\reg\add\Add_Navigation_pane_to_context_menu.reg' > $null 2>&1
-            reg import "$wmTemp\Add_Theme_Mode_in_Context_Menu.reg" > $null 2>&1
+            reg import '..\config\reg\add\Add_Theme_Mode_in_Context_Menu.reg' > $null 2>&1
             Copy-Item -Path "..\config\themes\*" -Destination "$ENV:WINDIR\Resources\Themes" -Recurse -Force
             New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowIconOverlay" -Value 0 -PropertyType DWord -Force | Out-Null
         #? End Task
