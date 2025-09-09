@@ -658,10 +658,10 @@ Write-Host "`n------------------------------------------------------------------
 #! WinMac deployment
 #* Copy Common Resources files
 Write-Host "Copying Common Resource files to Windows directory..." -ForegroundColor Yellow
-takeown /F "$env:WINDIR\Resources" /A /R /D Y
-icacls "$env:WINDIR\Resources" /grant Administrators:F /T
-takeown /F "$env:WINDIR\Web" /A /R /D Y
-icacls "$env:WINDIR\Web" /grant Administrators:F /T
+takeown /F "$env:WINDIR\Resources" /A /R /D Y > $null 2>&1
+icacls "$env:WINDIR\Resources" /grant Administrators:F /T > $null 2>&1
+takeown /F "$env:WINDIR\Web" /A /R /D Y > $null 2>&1
+icacls "$env:WINDIR\Web" /grant Administrators:F /T > $null 2>&1
 New-Item -ItemType Directory -Path "$ENV:WINDIR\Resources\Icons" -Force | Out-Null
 Copy-Item "..\config\icons\*" "$ENV:WINDIR\Resources\Icons\" -Recurse -Force
 Copy-Item "..\config\themes\*" "$ENV:WINDIR\Resources\Themes\" -Recurse -Force
@@ -671,9 +671,8 @@ $part2 = [System.IO.File]::ReadAllBytes("$wallpapersParentDirectory\wallpapers.z
 [System.IO.File]::WriteAllBytes("$wmTemp\wallpapers.zip", $part1 + $part2)
 Expand-Archive -Path "$wmTemp\wallpapers.zip" -DestinationPath "$ENV:WINDIR\Web\Wallpaper" -Force
 Remove-Item "$wmTemp\wallpapers.zip" -Force
-icacls "$env:WINDIR\Cursors" /inheritance:e /T
-icacls "$env:WINDIR\Resources" /inheritance:e /T
-icacls "$env:WINDIR\Web" /inheritance:e /T
+icacls "$env:WINDIR\Resources" /inheritance:e /T > $null 2>&1
+icacls "$env:WINDIR\Web" /inheritance:e /T > $null 2>&1
 Write-Host "Copying Common Resource files to Windows directory completed." -ForegroundColor Green
 #* Install WinMac components
 foreach ($app in $selectedApps) {
@@ -1504,10 +1503,10 @@ IconResource=C:\Windows\Resources\Icons\programs.ico
         #? Set Theme
             if ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
                 Start-Process -FilePath "$ENV:WINDIR\Resources\Themes\dark.theme"
-                reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v Wallpaper /t REG_SZ /d "$ENV:WINDIR\Web\Wallpaper\Surface\img19.jpg" /f
+                Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "Wallpaper" -Value "$ENV:WINDIR\Web\Wallpaper\Surface\img19.jpg"
             } else {
                 Start-Process -FilePath "$ENV:WINDIR\Resources\Themes\aero.theme"
-                reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v Wallpaper /t REG_SZ /d "$ENV:WINDIR\Web\Wallpaper\Surface\img0.jpg" /f
+                Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "Wallpaper" -Value "$ENV:WINDIR\Web\Wallpaper\Surface\img0.jpg"
             }
             Stop-Process -n SystemSettings -Force
         }
