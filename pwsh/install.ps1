@@ -653,9 +653,6 @@ if ($null -eq $wingetCliCheck) {
 else {
     Write-Host "Winget installation completed." -ForegroundColor Green
 }
-
-Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
-#! WinMac deployment
 #* Copy Common Resources files
 Write-Host "Copying Common Resource files to Windows directory..." -ForegroundColor Yellow
 takeown /F "$env:WINDIR\Resources" /A /R /D Y > $null 2>&1
@@ -674,6 +671,8 @@ Remove-Item "$wmTemp\wallpapers.zip" -Force
 icacls "$env:WINDIR\Resources" /inheritance:e /T > $null 2>&1
 icacls "$env:WINDIR\Web" /inheritance:e /T > $null 2>&1
 Write-Host "Copying Common Resource files to Windows directory completed." -ForegroundColor Green
+Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
+#! WinMac deployment
 #* Install WinMac components
 foreach ($app in $selectedApps) {
     switch ($app.Trim()) {
