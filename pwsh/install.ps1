@@ -656,7 +656,8 @@ else {
 
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
 #! WinMac deployment
-#* Copy Common Resources files like icons, themes and wallpapers
+#* Copy Common Resources files
+Write-Host "Copying Common Resource files to Windows directory..." -ForegroundColor Yellow
 takeown /F "$env:WINDIR\Resources" /A /R /D Y
 icacls "$env:WINDIR\Resources" /grant Administrators:F /T
 takeown /F "$env:WINDIR\Web" /A /R /D Y
@@ -673,6 +674,7 @@ Remove-Item "$wmTemp\wallpapers.zip" -Force
 icacls "$env:WINDIR\Cursors" /inheritance:e /T
 icacls "$env:WINDIR\Resources" /inheritance:e /T
 icacls "$env:WINDIR\Web" /inheritance:e /T
+Write-Host "Copying Common Resource files to Windows directory completed." -ForegroundColor Green
 #* Install WinMac components
 foreach ($app in $selectedApps) {
     switch ($app.Trim()) {
