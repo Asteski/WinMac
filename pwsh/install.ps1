@@ -395,10 +395,11 @@ Write-Host @"
 
 `e[93m$("You can choose between WinMac menu or Classic Start menu.")`e[0m
 
-WinMac menu replaces the default Start menu with a standalone and customizable 
-application that resembles Apple menu.
+WinMac menu replaces the default Start menu with 
+standalone and customizable application that resembles Apple menu.
 
-Classic Start menu replaces the default Start menu with enhanced Windows 7 start menu.
+Classic Start menu replaces the default Start menu with 
+enhanced and modernised Windows 7 start menu.
 
 "@
 
