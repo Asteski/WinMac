@@ -42,13 +42,13 @@ DefaultValue=Windows Modern v2 - Aero White - (x1)
 DefaultValue.MUI=@main.cpl,-1020
 
 [Control Panel\Desktop]
-Wallpaper=%SystemRoot%\web\wallpaper\Surface\img19.jpg
+Wallpaper=0
 TileWallpaper=0
 WallpaperStyle=10
 Pattern=
 
 [VisualStyles]
-Path=%ResourceDir%\Themes\FullDark\Dark.msstyles
+Path=%ResourceDir%\Themes\Full Dark\Dark.msstyles
 ColorStyle=NormalColor
 Size=NormalSize
 AutoColorization=0
