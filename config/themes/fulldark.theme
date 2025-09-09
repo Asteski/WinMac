@@ -19,8 +19,8 @@ DefaultValue=%SystemRoot%\System32\imageres.dll,-25
 
 ; Recycle Bin - SHIDI_RECYCLERFULL SHIDI_RECYCLER
 [CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon]
-Full=%SystemRoot%\Resources\Icons\macos_bin_full_dark.ico
-Empty=%SystemRoot%\Resources\Icons\macos_bin_empty_dark.ico
+Full=%SystemRoot%\Resources\Icons\recycle_bin_full_dark.ico
+Empty=%SystemRoot%\Resources\Icons\recycle_bin_empty_dark.ico
 
 [Control Panel\Cursors]
 AppStarting=%SystemRoot%\cursors\windows-modern-v2\x1\working-in-background_black.ani
@@ -52,7 +52,7 @@ Path=%ResourceDir%\Themes\Full Dark\Dark.msstyles
 ColorStyle=NormalColor
 Size=NormalSize
 AutoColorization=0
-ColorizationColor=0XC40078D4
+ColorizationColor=0XD90b0b0b
 SystemMode=Dark
 AppMode=Dark
 
