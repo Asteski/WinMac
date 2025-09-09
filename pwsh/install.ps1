@@ -664,7 +664,8 @@ icacls "%WINDIR%\Web" /grant Administrators:F /T
 New-Item -ItemType Directory -Path "$ENV:WINDIR\Resources\Icons" -Force | Out-Null
 Copy-Item "..\config\icons\*" "$ENV:WINDIR\Resources\Icons\" -Recurse -Force
 Copy-Item "..\config\themes\*" "$ENV:WINDIR\Resources\Themes\" -Recurse -Force
-Expand-Archive -Path "..\config\wallpapers\wallpapers.zip" -DestinationPath "$ENV:WINDIR\Web\Wallpaper" -Force
+Get-Content '..\config\wallpapers\wallpapers.zip.001' '..\config\wallpapers\wallpapers.zip.002' -Encoding Byte -ReadCount 0 | Set-Content '..\Temp\wallpapers.zip' -Encoding Byte
+Expand-Archive -Path "..\Temp\wallpapers.zip" -DestinationPath "$ENV:WINDIR\Web\Wallpaper" -Force
 icacls "%WINDIR%\Cursors" /inheritance:e /T
 icacls "%WINDIR%\Resources" /inheritance:e /T
 icacls "%WINDIR%\Web" /inheritance:e /T
