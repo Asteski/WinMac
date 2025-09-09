@@ -659,12 +659,15 @@ else {
 }
 #* Copy common resource files to Windows directory
 Write-Host "Copying common resource files to Windows directory..." -ForegroundColor Yellow
-New-Item -ItemType Directory -Path "$ENV:WINDIR\Resources\Scripts" -Force | Out-Null
-takeown /F "$env:WINDIR\Resources" /A /R /D Y > $null 2>&1
-icacls "$env:WINDIR\Resources" /grant Administrators:F /T > $null 2>&1
-takeown /F "$env:WINDIR\Web" /A /R /D Y > $null 2>&1
-icacls "$env:WINDIR\Web" /grant Administrators:F /T > $null 2>&1
 New-Item -ItemType Directory -Path "$ENV:WINDIR\Resources\Icons" -Force | Out-Null
+New-Item -ItemType Directory -Path "$ENV:WINDIR\Resources\Scripts" -Force | Out-Null
+New-Item -ItemType Directory -Path "$ENV:WINDIR\Resources\Themes\Legacy" -Force | Out-Null
+# takeown /F "$env:WINDIR\Resources" /A /R /D Y > $null 2>&1
+# icacls "$env:WINDIR\Resources" /grant Administrators:F /T > $null 2>&1
+# takeown /F "$env:WINDIR\Web" /A /R /D Y > $null 2>&1
+# icacls "$env:WINDIR\Web" /grant Administrators:F /T > $null 2>&1
+Copy-Item "$ENV:WINDIR\Resources\Themes\aero.theme" "$ENV:WINDIR\Resources\Themes\Legacy\aero.theme" -Force
+Copy-Item "$ENV:WINDIR\Resources\Themes\dark.theme" "$ENV:WINDIR\Resources\Themes\Legacy\dark.theme" -Force
 Copy-Item "..\config\icons\*" "$ENV:WINDIR\Resources\Icons\" -Recurse -Force
 Copy-Item "..\config\themes\*" "$ENV:WINDIR\Resources\Themes\" -Recurse -Force
 $wallpapersParentDirectory = Join-Path $PWD '..\config\wallpapers'
@@ -673,8 +676,8 @@ $part2 = [System.IO.File]::ReadAllBytes("$wallpapersParentDirectory\wallpapers.z
 [System.IO.File]::WriteAllBytes("$wmTemp\wallpapers.zip", $part1 + $part2)
 Expand-Archive -Path "$wmTemp\wallpapers.zip" -DestinationPath "$ENV:WINDIR\Web\Wallpaper" -Force
 Remove-Item "$wmTemp\wallpapers.zip" -Force
-icacls "$env:WINDIR\Resources" /inheritance:e /T > $null 2>&1
-icacls "$env:WINDIR\Web" /inheritance:e /T > $null 2>&1
+# icacls "$env:WINDIR\Resources" /inheritance:e /T > $null 2>&1
+# icacls "$env:WINDIR\Web" /inheritance:e /T > $null 2>&1
 Write-Host "Copying common resource files to Windows directory completed." -ForegroundColor Green
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
 #! WinMac deployment
