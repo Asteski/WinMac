@@ -1508,7 +1508,7 @@ IconResource=C:\Windows\Resources\Icons\programs.ico
                 Start-Process -FilePath "$ENV:WINDIR\Resources\Themes\aero.theme"
                 Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "Wallpaper" -Value "$ENV:WINDIR\Web\Wallpaper\Surface\img0.jpg"
             }
-            Stop-Process -n SystemSettings -Force
+            if (Get-Process -n SystemSettings -ErrorAction SilentlyContinue) { Stop-Process -n SystemSettings -Force }
         }
     }
 }
