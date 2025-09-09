@@ -840,6 +840,7 @@ foreach ($app in $selectedApps) {
                 Set-ItemProperty -Path $sabRegPath -Name "SysTrayStyle" -Value 0
                 Set-ItemProperty -Path $sabRegPath -Name "SysTrayActionCenter" -Value 0
                 Set-ItemProperty -Path $sabRegPath -Name "SysTraySpacierIcons" -Value 1
+                Set-ItemProperty -Path $sabRegPath -Name "DarkMagic" -Value 1
                 Set-ItemProperty -Path $sabRegPath -Name "DriveGrouping" -Value 1
                 Set-ItemProperty -Path $sabRegPath -Name "SysTrayClockFormat" -Value 3
                 Set-ItemProperty -Path $sabRegPath -Name "SysTrayInputSwitch" -Value 0
