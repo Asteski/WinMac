@@ -9,7 +9,7 @@ $programsDir = "$ENV:APPDATA\Microsoft\Windows\Start Menu\Programs"
 $winMacDirectory = "$ENV:LOCALAPPDATA\WinMac"
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName PresentationFramework
-if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null }
+if (-not (Test-Path -Path "../temp")) {$wmTemp = (New-Item -ItemType Directory -Path "../temp").FullName }
 $sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
 $osVersion = (Get-WmiObject -Class Win32_OperatingSystem).Caption
 $user = [Security.Principal.WindowsIdentity]::GetCurrent()
@@ -625,13 +625,13 @@ if ($null -eq $nugetProvider) {
 Write-Host "Checking Package Manager (Winget)" -ForegroundColor Yellow
 $wingetCliCheck = winget -v
 if ($null -eq $wingetCliCheck) {
-    Invoke-WebRequest -Uri 'https://aka.ms/getwinget' -OutFile '..\temp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
-    Invoke-WebRequest -Uri 'https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx' -OutFile '..\temp\Microsoft.VCLibs.x64.14.00.Desktop.appx'
-    Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.6/Microsoft.UI.Xaml.2.8.x64.appx' -OutFile '..\temp\Microsoft.UI.Xaml.2.8.x64.appx'
+    Invoke-WebRequest -Uri 'https://aka.ms/getwinget' -OutFile "$wmTemp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
+    Invoke-WebRequest -Uri 'https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx' -OutFile "$wmTemp\Microsoft.VCLibs.x64.14.00.Desktop.appx"
+    Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.6/Microsoft.UI.Xaml.2.8.x64.appx' -OutFile "$wmTemp\Microsoft.UI.Xaml.2.8.x64.appx"
     Add-AppxPackage '..\bin\appx\Microsoft.VCLibs.140.00.UWPDesktop_14.0.33728.0_x64__8wekyb3d8bbwe.appx'
-    Add-AppxPackage '..\temp\Microsoft.VCLibs.x64.14.00.Desktop.appx'
-    Add-AppxPackage '..\temp\Microsoft.UI.Xaml.2.8.x64.appx'
-    Add-AppxPackage '..\temp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
+    Add-AppxPackage "$wmTemp\Microsoft.VCLibs.x64.14.00.Desktop.appx"
+    Add-AppxPackage "$wmTemp\Microsoft.UI.Xaml.2.8.x64.appx"
+    Add-AppxPackage "$wmTemp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
 }
 $wingetClientCheck = Get-InstalledModule -Name Microsoft.WinGet.Client
 if ($null -eq $wingetClientCheck) {
@@ -664,8 +664,12 @@ icacls "$env:WINDIR\Web" /grant Administrators:F /T
 New-Item -ItemType Directory -Path "$ENV:WINDIR\Resources\Icons" -Force | Out-Null
 Copy-Item "..\config\icons\*" "$ENV:WINDIR\Resources\Icons\" -Recurse -Force
 Copy-Item "..\config\themes\*" "$ENV:WINDIR\Resources\Themes\" -Recurse -Force
-Get-Content '..\config\wallpapers\wallpapers.zip.001' '..\config\wallpapers\wallpapers.zip.002' -Encoding Byte -ReadCount 0 | Set-Content '..\Temp\wallpapers.zip' -Encoding Byte
-Expand-Archive -Path "..\Temp\wallpapers.zip" -DestinationPath "$ENV:WINDIR\Web\Wallpaper" -Force
+$wallpapersParentDirectory = Join-Path $PWD '..\config\wallpapers'
+$part1 = [System.IO.File]::ReadAllBytes("$wallpapersParentDirectory\wallpapers.zip.001")
+$part2 = [System.IO.File]::ReadAllBytes("$wallpapersParentDirectory\wallpapers.zip.002")
+[System.IO.File]::WriteAllBytes("$wmTemp\wallpapers.zip", $part1 + $part2)
+Expand-Archive -Path "$wmTemp\wallpapers.zip" -DestinationPath "$ENV:WINDIR\Web\Wallpaper" -Force
+Remove-Item "$wmTemp\wallpapers.zip" -Force
 icacls "$env:WINDIR\Cursors" /inheritance:e /T
 icacls "$env:WINDIR\Resources" /inheritance:e /T
 icacls "$env:WINDIR\Web" /inheritance:e /T
@@ -932,6 +936,7 @@ foreach ($app in $selectedApps) {
                     New-Item -ItemType Directory -Path "$winMacDirectory\" | Out-Null
                     Write-Host "Installing Open-Shell..." -ForegroundColor DarkYellow
                     $shellExePath = Join-Path $ENV:PROGRAMFILES "Open-Shell\StartMenu.exe"
+                    $oshMenuSettings = 'HKCU:\Software\OpenShell\StartMenu\Settings'
                     Start-Process -FilePath "..\bin\osh\osh.exe" -ArgumentList "/QUIET", "ADDLOCAL=StartMenu" -Wait -NoNewWindow | Out-Null
                     Stop-Process -Name StartMenu -Force | Out-Null
                     New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force | Out-Null
@@ -940,18 +945,18 @@ foreach ($app in $selectedApps) {
                     New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\OpenShell\Settings" -Force | Out-Null
                     New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell\StartMenu\Settings" -Force | Out-Null
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\OpenShell\Settings" -Name "Nightly" -Value 0x00000001
-                    Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "Version" -Value 0x040400bf
-                    Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "DisablePinExt" -Value 1
-                    Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "EnableContextMenu" -Value 0
-                    Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "MouseClick" -Value "Command"
-                    Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftClick" -Value "Command"
-                    Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "WinKey" -Value "Command"
-                    Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "MouseClickCommand" -Value "$winMacDirectory\WinMacMenu.exe"
-                    Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftClickCommand" -Value "Nothing"
-                    Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "WinKeyCommand" -Value "$winMacDirectory\WinMacMenu.exe"
-                    Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftWin" -Value "Nothing"
-                    Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftRight" -Value 1
-                    Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "SearchBox" -Value "Hide"
+                    Set-ItemProperty -Path $oshMenuSettings -Name "Version" -Value 0x040400bf
+                    Set-ItemProperty -Path $oshMenuSettings -Name "DisablePinExt" -Value 1
+                    Set-ItemProperty -Path $oshMenuSettings -Name "EnableContextMenu" -Value 0
+                    Set-ItemProperty -Path $oshMenuSettings -Name "MouseClick" -Value "Command"
+                    Set-ItemProperty -Path $oshMenuSettings -Name "ShiftClick" -Value "Command"
+                    Set-ItemProperty -Path $oshMenuSettings -Name "WinKey" -Value "Command"
+                    Set-ItemProperty -Path $oshMenuSettings -Name "MouseClickCommand" -Value "$winMacDirectory\WinMacMenu.exe"
+                    Set-ItemProperty -Path $oshMenuSettings -Name "ShiftClickCommand" -Value "Nothing"
+                    Set-ItemProperty -Path $oshMenuSettings -Name "WinKeyCommand" -Value "$winMacDirectory\WinMacMenu.exe"
+                    Set-ItemProperty -Path $oshMenuSettings -Name "ShiftWin" -Value "Nothing"
+                    Set-ItemProperty -Path $oshMenuSettings -Name "ShiftRight" -Value 1
+                    Set-ItemProperty -Path $oshMenuSettings -Name "SearchBox" -Value "Hide"
                     if ($sysType -like "*ARM*") { Copy-Item -Path "..\bin\menu\arm64\WinMacMenu.exe" -Destination $winMacDirectory -Recurse -Force } else { Copy-Item -Path "..\bin\menu\x64\WinMacMenu.exe" -Destination $winMacDirectory -Recurse -Force }
                     Copy-Item -Path "..\config\menu\config.ini" -Destination $winMacDirectory -Force
                     Copy-Item -Path "..\bin\menu\WinMac_Menu_RMB_Trigger.exe" -Destination $winMacDirectory -Force
@@ -996,7 +1001,7 @@ foreach ($app in $selectedApps) {
                 Stop-Process -Name Windhawk -Force
                 Start-Sleep 2
             }
-            $windhawkRoot = "$Env:ProgramData\Windhawk"
+            $windhawkRoot = "$ENV:ProgramData\Windhawk"
             if ($sysType -like "*ARM*") {
                 $windhawkBackup = 'windhawk-backup-arm.zip'
             } else {
@@ -1018,7 +1023,7 @@ foreach ($app in $selectedApps) {
             New-Item -ItemType Directory -Path $engineFolder -Force | Out-Null
             Copy-Item -Path $modsBackup -Destination $engineFolder -Recurse -Force
             $regContent = Get-Content $regBackup
-            $regContent = $regContent -replace "%LOCALAPPDATA%", $Env:LOCALAPPDATA.replace('\','\\')
+            $regContent = $regContent -replace "%LOCALAPPDATA%", $ENV:LOCALAPPDATA.replace('\','\\')
             if ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {
                 $regContent = $regContent -replace "WinMac-blue-folders", "WinMac-yellow-folders"
             }
@@ -1037,7 +1042,7 @@ foreach ($app in $selectedApps) {
             }
             Stop-Process -Name explorer -Force
             Move-Item -Path "C:\Users\Public\Desktop\Windhawk.lnk" -Destination $programsDir -Force
-            Start-Process "$Env:ProgramFiles\Windhawk\Windhawk.exe"
+            Start-Process "$ENV:ProgramFiles\Windhawk\Windhawk.exe"
             Write-Host "Windhawk installation completed." -ForegroundColor Green
             }
     #* Stahky
@@ -1169,7 +1174,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             $downloadsPath = "$ENV:USERPROFILE\Downloads"
             if ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
                 $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "Rounded", "Squared" }
-                $modifiedFile = "..\temp\winstep.reg"
+                $modifiedFile = "$wmTemp\winstep.reg"
                 $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 
                 $regFile = $modifiedFile
                 if ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
@@ -1181,7 +1186,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                     $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "recycle_bin_empty_light", "recycle_bin_empty_dark" }
                     $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "recycle_bin_full_light", "recycle_bin_full_dark" }
                     $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace '"Windows10Style"="False"', '"Windows10Style"="True"' }
-                    $modifiedFile = "..\temp\winstep.reg"
+                    $modifiedFile = "$wmTemp\winstep.reg"
                     $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8
                 }
             }
@@ -1194,7 +1199,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                 $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "recycle_bin_empty_light", "recycle_bin_empty_dark" }
                 $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace "recycle_bin_full_light", "recycle_bin_full_dark" }
                 $modifiedContent = $modifiedContent | ForEach-Object { $_ -replace '"Windows10Style"="False"', '"Windows10Style"="True"' }
-                $modifiedFile = "..\temp\winstep.reg"
+                $modifiedFile = "$wmTemp\winstep.reg"
                 $modifiedContent | Out-File -FilePath $modifiedFile -Encoding UTF8 
                 $regFile = $modifiedFile
             }
@@ -1252,13 +1257,13 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
     #* Hot Corners
         "10"{
             Write-Host "Installing Hot Corners..." -ForegroundColor Yellow
-            $outputPath = '..\temp\WinXCorners.zip'
+            $outputPath = "$wmTemp\WinXCorners.zip"
             $winXCornersUrl = "https://github.com/vhanla/winxcorners/releases/download/1.3.2/WinXCorners1.3.2.zip"
             $winXCornersConfigPath = '..\config\hotcorners\settings.ini'
             $destinationPath = "$ENV:LOCALAPPDATA\WinXCorners"
             $winLaunchUrl = "https://github.com/jensroth-git/WinLaunch/releases/download/v.0.7.3.0/WinLaunch.0.7.3.0.zip"
             $winLaunchConfigPath = '..\config\hotcorners\Settings.xml'
-            $winLaunchOutputPath = '..\temp\WinLaunch.zip'
+            $winLaunchOutputPath = "$wmTemp\WinLaunch.zip"
             $winLaunchDestinationPath = "$ENV:LOCALAPPDATA\WinLaunch"
             $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.8'
             if ($null -eq $dotNetRuntime) {
@@ -1442,16 +1447,16 @@ IconResource=C:\Windows\Resources\Icons\programs.ico
         #? Configuring file explorer and context menus
             Get-ChildItem ..\config\reg\remove\* -e *theme* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
             $sourceFilePath = "..\config\reg\add\Add_Theme_Mode_in_Context_Menu.reg"
-            $tempFilePath = "..\temp\Add_Theme_Mode_in_Context_Menu.reg"
+            $tempFilePath = "$wmTemp\Add_Theme_Mode_in_Context_Menu.reg"
             $ps1FilePath = "..\config\reg\ThemeSwitcher.ps1"
             if (-not (Test-Path -Path $winMacDirectory)) {New-Item -ItemType Directory -Path $winMacDirectory -Force | Out-Null }
-            Copy-Item -Path $ps1FilePath -Destination $winMacDirectory -Force
-            Copy-Item -Path $sourceFilePath -Destination '..\temp\' -Force
+            Copy-Item -Path $ps1FilePath -Destination "$ENV:WINDIR\Resources\Themes" -Force
+            Copy-Item -Path $sourceFilePath -Destination $wmTemp -Force
             $appData = $ENV:LOCALAPPDATA -replace '\\', '\\'
             (Get-Content -Path $tempFilePath) -replace '%LOCALAPPDATA%', $appData | Set-Content -Path $tempFilePath
             reg import '..\config\reg\add\Add_Hidden_items_to_context_menu.reg' > $null 2>&1
             reg import '..\config\reg\add\Add_Navigation_pane_to_context_menu.reg' > $null 2>&1
-            reg import '..\temp\Add_Theme_Mode_in_Context_Menu.reg' > $null 2>&1
+            reg import "$wmTemp\Add_Theme_Mode_in_Context_Menu.reg" > $null 2>&1
             Copy-Item -Path "..\config\themes\*" -Destination "$ENV:WINDIR\Resources\Themes" -Recurse -Force
             New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowIconOverlay" -Value 0 -PropertyType DWord -Force | Out-Null
         #? End Task
@@ -1508,7 +1513,7 @@ IconResource=C:\Windows\Resources\Icons\programs.ico
 }
 Stop-Process -n explorer
 Start-Sleep 2
-Remove-Item "..\temp" -Recurse -Force
+Remove-Item $wmTemp -Recurse -Force
 Start-Sleep 3
 if (-not (Get-Process -Name explorer)) { Start-Process explorer }
 Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan

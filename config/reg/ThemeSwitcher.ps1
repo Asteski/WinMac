@@ -45,7 +45,7 @@ switch ($param) {
 # Change Theme in Nexus
 $themePath = "C:\Users\Public\Documents\WinStep\Themes\$theme\"
 $registry1Properties = Get-ItemProperty -Path $registryPath1
-$storeIcon = '$ENV:WINDIR\Resources\Icons\store'
+$storeIcon = "$ENV:WINDIR\Resources\Icons\store"
 $storeIcon = $registry1Properties.PSObject.Properties |
 Where-Object { $_.Value -like "$storeIcon*" } |
 	Select-Object -ExpandProperty Name
