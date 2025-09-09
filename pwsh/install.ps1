@@ -59,7 +59,7 @@ if (!($noGUI)) {
     $isCheckedLight = if ($windowsTheme -eq "Light") { "True" } else { "False" }
     $isCheckedDark = if ($windowsTheme -eq "Dark") { "True" } else { "False" }
     $parentDirectory = Split-Path -Path $PSScriptRoot -Parent
-    $iconFolderName = "config"
+    $iconFolderName = "config\icons"
     $iconFolderPath = Join-Path -Path $parentDirectory -ChildPath $iconFolderName
     $topTextBlock = "Windows and macOS Hybrid Installation Wizard"
     $bottomTextBlock1 = '↓ Important Notes ↓'
@@ -1151,8 +1151,8 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Copy-Item -Path "..\config\dock\indicators\*" -Destination "$winStep\NeXus\Indicators\" -Recurse -Force
             New-Item -ItemType Directory -Path "$winStep\Sounds" -Force | Out-Null
             Copy-Item -Path "..\config\dock\sounds\*" -Destination "$winStep\Sounds\" -Recurse -Force
-            New-Item -ItemType Directory -Path "$winStep\Icons" -Force | Out-Null
-            Copy-Item "..\config\icons" "$winStep" -Recurse -Force
+            New-Item -ItemType Directory -Path "$ENV:WINDIR\Resources\Icons" -Force | Out-Null
+            Copy-Item "..\config\icons\*" "$ENV:WINDIR\Resources\Icons\" -Recurse -Force
             $regFile = "..\config\dock\winstep.reg"
             $downloadsPath = "$env:USERPROFILE\Downloads"
             if ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
@@ -1190,18 +1190,18 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             if ($selectedApps -like '*10*' -or (Test-Path "$env:LOCALAPPDATA\WinLaunch")) {
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Label9" -Value "Launchpad"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path9" -Value "$env:LOCALAPPDATA\WinLaunch\WinLaunch.exe"
-                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath9" -Value "C:\Users\Public\Documents\Winstep\Icons\launchpad.ico"
+                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath9" -Value "$ENV:WINDIR\Resources\Icons\launchpad.ico"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type9" -Value "1"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Label10" -Value "Capture Desktop"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path10" -Value "*78"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type10" -Value "2"
-                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath10" -Value "C:\Users\Public\Documents\Winstep\Icons\camera.ico"
+                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath10" -Value "$ENV:WINDIR\Resources\Icons\camera.ico"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockNoItems1" -Value "10"
             } else {
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Label9" -Value "Capture Desktop"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path9" -Value "*78"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type9" -Value "2"
-                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath9" -Value "C:\Users\Public\Documents\Winstep\Icons\camera.ico"
+                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath9" -Value "$ENV:WINDIR\Resources\Icons\camera.ico"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockNoItems1" -Value "9"
             }
                 Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "DockLabelColorHotTrack1" 
@@ -1214,7 +1214,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockRespectReserved1" -Value "False"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockReserveScreen1" -Value "False"
         }
-            if ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath0" -Value "C:\\Users\\Public\\Documents\\Winstep\\Icons\\explorer_default.ico"}
+            if ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath0" -Value "C:\\Windows\\Resources\\Icons\\explorer_default.ico"}
             $scriptBlock2 = "Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe'"
             $tempScript = Join-Path $env:TEMP "nonadmin_$([guid]::NewGuid().ToString()).ps1"
             Set-Content -Path $tempScript -Value $scriptBlock2 -Encoding UTF8
@@ -1426,9 +1426,8 @@ IconResource=C:\Windows\Resources\Icons\programs.ico
             New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force | Out-Null
             Get-QuickAccessPinned -NamespacePath 'shell:::{645FF040-5081-101B-9F08-00AA002F954E}'
         #? Remove shortcut arrows
-            Copy-Item -Path "..\config\blank.ico" -Destination "C:\Windows" -Force
             New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Force | Out-Null
-            Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String | Out-Null
+            Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\Resources\Icons\blank.ico" -Type String | Out-Null
         #? Configuring file explorer and context menus
             Get-ChildItem ..\config\reg\remove\* -e *theme* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
             $sourceFilePath = "..\config\reg\add\Add_Theme_Mode_in_Context_Menu.reg"
