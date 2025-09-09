@@ -271,7 +271,7 @@ on WinMac GitHub page: https://github.com/Asteski/WinMac/wiki
     Show-Header
 Write-Host @"
 
-`e[93m$("Please select options you want to uninstall:")`e[0m
+`e[93m$("Please select components you want to uninstall:")`e[0m
 
 "@
         Write-Host "1. PowerToys"
@@ -288,7 +288,7 @@ Write-Host @"
         Write-Host "12. Other Settings"
         Write-Host
         do {
-            $selection = Read-Host "Enter the numbers of options you want to uninstall (separated by commas)"
+            $selection = Read-Host "Enter the numbers of components you want to uninstall (separated by commas)"
             $selection = $selection.Trim()
             $selection = $selection -replace '\s*,\s*', ','
             $valid = $selection -match '^([1-9]|10|11|12)(,([1-9]|10|11|12))*$'
@@ -312,7 +312,7 @@ Write-Host @"
                 $selectedAppNames += $appList[$appNumber]
             }
         }
-        Write-Host "`e[92m$("Selected options:")`e[0m $($selectedAppNames -join ', ')"
+        Write-Host "`e[92m$("Selected components:")`e[0m $($selectedAppNames -join ', ')"
         Start-Sleep 2
     }
     else
