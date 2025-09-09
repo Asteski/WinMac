@@ -5,8 +5,8 @@ $version = "1.4.0"
 $ErrorActionPreference = "SilentlyContinue"
 $WarningPreference = "SilentlyContinue"
 $ProgressPreference = "SilentlyContinue"
-$programsDir = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs"
-$winMacDirectory = "$env:LOCALAPPDATA\WinMac"
+$programsDir = "$ENV:APPDATA\Microsoft\Windows\Start Menu\Programs"
+$winMacDirectory = "$ENV:LOCALAPPDATA\WinMac"
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName PresentationFramework
 if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null }
@@ -667,17 +667,17 @@ foreach ($app in $selectedApps) {
             Write-Host "Installing PowerToys..." -ForegroundColor Yellow
             winget configure --enable | Out-Null
             pwsh -NoProfile -Command "winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements" | Out-Null
-            Copy-Item -Path "..\config\powertoys\ptr\ptr.exe" -Destination "$env:LOCALAPPDATA\PowerToys" -Recurse -Force
-            Copy-Item -Path "..\config\powertoys\Assets\PowerLauncher" -Destination "$env:LOCALAPPDATA\PowerToys\Assets" -Recurse -Force
-            Copy-Item -Path "..\config\powertoys\Plugins" -Destination "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run" -Recurse -Force
+            Copy-Item -Path "..\config\powertoys\ptr\ptr.exe" -Destination "$ENV:LOCALAPPDATA\PowerToys" -Recurse -Force
+            Copy-Item -Path "..\config\powertoys\Assets\PowerLauncher" -Destination "$ENV:LOCALAPPDATA\PowerToys\Assets" -Recurse -Force
+            Copy-Item -Path "..\config\powertoys\Plugins" -Destination "$ENV:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run" -Recurse -Force
             if ($blueOrYellow -eq 'B' -or $blueOrYellow -eq 'b') {
-                Copy-Item -Path "..\config\powertoys\RunPlugins" -Destination "$env:LOCALAPPDATA\PowerToys" -Recurse -Force
-                Copy-Item -Path "..\config\powertoys\Assets\Peek" -Destination "$env:LOCALAPPDATA\PowerToys\WinUI3Apps\Assets" -Recurse -Force
-                Copy-Item -Path "..\config\powertoys\RunPlugins\Everything" "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -Recurse -Force
+                Copy-Item -Path "..\config\powertoys\RunPlugins" -Destination "$ENV:LOCALAPPDATA\PowerToys" -Recurse -Force
+                Copy-Item -Path "..\config\powertoys\Assets\Peek" -Destination "$ENV:LOCALAPPDATA\PowerToys\WinUI3Apps\Assets" -Recurse -Force
+                Copy-Item -Path "..\config\powertoys\RunPlugins\Everything" "$ENV:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -Recurse -Force
             }
             else {
                 Get-ChildItem -Path "..\config\powertoys\RunPlugins" -Recurse | Where-Object { $_.Name -ne "folder.png" } | ForEach-Object {
-                    $destinationPath = Join-Path -Path "$env:LOCALAPPDATA\PowerToys\RunPlugins" -ChildPath $_.FullName.Substring((Get-Item "..\config\powertoys\RunPlugins").FullName.Length + 1)
+                    $destinationPath = Join-Path -Path "$ENV:LOCALAPPDATA\PowerToys\RunPlugins" -ChildPath $_.FullName.Substring((Get-Item "..\config\powertoys\RunPlugins").FullName.Length + 1)
                     if ($_.PSIsContainer) {
                         New-Item -ItemType Directory -Path $destinationPath -Force | Out-Null
                     } else {
@@ -685,7 +685,7 @@ foreach ($app in $selectedApps) {
                     }
                 }
                 Get-ChildItem -Path "..\config\powertoys\RunPlugins\Everything" -Recurse | Where-Object { $_.Name -ne "folder.png" } | ForEach-Object {
-                    $destinationPath = Join-Path -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -ChildPath $_.FullName.Substring((Get-Item "..\config\powertoys\RunPlugins").FullName.Length + 1)
+                    $destinationPath = Join-Path -Path "$ENV:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -ChildPath $_.FullName.Substring((Get-Item "..\config\powertoys\RunPlugins").FullName.Length + 1)
                     if ($_.PSIsContainer) {
                         New-Item -ItemType Directory -Path $destinationPath -Force | Out-Null
                     } else {
@@ -694,14 +694,14 @@ foreach ($app in $selectedApps) {
                 }
             }
             $envPath = [System.Environment]::GetEnvironmentVariable("Path", [System.EnvironmentVariableTarget]::User)
-            if (-not ($envPath -like "*$env:LOCALAPPDATA\PowerToys*")) {
-                $envPath += ";$env:LOCALAPPDATA\PowerToys"
+            if (-not ($envPath -like "*$ENV:LOCALAPPDATA\PowerToys*")) {
+                $envPath += ";$ENV:LOCALAPPDATA\PowerToys"
                 [System.Environment]::SetEnvironmentVariable("Path", $envPath, [System.EnvironmentVariableTarget]::User)
             }
             Stop-Process -Name PowerToys*
             Install-WingetPackage -id ThioJoe.SvgThumbnailExtension | Out-Null
             Stop-Process -Name Microsoft.CmdPal.UI
-            (Get-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json") -replace '"CmdPal":true', '"CmdPal":false' -replace '"show_tray_icon":true', '"show_tray_icon":false' | Set-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json" -Force
+            (Get-Content -Path "$ENV:LOCALAPPDATA\Microsoft\PowerToys\settings.json") -replace '"CmdPal":true', '"CmdPal":false' -replace '"show_tray_icon":true', '"show_tray_icon":false' | Set-Content -Path "$ENV:LOCALAPPDATA\Microsoft\PowerToys\settings.json" -Force
             New-Item -ItemType Directory -Path $winMacDirectory | Out-Null
             Copy-Item '..\bin\ahk\TriggerPeekWithSpacebar.exe' $winMacDirectory
             $description = "Trigger PowerToys Peek with Space bar."
@@ -718,7 +718,7 @@ foreach ($app in $selectedApps) {
             $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
             Register-ScheduledTask -TaskName "Trigger Peek With Spacebar" -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -Description $description | Out-Null
             Start-Process -FilePath "$winMacDirectory\TriggerPeekWithSpacebar.exe" -WorkingDirectory $winMacDirectory
-            Start-Process "$env:LOCALAPPDATA\PowerToys\PowerToys.exe" -ArgumentList "--start-minimized" -WorkingDirectory "$env:LOCALAPPDATA\PowerToys" -WindowStyle Hidden
+            Start-Process "$ENV:LOCALAPPDATA\PowerToys\PowerToys.exe" -ArgumentList "--start-minimized" -WorkingDirectory "$ENV:LOCALAPPDATA\PowerToys" -WindowStyle Hidden
             Write-Host "PowerToys installation completed." -ForegroundColor Green
         }
     #* Everything
@@ -726,15 +726,15 @@ foreach ($app in $selectedApps) {
             Write-Host "Installing Everything..." -ForegroundColor Yellow
             Install-WinGetPackage -Id "voidtools.Everything" | Out-Null
             Move-Item -Path "C:\Users\Public\Desktop\Everything.lnk" -Destination $programsDir -Force
-            Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Everything.lnk" -Destination $programsDir -Force
-            if (-not (Test-Path -Path "$env:APPDATA\Everything")) {
-                New-Item -ItemType Directory -Path "$env:APPDATA\Everything" -Force | Out-Null
-                Copy-Item -Path "..\config\everything\Everything.ini" -Destination "$env:APPDATA\Everything" -Force
+            Move-Item -Path "C:\Users\$ENV:USERNAME\Desktop\Everything.lnk" -Destination $programsDir -Force
+            if (-not (Test-Path -Path "$ENV:APPDATA\Everything")) {
+                New-Item -ItemType Directory -Path "$ENV:APPDATA\Everything" -Force | Out-Null
+                Copy-Item -Path "..\config\everything\Everything.ini" -Destination "$ENV:APPDATA\Everything" -Force
             }
             else {
-                (Get-Content -Path "$env:APPDATA\Everything\Everything.ini") -replace "index_folder_size=0", "index_folder_size=1" -replace 'show_tray_icon=1' , 'show_tray_icon=0' | Set-Content -Path "$env:APPDATA\Everything\Everything.ini"
+                (Get-Content -Path "$ENV:APPDATA\Everything\Everything.ini") -replace "index_folder_size=0", "index_folder_size=1" -replace 'show_tray_icon=1' , 'show_tray_icon=0' | Set-Content -Path "$ENV:APPDATA\Everything\Everything.ini"
             }
-            Start-Process -FilePath Everything.exe -WorkingDirectory "$env:PROGRAMFILES\Everything" -WindowStyle Hidden
+            Start-Process -FilePath Everything.exe -WorkingDirectory "$ENV:PROGRAMFILES\Everything" -WindowStyle Hidden
             Write-Host "Everything installation completed." -ForegroundColor Green
         }
     #* PowerShell Profile
@@ -794,10 +794,10 @@ foreach ($app in $selectedApps) {
             } else {
                 Write-Host "z is already installed." -ForegroundColor DarkGreen
             }
-            $vimParentPath = Join-Path $env:PROGRAMFILES Vim
+            $vimParentPath = Join-Path $ENV:PROGRAMFILES Vim
             $latestSubfolder = Get-ChildItem -Path $vimParentPath -Directory | Sort-Object -Property CreationTime -Descending | Select-Object -First 1
             $vimChildPath = $latestSubfolder.FullName
-            [Environment]::SetEnvironmentVariable("Path", $env:Path + ";$vimChildPath", [EnvironmentVariableTarget]::Machine)
+            [Environment]::SetEnvironmentVariable("Path", $ENV:Path + ";$vimChildPath", [EnvironmentVariableTarget]::Machine)
             Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $prompt
             if ($gitProfile -eq $true) { Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $git }
             Add-Content -Path "$profilePath\PowerShell\$profileFile" -Value $functions
@@ -805,8 +805,8 @@ foreach ($app in $selectedApps) {
             if ($gitProfile -eq $true) { Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $git }
             Add-Content -Path "$profilePath\WindowsPowerShell\$profileFile" -Value $functions
             Remove-Item -Path "C:\Users\Public\Desktop\gVim*" -Force
-            Remove-Item -Path "C:\Users\$env:USERNAME\Desktop\gVim*" -Force
-            Remove-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\gVim*" -Force
+            Remove-Item -Path "C:\Users\$ENV:USERNAME\Desktop\gVim*" -Force
+            Remove-Item -Path "C:\Users\$ENV:USERNAME\OneDrive\Desktop\gVim*" -Force
             Write-Host "PowerShell Profile configuration completed." -ForegroundColor Green
         }
     #* StartAllBack
@@ -817,7 +817,7 @@ foreach ($app in $selectedApps) {
                 Write-Host "Installing StartAllBack..." -ForegroundColor Yellow
                 Install-WinGetPackage -Id "StartIsBack.StartAllBack" | Out-Null
                 $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
-                $sabOrbs = $env:LOCALAPPDATA + "\StartAllBack\Orbs"
+                $sabOrbs = $ENV:LOCALAPPDATA + "\StartAllBack\Orbs"
                 $sabRegPath = "HKCU:\Software\StartIsBack"
                 $taskbarOnTopPath = "$exRegPath\StuckRectsLegacy"
                 $taskbarOnTopName = "Settings"
@@ -847,6 +847,8 @@ foreach ($app in $selectedApps) {
                 Set-ItemProperty -Path $sabRegPath -Name "TaskbarLargerIcons" -Value 0
                 Set-ItemProperty -Path $sabRegPath -Name "TaskbarSpacierIcons" -Value (-1)
                 Set-ItemProperty -Path $sabRegPath -Name "TaskbarControlCenter" -Value 0
+                Set-ItemProperty -Path $sabRegPath -Name "Start_SortOverride" -Value 0
+                Set-ItemProperty -Path $sabRegPath -Name "StartMetroAppsFolder" -Value 2
                 Set-ItemProperty -Path $sabRegPath -Name "SysTrayStyle" -Value 0
                 Set-ItemProperty -Path $sabRegPath -Name "SysTrayActionCenter" -Value 0
                 Set-ItemProperty -Path $sabRegPath -Name "SysTraySpacierIcons" -Value 1
@@ -862,8 +864,8 @@ foreach ($app in $selectedApps) {
                 else {
                     Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 0
                     Uninstall-WinGetPackage -name "Winver UWP" | Out-Null
-                    Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
-                    Expand-Archive -Path "..\config\WinX-default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
+                    Get-ChildItem "$ENV:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
+                    Expand-Archive -Path "..\config\WinX-default.zip" -Destination "$ENV:LOCALAPPDATA\Microsoft\Windows\" -Force
                 }
                 Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "(default)" -Value 1
                 Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
@@ -919,7 +921,7 @@ foreach ($app in $selectedApps) {
                     }
                     New-Item -ItemType Directory -Path "$winMacDirectory\" | Out-Null
                     Write-Host "Installing Open-Shell..." -ForegroundColor DarkYellow
-                    $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\StartMenu.exe"
+                    $shellExePath = Join-Path $ENV:PROGRAMFILES "Open-Shell\StartMenu.exe"
                     Start-Process -FilePath "..\bin\osh\osh.exe" -ArgumentList "/QUIET", "ADDLOCAL=StartMenu" -Wait -NoNewWindow | Out-Null
                     Stop-Process -Name StartMenu -Force | Out-Null
                     New-Item -Path "Registry::HKEY_CURRENT_USER\Software\OpenShell" -Force | Out-Null
@@ -992,8 +994,8 @@ foreach ($app in $selectedApps) {
             }
             $backupFile = Get-ChildItem -Path (Join-Path $PWD '..\config') -Filter $windhawkBackup -Recurse | Select-Object -First 1
             $timeStamp = (Get-Date -Format 'yyyyMMddHHmmss')
-            $extractFolder = Join-Path $env:TEMP ("WindhawkRestore_$timeStamp")
-            Copy-Item -Path '..\bin\ModernShutDownWindows.exe' -Destination "$env:WINDIR\System32\" -Recurse -Force
+            $extractFolder = Join-Path $ENV:TEMP ("WindhawkRestore_$timeStamp")
+            Copy-Item -Path '..\bin\ModernShutDownWindows.exe' -Destination "$ENV:WINDIR\System32\" -Recurse -Force
             New-Item -ItemType Directory -Path $extractFolder -Force | Out-Null
             Expand-Archive -Path $backupFile.FullName -DestinationPath $extractFolder -Force
             $modsSourceBackup = Join-Path $extractFolder "ModsSource"
@@ -1012,7 +1014,7 @@ foreach ($app in $selectedApps) {
             }
             $regContent | Set-Content $regBackup
             reg import $regBackup > $null 2>&1
-            Remove-Item "$env:LocalAppData\Microsoft\Windows\Explorer\thumbcache_*.db" -Force -Recurse
+            Remove-Item "$ENV:LocalAppData\Microsoft\Windows\Explorer\thumbcache_*.db" -Force -Recurse
             Set-ItemProperty -Path "HKCU:\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags\AllFolders\Shell" -Name Logo -Value "imageres.dll,-3" -Type String
             $secureUxThemeInstalled = Get-WmiObject -Class Win32_Product | Where-Object { $_.Name -like "SecureUxTheme*" }
             if (-not $secureUxThemeInstalled) { 
@@ -1033,7 +1035,7 @@ foreach ($app in $selectedApps) {
             Write-Host "Installing Stahky..." -ForegroundColor Yellow
             $url = "https://github.com/joedf/stahky/releases/download/v0.3.9.1/stahky_U64_v0.3.9.1.zip"
             $outputPath = "..\stahky_U64.zip"
-            $exePath = "$env:LOCALAPPDATA\Stahky"
+            $exePath = "$ENV:LOCALAPPDATA\Stahky"
             New-Item -ItemType Directory -Path $exePath -Force | Out-Null
             New-Item -ItemType Directory -Path $exePath\config -Force | Out-Null
             Invoke-WebRequest -Uri $url -OutFile $outputPath
@@ -1058,13 +1060,13 @@ foreach ($app in $selectedApps) {
             [Environment]::SetEnvironmentVariable("Path", $pathVar, "Machine")
             $pathVar = [Environment]::GetEnvironmentVariable("Path", "User") + ";$exePath"
             [Environment]::SetEnvironmentVariable("Path", $pathVar, "User")
-            $shortcutPath1 = "$env:LOCALAPPDATA\Stahky\config\shortcuts\Management.lnk"
-            $shortcutPath2 = "$env:LOCALAPPDATA\Stahky\config\shortcuts\Favorites.lnk"
-            $newTargetPath = "$env:LOCALAPPDATA\Stahky\Stahky.exe"
-            $newArguments1 = '/stahky ' + "$env:LOCALAPPDATA\Stahky\config\management"
-            $newArguments2 = '/stahky ' + "$env:LOCALAPPDATA\Stahky\config\favorites"
-            $newWorkDir1 = "$env:LOCALAPPDATA\Stahky\config\management"
-            $newWorkDir2 = "$env:LOCALAPPDATA\Stahky\config\favorites"
+            $shortcutPath1 = "$ENV:LOCALAPPDATA\Stahky\config\shortcuts\Management.lnk"
+            $shortcutPath2 = "$ENV:LOCALAPPDATA\Stahky\config\shortcuts\Favorites.lnk"
+            $newTargetPath = "$ENV:LOCALAPPDATA\Stahky\Stahky.exe"
+            $newArguments1 = '/stahky ' + "$ENV:LOCALAPPDATA\Stahky\config\management"
+            $newArguments2 = '/stahky ' + "$ENV:LOCALAPPDATA\Stahky\config\favorites"
+            $newWorkDir1 = "$ENV:LOCALAPPDATA\Stahky\config\management"
+            $newWorkDir2 = "$ENV:LOCALAPPDATA\Stahky\config\favorites"
             $shell1 = New-Object -ComObject WScript.Shell
             $shortcut1 = $shell1.CreateShortcut($shortcutPath1)
             $shortcut1.Arguments = $newArguments1
@@ -1122,16 +1124,16 @@ foreach ($app in $selectedApps) {
             if (Get-Process -n Nexus) { Stop-Process -n Nexus }
             $currentDir = (Get-Location).Path
             $scriptBlock1 = "winget install WinStep.Nexus --silent"
-            $tempScript = Join-Path $env:TEMP "nonadmin_$([guid]::NewGuid().ToString()).ps1"
+            $tempScript = Join-Path $ENV:TEMP "nonadmin_$([guid]::NewGuid().ToString()).ps1"
             Set-Content -Path $tempScript -Value $scriptBlock1 -Encoding UTF8
 $batchContent = @"
 @echo off
 pushd "$currentDir"
 pwsh.exe -NoProfile -ExecutionPolicy Bypass -File "`"$tempScript`""
 "@
-            $tempBatch = Join-Path $env:TEMP "run_nonadmin_$([guid]::NewGuid().ToString()).cmd"
+            $tempBatch = Join-Path $ENV:TEMP "run_nonadmin_$([guid]::NewGuid().ToString()).cmd"
             Set-Content -Path $tempBatch -Value $batchContent -Encoding ASCII
-            $tempVbs = Join-Path $env:TEMP "run_silent_$([guid]::NewGuid().ToString()).vbs"
+            $tempVbs = Join-Path $ENV:TEMP "run_silent_$([guid]::NewGuid().ToString()).vbs"
 $vbsContent = @"
 Set WshShell = CreateObject("WScript.Shell")
 WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
@@ -1154,7 +1156,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             New-Item -ItemType Directory -Path "$winStep\Sounds" -Force | Out-Null
             Copy-Item -Path "..\config\dock\sounds\*" -Destination "$winStep\Sounds\" -Recurse -Force
             $regFile = "..\config\dock\winstep.reg"
-            $downloadsPath = "$env:USERPROFILE\Downloads"
+            $downloadsPath = "$ENV:USERPROFILE\Downloads"
             if ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
                 $modifiedContent = Get-Content $regFile | ForEach-Object { $_ -replace "Rounded", "Squared" }
                 $modifiedFile = "..\temp\winstep.reg"
@@ -1187,9 +1189,9 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                 $regFile = $modifiedFile
             }
             reg import $regFile > $null 2>&1
-            if ($selectedApps -like '*10*' -or (Test-Path "$env:LOCALAPPDATA\WinLaunch")) {
+            if ($selectedApps -like '*10*' -or (Test-Path "$ENV:LOCALAPPDATA\WinLaunch")) {
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Label9" -Value "Launchpad"
-                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path9" -Value "$env:LOCALAPPDATA\WinLaunch\WinLaunch.exe"
+                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path9" -Value "$ENV:LOCALAPPDATA\WinLaunch\WinLaunch.exe"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath9" -Value "$ENV:WINDIR\Resources\Icons\launchpad.ico"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type9" -Value "1"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Label10" -Value "Capture Desktop"
@@ -1208,7 +1210,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                 Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type6"
                 Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type7"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path6" -Value $downloadsPath
-                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path7" -Value "$env:APPDATA\Microsoft\Windows\Recent\"
+                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path7" -Value "$ENV:APPDATA\Microsoft\Windows\Recent\"
             if ($dockDynamic -eq "X" -or $dockDynamic -eq "x") {
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockAutoHideMaximized1" -Value "True"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockRespectReserved1" -Value "False"
@@ -1216,16 +1218,16 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
         }
             if ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath0" -Value "C:\\Windows\\Resources\\Icons\\explorer_default.ico"}
             $scriptBlock2 = "Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe'"
-            $tempScript = Join-Path $env:TEMP "nonadmin_$([guid]::NewGuid().ToString()).ps1"
+            $tempScript = Join-Path $ENV:TEMP "nonadmin_$([guid]::NewGuid().ToString()).ps1"
             Set-Content -Path $tempScript -Value $scriptBlock2 -Encoding UTF8
 $batchContent = @"
 @echo off
 pushd "$currentDir"
 pwsh.exe -NoProfile -ExecutionPolicy Bypass -File "`"$tempScript`""
 "@
-            $tempBatch = Join-Path $env:TEMP "run_nonadmin_$([guid]::NewGuid().ToString()).cmd"
+            $tempBatch = Join-Path $ENV:TEMP "run_nonadmin_$([guid]::NewGuid().ToString()).cmd"
             Set-Content -Path $tempBatch -Value $batchContent -Encoding ASCII
-            $tempVbs = Join-Path $env:TEMP "run_silent_$([guid]::NewGuid().ToString()).vbs"
+            $tempVbs = Join-Path $ENV:TEMP "run_silent_$([guid]::NewGuid().ToString()).vbs"
 $vbsContent = @"
 Set WshShell = CreateObject("WScript.Shell")
 WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
@@ -1233,8 +1235,8 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Set-Content -Path $tempVbs -Value $vbsContent -Encoding ASCII
             Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""
             while (!(Get-Process "nexus")) { Start-Sleep 1 }
-            Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Nexus.lnk" -Destination $programsDir -Force 
-            Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\Nexus.lnk" -Destination $programsDir -Force 
+            Move-Item -Path "C:\Users\$ENV:USERNAME\Desktop\Nexus.lnk" -Destination $programsDir -Force 
+            Move-Item -Path "C:\Users\$ENV:USERNAME\OneDrive\Desktop\Nexus.lnk" -Destination $programsDir -Force 
             Write-Host "Nexus Dock installation completed." -ForegroundColor Green
             }
     #* Hot Corners
@@ -1243,11 +1245,11 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             $outputPath = '..\temp\WinXCorners.zip'
             $winXCornersUrl = "https://github.com/vhanla/winxcorners/releases/download/1.3.2/WinXCorners1.3.2.zip"
             $winXCornersConfigPath = '..\config\hotcorners\settings.ini'
-            $destinationPath = "$env:LOCALAPPDATA\WinXCorners"
+            $destinationPath = "$ENV:LOCALAPPDATA\WinXCorners"
             $winLaunchUrl = "https://github.com/jensroth-git/WinLaunch/releases/download/v.0.7.3.0/WinLaunch.0.7.3.0.zip"
             $winLaunchConfigPath = '..\config\hotcorners\Settings.xml'
             $winLaunchOutputPath = '..\temp\WinLaunch.zip'
-            $winLaunchDestinationPath = "$env:LOCALAPPDATA\WinLaunch"
+            $winLaunchDestinationPath = "$ENV:LOCALAPPDATA\WinLaunch"
             $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.8'
             if ($null -eq $dotNetRuntime) {
                 Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8' | Out-Null
@@ -1272,23 +1274,23 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Remove-Item $winLaunchOutputPath -Force
             Start-Process "$winLaunchDestinationPath\WinLaunch.exe"
             Start-Process "C:\Program Files (x86)\Simnet\Simple Sticky Notes\ssn.exe"
-            Move-Item -Path "$env:USERPROFILE\Desktop\Simple Sticky Notes.lnk" -Destination "$env:APPDATA\Microsoft\Windows\Start Menu\Programs" -Force
+            Move-Item -Path "$ENV:USERPROFILE\Desktop\Simple Sticky Notes.lnk" -Destination "$ENV:APPDATA\Microsoft\Windows\Start Menu\Programs" -Force
             $process = Get-Process -Name WinLaunch
             if ($process) { Stop-Process -Name WinLaunch -Force }
             New-Item -ItemType Directory -Path "$winLaunchDestinationPath\Data" -Force | Out-Null
             Copy-Item -Path $winLaunchConfigPath -Destination "$winLaunchDestinationPath\Data\Settings.xml" -Force
             $configFilePath = Join-Path -Path $destinationPath -ChildPath "settings.ini"
-            (Get-Content -Path $configFilePath) -replace "WINLAUNCH", "$($env:LOCALAPPDATA)\WinLaunch\WinLaunch.exe" | Set-Content -Path $configFilePath
-            (Get-Content -Path $configFilePath) -replace "MINIMIZEALL", "$($env:LOCALAPPDATA)\WinMac\hotcorners\MinimizeAllWindowsExceptFocused.exe" | Set-Content -Path $configFilePath
+            (Get-Content -Path $configFilePath) -replace "WINLAUNCH", "$($ENV:LOCALAPPDATA)\WinLaunch\WinLaunch.exe" | Set-Content -Path $configFilePath
+            (Get-Content -Path $configFilePath) -replace "MINIMIZEALL", "$($ENV:LOCALAPPDATA)\WinMac\hotcorners\MinimizeAllWindowsExceptFocused.exe" | Set-Content -Path $configFilePath
             Remove-Item $outputPath -Force
             Start-Process "$destinationPath\WinXCorners.exe"
-            $shortcut1Path = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\WinXCorners.lnk"
+            $shortcut1Path = "$ENV:APPDATA\Microsoft\Windows\Start Menu\Programs\WinXCorners.lnk"
             $target1Path = "$destinationPath\WinXCorners.exe"
             $shell = New-Object -ComObject WScript.Shell
             $shortcut = $shell.CreateShortcut($shortcut1Path)
             $shortcut.TargetPath = $target1Path
             $shortcut.Save()
-            $shortcut2Path = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\WinLaunch.lnk"
+            $shortcut2Path = "$ENV:APPDATA\Microsoft\Windows\Start Menu\Programs\WinLaunch.lnk"
             $target2Path = "$winLaunchDestinationPath\WinLaunch.exe"
             $icon2Path = "$winLaunchDestinationPath\winlaunch.ico"
             $shell = New-Object -ComObject WScript.Shell
@@ -1312,14 +1314,14 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                 $macTypeInstalled = Get-WinGetPackage -Id "MacType.MacType"
                 if ($null -eq $macTypeInstalled) { winget install --id "MacType.MacType" --source winget --silent | Out-Null }
                 Stop-Process -n mt64agnt, MacTray, MacType -Force
-                New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "MacType" -Value "$env:PROGRAMFILES\MacType\MacTray.exe" | Out-Null
-                Copy-Item -Path "..\config\mactype\*" -Destination "$env:PROGRAMFILES\MacType" -Recurse -Force
+                New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "MacType" -Value "$ENV:PROGRAMFILES\MacType\MacTray.exe" | Out-Null
+                Copy-Item -Path "..\config\mactype\*" -Destination "$ENV:PROGRAMFILES\MacType" -Recurse -Force
                 Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name FontSmoothing -Value "0"
                 Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name FontSmoothingType -Type DWord -Value 0
                 Start-Sleep -Seconds 2
                 Stop-Process -n Explorer
                 Start-Sleep -Seconds 4
-                Start-Process -FilePath "$env:PROGRAMFILES\MacType\MacTray.exe"
+                Start-Process -FilePath "$ENV:PROGRAMFILES\MacType\MacTray.exe"
                 Write-Host "MacType installation completed." -ForegroundColor Green
             }
             }
@@ -1327,9 +1329,8 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
         "12" {
             Write-Host "Configuring Other Settings..." -ForegroundColor Yellow
         #? Black Cursor
-            $curSourceFolder = (Get-Item -Path "..\config\cursors").FullName
-            $curDestFolder = "C:\Windows\Cursors"
-            Copy-Item -Path "$curSourceFolder\windows-modern-v2" -Destination $curDestFolder -Recurse -Force
+            # $cursorsArchivePath = (Get-Item -Path "..\config\cursors\windows-modern-v2.zip").FullName
+            Expand-Archive -Path '..\config\cursors\windows-modern-v2.zip' -DestinationPath "$ENV:WINDIR\Cursors" -Force
             reg import ..\config\cursors\Add_Modern_Cursors_Scheme.reg > $null 2>&1
             if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
                 $cursorName = 'Windows Modern v2 - Aero Black - (x1)'
@@ -1338,7 +1339,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                 $cursorName = 'Windows Modern v2 - Aero White - (x1)'
                 $cursorColor = 'white'
             }
-            $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
+            $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$ENV:COMPUTERNAME")
             $RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
             $RegCursors.SetValue("",$cursorName)
             $RegCursors.SetValue("AppStarting","%SYSTEMROOT%\Cursors\windows-modern-v2\x1\working-in-background_$cursorColor.ani")
@@ -1436,12 +1437,12 @@ IconResource=C:\Windows\Resources\Icons\programs.ico
             if (-not (Test-Path -Path $winMacDirectory)) {New-Item -ItemType Directory -Path $winMacDirectory -Force | Out-Null }
             Copy-Item -Path $ps1FilePath -Destination $winMacDirectory -Force
             Copy-Item -Path $sourceFilePath -Destination '..\temp\' -Force
-            $appData = $env:LOCALAPPDATA -replace '\\', '\\'
+            $appData = $ENV:LOCALAPPDATA -replace '\\', '\\'
             (Get-Content -Path $tempFilePath) -replace '%LOCALAPPDATA%', $appData | Set-Content -Path $tempFilePath
             reg import '..\config\reg\add\Add_Hidden_items_to_context_menu.reg' > $null 2>&1
             reg import '..\config\reg\add\Add_Navigation_pane_to_context_menu.reg' > $null 2>&1
             reg import '..\temp\Add_Theme_Mode_in_Context_Menu.reg' > $null 2>&1
-            Copy-Item -Path "..\config\themes\*" -Destination "$env:WINDIR\Resources\Themes" -Recurse -Force
+            Copy-Item -Path "..\config\themes\*" -Destination "$ENV:WINDIR\Resources\Themes" -Recurse -Force
             New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowIconOverlay" -Value 0 -PropertyType DWord -Force | Out-Null
         #? End Task
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value "" 
@@ -1450,7 +1451,7 @@ IconResource=C:\Windows\Resources\Icons\programs.ico
             New-ItemProperty -Path $taskbarDevSettings -Name "TaskbarEndTask" -Value 1 -PropertyType DWORD -Force | Out-Null
         #? Hide Desktop icons
             Copy-Item -Path "..\bin\HideDesktopIcons.exe" -Destination $winMacDirectory -Force
-            $shortcutPath = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Hide Desktop Icons.lnk"
+            $shortcutPath = "$ENV:APPDATA\Microsoft\Windows\Start Menu\Programs\Hide Desktop Icons.lnk"
             $targetPath = "$winMacDirectory\HideDesktopIcons.exe"
             $shell = New-Object -ComObject WScript.Shell
             $shortcut = $shell.CreateShortcut($shortcutPath)
@@ -1476,7 +1477,7 @@ IconResource=C:\Windows\Resources\Icons\programs.ico
             }
         #? Send To Programs (create shortcut)
             Expand-Archive -Path '..\bin\ProgramsShortcut.zip' -DestinationPath $winMacDirectory -Force
-            $sendToPath = Join-Path $env:APPDATA 'Microsoft\Windows\SendTo\Programs (create shortcut).lnk'
+            $sendToPath = Join-Path $ENV:APPDATA 'Microsoft\Windows\SendTo\Programs (create shortcut).lnk'
             $targetPath = Join-Path $winMacDirectory 'ProgramsShortcut.exe'
             $shell = New-Object -ComObject WScript.Shell
             $shortcut = $shell.CreateShortcut($sendToPath)
