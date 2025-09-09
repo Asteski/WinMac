@@ -662,8 +662,8 @@ Write-Host "Copying common resource files to Windows directory..." -ForegroundCo
 New-Item -ItemType Directory -Path "$ENV:WINDIR\Resources\Icons" -Force | Out-Null
 New-Item -ItemType Directory -Path "$ENV:WINDIR\Resources\Scripts" -Force | Out-Null
 New-Item -ItemType Directory -Path "$ENV:WINDIR\Resources\Themes\Legacy" -Force | Out-Null
-# takeown /F "$env:WINDIR\Resources" /A /R /D Y > $null 2>&1
-# icacls "$env:WINDIR\Resources" /grant Administrators:F /T > $null 2>&1
+takeown /F "$env:WINDIR\Resources" /A /R /D Y > $null 2>&1
+icacls "$env:WINDIR\Resources" /grant Administrators:F /T > $null 2>&1
 # takeown /F "$env:WINDIR\Web" /A /R /D Y > $null 2>&1
 # icacls "$env:WINDIR\Web" /grant Administrators:F /T > $null 2>&1
 Copy-Item "$ENV:WINDIR\Resources\Themes\aero.theme" "$ENV:WINDIR\Resources\Themes\Legacy\aero.theme" -Force
@@ -676,7 +676,7 @@ $part2 = [System.IO.File]::ReadAllBytes("$wallpapersParentDirectory\wallpapers.z
 [System.IO.File]::WriteAllBytes("$wmTemp\wallpapers.zip", $part1 + $part2)
 Expand-Archive -Path "$wmTemp\wallpapers.zip" -DestinationPath "$ENV:WINDIR\Web\Wallpaper" -Force
 Remove-Item "$wmTemp\wallpapers.zip" -Force
-# icacls "$env:WINDIR\Resources" /inheritance:e /T > $null 2>&1
+icacls "$env:WINDIR\Resources" /inheritance:e /T > $null 2>&1
 # icacls "$env:WINDIR\Web" /inheritance:e /T > $null 2>&1
 Write-Host "Copying common resource files to Windows directory completed." -ForegroundColor Green
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
@@ -1024,9 +1024,8 @@ foreach ($app in $selectedApps) {
             $modsSourceBackup = Join-Path $extractFolder "ModsSource"
             $modsBackup = Join-Path $extractFolder "Engine\Mods"
             $regBackup = Join-Path $extractFolder "Windhawk.reg"
-            New-Item -ItemType Directory -Path "$winMacDirectory\resource-redirect\" -Force | Out-Null
             Copy-Item -Path $modsSourceBackup -Destination $windhawkRoot -Recurse -Force
-            Expand-Archive -Path '..\config\windhawk\resource-redirect.zip' -DestinationPath "$winMacDirectory\resource-redirect\" -Force
+            Expand-Archive -Path '..\config\windhawk\resource-redirect.zip' -DestinationPath "$winMacDirectory" -Force
             $engineFolder = Join-Path $windhawkRoot "Engine"
             New-Item -ItemType Directory -Path $engineFolder -Force | Out-Null
             Copy-Item -Path $modsBackup -Destination $engineFolder -Recurse -Force
@@ -1504,10 +1503,10 @@ IconResource=C:\Windows\Resources\Icons\programs.ico
         #? Set Theme
             if ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
                 Start-Process -FilePath "$ENV:WINDIR\Resources\Themes\dark.theme"
-                Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "Wallpaper" -Value "$ENV:WINDIR\Web\Wallpaper\Surface\img19.jpg"
+                # Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "Wallpaper" -Value "$ENV:WINDIR\Web\Wallpaper\Server\img19.jpg"
             } else {
                 Start-Process -FilePath "$ENV:WINDIR\Resources\Themes\aero.theme"
-                Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "Wallpaper" -Value "$ENV:WINDIR\Web\Wallpaper\Surface\img0.jpg"
+                # Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "Wallpaper" -Value "$ENV:WINDIR\Web\Wallpaper\Server\img0.jpg"
             }
             if (Get-Process -n SystemSettings -ErrorAction SilentlyContinue) { Stop-Process -n SystemSettings -Force }
         Write-Host "Other settings deployment completed." -ForegroundColor Green
