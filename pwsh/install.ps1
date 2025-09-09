@@ -9,7 +9,11 @@ $programsDir = "$ENV:APPDATA\Microsoft\Windows\Start Menu\Programs"
 $winMacDirectory = "$ENV:LOCALAPPDATA\WinMac"
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName PresentationFramework
-if (-not (Test-Path -Path "../temp")) {$wmTemp = (New-Item -ItemType Directory -Path "../temp").FullName }
+if (-not (Test-Path -Path "..\temp")) {
+    $wmTemp = (New-Item -ItemType Directory -Path "..\temp").FullName
+} else {
+    $wmTemp = (Get-Item "..\temp").FullName
+}
 $sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
 $osVersion = (Get-WmiObject -Class Win32_OperatingSystem).Caption
 $user = [Security.Principal.WindowsIdentity]::GetCurrent()
@@ -655,6 +659,7 @@ else {
 }
 #* Copy Common Resources files
 Write-Host "Copying Common Resource files to Windows directory..." -ForegroundColor Yellow
+New-Item -ItemType Directory -Path "$ENV:WINDIR\Resources\Scripts" -Force | Out-Null
 takeown /F "$env:WINDIR\Resources" /A /R /D Y > $null 2>&1
 icacls "$env:WINDIR\Resources" /grant Administrators:F /T > $null 2>&1
 takeown /F "$env:WINDIR\Web" /A /R /D Y > $null 2>&1
@@ -1447,7 +1452,7 @@ IconResource=C:\Windows\Resources\Icons\programs.ico
         #? Configuring file explorer and context menus
             Get-ChildItem ..\config\reg\remove\* -e *theme* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
             if (-not (Test-Path -Path $winMacDirectory)) {New-Item -ItemType Directory -Path $winMacDirectory -Force | Out-Null }
-            Copy-Item -Path '..\config\reg\ThemeSwitcher.ps1' -Destination "$ENV:WINDIR\Resources\Themes" -Force
+            Copy-Item -Path '..\config\reg\ThemeSwitcher.ps1' -Destination "$ENV:WINDIR\Resources\Scripts" -Force
             reg import '..\config\reg\add\Add_Hidden_items_to_context_menu.reg' > $null 2>&1
             reg import '..\config\reg\add\Add_Navigation_pane_to_context_menu.reg' > $null 2>&1
             reg import '..\config\reg\add\Add_Theme_Mode_in_Context_Menu.reg' > $null 2>&1
@@ -1508,6 +1513,11 @@ IconResource=C:\Windows\Resources\Icons\programs.ico
 Stop-Process -n explorer
 Start-Sleep 2
 Remove-Item $wmTemp -Recurse -Force
+# Remove parent directory if empty
+$parentDir = Split-Path $wmTemp -Parent
+if ((Test-Path $parentDir) -and ((Get-ChildItem $parentDir -Force | Where-Object { $_.Name -ne '.' -and $_.Name -ne '..' }).Count -eq 0)) {
+    Remove-Item $parentDir -Force
+}
 Start-Sleep 3
 if (-not (Get-Process -Name explorer)) { Start-Process explorer }
 Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan

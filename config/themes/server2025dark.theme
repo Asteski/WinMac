@@ -19,8 +19,8 @@ DefaultValue=%SystemRoot%\System32\imageres.dll,-25
 
 ; Recycle Bin - SHIDI_RECYCLERFULL SHIDI_RECYCLER
 [CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon]
-Full=%SystemRoot%\Resources\Icons\recycle_bin_light_full.ico
-Empty=%SystemRoot%\Resources\Icons\recycle_bin_light_empty.ico
+Full=%SystemRoot%\Resources\Icons\macos_bin_full_light.ico
+Empty=%SystemRoot%\Resources\Icons\macos_bin_empty_light.ico
 
 [Control Panel\Cursors]
 AppStarting=%SystemRoot%\cursors\windows-modern-v2\x1\working-in-background_white.ani
