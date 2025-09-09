@@ -42,7 +42,7 @@ DefaultValue=Windows Modern v2 - Aero Black - (x1)
 DefaultValue.MUI=@main.cpl,-1020
 
 [Control Panel\Desktop]
-Wallpaper=%SystemRoot%\web\wallpaper\FullDark\img0.jpg
+Wallpaper=%SystemRoot%\web\wallpaper\FullDark\img0.png
 TileWallpaper=0
 WallpaperStyle=10
 Pattern=

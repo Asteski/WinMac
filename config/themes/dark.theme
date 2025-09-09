@@ -42,7 +42,7 @@ DefaultValue=Windows Modern v2 - Aero White - (x1)
 DefaultValue.MUI=@main.cpl,-1020
 
 [Control Panel\Desktop]
-Wallpaper=0
+Wallpaper=%SystemRoot%\web\wallpaper\Server\img19.jpg
 TileWallpaper=0
 WallpaperStyle=10
 Pattern=

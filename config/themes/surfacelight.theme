@@ -2,7 +2,7 @@
 
 [Theme]
 ; Windows - IDS_THEME_DISPLAYNAME_AERO_LIGHT
-DisplayName=Windows Server 2025 Light theme
+DisplayName=Surface Light Theme
 SetLogonBackground=1
 
 ; Computer - SHIDI_SERVER
@@ -19,8 +19,8 @@ DefaultValue=%SystemRoot%\System32\imageres.dll,-25
 
 ; Recycle Bin - SHIDI_RECYCLERFULL SHIDI_RECYCLER
 [CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon]
-Full=%SystemRoot%\Resources\Icons\macos_bin_full_dark.ico
-Empty=%SystemRoot%\Resources\Icons\macos_bin_empty_dark.ico
+Full=%SystemRoot%\Resources\Icons\recycle_bin_full_dark.ico
+Empty=%SystemRoot%\Resources\Icons\recycle_bin_empty_dark.ico
 
 [Control Panel\Cursors]
 AppStarting=%SystemRoot%\cursors\windows-modern-v2\x1\working-in-background_black.ani
@@ -42,7 +42,7 @@ DefaultValue=Windows Modern v2 - Aero Black - (x1)
 DefaultValue.MUI=@main.cpl,-1020
 
 [Control Panel\Desktop]
-Wallpaper=%SystemRoot%\web\wallpaper\Server\img0.jpg
+Wallpaper=%SystemRoot%\web\wallpaper\Surface\img0.jpg
 TileWallpaper=0
 WallpaperStyle=10
 Pattern=
