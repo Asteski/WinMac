@@ -1,7 +1,7 @@
 param (
     [switch]$noGUI
 )
-$version = "1.3.0"
+$version = "1.4.0"
 $ErrorActionPreference = "SilentlyContinue"
 $WarningPreference = "SilentlyContinue"
 $ProgressPreference = "SilentlyContinue"
@@ -23,7 +23,7 @@ if (-not $adminTest) {
     Add-Type -AssemblyName PresentationFramework
     [void][System.Windows.MessageBox]::Show("This script must be run as Administrator.", "Insufficient Privileges", 'OK', 'Error')
     exit
-}c
+}
 function Get-WindowsTheme {
     try {
         $key = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"
@@ -989,7 +989,7 @@ foreach ($app in $selectedApps) {
             $regBackup = Join-Path $extractFolder "Windhawk.reg"
             New-Item -ItemType Directory -Path "$winMacDirectory\resource-redirect\" -Force | Out-Null
             Copy-Item -Path $modsSourceBackup -Destination $windhawkRoot -Recurse -Force
-            Copy-Item -Path '..\config\windhawk\resource-redirect\*' -Destination "$winMacDirectory\resource-redirect\" -Recurse -Force
+            Expand-Archive -Path '..\config\windhawk\resource-redirect.zip' -DestinationPath "$winMacDirectory\resource-redirect\" -Force
             $engineFolder = Join-Path $windhawkRoot "Engine"
             New-Item -ItemType Directory -Path $engineFolder -Force | Out-Null
             Copy-Item -Path $modsBackup -Destination $engineFolder -Recurse -Force
@@ -1350,7 +1350,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             $RegCursors.SetValue("Person","%SYSTEMROOT%\Cursors\windows-modern-v2\x1\link-select_$cursorColor.cur")
             $RegCursors.Close()
             $RegConnect.Close()
-            Add-Type -TypeDefinition @"
+Add-Type -TypeDefinition @"
 using System;
 using System.Runtime.InteropServices;
 public class User32 {
@@ -1360,55 +1360,61 @@ public class User32 {
 "@
             [User32]::SystemParametersInfo(0x0057, 0, [IntPtr]::Zero, 0x0001) > $null 2>&1
         #? Pin User folder, Programs and Recycle Bin to Quick Access
-            $registryPath3 = "HKCU:\SOFTWARE\WinMac"
-            if (-not (Test-Path -Path $registryPath3)) {New-Item -Path $registryPath3 -Force | Out-Null }
-            if ((Get-ItemProperty -Path $registryPath3 -Name "QuickAccess").QuickAccess -ne 1) {
+            function Get-QuickAccessPinned {
+                param(
+                    [Parameter(Mandatory=$true)]
+                    [string]$NamespacePath
+                )
+                try {
+                    $shell = New-Object -ComObject Shell.Application
+                    $folder = $shell.Namespace($NamespacePath)
+                    if (-not $folder) { return }
+                    $verbs = $folder.Self.Verbs()
+                    $hasUnpin = $verbs | Where-Object { ($_.Verb -eq 'unpinfromhome') -or ($_.Name -like 'Unpin from*') }
+                    if ($hasUnpin) { return }
+                    $hasPin = $verbs | Where-Object { ($_.Verb -eq 'pintohome') -or ($_.Name -like '*Pin to Quick access*') -or ($_.Name -like 'Pin to*') }
+                    if ($hasPin) { $folder.Self.InvokeVerb('pintohome') }
+                } catch {
+                    # ignore
+                }
+            }
+
+            # Pin User home folder to Quick Access
 $homeIni = @"
 [.ShellClassInfo]
 IconResource=C:\Windows\System32\SHELL32.dll,160
 "@
-                $homeDir = "C:\Users\$env:USERNAME"
-                $homeIniFilePath = "$($homeDir)\desktop.ini"
-                if (Test-Path $homeIniFilePath)  {
-                    Remove-Item $homeIniFilePath -Force
-                    New-Item -Path $homeIniFilePath -ItemType File -Force | Out-Null
-                }
-                Add-Content $homeIniFilePath -Value $homeIni | Out-Null
-                (Get-Item $homeIniFilePath -Force).Attributes = 'Hidden, System, Archive'
-                (Get-Item $homeDir -Force).Attributes = 'ReadOnly, Directory'
-                $homePin = new-object -com shell.application
-                if (-not ($homePin.Namespace($homeDir).Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
-                    $homePin.Namespace($homeDir).Self.InvokeVerb("pintohome")
-                } 
+            $homeIniFilePath = "$($ENV:USERPROFILE)\desktop.ini"
+            if (Test-Path $homeIniFilePath)  {
+                Remove-Item $homeIniFilePath -Force
+                New-Item -Path $homeIniFilePath -ItemType File -Force | Out-Null
+            }
+            Add-Content $homeIniFilePath -Value $homeIni | Out-Null
+            (Get-Item $homeIniFilePath -Force).Attributes = 'Hidden, System, Archive'
+            (Get-Item $ENV:USERPROFILE -Force).Attributes = 'ReadOnly, Directory'
+            Get-QuickAccessPinned -NamespacePath $ENV:USERPROFILE
+            # Pin Programs folder to Quick Access
 $programsIni = @"
 [.ShellClassInfo]
-IconResource=C:\WINDOWS\System32\imageres.dll,-87
-"@
-                $programsIniFilePath = "$($programsDir)\desktop.ini"
-                if (Test-Path $programsIniFilePath)  {
-                    Remove-Item $programsIniFilePath -Force
-                    New-Item -Path $programsIniFilePath -ItemType File -Force | Out-Null
-                }
-                Add-Content $programsIniFilePath -Value $programsIni  | Out-Null
-                (Get-Item $programsIniFilePath -Force).Attributes = 'Hidden, System, Archive'
-                (Get-Item $programsDir -Force).Attributes = 'ReadOnly, Directory'
-                $programsPin = new-object -com shell.application
-                if (-not ($programsPin.Namespace($programsDir).Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
-                    $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome")
-                }
-                $RBPath = 'HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\pintohome\command\'
-                $name = "DelegateExecute"
-                $value = "{b455f46e-e4af-4035-b0a4-cf18d2f6f28e}"
-                New-Item -Path $RBPath -Force  | Out-Null
-                New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force | Out-Null
-                $oShell = New-Object -ComObject Shell.Application
-                $recycleBin = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
-                if (-not ($recycleBin.Self.Verbs() | Where-Object {$_.Name -eq "pintohome"})) {
-                    $recycleBin.Self.InvokeVerb("PinToHome")
-                }
-                Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse
-                Set-ItemProperty -Path $registryPath3 -Name "QuickAccess" -Value 1 | Out-Null
+IconResource=C:\Windows\Resources\Icons\programs.ico
+"@ 
+            $programsDir = "$($ENV:USERPROFILE)\AppData\Roaming\Microsoft\Windows\Start Menu\Programs"
+            $programsIniFilePath = "$($programsDir)\desktop.ini"
+            if (Test-Path $programsIniFilePath)  {
+                Remove-Item $programsIniFilePath -Force
+                New-Item -Path $programsIniFilePath -ItemType File -Force | Out-Null
             }
+            Add-Content $programsIniFilePath -Value $programsIni  | Out-Null
+            (Get-Item $programsIniFilePath -Force).Attributes = 'Hidden, System, Archive'
+            (Get-Item $programsDir -Force).Attributes = 'ReadOnly, Directory'
+            Get-QuickAccessPinned -NamespacePath $programsDir
+            # Pin Recycle Bin to Quick Access
+            $RBPath = 'HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\pintohome\command\'
+            $name = "DelegateExecute"
+            $value = "{b455f46e-e4af-4035-b0a4-cf18d2f6f28e}"
+            New-Item -Path $RBPath -Force  | Out-Null
+            New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force | Out-Null
+            Get-QuickAccessPinned -NamespacePath 'shell:::{645FF040-5081-101B-9F08-00AA002F954E}'
         #? Remove shortcut arrows
             Copy-Item -Path "..\config\blank.ico" -Destination "C:\Windows" -Force
             New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Force | Out-Null
@@ -1467,7 +1473,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             $shortcut = $shell.CreateShortcut($sendToPath)
             $shortcut.TargetPath = $targetPath
             $shortcut.IconLocation = $targetPath
-            $shortcut.Save()   
+            $shortcut.Save()
         }
     }
 }
@@ -1477,7 +1483,8 @@ Remove-Item "..\temp" -Recurse -Force
 Start-Sleep 3
 if (-not (Get-Process -Name explorer)) { Start-Process explorer }
 Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
-Write-Host @"
+Write-Host -ForegroundColor Cyan @"
+
 
 Enjoy and support by giving feedback and contributing to the project!
 
@@ -1486,8 +1493,7 @@ https://github.com/Asteski/WinMac
 
 If you have any questions or suggestions, please contact me on GitHub.
 
-"@ -ForegroundColor Cyan
-
+"@
 Write-Host "-----------------------------------------------------------------------------"  -ForegroundColor Cyan
 Start-Sleep 2
 $restartConfirmation = Read-Host "`nRestart computer now? It's recommended to fully apply all the changes (Y/n)"
