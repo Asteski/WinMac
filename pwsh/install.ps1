@@ -1442,11 +1442,6 @@ IconResource=C:\Windows\Resources\Icons\programs.ico
             (Get-Item $programsDir -Force).Attributes = 'ReadOnly, Directory'
             Get-QuickAccessPinned -NamespacePath $programsDir
             # Pin Recycle Bin to Quick Access
-            $RBPath = 'HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\pintohome\command\'
-            $name = "DelegateExecute"
-            $value = "{b455f46e-e4af-4035-b0a4-cf18d2f6f28e}"
-            New-Item -Path $RBPath -Force  | Out-Null
-            New-ItemProperty -Path $RBPath -Name $name -Value $value -PropertyType String -Force | Out-Null
             Get-QuickAccessPinned -NamespacePath 'shell:::{645FF040-5081-101B-9F08-00AA002F954E}'
         #? Remove shortcut arrows
             New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Force | Out-Null
