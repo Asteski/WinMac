@@ -1503,14 +1503,10 @@ IconResource=C:\Windows\Resources\Icons\programs.ico
         #? Set Theme
             if ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
                 Start-Process -FilePath "$ENV:WINDIR\Resources\Themes\dark.theme"
-                # Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "Wallpaper" -Value "$ENV:WINDIR\Web\Wallpaper\Server\img19.jpg"
             } else {
                 Start-Process -FilePath "$ENV:WINDIR\Resources\Themes\aero.theme"
-                # Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "Wallpaper" -Value "$ENV:WINDIR\Web\Wallpaper\Server\img0.jpg"
             }
             Start-Sleep 4
-            # if (Get-Process -n SystemSettings -ErrorAction SilentlyContinue) { Stop-Process -n SystemSettings -Force }
-            # write-host
         Write-Host "Other settings deployment completed." -ForegroundColor Green
         }
     }
