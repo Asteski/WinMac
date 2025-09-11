@@ -1128,7 +1128,7 @@ foreach ($app in $selectedApps) {
             $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
             Register-ScheduledTask -TaskName "Keyboard Shortcuts" -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -Description $description | Out-Null
             Start-Process -FilePath "$winMacDirectory\WinMacKeyboardShortcuts.exe" -WorkingDirectory $winMacDirectory
-
+            #!#!#!#!#!
             $description = "Edge Keyboard Shortcuts - custom keyboard shortcut for Edge escribed in Commands cheat sheet wiki page."
             $taskService = New-Object -ComObject "Schedule.Service"
             $taskService.Connect()
@@ -1141,8 +1141,7 @@ foreach ($app in $selectedApps) {
             $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
             Register-ScheduledTask -TaskName "Keyboard Shortcuts" -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -Description $description | Out-Null
             Start-Process -FilePath "$winMacDirectory\EdgeKeyboardShortcuts.exe" -WorkingDirectory $winMacDirectory
-
-
+            #!#!#!#!#!
             if (Get-Process window-switcher) { Stop-Process -Name window-switcher }
             $description = "Window Switcher - Cycle between windows of the same app like in macOS - Alt+backtick."
             $taskService = New-Object -ComObject "Schedule.Service"
