@@ -62,10 +62,8 @@
     currentSetting := RegRead("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Hidden")
     newSetting := (currentSetting = 2) ? 1 : 2
     RegWrite(newSetting, "REG_DWORD", "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Hidden")
-
     ; Send WM_SETTINGCHANGE to notify Explorer of the change
     SendMessage(0x1A, 0, StrPtr("Environment"), 0xFFFF)
-
     ; Refresh all open Explorer windows (ahk_class CabinetWClass or ExploreWClass)
     idList := WinGetList("ahk_class CabinetWClass")
     for this_id in idList
@@ -74,7 +72,7 @@
     }
 }
 
-; Ctrl+Shift+L => Copy Current Path
+; Ctrl+Shift+L => Copy Current Path in File Explorer
 ^+l:: {
     Send("^l")
     Sleep(100)
@@ -82,4 +80,23 @@
     Sleep(10)
     Send("{Esc}")
 }
+
+; Right Click on Start Menu => Left Click
+#HotIf WinMacMenu()
+$RButton::Send("{LButton down}{LButton up}")
+#HotIf
+WinMacMenu() {
+    MouseGetPos , , &id, &control
+	WGC := WinGetClass(id)
+	WGT := WinGetTitle(id)
+	If (WGC = "Shell_TrayWnd" And control = "Start1") 
+	{
+		return True
+	}
+	Else If (WGC = "Button" And WGT = "Start") 
+	{
+		return True
+	} 
+}
+
 #HotIf
