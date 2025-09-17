@@ -41,13 +41,13 @@
 
 - **Hot Corners** - assign custom actions triggered when you hover your mouse cursor over the screen corners
 
-- **Enhanced Start Menu** - Start Menu replaced with customized Power User menu to resemble Apple menu
+- **Enhanced Start Menu** - Start Menu replaced with newly developed Win32 app called WinMac menu, to fully resemble functionality of Apple menu
 
 - **Enhanced Taskbar** - legacy Taskbar put on top, with enhanced capabilities and looks to match Windows 11 design
 
-- **Enhanced Explorer** - improved Explorer and context menus which makes explorer load fast and look clean
+- **Enhanced File Explorer** - improved File Explorer looks and cleaned up context menus, which makes File Explorer load fast and look clean
 
-- **Enhanced Terminal** - custom prompt and ton of custom functions which bring most commonly used macOS/Linux commands
+- **Enhanced Terminal** - custom prompt and a ton of custom functions, bringing most commonly used macOS/Linux commands
 
 - **Enhanced Icons** - refresh legacy and default Windows components with modern set of icons
 
