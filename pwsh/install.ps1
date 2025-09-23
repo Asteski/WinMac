@@ -1,4 +1,3 @@
-# Test marker: non-functional change for pipeline verification.
 param (
     [switch]$noGUI
 )
@@ -967,14 +966,22 @@ foreach ($app in $selectedApps) {
                     Set-ItemProperty -Path $oshMenuSettings -Name "MiddleClick" -Value "Command"
                     Set-ItemProperty -Path $oshMenuSettings -Name "ShiftClick" -Value "Command"
                     Set-ItemProperty -Path $oshMenuSettings -Name "WinKey" -Value "Command"
-                    Set-ItemProperty -Path $oshMenuSettings -Name "MouseClickCommand" -Value "$winMacDirectory\Menu\WinMacMenu.exe"
+                    Set-ItemProperty -Path $oshMenuSettings -Name "MouseClickCommand" -Value "%WINMAC%\Menu\WinMacMenu.exe"
                     Set-ItemProperty -Path $oshMenuSettings -Name "MiddleClickCommand" -Value "explorer.exe"
                     Set-ItemProperty -Path $oshMenuSettings -Name "ShiftClickCommand" -Value "C:\Windows\System32\ModernShutDownWindows.exe"
-                    Set-ItemProperty -Path $oshMenuSettings -Name "WinKeyCommand" -Value "$winMacDirectory\Menu\WinMacMenu.exe"
+                    Set-ItemProperty -Path $oshMenuSettings -Name "WinKeyCommand" -Value "%WINMAC%\Menu\WinMacMenu_Windowskey.lnk"
                     Set-ItemProperty -Path $oshMenuSettings -Name "ShiftWin" -Value "Nothing"
                     Set-ItemProperty -Path $oshMenuSettings -Name "ShiftRight" -Value 1
                     Set-ItemProperty -Path $oshMenuSettings -Name "SearchBox" -Value "Hide"
                     if ($sysType -like "*ARM*") { Copy-Item -Path "..\bin\menu\arm64\WinMacMenu.exe" -Destination "$winMacDirectory\Menu" -Recurse -Force } else { Copy-Item -Path "..\bin\menu\x64\WinMacMenu.exe" -Destination "$winMacDirectory\Menu" -Recurse -Force }
+                    $shortcutPath = "$winMacDirectory\Menu\WinMacMenu_Windowskey.lnk"
+                    $targetPath = "$winMacDirectory\Menu\WinMacMenu.exe"
+                    $shell = New-Object -ComObject WScript.Shell
+                    $shortcut = $shell.CreateShortcut($shortcutPath)
+                    $shortcut.TargetPath = $targetPath
+                    $shortcut.Arguments = '--config windowskey.config.ini'
+                    $shortcut.IconLocation = $targetPath
+                    $shortcut.Save()
                     Copy-Item -Path "..\config\menu\*.ini" -Destination "$winMacDirectory\Menu" -Force
                     Copy-Item -Path "..\bin\menu\WinMac_Menu_RMB_Trigger.exe" -Destination $winMacDirectory -Force
                     $folderName = "WinMac"
