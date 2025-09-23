@@ -662,10 +662,8 @@ if ($null -eq $wingetCliCheck) {
 else {
     Write-Host "Winget installation completed." -ForegroundColor Green
 }
-#* Copy common resource files to Windows directory
-Write-Host "Copying common resource files to Windows directory..." -ForegroundColor Yellow
-New-Item -ItemType Directory -Path "$ENV:WINDIR\Resources\Icons" -Force | Out-Null
-New-Item -ItemType Directory -Path "$ENV:WINDIR\Resources\Scripts" -Force | Out-Null
+New-Item -ItemType Directory -Path "$winMacDirectory\Icons" -Force | Out-Null
+New-Item -ItemType Directory -Path "$winMacDirectory\Resources\Scripts" -Force | Out-Null
 New-Item -ItemType Directory -Path "$ENV:WINDIR\Resources\Themes\Legacy" -Force | Out-Null
 takeown /F "$env:WINDIR\Resources" /A /R /D Y > $null 2>&1
 icacls "$env:WINDIR\Resources" /grant Administrators:F /T > $null 2>&1
@@ -682,8 +680,6 @@ $part2 = [System.IO.File]::ReadAllBytes("$wallpapersParentDirectory\wallpapers.z
 Expand-Archive -Path "$wmTemp\wallpapers.zip" -DestinationPath "$ENV:WINDIR\Web\Wallpaper" -Force
 Remove-Item "$wmTemp\wallpapers.zip" -Force
 icacls "$env:WINDIR\Resources" /inheritance:e /T > $null 2>&1
-# icacls "$env:WINDIR\Web" /inheritance:e /T > $null 2>&1
-Write-Host "Copying common resource files to Windows directory completed." -ForegroundColor Green
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
 #! WinMac deployment
 #* Install WinMac components
