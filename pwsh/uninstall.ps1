@@ -457,6 +457,7 @@ foreach ($app in $selectedApps) {
     #* WinMac Menu
         "5" {
             Write-Host "Uninstalling WinMac Menu..." -ForegroundColor Yellow
+            Get-Process -Name WinMacMenu -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.Id -Force }
             $sabRegPath = "HKCU:\Software\StartIsBack"
             winget uninstall --id "Open-Shell.Open-Shell-Menu" --source winget --force | Out-Null
             Uninstall-WinGetPackage -name "Winver UWP" | Out-Null
