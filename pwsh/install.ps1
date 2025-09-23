@@ -1,3 +1,4 @@
+# Test marker: non-functional change for pipeline verification.
 param (
     [switch]$noGUI
 )
@@ -7,6 +8,12 @@ $WarningPreference = "SilentlyContinue"
 $ProgressPreference = "SilentlyContinue"
 $programsDir = "$ENV:APPDATA\Microsoft\Windows\Start Menu\Programs"
 $winMacDirectory = "$ENV:LOCALAPPDATA\WinMac"
+if (-not [Environment]::GetEnvironmentVariable("WINMAC", "User")) {
+    [Environment]::SetEnvironmentVariable("WINMAC", $winMacDirectory, "User")
+}
+if (-not [Environment]::GetEnvironmentVariable("WINMAC", "Machine")) {
+    [Environment]::SetEnvironmentVariable("WINMAC", $winMacDirectory, "Machine")
+}
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName PresentationFramework
 if (-not (Test-Path -Path "..\temp")) {
@@ -85,7 +92,6 @@ if (!($noGUI)) {
         <SolidColorBrush x:Key="AccentBrush" Color="$accentColor"/>
         <SolidColorBrush x:Key="SecondaryBackgroundBrush" Color="$secondaryBackgroundColor"/>
         <SolidColorBrush x:Key="BorderBrush" Color="$borderColor"/>
-        <Thickness x:Key="BorderThickness">0</Thickness>  <!-- Corrected Thickness -->
     </Window.Resources>
 
     <Grid Background="{StaticResource BackgroundBrush}">
@@ -960,15 +966,15 @@ foreach ($app in $selectedApps) {
                     Set-ItemProperty -Path $oshMenuSettings -Name "MiddleClick" -Value "Command"
                     Set-ItemProperty -Path $oshMenuSettings -Name "ShiftClick" -Value "Command"
                     Set-ItemProperty -Path $oshMenuSettings -Name "WinKey" -Value "Command"
-                    Set-ItemProperty -Path $oshMenuSettings -Name "MouseClickCommand" -Value "$winMacDirectory\WinMacMenu.exe"
+                    Set-ItemProperty -Path $oshMenuSettings -Name "MouseClickCommand" -Value "$winMacDirectory\Menu\WinMacMenu.exe"
                     Set-ItemProperty -Path $oshMenuSettings -Name "MiddleClickCommand" -Value "explorer.exe"
                     Set-ItemProperty -Path $oshMenuSettings -Name "ShiftClickCommand" -Value "C:\Windows\System32\ModernShutDownWindows.exe"
-                    Set-ItemProperty -Path $oshMenuSettings -Name "WinKeyCommand" -Value "$winMacDirectory\WinMacMenu.exe"
+                    Set-ItemProperty -Path $oshMenuSettings -Name "WinKeyCommand" -Value "$winMacDirectory\Menu\WinMacMenu.exe"
                     Set-ItemProperty -Path $oshMenuSettings -Name "ShiftWin" -Value "Nothing"
                     Set-ItemProperty -Path $oshMenuSettings -Name "ShiftRight" -Value 1
                     Set-ItemProperty -Path $oshMenuSettings -Name "SearchBox" -Value "Hide"
-                    if ($sysType -like "*ARM*") { Copy-Item -Path "..\bin\menu\arm64\WinMacMenu.exe" -Destination $winMacDirectory -Recurse -Force } else { Copy-Item -Path "..\bin\menu\x64\WinMacMenu.exe" -Destination $winMacDirectory -Recurse -Force }
-                    Copy-Item -Path "..\config\menu\config.ini" -Destination $winMacDirectory -Force
+                    if ($sysType -like "*ARM*") { Copy-Item -Path "..\bin\menu\arm64\WinMacMenu.exe" -Destination "$winMacDirectory\Menu" -Recurse -Force } else { Copy-Item -Path "..\bin\menu\x64\WinMacMenu.exe" -Destination "$winMacDirectory\Menu" -Recurse -Force }
+                    Copy-Item -Path "..\config\menu\*.ini" -Destination "$winMacDirectory\Menu" -Force
                     Copy-Item -Path "..\bin\menu\WinMac_Menu_RMB_Trigger.exe" -Destination $winMacDirectory -Force
                     $folderName = "WinMac"
                     $taskFolder = "\" + $folderName
@@ -1111,9 +1117,10 @@ foreach ($app in $selectedApps) {
             Write-Host "Installing Keyboard Shortcuts..." -ForegroundColor Yellow
             New-Item -ItemType Directory -Path "$winMacDirectory" | Out-Null
             if (Get-Process keyshortcuts) { Stop-Process -Name keyshortcuts }
-            Copy-Item '..\bin\ahk\WinMacKeyboardShortcuts.exe' "$winMacDirectory" 
+            Copy-Item '..\bin\ahk\WinMacKeyboardShortcuts.exe' "$winMacDirectory"
             Copy-Item '..\bin\ahk\EdgeKeyboardShortcuts.exe' "$winMacDirectory" 
             Copy-Item '..\bin\windowswitcher\window-switcher*' "$winMacDirectory"
+            Get-ChildItem -Path $winMacDirectory -Filter "*keyshortcuts*" | ForEach-Object {Remove-Item $_.FullName -Force}
             $folderName = "WinMac"
             $taskFolder = "\" + $folderName
             $description = "WinMac Keyboard Shortcuts - custom keyboard shortcut described in Commands cheat sheet wiki page."
