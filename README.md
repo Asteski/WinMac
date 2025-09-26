@@ -41,7 +41,7 @@
 
 - **Hot Corners** - assign custom actions triggered when you hover your mouse cursor over the screen corners
 
-- **Enhanced Start Menu** - Start Menu replaced with newly developed Win32 app called WinMac menu, to fully resemble functionality of Apple menu
+- **Enhanced Start Menu** - Start Menu replaced with newly developed Win32 app to fully resemble functionality of Apple menu
 
 - **Enhanced Taskbar** - legacy Taskbar put on top, with enhanced capabilities and looks to match Windows 11 design
 
