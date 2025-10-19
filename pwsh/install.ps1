@@ -1,7 +1,7 @@
 param (
     [switch]$noGUI
 )
-$version = "1.3.0"
+$version = "1.3.1"
 $ErrorActionPreference = "SilentlyContinue"
 $WarningPreference = "SilentlyContinue"
 $ProgressPreference = "SilentlyContinue"
@@ -654,9 +654,9 @@ foreach ($app in $selectedApps) {
     #* PowerToys
         "1" {
             Write-Host "Installing PowerToys..." -ForegroundColor Yellow
-            # winget configure --enable | Out-Null
-            # pwsh -NoProfile -Command "winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements" | Out-Null
-            # Copy-Item -Path "..\config\powertoys\ptr\ptr.exe" -Destination "$env:LOCALAPPDATA\PowerToys" -Recurse -Force
+            winget configure --enable | Out-Null
+            pwsh -NoProfile -Command "winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements" | Out-Null
+            Copy-Item -Path "..\config\powertoys\ptr\ptr.exe" -Destination "$env:LOCALAPPDATA\PowerToys" -Recurse -Force
             Copy-Item -Path "..\config\powertoys\Assets\PowerLauncher" -Destination "$env:LOCALAPPDATA\PowerToys\Assets" -Recurse -Force
             Copy-Item -Path "..\config\powertoys\Plugins" -Destination "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run" -Recurse -Force
             if ($blueOrYellow -eq 'B' -or $blueOrYellow -eq 'b') {
@@ -689,8 +689,9 @@ foreach ($app in $selectedApps) {
             }
             Stop-Process -Name PowerToys*
             Install-WingetPackage -id ThioJoe.SvgThumbnailExtension | Out-Null
+            Stop-Process -Name PowerToys.LightSwitchService
             Stop-Process -Name Microsoft.CmdPal.UI
-            (Get-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json") -replace '"CmdPal":true', '"CmdPal":false' -replace '"show_tray_icon":true', '"show_tray_icon":false' | Set-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json" -Force
+            (Get-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json") -replace '"CmdPal":true', '"CmdPal":false' -replace '"show_tray_icon":true', '"show_tray_icon":false' -replace '"LightSwitch": true', '"LightSwitch": false' | Set-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json" -Force
             New-Item -ItemType Directory -Path $winMacDirectory | Out-Null
             Copy-Item '..\bin\ahk\TriggerPeekWithSpacebar.exe' $winMacDirectory
             $description = "Trigger PowerToys Peek with Space bar."
@@ -1126,9 +1127,14 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
 "@
             Set-Content -Path $tempVbs -Value $vbsContent -Encoding ASCII
             Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""
-            while (-not (Get-Process -Name "Nexus")) {
+            $sw = [Diagnostics.Stopwatch]::StartNew()
+            while (-not (Get-Process -Name "Nexus" -ErrorAction SilentlyContinue)) {
+                if ($sw.Elapsed.TotalSeconds -ge 60) {
+                    break
+                }
                 Start-Sleep -Seconds 1
             }
+            $sw.Stop()
             Stop-Process -Name "Nexus" -Force
             $wingetTerminalCheck = Get-WinGetPackage -Id "Microsoft.WindowsTerminal"
             if ($null -eq $wingetTerminalCheck) {
@@ -1222,7 +1228,12 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
 "@
             Set-Content -Path $tempVbs -Value $vbsContent -Encoding ASCII
             Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""
-            while (!(Get-Process "nexus")) { Start-Sleep 1 }
+            $sw = [Diagnostics.Stopwatch]::StartNew()
+            while (-not (Get-Process -Name "Nexus" -ErrorAction SilentlyContinue)) {
+                if ($sw.Elapsed.TotalSeconds -ge 60) { break }
+                Start-Sleep -Seconds 1
+            }
+            $sw.Stop()
             Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Nexus.lnk" -Destination $programsDir -Force 
             Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\Nexus.lnk" -Destination $programsDir -Force 
             Write-Host "Nexus Dock installation completed." -ForegroundColor Green
