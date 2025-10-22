@@ -503,35 +503,6 @@ if ($selectedApps -like '*4*' -or $selectedApps -like '*7*' -or $selectedApps -l
         $lightOrDark = "L"
     }
 }
-# if ($selectedApps -like '*4*' -or $selectedApps -like '*7*' -or $selectedApps -like '*9*' -or $selectedApps -like '*12*') {
-#     Clear-Host
-#     Show-Header
-#     $lightOrDark = Read-Host "`nEnter 'L' for light or 'D' for dark themed Windows"
-#     if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
-#         Write-Host "Using light theme." -ForegroundColor Green
-#         Start-Sleep 1
-#         $stackTheme = 'light'
-#         $orbTheme = 'black'
-#     } elseif ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
-#         Write-Host "Using dark theme." -ForegroundColor Green
-#         Start-Sleep 1
-#         $stackTheme = 'dark'
-#         $orbTheme = 'white'
-#     } else {
-#         if ($windowsTheme -eq "Dark") {
-#             Write-Host "Invalid input. Defaulting to dark theme." -ForegroundColor Yellow
-#             $stackTheme = 'dark'
-#             $orbTheme = 'white'
-#             $lightOrDark = "D"
-#         } else {
-#             Write-Host "Invalid input. Defaulting to light theme." -ForegroundColor Yellow
-#             $stackTheme = 'light'
-#             $orbTheme = 'black'
-#             $lightOrDark = "L"
-#         }
-#         Start-Sleep 1
-#     }
-# }
 if ($selectedApps -like '*4*') {
     Clear-Host
     Show-Header
