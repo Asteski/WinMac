@@ -55,6 +55,8 @@ set-alias -name ss -value Select-String
 set-alias -name alias -value Set-Alias
 set-alias -name df -value Get-Volume
 set-alias -name desk -value desktop
+set-alias -name cpy -value Set-Clipboard
+set-alias -name pst -value Get-Clipboard
 
 # Functions
 function onedrive { Set-Location $env:ONEDRIVE }
@@ -66,9 +68,6 @@ function sed($file, $find, $replace) {
     (Get-Content $file).replace("$find", $replace) | Set-Content $file
 }
 function mkcd { param($dir) mkdir $dir -Force; Set-Location $dir }
-function cpy { $string = "$args"; Set-Clipboard $string }
-function pst { Get-Clipboard }
-
 function .. { Set-Location .. }
 function ..2 { Set-Location ../.. }
 function ..3 { Set-Location ../../.. }
