@@ -1,7 +1,7 @@
 param (
     [switch]$noGUI
 )
-$version = "1.3.0"
+$version = "1.3.1"
 $ErrorActionPreference = "SilentlyContinue"
 $WarningPreference = "SilentlyContinue"
 $ProgressPreference = "SilentlyContinue"
@@ -23,7 +23,7 @@ if (-not $adminTest) {
     Add-Type -AssemblyName PresentationFramework
     [void][System.Windows.MessageBox]::Show("This script must be run as Administrator.", "Insufficient Privileges", 'OK', 'Error')
     exit
-}c
+}
 function Get-WindowsTheme {
     try {
         $key = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"
@@ -493,27 +493,45 @@ if ($selectedApps -like '*4*' -or $selectedApps -like '*9*') {
     }
 }
 if ($selectedApps -like '*4*' -or $selectedApps -like '*7*' -or $selectedApps -like '*9*' -or $selectedApps -like '*12*') {
-    Clear-Host
-    Show-Header
-    $lightOrDark = Read-Host "`nEnter 'L' for light or 'D' for dark themed Windows"
-    if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
-        Write-Host "Using light theme." -ForegroundColor Green
-        Start-Sleep 1
-        $stackTheme = 'light'
-        $orbTheme = 'black'
-    } elseif ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
-        Write-Host "Using dark theme." -ForegroundColor Green
-        Start-Sleep 1
+    if ($windowsTheme -eq "Dark") {
         $stackTheme = 'dark'
         $orbTheme = 'white'
+        $lightOrDark = "D"
     } else {
-        Write-Host "Invalid input. Defaulting to light theme." -ForegroundColor Yellow
-        Start-Sleep 1
         $stackTheme = 'light'
         $orbTheme = 'black'
         $lightOrDark = "L"
     }
 }
+# if ($selectedApps -like '*4*' -or $selectedApps -like '*7*' -or $selectedApps -like '*9*' -or $selectedApps -like '*12*') {
+#     Clear-Host
+#     Show-Header
+#     $lightOrDark = Read-Host "`nEnter 'L' for light or 'D' for dark themed Windows"
+#     if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
+#         Write-Host "Using light theme." -ForegroundColor Green
+#         Start-Sleep 1
+#         $stackTheme = 'light'
+#         $orbTheme = 'black'
+#     } elseif ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
+#         Write-Host "Using dark theme." -ForegroundColor Green
+#         Start-Sleep 1
+#         $stackTheme = 'dark'
+#         $orbTheme = 'white'
+#     } else {
+#         if ($windowsTheme -eq "Dark") {
+#             Write-Host "Invalid input. Defaulting to dark theme." -ForegroundColor Yellow
+#             $stackTheme = 'dark'
+#             $orbTheme = 'white'
+#             $lightOrDark = "D"
+#         } else {
+#             Write-Host "Invalid input. Defaulting to light theme." -ForegroundColor Yellow
+#             $stackTheme = 'light'
+#             $orbTheme = 'black'
+#             $lightOrDark = "L"
+#         }
+#         Start-Sleep 1
+#     }
+# }
 if ($selectedApps -like '*4*') {
     Clear-Host
     Show-Header
@@ -654,9 +672,9 @@ foreach ($app in $selectedApps) {
     #* PowerToys
         "1" {
             Write-Host "Installing PowerToys..." -ForegroundColor Yellow
-            # winget configure --enable | Out-Null
-            # pwsh -NoProfile -Command "winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements" | Out-Null
-            # Copy-Item -Path "..\config\powertoys\ptr\ptr.exe" -Destination "$env:LOCALAPPDATA\PowerToys" -Recurse -Force
+            winget configure --enable | Out-Null
+            pwsh -NoProfile -Command "winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements" | Out-Null
+            Copy-Item -Path "..\config\powertoys\ptr\ptr.exe" -Destination "$env:LOCALAPPDATA\PowerToys" -Recurse -Force
             Copy-Item -Path "..\config\powertoys\Assets\PowerLauncher" -Destination "$env:LOCALAPPDATA\PowerToys\Assets" -Recurse -Force
             Copy-Item -Path "..\config\powertoys\Plugins" -Destination "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run" -Recurse -Force
             if ($blueOrYellow -eq 'B' -or $blueOrYellow -eq 'b') {
@@ -689,8 +707,9 @@ foreach ($app in $selectedApps) {
             }
             Stop-Process -Name PowerToys*
             Install-WingetPackage -id ThioJoe.SvgThumbnailExtension | Out-Null
+            Stop-Process -Name PowerToys.LightSwitchService
             Stop-Process -Name Microsoft.CmdPal.UI
-            (Get-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json") -replace '"CmdPal":true', '"CmdPal":false' -replace '"show_tray_icon":true', '"show_tray_icon":false' | Set-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json" -Force
+            (Get-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json") -replace '"CmdPal":true', '"CmdPal":false' -replace '"show_tray_icon":true', '"show_tray_icon":false' -replace '"LightSwitch": true', '"LightSwitch": false' | Set-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json" -Force
             New-Item -ItemType Directory -Path $winMacDirectory | Out-Null
             Copy-Item '..\bin\ahk\TriggerPeekWithSpacebar.exe' $winMacDirectory
             $description = "Trigger PowerToys Peek with Space bar."
@@ -923,7 +942,7 @@ foreach ($app in $selectedApps) {
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftClick" -Value "Command"
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "WinKey" -Value "Command"
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "MouseClickCommand" -Value "$winMacDirectory\WinMacMenu.exe"
-                    Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftClickCommand" -Value "Nothing"
+                    Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftClickCommand" -Value "ModernShutDownWindows"
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "WinKeyCommand" -Value "$winMacDirectory\WinMacMenu.exe"
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftWin" -Value "Nothing"
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftRight" -Value 1
@@ -1126,23 +1145,19 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
 "@
             Set-Content -Path $tempVbs -Value $vbsContent -Encoding ASCII
             Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""
-            while (-not (Get-Process -Name "Nexus")) {
+            $sw = [Diagnostics.Stopwatch]::StartNew()
+            while (-not (Get-Process -Name "Nexus" -ErrorAction SilentlyContinue)) {
+                if ($sw.Elapsed.TotalSeconds -ge 60) {
+                    break
+                }
                 Start-Sleep -Seconds 1
             }
+            $sw.Stop()
             Stop-Process -Name "Nexus" -Force
             $wingetTerminalCheck = Get-WinGetPackage -Id "Microsoft.WindowsTerminal"
             if ($null -eq $wingetTerminalCheck) {
                 winget install Microsoft.WindowsTerminal | Out-Null
             }
-            $winStep = 'C:\Users\Public\Documents\WinStep'
-            Remove-Item -Path "$winStep\Themes\*" -Recurse -Force
-            Copy-Item -Path "..\config\dock\themes\*" -Destination "$winStep\Themes\" -Recurse -Force
-            Remove-Item -Path "$winStep\NeXus\Indicators\*" -Force -Recurse 
-            Copy-Item -Path "..\config\dock\indicators\*" -Destination "$winStep\NeXus\Indicators\" -Recurse -Force
-            New-Item -ItemType Directory -Path "$winStep\Sounds" -Force | Out-Null
-            Copy-Item -Path "..\config\dock\sounds\*" -Destination "$winStep\Sounds\" -Recurse -Force
-            New-Item -ItemType Directory -Path "$winStep\Icons" -Force | Out-Null
-            Copy-Item "..\config\icons" "$winStep" -Recurse -Force
             $regFile = "..\config\dock\winstep.reg"
             $downloadsPath = "$env:USERPROFILE\Downloads"
             if ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
@@ -1180,18 +1195,18 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             if ($selectedApps -like '*10*' -or (Test-Path "$env:LOCALAPPDATA\WinLaunch")) {
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Label9" -Value "Launchpad"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path9" -Value "$env:LOCALAPPDATA\WinLaunch\WinLaunch.exe"
-                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath9" -Value "C:\Users\Public\Documents\Winstep\Icons\launchpad.ico"
+                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath9" -Value "C:\ProgramData\Winstep\Icons\launchpad.ico"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type9" -Value "1"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Label10" -Value "Capture Desktop"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path10" -Value "*78"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type10" -Value "2"
-                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath10" -Value "C:\Users\Public\Documents\Winstep\Icons\camera.ico"
+                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath10" -Value "C:\ProgramData\Winstep\Icons\camera.ico"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockNoItems1" -Value "10"
             } else {
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Label9" -Value "Capture Desktop"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Path9" -Value "*78"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1Type9" -Value "2"
-                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath9" -Value "C:\Users\Public\Documents\Winstep\Icons\camera.ico"
+                Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath9" -Value "C:\ProgramData\Winstep\Icons\camera.ico"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockNoItems1" -Value "9"
             }
                 Remove-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\WinSTEP2000\NeXuS\Docks" -Name "DockLabelColorHotTrack1" 
@@ -1204,7 +1219,16 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockRespectReserved1" -Value "False"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockReserveScreen1" -Value "False"
         }
-            if ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath0" -Value "C:\\Users\\Public\\Documents\\Winstep\\Icons\\explorer_default.ico"}
+            if ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath0" -Value "C:\ProgramData\Winstep\Icons\explorer_default.ico"}
+            $winStep = 'C:\ProgramData\WinStep'
+            Remove-Item -Path "$winStep\Themes\*" -Recurse -Force
+            Copy-Item -Path "..\config\dock\themes\*" -Destination "$winStep\Themes\" -Recurse -Force
+            Remove-Item -Path "$winStep\NeXus\Indicators\*" -Force -Recurse 
+            Copy-Item -Path "..\config\dock\indicators\*" -Destination "$winStep\NeXus\Indicators\" -Recurse -Force
+            New-Item -ItemType Directory -Path "$winStep\Sounds" -Force | Out-Null
+            Copy-Item -Path "..\config\dock\sounds\*" -Destination "$winStep\Sounds\" -Recurse -Force
+            New-Item -ItemType Directory -Path "$winStep\Icons" -Force | Out-Null
+            Copy-Item "..\config\icons" "$winStep" -Recurse -Force
             $scriptBlock2 = "Start-Process 'C:\Program Files (x86)\Winstep\Nexus.exe'"
             $tempScript = Join-Path $env:TEMP "nonadmin_$([guid]::NewGuid().ToString()).ps1"
             Set-Content -Path $tempScript -Value $scriptBlock2 -Encoding UTF8
@@ -1222,9 +1246,14 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
 "@
             Set-Content -Path $tempVbs -Value $vbsContent -Encoding ASCII
             Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""
-            while (!(Get-Process "nexus")) { Start-Sleep 1 }
+            $sw = [Diagnostics.Stopwatch]::StartNew()
+            while (-not (Get-Process -Name "Nexus" -ErrorAction SilentlyContinue)) {
+                if ($sw.Elapsed.TotalSeconds -ge 60) { break }
+                Start-Sleep -Seconds 1
+            }
+            $sw.Stop()
             Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Nexus.lnk" -Destination $programsDir -Force 
-            Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\Nexus.lnk" -Destination $programsDir -Force 
+            Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\Nexus.lnk" -Destination $programsDir -Force
             Write-Host "Nexus Dock installation completed." -ForegroundColor Green
             }
     #* Hot Corners
