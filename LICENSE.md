@@ -1,6 +1,6 @@
 # WinMac License
 
-This project is a personal customization pack that modifies the look and feel of Windows to resemble macOS. It includes a mix of original work and third-party assets or software.
+This project is a personal customization package, that modifies the look and feel of Windows to resemble macOS. It includes a mix of original work and third-party assets or software.
 
 ---
 
