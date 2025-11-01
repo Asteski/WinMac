@@ -129,7 +129,7 @@ if (!($noGUI)) {
                             <StackPanel Margin="5">
                                 <CheckBox x:Name="chkPowerToys" Content="PowerToys" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                                 <CheckBox x:Name="chkEverything" Content="Everything" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                                <CheckBox x:Name="chkPowershellProfile" Content="PowerShell Profile" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                                <CheckBox x:Name="chkPowerShellProfile" Content="PowerShell Profile" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                                 <CheckBox x:Name="chkStartAllBack" Content="StartAllBack" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                                 <CheckBox x:Name="chkWinMacMenu" Content="WinMac Menu" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                                 <CheckBox x:Name="chkWindhawk" Content="Windhawk" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
@@ -237,7 +237,7 @@ if (!($noGUI)) {
     $componentSelection = $window.FindName("componentSelection")
     $chkPowerToys = $window.FindName("chkPowerToys")
     $chkEverything = $window.FindName("chkEverything")
-    $chkPowershellProfile = $window.FindName("chkPowershellProfile")
+    $chkPowerShellProfile = $window.FindName("chkPowerShellProfile")
     $chkStartAllBack = $window.FindName("chkStartAllBack")
     $chkWinMacMenu = $window.FindName("chkWinMacMenu")
     $chkWindhawk = $window.FindName("chkWindhawk")
@@ -265,7 +265,7 @@ if (!($noGUI)) {
         else {
             if ($chkPowerToys.IsChecked) { $selection += "1," }
             if ($chkEverything.IsChecked) { $selection += "2," }
-            if ($chkPowershellProfile.IsChecked) { $selection += "3," }
+            if ($chkPowerShellProfile.IsChecked) { $selection += "3," }
             if ($chkStartAllBack.IsChecked) { $selection += "4," }
             if ($chkWinMacMenu.IsChecked) { $selection += "5," }
             if ($chkWindhawk.IsChecked) { $selection += "6," }
@@ -276,7 +276,7 @@ if (!($noGUI)) {
             if ($chkMacType.IsChecked) { $selection += "11," }
             if ($chkOther.IsChecked) { $selection += "12" }
         }
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Hot Corners"; "11"="MacType"; "12"="Other"}
+        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="PowerShell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Hot Corners"; "11"="MacType"; "12"="Other"}
         $result["selectedApps"] = $selection.Split(',').TrimEnd(',')
         $selectedAppNames = @()
         foreach ($appNumber in $selection) {
@@ -338,7 +338,7 @@ on WinMac GitHub page: https://github.com/Asteski/WinMac/wiki
     elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
         Write-Host "Choosing custom installation." -ForegroundColor Green
         Start-Sleep 2
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Hot Corners"; "11"="MacType"; "12"="Other"}
+        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="PowerShell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Hot Corners"; "11"="MacType"; "12"="Other"}
     Clear-Host
     Show-Header
 Write-Host @"
@@ -349,7 +349,7 @@ Write-Host @"
 Write-Host @"
 1. PowerToys
 2. Everything
-3. Powershell Profile
+3. PowerShell Profile
 4. StartAllBack
 5. WinMac Menu
 6. Windhawk
@@ -617,23 +617,23 @@ if ($null -eq $wingetCliCheck) {
 }
 $wingetClientCheck = Get-InstalledModule -Name Microsoft.WinGet.Client
 if ($null -eq $wingetClientCheck) {
-    Write-Host "Winget Powershell Module is not installed. Installing Winget..." -ForegroundColor DarkYellow
+    Write-Host "Winget PowerShell Module is not installed. Installing Winget..." -ForegroundColor DarkYellow
     Install-Module -Name Microsoft.WinGet.Client -Force
 } else {
     $wingetFind = Find-Module -Name Microsoft.WinGet.Client
     if ($wingetFind.Version -gt $wingetClientCheck.Version) {
-        Write-Host "A newer version of Winget Powershell Module is available. Updating Winget..." -ForegroundColor DarkYellow
+        Write-Host "A newer version of Winget PowerShell Module is available. Updating Winget..." -ForegroundColor DarkYellow
         Update-Module -Name Microsoft.WinGet.Client -Force
     }
 }
 Import-Module -Name Microsoft.WinGet.Client -Force
 $wingetClientCheck = Get-InstalledModule -Name Microsoft.WinGet.Client
 if ($null -eq $wingetCliCheck) {
-    Write-Host "Winget Powershell Module installation failed. Aborting installation." -ForegroundColor Red
+    Write-Host "Winget PowerShell Module installation failed. Aborting installation." -ForegroundColor Red
     exit 1
 }
 else {
-    Write-Host "Winget Powershell Module installation completed." -ForegroundColor Green
+    Write-Host "Winget PowerShell Module installation completed." -ForegroundColor Green
 }
 
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
@@ -936,7 +936,7 @@ foreach ($app in $selectedApps) {
                     $taskService.Connect()
                     $rootFolder = $taskService.GetFolder("\")
                     try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }
-                    if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) |w Out-Null }
+                    if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
                     $trigger = New-ScheduledTaskTrigger -AtLogon
                     $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
                     $action = New-ScheduledTaskAction -Execute WinMac_Menu_RMB_Trigger.exe -WorkingDirectory $winMacDirectory
