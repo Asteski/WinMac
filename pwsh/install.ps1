@@ -677,27 +677,11 @@ foreach ($app in $selectedApps) {
                 [System.Environment]::SetEnvironmentVariable("Path", $envPath, [System.EnvironmentVariableTarget]::User)
             }
             Stop-Process -Name PowerToys*
-            # Stop-Process -Name PowerToys.LightSwitchService
+            Stop-Process -Name PowerToys.LightSwitchService
             Stop-Process -Name Microsoft.CmdPal.UI
             Start-Sleep -Seconds 3
             Install-WingetPackage -id ThioJoe.SvgThumbnailExtension | Out-Null
             (Get-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json") -replace '"CmdPal":true', '"CmdPal":false' -replace '"show_tray_icon":true', '"show_tray_icon":false' -replace '"LightSwitch": true', '"LightSwitch": false' | Set-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json" -Force
-            # New-Item -ItemType Directory -Path $winMacDirectory | Out-Null
-            # Copy-Item '..\bin\ahk\TriggerPeekWithSpacebar.exe' $winMacDirectory
-            # $description = "Trigger PowerToys Peek with Space bar."
-            # $folderName = "WinMac"
-            # $taskService = New-Object -ComObject "Schedule.Service"
-            # $taskService.Connect()
-            # $rootFolder = $taskService.GetFolder("\") 
-            # try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }
-            # if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
-            # $taskFolder = "\" + $folderName
-            # $trigger = New-ScheduledTaskTrigger -AtLogon
-            # $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
-            # $action = New-ScheduledTaskAction -Execute TriggerPeekWithSpacebar.exe -WorkingDirectory $winMacDirectory
-            # $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
-            # Register-ScheduledTask -TaskName "Trigger Peek With Spacebar" -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -Description $description | Out-Null
-            # Start-Process -FilePath "$winMacDirectory\TriggerPeekWithSpacebar.exe" -WorkingDirectory $winMacDirectory
             Start-Process "$env:LOCALAPPDATA\PowerToys\PowerToys.exe" -ArgumentList "--start-minimized" -WorkingDirectory "$env:LOCALAPPDATA\PowerToys" -WindowStyle Hidden
             Write-Host "PowerToys installation completed." -ForegroundColor Green
         }
