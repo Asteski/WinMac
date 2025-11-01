@@ -427,36 +427,95 @@ function rmenv {
         [Environment]::SetEnvironmentVariable($name, $null, "User")
     }
 }
-
 function Get-RandomString {
+    <#
+    .SYNOPSIS
+    Generate random strings with optional character exclusions.
+
+    .DESCRIPTION
+    Use -e to exclude characters as a contiguous string (no separators), e.g. -e '?*&'.
+    Honors $script:RandomStringAlwaysExclude for characters to always exclude.
+
+    .EXAMPLE
+        Get-RandomString -l 12 -e '?*&'
+
+    .EXAMPLE
+        $script:RandomStringAlwaysExclude = @('?', '+', '-')
+        Get-RandomString -l 16
+    #>
     param(
         [Parameter(ValueFromPipeline=$false)]
         [ValidateRange(1,256)]
         [Alias('l','length')]
-        [int]$PasswordLength = 10
+        [int]$PasswordLength = 10,
+
+        [Alias('e')]
+        [string]$Exclude
     )
     $terminalWidth = $Host.UI.RawUI.WindowSize.Width
     $maxColumns = 5
     $randomStrings = @()
+
+    # Base character set
     $CharacterSet = @{
-        Lowercase   = (97..122) | ForEach-Object {[char]$_}
-        Uppercase   = (65..90)  | ForEach-Object {[char]$_}
-        Numeric     = (48..57)  | ForEach-Object {[char]$_}
-        SpecialChar = (33..47)+(58..64)+(91..96)+(123..126) | ForEach-Object {[char]$_}
+        Lowercase   = (97..122) | ForEach-Object { [char]$_ }
+        Uppercase   = (65..90)  | ForEach-Object { [char]$_ }
+        Numeric     = (48..57)  | ForEach-Object { [char]$_ }
+        SpecialChar = (33..47)+(58..64)+(91..96)+(123..126) | ForEach-Object { [char]$_ }
     }
     $StringSet = $CharacterSet.Uppercase + $CharacterSet.Lowercase + $CharacterSet.Numeric + $CharacterSet.SpecialChar
-    for ($i = 1; $i -le 25; $i++) {
-        $randomString = -join (1..$PasswordLength | ForEach-Object { $StringSet | Get-Random })
-        $randomStrings += $randomString
+
+    # Build exclusion list from script-level config and parameter
+    $alwaysExcludeChars = @()
+    try {
+        $cfg = Get-Variable -Scope Script -Name RandomStringAlwaysExclude -ErrorAction SilentlyContinue
+        if ($cfg) {
+            $val = $script:RandomStringAlwaysExclude
+            if ($val -is [string]) { $alwaysExcludeChars += $val.ToCharArray() }
+            elseif ($val -is [System.Collections.IEnumerable]) {
+                foreach ($v in $val) { if ($null -ne $v) { $alwaysExcludeChars += $v.ToString().ToCharArray() } }
+            }
+        }
+    } catch { }
+    $paramExcludeChars = @()
+    if ($Exclude) { $paramExcludeChars = $Exclude.ToCharArray() }
+    $excludeChars = ($alwaysExcludeChars + $paramExcludeChars) | Select-Object -Unique
+    if ($excludeChars.Count -gt 0) {
+        $StringSet = $StringSet | Where-Object { $excludeChars -notcontains $_ }
     }
+    if (-not $StringSet -or $StringSet.Count -eq 0) {
+        throw "Character set is empty after applying exclusions. Adjust -e input or the predefined list in $script:RandomStringAlwaysExclude."
+    }
+
+    # Prepare per-class arrays after exclusions
+    $Upper   = $CharacterSet.Uppercase   | Where-Object { $excludeChars -notcontains $_ }
+    $Lower   = $CharacterSet.Lowercase   | Where-Object { $excludeChars -notcontains $_ }
+    $Number  = $CharacterSet.Numeric     | Where-Object { $excludeChars -notcontains $_ }
+    $Special = $CharacterSet.SpecialChar | Where-Object { $excludeChars -notcontains $_ }
+
+    function New-SimpleRandomString([int]$len) {
+        if ($len -lt 12) {
+            return -join (1..$len | ForEach-Object { $StringSet | Get-Random })
+        }
+        $chosen = @()
+        if ($Upper   -and $Upper.Count)   { 1..3 | ForEach-Object { $chosen += ($Upper   | Get-Random) } }
+        if ($Lower   -and $Lower.Count)   { 1..3 | ForEach-Object { $chosen += ($Lower   | Get-Random) } }
+        if ($Number  -and $Number.Count)  { 1..3 | ForEach-Object { $chosen += ($Number  | Get-Random) } }
+        if ($Special -and $Special.Count) { 1..3 | ForEach-Object { $chosen += ($Special | Get-Random) } }
+        $remaining = $len - $chosen.Count
+        if ($remaining -gt 0) {
+            1..$remaining | ForEach-Object { $chosen += ($StringSet | Get-Random) }
+        }
+        return -join (@($chosen) | Sort-Object { Get-Random })
+    }
+
+    for ($i = 1; $i -le 25; $i++) { $randomStrings += (New-SimpleRandomString -len $PasswordLength) }
     if ($PasswordLength -gt $terminalWidth) {
         $randomStrings | ForEach-Object { $_ }
     } else {
         $maxItemWidth = $PasswordLength + 2
         $columns = [math]::floor($terminalWidth / ($maxItemWidth + 2))
-        if ($columns -gt $maxColumns) {
-            $columns = $maxColumns
-        }
+        if ($columns -gt $maxColumns) { $columns = $maxColumns }
         for ($i = 0; $i -lt $randomStrings.Count; $i += $columns) {
             $line = $randomStrings[$i..([math]::Min($i + $columns - 1, $randomStrings.Count - 1))]
             $line -join "  "
