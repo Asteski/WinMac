@@ -29,7 +29,7 @@ properties:
           ActivationMethod: 2
         Peek:
           Enabled: true
-          ActivationShortcut: "Alt+Shift+Space"
+          EnableSpaceToActivate: "True"
           CloseAfterLosingFocus: true
         AlwaysOnTop:
           Enabled: true

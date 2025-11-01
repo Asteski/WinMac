@@ -1,7 +1,7 @@
 param (
     [switch]$noGUI
 )
-$version = "1.3.1"
+$version = "1.3.2"
 $ErrorActionPreference = "SilentlyContinue"
 $WarningPreference = "SilentlyContinue"
 $ProgressPreference = "SilentlyContinue"
@@ -127,7 +127,7 @@ if (!($noGUI)) {
 
                         <CheckBox x:Name="chkPowerToys" Content="PowerToys" IsChecked="True" Grid.Row="0" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkEverything" Content="Everything" IsChecked="True" Grid.Row="0" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="chkPowershellProfile" Content="PowerShell Profile" IsChecked="True" Grid.Row="1" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="chkPowerShellProfile" Content="PowerShell Profile" IsChecked="True" Grid.Row="1" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkStartAllBack" Content="StartAllBack" IsChecked="True" Grid.Row="1" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkWinMacMenu" Content="WinMac Menu" IsChecked="True" Grid.Row="2" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkWindhawk" Content="Windhawk" IsChecked="True" Grid.Row="2" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
@@ -176,7 +176,7 @@ if (!($noGUI)) {
     $componentSelection = $window.FindName("componentSelection")
     $chkPowerToys = $window.FindName("chkPowerToys")
     $chkEverything = $window.FindName("chkEverything")
-    $chkPowershellProfile = $window.FindName("chkPowershellProfile")
+    $chkPowerShellProfile = $window.FindName("chkPowerShellProfile")
     $chkStartAllBack = $window.FindName("chkStartAllBack")
     $chkWinMacMenu = $window.FindName("chkWinMacMenu")
     $chkWindhawk = $window.FindName("chkWindhawk")
@@ -196,7 +196,7 @@ if (!($noGUI)) {
         else {
             if ($chkPowerToys.IsChecked) { $selection += "1," }
             if ($chkEverything.IsChecked) { $selection += "2," }
-            if ($chkPowershellProfile.IsChecked) { $selection += "3," }
+            if ($chkPowerShellProfile.IsChecked) { $selection += "3," }
             if ($chkStartAllBack.IsChecked) { $selection += "4," }
             if ($chkWinMacMenu.IsChecked) { $selection += "5," }
             if ($chkWindhawk.IsChecked) { $selection += "6," }
@@ -207,7 +207,7 @@ if (!($noGUI)) {
             if ($chkMacType.IsChecked) { $selection += "11," }
             if ($chkOther.IsChecked) { $selection += "12" }
         }
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="Stahky"; "8"="AutoHotkey"; "9"="Nexus Dock"; "10"="Hot Corners"; "11"="MacType"; "12"="Other"}
+        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="PowerShell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="Stahky"; "8"="AutoHotkey"; "9"="Nexus Dock"; "10"="Hot Corners"; "11"="MacType"; "12"="Other"}
         $result["selectedApps"] = $selection.Split(',').TrimEnd(',')
         $selectedAppNames = @()
         foreach ($appNumber in $selection) {
@@ -266,7 +266,7 @@ on WinMac GitHub page: https://github.com/Asteski/WinMac/wiki
     elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
         Write-Host "Choosing custom uninstallation." -ForegroundColor Yellow
         Start-Sleep 2
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="Powershell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Hot Corners"; "11"="MacType"; "12"="Other"}
+        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="PowerShell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Hot Corners"; "11"="MacType"; "12"="Other"}
     Clear-Host
     Show-Header
 Write-Host @"
@@ -276,7 +276,7 @@ Write-Host @"
 "@
         Write-Host "1. PowerToys"
         Write-Host "2. Everything"
-        Write-Host "3. Powershell Profile"
+        Write-Host "3. PowerShell Profile"
         Write-Host "4. StartAllBack"
         Write-Host "5. WinMac Menu"
         Write-Host "6. Windhawk"
@@ -367,17 +367,17 @@ if ($null -eq $wingetCliCheck) {
 }
 $wingetClientCheck = Get-InstalledModule -Name Microsoft.WinGet.Client
 if ($null -eq $wingetClientCheck) {
-    Write-Host "Winget is not installed. Installing Winget..." -ForegroundColor DarkYellow
+    Write-Host "Winget PowerShell Module is not installed. Installing Winget..." -ForegroundColor DarkYellow
     Install-Module -Name Microsoft.WinGet.Client -Force
-    Write-Host "Winget installation completed." -ForegroundColor Green
+    Write-Host "Winget PowerShell Module installation completed." -ForegroundColor Green
 } else {
     $wingetFind = Find-Module -Name Microsoft.WinGet.Client
     if ($wingetFind.Version -gt $wingetClientCheck.Version) {
-        Write-Host "A newer version of Winget is available. Updating Winget..." -ForegroundColor DarkYellow
+        Write-Host "A newer version of Winget PowerShell Module is available. Updating Winget..." -ForegroundColor DarkYellow
         Update-Module -Name Microsoft.WinGet.Client -Force
-        Write-Host "Winget update completed." -ForegroundColor Green
+        Write-Host "Winget PowerShell Module update completed." -ForegroundColor Green
     } else {
-        Write-Host "Winget is already installed." -ForegroundColor Green
+        Write-Host "Winget PowerShell Module is already installed." -ForegroundColor Green
     }
 }
 Import-Module -Name Microsoft.WinGet.Client
@@ -399,10 +399,6 @@ foreach ($app in $selectedApps) {
             Uninstall-WinGetPackage -id Microsoft.PowerToys | Out-Null
             Uninstall-WinGetPackage -name $everythingPT.name | Out-Null
             Uninstall-WinGetPackage -id ThioJoe.SvgThumbnailExtension | Out-Null
-            Stop-Process -Name TriggerPeekWithSpacebar -Force
-            $tasks = Get-ScheduledTask -TaskPath "\WinMac\" | Where-Object { $_.TaskName -match 'Peek' }
-            foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
-            Get-ChildItem $winMacDirectory | Where-Object { $_.Name -match 'TriggerPeekWithSpacebar' } | Remove-Item -Recurse -Force
             Remove-Item $env:LOCALAPPDATA\Microsoft\PowerToys -Recurse -Force
             Remove-Item $env:LOCALAPPDATA\PowerToys -Recurse -Force
             Write-Host "Uninstalling PowerToys completed." -ForegroundColor Green
@@ -458,13 +454,17 @@ foreach ($app in $selectedApps) {
         "5" {
             Write-Host "Uninstalling WinMac Menu..." -ForegroundColor Yellow
             $sabRegPath = "HKCU:\Software\StartIsBack"
+            Stop-Process -Name WinMacMenu -Force
+            Stop-Process -Name WinMac_Menu_RMB_Trigger -Force
             winget uninstall --id "Open-Shell.Open-Shell-Menu" --source winget --force | Out-Null
             Uninstall-WinGetPackage -name "Winver UWP" | Out-Null
-            Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
-            Get-ChildItem $winMacDirectory -Filter "resource-redirect" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
-            Expand-Archive -Path "..\config\menu\WinX_default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
             Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 0
+            $tasks = Get-ScheduledTask -TaskPath "\WinMac\" | Where-Object { $_.TaskName -match 'WinMac Menu RMB Trigger' }
+            foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
             Remove-Item -Path "$winMacDirectory\WinMacMenu.exe" -Force
+            Remove-Item -Path "$winMacDirectory\config.ini" -Force
+            Remove-Item -Path "$winMacDirectory\WinMac_Menu_RMB_Trigger.exe" -Force
+            Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "WinMac Menu"
             Stop-Process -Name explorer -Force
             Write-Host "Uninstalling WinMac Menu completed." -ForegroundColor Green
         }
