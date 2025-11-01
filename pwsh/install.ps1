@@ -948,7 +948,23 @@ foreach ($app in $selectedApps) {
                     Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\winver.exe" -Name "Debugger" -Value $WinverUWP -Type String
                     Stop-Process -Name Explorer
                     Start-Process $shellExePath
-                    Start-Process -FilePath "$winMacDirectory\WinMacMenu.exe" -WorkingDirectory $winMacDirectory | Out-Null
+                    $scriptBlock1 = "Start-Process -FilePath $env:LOCALAPPDATA\WinMac\WinMacMenu.exe -WorkingDirectory $env:LOCALAPPDATA\WinMac"
+                    $tempScript = Join-Path $env:TEMP "nonadmin_$([guid]::NewGuid().ToString()).ps1"
+                    Set-Content -Path $tempScript -Value $scriptBlock1 -Encoding UTF8
+$batchContent = @"
+@echo off
+pushd "$currentDir"
+pwsh.exe -NoProfile -ExecutionPolicy Bypass -File "`"$tempScript`""
+"@
+            $tempBatch = Join-Path $env:TEMP "run_nonadmin_$([guid]::NewGuid().ToString()).cmd"
+            Set-Content -Path $tempBatch -Value $batchContent -Encoding ASCII
+            $tempVbs = Join-Path $env:TEMP "run_silent_$([guid]::NewGuid().ToString()).vbs"
+$vbsContent = @"
+Set WshShell = CreateObject("WScript.Shell")
+WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
+"@
+                    Set-Content -Path $tempVbs -Value $vbsContent -Encoding ASCII
+                    Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""
                     Start-Sleep 5
                     if (-not (Get-Process -Name explorer)) { Start-Process explorer }
                     Write-Host "WinMac Menu installation completed." -ForegroundColor Green
