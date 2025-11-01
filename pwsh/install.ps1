@@ -678,7 +678,7 @@ foreach ($app in $selectedApps) {
             }
             Stop-Process -Name PowerToys*
             # Stop-Process -Name PowerToys.LightSwitchService
-            # Stop-Process -Name Microsoft.CmdPal.UI
+            Stop-Process -Name Microsoft.CmdPal.UI
             Start-Sleep -Seconds 3
             Install-WingetPackage -id ThioJoe.SvgThumbnailExtension | Out-Null
             (Get-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json") -replace '"CmdPal":true', '"CmdPal":false' -replace '"show_tray_icon":true', '"show_tray_icon":false' -replace '"LightSwitch": true', '"LightSwitch": false' | Set-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json" -Force
