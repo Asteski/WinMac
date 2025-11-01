@@ -1,7 +1,7 @@
 param (
     [switch]$noGUI
 )
-$version = "1.3.1"
+$version = "1.3.2"
 $ErrorActionPreference = "SilentlyContinue"
 $WarningPreference = "SilentlyContinue"
 $ProgressPreference = "SilentlyContinue"
@@ -843,6 +843,7 @@ foreach ($app in $selectedApps) {
                     Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
                     Expand-Archive -Path "..\config\WinX-default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
                 }
+                Set-ItemProperty -Path $sabRegPath -Name "DarkMagic" -Value 1
                 Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "(default)" -Value 1
                 Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
                 if ($roundedOrSquared -eq 'R' -or $roundedOrSquared -eq 'r') {
@@ -1189,7 +1190,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockAutoHideMaximized1" -Value "True"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockRespectReserved1" -Value "False"
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockReserveScreen1" -Value "False"
-        }
+            }
             if ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath0" -Value "C:\ProgramData\Winstep\Icons\explorer_default.ico"}
             $winStep = 'C:\ProgramData\WinStep'
             Remove-Item -Path "$winStep\Themes\*" -Recurse -Force
