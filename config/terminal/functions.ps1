@@ -1,3 +1,4 @@
+$script:RandomStringAlwaysExclude = @('"', '''', '(', ')', '{', '}', '[', ']', '\', '/', '<', '>', '`', '~', ',', ';', ':')
 
 function Test-Admin
 {
@@ -5,12 +6,14 @@ function Test-Admin
     (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
 }
 
-# Completion settings
+# Settings
 Set-PSReadlineKeyHandler -Chord Tab -Function MenuComplete
 Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
 Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
 Set-PSReadLineKeyHandler -Chord 'Ctrl+f' -Function ForwardWord
 Set-PSReadLineKeyHandler -Chord 'Enter' -Function ValidateAndAcceptLine
+Set-PSReadLineOption -PredictionSource HistoryAndPlugin
+Set-PSReadLineOption -PredictionViewStyle ListView
 
 # Aliases
 set-alias -name vi -value vim
