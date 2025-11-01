@@ -948,6 +948,7 @@ foreach ($app in $selectedApps) {
                     Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\winver.exe" -Name "Debugger" -Value $WinverUWP -Type String
                     Stop-Process -Name Explorer
                     Start-Process $shellExePath
+                    Start-Process -FilePath "$winMacDirectory\WinMacMenu.exe" -WorkingDirectory $winMacDirectory | Out-Null
                     Start-Sleep 5
                     if (-not (Get-Process -Name explorer)) { Start-Process explorer }
                     Write-Host "WinMac Menu installation completed." -ForegroundColor Green
