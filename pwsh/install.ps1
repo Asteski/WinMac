@@ -927,6 +927,7 @@ foreach ($app in $selectedApps) {
                         $wmmUrl = "https://github.com/Asteski/WinMac-Menu/raw/refs/heads/main/bin/x64/WinMacMenu.exe"
                     }
                     Invoke-WebRequest -Uri $wmmUrl -OutFile "$winMacDirectory\WinMacMenu.exe"
+                    Copy-Item -Path "..\config\menu\config.ini" -Destination $winMacDirectory -Force
                     Copy-Item -Path "..\bin\menu\WinMac_Menu_RMB_Trigger.exe" -Destination $winMacDirectory -Force
                     $folderName = "WinMac"
                     $taskFolder = "\" + $folderName
