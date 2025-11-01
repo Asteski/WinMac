@@ -948,6 +948,8 @@ Set WshShell = CreateObject("WScript.Shell")
 WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
 "@
                     Set-Content -Path $tempVbs -Value $vbsContent -Encoding ASCII
+                    Start-Sleep 3
+                    Stop-Process -Name WinMacMenu -Force
                     Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""
                     Start-Sleep 5
                     if (-not (Get-Process -Name explorer)) { Start-Process explorer }
