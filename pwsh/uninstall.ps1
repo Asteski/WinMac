@@ -462,7 +462,6 @@ foreach ($app in $selectedApps) {
             Uninstall-WinGetPackage -name "Winver UWP" | Out-Null
             Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
             Get-ChildItem $winMacDirectory -Filter "resource-redirect" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
-            Expand-Archive -Path "..\config\menu\WinX_default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
             Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 0
             Remove-Item -Path "$winMacDirectory\WinMacMenu.exe" -Force
             Stop-Process -Name explorer -Force
