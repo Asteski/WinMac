@@ -28,9 +28,7 @@ properties:
           Enabled: true
           ActivationMethod: 2
         Peek:
-          Enabled: true
-          EnableSpaceToActivate: "True"
-          CloseAfterLosingFocus: true
+          Enabled: false
         AlwaysOnTop:
           Enabled: true
           Hotkey: "Win+Shift+A"
