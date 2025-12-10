@@ -619,12 +619,12 @@ if ($null -eq $wingetCliCheck) {
 }
 $wingetClientCheck = Get-InstalledModule -Name Microsoft.WinGet.Client
 if ($null -eq $wingetClientCheck) {
-    Write-Host "Winget PowerShell Module is not installed. Installing Winget..." -ForegroundColor DarkYellow
+    Write-Host "Winget PowerShell Module is not installed. Installing Microsoft.WinGet.Client..." -ForegroundColor DarkYellow
     Install-Module -Name Microsoft.WinGet.Client -Force
 } else {
     $wingetFind = Find-Module -Name Microsoft.WinGet.Client
     if ($wingetFind.Version -gt $wingetClientCheck.Version) {
-        Write-Host "A newer version of Winget PowerShell Module is available. Updating Winget..." -ForegroundColor DarkYellow
+        Write-Host "A newer version of Winget PowerShell Module is available. Updating  Microsoft.WinGet.Client..." -ForegroundColor DarkYellow
         Update-Module -Name Microsoft.WinGet.Client -Force
     }
 }
@@ -683,6 +683,8 @@ foreach ($app in $selectedApps) {
             Start-Sleep -Seconds 3
             Install-WingetPackage -id ThioJoe.SvgThumbnailExtension | Out-Null
             Install-WingetPackage -id 'QL-Win.QuickLook' | Out-Null
+            Move-Item -Path "$Env:USERPROFILE\Desktop\QuickLook.lnk" -Destination "$Env:APPDATA\Microsoft\Windows\Start Menu\Programs\Start-up" -Force
+            Start-Process -FilePath "QuickLook.exe" -ArgumentList "/silent" -WorkingDirectory "$Env:LOCALAPPDATA\Programs\QuickLook" -WindowStyle Hidden
             (Get-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json") -replace '"CmdPal":true', '"CmdPal":false' -replace '"show_tray_icon":true', '"show_tray_icon":false' -replace '"LightSwitch": true', '"LightSwitch": false' | Set-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json" -Force
             Start-Process "$env:LOCALAPPDATA\PowerToys\PowerToys.exe" -ArgumentList "--start-minimized" -WorkingDirectory "$env:LOCALAPPDATA\PowerToys" -WindowStyle Hidden
             Write-Host "PowerToys installation completed." -ForegroundColor Green
@@ -899,10 +901,12 @@ foreach ($app in $selectedApps) {
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "EnableContextMenu" -Value 0
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "MouseClick" -Value "Command"
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftClick" -Value "Command"
+                    Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "MiddleClick" -Value "Command"
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "WinKey" -Value "Command"
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "MouseClickCommand" -Value "$winMacDirectory\WinMacMenu.exe"
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftClickCommand" -Value "ModernShutDownWindows"
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "WinKeyCommand" -Value "$winMacDirectory\WinMacMenu.exe"
+                    Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "MiddleClickCommand" -Value "taskmgr.exe"
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftWin" -Value "Nothing"
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftRight" -Value 1
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "SearchBox" -Value "Hide"
