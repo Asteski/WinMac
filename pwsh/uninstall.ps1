@@ -324,15 +324,15 @@ Write-Host @"
     do {
         Clear-Host
         Show-Header
-        $installConfirmation = Read-Host "`nAre you sure you want to start the uninstallation process (Y/n)"
-        $valid = $installConfirmation -match '^(y|Y|n|N)$'
+        $uninstallConfirmation = Read-Host "`nAre you sure you want to start the uninstallation process (Y/n)"
+        $valid = $uninstallConfirmation -match '^(y|Y|n|N)$'
     if (!$valid) {
         Write-Host "`e[91mInvalid input! Please enter either (Y)es or (N)o.`e[0m`n"
         Start-Sleep 2
     }
 } while (!$valid)
 
-if ($installConfirmation -eq 'n' -or $installConfirmation -eq 'N') {
+if ($uninstallConfirmation -eq 'n' -or $uninstallConfirmation -eq 'N') {
     Clear-Host
     Show-Header
     Write-Host "`n`e[91mUninstallation process aborted.`e[0m"
