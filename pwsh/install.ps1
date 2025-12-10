@@ -397,7 +397,7 @@ Write-Host @"
 
 `e[93m$("You can choose between WinMac start menu or Classic start menu.")`e[0m
 
-WinMac start menu replaces default menu with customized WinX menu.
+WinMac start menu replaces default menu with WinMac Menu application.
 
 Classic start menu replaces default menu with enhanced Windows 7 start menu.
 
