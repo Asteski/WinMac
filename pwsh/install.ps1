@@ -1027,57 +1027,13 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Start-Process "$Env:ProgramFiles\Windhawk\Windhawk.exe"
             Write-Host "Windhawk installation completed." -ForegroundColor Green
             }
-    #* Stahky
+    #* WinMac Menu Bar
         "7" {
-            Write-Host "Installing Stahky..." -ForegroundColor Yellow
-            $url = "https://github.com/joedf/stahky/releases/download/v0.3.9.1/stahky_U64_v0.3.9.1.zip"
-            $outputPath = "..\stahky_U64.zip"
-            $exePath = "$env:LOCALAPPDATA\Stahky"
-            New-Item -ItemType Directory -Path $exePath -Force | Out-Null
-            New-Item -ItemType Directory -Path $exePath\config -Force | Out-Null
-            Invoke-WebRequest -Uri $url -OutFile $outputPath
-            if (Test-Path -Path "$exePath\stahky.exe") {
-                Write-Output "Stahky already exists."
-            } else {
-                Expand-Archive -Path $outputPath -DestinationPath $exePath | Out-Null
-            }
-            Copy-Item -Path ..\config\taskbar\stacks\* -Destination $exePath\config -Recurse -Force
-            Copy-Item -Path $exePath\config\themes\stahky-$stackTheme.ini -Destination $exePath\stahky.ini
-            $pathVarUser = [Environment]::GetEnvironmentVariable("Path", "User")
-            $pathVarMachine = [Environment]::GetEnvironmentVariable("Path", "Machine")
-            if (-not ($pathVarUser -like "*$exePath*")) {
-                $pathVarUser += ";$exePath"
-                [Environment]::SetEnvironmentVariable("Path", $pathVarUser, "User")
-            }
-            $job | Get-Jobif (-not ($pathVarMachine -like "* $exePath*")) {
-                $pathVarMachine += "; $exePath"
-                [Environment]::SetEnvironmentVariable("Path", $pathVarMachine, "Machine")
-            }
-            $pathVar = [Environment]::GetEnvironmentVariable("Path", "Machine") + ";$exePath"
-            [Environment]::SetEnvironmentVariable("Path", $pathVar, "Machine")
-            $pathVar = [Environment]::GetEnvironmentVariable("Path", "User") + ";$exePath"
-            [Environment]::SetEnvironmentVariable("Path", $pathVar, "User")
-            $shortcutPath1 = "$env:LOCALAPPDATA\Stahky\config\shortcuts\Management.lnk"
-            $shortcutPath2 = "$env:LOCALAPPDATA\Stahky\config\shortcuts\Favorites.lnk"
-            $newTargetPath = "$env:LOCALAPPDATA\Stahky\Stahky.exe"
-            $newArguments1 = '/stahky ' + "$env:LOCALAPPDATA\Stahky\config\management"
-            $newArguments2 = '/stahky ' + "$env:LOCALAPPDATA\Stahky\config\favorites"
-            $newWorkDir1 = "$env:LOCALAPPDATA\Stahky\config\management"
-            $newWorkDir2 = "$env:LOCALAPPDATA\Stahky\config\favorites"
-            $shell1 = New-Object -ComObject WScript.Shell
-            $shortcut1 = $shell1.CreateShortcut($shortcutPath1)
-            $shortcut1.Arguments = $newArguments1
-            $shortcut1.TargetPath = $newTargetPath
-            $shortcut1.WorkingDirectory = $newWorkDir1
-            $shortcut1.Save()
-            $shell2 = New-Object -ComObject WScript.Shell
-            $shortcut2 = $shell2.CreateShortcut($shortcutPath2) 
-            $shortcut2.Arguments = $newArguments2
-            $shortcut2.TargetPath = $newTargetPath
-            $shortcut2.WorkingDirectory = $newWorkDir2
-            $shortcut2.Save()
-            Remove-Item $outputPath -Force
-            Write-Host "Stahky installation completed." -ForegroundColor Green
+            Write-Host "Installing WinMac Menu Bar..." -ForegroundColor Yellow
+            $folderPath = "$Env:USERPROFILE\Favorites\Links"
+            $folder = Get-Item $folderPath
+            $folder.Attributes = 'Hidden'
+            Write-Host "WinMac Menu Bar installation completed." -ForegroundColor Green
         }
     #* AutoHotkey Keyboard Shortcuts
         "8" {
