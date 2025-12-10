@@ -321,15 +321,24 @@ Write-Host @"
         Write-Host "Invalid input. Defaulting to full uninstallation." -ForegroundColor Yellow
         Start-Sleep 2
     }
+    do {
+        Clear-Host
+        Show-Header
+        $installConfirmation = Read-Host "`nAre you sure you want to start the uninstallation process (Y/n)"
+        $valid = $installConfirmation -match '^(y|Y|n|N)$'
+    if (!$valid) {
+        Write-Host "`e[91mInvalid input! Please enter either (Y)es or (N)o.`e[0m`n"
+        Start-Sleep 2
+    }
+} while (!$valid)
+
+if ($installConfirmation -eq 'n' -or $installConfirmation -eq 'N') {
     Clear-Host
     Show-Header
-    $installConfirmation = Read-Host "`nAre you sure you want to start the uninstallation process (Y/n)"
-
-    if ($installConfirmation -ne 'y' -or $installConfirmation -ne 'Y') {
-        Write-Host "Uninstallation process aborted." -ForegroundColor Red
-        Start-Sleep 2
-        exit
-    }
+    Write-Host "`n`e[91mUninstallation process aborted.`e[0m"
+    Start-Sleep 2
+    exit
+}
 }
 if ($result){
     $selectedApps = $result["selectedApps"]
