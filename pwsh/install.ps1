@@ -858,6 +858,7 @@ foreach ($app in $selectedApps) {
                 Set-ItemProperty -Path $sabRegPath -Name "OrbBitmap" -Value $orbBitmapValue
                 Set-ItemProperty -Path $exRegPath\Advanced -Name "LaunchTO" -Value 1
                 Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
+                reg import "..\config\taskbar\fonts.reg" > $null 2>&1
                 Stop-Process -Name explorer -Force
                 Start-Sleep 5
                 if (-not (Get-Process -Name explorer)) { Start-Process explorer }
