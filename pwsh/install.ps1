@@ -803,6 +803,8 @@ foreach ($app in $selectedApps) {
                 New-ItemProperty -Path $taskbarOnTopPath -Name $taskbarOnTopName -Value $taskbarOnTopValue -PropertyType Binary | Out-Null
                 Copy-Item "..\config\taskbar\orbs\*" $sabOrbs -Force
                 Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 1
+                Set-ItemProperty -Path $exRegPath\Advanced -Name "ShowNotificationIcon" -Value 0
+                Set-ItemProperty -Path $exRegPath\Advanced -Name "Start_TrackDocs" -Value 1
                 Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSizeMove" -Value 1
                 Set-ItemProperty -Path $exRegPath\Advanced -Name "ShowStatusBar" -Value 0
                 Set-ItemProperty -Path $exRegPath\Advanced -Name "EnableSnapAssistFlyout" -Value 0
