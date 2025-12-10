@@ -1030,9 +1030,23 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
     #* WinMac Menu Bar
         "7" {
             Write-Host "Installing WinMac Menu Bar..." -ForegroundColor Yellow
-            $folderPath = "$Env:USERPROFILE\Favorites\Links"
+            $folderPath = Join-Path $Env:USERPROFILE 'Favorites\Links'
+            if (-not (Test-Path $folderPath)) {
+                New-Item -ItemType Directory -Path $folderPath -Force | Out-Null
+            }
             $folder = Get-Item $folderPath
-            $folder.Attributes = 'Hidden'
+            if (($folder.Attributes -band [System.IO.FileAttributes]::Hidden) -eq 0) {
+                $folder.Attributes = $folder.Attributes -bor [System.IO.FileAttributes]::Hidden
+            }
+            $layoutBinary = Join-Path $PSScriptRoot '..\config\taskbar\layouts\links-toolbar.bin'
+            $layoutScript = Join-Path $PSScriptRoot 'links-toolbar.ps1'
+            if (Test-Path $layoutBinary) {
+                Write-Host "Applying Links toolbar layout..." -ForegroundColor DarkYellow
+                & $layoutScript -Mode Apply -LayoutPath $layoutBinary | Out-Null
+            } else {
+                Write-Warning "Links toolbar snapshot not found at $layoutBinary"
+                Write-Host "Capture one after arranging the toolbar with 'pwsh\\links-toolbar.ps1 -Mode Capture'." -ForegroundColor DarkYellow
+            }
             Write-Host "WinMac Menu Bar installation completed." -ForegroundColor Green
         }
     #* AutoHotkey Keyboard Shortcuts
