@@ -571,7 +571,7 @@ do {
     $installConfirmation = Read-Host "`nAre you sure you want to start the installation process (Y/n)"
     $valid = $installConfirmation -match '^(y|Y|n|N)$'
     if (!$valid) {
-        Write-Host "`e[91mInvalid input! Please enter either (y)es or (n)o.`e[0m`n"
+        Write-Host "`e[91mInvalid input! Please enter either (Y)es or (N)o.`e[0m`n"
         Start-Sleep 2
     }
 } while (!$valid)
