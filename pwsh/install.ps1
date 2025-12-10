@@ -567,13 +567,14 @@ if ($selectedApps -like '*9*') {
 }
     Clear-Host
     Show-Header
-$installConfirmation = Read-Host "`nAre you sure you want to start the installation process (Y/n)"
-if ($installConfirmation -ne 'y' -or $installConfirmation -ne 'Y') {
-    Show-Header
-    Write-Host "Installation process aborted." -ForegroundColor Red
-    Start-Sleep 2
-    exit
-}
+    $installConfirmation = Read-Host "`nAre you sure you want to start the installation process (Y/n)"
+    if ($installConfirmation -ne 'y' -or $installConfirmation -ne 'Y') {
+        Clear-Host
+        Show-Header
+        Write-Host "Installation process aborted." -ForegroundColor Red
+        Start-Sleep 2
+        exit
+    }
 }
 if ($result){
     $selectedApps = $result["selectedApps"]
