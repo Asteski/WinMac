@@ -911,12 +911,12 @@ foreach ($app in $selectedApps) {
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftRight" -Value 1
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "SearchBox" -Value "Hide"
                     if ($sysType -like "*ARM*") { 
-                        $wmmUrl = "https://github.com/Asteski/WinMac-Menu/raw/refs/heads/main/bin/arm64/WinMacMenu.exe"
+                        $wmmExePath = "..\bin\menu\arm\WinMacMenu.exe"
                     } 
                     else {
-                        $wmmUrl = "https://github.com/Asteski/WinMac-Menu/raw/refs/heads/main/bin/x64/WinMacMenu.exe"
+                        $wmmExePath = "..\bin\menu\x64\WinMacMenu.exe"
                     }
-                    Invoke-WebRequest -Uri $wmmUrl -OutFile "$winMacDirectory\WinMacMenu.exe"
+                    Copy-Item -Path $wmmExePath -Destination $winMacDirectory -Force
                     Copy-Item -Path "..\config\menu\config.ini" -Destination $winMacDirectory -Force
                     Copy-Item -Path "..\bin\menu\WinMac_Menu_RMB_Trigger.exe" -Destination $winMacDirectory -Force
                     $folderName = "WinMac"
