@@ -565,16 +565,24 @@ if ($selectedApps -like '*9*') {
         $dockDynamic = 'D'
     }
 }
+do {
     Clear-Host
     Show-Header
     $installConfirmation = Read-Host "`nAre you sure you want to start the installation process (Y/n)"
-    if ($installConfirmation -ne 'y' -or $installConfirmation -ne 'Y') {
-        Clear-Host
-        Show-Header
-        Write-Host "Installation process aborted." -ForegroundColor Red
+    $valid = $installConfirmation -match '^(y|Y|n|N)$'
+    if (!$valid) {
+        Write-Host "`e[91mInvalid input! Please enter either (y)es or (n)o.`e[0m`n"
         Start-Sleep 2
-        exit
     }
+} while (!$valid)
+
+if ($installConfirmation -eq 'n' -or $installConfirmation -eq 'N') {
+    Clear-Host
+    Show-Header
+    Write-Host "`eInstallation process aborted." -ForegroundColor Red
+    Start-Sleep 2
+    exit
+}
 }
 if ($result){
     $selectedApps = $result["selectedApps"]
