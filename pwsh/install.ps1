@@ -135,7 +135,7 @@ if (!($noGUI)) {
                                 <CheckBox x:Name="chkStartAllBack" Content="StartAllBack" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                                 <CheckBox x:Name="chkWinMacMenu" Content="WinMac Menu" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                                 <CheckBox x:Name="chkWindhawk" Content="Windhawk" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                                <CheckBox x:Name="chkStahky" Content="Stahky" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                                <CheckBox x:Name="chkWinMacMenuBar" Content="WinMac Menu Bar" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                                 <CheckBox x:Name="chkAutoHotKey" Content="Keyboard Shortcuts" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                                 <CheckBox x:Name="chkNexusDock" Content="Nexus Dock" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                                 <CheckBox x:Name="chkHotCorners" Content="Hot Corners" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
@@ -243,7 +243,7 @@ if (!($noGUI)) {
     $chkStartAllBack = $window.FindName("chkStartAllBack")
     $chkWinMacMenu = $window.FindName("chkWinMacMenu")
     $chkWindhawk = $window.FindName("chkWindhawk")
-    $chkStahky = $window.FindName("chkStahky")
+    $chkWinMacMenuBar = $window.FindName("chkWinMacMenuBar")
     $chkAutoHotKey = $window.FindName("chkAutoHotKey")
     $chkNexusDock = $window.FindName("chkNexusDock")
     $chkGitProfile = $window.FindName("chkGitProfile")
@@ -271,14 +271,14 @@ if (!($noGUI)) {
             if ($chkStartAllBack.IsChecked) { $selection += "4," }
             if ($chkWinMacMenu.IsChecked) { $selection += "5," }
             if ($chkWindhawk.IsChecked) { $selection += "6," }
-            if ($chkStahky.IsChecked) { $selection += "7," }
+            if ($chkWinMacMenuBar.IsChecked) { $selection += "7," }
             if ($chkAutoHotKey.IsChecked) { $selection += "8," }
             if ($chkNexusDock.IsChecked) { $selection += "9," }
             if ($chkHotCorners.IsChecked) { $selection += "10," }
             if ($chkMacType.IsChecked) { $selection += "11," }
             if ($chkOther.IsChecked) { $selection += "12" }
         }
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="PowerShell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Hot Corners"; "11"="MacType"; "12"="Other"}
+        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="PowerShell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="WinMac Menu Bar"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Hot Corners"; "11"="MacType"; "12"="Other"}
         $result["selectedApps"] = $selection.Split(',').TrimEnd(',')
         $selectedAppNames = @()
         foreach ($appNumber in $selection) {
@@ -340,7 +340,7 @@ on WinMac GitHub page: https://github.com/Asteski/WinMac/wiki
     elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
         Write-Host "Choosing custom installation." -ForegroundColor Green
         Start-Sleep 2
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="PowerShell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Hot Corners"; "11"="MacType"; "12"="Other"}
+        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="PowerShell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="WinMac Menu Bar"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Hot Corners"; "11"="MacType"; "12"="Other"}
     Clear-Host
     Show-Header
 Write-Host @"
@@ -355,7 +355,7 @@ Write-Host @"
 4. StartAllBack
 5. WinMac Menu
 6. Windhawk
-7. Stahky
+7. WinMac Menu Bar
 8. Keyboard Shortcuts
 9. Nexus Dock
 10. Hot Corners
