@@ -1,20 +1,22 @@
 param (
     [switch]$noGUI
 )
-$version = "1.3.2"
+$version = "1.4.0"
 $ErrorActionPreference = "SilentlyContinue"
 $WarningPreference = "SilentlyContinue"
 $ProgressPreference = "SilentlyContinue"
 $programsDir = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs"
 $winMacDirectory = "$env:LOCALAPPDATA\WinMac"
+[System.Environment]::SetEnvironmentVariable("WINMAC", "$env:LOCALAPPDATA\WinMac", [System.EnvironmentVariableTarget]::User)
+[System.Environment]::SetEnvironmentVariable("WINMAC", "$env:LOCALAPPDATA\WinMac", [System.EnvironmentVariableTarget]::Machine)
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName PresentationFramework
-if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null }
-$sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
-$osVersion = (Get-WmiObject -Class Win32_OperatingSystem).Caption
 $user = [Security.Principal.WindowsIdentity]::GetCurrent()
 $adminTest = (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
+$sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
+$osVersion = (Get-WmiObject -Class Win32_OperatingSystem).Caption
 $checkDir = Get-ChildItem '..'
+if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null }
 if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir -like "*bin*" -and $checkDir -like "*pwsh*")) {
     [void][System.Windows.MessageBox]::Show("WinMac components not found. Please make sure to run the script from the correct directory.", "Missing Components", 'OK', 'Error')
     exit
@@ -652,8 +654,7 @@ foreach ($app in $selectedApps) {
                 Copy-Item -Path "..\config\powertoys\RunPlugins" -Destination "$env:LOCALAPPDATA\PowerToys" -Recurse -Force
                 Copy-Item -Path "..\config\powertoys\Assets\Peek" -Destination "$env:LOCALAPPDATA\PowerToys\WinUI3Apps\Assets" -Recurse -Force
                 Copy-Item -Path "..\config\powertoys\RunPlugins\Everything" "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -Recurse -Force
-            }
-            else {
+            } else {
                 Get-ChildItem -Path "..\config\powertoys\RunPlugins" -Recurse | Where-Object { $_.Name -ne "folder.png" } | ForEach-Object {
                     $destinationPath = Join-Path -Path "$env:LOCALAPPDATA\PowerToys\RunPlugins" -ChildPath $_.FullName.Substring((Get-Item "..\config\powertoys\RunPlugins").FullName.Length + 1)
                     if ($_.PSIsContainer) {
@@ -988,7 +989,13 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             $regBackup = Join-Path $extractFolder "Windhawk.reg"
             New-Item -ItemType Directory -Path "$winMacDirectory\resource-redirect\" -Force | Out-Null
             Copy-Item -Path $modsSourceBackup -Destination $windhawkRoot -Recurse -Force
-            Copy-Item -Path '..\config\windhawk\resource-redirect\*' -Destination "$winMacDirectory\resource-redirect\" -Recurse -Force
+            Expand-Archive -Path '..\bin\windhawk-mods-windows.zip' -DestinationPath "$windhawkRoot\Mods" -Force
+            if ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {
+                Expand-Archive -Path '..\config\windhawk\resource-redirect\WinMac-yellow-folders.zip' -DestinationPath "..\temp" -Force
+            } else {
+                Expand-Archive -Path '..\config\windhawk\resource-redirect\WinMac-blue-folders.zip' -DestinationPath "..\temp" -Force
+            }
+            Copy-Item -Path '..\temp\resource-redirect\*' -Destination "$winMacDirectory\resource-redirect\" -Recurse -Force
             $engineFolder = Join-Path $windhawkRoot "Engine"
             New-Item -ItemType Directory -Path $engineFolder -Force | Out-Null
             Copy-Item -Path $modsBackup -Destination $engineFolder -Recurse -Force
@@ -1240,7 +1247,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
         "10"{
             Write-Host "Installing Hot Corners..." -ForegroundColor Yellow
             $outputPath = '..\temp\WinXCorners.zip'
-            $winXCornersUrl = "https://github.com/vhanla/winxcorners/releases/download/1.3.2/WinXCorners1.3.2.zip"
+            $winXCornersUrl = "https://github.com/vhanla/winxcorners/releases/download/1.4.0/WinXCorners1.4.0.zip"
             $winXCornersConfigPath = '..\config\hotcorners\settings.ini'
             $destinationPath = "$env:LOCALAPPDATA\WinXCorners"
             $winLaunchUrl = "https://github.com/jensroth-git/WinLaunch/releases/download/v.0.7.3.0/WinLaunch.0.7.3.0.zip"
