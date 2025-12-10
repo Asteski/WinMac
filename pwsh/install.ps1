@@ -579,7 +579,7 @@ do {
 if ($installConfirmation -eq 'n' -or $installConfirmation -eq 'N') {
     Clear-Host
     Show-Header
-    Write-Host "`eInstallation process aborted." -ForegroundColor Red
+    Write-Host "`n`e[91mInstallation process aborted.`e[0m"
     Start-Sleep 2
     exit
 }
