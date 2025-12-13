@@ -1049,8 +1049,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Copy-Item -Path "..\config\toolbar\*.lnk" -Destination '..\Temp' -Force
             Get-ChildItem -Path '..\Temp' -Filter '*.lnk' | ForEach-Object {
                 $link = $_.FullName
-                $destinationPath = "$Env:LOCALAPPDATA\WinMac\$(($_.Name).replace('lnk','ini'))"
-                $destinationPath
+                $destinationPath = "$Env:USERPROFILE\Favorites\Links\$($_.Name)"
                 $shell = New-Object -ComObject WScript.Shell
                 $shortcut = $shell.CreateShortcut($link)
                 $shortcut.IconLocation = "C:\Windows\blank.ico"
