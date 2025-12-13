@@ -37,7 +37,7 @@
 
 - **WinMac Menu** - Start Menu replaced with newly developed Win32 app to fully resemble functionality of Apple Menu
 
-- **WinMac Toolbar** - highly customizable toolbar added to taskbar to resemble Apple Menu Bar
+- **WinMac Toolbar** - highly customizable toolbar added to taskbar to resemble macOS Menu Bar
 
 - **Quick Launcher** - Spotlight-like launcher for power users that provides instant access to files, folders, calculator functions, applications, and settings on your system, among many [other features](https://learn.microsoft.com/en-us/windows/powertoys/run)
 
@@ -49,7 +49,7 @@
 
 - **Enhanced File Explorer** - improved File Explorer looks and cleaned up context menus, which makes File Explorer load fast and look clean
 
-- **Enhanced Terminal** - custom prompt and a ton of custom functions, bringing most commonly used macOS/Linux commands
+- **Enhanced Terminal** - custom prompt and a ton of new custom functions and aliases, bringing most commonly used macOS/Linux commands
 
 - **Enhanced Icons** - refresh legacy and default Windows components with modern set of icons
 
@@ -79,7 +79,6 @@ WinMac is supported by Windows 11 Home, Pro, LTSC, IoT LTSC, on both x86 and ARM
 
 ## Future plans
 
-- *Nexus Xtreme* theme with customised context menu to match Windows 11 design
 - enforce dark theme on legacy Windows components
 - more Quick Launcher and Start Menu choices
 - disable keyboard shortcuts for full-screen apps & add more keyboard shortcuts
