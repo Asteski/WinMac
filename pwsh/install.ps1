@@ -289,7 +289,7 @@ if (!($noGUI)) {
         $result["menuSet"] = if ($startMenu.IsChecked) { "X" } else { "C" }
         $result["promptSetVar"] = if ($promptStyle.IsChecked) { "W"} else { "M" }
         $result["roundedOrSquared"] = if ($shellCorner.IsChecked) { "R" } else { "S" }
-        $result["lightOrDark"] = if ($theme.IsChecked) { "L"; $result["stackTheme"] = 'light'; $result["orbTheme"] = 'black' } else { "D"; $result["stackTheme"] = 'dark'; $result["orbTheme"] = 'white' }
+        $result["lightOrDark"] = if ($theme.IsChecked) { "L"; $result["orbTheme"] = 'black' } else { "D"; $result["orbTheme"] = 'white' }
         $result["blueOrYellow"] = if ($blueOrYellow.IsChecked) { "Y" } else { "B" }
         $result["dockDynamic"] = if ($dockDynamic.IsChecked) { "X" } else { "D" }
         $result["gitProfile"] = if ($chkGitProfile.IsChecked) { $true } else { $false }
@@ -496,11 +496,9 @@ if ($selectedApps -like '*4*' -or $selectedApps -like '*9*') {
 }
 if ($selectedApps -like '*4*' -or $selectedApps -like '*7*' -or $selectedApps -like '*9*' -or $selectedApps -like '*12*') {
     if ($windowsTheme -eq "Dark") {
-        $stackTheme = 'dark'
         $orbTheme = 'white'
         $lightOrDark = "D"
     } else {
-        $stackTheme = 'light'
         $orbTheme = 'black'
         $lightOrDark = "L"
     }
@@ -590,7 +588,6 @@ if ($result){
     $promptSet = $result["promptSetVar"]
     $roundedOrSquared = $result["roundedOrSquared"]
     $lightOrDark = $result["lightOrDark"]
-    $stackTheme = $result["stackTheme"]
     $dockDynamic = $result["dockDynamic"]
     $blueOrYellow = $result["blueOrYellow"]
     $exStyle = $result["exStyle"]
