@@ -135,7 +135,7 @@ if (!($noGUI)) {
                                 <CheckBox x:Name="chkStartAllBack" Content="StartAllBack" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                                 <CheckBox x:Name="chkWinMacMenu" Content="WinMac Menu" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                                 <CheckBox x:Name="chkWindhawk" Content="Windhawk" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                                <CheckBox x:Name="chkWinMacMenuBar" Content="WinMac Toolbar" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                                <CheckBox x:Name="chkWinMacToolbar" Content="WinMac Toolbar" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                                 <CheckBox x:Name="chkAutoHotKey" Content="Keyboard Shortcuts" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                                 <CheckBox x:Name="chkNexusDock" Content="Nexus Dock" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                                 <CheckBox x:Name="chkHotCorners" Content="Hot Corners" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
@@ -243,7 +243,7 @@ if (!($noGUI)) {
     $chkStartAllBack = $window.FindName("chkStartAllBack")
     $chkWinMacMenu = $window.FindName("chkWinMacMenu")
     $chkWindhawk = $window.FindName("chkWindhawk")
-    $chkWinMacMenuBar = $window.FindName("chkWinMacMenuBar")
+    $chkWinMacToolbar = $window.FindName("chkWinMacToolbar")
     $chkAutoHotKey = $window.FindName("chkAutoHotKey")
     $chkNexusDock = $window.FindName("chkNexusDock")
     $chkGitProfile = $window.FindName("chkGitProfile")
@@ -271,7 +271,7 @@ if (!($noGUI)) {
             if ($chkStartAllBack.IsChecked) { $selection += "4," }
             if ($chkWinMacMenu.IsChecked) { $selection += "5," }
             if ($chkWindhawk.IsChecked) { $selection += "6," }
-            if ($chkWinMacMenuBar.IsChecked) { $selection += "7," }
+            if ($chkWinMacToolbar.IsChecked) { $selection += "7," }
             if ($chkAutoHotKey.IsChecked) { $selection += "8," }
             if ($chkNexusDock.IsChecked) { $selection += "9," }
             if ($chkHotCorners.IsChecked) { $selection += "10," }
@@ -1046,13 +1046,14 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             if (-not (Test-Path $folderPath)) {
                 New-Item -ItemType Directory -Path $folderPath -Force | Out-Null
             }
-            Copy-Item -Path "..\config\toolbar\*.lnk" -Destination '..\Temp' -Force
-            Get-ChildItem -Path '..\Temp' -Filter '*.lnk' | ForEach-Object {
+            Copy-Item -Path "..\config\toolbar\*.lnk" -Destination '..\temp' -Force
+            Get-ChildItem -Path '..\temp' -Filter '*.lnk' | ForEach-Object {
                 $link = $_.FullName
                 $destinationPath = "$Env:USERPROFILE\Favorites\Links\$($_.Name)"
                 $shell = New-Object -ComObject WScript.Shell
                 $shortcut = $shell.CreateShortcut($link)
-                $shortcut.IconLocation = "C:\Windows\blank.ico"
+                $shortcut.TargetPath = "$Env:LOCALAPPDATA\WinMac\WinMacMenu.exe"
+                $shortcut.Arguments = "--config $Env:LOCALAPPDATA\WinMac\$($_.Name.Replace('.lnk','.ini'))"
                 $shortcut.Save()
                 Copy-Item -Path $link -Destination $destinationPath -Force
             }
