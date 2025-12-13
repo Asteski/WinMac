@@ -131,7 +131,7 @@ if (!($noGUI)) {
                         <CheckBox x:Name="chkStartAllBack" Content="StartAllBack" IsChecked="True" Grid.Row="1" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkWinMacMenu" Content="WinMac Menu" IsChecked="True" Grid.Row="2" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkWindhawk" Content="Windhawk" IsChecked="True" Grid.Row="2" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                        <CheckBox x:Name="WinMacMenuBar" Content="WinMac Menu Bar" IsChecked="True" Grid.Row="3" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
+                        <CheckBox x:Name="WinMacToolbar" Content="WinMac Toolbar" IsChecked="True" Grid.Row="3" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkAutoHotkey" Content="Keyboard Shortcuts" IsChecked="True" Grid.Row="3" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkNexusDock" Content="Nexus Dock" IsChecked="True" Grid.Row="4" Grid.Column="0" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                         <CheckBox x:Name="chkHotCorners" Content="Hot Corners" IsChecked="True" Grid.Row="4" Grid.Column="1" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
@@ -180,7 +180,7 @@ if (!($noGUI)) {
     $chkStartAllBack = $window.FindName("chkStartAllBack")
     $chkWinMacMenu = $window.FindName("chkWinMacMenu")
     $chkWindhawk = $window.FindName("chkWindhawk")
-    $WinMacMenuBar = $window.FindName("WinMacMenuBar")
+    $WinMacToolbar = $window.FindName("WinMacToolbar")
     $chkAutoHotkey = $window.FindName("chkAutoHotkey")
     $chkNexusDock = $window.FindName("chkNexusDock")
     $chkHotCorners = $window.FindName("chkHotCorners")
@@ -200,14 +200,14 @@ if (!($noGUI)) {
             if ($chkStartAllBack.IsChecked) { $selection += "4," }
             if ($chkWinMacMenu.IsChecked) { $selection += "5," }
             if ($chkWindhawk.IsChecked) { $selection += "6," }
-            if ($WinMacMenuBar.IsChecked) { $selection += "7," }
+            if ($WinMacToolbar.IsChecked) { $selection += "7," }
             if ($chkAutoHotkey.IsChecked) { $selection += "8," }
             if ($chkNexusDock.IsChecked) { $selection += "9," }
             if ($chkHotCorners.IsChecked) { $selection += "10," }
             if ($chkMacType.IsChecked) { $selection += "11," }
             if ($chkOther.IsChecked) { $selection += "12" }
         }
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="PowerShell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="WinMac Menu Bar"; "8"="AutoHotkey"; "9"="Nexus Dock"; "10"="Hot Corners"; "11"="MacType"; "12"="Other"}
+        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="PowerShell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="WinMac Toolbar"; "8"="AutoHotkey"; "9"="Nexus Dock"; "10"="Hot Corners"; "11"="MacType"; "12"="Other"}
         $result["selectedApps"] = $selection.Split(',').TrimEnd(',')
         $selectedAppNames = @()
         foreach ($appNumber in $selection) {
@@ -266,7 +266,7 @@ on WinMac GitHub page: https://github.com/Asteski/WinMac/wiki
     elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
         Write-Host "Choosing custom uninstallation." -ForegroundColor Yellow
         Start-Sleep 2
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="PowerShell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="WinMac Menu Bar"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Hot Corners"; "11"="MacType"; "12"="Other"}
+        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="PowerShell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="WinMac Toolbar"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Hot Corners"; "11"="MacType"; "12"="Other"}
     Clear-Host
     Show-Header
 Write-Host @"
@@ -280,7 +280,7 @@ Write-Host @"
         Write-Host "4. StartAllBack"
         Write-Host "5. WinMac Menu"
         Write-Host "6. Windhawk"
-        Write-Host "7. WinMac Menu Bar"
+        Write-Host "7. WinMac Toolbar"
         Write-Host "8. Keyboard Shortcuts"
         Write-Host "9. Nexus Dock"
         Write-Host "10. Hot Corners"
@@ -490,12 +490,17 @@ foreach ($app in $selectedApps) {
             Start-Process explorer
             Write-Host "Uninstalling Windhawk completed." -ForegroundColor Green
         }
-    #* WinMac Menu Bar
+    #* WinMac Toolbar
         "7" {
-            Write-Host "Uninstalling WinMac Menu Bar..." -ForegroundColor Yellow
-            $exePath = "$env:LOCALAPPDATA\WinMac Menu Bar"
-            Remove-Item -Path $exePath -Recurse -Force
-            Write-Host "Uninstalling WinMac Menu Bar completed." -ForegroundColor Green
+            Write-Host "Uninstalling WinMac Toolbar..." -ForegroundColor Yellow
+            Stop-Process -Name WinMacMenu -Force
+            #! remove from taskbar
+            Stop-Process -Name explorer -Force
+            Remove-Item -Path "$env:USERPROFILE\Favorites\Links\Explorer.lnk" -Force
+            Remove-Item -Path "$env:USERPROFILE\Favorites\Links\Favorites.lnk" -Force
+            Remove-Item -Path "$env:LOCALAPPDATA\WinMac\explorer.ini" -Force
+            Remove-Item -Path "$env:LOCALAPPDATA\WinMac\favorites.ini" -Force
+            Write-Host "Uninstalling WinMac Toolbar completed." -ForegroundColor Green
         }
     #* AutoHotkey Keyboard Shortcuts
         "8" {
