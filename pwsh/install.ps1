@@ -7,8 +7,8 @@ $WarningPreference = "SilentlyContinue"
 $ProgressPreference = "SilentlyContinue"
 $programsDir = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs"
 $winMacDirectory = "$env:LOCALAPPDATA\WinMac"
-[System.Environment]::SetEnvironmentVariable("WINMAC", "$env:LOCALAPPDATA\WinMac", [System.EnvironmentVariableTarget]::User)
-[System.Environment]::SetEnvironmentVariable("WINMAC", "$env:LOCALAPPDATA\WinMac", [System.EnvironmentVariableTarget]::Machine)
+[System.Environment]::SetEnvironmentVariable("WINMAC", "%LOCALAPPDATA%\WinMac", [System.EnvironmentVariableTarget]::User)
+[System.Environment]::SetEnvironmentVariable("WINMAC", "%LOCALAPPDATA%\WinMac", [System.EnvironmentVariableTarget]::Machine)
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName PresentationFramework
 $user = [Security.Principal.WindowsIdentity]::GetCurrent()
