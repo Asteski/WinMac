@@ -39,7 +39,7 @@
 
 - **WinMac Toolbar** - highly customizable toolbar added to taskbar to resemble Apple Menu Bar
 
-- **Quick Launcher** - Spotlight-like launcher for power users that contains additional features, allowing users to quickly search for files, folders, applications, and settings on your system
+- **Quick Launcher** - Spotlight-like launcher for power users that provides instant access to files, folders, calculator functions, applications, and settings on your system, among many [other features](https://learn.microsoft.com/en-us/windows/powertoys/run)
 
 - **Dock** - highly customizable and feature-rich dock application, used to achieve macOS-like dock experience
 
