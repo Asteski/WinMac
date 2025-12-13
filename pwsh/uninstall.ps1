@@ -495,6 +495,7 @@ foreach ($app in $selectedApps) {
             Write-Host "Uninstalling WinMac Toolbar..." -ForegroundColor Yellow
             Stop-Process -Name WinMacMenu -Force
             #! remove from taskbar
+            #! zrobic export regu z wersji 1.3.2
             Stop-Process -Name explorer -Force
             Remove-Item -Path "$env:USERPROFILE\Favorites\Links\Explorer.lnk" -Force
             Remove-Item -Path "$env:USERPROFILE\Favorites\Links\Favorites.lnk" -Force
