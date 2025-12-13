@@ -35,13 +35,15 @@
 
 ## Features
 
+- **WinMac Menu** - Start Menu replaced with newly developed Win32 app to fully resemble functionality of Apple Menu
+
+- **WinMac Toolbar** - highly customizable toolbar added to taskbar to resemble Apple Menu Bar
+
 - **Quick Launcher** - Spotlight-like launcher for power users that contains additional features, allowing users to quickly search for files, folders, applications, and settings on your system
 
 - **Dock** - highly customizable and feature-rich dock application, used to achieve macOS-like dock experience
 
 - **Hot Corners** - assign custom actions triggered when you hover your mouse cursor over the screen corners
-
-- **Enhanced Start Menu** - Start Menu replaced with newly developed Win32 app to fully resemble functionality of Apple menu
 
 - **Enhanced Taskbar** - legacy Taskbar put on top, with enhanced capabilities and looks to match Windows 11 design
 
