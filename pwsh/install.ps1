@@ -1046,8 +1046,18 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             if (-not (Test-Path $folderPath)) {
                 New-Item -ItemType Directory -Path $folderPath -Force | Out-Null
             }
-            Copy-Item -Path "..\config\taskbar\menubar\*.lnk" -Destination "$Env:USERPROFILE\Favorites\Links" -Force
-            Copy-Item -Path "..\config\taskbar\menubar\*.ini" -Destination $winMacDirectory -Force
+            Copy-Item -Path "..\config\toolbar\*.lnk" -Destination '..\Temp' -Force
+            Get-ChildItem -Path '..\Temp' -Filter '*.lnk' | ForEach-Object {
+                $link = $_.FullName
+                $destinationPath = "$Env:LOCALAPPDATA\WinMac\$(($_.Name).replace('lnk','ini'))"
+                $destinationPath
+                $shell = New-Object -ComObject WScript.Shell
+                $shortcut = $shell.CreateShortcut($link)
+                $shortcut.IconLocation = "C:\Windows\blank.ico"
+                $shortcut.Save()
+                Copy-Item -Path $link -Destination $destinationPath -Force
+            }
+            Copy-Item -Path "..\config\toolbar\*.ini" -Destination $winMacDirectory -Force
             Copy-Item -Path "..\config\blank.ico" -Destination "C:\Windows" -Force
             $folder = Get-Item $folderPath
             if (($folder.Attributes -band [System.IO.FileAttributes]::Hidden) -eq 0) {
