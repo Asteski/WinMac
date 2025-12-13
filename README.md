@@ -45,6 +45,8 @@
 
 - **Hot Corners** - assign custom actions triggered when you hover your mouse cursor over the screen corners
 
+- **Enhanced Start Menu** - additionally you can choose to replace default Start menu with enhanced Windows 7 start menu, instead WinMac Menu or haev them both available
+
 - **Enhanced Taskbar** - legacy Taskbar put on top, with enhanced capabilities and looks to match Windows 11 design
 
 - **Enhanced File Explorer** - improved File Explorer looks and cleaned up context menus, which makes File Explorer load fast and look clean
