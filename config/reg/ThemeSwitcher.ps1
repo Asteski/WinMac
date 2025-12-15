@@ -1,17 +1,6 @@
-param
-(
-	[Parameter(Mandatory=$true)]
-	[string]
-	$mode,
-	[Parameter(Mandatory=$false)]
-	[string]
-	$mode2
-)
-Write-Host "Switching to $mode mode..." -ForegroundColor Green
 $ErrorActionPreference = 'SilentlyContinue'
 $WarningPreference = 'SilentlyContinue'
 $ProgressPreference = 'SilentlyContinue'
-Write-Host "Shutting down Windows Explorer..." -ForegroundColor Yellow
 taskkill /IM explorer.exe /F > $null 2>&1
 if (Test-Path "C:\Program Files (x86)\Winstep\Nexus.exe") {
 	Write-Host "Shutting down Nexus Dock..." -ForegroundColor Yellow
@@ -28,42 +17,43 @@ $themeStyle = (Get-ItemProperty -Path $registryPath0 -Name "NeXuSThemeName").NeX
 $orbBitmap = (Get-ItemProperty -Path $registryPath5 -Name "OrbBitmap").OrbBitmap
 $dockTrashEmptyIcon = (Get-ItemProperty -Path $registryPath0 -Name "TrashEmptyIcon").TrashEmptyIcon
 $dockTrashFullIcon = (Get-ItemProperty -Path $registryPath0 -Name "TrashFullIcon").TrashFullIcon
-if ($mode -eq 'Dark')
+switch ($arg[0]) 
 {
-	$OSMode 				= 0
-	$UIDarkMode 			= '1'
-	$DockLabelColor1 		= '15658734'
-	$DockLabelBackColor1 	= '2563870'
-	$cursorName 			= 'Windows Modern v2 - Aero White - (x1)'
-	$cursorColor 			= 'white'
-	$theme 					= $themeStyle -replace 'Light', 'Dark'
-	$orbBitmap 				= $orbBitmap -replace 'black', 'white'
-	$dockRunningIndicator 	= $dockRunningIndicator -replace 'Light', 'Dark'
-	$dockTrashEmptyIcon 	= $dockTrashEmptyIcon -replace 'Light', 'Dark'
-	$dockTrashFullIcon 		= $dockTrashFullIcon -replace 'Light', 'Dark'
-	$recycleBinEmptyIcon 	= '%SystemRoot%\System32\imageres.dll,-55'
-	$recycleBinFullIcon 	= '%SystemRoot%\System32\imageres.dll,-54'
-	$contextMenuStyle 		= 'True'
-}
-if ($mode -eq 'Light')
-{
-	$OSMode 				= 1
-	$UIDarkMode 			= '3'
-	$DockLabelColor1 		= '1644825'
-	$DockLabelBackColor1 	= '16119283'
-	$cursorName 			= 'Windows Modern v2 - Aero Black - (x1)'
-	$cursorColor 			= 'black'
-	$theme 					= $themeStyle -replace 'Dark', 'Light'
-	$orbBitmap 				= $orbBitmap -replace 'white', 'black'
-	$dockRunningIndicator 	= $dockRunningIndicator -replace 'Dark', 'Light'
-	$dockTrashEmptyIcon 	= $dockTrashEmptyIcon -replace 'Dark', 'Light'
-	$dockTrashFullIcon 		= $dockTrashFullIcon -replace 'Dark', 'Light'
-	$recycleBinEmptyIcon 	= '%SystemRoot%\System32\imageres.dll,-1015'
-	$recycleBinFullIcon 	= '%SystemRoot%\System32\imageres.dll,-1017'
-	$contextMenuStyle 		= 'False'
+	'-dark' {
+		$OSMode 				= 0
+		$UIDarkMode 			= '1'
+		$DockLabelColor1 		= '15658734'
+		$DockLabelBackColor1 	= '2563870'
+		$cursorName 			= 'Windows Modern v2 - Aero White - (x1)'
+		$cursorColor 			= 'white'
+		$theme 					= $themeStyle -replace 'Light', 'Dark'
+		$orbBitmap 				= $orbBitmap -replace 'black', 'white'
+		$dockRunningIndicator 	= $dockRunningIndicator -replace 'Light', 'Dark'
+		$dockTrashEmptyIcon 	= $dockTrashEmptyIcon -replace 'Light', 'Dark'
+		$dockTrashFullIcon 		= $dockTrashFullIcon -replace 'Light', 'Dark'
+		$recycleBinEmptyIcon 	= '%SystemRoot%\System32\imageres.dll,-55'
+		$recycleBinFullIcon 	= '%SystemRoot%\System32\imageres.dll,-54'
+		$contextMenuStyle 		= 'True'
+	}
+	-'light' {
+		$OSMode 				= 1
+		$UIDarkMode 			= '3'
+		$DockLabelColor1 		= '1644825'
+		$DockLabelBackColor1 	= '16119283'
+		$cursorName 			= 'Windows Modern v2 - Aero Black - (x1)'
+		$cursorColor 			= 'black'
+		$theme 					= $themeStyle -replace 'Dark', 'Light'
+		$orbBitmap 				= $orbBitmap -replace 'white', 'black'
+		$dockRunningIndicator 	= $dockRunningIndicator -replace 'Dark', 'Light'
+		$dockTrashEmptyIcon 	= $dockTrashEmptyIcon -replace 'Dark', 'Light'
+		$dockTrashFullIcon 		= $dockTrashFullIcon -replace 'Dark', 'Light'
+		$recycleBinEmptyIcon 	= '%SystemRoot%\System32\imageres.dll,-1015'
+		$recycleBinFullIcon 	= '%SystemRoot%\System32\imageres.dll,-1017'
+		$contextMenuStyle 		= 'False'
+	}
 }
 Write-Host "Changing Windows theme..." -ForegroundColor Yellow
-if ($mode2 -eq 'NoApp') {
+if ($arg[0]) {
 	Set-ItemProperty -Path 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize' -Name 'SystemUsesLightTheme' -Type DWord -Value $OSMode
 }
 else {
@@ -108,8 +98,6 @@ if (Test-Path "C:\Program Files (x86)\Winstep\Nexus.exe") {
 	Set-ItemProperty -Path $registryPath2 -Name "Windows10Style" -Value $contextMenuStyle
 }
 
-Write-Host "Changing Recycle Bin icons and Start Orb color..." -ForegroundColor Yellow
-
 Set-ItemProperty -Path $registryPath3 -Name "(default)" -Value $recycleBinEmptyIcon
 Set-ItemProperty -Path $registryPath3 -Name "empty" -Value $recycleBinEmptyIcon
 Set-ItemProperty -Path $registryPath3 -Name "full" -Value $recycleBinFullIcon
@@ -117,7 +105,6 @@ Set-ItemProperty -Path $registryPath4 -Name "Icon" -Value $recycleBinEmptyIcon
 Set-ItemProperty -Path $registryPath5 -Name "OrbBitmap" -Value $orbBitmap
 
 Start-Sleep 2
-Write-Host "Changing Cursor color..." -ForegroundColor Yellow
 
 $RegConnect = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]"CurrentUser","$env:COMPUTERNAME")
 $RegCursors = $RegConnect.OpenSubKey("Control Panel\Cursors",$true)
@@ -153,7 +140,6 @@ public class User32 {
 Write-Host "Starting Explorer..." -ForegroundColor Yellow
 Start-Process explorer
 if (Test-Path "C:\Program Files (x86)\Winstep\Nexus.exe") {
-	Write-Host "Changing Nexus Dock theme..." -ForegroundColor Yellow
 	try { Start-Process "C:\Program Files (x86)\Winstep\Nexus.exe" } catch {}
 }
 Write-Host "Theme switch completed!" -ForegroundColor Green
