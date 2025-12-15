@@ -24,7 +24,7 @@ $registryPath3 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID
 $registryPath4 = "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\empty"
 $registryPath5 = "HKCU:\Software\StartIsBack"
 $dockRunningIndicator = (Get-ItemProperty -Path $registryPath1 -Name "DockRunningIndicator1").DockRunningIndicator1
-$themeStyle = (Get-ItemProperty -Path $registryPath0 -Name "GenThemeName").GenThemeName
+$themeStyle = (Get-ItemProperty -Path $registryPath0 -Name "NeXuSThemeName").NeXuSThemeName
 $orbBitmap = (Get-ItemProperty -Path $registryPath5 -Name "OrbBitmap").OrbBitmap
 $dockTrashEmptyIcon = (Get-ItemProperty -Path $registryPath0 -Name "TrashEmptyIcon").TrashEmptyIcon
 $dockTrashFullIcon = (Get-ItemProperty -Path $registryPath0 -Name "TrashFullIcon").TrashFullIcon
@@ -82,11 +82,10 @@ if (Test-Path "C:\Program Files (x86)\Winstep\Nexus.exe") {
 		Where-Object { $_.Value -like "$storeIcon*" } |
 		Select-Object -ExpandProperty Name
 
-	Set-ItemProperty -Path $registryPath0 -Name "GenThemeName" -Value $theme
+		Set-ItemProperty -Path $registryPath0 -Name "NeXuSThemeName" -Value $theme
 	Set-ItemProperty -Path $registryPath0 -Name "BitmapsFolder" -Value "C:\ProgramData\WinStep\Themes\$theme\"
 	Set-ItemProperty -Path $registryPath0 -Name "GlobalBitmapFolder" -Value "C:\ProgramData\WinStep\Themes\$theme\"
 	Set-ItemProperty -Path $registryPath0 -Name "NeXuSBitmapFolder" -Value "C:\ProgramData\WinStep\Themes\$theme\"
-	Set-ItemProperty -Path $registryPath0 -Name "NeXuSThemeName" -Value $theme
 	Set-ItemProperty -Path $registryPath0 -Name "NeXuSImage3" -Value "C:\ProgramData\WinStep\Themes\$theme\NxBack.png"
 	Set-ItemProperty -Path $registryPath0 -Name "ClockBitmapFolder" -Value "C:\ProgramData\WinStep\Themes\$theme\"
 	Set-ItemProperty -Path $registryPath0 -Name "TrashBitmapFolder" -Value "C:\ProgramData\WinStep\Themes\$theme\"
