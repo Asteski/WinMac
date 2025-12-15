@@ -72,7 +72,7 @@ if (Test-Path "C:\Program Files (x86)\Winstep\Nexus.exe") {
 		Where-Object { $_.Value -like "$storeIcon*" } |
 		Select-Object -ExpandProperty Name
 
-		Set-ItemProperty -Path $registryPath0 -Name "NeXuSThemeName" -Value $theme
+	Set-ItemProperty -Path $registryPath0 -Name "NeXuSThemeName" -Value $theme
 	Set-ItemProperty -Path $registryPath0 -Name "BitmapsFolder" -Value "C:\ProgramData\WinStep\Themes\$theme\"
 	Set-ItemProperty -Path $registryPath0 -Name "GlobalBitmapFolder" -Value "C:\ProgramData\WinStep\Themes\$theme\"
 	Set-ItemProperty -Path $registryPath0 -Name "NeXuSBitmapFolder" -Value "C:\ProgramData\WinStep\Themes\$theme\"
