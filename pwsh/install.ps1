@@ -1458,17 +1458,17 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Force | Out-Null
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String | Out-Null
         #? Configuring file explorer and context menus
-            Get-ChildItem ..\config\reg\remove\* -e *theme* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
-            $sourceFilePath = "..\config\reg\add\Add_Theme_Mode_in_Context_Menu.reg"
+            Get-ChildItem ..\config\registry\remove\* -e *theme* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
+            $sourceFilePath = "..\config\registry\add\Add_Theme_Mode_in_Context_Menu.reg"
             $tempFilePath = "..\temp\Add_Theme_Mode_in_Context_Menu.reg"
-            $ps1FilePath = "..\config\reg\ThemeSwitcher.ps1"
+            $ps1FilePath = "..\config\registry\ThemeSwitcher.ps1"
             if (-not (Test-Path -Path $winMacDirectory)) {New-Item -ItemType Directory -Path $winMacDirectory -Force | Out-Null }
             Copy-Item -Path $ps1FilePath -Destination $winMacDirectory -Force
             Copy-Item -Path $sourceFilePath -Destination '..\temp\' -Force
             $appData = $env:LOCALAPPDATA -replace '\\', '\\'
             (Get-Content -Path $tempFilePath) -replace '%LOCALAPPDATA%', $appData | Set-Content -Path $tempFilePath
-            reg import '..\config\reg\add\Add_Hidden_items_to_context_menu.reg' > $null 2>&1
-            reg import '..\config\reg\add\Add_Navigation_pane_to_context_menu.reg' > $null 2>&1
+            reg import '..\config\registry\add\Add_Hidden_items_to_context_menu.reg' > $null 2>&1
+            reg import '..\config\registry\add\Add_Navigation_pane_to_context_menu.reg' > $null 2>&1
             reg import '..\temp\Add_Theme_Mode_in_Context_Menu.reg' > $null 2>&1
             Copy-Item -Path "..\config\themes\*" -Destination "$env:WINDIR\Resources\Themes" -Recurse -Force
             New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowIconOverlay" -Value 0 -PropertyType DWord -Force | Out-Null
