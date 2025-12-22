@@ -466,6 +466,7 @@ foreach ($app in $selectedApps) {
             Stop-Process -Name WinMacMenu -Force
             Stop-Process -Name WinMac_Menu_RMB_Trigger -Force
             winget uninstall --id "Open-Shell.Open-Shell-Menu" --source winget --force | Out-Null
+            Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\winver.exe" -Force
             Uninstall-WinGetPackage -name "Winver UWP" | Out-Null
             Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 0
             $tasks = Get-ScheduledTask -TaskPath "\WinMac\" | Where-Object { $_.TaskName -match 'WinMac Menu RMB Trigger' }
