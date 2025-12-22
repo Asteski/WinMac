@@ -357,6 +357,7 @@ if ($uninstallConfirmation -eq 'n' -or $uninstallConfirmation -eq 'N') {
     Show-Header
     Write-Host "`n`e[91mUninstallation process aborted.`e[0m"
     Start-Sleep 2
+    Clear-Host
     exit
 }
 }

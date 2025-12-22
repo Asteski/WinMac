@@ -599,6 +599,7 @@ if ($installConfirmation -eq 'n' -or $installConfirmation -eq 'N') {
     Show-Header
     Write-Host "`n`e[91mInstallation process aborted.`e[0m"
     Start-Sleep 2
+    Clear-Host
     exit
 }
 }
