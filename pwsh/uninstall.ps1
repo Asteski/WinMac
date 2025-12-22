@@ -418,7 +418,7 @@ if ($null -eq $wingetCliCheck) {
     exit 1
 }
 #! WinMac deployment
-if ($selectedApps -like '*9*'){ Get-Process Nexus | Stop-Process -Force }
+if ($selectedApps -like '*8*'){ Get-Process Nexus | Stop-Process -Force }
 foreach ($app in $selectedApps) {
     switch ($app.Trim()) {
     #* PowerToys

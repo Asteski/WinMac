@@ -667,7 +667,7 @@ else {
 
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
 #! WinMac deployment
-
+New-Item -Path $winMacDirectory -ItemType Directory -Force | Out-Null
 foreach ($app in $selectedApps) {
     switch ($app.Trim()) {
     #* PowerToys
