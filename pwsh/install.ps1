@@ -959,6 +959,7 @@ foreach ($app in $selectedApps) {
                     New-Item -Path $taskbarLinksPath -Force | Out-Null
                 }
                 Set-ItemProperty -Path $taskbarLinksPath -Name "Toolbars" -Value $toolbarsValue -Type Binary -Force
+                Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "TaskbarSizeMove" -Value 0 -Type DWord -Force | Out-Null
                 #? WinMac Start Menu Setup
                 if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
                     $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.8'
@@ -1038,7 +1039,6 @@ foreach ($app in $selectedApps) {
                     $WinverUWP = ((Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP).InstallLocation) + "\WinverUWP.exe"
                     New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\winver.exe" -Force | Out-Null
                     Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\winver.exe" -Name "Debugger" -Value $WinverUWP -Type String
-                    Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "TaskbarSizeMove" -Value 0 -Type DWord -Force | Out-Null
                     Stop-Process -Name Explorer
                     Start-Process $shellExePath
                     $scriptBlock1 = "Start-Process -FilePath $env:LOCALAPPDATA\WinMac\WinMacMenu.exe -WorkingDirectory $env:LOCALAPPDATA\WinMac"
