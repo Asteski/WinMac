@@ -667,7 +667,7 @@ else {
 
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
 #! WinMac deployment
-if (-not (Test-Path -Path $winMacDirectory)) {New-Item -ItemType Directory -Path $winMacDirectory | Out-Null }
+
 foreach ($app in $selectedApps) {
     switch ($app.Trim()) {
     #* PowerToys
@@ -1059,9 +1059,10 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                     Set-Content -Path $tempVbs -Value $vbsContent -Encoding ASCII
                     Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""
                     Start-Sleep 5
-                    if (-not (Get-Process -Name explorer)) { Start-Process explorer }
-                    Write-Host "WinMac Menu installation completed." -ForegroundColor Green
                 }
+                if (-not (Get-Process -Name explorer)) { Start-Process explorer }
+                else { Stop-Process -Name explorer -Force; Start-Sleep 2 }
+                Write-Host "WinMac Menu installation completed." -ForegroundColor Green
             } elseif ($osVersion -notlike '*Windows 11*') {
                 Write-Host "WinMac Menu is supported only on Windows 11. Skipping installation." -ForegroundColor Red
             }
