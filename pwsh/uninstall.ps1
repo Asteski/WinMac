@@ -508,11 +508,11 @@ foreach ($app in $selectedApps) {
             if (Test-Path $taskbarLinksPath) {
                 Set-ItemProperty -Path $taskbarLinksPath -Name "Toolbars" -Value $toolbarsValue -Type Binary -Force
             }
+            Stop-Process -Name explorer -Force
             Remove-Item -Path "$env:USERPROFILE\Favorites\Links\Explorer.lnk" -Force
             Remove-Item -Path "$env:USERPROFILE\Favorites\Links\Favorites.lnk" -Force
             Remove-Item -Path "$env:LOCALAPPDATA\WinMac\explorer.ini" -Force
             Remove-Item -Path "$env:LOCALAPPDATA\WinMac\favorites.ini" -Force
-            Stop-Process -Name explorer -Force
             Write-Host "Uninstalling WinMac Toolbar completed." -ForegroundColor Green
         }
     #* AutoHotkey Keyboard Shortcuts
