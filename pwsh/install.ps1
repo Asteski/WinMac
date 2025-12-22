@@ -667,6 +667,7 @@ else {
 
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
 #! WinMac deployment
+if (-not (Test-Path -Path $winMacDirectory)) {New-Item -ItemType Directory -Path $winMacDirectory | Out-Null }
 foreach ($app in $selectedApps) {
     switch ($app.Trim()) {
     #* PowerToys
@@ -987,7 +988,6 @@ foreach ($app in $selectedApps) {
                     } else {
                         Write-Host "WinverUWP is already installed." -ForegroundColor DarkGreen
                     }
-                    New-Item -ItemType Directory -Path "$winMacDirectory\" | Out-Null
                     Write-Host "Installing Open-Shell..." -ForegroundColor DarkYellow
                     $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\StartMenu.exe"
                     Start-Process -FilePath "..\bin\osh\osh.exe" -ArgumentList "/QUIET", "ADDLOCAL=StartMenu" -Wait -NoNewWindow | Out-Null
@@ -1061,8 +1061,6 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                     Start-Sleep 5
                     if (-not (Get-Process -Name explorer)) { Start-Process explorer }
                     Write-Host "WinMac Menu installation completed." -ForegroundColor Green
-                } else {
-                    Write-Host "Skipping WinMac Menu installation." -ForegroundColor DarkYellow
                 }
             } elseif ($osVersion -notlike '*Windows 11*') {
                 Write-Host "WinMac Menu is supported only on Windows 11. Skipping installation." -ForegroundColor Red
@@ -1133,7 +1131,6 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
     #* AutoHotkey Keyboard Shortcuts
         "7" {
             Write-Host "Installing Keyboard Shortcuts..." -ForegroundColor Yellow
-            New-Item -ItemType Directory -Path "$winMacDirectory\" | Out-Null
             if (Get-Process keyshortcuts) { Stop-Process -Name keyshortcuts }
             Copy-Item '..\bin\ahk\WinMacKeyShortcuts.exe' "$winMacDirectory" 
             Copy-Item '..\bin\windowswitcher\window-switcher*' "$winMacDirectory"
@@ -1490,7 +1487,6 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             $sourceFilePath = "..\config\registry\add\Add_Theme_Mode_in_Context_Menu.reg"
             $tempFilePath = "..\temp\Add_Theme_Mode_in_Context_Menu.reg"
             $ps1FilePath = "..\config\registry\ThemeSwitcher.ps1"
-            if (-not (Test-Path -Path $winMacDirectory)) {New-Item -ItemType Directory -Path $winMacDirectory -Force | Out-Null }
             Copy-Item -Path $ps1FilePath -Destination $winMacDirectory -Force
             Copy-Item -Path $sourceFilePath -Destination '..\temp\' -Force
             $appData = $env:LOCALAPPDATA -replace '\\', '\\'
