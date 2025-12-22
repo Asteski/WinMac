@@ -135,7 +135,6 @@ if (!($noGUI)) {
                                 <CheckBox x:Name="chkStartAllBack" Content="StartAllBack" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                                 <CheckBox x:Name="chkWinMacMenu" Content="WinMac Menu" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                                 <CheckBox x:Name="chkWindhawk" Content="Windhawk" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                                <CheckBox x:Name="chkWinMacToolbar" Content="WinMac Toolbar" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                                 <CheckBox x:Name="chkAutoHotKey" Content="Keyboard Shortcuts" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                                 <CheckBox x:Name="chkNexusDock" Content="Nexus Dock" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                                 <CheckBox x:Name="chkHotCorners" Content="Hot Corners" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
@@ -243,7 +242,6 @@ if (!($noGUI)) {
     $chkStartAllBack = $window.FindName("chkStartAllBack")
     $chkWinMacMenu = $window.FindName("chkWinMacMenu")
     $chkWindhawk = $window.FindName("chkWindhawk")
-    $chkWinMacToolbar = $window.FindName("chkWinMacToolbar")
     $chkAutoHotKey = $window.FindName("chkAutoHotKey")
     $chkNexusDock = $window.FindName("chkNexusDock")
     $chkGitProfile = $window.FindName("chkGitProfile")
@@ -263,7 +261,7 @@ if (!($noGUI)) {
     $customInstall.Add_Checked({$componentSelection.IsEnabled = $true})
     $result = @{}
     $btnInstall.Add_Click({
-        if ($fullInstall.IsChecked) { $selection = "1","2","3","4","5","6","7","8","9","10","11","12"} 
+        if ($fullInstall.IsChecked) { $selection = "1","2","3","4","5","6","7","8","9","10","11"} 
         else {
             if ($chkPowerToys.IsChecked) { $selection += "1," }
             if ($chkEverything.IsChecked) { $selection += "2," }
@@ -271,14 +269,25 @@ if (!($noGUI)) {
             if ($chkStartAllBack.IsChecked) { $selection += "4," }
             if ($chkWinMacMenu.IsChecked) { $selection += "5," }
             if ($chkWindhawk.IsChecked) { $selection += "6," }
-            if ($chkWinMacToolbar.IsChecked) { $selection += "7," }
-            if ($chkAutoHotKey.IsChecked) { $selection += "8," }
-            if ($chkNexusDock.IsChecked) { $selection += "9," }
-            if ($chkHotCorners.IsChecked) { $selection += "10," }
-            if ($chkMacType.IsChecked) { $selection += "11," }
-            if ($chkOther.IsChecked) { $selection += "12" }
+            if ($chkAutoHotKey.IsChecked) { $selection += "7," }
+            if ($chkNexusDock.IsChecked) { $selection += "8," }
+            if ($chkHotCorners.IsChecked) { $selection += "9," }
+            if ($chkMacType.IsChecked) { $selection += "10," }
+            if ($chkOther.IsChecked) { $selection += "11" }
         }
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="PowerShell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="WinMac Toolbar"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Hot Corners"; "11"="MacType"; "12"="Other"}
+        $appList = @{
+                "1"="PowerToys"
+                "2"="Everything"
+                "3"="PowerShell Profile"
+                "4"="StartAllBack"
+                "5"="WinMac Menu"
+                "6"="Windhawk"
+                "7"="Keyboard Shortcuts"
+                "8"="Nexus Dock"
+                "9"="Hot Corners"
+                "10"="MacType"
+                "11"="Other"
+        }        
         $result["selectedApps"] = $selection.Split(',').TrimEnd(',')
         $selectedAppNames = @()
         foreach ($appNumber in $selection) {
@@ -335,13 +344,25 @@ on WinMac GitHub page: https://github.com/Asteski/WinMac/wiki
     if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
         Write-Host "Choosing full installation." -ForegroundColor Green
         Start-Sleep 2
-        $selectedApps = "1","2","3","4","5","6","7","8","9","10","11","12"
+        $selectedApps = "1","2","3","4","5","6","7","8","9","10","11"
     } 
     elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
         Write-Host "Choosing custom installation." -ForegroundColor Green
         Start-Sleep 2
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="PowerShell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="WinMac Toolbar"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Hot Corners"; "11"="MacType"; "12"="Other"}
-    Clear-Host
+        $appList = @{
+                "1"="PowerToys"
+                "2"="Everything"
+                "3"="PowerShell Profile"
+                "4"="StartAllBack"
+                "5"="WinMac Menu"
+                "6"="Windhawk"
+                "7"="Keyboard Shortcuts"
+                "8"="Nexus Dock"
+                "9"="Hot Corners"
+                "10"="MacType"
+                "11"="Other"
+        }
+        Clear-Host
     Show-Header
 Write-Host @"
 
@@ -355,21 +376,20 @@ Write-Host @"
 4. StartAllBack
 5. WinMac Menu
 6. Windhawk
-7. WinMac Toolbar
-8. Keyboard Shortcuts
-9. Nexus Dock
-10. Hot Corners
-11. MacType
-12. Other Settings
+7. Keyboard Shortcuts
+8. Nexus Dock
+9. Hot Corners
+10. MacType
+11. Other Settings
 "@
     Write-Host
     do {
         $selection = Read-Host "Enter the numbers of options you want to install (separated by commas)"
         $selection = $selection.Trim()
         $selection = $selection -replace '\s*,\s*', ','
-        $valid = $selection -match '^([1-9]|10|11|12)(,([1-9]|10|11|12))*$'
+        $valid = $selection -match '^([1-9]|10|11)(,([1-9]|10|11))*$'
         if (!$valid) {
-            Write-Host "`e[91mInvalid input! Please enter numbers between 1 and 12, separated by commas.`e[0m`n"
+            Write-Host "`e[91mInvalid input! Please enter numbers between 1 and 11, separated by commas.`e[0m`n"
         }
     } while ([string]::IsNullOrWhiteSpace($selection) -or !$valid)
     $selectedApps = @()
@@ -387,7 +407,7 @@ else
 {
     Write-Host "Invalid input. Defaulting to full installation." -ForegroundColor Yellow
     Start-Sleep 1
-    $selectedApps = "1","2","3","4","5","6","7","8","9","10","11","12"
+    $selectedApps = "1","2","3","4","5","6","7","8","9","10","11"
 }
 
 if ($selectedApps -like '*4*' -and $selectedApps -like '*5*') {
@@ -475,7 +495,7 @@ userName@computerName ~ %
         $gitProfile = $true
     }
 }
-if ($selectedApps -like '*4*' -or $selectedApps -like '*9*') {
+if ($selectedApps -like '*4*' -or $selectedApps -like '*8*') {
     Clear-Host
     Show-Header
     $roundedOrSquared = Read-Host "`nEnter 'R' for rounded or 'S' for squared shell corners"
@@ -494,7 +514,7 @@ if ($selectedApps -like '*4*' -or $selectedApps -like '*9*') {
         $roundedOrSquared = 'R'
     }
 }
-if ($selectedApps -like '*4*' -or $selectedApps -like '*7*' -or $selectedApps -like '*9*' -or $selectedApps -like '*12*') {
+if ($selectedApps -like '*4*' -or $selectedApps -like '*8*' -or $selectedApps -like '*11*') {
     if ($windowsTheme -eq "Dark") {
         $orbTheme = 'white'
         $lightOrDark = "D"
@@ -523,7 +543,7 @@ if ($selectedApps -like '*4*') {
         $exStyle = 'x'
     }
 }
-if ($selectedApps -like '*9*' -or $selectedApps -like '*6*'-or $selectedApps -like '1') {
+if ($selectedApps -like '1' -or $selectedApps -like '*6*' -or $selectedApps -like '*8*') {
     Clear-Host
     Show-Header
     $blueOrYellow = Read-Host "`nEnter 'B' for blue or 'Y' for yellow folders"
@@ -543,7 +563,7 @@ if ($selectedApps -like '*9*' -or $selectedApps -like '*6*'-or $selectedApps -li
         $blueOrYellow = 'B'
     }
 }
-if ($selectedApps -like '*9*') {
+if ($selectedApps -like '*8*') {
     Clear-Host
     Show-Header
     $dockDynamic = Read-Host "`nEnter 'D' for default or 'X' for dynamic dock"
@@ -946,9 +966,6 @@ foreach ($app in $selectedApps) {
                     $WinverUWP = ((Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP).InstallLocation) + "\WinverUWP.exe"
                     New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\winver.exe" -Force | Out-Null
                     Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\winver.exe" -Name "Debugger" -Value $WinverUWP -Type String
-
-                    #! TOOLBAR
-
                     $folderPath = Join-Path $Env:USERPROFILE 'Favorites\Links'
                     if (-not (Test-Path $folderPath)) {
                         New-Item -ItemType Directory -Path $folderPath -Force | Out-Null
@@ -1007,9 +1024,6 @@ foreach ($app in $selectedApps) {
                     }
                     Set-ItemProperty -Path $taskbarLinksPath -Name "Toolbars" -Value $toolbarsValue -Type Binary -Force
                     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "TaskbarSizeMove" -Value 0 -Type DWord -Force | Out-Null
-
-                    #! TOOLBAR
-
                     Stop-Process -Name Explorer
                     Start-Process $shellExePath
                     $scriptBlock1 = "Start-Process -FilePath $env:LOCALAPPDATA\WinMac\WinMacMenu.exe -WorkingDirectory $env:LOCALAPPDATA\WinMac"
@@ -1101,73 +1115,8 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Start-Process "$Env:ProgramFiles\Windhawk\Windhawk.exe"
             Write-Host "Windhawk installation completed." -ForegroundColor Green
             }
-    # #* WinMac Toolbar
-    #     "7" {
-    #         Write-Host "Installing WinMac Toolbar..." -ForegroundColor Yellow
-    #         $folderPath = Join-Path $Env:USERPROFILE 'Favorites\Links'
-    #         if (-not (Test-Path $folderPath)) {
-    #             New-Item -ItemType Directory -Path $folderPath -Force | Out-Null
-    #         }
-    #         Copy-Item -Path "..\config\menu\toolbar\*.lnk" -Destination '..\temp' -Force
-    #         Get-ChildItem -Path '..\temp' -Filter '*.lnk' | ForEach-Object {
-    #             $link = $_.FullName
-    #             $destinationPath = "$Env:USERPROFILE\Favorites\Links\$($_.Name)"
-    #             $shell = New-Object -ComObject WScript.Shell
-    #             $shortcut = $shell.CreateShortcut($link)
-    #             $shortcut.TargetPath = "$Env:LOCALAPPDATA\WinMac\WinMacMenu.exe"
-    #             $shortcut.Arguments = "--config $Env:LOCALAPPDATA\WinMac\$($_.Name.Replace('.lnk','.ini'))"
-    #             $shortcut.Save()
-    #             Copy-Item -Path $link -Destination $destinationPath -Force
-    #         }
-    #         Copy-Item -Path "..\config\menu\toolbar\*.ini" -Destination $winMacDirectory -Force
-    #         Copy-Item -Path "..\config\blank.ico" -Destination "C:\Windows" -Force
-    #         $folder = Get-Item $folderPath
-    #         if (($folder.Attributes -band [System.IO.FileAttributes]::Hidden) -eq 0) {
-    #             $folder.Attributes = $folder.Attributes -bor [System.IO.FileAttributes]::Hidden
-    #         }
-    #         $toolbarsValue = [byte[]](0x0c,0x00,0x00,0x00,0x08,0x00,0x00,0x00,0x02,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x21,0xbf,0x5c,0x0e,0x5f,
-    #             0xd1,0xd0,0x11,0x83,0x01,0x00,0xaa,0x00,0x5b,0x43,0x83,0x22,0x00,0x1c,0x00,0x08,0x10,0x00,0x00,0xff,0xff,0xff,0xff,0x01,0x00,
-    #             0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x4c,0x00,0x00,0x00,0x01,0x14,0x02,0x00,0x00,0x00,0x00,
-    #             0x00,0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46,0x81,0x01,0x00,0x00,0x12,0x00,0x00,0x00,0x7f,0x15,0x40,0x63,0xcb,0x69,0xdc,0x01,
-    #             0xd3,0x5c,0xed,0x7d,0xcb,0x69,0xdc,0x01,0xfe,0xfb,0xe4,0x7d,0xcb,0x69,0xdc,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
-    #             0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xac,0x00,0x3a,0x00,0x1f,0x49,0x47,0x1a,0x03,0x59,
-    #             0x72,0x3f,0xa7,0x44,0x89,0xc5,0x55,0x95,0xfe,0x6b,0x30,0xee,0x26,0x00,0x01,0x00,0x26,0x00,0xef,0xbe,0x31,0x00,0x00,0x00,0xea,
-    #             0xec,0x14,0xd9,0xf2,0x5d,0xdc,0x01,0xa3,0xa4,0x2c,0xa1,0xbc,0x69,0xdc,0x01,0xa3,0xa4,0x2c,0xa1,0xbc,0x69,0xdc,0x01,0x14,0x00,
-    #             0x20,0x00,0x00,0x00,0x1a,0x00,0xee,0xbb,0xfe,0x23,0x00,0x00,0x10,0x00,0x61,0xf7,0x77,0x17,0xad,0x68,0x8a,0x4d,0x87,0xbd,0x30,
-    #             0xb7,0x59,0xfa,0x33,0xdd,0x00,0x00,0x50,0x00,0x31,0x00,0x00,0x00,0x00,0x00,0x8a,0x5b,0x96,0x5e,0x12,0x00,0x4c,0x69,0x6e,0x6b,
-    #             0x73,0x00,0x3c,0x00,0x09,0x00,0x04,0x00,0xef,0xbe,0x8a,0x5b,0x7d,0x5e,0x8a,0x5b,0x96,0x5e,0x2e,0x00,0x00,0x00,0xb3,0x6b,0x06,
-    #             0x00,0x00,0x00,0x44,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x02,0x12,0xda,0x00,0x4c,0x00,
-    #             0x69,0x00,0x6e,0x00,0x6b,0x00,0x73,0x00,0x00,0x00,0x14,0x00,0x00,0x00,0x10,0x00,0x00,0x00,0x05,0x00,0x00,0xa0,0x06,0x00,0x00,
-    #             0x00,0x5a,0x00,0x00,0x00,0x1c,0x00,0x00,0x00,0x0b,0x00,0x00,0xa0,0x61,0xf7,0x77,0x17,0xad,0x68,0x8a,0x4d,0x87,0xbd,0x30,0xb7,
-    #             0x59,0xfa,0x33,0xdd,0x5a,0x00,0x00,0x00,0x60,0x00,0x00,0x00,0x03,0x00,0x00,0xa0,0x58,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x61,
-    #             0x64,0x61,0x6d,0x73,0x2d,0x79,0x6f,0x67,0x61,0x00,0x00,0x00,0x00,0x00,0x00,0xd0,0x2c,0x5e,0x48,0x0c,0xc4,0x82,0x41,0xa5,0xde,
-    #             0x51,0x25,0x8a,0x54,0x80,0x22,0x9e,0x95,0x6d,0x41,0x45,0xd5,0xf0,0x11,0x9e,0xa6,0x68,0xc6,0xac,0xb9,0xaf,0xb3,0xd0,0x2c,0x5e,
-    #             0x48,0x0c,0xc4,0x82,0x41,0xa5,0xde,0x51,0x25,0x8a,0x54,0x80,0x22,0x9e,0x95,0x6d,0x41,0x45,0xd5,0xf0,0x11,0x9e,0xa6,0x68,0xc6,
-    #             0xac,0xb9,0xaf,0xb3,0xce,0x00,0x00,0x00,0x09,0x00,0x00,0xa0,0x89,0x00,0x00,0x00,0x31,0x53,0x50,0x53,0xe2,0x8a,0x58,0x46,0xbc,
-    #             0x4c,0x38,0x43,0xbb,0xfc,0x13,0x93,0x26,0x98,0x6d,0xce,0x6d,0x00,0x00,0x00,0x04,0x00,0x00,0x00,0x00,0x1f,0x00,0x00,0x00,0x2d,
-    #             0x00,0x00,0x00,0x53,0x00,0x2d,0x00,0x31,0x00,0x2d,0x00,0x35,0x00,0x2d,0x00,0x32,0x00,0x31,0x00,0x2d,0x00,0x33,0x00,0x31,0x00,
-    #             0x32,0x00,0x36,0x00,0x37,0x00,0x31,0x00,0x32,0x00,0x33,0x00,0x39,0x00,0x2d,0x00,0x33,0x00,0x32,0x00,0x33,0x00,0x39,0x00,0x39,
-    #             0x00,0x36,0x00,0x38,0x00,0x39,0x00,0x31,0x00,0x36,0x00,0x2d,0x00,0x35,0x00,0x30,0x00,0x30,0x00,0x38,0x00,0x38,0x00,0x34,0x00,
-    #             0x38,0x00,0x38,0x00,0x38,0x00,0x2d,0x00,0x31,0x00,0x30,0x00,0x30,0x00,0x31,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x39,
-    #             0x00,0x00,0x00,0x31,0x53,0x50,0x53,0xb1,0x16,0x6d,0x44,0xad,0x8d,0x70,0x48,0xa7,0x48,0x40,0x2e,0xa4,0x3d,0x78,0x8c,0x1d,0x00,
-    #             0x00,0x00,0x68,0x00,0x00,0x00,0x00,0x48,0x00,0x00,0x00,0x78,0xd2,0x33,0x3a,0xd6,0x42,0xac,0x41,0x99,0xb3,0x43,0xa7,0xd7,0x12,
-    #             0x67,0x21,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x12,0x01,0x00,0x00,0x40,0x07,0x00,0x00,0x00,0x00,0x00,
-    #             0x00,0x26,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x2d,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x00,0x00,0x00,
-    #             0x01,0x00,0x00,0x00,0xaa,0x4f,0x28,0x68,0x48,0x6a,0xd0,0x11,0x8c,0x78,0x00,0xc0,0x4f,0xd9,0x18,0xb4,0xa6,0x07,0x00,0x00,0x40,
-    #             0x0d,0x00,0x00,0x00,0x00,0x00,0x00,0x2d,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x2d,0x00,0x00,0x00,0x00,0x00,
-    #             0x00,0x00,0x01,0x00,0x00,0x00)
-    #         $taskbarLinksPath = "HKCU:\Software\StartIsBack\Taskbaz"
-    #         if (-not (Test-Path $taskbarLinksPath)) {
-    #             New-Item -Path $taskbarLinksPath -Force | Out-Null
-    #         }
-    #         Set-ItemProperty -Path $taskbarLinksPath -Name "Toolbars" -Value $toolbarsValue -Type Binary -Force
-    #         Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "TaskbarSizeMove" -Value 0 -Type DWord -Force | Out-Null
-    #         Stop-Process -Name explorer -Force
-    #         Start-Sleep 2
-    #         Write-Host "WinMac Toolbar installation completed." -ForegroundColor Green
-    #     }
     #* AutoHotkey Keyboard Shortcuts
-        "8" {
+        "7" {
             Write-Host "Installing Keyboard Shortcuts..." -ForegroundColor Yellow
             New-Item -ItemType Directory -Path "$winMacDirectory\" | Out-Null
             if (Get-Process keyshortcuts) { Stop-Process -Name keyshortcuts }
@@ -1203,7 +1152,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Write-Host "Keyboard Shortcuts installation completed." -ForegroundColor Green
         }
     #* Nexus Dock
-        "9" {
+        "8" {
             Write-Host "Installing Nexus Dock..." -ForegroundColor Yellow
             if (Get-Process -n Nexus) { Stop-Process -n Nexus }
             $currentDir = (Get-Location).Path
@@ -1336,7 +1285,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Write-Host "Nexus Dock installation completed." -ForegroundColor Green
             }
     #* Hot Corners
-        "10"{
+        "9"{
             Write-Host "Installing Hot Corners..." -ForegroundColor Yellow
             $outputPath = '..\temp\WinXCorners.zip'
             $winXCornersUrl = "https://github.com/vhanla/winxcorners/releases/download/1.4.0/WinXCorners1.4.0.zip"
@@ -1401,7 +1350,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Write-Host "Hot Corners installation completed." -ForegroundColor Green
             }
     #* MacType
-        "11" {
+        "10" {
             if ($sysType -like "*ARM*") {
                 Write-Host "MacType is not supported on ARM devices. Skipping installation." -ForegroundColor Red
             }
@@ -1422,7 +1371,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             }
             }
     #* Other
-        "12" {
+        "11" {
             Write-Host "Configuring Other Settings..." -ForegroundColor Yellow
         #? Black Cursor
             $curSourceFolder = (Get-Item -Path "..\config\cursors").FullName
