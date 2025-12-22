@@ -497,13 +497,22 @@ foreach ($app in $selectedApps) {
         "7" {
             Write-Host "Uninstalling WinMac Toolbar..." -ForegroundColor Yellow
             Stop-Process -Name WinMacMenu -Force
-            #! remove from taskbar
-            #! zrobic export regu z wersji 1.3.2
-            Stop-Process -Name explorer -Force
+            $toolbarsValue = [byte[]](
+                0x0c,0x00,0x00,0x00,0x08,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+                0xaa,0x4f,0x28,0x68,0x48,0x6a,0xd0,0x11,0x8c,0x78,0x00,0xc0,0x4f,0xd9,0x18,0xb4,
+                0x00,0x00,0x00,0x00,0x40,0x0d,0x00,0x00,0x00,0x00,0x00,0x00,0x1e,0x00,0x00,0x00,
+                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x1e,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+                0x01,0x00,0x00,0x00
+            )
+            $taskbarLinksPath = "HKCU:\Software\StartIsBack\Taskbaz"
+            if (Test-Path $taskbarLinksPath) {
+                Set-ItemProperty -Path $taskbarLinksPath -Name "Toolbars" -Value $toolbarsValue -Type Binary -Force
+            }
             Remove-Item -Path "$env:USERPROFILE\Favorites\Links\Explorer.lnk" -Force
             Remove-Item -Path "$env:USERPROFILE\Favorites\Links\Favorites.lnk" -Force
             Remove-Item -Path "$env:LOCALAPPDATA\WinMac\explorer.ini" -Force
             Remove-Item -Path "$env:LOCALAPPDATA\WinMac\favorites.ini" -Force
+            Stop-Process -Name explorer -Force
             Write-Host "Uninstalling WinMac Toolbar completed." -ForegroundColor Green
         }
     #* AutoHotkey Keyboard Shortcuts
