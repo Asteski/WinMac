@@ -442,6 +442,7 @@ foreach ($app in $selectedApps) {
             Start-Sleep 5
             Start-Process explorer
             Uninstall-WinGetPackage -id "StartIsBack.StartAllBack"
+            Set-ItemProperty -Path $exRegPath\Advanced -Name "ShowStatusBar" -Value 1
             Set-ItemProperty -Path $exRegPath\Advanced -Name "UseCompactMode" -Value 0
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarAl" -Value 1
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarGlomLevel" -Value 0
