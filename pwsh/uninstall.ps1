@@ -547,8 +547,10 @@ foreach ($app in $selectedApps) {
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             Set-ItemProperty -Path $regPath -Name "QuickAccess" -Value 0
             Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 0
-            $homeDir = "C:\Users\$env:USERNAME"
-            $homeIniFilePath = "$($homeDir)\desktop.ini"
+            # $homeDir = "C:\Users\$env:USERNAME"
+            $homeIniFilePath = "$($ENV:USERPROFILE)\desktop.ini"
+            # $homeDir = "C:\Users\$env:USERNAME"
+            # $homeIniFilePath = "$($homeDir)\desktop.ini"
             Remove-Item -Path $homeIniFilePath -Force | Out-Null
             $programsIniFilePath = "$($programsDir)\desktop.ini"
             Remove-Item -Path $programsIniFilePath -Force  | Out-Null
@@ -587,9 +589,9 @@ uint fWinIni);
             $CursorRefresh::SystemParametersInfo(0x0057,0,$null,0) | Out-Null
             Get-ChildItem -Path "C:\Windows\Cursors" -Directory | Where-Object { $_.Name -eq "windows-modern-v2" } | Remove-Item -Recurse -Force
             reg import ..\config\cursors\Remove_Modern_Cursors_Scheme.reg > $null 2>&1
-            $homeDir = "C:\Users\$env:USERNAME"
+            # $homeDir = "C:\Users\$env:USERNAME"
             $homePin = new-object -com shell.application
-            $homePin.Namespace($homeDir).Self.InvokeVerb("pintohome") | Out-Null
+            $homePin.Namespace($($ENV:USERPROFILE)).Self.InvokeVerb("pintohome") | Out-Null
             $programsPin = new-object -com shell.application
             $programsPin.Namespace($programsDir).Self.InvokeVerb("pintohome") | Out-Null
             $RBPath = 'HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\pintohome\command\'
@@ -621,6 +623,8 @@ uint fWinIni);
             Set-ItemProperty -Path $registryPath1 -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-54"
             Remove-Item -Path $registryPath2 -Recurse -Force | Out-Null
             Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name SettingsPageVisibility -Force | Out-Null
+            Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "UseCompactMode" -Value 0
+            Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowStatusBar" -Value 1
             Write-Host "Uninstalling Other Settings completed." -ForegroundColor Green
         }
     }
