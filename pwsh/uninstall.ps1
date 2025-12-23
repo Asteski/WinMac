@@ -497,7 +497,6 @@ foreach ($app in $selectedApps) {
             Remove-Item -Path "$winMacDirectory\WinMacMenu.exe" -Force
             Remove-Item -Path "$winMacDirectory\config.ini" -Force
             Remove-Item -Path "$winMacDirectory\WinMac_Menu_RMB_Trigger.exe" -Force
-            Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "WinMac Menu"
             $toolbarsValue = [byte[]](
                 0x0c,0x00,0x00,0x00,0x08,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
                 0xaa,0x4f,0x28,0x68,0x48,0x6a,0xd0,0x11,0x8c,0x78,0x00,0xc0,0x4f,0xd9,0x18,0xb4,
@@ -510,10 +509,10 @@ foreach ($app in $selectedApps) {
                 Set-ItemProperty -Path $taskbarLinksPath -Name "Toolbars" -Value $toolbarsValue -Type Binary -Force
             }
             Stop-Process -Name explorer -Force
-            Remove-Item -Path "$env:USERPROFILE\Favorites\Links\Explorer.lnk" -Force
-            Remove-Item -Path "$env:USERPROFILE\Favorites\Links\Favorites.lnk" -Force
-            Remove-Item -Path "$env:LOCALAPPDATA\WinMac\explorer.ini" -Force
-            Remove-Item -Path "$env:LOCALAPPDATA\WinMac\favorites.ini" -Force
+            Remove-Item -Path "$env:USERPROFILE\Links\Explorer.lnk" -Force -ErrorAction SilentlyContinue
+            Remove-Item -Path "$env:USERPROFILE\Links\Favourites.lnk" -Force -ErrorAction SilentlyContinue
+            Remove-Item -Path "$env:LOCALAPPDATA\WinMac\explorer.ini" -Force -ErrorAction SilentlyContinue
+            Remove-Item -Path "$env:LOCALAPPDATA\WinMac\favourites.ini" -Force -ErrorAction SilentlyContinue
             Write-Host "Uninstalling WinMac Menu completed." -ForegroundColor Green
         }
     #* Windhawk
