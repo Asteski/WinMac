@@ -905,7 +905,8 @@ foreach ($app in $selectedApps) {
                 Copy-Item -Path "..\config\blank.ico" -Destination "C:\Windows" -Force
                 $folderPath = Join-Path $Env:USERPROFILE 'Links'
                 if (-not (Test-Path $folderPath)) { New-Item -ItemType Directory -Path $folderPath -Force | Out-Null }
-
+                $items = Get-ChildItem -Path $folderPath
+                if ($items) { $items | Remove-Item -Force -Recurse }
                 foreach ($name in "Explorer", "Favourites") {
                     $shell = New-Object -ComObject WScript.Shell
                     $shortcut = $shell.CreateShortcut((Join-Path $folderPath "$name.lnk"))
