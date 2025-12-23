@@ -907,38 +907,20 @@ foreach ($app in $selectedApps) {
                 if (-not (Test-Path $folderPath)) { New-Item -ItemType Directory -Path $folderPath -Force | Out-Null }
                 $items = Get-ChildItem -Path $folderPath
                 if ($items) { $items | Remove-Item -Force -Recurse }
-                if (Test-Path "$Env:USERPROFILE\Favorites") {
-                    $favName = 'Favorites'
-                    (Get-Content -Path "$Env:LOCALAPPDATA\WinMac\favourites.ini") -replace 'Item1=Favourites|FOLDER|%USERPROFILE%\Favourites|inlinenotitle', 'Item1=Favorites|FOLDER|%USERPROFILE%\Favorites|inlinenotitle' | Set-Content -Path "$Env:LOCALAPPDATA\WinMac\favourites.ini" -Force
-                } elseif (Test-Path "$Env:USERPROFILE\Favourites") {
-                    $favName = 'Favourites'
-                } else {
-                    New-Item -ItemType Directory -Path (Join-Path $Env:USERPROFILE 'Favourites') -Force | Out-Null
-                    $favName = 'Favourites'
-                }
-                
-                $shell = New-Object -ComObject WScript.Shell
-                $shortcut = $shell.CreateShortcut((Join-Path $folderPath "Explorer.lnk"))
-                $shortcut.TargetPath = "$winMacDirectory\WinMacMenu.exe"
-                $shortcut.WorkingDirectory = $winMacDirectory
-                $shortcut.Arguments = "--config $winMacDirectory\Explorer.ini"
-                $shortcut.IconLocation = "C:\Windows\blank.ico"
-                $shortcut.Save()
-                Unblock-File -Path (Join-Path $folderPath "Explorer.lnk")
-                $shell = New-Object -ComObject WScript.Shell
-                $shortcut = $shell.CreateShortcut((Join-Path $folderPath "$favName.lnk"))
-                $shortcut.TargetPath = "$winMacDirectory\WinMacMenu.exe"
-                $shortcut.WorkingDirectory = $winMacDirectory
-                $shortcut.Arguments = "--config $winMacDirectory\Favourites.ini"
-                $shortcut.IconLocation = "C:\Windows\blank.ico"
-                $shortcut.Save()
-                Unblock-File -Path (Join-Path $folderPath "$favName.lnk")
 
-                foreach ($name in "Links", "$favName Bar") {
-                    $folder = Get-Item (Join-Path $Env:USERPROFILE "$favName\$name")
-                    if (($folder.Attributes -band [System.IO.FileAttributes]::Hidden) -eq 0) {
-                        $folder.Attributes = $folder.Attributes -bor [System.IO.FileAttributes]::Hidden
-                    }
+                foreach ($name in "Explorer", "Favourites") {
+                    $shortcut = $shell.CreateShortcut((Join-Path $folderPath "$name.lnk"))
+                    $shortcut.TargetPath = "$winMacDirectory\WinMacMenu.exe"
+                    $shortcut.WorkingDirectory = $winMacDirectory
+                    $shortcut.Arguments = "--config $winMacDirectory\$name.ini"
+                    $shortcut.IconLocation = "C:\Windows\blank.ico"
+                    $shortcut.Save()
+                    Unblock-File -Path (Join-Path $folderPath "$name.lnk")
+                }
+
+                $folderPath = Get-Item (Join-Path $Env:USERPROFILE "Favorites\Links")
+                if (($folderPath.Attributes -band [System.IO.FileAttributes]::Hidden) -eq 0) {
+                    $folderPath.Attributes = $folderPath.Attributes -bor [System.IO.FileAttributes]::Hidden
                 }
                 $toolbarsValue = [byte[]](
                     0x0c,0x00,0x00,0x00,0x08,0x00,0x00,0x00,0x02,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xb0,0xe2,0x2b,0xd8,0x64,0x57,0xd0,0x11,
