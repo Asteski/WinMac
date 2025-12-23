@@ -908,17 +908,29 @@ foreach ($app in $selectedApps) {
                 $items = Get-ChildItem -Path $folderPath
                 if ($items) { $items | Remove-Item -Force -Recurse }
                 $shell = New-Object -ComObject WScript.Shell
-                foreach ($name in "Explorer", "Favourites") {
-                    $shortcut = $shell.CreateShortcut((Join-Path $folderPath "$name.lnk"))
+                if (Test-Path "$Env:USERPROFILE\Favorites") {
+                    $favName = 'Favorites'
+                }
+                elseif (Test-Path "$Env:USERPROFILE\Favourites") {
+                    $favName = 'Favourites'
+                }
+                else {
+                    New-Item -ItemType Directory -Path (Join-Path $Env:USERPROFILE 'Favourites') -Force | Out-Null
+                    $favName = 'Favourites'
+                }
+                $favPath = Join-Path $Env:USERPROFILE $favName
+                foreach ($name in "Explorer", $favName) {
+                    $shortcut = $shell.CreateShortcut((Join-Path $favPath "$name.lnk"))
                     $shortcut.TargetPath = "$winMacDirectory\WinMacMenu.exe"
                     $shortcut.WorkingDirectory = $winMacDirectory
                     $shortcut.Arguments = "--config $winMacDirectory\$name.ini"
                     $shortcut.IconLocation = "C:\Windows\blank.ico"
                     $shortcut.Save()
-                    Unblock-File -Path (Join-Path $folderPath "$name.lnk")
+                    Unblock-File -Path (Join-Path $favPath "$name.lnk")
                 }
-                foreach ($name in "Links", "Favourites Bar", "Favorites Bar") {
-                    $folder = Get-Item (Join-Path $Env:USERPROFILE 'Favourites\$name')
+
+                foreach ($name in "Links", "$favName Bar") {
+                    $folder = Get-Item (Join-Path $Env:USERPROFILE "$favName\$name")
                     if (($folder.Attributes -band [System.IO.FileAttributes]::Hidden) -eq 0) {
                         $folder.Attributes = $folder.Attributes -bor [System.IO.FileAttributes]::Hidden
                     }
