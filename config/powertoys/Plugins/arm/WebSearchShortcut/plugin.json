@@ -1,0 +1,14 @@
+{
+  "ID": "B5E595872B8068104D5AD6BBE39A6664",
+  "Disabled": false,
+  "ActionKeyword": "??",
+  "IsGlobal": false,
+  "Name": "Web Search Shortcut",
+  "Author": "Daydreamer-riri",
+  "Version": "0.7.0",
+  "Language": "csharp",
+  "Website": "https://github.com/Daydreamer-riri/PowerToys-Run-WebSearchShortcut",
+  "ExecuteFileName": "Community.PowerToys.Run.Plugin.WebSearchShortcut.dll",
+  "IcoPathDark": "Images\\Search.dark.png",
+  "IcoPathLight": "Images\\Search.light.png"
+}

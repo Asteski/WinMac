@@ -1,0 +1,175 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "Community.PowerToys.Run.Plugin.WebSearchShortcut/0.7.0": {
+        "dependencies": {
+          "Community.PowerToys.Run.Plugin.Dependencies": "0.88.0",
+          "PowerToys.Common.UI": "0.88.0.0",
+          "PowerToys.ManagedCommon": "0.88.0.0",
+          "PowerToys.Settings.UI.Lib": "0.88.0.0",
+          "Wox.Infrastructure": "0.88.0.0",
+          "Wox.Plugin": "0.88.0.0"
+        },
+        "runtime": {
+          "Community.PowerToys.Run.Plugin.WebSearchShortcut.dll": {}
+        },
+        "resources": {
+          "fr-fr/Community.PowerToys.Run.Plugin.WebSearchShortcut.resources.dll": {
+            "locale": "fr-fr"
+          },
+          "zh/Community.PowerToys.Run.Plugin.WebSearchShortcut.resources.dll": {
+            "locale": "zh"
+          }
+        }
+      },
+      "Community.PowerToys.Run.Plugin.Dependencies/0.88.0": {
+        "runtimeTargets": {
+          "runtimes/win-arm64/lib/net9.0/PowerToys.Common.UI.dll": {
+            "rid": "win-arm64",
+            "assetType": "runtime",
+            "assemblyVersion": "0.88.0.0",
+            "fileVersion": "0.88.0.0"
+          },
+          "runtimes/win-arm64/lib/net9.0/PowerToys.ManagedCommon.dll": {
+            "rid": "win-arm64",
+            "assetType": "runtime",
+            "assemblyVersion": "0.88.0.0",
+            "fileVersion": "0.88.0.0"
+          },
+          "runtimes/win-arm64/lib/net9.0/PowerToys.Settings.UI.Lib.dll": {
+            "rid": "win-arm64",
+            "assetType": "runtime",
+            "assemblyVersion": "0.88.0.0",
+            "fileVersion": "0.88.0.0"
+          },
+          "runtimes/win-arm64/lib/net9.0/Wox.Infrastructure.dll": {
+            "rid": "win-arm64",
+            "assetType": "runtime",
+            "assemblyVersion": "0.88.0.0",
+            "fileVersion": "0.88.0.0"
+          },
+          "runtimes/win-arm64/lib/net9.0/Wox.Plugin.dll": {
+            "rid": "win-arm64",
+            "assetType": "runtime",
+            "assemblyVersion": "0.88.0.0",
+            "fileVersion": "0.88.0.0"
+          },
+          "runtimes/win-x64/lib/net9.0/PowerToys.Common.UI.dll": {
+            "rid": "win-x64",
+            "assetType": "runtime",
+            "assemblyVersion": "0.88.0.0",
+            "fileVersion": "0.88.0.0"
+          },
+          "runtimes/win-x64/lib/net9.0/PowerToys.ManagedCommon.dll": {
+            "rid": "win-x64",
+            "assetType": "runtime",
+            "assemblyVersion": "0.88.0.0",
+            "fileVersion": "0.88.0.0"
+          },
+          "runtimes/win-x64/lib/net9.0/PowerToys.Settings.UI.Lib.dll": {
+            "rid": "win-x64",
+            "assetType": "runtime",
+            "assemblyVersion": "0.88.0.0",
+            "fileVersion": "0.88.0.0"
+          },
+          "runtimes/win-x64/lib/net9.0/Wox.Infrastructure.dll": {
+            "rid": "win-x64",
+            "assetType": "runtime",
+            "assemblyVersion": "0.88.0.0",
+            "fileVersion": "0.88.0.0"
+          },
+          "runtimes/win-x64/lib/net9.0/Wox.Plugin.dll": {
+            "rid": "win-x64",
+            "assetType": "runtime",
+            "assemblyVersion": "0.88.0.0",
+            "fileVersion": "0.88.0.0"
+          }
+        }
+      },
+      "PowerToys.Common.UI/0.88.0.0": {
+        "runtime": {
+          "PowerToys.Common.UI.dll": {
+            "assemblyVersion": "0.88.0.0",
+            "fileVersion": "0.88.0.0"
+          }
+        }
+      },
+      "PowerToys.ManagedCommon/0.88.0.0": {
+        "runtime": {
+          "PowerToys.ManagedCommon.dll": {
+            "assemblyVersion": "0.88.0.0",
+            "fileVersion": "0.88.0.0"
+          }
+        }
+      },
+      "PowerToys.Settings.UI.Lib/0.88.0.0": {
+        "runtime": {
+          "PowerToys.Settings.UI.Lib.dll": {
+            "assemblyVersion": "0.88.0.0",
+            "fileVersion": "0.88.0.0"
+          }
+        }
+      },
+      "Wox.Infrastructure/0.88.0.0": {
+        "runtime": {
+          "Wox.Infrastructure.dll": {
+            "assemblyVersion": "0.88.0.0",
+            "fileVersion": "0.88.0.0"
+          }
+        }
+      },
+      "Wox.Plugin/0.88.0.0": {
+        "runtime": {
+          "Wox.Plugin.dll": {
+            "assemblyVersion": "0.88.0.0",
+            "fileVersion": "0.88.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Community.PowerToys.Run.Plugin.WebSearchShortcut/0.7.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Community.PowerToys.Run.Plugin.Dependencies/0.88.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-j54LMNC611xoLUI8mHt/tiFoDp5XVYBXU+WG2o/qSuPwfxdgrZKYLpg5ZNpWXgAzgEGY2HE6736EV8xLV2PpgA==",
+      "path": "community.powertoys.run.plugin.dependencies/0.88.0",
+      "hashPath": "community.powertoys.run.plugin.dependencies.0.88.0.nupkg.sha512"
+    },
+    "PowerToys.Common.UI/0.88.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "PowerToys.ManagedCommon/0.88.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "PowerToys.Settings.UI.Lib/0.88.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Wox.Infrastructure/0.88.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Wox.Plugin/0.88.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

@@ -677,14 +677,17 @@ foreach ($app in $selectedApps) {
             pwsh -NoProfile -Command "winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements" | Out-Null
             Copy-Item -Path "..\config\powertoys\ptr\ptr.exe" -Destination "$env:LOCALAPPDATA\PowerToys" -Recurse -Force
             Copy-Item -Path "..\config\powertoys\Assets\PowerLauncher" -Destination "$env:LOCALAPPDATA\PowerToys\Assets" -Recurse -Force
-            Copy-Item -Path "..\config\powertoys\Plugins" -Destination "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run" -Recurse -Force
+            if ($sysType -like "*ARM*") { 
+                Copy-Item -Path "..\config\powertoys\Plugins\arm\*" -Destination "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -Recurse -Force
+            } 
+            else {
+                Copy-Item -Path "..\config\powertoys\Plugins\x64\*" -Destination "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -Recurse -Force
+            }
             if ($blueOrYellow -eq 'B' -or $blueOrYellow -eq 'b') {
-                Copy-Item -Path "..\config\powertoys\RunPlugins" -Destination "$env:LOCALAPPDATA\PowerToys" -Recurse -Force
-                Copy-Item -Path "..\config\powertoys\Assets\Peek" -Destination "$env:LOCALAPPDATA\PowerToys\WinUI3Apps\Assets" -Recurse -Force
-                Copy-Item -Path "..\config\powertoys\RunPlugins\Everything" "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -Recurse -Force
+                Copy-Item -Path "..\config\powertoys\RunPlugins" -Destination "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -Recurse -Force
             } else {
                 Get-ChildItem -Path "..\config\powertoys\RunPlugins" -Recurse | Where-Object { $_.Name -ne "folder.png" } | ForEach-Object {
-                    $destinationPath = Join-Path -Path "$env:LOCALAPPDATA\PowerToys\RunPlugins" -ChildPath $_.FullName.Substring((Get-Item "..\config\powertoys\RunPlugins").FullName.Length + 1)
+                    $destinationPath = Join-Path -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -ChildPath $_.FullName.Substring((Get-Item "..\config\powertoys\RunPlugins").FullName.Length + 1)
                     if ($_.PSIsContainer) {
                         New-Item -ItemType Directory -Path $destinationPath -Force | Out-Null
                     } else {
