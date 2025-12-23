@@ -963,6 +963,7 @@ foreach ($app in $selectedApps) {
                 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "TaskbarSizeMove" -Value 0 -Type DWord -Force | Out-Null
                 #? WinMac Start Menu Setup
                 if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
+                    Copy-Item -Path "..\config\menu\config.ini" -Destination $winMacDirectory -Force
                     $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.8'
                     if ($null -eq $dotNetRuntime) {
                         Write-Host "Installing .NET Desktop Runtime 8..." -ForegroundColor DarkYellow
@@ -1014,14 +1015,6 @@ foreach ($app in $selectedApps) {
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftWin" -Value "Nothing"
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftRight" -Value 1
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "SearchBox" -Value "Hide"
-                    # if ($sysType -like "*ARM*") { 
-                    #     $wmmExePath = "..\bin\menu\arm\WinMacMenu.exe"
-                    # } 
-                    # else {
-                    #     $wmmExePath = "..\bin\menu\x64\WinMacMenu.exe"
-                    # }
-                    # Copy-Item -Path $wmmExePath -Destination $winMacDirectory -Force
-                    # Copy-Item -Path "..\config\menu\config.ini" -Destination $winMacDirectory -Force
                     Copy-Item -Path "..\bin\menu\WinMac_Menu_RMB_Trigger.exe" -Destination $winMacDirectory -Force
                     $folderName = "WinMac"
                     $taskFolder = "\" + $folderName
