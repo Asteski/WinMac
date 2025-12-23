@@ -904,9 +904,9 @@ foreach ($app in $selectedApps) {
                 Copy-Item -Path "..\config\menu\toolbar\*.ini" -Destination $winMacDirectory -Force
                 Copy-Item -Path "..\config\blank.ico" -Destination "C:\Windows" -Force
                 $folderPath = Join-Path $Env:USERPROFILE 'Links'
-                if (-not (Test-Path $folderPath)) {
-                    New-Item -ItemType Directory -Path $folderPath -Force | Out-Null
-                }
+                if (-not (Test-Path $folderPath)) { New-Item -ItemType Directory -Path $folderPath -Force | Out-Null }
+                $items = Get-ChildItem -Path $folderPath
+                if ($items) { $items | Remove-Item -Force -Recurse }
                 $shell = New-Object -ComObject WScript.Shell
                 foreach ($name in "Explorer", "Favourites") {
                     $shortcut = $shell.CreateShortcut((Join-Path $folderPath "$name.lnk"))
@@ -921,9 +921,6 @@ foreach ($app in $selectedApps) {
                 if (($folder.Attributes -band [System.IO.FileAttributes]::Hidden) -eq 0) {
                     $folder.Attributes = $folder.Attributes -bor [System.IO.FileAttributes]::Hidden
                 }
-                $folder = "$Env:APPDATA\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar"
-                $items = Get-ChildItem -Path $folder
-                if ($items) { $items | Remove-Item -Force -Recurse}
                 $toolbarsValue = [byte[]](
                     0x0c,0x00,0x00,0x00,0x08,0x00,0x00,0x00,0x02,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xb0,0xe2,0x2b,0xd8,0x64,0x57,0xd0,0x11,
                     0xa9,0x6e,0x00,0xc0,0x4f,0xd7,0x05,0xa2,0x22,0x00,0x1c,0x00,0x08,0x11,0x00,0x00,0x01,0x00,0x00,0x00,0x01,0x00,0x00,0x00,
