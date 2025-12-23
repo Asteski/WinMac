@@ -917,18 +917,13 @@ foreach ($app in $selectedApps) {
                     $shortcut.Save()
                     Unblock-File -Path (Join-Path $folderPath "$name.lnk")
                 }
-                # Copy-Item -Path "..\config\menu\toolbar\*.lnk" -Destination '..\temp' -Force
-                # Get-ChildItem -Path '..\temp' -Filter '*.lnk' | ForEach-Object {
-                #     $link = $_.FullName
-                #     $destinationPath = "$Env:USERPROFILE\Favorites\Links\$($_.Name)"
-                #     $shell = New-Object -ComObject WScript.Shell
-                #     $shortcut = $shell.CreateShortcut($link)
-                #     $shortcut.TargetPath = "$Env:LOCALAPPDATA\WinMac\WinMacMenu.exe"
-                #     $shortcut.Arguments = "--config $Env:LOCALAPPDATA\WinMac\$($_.Name.Replace('.lnk','.ini'))"
-                #     $shortcut.Save()
-                #     Copy-Item -Path $link -Destination $destinationPath -Force
-                # }
-
+                $folder = Get-Item (Join-Path $Env:USERPROFILE 'Favourites\Links')
+                if (($folder.Attributes -band [System.IO.FileAttributes]::Hidden) -eq 0) {
+                    $folder.Attributes = $folder.Attributes -bor [System.IO.FileAttributes]::Hidden
+                }
+                $folder = "$Env:APPDATA\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar"
+                $items = Get-ChildItem -Path $folder
+                if ($items) { $items | Remove-Item -Force -Recurse}
                 $toolbarsValue = [byte[]](
                     0x0c,0x00,0x00,0x00,0x08,0x00,0x00,0x00,0x02,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xb0,0xe2,0x2b,0xd8,0x64,0x57,0xd0,0x11,
                     0xa9,0x6e,0x00,0xc0,0x4f,0xd7,0x05,0xa2,0x22,0x00,0x1c,0x00,0x08,0x11,0x00,0x00,0x01,0x00,0x00,0x00,0x01,0x00,0x00,0x00,
