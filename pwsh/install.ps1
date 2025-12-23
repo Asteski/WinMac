@@ -917,7 +917,7 @@ foreach ($app in $selectedApps) {
                     $shortcut.Save()
                     Unblock-File -Path (Join-Path $folderPath "$name.lnk")
                 }
-                foreach ($name in "Links", "Favourites Bar","Favorites Bar") {
+                foreach ($name in "Links", "Favourites Bar", "Favorites Bar") {
                     $folder = Get-Item (Join-Path $Env:USERPROFILE 'Favourites\$name')
                     if (($folder.Attributes -band [System.IO.FileAttributes]::Hidden) -eq 0) {
                         $folder.Attributes = $folder.Attributes -bor [System.IO.FileAttributes]::Hidden
