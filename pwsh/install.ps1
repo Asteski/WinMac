@@ -882,7 +882,6 @@ foreach ($app in $selectedApps) {
                 Set-ItemProperty -Path $sabRegPath -Name "OrbBitmap" -Value $orbBitmapValue
                 Set-ItemProperty -Path $exRegPath\Advanced -Name "LaunchTO" -Value 1
                 Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
-                reg import "..\config\taskbar\fonts.reg" > $null 2>&1
                 Stop-Process -Name explorer -Force
                 Start-Sleep 5
                 if (-not (Get-Process -Name explorer)) { Start-Process explorer }
@@ -917,7 +916,6 @@ foreach ($app in $selectedApps) {
                     $shortcut.Save()
                     Unblock-File -Path (Join-Path $folderPath "$name.lnk")
                 }
-
                 $folderPath = Get-Item (Join-Path $Env:USERPROFILE "Favorites\Links")
                 if (($folderPath.Attributes -band [System.IO.FileAttributes]::Hidden) -eq 0) {
                     $folderPath.Attributes = $folderPath.Attributes -bor [System.IO.FileAttributes]::Hidden

@@ -467,11 +467,11 @@ foreach ($app in $selectedApps) {
             Write-Host "Uninstalling StartAllBack..." -ForegroundColor Yellow
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             $sabRegPath = "HKCU:\Software\StartIsBack"
-            taskkill /f /im explorer.exe > $null 2>&1
             Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "Unround" -Value 0
-            Start-Sleep 5
-            Start-Process explorer
+            Stop-Process -Name explorer -Force
+            Start-Sleep 3
             Uninstall-WinGetPackage -id "StartIsBack.StartAllBack" | Out-Null
+            Set-ItemProperty -Path $exRegPath\Advanced -Name "ShowNotificationIcon" -Value 1
             Set-ItemProperty -Path $exRegPath\Advanced -Name "UseCompactMode" -Value 0
             Set-ItemProperty -Path $exRegPath\Advanced -Name "ShowStatusBar" -Value 1
             Set-ItemProperty -Path $exRegPath\Advanced -Name "UseCompactMode" -Value 0
@@ -480,7 +480,7 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $exRegPath\Advanced -Name "LaunchTO" -Value 0
             Stop-Process -Name explorer -Force
             Write-Host "Uninstalling StartAllBack completed." -ForegroundColor Green
-            Start-Sleep 3
+            Start-Sleep 2
         }
     #* WinMac Menu
         "5" {
@@ -507,6 +507,10 @@ foreach ($app in $selectedApps) {
             $taskbarLinksPath = "HKCU:\Software\StartIsBack\Taskbaz"
             if (Test-Path $taskbarLinksPath) {
                 Set-ItemProperty -Path $taskbarLinksPath -Name "Toolbars" -Value $toolbarsValue -Type Binary -Force
+            }
+            $folderPath = Get-Item (Join-Path $Env:USERPROFILE "Favorites\Links") -Force
+            if (($folderPath.Attributes -band [System.IO.FileAttributes]::Hidden) -ne 0) {
+                $folderPath.Attributes = $folderPath.Attributes -band (-bnot [System.IO.FileAttributes]::Hidden)
             }
             Stop-Process -Name explorer -Force
             Remove-Item -Path "$env:USERPROFILE\Links\Explorer.lnk" -Force -ErrorAction SilentlyContinue
