@@ -909,12 +909,14 @@ foreach ($app in $selectedApps) {
                 if ($items) { $items | Remove-Item -Force -Recurse }
                 if (Test-Path "$Env:USERPROFILE\Favorites") {
                     $favName = 'Favorites'
+                    (Get-Content -Path "$Env:LOCALAPPDATA\WinMac\favourites.ini") -replace 'Item1=Favourites|FOLDER|%USERPROFILE%\Favourites|inlinenotitle', 'Item1=Favorites|FOLDER|%USERPROFILE%\Favorites|inlinenotitle' | Set-Content -Path "$Env:LOCALAPPDATA\WinMac\favourites.ini" -Force
                 } elseif (Test-Path "$Env:USERPROFILE\Favourites") {
                     $favName = 'Favourites'
                 } else {
                     New-Item -ItemType Directory -Path (Join-Path $Env:USERPROFILE 'Favourites') -Force | Out-Null
                     $favName = 'Favourites'
                 }
+                
                 $shell = New-Object -ComObject WScript.Shell
                 $shortcut = $shell.CreateShortcut((Join-Path $folderPath "Explorer.lnk"))
                 $shortcut.TargetPath = "$winMacDirectory\WinMacMenu.exe"
@@ -923,7 +925,6 @@ foreach ($app in $selectedApps) {
                 $shortcut.IconLocation = "C:\Windows\blank.ico"
                 $shortcut.Save()
                 Unblock-File -Path (Join-Path $folderPath "Explorer.lnk")
-                
                 $shell = New-Object -ComObject WScript.Shell
                 $shortcut = $shell.CreateShortcut((Join-Path $folderPath "$favName.lnk"))
                 $shortcut.TargetPath = "$winMacDirectory\WinMacMenu.exe"
