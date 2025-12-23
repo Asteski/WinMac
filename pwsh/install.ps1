@@ -889,7 +889,7 @@ foreach ($app in $selectedApps) {
                 Write-Host "StartAllBack installation completed." -ForegroundColor Green
             }
         }
-        #* WinMac Menu
+    #* WinMac Menu
         "5" {
             if ($osVersion -like '*Windows 11*') {
                 Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
@@ -1054,6 +1054,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                     Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""
                     Start-Sleep 5
                 }
+                (Get-Content -Path "$Env:LOCALAPPDATA\WinMac\config.ini") -replace 'ShowOnLaunch=false', 'ShowOnLaunch=true' | Set-Content -Path "$Env:LOCALAPPDATA\WinMac\config.ini" -Force
                 if (-not (Get-Process -Name explorer)) { Start-Process explorer }
                 else { Stop-Process -Name explorer -Force; Start-Sleep 2 }
                 Write-Host "WinMac Menu installation completed." -ForegroundColor Green
