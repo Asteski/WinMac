@@ -917,9 +917,11 @@ foreach ($app in $selectedApps) {
                     $shortcut.Save()
                     Unblock-File -Path (Join-Path $folderPath "$name.lnk")
                 }
-                $folder = Get-Item (Join-Path $Env:USERPROFILE 'Favourites\Links')
-                if (($folder.Attributes -band [System.IO.FileAttributes]::Hidden) -eq 0) {
-                    $folder.Attributes = $folder.Attributes -bor [System.IO.FileAttributes]::Hidden
+                foreach ($name in "Links", "Favourites Bar","Favorites Bar") {
+                    $folder = Get-Item (Join-Path $Env:USERPROFILE 'Favourites\$name')
+                    if (($folder.Attributes -band [System.IO.FileAttributes]::Hidden) -eq 0) {
+                        $folder.Attributes = $folder.Attributes -bor [System.IO.FileAttributes]::Hidden
+                    }
                 }
                 $toolbarsValue = [byte[]](
                     0x0c,0x00,0x00,0x00,0x08,0x00,0x00,0x00,0x02,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xb0,0xe2,0x2b,0xd8,0x64,0x57,0xd0,0x11,
