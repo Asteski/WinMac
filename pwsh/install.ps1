@@ -918,22 +918,22 @@ foreach ($app in $selectedApps) {
                 $favPath = Join-Path $Env:USERPROFILE $favName
 
                 $shell = New-Object -ComObject WScript.Shell
-                $shortcut = $shell.CreateShortcut((Join-Path $favPath "Explorer.lnk"))
+                $shortcut = $shell.CreateShortcut((Join-Path $folderPath "Explorer.lnk"))
                 $shortcut.TargetPath = "$winMacDirectory\WinMacMenu.exe"
                 $shortcut.WorkingDirectory = $winMacDirectory
                 $shortcut.Arguments = "--config $winMacDirectory\Explorer.ini"
                 $shortcut.IconLocation = "C:\Windows\blank.ico"
                 $shortcut.Save()
-                Unblock-File -Path (Join-Path $favPath "Explorer.lnk")
+                Unblock-File -Path (Join-Path $folderPath "Explorer.lnk")
                 
                 $shell = New-Object -ComObject WScript.Shell
-                $shortcut = $shell.CreateShortcut((Join-Path $favPath "$favName.lnk"))
+                $shortcut = $shell.CreateShortcut((Join-Path $folderPath "$favName.lnk"))
                 $shortcut.TargetPath = "$winMacDirectory\WinMacMenu.exe"
                 $shortcut.WorkingDirectory = $winMacDirectory
                 $shortcut.Arguments = "--config $winMacDirectory\$favName.ini"
                 $shortcut.IconLocation = "C:\Windows\blank.ico"
                 $shortcut.Save()
-                Unblock-File -Path (Join-Path $favPath "$favName.lnk")
+                Unblock-File -Path (Join-Path $folderPath "$favName.lnk")
 
                 foreach ($name in "Links", "$favName Bar") {
                     $folder = Get-Item (Join-Path $Env:USERPROFILE "$favName\$name")
