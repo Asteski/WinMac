@@ -905,17 +905,26 @@ foreach ($app in $selectedApps) {
                 if (-not (Test-Path $folderPath)) {
                     New-Item -ItemType Directory -Path $folderPath -Force | Out-Null
                 }
-                Copy-Item -Path "..\config\menu\toolbar\*.lnk" -Destination '..\temp' -Force
-                Get-ChildItem -Path '..\temp' -Filter '*.lnk' | ForEach-Object {
-                    $link = $_.FullName
-                    $destinationPath = "$Env:USERPROFILE\Favorites\Links\$($_.Name)"
-                    $shell = New-Object -ComObject WScript.Shell
-                    $shortcut = $shell.CreateShortcut($link)
-                    $shortcut.TargetPath = "$Env:LOCALAPPDATA\WinMac\WinMacMenu.exe"
-                    $shortcut.Arguments = "--config $Env:LOCALAPPDATA\WinMac\$($_.Name.Replace('.lnk','.ini'))"
+                $shell = New-Object -ComObject WScript.Shell
+                foreach ($name in "Explorer", "Favourites") {
+                    $shortcut = $shell.CreateShortcut((Join-Path $folderPath "$name.lnk"))
+                    $shortcut.TargetPath = "$winMacDirectory\WinMacMenu.exe"
+                    $shortcut.WorkingDirectory = $winMacDirectory
+                    $shortcut.Arguments = "--config $winMacDirectory\$name.ini"
+                    $shortcut.IconLocation = "C:\Windows\blank.ico"
                     $shortcut.Save()
-                    Copy-Item -Path $link -Destination $destinationPath -Force
                 }
+                # Copy-Item -Path "..\config\menu\toolbar\*.lnk" -Destination '..\temp' -Force
+                # Get-ChildItem -Path '..\temp' -Filter '*.lnk' | ForEach-Object {
+                #     $link = $_.FullName
+                #     $destinationPath = "$Env:USERPROFILE\Favorites\Links\$($_.Name)"
+                #     $shell = New-Object -ComObject WScript.Shell
+                #     $shortcut = $shell.CreateShortcut($link)
+                #     $shortcut.TargetPath = "$Env:LOCALAPPDATA\WinMac\WinMacMenu.exe"
+                #     $shortcut.Arguments = "--config $Env:LOCALAPPDATA\WinMac\$($_.Name.Replace('.lnk','.ini'))"
+                #     $shortcut.Save()
+                #     Copy-Item -Path $link -Destination $destinationPath -Force
+                # }
                 Copy-Item -Path "..\config\menu\toolbar\*.ini" -Destination $winMacDirectory -Force
                 Copy-Item -Path "..\config\blank.ico" -Destination "C:\Windows" -Force
                 $folder = Get-Item $folderPath
