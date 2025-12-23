@@ -915,8 +915,6 @@ foreach ($app in $selectedApps) {
                     New-Item -ItemType Directory -Path (Join-Path $Env:USERPROFILE 'Favourites') -Force | Out-Null
                     $favName = 'Favourites'
                 }
-                $favPath = Join-Path $Env:USERPROFILE $favName
-
                 $shell = New-Object -ComObject WScript.Shell
                 $shortcut = $shell.CreateShortcut((Join-Path $folderPath "Explorer.lnk"))
                 $shortcut.TargetPath = "$winMacDirectory\WinMacMenu.exe"
@@ -930,7 +928,7 @@ foreach ($app in $selectedApps) {
                 $shortcut = $shell.CreateShortcut((Join-Path $folderPath "$favName.lnk"))
                 $shortcut.TargetPath = "$winMacDirectory\WinMacMenu.exe"
                 $shortcut.WorkingDirectory = $winMacDirectory
-                $shortcut.Arguments = "--config $winMacDirectory\$favName.ini"
+                $shortcut.Arguments = "--config $winMacDirectory\Favourites.ini"
                 $shortcut.IconLocation = "C:\Windows\blank.ico"
                 $shortcut.Save()
                 Unblock-File -Path (Join-Path $folderPath "$favName.lnk")
