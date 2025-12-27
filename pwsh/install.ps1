@@ -73,7 +73,7 @@ if (!($noGUI)) {
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="WinMac Deployment Wizard" 
-    Height="622" Width="540" 
+    Height="600" Width="540" 
     WindowStartupLocation="CenterScreen" 
     Background="$backgroundColor" 
     Icon="$iconFolderPath\wizard.ico">
