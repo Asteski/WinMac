@@ -1374,7 +1374,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                 if ($null -eq $macTypeInstalled) { winget install --id "MacType.MacType" --source winget --silent | Out-Null }
                 Stop-Process -n mt64agnt, MacTray, MacType -Force
                 New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "MacType" -Value "$env:PROGRAMFILES\MacType\MacTray.exe" | Out-Null
-                Copy-Item -Path "..\config\mactype\*" -Destination "$env:PROGRAMFILES\MacType" -Recurse -Force
+                Copy-Item -Path "..\config\mactype\*" -Destination "$env:PROGRAMFILES\MacType\ini" -Recurse -Force
                 Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name FontSmoothing -Value "0"
                 Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name FontSmoothingType -Type DWord -Value 0
                 Start-Sleep -Seconds 2
