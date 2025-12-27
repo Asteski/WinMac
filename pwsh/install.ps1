@@ -1497,7 +1497,8 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             reg import '..\config\registry\add\Add_Hidden_items_to_context_menu.reg' > $null 2>&1
             reg import '..\config\registry\add\Add_Navigation_pane_to_context_menu.reg' > $null 2>&1
             reg import '..\temp\Add_Theme_Mode_in_Context_Menu.reg' > $null 2>&1
-            Copy-Item -Path "..\config\themes\*" -Destination "$env:WINDIR\Resources\Themes" -Recurse -Force
+            Copy-Item -Path "..\config\themes\*.theme" -Destination "$env:WINDIR\Resources\Themes" -Recurse -Force
+            Copy-Item -Path "..\config\themes\Wallpaper\*" -Destination "$env:WINDIR\Web\Wallpaper" -Recurse -Force
             New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowIconOverlay" -Value 0 -PropertyType DWord -Force | Out-Null
         #? End Task
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value "" 
