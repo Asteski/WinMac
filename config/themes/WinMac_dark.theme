@@ -64,4 +64,4 @@ MTSM=RJSPBS
 
 [Sounds]
 ; IDS_SCHEME_DEFAULT
-SchemeName=@mmres.dll,-800
+SchemeName=WinMac
