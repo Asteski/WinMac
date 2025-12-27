@@ -704,10 +704,8 @@ foreach ($app in $selectedApps) {
                 }
             }
             $envPath = [System.Environment]::GetEnvironmentVariable("Path", [System.EnvironmentVariableTarget]::User)
-            if (-not ($envPath -like "*$env:LOCALAPPDATA\PowerToys*")) {
-                $envPath += ";$env:LOCALAPPDATA\PowerToys"
-                [System.Environment]::SetEnvironmentVariable("Path", $envPath, [System.EnvironmentVariableTarget]::User)
-            }
+            $envPath += ";$env:LOCALAPPDATA\PowerToys"
+            [System.Environment]::SetEnvironmentVariable("Path", $envPath, [System.EnvironmentVariableTarget]::User)
             Stop-Process -Name PowerToys*
             Stop-Process -Name PowerToys.LightSwitchService
             Stop-Process -Name Microsoft.CmdPal.UI
