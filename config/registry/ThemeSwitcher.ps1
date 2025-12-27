@@ -16,6 +16,7 @@ $registryPath0 = "HKCU:\Software\WinSTEP2000\NeXuS"
 $registryPath1 = "HKCU:\Software\WinSTEP2000\NeXuS\Docks"
 $registryPath2 = "HKCU:\Software\WinSTEP2000\Shared"
 $registryPath3 = "HKCU:\Software\StartIsBack"
+$registryPath4 = "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\empty"
 $dockIndicator = (Get-ItemProperty -Path $registryPath1 -Name "DockRunningIndicator1").DockRunningIndicator1
 $themeStyle = (Get-ItemProperty -Path $registryPath0 -Name "NeXuSThemeName").NeXuSThemeName
 $orbBitmap = (Get-ItemProperty -Path $registryPath3 -Name "OrbBitmap").OrbBitmap
@@ -83,6 +84,7 @@ if (Test-Path "C:\Program Files (x86)\Winstep\Nexus.exe") {
 }
 
 Set-ItemProperty -Path $registryPath3 -Name "OrbBitmap" -Value $orbBitmap
+Set-ItemProperty -Path $registryPath4 -Name "Icon" -Value $dockTrashEmptyIcon
 Start-Sleep 2
 Start-Process explorer
 if (Test-Path "C:\Program Files (x86)\Winstep\Nexus.exe") {
