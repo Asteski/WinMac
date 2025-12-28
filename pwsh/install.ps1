@@ -1201,6 +1201,8 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             if ($null -eq $wingetTerminalCheck) {
                 winget install Microsoft.WindowsTerminal | Out-Null
             }
+            $winStep = 'C:\ProgramData\WinStep'
+            Remove-Item -Path "$winStep\Themes\*" -Recurse -Force
             $regFile = "..\config\dock\winstep.reg"
             $downloadsPath = "$env:USERPROFILE\Downloads"
             if ($roundedOrSquared -eq "S" -or $roundedOrSquared -eq "s") {
@@ -1263,8 +1265,6 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockReserveScreen1" -Value "False"
             }
             if ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath0" -Value "C:\ProgramData\Winstep\Icons\explorer_default.ico"}
-            $winStep = 'C:\ProgramData\WinStep'
-            Remove-Item -Path "$winStep\Themes\*" -Recurse -Force
             Copy-Item -Path "..\config\dock\themes\*" -Destination "$winStep\Themes\" -Recurse -Force
             Remove-Item -Path "$winStep\NeXus\Indicators\*" -Force -Recurse 
             Copy-Item -Path "..\config\dock\indicators\*" -Destination "$winStep\NeXus\Indicators\" -Recurse -Force
