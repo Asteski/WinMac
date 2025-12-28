@@ -19,26 +19,26 @@ DefaultValue=%SystemRoot%\System32\imageres.dll,-25
 
 ; Recycle Bin - SHIDI_RECYCLERFULL SHIDI_RECYCLER
 [CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon]
-Full=%SystemRoot%\System32\imageres.dll,-54
-Empty=%SystemRoot%\System32\imageres.dll,-55
+Full=%SystemRoot%\System32\imageres.dll,-1017
+Empty=%SystemRoot%\System32\imageres.dll,-1015
 
 [Control Panel\Cursors]
-AppStarting=%SystemRoot%\cursors\windows-modern-v2\x1\working-in-background_white.ani
-Arrow=%SystemRoot%\cursors\windows-modern-v2\x1\normal-select_white.cur
+AppStarting=%SystemRoot%\cursors\windows-modern-v2\x1\working-in-background_black.ani
+Arrow=%SystemRoot%\cursors\windows-modern-v2\x1\normal-select_black.cur
 Crosshair=%SystemRoot%\cursors\windows-modern-v2\x1\precision-select_default.cur
-Hand=%SystemRoot%\cursors\windows-modern-v2\x1\link-select_white.cur
-Help=%SystemRoot%\cursors\windows-modern-v2\x1\help-select_white.cur
-IBeam=%SystemRoot%\cursors\windows-modern-v2\x1\text-select_white.curs
-No=%SystemRoot%\cursors\windows-modern-v2\x1\unavailable_white.cur
-NWPen=%SystemRoot%\cursors\windows-modern-v2\x1\handwriting_white.cur
-SizeAll=%SystemRoot%\cursors\windows-modern-v2\x1\move_white.cur
-SizeNESW=%SystemRoot%\cursors\windows-modern-v2\x1\diagonal-resize-2_white.cur
-SizeNS=%SystemRoot%\cursors\windows-modern-v2\x1\vertical-resize_white.cur
-SizeNWSE=%SystemRoot%\cursors\windows-modern-v2\x1\diagonal-resize-1_white.cur
-SizeWE=%SystemRoot%\cursors\windows-modern-v2\x1\horizontal-resize_white.cur
-UpArrow=%SystemRoot%\cursors\windows-modern-v2\x1\alternate-select_white.cur
+Hand=%SystemRoot%\cursors\windows-modern-v2\x1\link-select_black.cur
+Help=%SystemRoot%\cursors\windows-modern-v2\x1\help-select_black.cur
+IBeam=%SystemRoot%\cursors\windows-modern-v2\x1\text-select_black.cur
+No=%SystemRoot%\cursors\windows-modern-v2\x1\unavailable_black.cur
+NWPen=%SystemRoot%\cursors\windows-modern-v2\x1\handwriting_black.cur
+SizeAll=%SystemRoot%\cursors\windows-modern-v2\x1\move_black.cur
+SizeNESW=%SystemRoot%\cursors\windows-modern-v2\x1\diagonal-resize-2_black.cur
+SizeNS=%SystemRoot%\cursors\windows-modern-v2\x1\vertical-resize_black.cur
+SizeNWSE=%SystemRoot%\cursors\windows-modern-v2\x1\diagonal-resize-1_black.cur
+SizeWE=%SystemRoot%\cursors\windows-modern-v2\x1\horizontal-resize_black.cur
+UpArrow=%SystemRoot%\cursors\windows-modern-v2\x1\alternate-select_black.cur
 Wait=%SystemRoot%\cursors\windows-modern-v2\x1\busy.ani
-DefaultValue=Windows Modern v2 - Aero White - (x1)
+DefaultValue=Windows Modern v2 - Aero Black - (x1)
 
 [Control Panel\Desktop]
 Wallpaper=%SystemRoot%\web\wallpaper\WinMac\img0.jpg
