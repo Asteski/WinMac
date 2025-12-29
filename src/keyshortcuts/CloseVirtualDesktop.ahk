@@ -2,8 +2,7 @@
 #SingleInstance Force
 #NoTrayIcon
 
-; Alt+Backspace to Delete
-!Backspace::
-{
-    Send("{Del}")
+; Win+Ctrl+Q to Win+Ctrl+F4
+^#q::{
+    Send("^#{F4}")
 }

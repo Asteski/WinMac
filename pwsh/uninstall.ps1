@@ -503,7 +503,7 @@ foreach ($app in $selectedApps) {
             foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
             Remove-Item -Path "$winMacDirectory\WinMacMenu.exe" -Force
             Remove-Item -Path "$winMacDirectory\config.ini" -Force
-            Remove-Item -Path "$winMacDirectory\WinMac_Menu_RMB_Trigger.exe" -Force
+            Remove-Item -Path "$winMacDirectory\WinMacMenuRMBTrigger.exe" -Force
             $toolbarsValue = [byte[]](
                 0x0c,0x00,0x00,0x00,0x08,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
                 0xaa,0x4f,0x28,0x68,0x48,0x6a,0xd0,0x11,0x8c,0x78,0x00,0xc0,0x4f,0xd9,0x18,0xb4,

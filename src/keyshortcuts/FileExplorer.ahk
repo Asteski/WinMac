@@ -1,5 +1,6 @@
 #Requires AutoHotkey v2.0
-
+#SingleInstance Force
+#NoTrayIcon
 
 #HotIf WinActive("ahk_exe explorer.exe" && "ahk_class CabinetWClass")
 ; Ctrl + , to Open File Explorer Options

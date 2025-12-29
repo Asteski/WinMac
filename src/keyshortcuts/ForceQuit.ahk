@@ -1,6 +1,8 @@
 ﻿#Requires AutoHotkey v2.0
 #SingleInstance Force
 #NoTrayIcon
+
+; Robust Force Quit: Ctrl+Alt+Esc to force quit the active application, with special handling for File Explorer and Nexus Dock
 ^!Esc::
 {
     If Not WinActive("ahk_exe explorer.exe") and Not WinActive("ahk_exe Nexus.exe")
@@ -17,4 +19,7 @@
     }
 }
 
-#q::Send("!{F4}")
+; Win+Q to Alt+F4
+#q::{
+    Send("!{F4}")
+}

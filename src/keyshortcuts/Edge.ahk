@@ -1,6 +1,7 @@
 #Requires AutoHotkey v2.0
 #SingleInstance Force
 #NoTrayIcon
+
 #HotIf WinActive("ahk_exe msedge.exe")
 ; Ctrl+Shift+C to copy URL
 ^+c::

@@ -877,7 +877,9 @@ foreach ($app in $selectedApps) {
                 Set-ItemProperty -Path $exRegPath\Advanced -Name "LaunchTO" -Value 1
                 Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
                 $original = "Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy"
+                $disabled = "++Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy"
                 $originalPath = Join-Path -Path "C:\Windows\SystemApps" -ChildPath $original
+                $disabledPath = Join-Path -Path "C:\Windows\SystemApps" -ChildPath $disabled
                 if (Test-Path -LiteralPath $originalPath) {
                 Stop-Process -Name StartMenuExperienceHost -Force -ErrorAction SilentlyContinue
                     while (Test-Path -LiteralPath $originalPath) {
@@ -979,15 +981,15 @@ foreach ($app in $selectedApps) {
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "EnableContextMenu" -Value 0
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "MouseClick" -Value "Command"
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftClick" -Value "Command"
+                    Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftWin" -Value "Nothing"
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "MiddleClick" -Value "WindowsMenu"
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "WinKey" -Value "Command"
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "MouseClickCommand" -Value "$winMacDirectory\WinMacMenu.exe"
-                    Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftClickCommand" -Value "ModernShutDownWindows"
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "WinKeyCommand" -Value "$winMacDirectory\WinMacMenu.exe"
-                    Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftWin" -Value "Nothing"
+                    Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftClickCommand" -Value "ModernShutDownWindows"
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftRight" -Value 1
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "SearchBox" -Value "Hide"
-                    Copy-Item -Path "..\bin\menu\WinMac_Menu_RMB_Trigger.exe" -Destination $winMacDirectory -Force
+                    Copy-Item -Path "..\bin\menu\WinMacMenuRMBTrigger.exe" -Destination $winMacDirectory -Force
                     $folderName = "WinMac"
                     $taskFolder = "\" + $folderName
                     $description = "WinMac Menu right mouse button trigger. Currently used as a workaround for the WinMac Menu being able to be opened with the right mouse button using Open-Shell, as it doesn't currently support that."
@@ -998,10 +1000,10 @@ foreach ($app in $selectedApps) {
                     if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
                     $trigger = New-ScheduledTaskTrigger -AtLogon
                     $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
-                    $action = New-ScheduledTaskAction -Execute WinMac_Menu_RMB_Trigger.exe -WorkingDirectory $winMacDirectory
+                    $action = New-ScheduledTaskAction -Execute WinMacMenuRMBTrigger.exe -WorkingDirectory $winMacDirectory
                     $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
                     Register-ScheduledTask -TaskName "WinMac Menu RMB Trigger" -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -Description $description | Out-Null
-                    Start-Process -FilePath "$winMacDirectory\WinMac_Menu_RMB_Trigger.exe" -WorkingDirectory $winMacDirectory | Out-Null
+                    Start-Process -FilePath "$winMacDirectory\WinMacMenuRMBTrigger.exe" -WorkingDirectory $winMacDirectory | Out-Null
                     $WinverUWP = ((Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP).InstallLocation) + "\WinverUWP.exe"
                     New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\winver.exe" -Force | Out-Null
                     Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\winver.exe" -Name "Debugger" -Value $WinverUWP -Type String
