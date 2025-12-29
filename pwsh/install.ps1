@@ -1170,7 +1170,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
         "8" {
             Write-Host "Installing Nexus Dock..." -ForegroundColor Yellow
             $winStep = 'C:\ProgramData\WinStep'
-            if (Get-Process -n Nexus) { Stop-Process -n Nexus }
+            if (Get-Process -n Nexus -ErrorAction SilentlyContinue) { Stop-Process -n Nexus }
             $currentDir = (Get-Location).Path
             $scriptBlock1 = "winget install WinStep.Nexus --silent"
             $tempScript = Join-Path $env:TEMP "nonadmin_$([guid]::NewGuid().ToString()).ps1"
@@ -1191,12 +1191,13 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""
             $sw = [Diagnostics.Stopwatch]::StartNew()
             while (-not (Get-Process -Name "Nexus" -ErrorAction SilentlyContinue)) {
+                Start-Sleep -Seconds 1
                 if ($sw.Elapsed.TotalSeconds -ge 60) {
                     break
                 }
-                Start-Sleep -Seconds 1
             }
             $sw.Stop()
+            Start-Sleep 6
             Stop-Process -Name "Nexus" -Force
             $wingetTerminalCheck = Get-WinGetPackage -Id "Microsoft.WindowsTerminal"
             if ($null -eq $wingetTerminalCheck) {
