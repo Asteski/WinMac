@@ -1336,7 +1336,17 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                 $macTypeInstalled = Get-WinGetPackage -Id "MacType.MacType"
                 if ($null -eq $macTypeInstalled) { winget install --id "MacType.MacType" --source winget --silent | Out-Null }
                 Stop-Process -n mt64agnt, MacTray, MacType -Force
-                New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "MacType" -Value "$env:PROGRAMFILES\MacType\MacTray.exe" | Out-Null
+                $description = "MacType - Better font rendering for Windows."
+                $taskService = New-Object -ComObject "Schedule.Service"
+                $taskService.Connect()
+                $rootFolder = $taskService.GetFolder("\") 
+                try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }
+                if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
+                $trigger = New-ScheduledTaskTrigger -AtLogon
+                $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
+                $action = New-ScheduledTaskAction -Execute MacTray.exe -WorkingDirectory "$env:PROGRAMFILES\MacType\"
+                $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
+                Register-ScheduledTask -TaskName "MacType" -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -Description $description | Out-Null
                 Copy-Item -Path "..\config\mactype\*" -Destination "$env:PROGRAMFILES\MacType\ini" -Recurse -Force
                 Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name FontSmoothing -Value "0"
                 Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name FontSmoothingType -Type DWord -Value 0
