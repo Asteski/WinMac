@@ -397,13 +397,13 @@ if ($null -eq $wingetCliCheck) {
 }
 $wingetClientCheck = Get-InstalledModule -Name Microsoft.WinGet.Client
 if ($null -eq $wingetClientCheck) {
-    Write-Host "Winget PowerShell Module is not installed. Installing Winget..." -ForegroundColor DarkYellow
+    Write-Host "Winget PowerShell Module is not installed. Installing Microsoft.WinGet.Client..." -ForegroundColor DarkYellow
     Install-Module -Name Microsoft.WinGet.Client -Force
     Write-Host "Winget PowerShell Module installation completed." -ForegroundColor Green
 } else {
     $wingetFind = Find-Module -Name Microsoft.WinGet.Client
     if ($wingetFind.Version -gt $wingetClientCheck.Version) {
-        Write-Host "A newer version of Winget PowerShell Module is available. Updating Winget..." -ForegroundColor DarkYellow
+        Write-Host "A newer version of Winget PowerShell Module is available. Updating Microsoft.WinGet.Client..." -ForegroundColor DarkYellow
         Update-Module -Name Microsoft.WinGet.Client -Force
         Write-Host "Winget PowerShell Module update completed." -ForegroundColor Green
     } else {

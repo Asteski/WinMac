@@ -651,7 +651,7 @@ if ($null -eq $wingetClientCheck) {
 } else {
     $wingetFind = Find-Module -Name Microsoft.WinGet.Client
     if ($wingetFind.Version -gt $wingetClientCheck.Version) {
-        Write-Host "A newer version of Winget PowerShell Module is available. Updating  Microsoft.WinGet.Client..." -ForegroundColor DarkYellow
+        Write-Host "A newer version of Winget PowerShell Module is available. Updating Microsoft.WinGet.Client..." -ForegroundColor DarkYellow
         Update-Module -Name Microsoft.WinGet.Client -Force
     }
 }
@@ -1188,6 +1188,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
 "@
             Set-Content -Path $tempVbs -Value $vbsContent -Encoding ASCII
             Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""
+            Start-Sleep 15
             $sw = [Diagnostics.Stopwatch]::StartNew()
             while (-not (Get-Process -Name "Nexus" -ErrorAction SilentlyContinue)) {
                 if ($sw.Elapsed.TotalSeconds -ge 60) {
