@@ -1169,6 +1169,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
     #* Nexus Dock
         "8" {
             Write-Host "Installing Nexus Dock..." -ForegroundColor Yellow
+            $winStep = 'C:\ProgramData\WinStep'
             if (Get-Process -n Nexus) { Stop-Process -n Nexus }
             $currentDir = (Get-Location).Path
             $scriptBlock1 = "winget install WinStep.Nexus --silent"
@@ -1188,7 +1189,6 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
 "@
             Set-Content -Path $tempVbs -Value $vbsContent -Encoding ASCII
             Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""
-            Start-Sleep 15
             $sw = [Diagnostics.Stopwatch]::StartNew()
             while (-not (Get-Process -Name "Nexus" -ErrorAction SilentlyContinue)) {
                 if ($sw.Elapsed.TotalSeconds -ge 60) {
@@ -1202,7 +1202,6 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             if ($null -eq $wingetTerminalCheck) {
                 winget install Microsoft.WindowsTerminal | Out-Null
             }
-            $winStep = 'C:\ProgramData\WinStep'
             Remove-Item -Path "$winStep\Themes\*" -Recurse -Force
             $regFile = "..\config\dock\winstep.reg"
             $downloadsPath = "$env:USERPROFILE\Downloads"
@@ -1296,6 +1295,8 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                 Start-Sleep -Seconds 1
             }
             $sw.Stop()
+            Start-Sleep -Seconds 5
+            Get-ChildItem -Path "$winStep\Themes" -Directory | Where-Object { $_.Name -notlike "*WinMac*" } | Remove-Item -Recurse -Force
             Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Nexus.lnk" -Destination $programsDir -Force 
             Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\Nexus.lnk" -Destination $programsDir -Force
             Write-Host "Nexus Dock installation completed." -ForegroundColor Green
