@@ -903,7 +903,9 @@ foreach ($app in $selectedApps) {
                 Copy-Item -Path $wmmExePath -Destination $winMacDirectory -Force
                 #? WinMac Menu Toolbar Setup
                 Copy-Item -Path "..\config\menu\toolbar\*.ini" -Destination $winMacDirectory -Force
-                Copy-Item -Path "..\config\blank.ico" -Destination "C:\Windows" -Force
+                if (-not (Test-Path 'C:\Windows\blank.ico')) {
+                    Copy-Item -Path "..\config\blank.ico" -Destination "C:\Windows" -Force | Out-Null
+                }
                 $folderPath = Join-Path $Env:USERPROFILE 'Links'
                 if (-not (Test-Path $folderPath)) { New-Item -ItemType Directory -Path $folderPath -Force | Out-Null }
                 $items = Get-ChildItem -Path $folderPath
@@ -1442,7 +1444,9 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
                 Set-ItemProperty -Path $registryPath3 -Name "QuickAccess" -Value 1 | Out-Null
             }
         #? Remove shortcut arrows
-            Copy-Item -Path "..\config\blank.ico" -Destination "C:\Windows" -Force
+            if (-not (Test-Path 'C:\Windows\blank.ico')) {
+                Copy-Item -Path "..\config\blank.ico" -Destination "C:\Windows" -Force | Out-Null
+            }
             New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Force | Out-Null
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String | Out-Null
         #? Configuring file explorer and context menus
