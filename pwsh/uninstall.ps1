@@ -478,6 +478,13 @@ foreach ($app in $selectedApps) {
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarAl" -Value 1
             Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarGlomLevel" -Value 0
             Set-ItemProperty -Path $exRegPath\Advanced -Name "LaunchTO" -Value 0
+            $original = "Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy"
+            $disabled = "++Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy"
+            $originalPath = Join-Path -Path "C:\Windows\SystemApps" -ChildPath $original
+            $disabledPath = Join-Path -Path "C:\Windows\SystemApps" -ChildPath $disabled
+            if (Test-Path -LiteralPath $disabledPath) {
+                Rename-Item -LiteralPath $disabledPath -NewName $originalPath
+            }
             Stop-Process -Name explorer -Force
             Write-Host "Uninstalling StartAllBack completed." -ForegroundColor Green
             Start-Sleep 2

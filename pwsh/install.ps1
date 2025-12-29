@@ -876,6 +876,18 @@ foreach ($app in $selectedApps) {
                 Set-ItemProperty -Path $sabRegPath -Name "OrbBitmap" -Value $orbBitmapValue
                 Set-ItemProperty -Path $exRegPath\Advanced -Name "LaunchTO" -Value 1
                 Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
+                $original = "Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy"
+                $originalPath = Join-Path -Path "C:\Windows\SystemApps" -ChildPath $original
+                if (Test-Path -LiteralPath $originalPath) {
+                Stop-Process -Name StartMenuExperienceHost -Force -ErrorAction SilentlyContinue
+                    while (Test-Path -LiteralPath $originalPath) {
+                        try {
+                            Rename-Item -LiteralPath $originalPath -NewName $disabledPath -ErrorAction Stop
+                        } catch {
+                            Start-Sleep -Milliseconds 200
+                        }
+                    }
+                }
                 Stop-Process -Name explorer -Force
                 Start-Sleep 5
                 if (-not (Get-Process -Name explorer)) { Start-Process explorer }
