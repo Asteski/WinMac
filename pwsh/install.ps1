@@ -859,8 +859,18 @@ foreach ($app in $selectedApps) {
                 Set-ItemProperty -Path $sabRegPath -Name "SysTrayClockFormat" -Value 3
                 Set-ItemProperty -Path $sabRegPath -Name "SysTrayInputSwitch" -Value 0
                 Set-ItemProperty -Path $sabRegPath -Name "NavBarGlass" -Value 1
-                Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1
-                if ($exStyle -eq 'C' -or $exStyle -eq 'c') { Set-ItemProperty -Path $sabRegPath -Name "FrameStyle" -Value 2 } else { Set-ItemProperty -Path $sabRegPath -Name "FrameStyle" -Value 0 }
+                if ($exStyle -eq 'C' -or $exStyle -eq 'c') { 
+                    Set-ItemProperty -Path $sabRegPath -Name "FrameStyle" -Value 2 
+                }
+                else { 
+                    Set-ItemProperty -Path $sabRegPath -Name "FrameStyle" -Value 0 
+                }
+                if ($menuSet -eq 'X' -or $menuSet -eq 'x') {
+                    Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1
+                }
+                else {
+                    Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 0
+                }
                 Set-ItemProperty -Path $sabRegPath -Name "DarkMagic" -Value 1
                 Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "(default)" -Value 1
                 Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "DarkMode" -Value 1
@@ -983,7 +993,6 @@ foreach ($app in $selectedApps) {
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "MouseClick" -Value "Command"
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftClick" -Value "Command"
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftWin" -Value "Nothing"
-                    Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "MiddleClick" -Value "WindowsMenu"
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "WinKey" -Value "Command"
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "MouseClickCommand" -Value "$winMacDirectory\WinMacMenu.exe"
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "WinKeyCommand" -Value "$winMacDirectory\WinMacMenu.exe"
