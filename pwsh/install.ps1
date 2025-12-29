@@ -1197,7 +1197,6 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                 }
             }
             $sw.Stop()
-            Start-Sleep 6
             Stop-Process -Name "Nexus" -Force
             $wingetTerminalCheck = Get-WinGetPackage -Id "Microsoft.WindowsTerminal"
             if ($null -eq $wingetTerminalCheck) {
@@ -1296,8 +1295,6 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                 Start-Sleep -Seconds 1
             }
             $sw.Stop()
-            Start-Sleep -Seconds 5
-            Get-ChildItem -Path "$winStep\Themes" -Directory | Where-Object { $_.Name -notlike "*WinMac*" } | Remove-Item -Recurse -Force
             Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Nexus.lnk" -Destination $programsDir -Force 
             Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\Nexus.lnk" -Destination $programsDir -Force
             Write-Host "Nexus Dock installation completed." -ForegroundColor Green
