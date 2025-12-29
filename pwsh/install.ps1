@@ -934,7 +934,7 @@ foreach ($app in $selectedApps) {
                 if (-not (Test-Path $taskbarLinksPath)) {
                     New-Item -Path $taskbarLinksPath -Force | Out-Null
                 }
-                reg import '..\config\menu\taskbar\ToolbarLinks.reg' > $null 2>&1
+                reg import '..\config\menu\toolbar\ToolbarLinks.reg' > $null 2>&1
                 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "TaskbarSizeMove" -Value 0 -Type DWord -Force | Out-Null
                 #? WinMac Start Menu Setup
                 if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
@@ -1002,7 +1002,7 @@ foreach ($app in $selectedApps) {
                     $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
                     $action = New-ScheduledTaskAction -Execute WinMacMenuRMBTrigger.exe -WorkingDirectory $winMacDirectory
                     $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
-                    Register-ScheduledTask -TaskName "WinMac Menu RMB Trigger" -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -Description $description | Out-Null
+                    Register-ScheduledTask -TaskName "WinMac Menu Right Mouse Click Trigger" -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -Description $description | Out-Null
                     Start-Process -FilePath "$winMacDirectory\WinMacMenuRMBTrigger.exe" -WorkingDirectory $winMacDirectory | Out-Null
                     $WinverUWP = ((Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP).InstallLocation) + "\WinverUWP.exe"
                     New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\winver.exe" -Force | Out-Null
