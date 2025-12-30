@@ -7,6 +7,10 @@
 #include <wtsapi32.h>
 #pragma comment(lib, "PowrProf.lib")
 // Lock/logoff don't need extra libs beyond user32/advapi32 which are already linked
+#include <shlwapi.h>
+#include <strsafe.h>
+
+#pragma comment(lib, "Advapi32.lib")
 
 void open_uri(LPCWSTR uri) {
     ShellExecuteW(NULL, L"open", uri, NULL, NULL, SW_SHOWNORMAL);
@@ -61,4 +65,42 @@ void system_lock() {
 void system_logoff() {
     acquire_shutdown_privilege();
     ExitWindowsEx(EWX_LOGOFF | EWX_FORCEIFHUNG, SHTDN_REASON_MAJOR_OTHER);
+}
+
+void system_hibernate() {
+    // TRUE indicates hibernate, second param forceCritical FALSE, disableWakeEvent FALSE
+    SetSuspendState(TRUE, FALSE, FALSE);
+}
+
+static const WCHAR* RUN_KEY = L"Software\\Microsoft\\Windows\\CurrentVersion\\Run";
+
+BOOL set_run_at_login(LPCWSTR valueName, LPCWSTR commandLine) {
+    HKEY hKey;
+    if (RegCreateKeyExW(HKEY_CURRENT_USER, RUN_KEY, 0, NULL, 0, KEY_SET_VALUE, NULL, &hKey, NULL) != ERROR_SUCCESS)
+        return FALSE;
+    DWORD cb = (DWORD)((lstrlenW(commandLine) + 1) * sizeof(WCHAR));
+    LONG r = RegSetValueExW(hKey, valueName, 0, REG_SZ, (const BYTE*)commandLine, cb);
+    RegCloseKey(hKey);
+    return (r == ERROR_SUCCESS);
+}
+
+BOOL remove_run_at_login(LPCWSTR valueName) {
+    HKEY hKey;
+    if (RegOpenKeyExW(HKEY_CURRENT_USER, RUN_KEY, 0, KEY_SET_VALUE, &hKey) != ERROR_SUCCESS)
+        return FALSE;
+    LONG r = RegDeleteValueW(hKey, valueName);
+    RegCloseKey(hKey);
+    return (r == ERROR_SUCCESS || r == ERROR_FILE_NOT_FOUND);
+}
+
+BOOL is_process_elevated(void) {
+    HANDLE hToken = NULL;
+    if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken)) return FALSE;
+    TOKEN_ELEVATION elev = {0}; DWORD cb = sizeof(elev);
+    BOOL elevated = FALSE;
+    if (GetTokenInformation(hToken, TokenElevation, &elev, sizeof(elev), &cb)) {
+        elevated = (elev.TokenIsElevated != 0);
+    }
+    CloseHandle(hToken);
+    return elevated;
 }

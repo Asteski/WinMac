@@ -1,20 +1,22 @@
 param (
     [switch]$noGUI
 )
-$version = "1.3.2"
+$version = "1.4.0"
 $ErrorActionPreference = "SilentlyContinue"
 $WarningPreference = "SilentlyContinue"
 $ProgressPreference = "SilentlyContinue"
 $programsDir = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs"
 $winMacDirectory = "$env:LOCALAPPDATA\WinMac"
+[System.Environment]::SetEnvironmentVariable("WINMAC", "%LOCALAPPDATA%\WinMac", [System.EnvironmentVariableTarget]::User)
+[System.Environment]::SetEnvironmentVariable("WINMAC", "%LOCALAPPDATA%\WinMac", [System.EnvironmentVariableTarget]::Machine)
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName PresentationFramework
-if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null }
-$sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
-$osVersion = (Get-WmiObject -Class Win32_OperatingSystem).Caption
 $user = [Security.Principal.WindowsIdentity]::GetCurrent()
 $adminTest = (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
+$sysType = (Get-WmiObject -Class Win32_ComputerSystem).SystemType
+$osVersion = (Get-WmiObject -Class Win32_OperatingSystem).Caption
 $checkDir = Get-ChildItem '..'
+if (-not (Test-Path -Path "../temp")) {New-Item -ItemType Directory -Path "../temp" | Out-Null }
 if (!($checkDir -like "*WinMac*" -and $checkDir -like "*config*" -and $checkDir -like "*bin*" -and $checkDir -like "*pwsh*")) {
     [void][System.Windows.MessageBox]::Show("WinMac components not found. Please make sure to run the script from the correct directory.", "Missing Components", 'OK', 'Error')
     exit
@@ -71,7 +73,7 @@ if (!($noGUI)) {
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="WinMac Deployment Wizard" 
-    Height="622" Width="540" 
+    Height="600" Width="540" 
     WindowStartupLocation="CenterScreen" 
     Background="$backgroundColor" 
     Icon="$iconFolderPath\wizard.ico">
@@ -133,7 +135,6 @@ if (!($noGUI)) {
                                 <CheckBox x:Name="chkStartAllBack" Content="StartAllBack" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                                 <CheckBox x:Name="chkWinMacMenu" Content="WinMac Menu" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                                 <CheckBox x:Name="chkWindhawk" Content="Windhawk" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
-                                <CheckBox x:Name="chkStahky" Content="Stahky" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                                 <CheckBox x:Name="chkAutoHotKey" Content="Keyboard Shortcuts" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                                 <CheckBox x:Name="chkNexusDock" Content="Nexus Dock" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
                                 <CheckBox x:Name="chkHotCorners" Content="Hot Corners" IsChecked="True" Margin="0,3,0,3" Foreground="{StaticResource ForegroundBrush}"/>
@@ -241,7 +242,6 @@ if (!($noGUI)) {
     $chkStartAllBack = $window.FindName("chkStartAllBack")
     $chkWinMacMenu = $window.FindName("chkWinMacMenu")
     $chkWindhawk = $window.FindName("chkWindhawk")
-    $chkStahky = $window.FindName("chkStahky")
     $chkAutoHotKey = $window.FindName("chkAutoHotKey")
     $chkNexusDock = $window.FindName("chkNexusDock")
     $chkGitProfile = $window.FindName("chkGitProfile")
@@ -261,7 +261,7 @@ if (!($noGUI)) {
     $customInstall.Add_Checked({$componentSelection.IsEnabled = $true})
     $result = @{}
     $btnInstall.Add_Click({
-        if ($fullInstall.IsChecked) { $selection = "1","2","3","4","5","6","7","8","9","10","11","12"} 
+        if ($fullInstall.IsChecked) { $selection = "1","2","3","4","5","6","7","8","9","10","11"} 
         else {
             if ($chkPowerToys.IsChecked) { $selection += "1," }
             if ($chkEverything.IsChecked) { $selection += "2," }
@@ -269,14 +269,25 @@ if (!($noGUI)) {
             if ($chkStartAllBack.IsChecked) { $selection += "4," }
             if ($chkWinMacMenu.IsChecked) { $selection += "5," }
             if ($chkWindhawk.IsChecked) { $selection += "6," }
-            if ($chkStahky.IsChecked) { $selection += "7," }
-            if ($chkAutoHotKey.IsChecked) { $selection += "8," }
-            if ($chkNexusDock.IsChecked) { $selection += "9," }
-            if ($chkHotCorners.IsChecked) { $selection += "10," }
-            if ($chkMacType.IsChecked) { $selection += "11," }
-            if ($chkOther.IsChecked) { $selection += "12" }
+            if ($chkAutoHotKey.IsChecked) { $selection += "7," }
+            if ($chkNexusDock.IsChecked) { $selection += "8," }
+            if ($chkHotCorners.IsChecked) { $selection += "9," }
+            if ($chkMacType.IsChecked) { $selection += "10," }
+            if ($chkOther.IsChecked) { $selection += "11" }
         }
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="PowerShell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Hot Corners"; "11"="MacType"; "12"="Other"}
+        $appList = @{
+                "1"="PowerToys"
+                "2"="Everything"
+                "3"="PowerShell Profile"
+                "4"="StartAllBack"
+                "5"="WinMac Menu"
+                "6"="Windhawk"
+                "7"="Keyboard Shortcuts"
+                "8"="Nexus Dock"
+                "9"="Hot Corners"
+                "10"="MacType"
+                "11"="Other"
+        }        
         $result["selectedApps"] = $selection.Split(',').TrimEnd(',')
         $selectedAppNames = @()
         foreach ($appNumber in $selection) {
@@ -287,7 +298,7 @@ if (!($noGUI)) {
         $result["menuSet"] = if ($startMenu.IsChecked) { "X" } else { "C" }
         $result["promptSetVar"] = if ($promptStyle.IsChecked) { "W"} else { "M" }
         $result["roundedOrSquared"] = if ($shellCorner.IsChecked) { "R" } else { "S" }
-        $result["lightOrDark"] = if ($theme.IsChecked) { "L"; $result["stackTheme"] = 'light'; $result["orbTheme"] = 'black' } else { "D"; $result["stackTheme"] = 'dark'; $result["orbTheme"] = 'white' }
+        $result["lightOrDark"] = if ($theme.IsChecked) { "L"; $result["orbTheme"] = 'black' } else { "D"; $result["orbTheme"] = 'white' }
         $result["blueOrYellow"] = if ($blueOrYellow.IsChecked) { "Y" } else { "B" }
         $result["dockDynamic"] = if ($dockDynamic.IsChecked) { "X" } else { "D" }
         $result["gitProfile"] = if ($chkGitProfile.IsChecked) { $true } else { $false }
@@ -333,13 +344,25 @@ on WinMac GitHub page: https://github.com/Asteski/WinMac/wiki
     if ($fullOrCustom -eq 'F' -or $fullOrCustom -eq 'f') {
         Write-Host "Choosing full installation." -ForegroundColor Green
         Start-Sleep 2
-        $selectedApps = "1","2","3","4","5","6","7","8","9","10","11","12"
+        $selectedApps = "1","2","3","4","5","6","7","8","9","10","11"
     } 
     elseif ($fullOrCustom -eq 'C' -or $fullOrCustom -eq 'c') {
         Write-Host "Choosing custom installation." -ForegroundColor Green
         Start-Sleep 2
-        $appList = @{"1"="PowerToys"; "2"="Everything"; "3"="PowerShell Profile"; "4"="StartAllBack"; "5"="WinMac Menu"; "6"="Windhawk"; "7"="Stahky"; "8"="Keyboard Shortcuts"; "9"="Nexus Dock"; "10"="Hot Corners"; "11"="MacType"; "12"="Other"}
-    Clear-Host
+        $appList = @{
+                "1"="PowerToys"
+                "2"="Everything"
+                "3"="PowerShell Profile"
+                "4"="StartAllBack"
+                "5"="WinMac Menu"
+                "6"="Windhawk"
+                "7"="Keyboard Shortcuts"
+                "8"="Nexus Dock"
+                "9"="Hot Corners"
+                "10"="MacType"
+                "11"="Other"
+        }
+        Clear-Host
     Show-Header
 Write-Host @"
 
@@ -353,21 +376,20 @@ Write-Host @"
 4. StartAllBack
 5. WinMac Menu
 6. Windhawk
-7. Stahky
-8. Keyboard Shortcuts
-9. Nexus Dock
-10. Hot Corners
-11. MacType
-12. Other Settings
+7. Keyboard Shortcuts
+8. Nexus Dock
+9. Hot Corners
+10. MacType
+11. Other Settings
 "@
     Write-Host
     do {
         $selection = Read-Host "Enter the numbers of options you want to install (separated by commas)"
         $selection = $selection.Trim()
         $selection = $selection -replace '\s*,\s*', ','
-        $valid = $selection -match '^([1-9]|10|11|12)(,([1-9]|10|11|12))*$'
+        $valid = $selection -match '^([1-9]|10|11)(,([1-9]|10|11))*$'
         if (!$valid) {
-            Write-Host "`e[91mInvalid input! Please enter numbers between 1 and 12, separated by commas.`e[0m`n"
+            Write-Host "`e[91mInvalid input! Please enter numbers between 1 and 11, separated by commas.`e[0m`n"
         }
     } while ([string]::IsNullOrWhiteSpace($selection) -or !$valid)
     $selectedApps = @()
@@ -385,7 +407,7 @@ else
 {
     Write-Host "Invalid input. Defaulting to full installation." -ForegroundColor Yellow
     Start-Sleep 1
-    $selectedApps = "1","2","3","4","5","6","7","8","9","10","11","12"
+    $selectedApps = "1","2","3","4","5","6","7","8","9","10","11"
 }
 
 if ($selectedApps -like '*4*' -and $selectedApps -like '*5*') {
@@ -395,7 +417,7 @@ Write-Host @"
 
 `e[93m$("You can choose between WinMac start menu or Classic start menu.")`e[0m
 
-WinMac start menu replaces default menu with customized WinX menu.
+WinMac start menu replaces default menu with WinMac Menu application.
 
 Classic start menu replaces default menu with enhanced Windows 7 start menu.
 
@@ -473,7 +495,7 @@ userName@computerName ~ %
         $gitProfile = $true
     }
 }
-if ($selectedApps -like '*4*' -or $selectedApps -like '*9*') {
+if ($selectedApps -like '*4*' -or $selectedApps -like '*8*') {
     Clear-Host
     Show-Header
     $roundedOrSquared = Read-Host "`nEnter 'R' for rounded or 'S' for squared shell corners"
@@ -492,13 +514,11 @@ if ($selectedApps -like '*4*' -or $selectedApps -like '*9*') {
         $roundedOrSquared = 'R'
     }
 }
-if ($selectedApps -like '*4*' -or $selectedApps -like '*7*' -or $selectedApps -like '*9*' -or $selectedApps -like '*12*') {
+if ($selectedApps -like '*4*' -or $selectedApps -like '*8*' -or $selectedApps -like '*11*') {
     if ($windowsTheme -eq "Dark") {
-        $stackTheme = 'dark'
         $orbTheme = 'white'
         $lightOrDark = "D"
     } else {
-        $stackTheme = 'light'
         $orbTheme = 'black'
         $lightOrDark = "L"
     }
@@ -523,7 +543,7 @@ if ($selectedApps -like '*4*') {
         $exStyle = 'x'
     }
 }
-if ($selectedApps -like '*9*' -or $selectedApps -like '*6*'-or $selectedApps -like '1') {
+if ($selectedApps -like '1' -or $selectedApps -like '*6*' -or $selectedApps -like '*8*') {
     Clear-Host
     Show-Header
     $blueOrYellow = Read-Host "`nEnter 'B' for blue or 'Y' for yellow folders"
@@ -543,7 +563,7 @@ if ($selectedApps -like '*9*' -or $selectedApps -like '*6*'-or $selectedApps -li
         $blueOrYellow = 'B'
     }
 }
-if ($selectedApps -like '*9*') {
+if ($selectedApps -like '*8*') {
     Clear-Host
     Show-Header
     $dockDynamic = Read-Host "`nEnter 'D' for default or 'X' for dynamic dock"
@@ -563,13 +583,23 @@ if ($selectedApps -like '*9*') {
         $dockDynamic = 'D'
     }
 }
+do {
     Clear-Host
     Show-Header
-$installConfirmation = Read-Host "`nAre you sure you want to start the installation process (Y/n)"
-if ($installConfirmation -ne 'y' -or $installConfirmation -ne 'Y') {
+    $installConfirmation = Read-Host "`nAre you sure you want to start the installation process (Y/n)"
+    $valid = $installConfirmation -match '^(y|Y|n|N)$'
+    if (!$valid) {
+        Write-Host "`e[91mInvalid input! Please enter either (Y)es or (N)o.`e[0m`n"
+        Start-Sleep 2
+    }
+} while (!$valid)
+
+if ($installConfirmation -eq 'n' -or $installConfirmation -eq 'N') {
+    Clear-Host
     Show-Header
-    Write-Host "Installation process aborted." -ForegroundColor Red
+    Write-Host "`n`e[91mInstallation process aborted.`e[0m"
     Start-Sleep 2
+    Clear-Host
     exit
 }
 }
@@ -579,7 +609,6 @@ if ($result){
     $promptSet = $result["promptSetVar"]
     $roundedOrSquared = $result["roundedOrSquared"]
     $lightOrDark = $result["lightOrDark"]
-    $stackTheme = $result["stackTheme"]
     $dockDynamic = $result["dockDynamic"]
     $blueOrYellow = $result["blueOrYellow"]
     $exStyle = $result["exStyle"]
@@ -617,12 +646,12 @@ if ($null -eq $wingetCliCheck) {
 }
 $wingetClientCheck = Get-InstalledModule -Name Microsoft.WinGet.Client
 if ($null -eq $wingetClientCheck) {
-    Write-Host "Winget PowerShell Module is not installed. Installing Winget..." -ForegroundColor DarkYellow
+    Write-Host "Winget PowerShell Module is not installed. Installing Microsoft.WinGet.Client..." -ForegroundColor DarkYellow
     Install-Module -Name Microsoft.WinGet.Client -Force
 } else {
     $wingetFind = Find-Module -Name Microsoft.WinGet.Client
     if ($wingetFind.Version -gt $wingetClientCheck.Version) {
-        Write-Host "A newer version of Winget PowerShell Module is available. Updating Winget..." -ForegroundColor DarkYellow
+        Write-Host "A newer version of Winget PowerShell Module is available. Updating Microsoft.WinGet.Client..." -ForegroundColor DarkYellow
         Update-Module -Name Microsoft.WinGet.Client -Force
     }
 }
@@ -638,6 +667,7 @@ else {
 
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
 #! WinMac deployment
+New-Item -Path $winMacDirectory -ItemType Directory -Force | Out-Null
 foreach ($app in $selectedApps) {
     switch ($app.Trim()) {
     #* PowerToys
@@ -647,15 +677,17 @@ foreach ($app in $selectedApps) {
             pwsh -NoProfile -Command "winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements" | Out-Null
             Copy-Item -Path "..\config\powertoys\ptr\ptr.exe" -Destination "$env:LOCALAPPDATA\PowerToys" -Recurse -Force
             Copy-Item -Path "..\config\powertoys\Assets\PowerLauncher" -Destination "$env:LOCALAPPDATA\PowerToys\Assets" -Recurse -Force
-            Copy-Item -Path "..\config\powertoys\Plugins" -Destination "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run" -Recurse -Force
-            if ($blueOrYellow -eq 'B' -or $blueOrYellow -eq 'b') {
-                Copy-Item -Path "..\config\powertoys\RunPlugins" -Destination "$env:LOCALAPPDATA\PowerToys" -Recurse -Force
-                Copy-Item -Path "..\config\powertoys\Assets\Peek" -Destination "$env:LOCALAPPDATA\PowerToys\WinUI3Apps\Assets" -Recurse -Force
-                Copy-Item -Path "..\config\powertoys\RunPlugins\Everything" "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -Recurse -Force
-            }
+            if ($sysType -like "*ARM*") { 
+                Copy-Item -Path "..\config\powertoys\Plugins\arm\*" -Destination "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -Recurse -Force
+            } 
             else {
+                Copy-Item -Path "..\config\powertoys\Plugins\x64\*" -Destination "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -Recurse -Force
+            }
+            if ($blueOrYellow -eq 'B' -or $blueOrYellow -eq 'b') {
+                Copy-Item -Path "..\config\powertoys\RunPlugins" -Destination "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -Recurse -Force
+            } else {
                 Get-ChildItem -Path "..\config\powertoys\RunPlugins" -Recurse | Where-Object { $_.Name -ne "folder.png" } | ForEach-Object {
-                    $destinationPath = Join-Path -Path "$env:LOCALAPPDATA\PowerToys\RunPlugins" -ChildPath $_.FullName.Substring((Get-Item "..\config\powertoys\RunPlugins").FullName.Length + 1)
+                    $destinationPath = Join-Path -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -ChildPath $_.FullName.Substring((Get-Item "..\config\powertoys\RunPlugins").FullName.Length + 1)
                     if ($_.PSIsContainer) {
                         New-Item -ItemType Directory -Path $destinationPath -Force | Out-Null
                     } else {
@@ -672,15 +704,18 @@ foreach ($app in $selectedApps) {
                 }
             }
             $envPath = [System.Environment]::GetEnvironmentVariable("Path", [System.EnvironmentVariableTarget]::User)
-            if (-not ($envPath -like "*$env:LOCALAPPDATA\PowerToys*")) {
-                $envPath += ";$env:LOCALAPPDATA\PowerToys"
-                [System.Environment]::SetEnvironmentVariable("Path", $envPath, [System.EnvironmentVariableTarget]::User)
-            }
+            $envPath += ";$env:LOCALAPPDATA\PowerToys"
+            [System.Environment]::SetEnvironmentVariable("Path", $envPath, [System.EnvironmentVariableTarget]::User)
             Stop-Process -Name PowerToys*
             Stop-Process -Name PowerToys.LightSwitchService
             Stop-Process -Name Microsoft.CmdPal.UI
             Start-Sleep -Seconds 3
             Install-WingetPackage -id ThioJoe.SvgThumbnailExtension | Out-Null
+            Install-WingetPackage -id 'QL-Win.QuickLook' | Out-Null
+            Move-Item -Path "$Env:USERPROFILE\Desktop\QuickLook.lnk" -Destination $programsDir -Force
+            New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "QuickLook" -Value "$Env:LOCALAPPDATA\Programs\QuickLook\QuickLook.exe" | Out-Null
+            Expand-Archive -Path "..\config\quicklook\QuickLook.Plugin.zip" -DestinationPath "$Env:APPDATA\pooi.moe\QuickLook\QuickLook.Plugin\" -Force
+            Start-Process -FilePath "QuickLook.exe" -ArgumentList "/silent" -WorkingDirectory "$Env:LOCALAPPDATA\Programs\QuickLook" -WindowStyle Hidden
             (Get-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json") -replace '"CmdPal":true', '"CmdPal":false' -replace '"show_tray_icon":true', '"show_tray_icon":false' -replace '"LightSwitch": true', '"LightSwitch": false' | Set-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json" -Force
             Start-Process "$env:LOCALAPPDATA\PowerToys\PowerToys.exe" -ArgumentList "--start-minimized" -WorkingDirectory "$env:LOCALAPPDATA\PowerToys" -WindowStyle Hidden
             Write-Host "PowerToys installation completed." -ForegroundColor Green
@@ -785,11 +820,17 @@ foreach ($app in $selectedApps) {
                 $sabRegPath = "HKCU:\Software\StartIsBack"
                 $taskbarOnTopPath = "$exRegPath\StuckRectsLegacy"
                 $taskbarOnTopName = "Settings"
-                $taskbarOnTopValue = @(0x30,0x00,0x00,0x00,0xfe,0xff,0xff,0xff,0x02,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x5a,0x00,0x00,0x00,0x32,0x00,0x00,0x00,0x26,0x07,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0x07,0x00,0x00,0x38,0x04,0x00,0x00,0x78,0x00,0x00,0x00,0x01,0x00,0x00,0x00)
+                $taskbarOnTopValue = @(
+                    0x30,0x00,0x00,0x00,0xfe,0xff,0xff,0xff,0x02,0x00,0x00,0x00,0x01,0x00,0x00,0x00,
+                    0x5a,0x00,0x00,0x00,0x32,0x00,0x00,0x00,0x26,0x07,0x00,0x00,0x00,0x00,0x00,0x00,
+                    0x80,0x07,0x00,0x00,0x38,0x04,0x00,0x00,0x78,0x00,0x00,0x00,0x01,0x00,0x00,0x00
+                )
                 New-Item -Path $taskbarOnTopPath -Force | Out-Null
                 New-ItemProperty -Path $taskbarOnTopPath -Name $taskbarOnTopName -Value $taskbarOnTopValue -PropertyType Binary | Out-Null
                 Copy-Item "..\config\taskbar\orbs\*" $sabOrbs -Force
                 Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 1
+                Set-ItemProperty -Path $exRegPath\Advanced -Name "ShowNotificationIcon" -Value 0
+                Set-ItemProperty -Path $exRegPath\Advanced -Name "Start_TrackDocs" -Value 1
                 Set-ItemProperty -Path $exRegPath\Advanced -Name "TaskbarSizeMove" -Value 1
                 Set-ItemProperty -Path $exRegPath\Advanced -Name "ShowStatusBar" -Value 0
                 Set-ItemProperty -Path $exRegPath\Advanced -Name "EnableSnapAssistFlyout" -Value 0
@@ -818,15 +859,17 @@ foreach ($app in $selectedApps) {
                 Set-ItemProperty -Path $sabRegPath -Name "SysTrayClockFormat" -Value 3
                 Set-ItemProperty -Path $sabRegPath -Name "SysTrayInputSwitch" -Value 0
                 Set-ItemProperty -Path $sabRegPath -Name "NavBarGlass" -Value 1
-                if ($exStyle -eq 'C' -or $exStyle -eq 'c') { Set-ItemProperty -Path $sabRegPath -Name "FrameStyle" -Value 2 } else { Set-ItemProperty -Path $sabRegPath -Name "FrameStyle" -Value 0 }
+                if ($exStyle -eq 'C' -or $exStyle -eq 'c') { 
+                    Set-ItemProperty -Path $sabRegPath -Name "FrameStyle" -Value 2 
+                }
+                else { 
+                    Set-ItemProperty -Path $sabRegPath -Name "FrameStyle" -Value 0 
+                }
                 if ($menuSet -eq 'X' -or $menuSet -eq 'x') {
                     Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 1
                 }
                 else {
                     Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 0
-                    Uninstall-WinGetPackage -name "Winver UWP" | Out-Null
-                    Get-ChildItem "$env:LOCALAPPDATA\Microsoft\Windows" -Filter "WinX" -Recurse -Force | ForEach-Object { Remove-Item $_.FullName -Recurse -Force }
-                    Expand-Archive -Path "..\config\WinX-default.zip" -Destination "$env:LOCALAPPDATA\Microsoft\Windows\" -Force
                 }
                 Set-ItemProperty -Path $sabRegPath -Name "DarkMagic" -Value 1
                 Set-ItemProperty -Path $sabRegPath\DarkMagic -Name "(default)" -Value 1
@@ -843,6 +886,20 @@ foreach ($app in $selectedApps) {
                 Set-ItemProperty -Path $sabRegPath -Name "OrbBitmap" -Value $orbBitmapValue
                 Set-ItemProperty -Path $exRegPath\Advanced -Name "LaunchTO" -Value 1
                 Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
+                $original = "Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy"
+                $disabled = "++Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy"
+                $originalPath = Join-Path -Path "C:\Windows\SystemApps" -ChildPath $original
+                $disabledPath = Join-Path -Path "C:\Windows\SystemApps" -ChildPath $disabled
+                if (Test-Path -LiteralPath $originalPath) {
+                Stop-Process -Name StartMenuExperienceHost -Force -ErrorAction SilentlyContinue
+                    while (Test-Path -LiteralPath $originalPath) {
+                        try {
+                            Rename-Item -LiteralPath $originalPath -NewName $disabledPath -ErrorAction Stop
+                        } catch {
+                            Start-Sleep -Milliseconds 200
+                        }
+                    }
+                }
                 Stop-Process -Name explorer -Force
                 Start-Sleep 5
                 if (-not (Get-Process -Name explorer)) { Start-Process explorer }
@@ -852,8 +909,47 @@ foreach ($app in $selectedApps) {
     #* WinMac Menu
         "5" {
             if ($osVersion -like '*Windows 11*') {
+                Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
+                if ($sysType -like "*ARM*") { 
+                    $wmmExePath = "..\bin\menu\arm\WinMacMenu.exe"
+                } 
+                else {
+                    $wmmExePath = "..\bin\menu\x64\WinMacMenu.exe"
+                }
+                Copy-Item -Path $wmmExePath -Destination $winMacDirectory -Force
+                #? WinMac Menu Toolbar Setup
+                Copy-Item -Path "..\config\menu\toolbar\*.ini" -Destination $winMacDirectory -Force
+                if (-not (Test-Path 'C:\Windows\blank.ico')) {
+                    Copy-Item -Path "..\config\blank.ico" -Destination "C:\Windows" -Force | Out-Null
+                }
+                $folderPath = Join-Path $Env:USERPROFILE 'Links'
+                if (-not (Test-Path $folderPath)) { New-Item -ItemType Directory -Path $folderPath -Force | Out-Null }
+                $items = Get-ChildItem -Path $folderPath
+                if ($items) { $items | Remove-Item -Force -Recurse }
+                foreach ($name in "Explorer", "Favourites") {
+                    $shell = New-Object -ComObject WScript.Shell
+                    $shortcut = $shell.CreateShortcut((Join-Path $folderPath "$name.lnk"))
+                    $shortcut.TargetPath = "$winMacDirectory\WinMacMenu.exe"
+                    $shortcut.WorkingDirectory = $winMacDirectory
+                    $shortcut.Arguments = "--config $winMacDirectory\$name.ini"
+                    $shortcut.IconLocation = "C:\Windows\blank.ico"
+                    $shortcut.Save()
+                    Unblock-File -Path (Join-Path $folderPath "$name.lnk")
+                }
+                $folderPath = Get-Item (Join-Path $Env:USERPROFILE "Favorites\Links")
+                if (($folderPath.Attributes -band [System.IO.FileAttributes]::Hidden) -eq 0) {
+                    $folderPath.Attributes = $folderPath.Attributes -bor [System.IO.FileAttributes]::Hidden
+                }
+                $taskbarLinksPath = "HKCU:\Software\StartIsBack\Taskbaz"
+                if (-not (Test-Path $taskbarLinksPath)) {
+                    New-Item -Path $taskbarLinksPath -Force | Out-Null
+                }
+                reg import '..\config\menu\toolbar\ToolbarLinks.reg' > $null 2>&1
+                Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "TaskbarSizeMove" -Value 0 -Type DWord -Force | Out-Null
+                Stop-Process -Name Explorer -Force | Out-Null
                 if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
-                    Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
+                    #? WinMac Start Menu Setup
+                    Copy-Item -Path "..\config\menu\config.ini" -Destination $winMacDirectory -Force
                     $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.8'
                     if ($null -eq $dotNetRuntime) {
                         Write-Host "Installing .NET Desktop Runtime 8..." -ForegroundColor DarkYellow
@@ -881,7 +977,6 @@ foreach ($app in $selectedApps) {
                     } else {
                         Write-Host "WinverUWP is already installed." -ForegroundColor DarkGreen
                     }
-                    New-Item -ItemType Directory -Path "$winMacDirectory\" | Out-Null
                     Write-Host "Installing Open-Shell..." -ForegroundColor DarkYellow
                     $shellExePath = Join-Path $env:PROGRAMFILES "Open-Shell\StartMenu.exe"
                     Start-Process -FilePath "..\bin\osh\osh.exe" -ArgumentList "/QUIET", "ADDLOCAL=StartMenu" -Wait -NoNewWindow | Out-Null
@@ -897,22 +992,14 @@ foreach ($app in $selectedApps) {
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "EnableContextMenu" -Value 0
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "MouseClick" -Value "Command"
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftClick" -Value "Command"
+                    Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftWin" -Value "Nothing"
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "WinKey" -Value "Command"
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "MouseClickCommand" -Value "$winMacDirectory\WinMacMenu.exe"
-                    Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftClickCommand" -Value "ModernShutDownWindows"
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "WinKeyCommand" -Value "$winMacDirectory\WinMacMenu.exe"
-                    Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftWin" -Value "Nothing"
+                    Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftClickCommand" -Value "ModernShutDownWindows"
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "ShiftRight" -Value 1
                     Set-ItemProperty -Path "HKCU:\Software\OpenShell\StartMenu\Settings" -Name "SearchBox" -Value "Hide"
-                    if ($sysType -like "*ARM*") { 
-                        $wmmUrl = "https://github.com/Asteski/WinMac-Menu/raw/refs/heads/main/bin/arm64/WinMacMenu.exe"
-                    } 
-                    else {
-                        $wmmUrl = "https://github.com/Asteski/WinMac-Menu/raw/refs/heads/main/bin/x64/WinMacMenu.exe"
-                    }
-                    Invoke-WebRequest -Uri $wmmUrl -OutFile "$winMacDirectory\WinMacMenu.exe"
-                    Copy-Item -Path "..\config\menu\config.ini" -Destination $winMacDirectory -Force
-                    Copy-Item -Path "..\bin\menu\WinMac_Menu_RMB_Trigger.exe" -Destination $winMacDirectory -Force
+                    Copy-Item -Path "..\bin\menu\WinMacMenuRMBTrigger.exe" -Destination $winMacDirectory -Force
                     $folderName = "WinMac"
                     $taskFolder = "\" + $folderName
                     $description = "WinMac Menu right mouse button trigger. Currently used as a workaround for the WinMac Menu being able to be opened with the right mouse button using Open-Shell, as it doesn't currently support that."
@@ -923,10 +1010,10 @@ foreach ($app in $selectedApps) {
                     if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
                     $trigger = New-ScheduledTaskTrigger -AtLogon
                     $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
-                    $action = New-ScheduledTaskAction -Execute WinMac_Menu_RMB_Trigger.exe -WorkingDirectory $winMacDirectory
+                    $action = New-ScheduledTaskAction -Execute WinMacMenuRMBTrigger.exe -WorkingDirectory $winMacDirectory
                     $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
-                    Register-ScheduledTask -TaskName "WinMac Menu RMB Trigger" -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -Description $description | Out-Null
-                    Start-Process -FilePath "$winMacDirectory\WinMac_Menu_RMB_Trigger.exe" -WorkingDirectory $winMacDirectory | Out-Null
+                    Register-ScheduledTask -TaskName "WinMac Menu Right Mouse Click Trigger" -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -Description $description | Out-Null
+                    Start-Process -FilePath "$winMacDirectory\WinMacMenuRMBTrigger.exe" -WorkingDirectory $winMacDirectory | Out-Null
                     $WinverUWP = ((Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP).InstallLocation) + "\WinverUWP.exe"
                     New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\winver.exe" -Force | Out-Null
                     Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\winver.exe" -Name "Debugger" -Value $WinverUWP -Type String
@@ -950,11 +1037,11 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                     Set-Content -Path $tempVbs -Value $vbsContent -Encoding ASCII
                     Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""
                     Start-Sleep 5
-                    if (-not (Get-Process -Name explorer)) { Start-Process explorer }
-                    Write-Host "WinMac Menu installation completed." -ForegroundColor Green
-                } else {
-                    Write-Host "Skipping WinMac Menu installation." -ForegroundColor DarkYellow
                 }
+                (Get-Content -Path "$Env:LOCALAPPDATA\WinMac\config.ini") -replace 'ShowOnLaunch=false', 'ShowOnLaunch=true' | Set-Content -Path "$Env:LOCALAPPDATA\WinMac\config.ini" -Force
+                if (-not (Get-Process -Name explorer)) { Start-Process explorer }
+                else { Stop-Process -Name explorer -Force; Start-Sleep 2 }
+                Write-Host "WinMac Menu installation completed." -ForegroundColor Green
             } elseif ($osVersion -notlike '*Windows 11*') {
                 Write-Host "WinMac Menu is supported only on Windows 11. Skipping installation." -ForegroundColor Red
             }
@@ -988,7 +1075,13 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             $regBackup = Join-Path $extractFolder "Windhawk.reg"
             New-Item -ItemType Directory -Path "$winMacDirectory\resource-redirect\" -Force | Out-Null
             Copy-Item -Path $modsSourceBackup -Destination $windhawkRoot -Recurse -Force
-            Copy-Item -Path '..\config\windhawk\resource-redirect\*' -Destination "$winMacDirectory\resource-redirect\" -Recurse -Force
+            Expand-Archive -Path '..\bin\windhawk-mods-windows.zip' -DestinationPath "$windhawkRoot\Mods" -Force
+            if ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {
+                Expand-Archive -Path '..\config\windhawk\resource-redirect\WinMac-yellow-folders.zip' -DestinationPath "..\temp" -Force
+            } else {
+                Expand-Archive -Path '..\config\windhawk\resource-redirect\WinMac-blue-folders.zip' -DestinationPath "..\temp" -Force
+            }
+            Copy-Item -Path '..\temp\resource-redirect\*' -Destination "$winMacDirectory\resource-redirect\" -Recurse -Force
             $engineFolder = Join-Path $windhawkRoot "Engine"
             New-Item -ItemType Directory -Path $engineFolder -Force | Out-Null
             Copy-Item -Path $modsBackup -Destination $engineFolder -Recurse -Force
@@ -1015,62 +1108,9 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Start-Process "$Env:ProgramFiles\Windhawk\Windhawk.exe"
             Write-Host "Windhawk installation completed." -ForegroundColor Green
             }
-    #* Stahky
-        "7" {
-            Write-Host "Installing Stahky..." -ForegroundColor Yellow
-            $url = "https://github.com/joedf/stahky/releases/download/v0.3.9.1/stahky_U64_v0.3.9.1.zip"
-            $outputPath = "..\stahky_U64.zip"
-            $exePath = "$env:LOCALAPPDATA\Stahky"
-            New-Item -ItemType Directory -Path $exePath -Force | Out-Null
-            New-Item -ItemType Directory -Path $exePath\config -Force | Out-Null
-            Invoke-WebRequest -Uri $url -OutFile $outputPath
-            if (Test-Path -Path "$exePath\stahky.exe") {
-                Write-Output "Stahky already exists."
-            } else {
-                Expand-Archive -Path $outputPath -DestinationPath $exePath | Out-Null
-            }
-            Copy-Item -Path ..\config\taskbar\stacks\* -Destination $exePath\config -Recurse -Force
-            Copy-Item -Path $exePath\config\themes\stahky-$stackTheme.ini -Destination $exePath\stahky.ini
-            $pathVarUser = [Environment]::GetEnvironmentVariable("Path", "User")
-            $pathVarMachine = [Environment]::GetEnvironmentVariable("Path", "Machine")
-            if (-not ($pathVarUser -like "*$exePath*")) {
-                $pathVarUser += ";$exePath"
-                [Environment]::SetEnvironmentVariable("Path", $pathVarUser, "User")
-            }
-            $job | Get-Jobif (-not ($pathVarMachine -like "* $exePath*")) {
-                $pathVarMachine += "; $exePath"
-                [Environment]::SetEnvironmentVariable("Path", $pathVarMachine, "Machine")
-            }
-            $pathVar = [Environment]::GetEnvironmentVariable("Path", "Machine") + ";$exePath"
-            [Environment]::SetEnvironmentVariable("Path", $pathVar, "Machine")
-            $pathVar = [Environment]::GetEnvironmentVariable("Path", "User") + ";$exePath"
-            [Environment]::SetEnvironmentVariable("Path", $pathVar, "User")
-            $shortcutPath1 = "$env:LOCALAPPDATA\Stahky\config\shortcuts\Management.lnk"
-            $shortcutPath2 = "$env:LOCALAPPDATA\Stahky\config\shortcuts\Favorites.lnk"
-            $newTargetPath = "$env:LOCALAPPDATA\Stahky\Stahky.exe"
-            $newArguments1 = '/stahky ' + "$env:LOCALAPPDATA\Stahky\config\management"
-            $newArguments2 = '/stahky ' + "$env:LOCALAPPDATA\Stahky\config\favorites"
-            $newWorkDir1 = "$env:LOCALAPPDATA\Stahky\config\management"
-            $newWorkDir2 = "$env:LOCALAPPDATA\Stahky\config\favorites"
-            $shell1 = New-Object -ComObject WScript.Shell
-            $shortcut1 = $shell1.CreateShortcut($shortcutPath1)
-            $shortcut1.Arguments = $newArguments1
-            $shortcut1.TargetPath = $newTargetPath
-            $shortcut1.WorkingDirectory = $newWorkDir1
-            $shortcut1.Save()
-            $shell2 = New-Object -ComObject WScript.Shell
-            $shortcut2 = $shell2.CreateShortcut($shortcutPath2) 
-            $shortcut2.Arguments = $newArguments2
-            $shortcut2.TargetPath = $newTargetPath
-            $shortcut2.WorkingDirectory = $newWorkDir2
-            $shortcut2.Save()
-            Remove-Item $outputPath -Force
-            Write-Host "Stahky installation completed." -ForegroundColor Green
-        }
     #* AutoHotkey Keyboard Shortcuts
-        "8" {
+        "7" {
             Write-Host "Installing Keyboard Shortcuts..." -ForegroundColor Yellow
-            New-Item -ItemType Directory -Path "$winMacDirectory\" | Out-Null
             if (Get-Process keyshortcuts) { Stop-Process -Name keyshortcuts }
             Copy-Item '..\bin\ahk\WinMacKeyShortcuts.exe' "$winMacDirectory" 
             Copy-Item '..\bin\windowswitcher\window-switcher*' "$winMacDirectory"
@@ -1104,9 +1144,10 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Write-Host "Keyboard Shortcuts installation completed." -ForegroundColor Green
         }
     #* Nexus Dock
-        "9" {
+        "8" {
             Write-Host "Installing Nexus Dock..." -ForegroundColor Yellow
-            if (Get-Process -n Nexus) { Stop-Process -n Nexus }
+            $winStep = 'C:\ProgramData\WinStep'
+            if (Get-Process -n Nexus -ErrorAction SilentlyContinue) { Stop-Process -n Nexus }
             $currentDir = (Get-Location).Path
             $scriptBlock1 = "winget install WinStep.Nexus --silent"
             $tempScript = Join-Path $env:TEMP "nonadmin_$([guid]::NewGuid().ToString()).ps1"
@@ -1127,10 +1168,10 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""
             $sw = [Diagnostics.Stopwatch]::StartNew()
             while (-not (Get-Process -Name "Nexus" -ErrorAction SilentlyContinue)) {
+                Start-Sleep -Seconds 1
                 if ($sw.Elapsed.TotalSeconds -ge 60) {
                     break
                 }
-                Start-Sleep -Seconds 1
             }
             $sw.Stop()
             Stop-Process -Name "Nexus" -Force
@@ -1200,8 +1241,6 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                 Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "DockReserveScreen1" -Value "False"
             }
             if ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {Set-ItemProperty -Path "HKCU:\Software\WinSTEP2000\NeXuS\Docks" -Name "1IconPath0" -Value "C:\ProgramData\Winstep\Icons\explorer_default.ico"}
-            $winStep = 'C:\ProgramData\WinStep'
-            Remove-Item -Path "$winStep\Themes\*" -Recurse -Force
             Copy-Item -Path "..\config\dock\themes\*" -Destination "$winStep\Themes\" -Recurse -Force
             Remove-Item -Path "$winStep\NeXus\Indicators\*" -Force -Recurse 
             Copy-Item -Path "..\config\dock\indicators\*" -Destination "$winStep\NeXus\Indicators\" -Recurse -Force
@@ -1232,15 +1271,15 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                 Start-Sleep -Seconds 1
             }
             $sw.Stop()
-            Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Nexus.lnk" -Destination $programsDir -Force 
+            Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Nexus.lnk" -Destination $programsDir -Force
             Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\Nexus.lnk" -Destination $programsDir -Force
             Write-Host "Nexus Dock installation completed." -ForegroundColor Green
             }
     #* Hot Corners
-        "10"{
+        "9"{
             Write-Host "Installing Hot Corners..." -ForegroundColor Yellow
             $outputPath = '..\temp\WinXCorners.zip'
-            $winXCornersUrl = "https://github.com/vhanla/winxcorners/releases/download/1.3.2/WinXCorners1.3.2.zip"
+            $winXCornersUrl = "https://github.com/vhanla/winxcorners/releases/download/1.4.0/WinXCorners1.4.0.zip"
             $winXCornersConfigPath = '..\config\hotcorners\settings.ini'
             $destinationPath = "$env:LOCALAPPDATA\WinXCorners"
             $winLaunchUrl = "https://github.com/jensroth-git/WinLaunch/releases/download/v.0.7.3.0/WinLaunch.0.7.3.0.zip"
@@ -1302,7 +1341,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Write-Host "Hot Corners installation completed." -ForegroundColor Green
             }
     #* MacType
-        "11" {
+        "10" {
             if ($sysType -like "*ARM*") {
                 Write-Host "MacType is not supported on ARM devices. Skipping installation." -ForegroundColor Red
             }
@@ -1311,8 +1350,18 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                 $macTypeInstalled = Get-WinGetPackage -Id "MacType.MacType"
                 if ($null -eq $macTypeInstalled) { winget install --id "MacType.MacType" --source winget --silent | Out-Null }
                 Stop-Process -n mt64agnt, MacTray, MacType -Force
-                New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "MacType" -Value "$env:PROGRAMFILES\MacType\MacTray.exe" | Out-Null
-                Copy-Item -Path "..\config\mactype\*" -Destination "$env:PROGRAMFILES\MacType" -Recurse -Force
+                $description = "MacType - Better font rendering for Windows."
+                $taskService = New-Object -ComObject "Schedule.Service"
+                $taskService.Connect()
+                $rootFolder = $taskService.GetFolder("\") 
+                try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }
+                if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
+                $trigger = New-ScheduledTaskTrigger -AtLogon
+                $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
+                $action = New-ScheduledTaskAction -Execute MacTray.exe -WorkingDirectory "$env:PROGRAMFILES\MacType\"
+                $principal = New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest
+                Register-ScheduledTask -TaskName "MacType" -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -Description $description | Out-Null
+                Copy-Item -Path "..\config\mactype\*" -Destination "$env:PROGRAMFILES\MacType\ini" -Recurse -Force
                 Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name FontSmoothing -Value "0"
                 Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name FontSmoothingType -Type DWord -Value 0
                 Start-Sleep -Seconds 2
@@ -1323,7 +1372,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             }
             }
     #* Other
-        "12" {
+        "11" {
             Write-Host "Configuring Other Settings..." -ForegroundColor Yellow
         #? Black Cursor
             $curSourceFolder = (Get-Item -Path "..\config\cursors").FullName
@@ -1419,23 +1468,25 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
                 Set-ItemProperty -Path $registryPath3 -Name "QuickAccess" -Value 1 | Out-Null
             }
         #? Remove shortcut arrows
-            Copy-Item -Path "..\config\blank.ico" -Destination "C:\Windows" -Force
+            if (-not (Test-Path 'C:\Windows\blank.ico')) {
+                Copy-Item -Path "..\config\blank.ico" -Destination "C:\Windows" -Force | Out-Null
+            }
             New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Force | Out-Null
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" -Name "29" -Value "C:\Windows\blank.ico" -Type String | Out-Null
         #? Configuring file explorer and context menus
-            Get-ChildItem ..\config\reg\remove\* -e *theme* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
-            $sourceFilePath = "..\config\reg\add\Add_Theme_Mode_in_Context_Menu.reg"
+            Get-ChildItem ..\config\registry\remove\* -e *theme* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
+            $sourceFilePath = "..\config\registry\add\Add_Theme_Mode_in_Context_Menu.reg"
             $tempFilePath = "..\temp\Add_Theme_Mode_in_Context_Menu.reg"
-            $ps1FilePath = "..\config\reg\ThemeSwitcher.ps1"
-            if (-not (Test-Path -Path $winMacDirectory)) {New-Item -ItemType Directory -Path $winMacDirectory -Force | Out-Null }
+            $ps1FilePath = "..\config\registry\ThemeSwitcher.ps1"
             Copy-Item -Path $ps1FilePath -Destination $winMacDirectory -Force
             Copy-Item -Path $sourceFilePath -Destination '..\temp\' -Force
             $appData = $env:LOCALAPPDATA -replace '\\', '\\'
             (Get-Content -Path $tempFilePath) -replace '%LOCALAPPDATA%', $appData | Set-Content -Path $tempFilePath
-            reg import '..\config\reg\add\Add_Hidden_items_to_context_menu.reg' > $null 2>&1
-            reg import '..\config\reg\add\Add_Navigation_pane_to_context_menu.reg' > $null 2>&1
+            reg import '..\config\registry\add\Add_Hidden_items_to_context_menu.reg' > $null 2>&1
+            reg import '..\config\registry\add\Add_Navigation_pane_to_context_menu.reg' > $null 2>&1
             reg import '..\temp\Add_Theme_Mode_in_Context_Menu.reg' > $null 2>&1
-            Copy-Item -Path "..\config\themes\*" -Destination "$env:WINDIR\Resources\Themes" -Recurse -Force
+            Copy-Item -Path "..\config\themes\*.theme" -Destination "$env:WINDIR\Resources\Themes" -Recurse -Force
+            Copy-Item -Path "..\config\themes\Wallpaper\*" -Destination "$env:WINDIR\Web\Wallpaper" -Recurse -Force
             New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowIconOverlay" -Value 0 -PropertyType DWord -Force | Out-Null
         #? End Task
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value "" 

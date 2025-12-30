@@ -2,7 +2,7 @@
 
 [Theme]
 ; Windows - IDS_THEME_DISPLAYNAME_AERO_LIGHT
-DisplayName=winmacdark
+DisplayName=WinMac Dark
 ThemeId={672171B0-9692-4D40-B557-79243AF99D5F}
 
 ; Computer - SHIDI_SERVER
@@ -17,14 +17,34 @@ DefaultValue=%SystemRoot%\System32\imageres.dll,-123
 [CLSID\{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}\DefaultIcon]
 DefaultValue=%SystemRoot%\System32\imageres.dll,-25
 
+; Recycle Bin - SHIDI_RECYCLERFULL SHIDI_RECYCLER
+[CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon]
+Full=%SystemRoot%\System32\imageres.dll,-54
+Empty=%SystemRoot%\System32\imageres.dll,-55
+
+[Control Panel\Cursors]
+AppStarting=%SystemRoot%\cursors\windows-modern-v2\x1\working-in-background_white.ani
+Arrow=%SystemRoot%\cursors\windows-modern-v2\x1\normal-select_white.cur
+Crosshair=%SystemRoot%\cursors\windows-modern-v2\x1\precision-select_default.cur
+Hand=%SystemRoot%\cursors\windows-modern-v2\x1\link-select_white.cur
+Help=%SystemRoot%\cursors\windows-modern-v2\x1\help-select_white.cur
+IBeam=%SystemRoot%\cursors\windows-modern-v2\x1\text-select_white.curs
+No=%SystemRoot%\cursors\windows-modern-v2\x1\unavailable_white.cur
+NWPen=%SystemRoot%\cursors\windows-modern-v2\x1\handwriting_white.cur
+SizeAll=%SystemRoot%\cursors\windows-modern-v2\x1\move_white.cur
+SizeNESW=%SystemRoot%\cursors\windows-modern-v2\x1\diagonal-resize-2_white.cur
+SizeNS=%SystemRoot%\cursors\windows-modern-v2\x1\vertical-resize_white.cur
+SizeNWSE=%SystemRoot%\cursors\windows-modern-v2\x1\diagonal-resize-1_white.cur
+SizeWE=%SystemRoot%\cursors\windows-modern-v2\x1\horizontal-resize_white.cur
+UpArrow=%SystemRoot%\cursors\windows-modern-v2\x1\alternate-select_white.cur
+Wait=%SystemRoot%\cursors\windows-modern-v2\x1\busy.ani
+DefaultValue=Windows Modern v2 - Aero White - (x1)
+
 [Control Panel\Desktop]
-Wallpaper=0
+Wallpaper=%SystemRoot%\web\wallpaper\WinMac\img19.jpg
+TileWallpaper=0
 WallpaperStyle=10
 Pattern=
-MultimonBackgrounds=0
-PicturePosition=4
-WallpaperWriteTime=133531971550000000
-WindowsSpotlight=0
 
 [VisualStyles]
 Path=%SystemRoot%\resources\themes\Aero\Aero.msstyles
@@ -44,4 +64,4 @@ MTSM=RJSPBS
 
 [Sounds]
 ; IDS_SCHEME_DEFAULT
-SchemeName=@mmres.dll,-800
+SchemeName=WinMac

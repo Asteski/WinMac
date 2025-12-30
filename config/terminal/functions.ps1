@@ -51,7 +51,6 @@ set-alias -name random -value Get-RandomString
 set-alias -name user -value getuser
 set-alias -name pwd -value ppwd -option AllScope
 set-alias -name lnk -value run
-set-alias -name stack -value stahky
 set-alias -name find -value ffind
 set-alias -name fi -value ffind
 set-alias -name ss -value Select-String
@@ -233,29 +232,6 @@ function ffind {
         }
     } else {
         Write-Host "No file name provided" -ForegroundColor Red
-    }
-}
-$stacks = "$env:LOCALAPPDATA\Stahky"
-function stahky { 
-    $dir = "$args"
-    if (-not (Test-Path $stacks)) {
-        Write-Host "Stahky not found." -ForegroundColor Red
-    } 
-    elseif ($args.Count -eq 0) {
-        Write-Host "Please provide a directory to stack:" -ForegroundColor Yellow
-        Write-Host "stack <full path to directory>"
-        Write-Host "stack . for current directory"
-        Write-Host
-        Write-Host "stack go to peek stacks directory"
-    }
-    elseif ($args -eq "go") {
-        open $stacks
-    }
-    elseif ($args -eq ".") {
-        Stahky.exe $pwd
-    }
-    else {
-        Stahky.exe $dir
     }
 }
 

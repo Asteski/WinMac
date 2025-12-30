@@ -35,19 +35,25 @@
 
 ## Features
 
-- **Quick Launcher** - Spotlight-like launcher for power users that contains additional features, allowing users to quickly search for files, folders, applications, and settings on your system
+- **WinMac Menu** - Start Menu replaced with newly developed Win32 app to fully resemble functionality of Apple Menu
+
+- **Quick Launcher** - Spotlight-like launcher for power users that provides instant access to files, folders, calculator functions, applications, and settings on your system, among many [other features](https://learn.microsoft.com/en-us/windows/powertoys/run)
 
 - **Dock** - highly customizable and feature-rich dock application, used to achieve macOS-like dock experience
 
+- **Quick Look** - peek into a file or folder content instantly by pressing a Space bar
+
+- **Menu Toolbar** - highly customizable toolbar added to taskbar to resemble macOS Menu Bar
+
 - **Hot Corners** - assign custom actions triggered when you hover your mouse cursor over the screen corners
 
-- **Enhanced Start Menu** - Start Menu replaced with newly developed Win32 app to fully resemble functionality of Apple menu
+- **Enhanced Start Menu** - additionally you can choose to replace default Start menu with enhanced Windows 7 start menu, instead of WinMac Menu or have them both available from Start button
 
 - **Enhanced Taskbar** - legacy Taskbar put on top, with enhanced capabilities and looks to match Windows 11 design
 
 - **Enhanced File Explorer** - improved File Explorer looks and cleaned up context menus, which makes File Explorer load fast and look clean
 
-- **Enhanced Terminal** - custom prompt and a ton of custom functions, bringing most commonly used macOS/Linux commands
+- **Enhanced Terminal** - custom prompt and a ton of new custom functions and aliases, bringing most commonly used macOS/Linux commands
 
 - **Enhanced Icons** - refresh legacy and default Windows components with modern set of icons
 
@@ -74,16 +80,6 @@ You can choose between full or custom installation, if you only want to install 
 
 WinMac is supported by Windows 11 Home, Pro, LTSC, IoT LTSC, on both x86 and ARM based platforms.
 
-
-## Future plans
-
-- *Nexus Xtreme* theme with customised context menu to match Windows 11 design
-- enforce dark theme on legacy Windows components
-- more Quick Launcher and Start Menu choices
-- disable keyboard shortcuts for full-screen apps & add more keyboard shortcuts
-- more Windhawk mods
-- additional *Start Orbs* and *Icons Packs*, incl. red and green colored folders
-
 ## Credits
 
 - [PowerToys](https://learn.microsoft.com/en-us/windows/powertoys/) by Microsoft
@@ -91,7 +87,6 @@ WinMac is supported by Windows 11 Home, Pro, LTSC, IoT LTSC, on both x86 and ARM
 - [StartAllBack](https://www.startallback.com/) by Tihiy
 - [Open-Shell](https://open-shell.github.io/Open-Shell-Menu/) by Open-Shell
 - [Windhawk](https://github.com/ramensoftware/windhawk) by Ramen Software
-- [Stahky](https://github.com/joedf/stahky) by joedf
 - [AutoHotkey](https://www.autohotkey.com/) by AutoHotkey Foundation
 - [Nexus](https://www.winstep.net/nexus.asp) by Winstep
 - [NewModernWinver](https://github.com/torchgm/NewModernWinver) by torchgm
@@ -104,6 +99,7 @@ WinMac is supported by Windows 11 Home, Pro, LTSC, IoT LTSC, on both x86 and ARM
 - [SecureUxTheme](https://github.com/namazso/SecureUxTheme) by namazso
 - [Windows Modern Cursors](https://github.com/imshvc/windows-cursors-modern) by imshvc
 - [Window Switcher](https://github.com/sigoden/window-switcher) by sigoden
+- [Quick Look](https://github.com/QL-Win/QuickLook) by emako
 - [PSTree](https://github.com/santisq/PSTree) by santisq
 - [ntop](https://github.com/gsass1/NTop) by gsass1
 - [ptr](https://github.com/8LWXpg/ptr) by 8LWXpg

@@ -7,9 +7,15 @@
     {
         if not WinActive("ahk_class Shell_TrayWnd") and not WinActive("ahk_exe Nexus.exe")
         {
-            WinMaximize("A")
+            try {
+                WinMaximize("A")
+            }
+            catch {
+            }
+        }
+        else {
+            return
         }
     }
-    ; Do nothing if no window is focused 
-    return
 }
+

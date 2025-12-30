@@ -3,10 +3,19 @@
 #NoTrayIcon
 #m::
 {
-    if !WinActive("ahk_class Shell_TrayWnd") && !WinActive("ahk_exe Nexus.exe")
+    if WinExist("A") ; Check if any window is active
     {
-        if WinExist("A")
-            WinMinimize("A")
-        ; else do nothing
+        if !WinActive("ahk_class Shell_TrayWnd") && !WinActive("ahk_exe Nexus.exe")
+        {
+            try {
+                WinMinimize("A")
+            }
+            catch {
+            }
+        }
+        else {
+            return
+        }
     }
 }
+

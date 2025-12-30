@@ -1,0 +1,21 @@
+Windows Registry Editor Version 5.00 
+
+[HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode]
+"MUIVerb"="Theme"
+"Position"="Bottom"
+"SubCommands"=""
+"Icon"="themeui.dll,-701"
+
+[HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\001flyout]
+"MUIVerb"="Light"
+"Icon"="imageres.dll,-5411"
+
+[HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\001flyout\command]
+@="pwsh -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File %LOCALAPPDATA%\\WinMac\\ThemeSwitcher.ps1 -light"
+
+[HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\002flyout]
+"MUIVerb"="Dark"
+"Icon"="imageres.dll,-5412"
+
+[HKEY_CLASSES_ROOT\DesktopBackground\Shell\ChooseMode\shell\002flyout\command]
+@="pwsh -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File %LOCALAPPDATA%\\WinMac\\ThemeSwitcher.ps1 -dark"

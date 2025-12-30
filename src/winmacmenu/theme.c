@@ -44,3 +44,16 @@ HMENU theme_style_menu(HMENU hMenu) {
     SetMenuInfo(hMenu, &mi);
     return hMenu;
 }
+
+BOOL theme_get_accent(COLORREF* color) {
+    if (!color) return FALSE;
+    DWORD raw=0; BOOL opaque=FALSE;
+    if (DwmGetColorizationColor(&raw, &opaque) == S_OK) {
+        BYTE r = GetRValue(raw);
+        BYTE g = GetGValue(raw);
+        BYTE b = GetBValue(raw);
+        *color = RGB(r,g,b);
+        return TRUE;
+    }
+    return FALSE;
+}
