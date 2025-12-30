@@ -1271,8 +1271,9 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                 Start-Sleep -Seconds 1
             }
             $sw.Stop()
-            Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Nexus.lnk" -Destination $programsDir -Force 
+            Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Nexus.lnk" -Destination $programsDir -Force
             Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\Nexus.lnk" -Destination $programsDir -Force
+            Start-Sleep -Seconds 10
             Get-ChildItem -Path "$winStep\Themes" | Where-Object {$_.Name -notlike '*WinMac*'} | Remove-Item -Force -Recurse
             Get-ChildItem -Path "$winStep\NeXuS\Backgrounds" | Remove-Item -Force -Recurse
             Get-ChildItem -Path "$winStep\NeXuS\Tiles" | Remove-Item -Force -Recurse
