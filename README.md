@@ -78,15 +78,6 @@ You can choose between full or custom installation, if you only want to install 
 
 WinMac is supported by Windows 11 Home, Pro, LTSC, IoT LTSC, on both x86 and ARM based platforms.
 
-
-## Future plans
-
-- enforce dark theme on legacy Windows components
-- more Quick Launcher and Start Menu choices
-- disable keyboard shortcuts for full-screen apps & add more keyboard shortcuts
-- more Windhawk mods
-- additional *Start Orbs* and *Icons Packs*, incl. red and green colored folders
-
 ## Credits
 
 - [PowerToys](https://learn.microsoft.com/en-us/windows/powertoys/) by Microsoft
