@@ -43,6 +43,8 @@
 
 - **Dock** - highly customizable and feature-rich dock application, used to achieve macOS-like dock experience
 
+- **Quick Look** - peek into a file or folder content instantly by pressing a Space bar
+
 - **Hot Corners** - assign custom actions triggered when you hover your mouse cursor over the screen corners
 
 - **Enhanced Start Menu** - additionally you can choose to replace default Start menu with enhanced Windows 7 start menu, instead of WinMac Menu or have them both available from Start button
@@ -97,6 +99,7 @@ WinMac is supported by Windows 11 Home, Pro, LTSC, IoT LTSC, on both x86 and ARM
 - [SecureUxTheme](https://github.com/namazso/SecureUxTheme) by namazso
 - [Windows Modern Cursors](https://github.com/imshvc/windows-cursors-modern) by imshvc
 - [Window Switcher](https://github.com/sigoden/window-switcher) by sigoden
+- [Quick Look](https://github.com/QL-Win/QuickLook) by emako
 - [PSTree](https://github.com/santisq/PSTree) by santisq
 - [ntop](https://github.com/gsass1/NTop) by gsass1
 - [ptr](https://github.com/8LWXpg/ptr) by 8LWXpg
