@@ -43,7 +43,7 @@
 
 - **Quick Look** - peek into a file or folder content instantly by pressing a Space bar
 
-- **Menu Bar** - highly customizable toolbar added to taskbar to resemble macOS Menu Bar
+- **Menu Toolbar** - highly customizable toolbar added to taskbar to resemble macOS Menu Bar
 
 - **Hot Corners** - assign custom actions triggered when you hover your mouse cursor over the screen corners
 
