@@ -947,8 +947,8 @@ foreach ($app in $selectedApps) {
                 reg import '..\config\menu\toolbar\ToolbarLinks.reg' > $null 2>&1
                 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "TaskbarSizeMove" -Value 0 -Type DWord -Force | Out-Null
                 Stop-Process -Name Explorer -Force | Out-Null
-                #? WinMac Start Menu Setup
                 if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
+                    #? WinMac Start Menu Setup
                     Copy-Item -Path "..\config\menu\config.ini" -Destination $winMacDirectory -Force
                     $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.8'
                     if ($null -eq $dotNetRuntime) {
