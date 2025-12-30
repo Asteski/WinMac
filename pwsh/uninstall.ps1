@@ -428,6 +428,7 @@ foreach ($app in $selectedApps) {
             $everythingPT = Get-WingetPackage -name EverythingPT
             Uninstall-WinGetPackage -id Microsoft.PowerToys | Out-Null
             Uninstall-WinGetPackage -name $everythingPT.name | Out-Null
+            Uninstall-WinGetPackage -id QL-Win.QuickLook | Out-Null
             Uninstall-WinGetPackage -id ThioJoe.SvgThumbnailExtension | Out-Null
             Remove-Item $env:LOCALAPPDATA\Microsoft\PowerToys -Recurse -Force
             Remove-Item $env:LOCALAPPDATA\PowerToys -Recurse -Force
