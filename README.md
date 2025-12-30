@@ -37,13 +37,13 @@
 
 - **WinMac Menu** - Start Menu replaced with newly developed Win32 app to fully resemble functionality of Apple Menu
 
-- **WinMac Toolbar** - highly customizable toolbar added to taskbar to resemble macOS Menu Bar
-
 - **Quick Launcher** - Spotlight-like launcher for power users that provides instant access to files, folders, calculator functions, applications, and settings on your system, among many [other features](https://learn.microsoft.com/en-us/windows/powertoys/run)
 
 - **Dock** - highly customizable and feature-rich dock application, used to achieve macOS-like dock experience
 
 - **Quick Look** - peek into a file or folder content instantly by pressing a Space bar
+
+- **Menu Bar** - highly customizable toolbar added to taskbar to resemble macOS Menu Bar
 
 - **Hot Corners** - assign custom actions triggered when you hover your mouse cursor over the screen corners
 
