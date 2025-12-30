@@ -1273,11 +1273,6 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             $sw.Stop()
             Move-Item -Path "C:\Users\$env:USERNAME\Desktop\Nexus.lnk" -Destination $programsDir -Force
             Move-Item -Path "C:\Users\$env:USERNAME\OneDrive\Desktop\Nexus.lnk" -Destination $programsDir -Force
-            Write-Host 'CLEANUPTEST'
-            Start-Sleep -Seconds 10
-            Get-ChildItem -Path "$winStep\Themes" | Where-Object {$_.Name -notlike '*WinMac*'} | Remove-Item -Force -Recurse
-            Get-ChildItem -Path "$winStep\NeXuS\Backgrounds" | Remove-Item -Force -Recurse
-            Get-ChildItem -Path "$winStep\NeXuS\Tiles" | Remove-Item -Force -Recurse
             Write-Host "Nexus Dock installation completed." -ForegroundColor Green
             }
     #* Hot Corners
