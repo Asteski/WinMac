@@ -679,8 +679,7 @@ foreach ($app in $selectedApps) {
             Copy-Item -Path "..\config\powertoys\Assets\PowerLauncher" -Destination "$env:LOCALAPPDATA\PowerToys\Assets" -Recurse -Force
             if ($sysType -like "*ARM*") { 
                 Copy-Item -Path "..\config\powertoys\Plugins\arm\*" -Destination "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -Recurse -Force
-            } 
-            else {
+            } else {
                 Copy-Item -Path "..\config\powertoys\Plugins\x64\*" -Destination "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -Recurse -Force
             }
             if ($blueOrYellow -eq 'B' -or $blueOrYellow -eq 'b') {
