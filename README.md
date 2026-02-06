@@ -1,9 +1,9 @@
 <h1 align="center">
   <span>WinMac</span>
 </h1>
-<p align="center">
+<h3 align="center">
   <span align="center">The Ultimate Windows and macOS hybrid</span>
-</p>
+</h3>
 <p align="center">
   <span align="center">WinMac is a revolutionary customization project that brings together the best of both Windows and macOS, offering users unique and seamless Windows experience.</span>
 </p>
