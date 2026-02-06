@@ -1,9 +1,4 @@
-<p align="center">
-  <b style="font-size: 2em;">WinMac</b><br>
-</p>
-<p align="center">
-  <b style="font-size: 1.2em;">The Ultimate Windows and macOS hybrid</b>
-</p>
+# WinMac - The Ultimate Windows and macOS hybrid
 
 **WinMac** is a revolutionary customization project that brings together the best of both Windows and macOS, offering users unique and seamless Windows experience.
 
