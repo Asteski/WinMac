@@ -1,12 +1,12 @@
+<h1 align="center">
+  <span>WinMac</span>
+</h1>
 <p align="center">
-  <b style="font-size: 2em;">WinMac</b><br>
+  <span align="center">The Ultimate Windows and macOS hybrid</span>
 </p>
 <p align="center">
-  <b style="font-size: 1.2em;">The Ultimate Windows and macOS hybrid</b>
+  <span align="center">WinMac is a revolutionary customization project that brings together the best of both Windows and macOS, offering users unique and seamless Windows experience.</span>
 </p>
-
-**WinMac** is a revolutionary customization project that brings together the best of both Windows and macOS, offering users unique and seamless Windows experience.
-
 <p align="center">
     <a href="https://github.com/Asteski/WinMac/wiki/Home">Documentation</a> |
     <a href="#Features">Features</a> |
