@@ -1,7 +1,7 @@
 param (
     [switch]$noGUI
 )
-$version = "1.4.0"
+$version = "1.5.0"
 $ErrorActionPreference = "SilentlyContinue"
 $WarningPreference = "SilentlyContinue"
 $ProgressPreference = "SilentlyContinue"
@@ -1280,7 +1280,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
         "9"{
             Write-Host "Installing Hot Corners..." -ForegroundColor Yellow
             $outputPath = '..\temp\WinXCorners.zip'
-            $winXCornersUrl = "https://github.com/vhanla/winxcorners/releases/download/1.4.0/WinXCorners1.4.0.zip"
+            $winXCornersUrl = "https://github.com/vhanla/winxcorners/releases/download/1.5.0/WinXCorners1.5.0.zip"
             $winXCornersConfigPath = '..\config\hotcorners\settings.ini'
             $destinationPath = "$env:LOCALAPPDATA\WinXCorners"
             $winLaunchUrl = "https://github.com/jensroth-git/WinLaunch/releases/download/v.0.7.3.0/WinLaunch.0.7.3.0.zip"

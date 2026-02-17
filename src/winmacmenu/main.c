@@ -747,7 +747,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                 // About dialog using custom application icon instead of default information icon.
                 // Switching from MessageBoxW to MessageBoxIndirectW with MB_USERICON allows specifying IDI_APPICON.
                 WCHAR msg[512];
-                wsprintfW(msg, L"WinMac\r\nVersion: v1.4.0\r\n\r\nWinMac Menu\r\nVersion: v0.8.0\r\n\r\n\u00A9 2025 Asteski\r\nhttps://github.com/Asteski");
+                wsprintfW(msg, L"WinMac\r\nVersion: v1.5.0\r\n\r\nWinMac Menu\r\nVersion: v0.8.0\r\n\r\n\u00A9 2025 Asteski\r\nhttps://github.com/Asteski");
                 MSGBOXPARAMSW mbp = {0};
                 mbp.cbSize = sizeof(mbp);
                 mbp.hwndOwner = hWnd;
