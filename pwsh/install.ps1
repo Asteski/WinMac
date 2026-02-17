@@ -1069,7 +1069,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             $extractFolder = Join-Path $env:TEMP ("WindhawkRestore_$timeStamp")
             Copy-Item -Path '..\bin\ModernShutDownWindows.exe' -Destination "$env:WINDIR\System32\" -Recurse -Force
             New-Item -ItemType Directory -Path $extractFolder -Force | Out-Null
-            & "$env:ProgramFiles\7-Zip\7z.exe" x $backupFile.FullName -o $extractFolder -y
+            & "$env:ProgramFiles\7-Zip\7z.exe" x $backupFile.FullName "-o$extractFolder" -y
             # Expand-Archive -Path $backupFile.FullName -DestinationPath $extractFolder -Force
             $modsSourceBackup = Join-Path $extractFolder "ModsSource"
             $modsBackup = Join-Path $extractFolder "Engine\Mods"
@@ -1078,8 +1078,8 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Copy-Item -Path $modsSourceBackup -Destination $windhawkRoot -Recurse -Force
             Expand-Archive -Path '..\bin\windhawk-mods-windows.zip' -DestinationPath "$windhawkRoot\Mods" -Force
             if ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {
-                & "$env:ProgramFiles\7-Zip\7z.exe" x '..\config\windhawk\resource-redirect\WinMac-yellow-folders.zip' -o"..\temp" -y
-                # Expand-Archive -Path '..\config\windhawk\resource-redirect\WinMac-yellow-folders.zip' -DestinationPath "..\temp" -Force
+                # & "$env:ProgramFiles\7-Zip\7z.exe" x '..\config\windhawk\resource-redirect\WinMac-yellow-folders.7z' '-o..\temp' -y
+                Expand-Archive -Path '..\config\windhawk\resource-redirect\WinMac-yellow-folders.zip' -DestinationPath "..\temp" -Force
             } else {
                 Expand-Archive -Path '..\config\windhawk\resource-redirect\WinMac-blue-folders.zip' -DestinationPath "..\temp" -Force
             }
@@ -1488,9 +1488,9 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             reg import '..\config\registry\add\Add_Navigation_pane_to_context_menu.reg' > $null 2>&1
             reg import '..\temp\Add_Theme_Mode_in_Context_Menu.reg' > $null 2>&1
             # Extract Themes using 7zip
-            & "$env:ProgramFiles\7-Zip\7z.exe" x "..\config\resources\Themes.7z" -o "$env:WINDIR\Resources\Themes" -y | Out-Null
+            & "$env:ProgramFiles\7-Zip\7z.exe" x "..\config\resources\Themes.7z" "-o$env:WINDIR\Resources\Themes" -y | Out-Null
             # Extract Wallpapers using 7zip
-            & "$env:ProgramFiles\7-Zip\7z.exe" x "..\config\resources\Wallpapers.7z" -o "$env:WINDIR\Web\Wallpaper" -y | Out-Null
+            & "$env:ProgramFiles\7-Zip\7z.exe" x "..\config\resources\Wallpapers.7z" "-o$env:WINDIR\Web\Wallpaper" -y | Out-Null
             New-Item "$env:WINDIR\Resources\Icons" -ItemType Directory -Force | Out-Null
             Copy-Item -Path "..\config\resources\Icons\*" -Destination "$env:WINDIR\Resources\Icons" -Force
             Copy-Item -Path "..\config\resources\Themes\*" -Destination "$env:WINDIR\Resources\Themes" -Recurse -Force
