@@ -1061,8 +1061,8 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             if ($sysType -like "*ARM*") {
                 $windhawkBackup = 'windhawk-backup-arm.zip'
             } else {
-                # $windhawkBackup = 'windhawk-backup-x64.7z'
-                $windhawkBackup = 'windhawk-backup-x64.zip'
+                $windhawkBackup = 'windhawk-backup-x64.7z'
+                # $windhawkBackup = 'windhawk-backup-x64.zip'
             }
             $backupFile = Get-ChildItem -Path (Join-Path $PWD '..\config') -Filter $windhawkBackup -Recurse | Select-Object -First 1
             $timeStamp = (Get-Date -Format 'yyyyMMddHHmmss')
@@ -1078,12 +1078,12 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Copy-Item -Path $modsSourceBackup -Destination $windhawkRoot -Recurse -Force
             Expand-Archive -Path '..\bin\windhawk-mods-windows.zip' -DestinationPath "$windhawkRoot\Mods" -Force
             if ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {
-                & "$env:ProgramFiles\7-Zip\7z.exe" x '..\config\windhawk\resource-redirect\WinMac-yellow-folders.7z' "-o$winMacDirectory\resource-redirect\" -y
+                & "$env:ProgramFiles\7-Zip\7z.exe" x '..\config\windhawk\WinMac-yellow-folders.7z' "-o$winMacDirectory" -y | Out-Null
                 # Expand-Archive -Path '..\config\windhawk\resource-redirect\WinMac-yellow-folders.zip' -DestinationPath "..\temp" -Force
             } else {
-                Expand-Archive -Path '..\config\windhawk\resource-redirect\WinMac-blue-folders.zip' -DestinationPath "..\temp" -Force
+                & "$env:ProgramFiles\7-Zip\7z.exe" x '..\config\windhawk\WinMac-yellow-folders.7z' "-o$winMacDirectory" -y | Out-Null
+                # Expand-Archive -Path '..\config\windhawk\resource-redirect\WinMac-blue-folders.zip' -DestinationPath "..\temp" -Force
             }
-            Copy-Item -Path '..\temp\resource-redirect\*' -Destination "$winMacDirectory\resource-redirect\" -Recurse -Force
             $engineFolder = Join-Path $windhawkRoot "Engine"
             New-Item -ItemType Directory -Path $engineFolder -Force | Out-Null
             Copy-Item -Path $modsBackup -Destination $engineFolder -Recurse -Force
@@ -1487,10 +1487,8 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             reg import '..\config\registry\add\Add_Hidden_items_to_context_menu.reg' > $null 2>&1
             reg import '..\config\registry\add\Add_Navigation_pane_to_context_menu.reg' > $null 2>&1
             reg import '..\temp\Add_Theme_Mode_in_Context_Menu.reg' > $null 2>&1
-            # Extract Themes using 7zip
-            # & "$env:ProgramFiles\7-Zip\7z.exe" x "..\config\resources\Themes.7z" "-o$env:WINDIR\Resources\Themes" -r -y | Out-Null
-            # Extract Wallpapers using 7zip
-            # & "$env:ProgramFiles\7-Zip\7z.exe" x "..\config\resources\Wallpapers.7z" "-o$env:WINDIR\Web\Wallpaper" -r -y | Out-Null
+            & "$env:ProgramFiles\7-Zip\7z.exe" x "..\config\resources\Themes.7z" "-o$env:WINDIR\Resources\Themes" -y | Out-Null
+            & "$env:ProgramFiles\7-Zip\7z.exe" x "..\config\resources\Wallpapers.7z" "-o$env:WINDIR\Web\Wallpaper" -y | Out-Null
             New-Item "$env:WINDIR\Resources\Icons" -ItemType Directory -Force | Out-Null
             Copy-Item -Path "..\config\resources\Icons\*" -Destination "$env:WINDIR\Resources\Icons" -Force
             Copy-Item -Path "..\config\resources\Themes\*" -Destination "$env:WINDIR\Resources\Themes" -Recurse -Force
