@@ -1079,8 +1079,8 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             $extractFolder = Join-Path $env:TEMP ("WindhawkRestore_$timeStamp")W
             Copy-Item -Path '..\bin\ModernShutDownWindows.exe' -Destination "$env:WINDIR\System32\" -Recurse -Force
             New-Item -ItemType Directory -Path $extractFolder -Force | Out-Null
-            # & "$env:ProgramFiles\7-Zip\7z.exe" x $backupFile.FullName "-o$extractFolder" -r -y
-            Expand-Archive -Path $backupFile.FullName -DestinationPath $extractFolder -Force
+            & "$env:ProgramFiles\7-Zip\7z.exe" x $backupFile.FullName "-o$extractFolder" -y
+            # Expand-Archive -Path $backupFile.FullName -DestinationPath $extractFolder -Force
             $modsSourceBackup = Join-Path $extractFolder "ModsSource"
             $modsBackup = Join-Path $extractFolder "Engine\Mods"
             $regBackup = Join-Path $extractFolder "Windhawk.reg"
