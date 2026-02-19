@@ -1078,7 +1078,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Copy-Item -Path $modsSourceBackup -Destination $windhawkRoot -Recurse -Force
             Expand-Archive -Path '..\bin\windhawk-mods-windows.zip' -DestinationPath "$windhawkRoot\Mods" -Force
             if ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {
-                & "$env:ProgramFiles\7-Zip\7z.exe" x '..\config\windhawk\resource-redirect\WinMac-yellow-folders.7z' '-o..\temp' -y
+                & "$env:ProgramFiles\7-Zip\7z.exe" x '..\config\windhawk\resource-redirect\WinMac-yellow-folders.7z' "-o$winMacDirectory\resource-redirect\" -y
                 # Expand-Archive -Path '..\config\windhawk\resource-redirect\WinMac-yellow-folders.zip' -DestinationPath "..\temp" -Force
             } else {
                 Expand-Archive -Path '..\config\windhawk\resource-redirect\WinMac-blue-folders.zip' -DestinationPath "..\temp" -Force
