@@ -52,7 +52,7 @@
 
 - **Hot Corners** - assign custom actions triggered when you hover your mouse cursor over the screen corners
 
-- **Enhanced Start Menu** - additionally you can choose to replace default Start menu with enhanced Windows 7 start menu, instead of WinMac Menu or have them both available from Start button
+- **Enhanced Start Menu** - various Start menu layouts adapted to different UI setups based on the taskbar placement
 
 - **Enhanced Taskbar** - legacy Taskbar put on top, with enhanced capabilities and looks to match Windows 11 design
 
