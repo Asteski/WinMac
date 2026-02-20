@@ -659,21 +659,21 @@ Import-Module -Name Microsoft.WinGet.Client -Force
 $wingetClientCheck = Get-InstalledModule -Name Microsoft.WinGet.Client
 if ($null -eq $wingetCliCheck) {
     Write-Host "Winget PowerShell Module installation failed. Aborting installation." -ForegroundColor Red
-    exit 1
+    exit 1ada
 }
 else {
     Write-Host "Winget PowerShell Module installation completed." -ForegroundColor Green
 } 
 #* 7-Zip check
 Write-Host "Checking 7-Zip..." -ForegroundColor Yellow
-$sevenZipCheck = Get-WingetPackage -Name '7zip.7zip' -ErrorAction SilentlyContinue
+$sevenZipCheck = Get-WingetPackage -Id '7zip.7zip' -ErrorAction SilentlyContinue
 if ($null -eq $sevenZipCheck) {
     Write-Host "7-Zip is not installed. Installing 7-Zip..." -ForegroundColor DarkYellow
     Install-WingetPackage -id '7zip.7zip' | Out-Null
     Write-Host "7-Zip installation completed." -ForegroundColor Green
 } else {
+    Write-Host "7-Zip is already installed." -ForegroundColor DarkGreen
 }
-Write-Host "7-Zip is already installed." -ForegroundColor DarkGreen
 
 Write-Host "`n-----------------------------------------------------------------------`n" -ForegroundColor Cyan
 #! WinMac deployment
