@@ -42,13 +42,13 @@
 
 - **WinMac Menu** - Start Menu replaced with newly developed Win32 app to fully resemble functionality of Apple Menu
 
-- **Quick Launcher** - Spotlight-like launcher for power users that provides instant access to files, folders, calculator functions, applications, and settings on your system, among many [other features](https://learn.microsoft.com/en-us/windows/powertoys/run)
+- **Launcher** - Spotlight-like launcher for power users that provides instant access to files, folders, calculator functions, applications, and settings on your system, among many [other features](https://learn.microsoft.com/en-us/windows/powertoys/run)
 
 - **Dock** - highly customizable and feature-rich dock application, used to achieve macOS-like dock experience
 
-- **Quick Look** - peek into a file or folder content instantly by pressing a Space bar
+- **Toolbar** - highly customizable toolbar added to taskbar to resemble macOS Menu Bar
 
-- **Menu Toolbar** - highly customizable toolbar added to taskbar to resemble macOS Menu Bar
+- **Quick Look** - peek into a file or folder content instantly by pressing a Space bar
 
 - **Hot Corners** - assign custom actions triggered when you hover your mouse cursor over the screen corners
 
@@ -100,6 +100,7 @@ WinMac is supported by Windows 11 Home, Pro, LTSC, IoT LTSC, on both x86 and ARM
 - [WinLaunch](https://github.com/jensroth-git/WinLaunch) by jensroth
 - [MacType](https://www.mactype.net/) by snowie2000
 - [Rebound](https://github.com/IviriusCommunity/Rebound) by Ivirius
+- [Rectify11](https://www.rectify11.com/about) by Ojas
 - [SVG Thumbnail Extension](https://github.com/ThioJoe/win-svg-thumbs-rust) by ThioJoe
 - [SecureUxTheme](https://github.com/namazso/SecureUxTheme) by namazso
 - [Windows Modern Cursors](https://github.com/imshvc/windows-cursors-modern) by imshvc
