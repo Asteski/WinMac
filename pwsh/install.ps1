@@ -666,7 +666,7 @@ else {
 } 
 #* 7-Zip check
 Write-Host "Checking 7-Zip..." -ForegroundColor Yellow
-$sevenZipCheck = Get-WingetPackage -Name '7-Zip' -ErrorAction SilentlyContinue
+$sevenZipCheck = Get-WingetPackage -Name '7zip.7zip' -ErrorAction SilentlyContinue
 if ($null -eq $sevenZipCheck) {
     Write-Host "7-Zip is not installed. Installing 7-Zip..." -ForegroundColor DarkYellow
     Install-WingetPackage -id '7zip.7zip' | Out-Null
@@ -1032,6 +1032,7 @@ foreach ($app in $selectedApps) {
                     $shell = New-Object -ComObject WScript.Shell
                     $shortcut = $shell.CreateShortcut($shortcutPath)
                     $shortcut.TargetPath = $shellExePath
+                    $shortcut.Arguments = " -settings"
                     $shortcut.IconLocation = $shellExePath
                     $shortcut.Save()
                     $scriptBlock1 = "Start-Process -FilePath $env:LOCALAPPDATA\WinMac\WinMacMenu.exe -WorkingDirectory $env:LOCALAPPDATA\WinMac"
@@ -1097,7 +1098,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                 & "$env:ProgramFiles\7-Zip\7z.exe" x '..\config\windhawk\WinMac-yellow-folders.7z' "-o$winMacDirectory" -y > $null 2>&1
                 # Expand-Archive -Path '..\config\windhawk\resource-redirect\WinMac-yellow-folders.zip' -DestinationPath "..\temp" -Force
             } else {
-                & "$env:ProgramFiles\7-Zip\7z.exe" x '..\config\windhawk\WinMac-yellow-folders.7z' "-o$winMacDirectory" -y > $null 2>&1
+                & "$env:ProgramFiles\7-Zip\7z.exe" x '..\config\windhawk\WinMac-blue-folders.7z' "-o$winMacDirectory" -y > $null 2>&1
                 # Expand-Archive -Path '..\config\windhawk\resource-redirect\WinMac-blue-folders.zip' -DestinationPath "..\temp" -Force
             }
             $engineFolder = Join-Path $windhawkRoot "Engine"
