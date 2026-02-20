@@ -1028,6 +1028,12 @@ foreach ($app in $selectedApps) {
                     Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\winver.exe" -Name "Debugger" -Value $WinverUWP -Type String
                     Stop-Process -Name Explorer
                     Start-Process $shellExePath
+                    $shortcutPath = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Open-Shell.lnk"
+                    $shell = New-Object -ComObject WScript.Shell
+                    $shortcut = $shell.CreateShortcut($shortcutPath)
+                    $shortcut.TargetPath = $shellExePath
+                    $shortcut.IconLocation = $shellExePath
+                    $shortcut.Save()
                     $scriptBlock1 = "Start-Process -FilePath $env:LOCALAPPDATA\WinMac\WinMacMenu.exe -WorkingDirectory $env:LOCALAPPDATA\WinMac"
                     $tempScript = Join-Path $env:TEMP "nonadmin_$([guid]::NewGuid().ToString()).ps1"
                     Set-Content -Path $tempScript -Value $scriptBlock1 -Encoding UTF8
@@ -1497,13 +1503,11 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             reg import '..\config\registry\add\Add_Hidden_items_to_context_menu.reg' > $null 2>&1
             reg import '..\config\registry\add\Add_Navigation_pane_to_context_menu.reg' > $null 2>&1
             reg import '..\temp\Add_Theme_Mode_in_Context_Menu.reg' > $null 2>&1
+            New-Item -Path "$env:WINDIR\Resources\Icons" -ItemType Directory -Force | Out-Null
+            & "$env:ProgramFiles\7-Zip\7z.exe" x "..\config\resources\Icons.7z" "-o$env:WINDIR\Resources\Icons" -y > $null 2>&1
+            & "$env:ProgramFiles\7-Zip\7z.exe" x "..\config\resources\System32.7z" "-o$env:WINDIR\System32" -y > $null 2>&1
             & "$env:ProgramFiles\7-Zip\7z.exe" x "..\config\resources\Themes.7z" "-o$env:WINDIR\Resources\Themes" -y > $null 2>&1
             & "$env:ProgramFiles\7-Zip\7z.exe" x "..\config\resources\Wallpapers.7z" "-o$env:WINDIR\Web\Wallpaper" -y > $null 2>&1
-            New-Item "$env:WINDIR\Resources\Icons" -ItemType Directory -Force | Out-Null
-            Copy-Item -Path "..\config\resources\Icons\*" -Destination "$env:WINDIR\Resources\Icons" -Force
-            Copy-Item -Path "..\config\resources\Themes\*" -Destination "$env:WINDIR\Resources\Themes" -Recurse -Force
-            Copy-Item -Path "..\config\resources\Wallpapers\*" -Destination "$env:WINDIR\Web\Wallpaper" -Recurse -Force
-            Copy-Item -Path "..\config\resources\System32\*" -Destination "$env:WINDIR\System32" -Force
             New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ShowIconOverlay" -Value 0 -PropertyType DWord -Force | Out-Null
         #? End Task
             Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked" -Name "{470C0EBD-5D73-4d58-9CED-E91E22E23282}" -Value "" 
