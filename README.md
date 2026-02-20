@@ -25,7 +25,6 @@
     <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_02.png" alt="winmac_light_02">
     <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_03.png" alt="winmac_light_03">
     <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_04.png" alt="winmac_light_04">
-    <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_light_05.png" alt="winmac_light_05">
 </details>
 
 ## Dark
@@ -37,7 +36,6 @@
     <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_02.png" alt="winmac_dark_02">
     <img src="https://raw.githubusercontent.com/Asteski/WinMac/main/img/winmac_dark_03.png" alt="winmac_dark_03">
     <img src="https://raw.githubusercontent.com/Asteski/WinMac/refs/heads/main/img/winmac_dark_04.png" alt="winmac_dark_04">
-    <img src="https://raw.githubusercontent.com/Asteski/WinMac/refs/heads/main/img/winmac_dark_05.png" alt="winmac_dark_05">
 </details>
 
 ## Features
