@@ -40,7 +40,7 @@
 
 ## Features
 
-- **WinMac Menu** - Start Menu replaced with newly developed Win32 app to fully resemble functionality of Apple Menu
+- **[WinMac Menu](https://github.com/Asteski/WinMac-Menu)** - Start Menu replaced with newly developed Win32 app to fully resemble functionality of Apple Menu
 
 - **Launcher** - Spotlight-like launcher for power users that provides instant access to files, folders, calculator functions, applications, and settings on your system, among many [other features](https://learn.microsoft.com/en-us/windows/powertoys/run)
 
