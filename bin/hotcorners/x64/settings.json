@@ -1,0 +1,51 @@
+{
+  "HotCornersEnabled": true,
+  "TopLeftActionId": "none",
+  "TopRightActionId": "none",
+  "BottomLeftActionId": "start-menu",
+  "BottomRightActionId": "all-windows",
+  "StartWithWindows": true,
+  "IgnoreFullScreen": true,
+  "AlwaysRunAsAdministrator": false,
+  "AlwaysHideTrayIcon": false,
+  "FlyoutAnimationDirection": 0,
+  "GlobalDelayEnabled": false,
+  "GlobalDelayIndex": 3,
+  "TopLeftDelayEnabled": false,
+  "TopLeftDelayIndex": 3,
+  "TopRightDelayEnabled": false,
+  "TopRightDelayIndex": 3,
+  "BottomLeftDelayEnabled": false,
+  "BottomLeftDelayIndex": 3,
+  "BottomRightDelayEnabled": false,
+  "BottomRightDelayIndex": 3,
+  "ShowCountdown": false,
+  "EnableCustomCommands": true,
+  "CustomCommands": [
+    {
+      "Name": "",
+      "Command": "",
+      "Parameters": "",
+      "LaunchHidden": false
+    },
+    {
+      "Name": "",
+      "Command": "",
+      "Parameters": "",
+      "LaunchHidden": false
+    },
+    {
+      "Name": "New Note",
+      "Command": "!_alt\u002Bn",
+      "Parameters": "",
+      "LaunchHidden": false
+    },
+    {
+      "Name": "",
+      "Command": "",
+      "Parameters": "",
+      "LaunchHidden": false
+    }
+  ],
+  "HotCornerModifierKey": 0
+}

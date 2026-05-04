@@ -20,3 +20,9 @@
     Send("{Esc}")
 }
 #HotIf
+; Shift + Enter to Rename File Explorer Item
+#HotIf WinActive("ahk_exe explorer.exe ahk_class CabinetWClass") or WinActive("ahk_exe explorer.exe ahk_class Progman")
++Enter:: {
+    Send("{F2}")
+}
+#HotIf
