@@ -1242,9 +1242,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Copy-Item -Path $wxcpPath -Destination $destinationPath -Recurse -Force
             Write-Host "Installing Simple Sticky Notes..." -ForegroundColor DarkYellow
             Install-WinGetPackage -id 'SimnetLtd.SimpleStickyNotes' | Out-Null
-            Start-Process "C:\Program Files (x86)\Simnet\Simple Sticky Notes\ssn.exe"
             Move-Item -Path "$env:USERPROFILE\Desktop\Simple Sticky Notes.lnk" -Destination "$env:APPDATA\Microsoft\Windows\Start Menu\Programs" -Force
-            Start-Process "$destinationPath\WinXCornersPlus.exe"
             $shortcut1Path = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\WinXCornersPlus.lnk"
             $target1Path = "$destinationPath\WinXCornersPlus.exe"
             $shell = New-Object -ComObject WScript.Shell
@@ -1253,6 +1251,8 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             $shortcut.Save()
             if (-not (Test-Path -Path "$winMacDirectory\hotcorners")) { New-Item -ItemType Directory -Path "$winMacDirectory\hotcorners" -Force | Out-Null }
             New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "WinXCornersPlus" -Value "$destinationPath\WinXCornersPlus.exe" | Out-Null
+            Start-Process "$destinationPath\WinXCornersPlus.exe"
+            Start-Process "C:\Program Files (x86)\Simnet\Simple Sticky Notes\ssn.exe"
             Write-Host "Hot Corners installation completed." -ForegroundColor Green
             }
     #* MacType
