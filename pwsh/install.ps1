@@ -1031,10 +1031,10 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             $modsSourceBackup = Join-Path $extractFolder "ModsSource"
             $modsBackup = Join-Path $extractFolder "Engine\Mods"
             $regBackup = Join-Path $extractFolder "Windhawk.reg"
-            New-Item -ItemType Directory -Path "$winMacDirectory\resource-redirect\" -Force | Out-Null
+            # New-Item -ItemType Directory -Path "$winMacDirectory\resource-redirect\" -Force | Out-Null
             Copy-Item -Path $modsSourceBackup -Destination $windhawkRoot -Recurse -Force
             Expand-Archive -Path '..\bin\windhawk-mods-windows.zip' -DestinationPath "$windhawkRoot\Mods" -Force | Out-Null
-            Expand-Archive -Path '..\config\windhawk\resource-redirect.zip' -DestinationPath $winMacDirectory -Force | Out-Null
+            Expand-Archive -Path '..\config\windhawk\resource-redirect.zip' -DestinationPath "$winMacDirectory\resource-redirect" -Force | Out-Null
             $engineFolder = Join-Path $windhawkRoot "Engine"
             New-Item -ItemType Directory -Path $engineFolder -Force | Out-Null
             Copy-Item -Path $modsBackup -Destination $engineFolder -Recurse -Force
@@ -1058,7 +1058,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             }
             Stop-Process -Name explorer -Force
             Move-Item -Path "C:\Users\Public\Desktop\Windhawk.lnk" -Destination $programsDir -Force
-            Start-Process "$Env:ProgramFiles\Windhawk\Windhawk.exe"
+            Start-Process "$Env:ProgramFiles\Windhawk\Windhawk.exe" -ArgumentList '-tray-only'
             Write-Host "Windhawk installation completed." -ForegroundColor Green
             }
     #* AutoHotkey Keyboard Shortcuts
