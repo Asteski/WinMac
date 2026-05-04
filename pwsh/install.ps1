@@ -948,10 +948,10 @@ foreach ($app in $selectedApps) {
             if ($menuSet -eq 'X'-or $menuSet -eq 'x') {
                 #? WinMac Start Menu Setup
                 Copy-Item -Path "..\config\menu\config.ini" -Destination $winMacDirectory -Force
-                $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.8'
+                $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.10'
                 if ($null -eq $dotNetRuntime) {
                     Write-Host "Installing .NET Desktop Runtime 8..." -ForegroundColor DarkYellow
-                    Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.8' | Out-Null
+                    Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.10' | Out-Null
                 }
                 $uiXaml = Get-WinGetPackage -Id 'Microsoft.UI.Xaml.2.7'
                 if ($null -eq $uiXaml) {
@@ -1224,9 +1224,9 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
         "9"{
             Write-Host "Installing Hot Corners..." -ForegroundColor Yellow
             $destinationPath = "$env:LOCALAPPDATA\WinXCornersPlus"
-            $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.AspNetCore.10'
+            $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.10'
             if ($null -eq $dotNetRuntime) {
-                Install-WinGetPackage -id 'Microsoft.DotNet.AspNetCore.10' | Out-Null
+                Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.10' | Out-Null
             }
             $uiXaml = Get-WinGetPackage -Id 'Microsoft.UI.Xaml.2.7'
             if ($null -eq $uiXaml) {
