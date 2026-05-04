@@ -1033,12 +1033,8 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             $regBackup = Join-Path $extractFolder "Windhawk.reg"
             New-Item -ItemType Directory -Path "$winMacDirectory\resource-redirect\" -Force | Out-Null
             Copy-Item -Path $modsSourceBackup -Destination $windhawkRoot -Recurse -Force
-            Expand-Archive -Path '..\bin\windhawk-mods-windows.zip' -DestinationPath "$windhawkRoot\Mods" -Force
-            if ($blueOrYellow -eq "Y" -or $blueOrYellow -eq "y") {
-                Expand-Archive -Path '..\config\windhawk\resource-redirect\WinMac-yellow-folders.zip' -DestinationPath "..\temp" -Force
-            } else {
-                Expand-Archive -Path '..\config\windhawk\resource-redirect\WinMac-blue-folders.zip' -DestinationPath "..\temp" -Force
-            }
+            Expand-Archive -Path '..\bin\windhawk-mods-windows.zip' -DestinationPath "$windhawkRoot\Mods" -Force | Out-Null
+            Expand-Archive -Path '..\config\windhawk\resource-redirect.zip' -DestinationPath $winMacDirectory -Force | Out-Null
             $engineFolder = Join-Path $windhawkRoot "Engine"
             New-Item -ItemType Directory -Path $engineFolder -Force | Out-Null
             Copy-Item -Path $modsBackup -Destination $engineFolder -Recurse -Force
