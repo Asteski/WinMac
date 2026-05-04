@@ -999,7 +999,6 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                 Start-Process -FilePath "explorer.exe" -ArgumentList "`"$tempVbs`""
                 Start-Sleep 5
             }
-            (Get-Content -Path "$Env:LOCALAPPDATA\WinMac\config.ini") -replace 'ShowOnLaunch=false', 'ShowOnLaunch=true' | Set-Content -Path "$Env:LOCALAPPDATA\WinMac\config.ini" -Force
             if (-not (Get-Process -Name explorer)) { Start-Process explorer }
             else { Stop-Process -Name explorer -Force; Start-Sleep 2 }
             Write-Host "WinMac Menu installation completed." -ForegroundColor Green
@@ -1013,7 +1012,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             }
             $windhawkProcess = Get-Process -Name Windhawk
             if ($windhawkProcess) {
-                Stop-Process -Name Windhawk -Force
+                Stop-Process -Name Windhawk -Force windhawk.exe -exit
                 Start-Sleep 2
             }
             $windhawkRoot = "$Env:ProgramData\Windhawk"
@@ -1237,7 +1236,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             }
             Copy-Item -Path $wxcpPath -Destination $destinationPath -Recurse -Force
             Write-Host "Installing Simple Sticky Notes..." -ForegroundColor DarkYellow
-            Install-WinGetPackage -id 'SimnetLtd.SimpleStickyNotes' | Out-Null
+            Install-WinGetPackage -id 'Simnet.SimpleStickyNotes' | Out-Null
             Move-Item -Path "$env:USERPROFILE\Desktop\Simple Sticky Notes.lnk" -Destination "$env:APPDATA\Microsoft\Windows\Start Menu\Programs" -Force
             $shortcut1Path = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\WinXCornersPlus.lnk"
             $target1Path = "$destinationPath\WinXCornersPlus.exe"
