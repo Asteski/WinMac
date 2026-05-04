@@ -909,12 +909,12 @@ foreach ($app in $selectedApps) {
         "5" {
             Write-Host "Installing WinMac Menu..." -ForegroundColor Yellow
             if ($sysType -like "*ARM*") { 
-                $wmmExePath = "..\bin\menu\arm\WinMacMenu.exe"
+                $wmmExePath = "..\bin\menu\arm\"
             } 
             else {
-                $wmmExePath = "..\bin\menu\x64\WinMacMenu.exe"
+                $wmmExePath = "..\bin\menu\x64\"
             }
-            Copy-Item -Path $wmmExePath -Destination $winMacDirectory -Force
+            Copy-Item -Path $wmmExePath -Destination $winMacDirectory -Recurse -Force
             #? WinMac Menu Toolbar Setup
             Copy-Item -Path "..\config\menu\toolbar\*.ini" -Destination $winMacDirectory -Force
             if (-not (Test-Path 'C:\Windows\blank.ico')) {

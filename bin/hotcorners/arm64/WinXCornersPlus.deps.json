@@ -1,0 +1,24 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0/win-arm64",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {},
+    ".NETCoreApp,Version=v10.0/win-arm64": {
+      "WinXCornersPlus/1.4.0": {
+        "runtime": {
+          "WinXCornersPlus.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "WinXCornersPlus/1.4.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
