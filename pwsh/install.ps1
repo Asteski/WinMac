@@ -1238,7 +1238,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             }
             Copy-Item -Path $wxcpPath -Destination $destinationPath -Recurse -Force
             Write-Host "Installing Simple Sticky Notes..." -ForegroundColor DarkYellow
-            Install-WinGetPackage -id 'Simnet.SimpleStickyNotes' | Out-Null
+            Install-WinGetPackage -id 'Simnet.SimpleStickyNotes' -Custom '/verysilent' | Out-Null
             Move-Item -Path "$env:USERPROFILE\Desktop\Simple Sticky Notes.lnk" -Destination "$env:APPDATA\Microsoft\Windows\Start Menu\Programs" -Force
             $shortcut1Path = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\WinXCornersPlus.lnk"
             $target1Path = "$destinationPath\WinXCornersPlus.exe"
@@ -1450,7 +1450,7 @@ Stop-Process -n explorer
 Start-Sleep 2
 Remove-Item "..\temp" -Recurse -Force
 Start-Sleep 3
-if (-not (Get-Process -Name explorer)) { Start-Process explorer }
+# if (-not (Get-Process -Name explorer)) { Start-Process explorer }
 Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
 Write-Host @"
 
