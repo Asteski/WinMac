@@ -1100,8 +1100,10 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Write-Host "Installing Nexus Dock..." -ForegroundColor Yellow
             $winStep = 'C:\ProgramData\WinStep'
             if (Get-Process -n Nexus -ErrorAction SilentlyContinue) { Stop-Process -n Nexus }
-            $currentDir = (Get-Location).Path
-            $scriptBlock1 = "winget install WinStep.Nexus --silent"
+            Invoke-WebRequest -Uri 'https://www.winstep.net/nexus.zip' -OutFile '..\temp\nexus.zip'
+            Expand-Archive ..\temp\nexus.zip ..\temp\nexus
+            $currentDir = Join-Path (Get-Location).Path ..\temp\nexus
+            $scriptBlock1 = "Start-Process -FilePath 'NexusSetup.exe' -ArgumentList '/verysilent'"
             $tempScript = Join-Path $env:TEMP "nonadmin_$([guid]::NewGuid().ToString()).ps1"
             Set-Content -Path $tempScript -Value $scriptBlock1 -Encoding UTF8
 $batchContent = @"
