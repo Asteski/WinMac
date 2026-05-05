@@ -986,7 +986,6 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                 Start-Sleep 5
             }
             if (-not (Get-Process -Name explorer)) { Start-Process explorer }
-            else { Stop-Process -Name explorer -Force; Start-Sleep 2 }
             Write-Host "WinMac Menu installation completed." -ForegroundColor Green
         }
     #* Windhawk
@@ -994,13 +993,18 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Write-Host "Installing Windhawk..." -ForegroundColor Yellow
             $windhawkInstalled = Get-WinGetPackage -Id "RamenSoftware.Windhawk"
             if ($null -eq $windhawkInstalled) {
-                winget install --id "RamenSoftware.Windhawk" --source winget --silent | Out-Null
+                winget install --id "RamenSoftware.Windhawk" --source winget --silent
             }
-            $windhawkProcess = Get-Process -Name Windhawk
-            if ($windhawkProcess) {
-                Stop-Process -Name Windhawk -Force windhawk.exe -exit
-                Start-Sleep 2
+            $sw = [Diagnostics.Stopwatch]::StartNew()
+            while (-not (Get-Process -Name "Windhawk" -ErrorAction SilentlyContinue)) {
+                Start-Sleep -Seconds 1
+                if ($sw.Elapsed.TotalSeconds -ge 60) {
+                    break
+                }
             }
+            $sw.Stop()
+            Stop-Process -Name Windhawk -Force windhawk.exe -exit
+            Start-Sleep 2
             $windhawkRoot = "$Env:ProgramData\Windhawk"
             if ($sysType -like "*ARM*") {
                 $windhawkBackup = 'windhawk-backup-arm.zip'
