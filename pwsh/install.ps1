@@ -887,7 +887,7 @@ foreach ($app in $selectedApps) {
                 Set-ItemProperty -Path $exRegPath -Name "ShowFrequent" -Value 0
                 # Stop-Process -Name explorer -Force
                 # Start-Sleep 5
-                # if (-not (Get-Process -Name explorer)) { Start-Process explorer }
+                if (-not (Get-Process -Name explorer)) { Start-Process explorer }
                 Write-Host "StartAllBack installation completed." -ForegroundColor Green
             }
         }
