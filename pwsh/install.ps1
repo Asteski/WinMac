@@ -1,14 +1,14 @@
 param (
     [switch]$noGUI
 )
-$version = "1.5.0"
 $ErrorActionPreference = "SilentlyContinue"
 $WarningPreference = "SilentlyContinue"
 $ProgressPreference = "SilentlyContinue"
+$version = "1.5.0"
 $programsDir = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs"
 $winMacDirectory = "$env:LOCALAPPDATA\WinMac"
-[System.Environment]::SetEnvironmentVariable("WINMAC", "%LOCALAPPDATA%\WinMac", [System.EnvironmentVariableTarget]::User)
-[System.Environment]::SetEnvironmentVariable("WINMAC", "%LOCALAPPDATA%\WinMac", [System.EnvironmentVariableTarget]::Machine)
+[System.Environment]::SetEnvironmentVariable("WINMAC", $winMacDirectory, [System.EnvironmentVariableTarget]::User)
+[System.Environment]::SetEnvironmentVariable("WINMAC", $winMacDirectory, [System.EnvironmentVariableTarget]::Machine)
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName PresentationFramework
 $user = [Security.Principal.WindowsIdentity]::GetCurrent()
@@ -47,7 +47,7 @@ function Show-Header {
     Write-Host "               GitHub: https://github.com/Asteski/WinMac               " -ForegroundColor Cyan
     Write-Host "-----------------------------------------------------------------------" -ForegroundColor Cyan
     Write-Host "             " -NoNewline
-    Write-Host "NO LIABILITY ACCEPTED, PROCEED WITH CAUTION!" -ForegroundColor Black -BackgroundColor Red -NoNewline
+    Write-Host " NO LIABILITY ACCEPTED, PROCEED WITH CAUTION!" -ForegroundColor Black -BackgroundColor Red -NoNewline
     Write-Host "              "
 }
 $windowsTheme = Get-WindowsTheme
