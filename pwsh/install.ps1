@@ -7,8 +7,24 @@ $ProgressPreference = "SilentlyContinue"
 $version = "1.5.0"
 $programsDir = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs"
 $winMacDirectory = "$env:LOCALAPPDATA\WinMac"
-[System.Environment]::SetEnvironmentVariable("WINMAC", $winMacDirectory, [System.EnvironmentVariableTarget]::User)
-[System.Environment]::SetEnvironmentVariable("WINMAC", $winMacDirectory, [System.EnvironmentVariableTarget]::Machine)
+if ([System.Environment]::GetEnvironmentVariable("WINMAC", [System.EnvironmentVariableTarget]::User) -ne $winMacDirectory) {
+    [System.Environment]::SetEnvironmentVariable("WINMAC", $winMacDirectory, [System.EnvironmentVariableTarget]::User)
+}
+if ([System.Environment]::GetEnvironmentVariable("WINMAC", [System.EnvironmentVariableTarget]::Machine) -ne $winMacDirectory) {
+    [System.Environment]::SetEnvironmentVariable("WINMAC", $winMacDirectory, [System.EnvironmentVariableTarget]::Machine)
+}
+$userPath = [System.Environment]::GetEnvironmentVariable("Path", [System.EnvironmentVariableTarget]::User)
+if ($userPath -notlike "*$winMacDirectory*") {
+    $userPath += ";$winMacDirectory"
+    [System.Environment]::SetEnvironmentVariable("Path", $userPath, [System.EnvironmentVariableTarget]::User)
+}
+
+$machinePath = [System.Environment]::GetEnvironmentVariable("Path", [System.EnvironmentVariableTarget]::Machine)
+if ($machinePath -notlike "*$winMacDirectory*") {
+    $machinePath += ";$winMacDirectory"
+    [System.Environment]::SetEnvironmentVariable("Path", $machinePath, [System.EnvironmentVariableTarget]::Machine)
+}
+
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName PresentationFramework
 $user = [Security.Principal.WindowsIdentity]::GetCurrent()
