@@ -1243,6 +1243,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                 $wxcpPath = "..\bin\hotcorners\x64\"
             }
             Copy-Item -Path $wxcpPath -Destination $destinationPath -Recurse -Force
+            Copy-Item -Path '..\config\hotcorners\settings.json' -Destination $destinationPath -Force
             Write-Host "Installing Simple Sticky Notes..." -ForegroundColor DarkYellow
             Install-WinGetPackage -id 'Simnet.SimpleStickyNotes' -Custom '/verysilent' | Out-Null
             Move-Item -Path "$env:USERPROFILE\Desktop\Simple Sticky Notes.lnk" -Destination "$env:APPDATA\Microsoft\Windows\Start Menu\Programs" -Force

@@ -1,9 +1,9 @@
 {
   "HotCornersEnabled": true,
-  "TopLeftActionId": "none",
-  "TopRightActionId": "custom-2",
-  "BottomLeftActionId": "start-menu",
-  "BottomRightActionId": "all-windows",
+  "TopLeftActionId": "custom-3",
+  "TopRightActionId": "action-center",
+  "BottomLeftActionId": "all-windows",
+  "BottomRightActionId": "custom-2",
   "StartWithWindows": true,
   "IgnoreFullScreen": true,
   "AlwaysRunAsAdministrator": false,
