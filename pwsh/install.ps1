@@ -716,7 +716,7 @@ foreach ($app in $selectedApps) {
             New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "QuickLook" -Value "$Env:LOCALAPPDATA\Programs\QuickLook\QuickLook.exe" | Out-Null
             Expand-Archive -Path "..\config\quicklook\QuickLook.Plugin.zip" -DestinationPath "$Env:APPDATA\pooi.moe\QuickLook\QuickLook.Plugin\" -Force
             Start-Process -FilePath "QuickLook.exe" -ArgumentList "/silent" -WorkingDirectory "$Env:LOCALAPPDATA\Programs\QuickLook" -WindowStyle Hidden
-            (Get-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json") -replace '"CmdPal":true', '"CmdPal":false' | Set-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json" -Force
+            (Get-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json") -replace '"CmdPal":true', '"CmdPal":false' -replace '"show_theme_adaptive_tray_icon": false', '"show_theme_adaptive_tray_icon": true' | Set-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json" -Force
             Start-Process "$env:LOCALAPPDATA\PowerToys\PowerToys.exe" -ArgumentList "--start-minimized" -WorkingDirectory "$env:LOCALAPPDATA\PowerToys" -WindowStyle Hidden
             Write-Host "PowerToys installation completed." -ForegroundColor Green
         }
