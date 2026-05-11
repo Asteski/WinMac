@@ -691,6 +691,15 @@ foreach ($app in $selectedApps) {
             Write-Host "Installing PowerToys..." -ForegroundColor Yellow
             winget configure --enable | Out-Null
             pwsh -NoProfile -Command "winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements" | Out-Null
+            $envPath = [System.Environment]::GetEnvironmentVariable("Path", [System.EnvironmentVariableTarget]::User)
+            $envPath += ";$env:LOCALAPPDATA\PowerToys"
+            [System.Environment]::SetEnvironmentVariable("Path", $envPath, [System.EnvironmentVariableTarget]::User)
+            Stop-Process -Name PowerToys*
+            Stop-Process -Name PowerToys.LightSwitchService
+            Stop-Process -Name Microsoft.CmdPal.UI
+            Start-Sleep -Seconds 3
+            Install-WingetPackage -id ThioJoe.SvgThumbnailExtension | Out-Null
+            Install-WingetPackage -id 'QL-Win.QuickLook' | Out-Null
             Copy-Item -Path "..\config\powertoys\ptr\ptr.exe" -Destination "$env:LOCALAPPDATA\PowerToys" -Recurse -Force
             Copy-Item -Path "..\config\powertoys\Assets\PowerLauncher" -Destination "$env:LOCALAPPDATA\PowerToys\Assets" -Recurse -Force
             if ($sysType -like "*ARM*") { 
@@ -718,15 +727,7 @@ foreach ($app in $selectedApps) {
                     }
                 }
             }
-            $envPath = [System.Environment]::GetEnvironmentVariable("Path", [System.EnvironmentVariableTarget]::User)
-            $envPath += ";$env:LOCALAPPDATA\PowerToys"
-            [System.Environment]::SetEnvironmentVariable("Path", $envPath, [System.EnvironmentVariableTarget]::User)
-            Stop-Process -Name PowerToys*
-            Stop-Process -Name PowerToys.LightSwitchService
-            Stop-Process -Name Microsoft.CmdPal.UI
-            Start-Sleep -Seconds 3
-            Install-WingetPackage -id ThioJoe.SvgThumbnailExtension | Out-Null
-            Install-WingetPackage -id 'QL-Win.QuickLook' | Out-Null
+
             Move-Item -Path "$Env:USERPROFILE\Desktop\QuickLook.lnk" -Destination $programsDir -Force
             New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "QuickLook" -Value "$Env:LOCALAPPDATA\Programs\QuickLook\QuickLook.exe" | Out-Null
             Expand-Archive -Path "..\config\quicklook\QuickLook.Plugin.zip" -DestinationPath "$Env:APPDATA\pooi.moe\QuickLook\QuickLook.Plugin\" -Force
