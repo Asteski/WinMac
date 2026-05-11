@@ -1004,7 +1004,9 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                 }
             }
             $sw.Stop()
-            Stop-Process -Name Windhawk -Force windhawk.exe -exit
+            Start-Process "$Env:ProgramFiles\Windhawk\Windhawk.exe" -ArgumentList '-exit'
+            # Stop-Process -Name Windhawk -Force
+            # windhawk.exe -exit
             Start-Sleep 2
             $windhawkRoot = "$Env:ProgramData\Windhawk"
             if ($sysType -like "*ARM*") {
@@ -1022,7 +1024,6 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             $modsBackup = Join-Path $extractFolder "Engine\Mods"
             $regBackup = Join-Path $extractFolder "Windhawk.reg"
             Copy-Item -Path $modsSourceBackup -Destination $windhawkRoot -Recurse -Force
-            Expand-Archive -Path '..\bin\windhawk-mods-windows.zip' -DestinationPath "$windhawkRoot\Mods" -Force | Out-Null
             Expand-Archive -Path '..\config\windhawk\resource-redirect.zip' -DestinationPath "$winMacDirectory\resource-redirect" -Force | Out-Null
             $engineFolder = Join-Path $windhawkRoot "Engine"
             New-Item -ItemType Directory -Path $engineFolder -Force | Out-Null
@@ -1036,15 +1037,15 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             reg import $regBackup > $null 2>&1
             Remove-Item "$env:LocalAppData\Microsoft\Windows\Explorer\thumbcache_*.db" -Force -Recurse
             Set-ItemProperty -Path "HKCU:\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags\AllFolders\Shell" -Name Logo -Value "imageres.dll,-3" -Type String
-            $secureUxThemeInstalled = Get-WmiObject -Class Win32_Product | Where-Object { $_.Name -like "SecureUxTheme*" }
-            if (-not $secureUxThemeInstalled) { 
-                if ($sysType -like "*ARM*") { 
-                    Start-Process -FilePath '..\bin\secureuxtheme\SecureUxTheme_ARM64.msi' -ArgumentList '/quiet /norestart' -Wait 
-                }
-                else {
-                    Start-Process -FilePath '..\bin\secureuxtheme\SecureUxTheme_x64.msi' -ArgumentList '/quiet /norestart' -Wait
-                }
-            }
+            # $secureUxThemeInstalled = Get-WmiObject -Class Win32_Product | Where-Object { $_.Name -like "SecureUxTheme*" }
+            # if (-not $secureUxThemeInstalled) { 
+            #     if ($sysType -like "*ARM*") { 
+            #         Start-Process -FilePath '..\bin\secureuxtheme\SecureUxTheme_ARM64.msi' -ArgumentList '/quiet /norestart' -Wait 
+            #     }
+            #     else {
+            #         Start-Process -FilePath '..\bin\secureuxtheme\SecureUxTheme_x64.msi' -ArgumentList '/quiet /norestart' -Wait
+            #     }
+            # }
             Stop-Process -Name explorer -Force
             Move-Item -Path "C:\Users\Public\Desktop\Windhawk.lnk" -Destination $programsDir -Force
             Start-Process "$Env:ProgramFiles\Windhawk\Windhawk.exe" -ArgumentList '-tray-only'
@@ -1411,11 +1412,18 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             $file = Get-Item $shortcutPath
             $file.Attributes = $file.Attributes -bor [System.IO.FileAttributes]::Hidden
         #? Theme
-            if ($windowsTheme -eq "Dark") { 
-                Start-Process "C:\Windows\Resources\Themes\dark_winmac.theme"
+            if ($windowsTheme -eq "Dark") {
+                $theme = "C:\Windows\Resources\Themes\dark_winmac.theme"
             } else { 
-                Start-Process "C:\Windows\Resources\Themes\light_winmac.theme"
+                $theme = "C:\Windows\Resources\Themes\light_winmac.theme"
             }
+            Set-ItemProperty `
+            -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes" `
+            -Name CurrentTheme `
+            -Value $theme
+            rundll32.exe user32.dll, UpdatePerUserSystemParameters
+            Start-Sleep -Seconds 2
+            Stop-Process -Name explorer -Force
             # $registryPath1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon"
             # $registryPath2 = "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\empty"
             # if (-not (Test-Path -Path $registryPath2)) {New-Item -Path $registryPath2 -Force | Out-Null }
