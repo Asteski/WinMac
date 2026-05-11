@@ -700,34 +700,18 @@ foreach ($app in $selectedApps) {
             Start-Sleep -Seconds 3
             Install-WingetPackage -id ThioJoe.SvgThumbnailExtension | Out-Null
             Install-WingetPackage -id 'QL-Win.QuickLook' | Out-Null
-            Copy-Item -Path "..\config\powertoys\ptr\ptr.exe" -Destination "$env:LOCALAPPDATA\PowerToys" -Recurse -Force
-            Copy-Item -Path "..\config\powertoys\Assets\PowerLauncher" -Destination "$env:LOCALAPPDATA\PowerToys\Assets" -Recurse -Force
+            Copy-Item -Path "..\config\powertoys\RunPlugins\*" -Destination "$env:LOCALAPPDATA\PowerToys\RunPlugins" -Recurse -Force
+            Copy-Item -Path "..\config\powertoys\Assets\*" -Destination "$env:LOCALAPPDATA\PowerToys\Assets" -Recurse -Force
+            Copy-Item -Path "..\config\powertoys\ptr\ptr.exe" -Destination "$env:LOCALAPPDATA\PowerToys" -Force
             if ($sysType -like "*ARM*") { 
                 Copy-Item -Path "..\config\powertoys\Plugins\arm\*" -Destination "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -Recurse -Force
             } else {
                 Copy-Item -Path "..\config\powertoys\Plugins\x64\*" -Destination "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -Recurse -Force
-            }
+}
             if ($blueOrYellow -eq 'B' -or $blueOrYellow -eq 'b') {
-                Copy-Item -Path "..\config\powertoys\RunPlugins" -Destination "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -Recurse -Force
-            } else {
-                Get-ChildItem -Path "..\config\powertoys\RunPlugins" -Recurse | Where-Object { $_.Name -ne "folder.png" } | ForEach-Object {
-                    $destinationPath = Join-Path -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -ChildPath $_.FullName.Substring((Get-Item "..\config\powertoys\RunPlugins").FullName.Length + 1)
-                    if ($_.PSIsContainer) {
-                        New-Item -ItemType Directory -Path $destinationPath -Force | Out-Null
-                    } else {
-                        Copy-Item -Path $_.FullName -Destination $destinationPath -Force
-                    }
-                }
-                Get-ChildItem -Path "..\config\powertoys\RunPlugins\Everything" -Recurse | Where-Object { $_.Name -ne "folder.png" } | ForEach-Object {
-                    $destinationPath = Join-Path -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins" -ChildPath $_.FullName.Substring((Get-Item "..\config\powertoys\RunPlugins").FullName.Length + 1)
-                    if ($_.PSIsContainer) {
-                        New-Item -ItemType Directory -Path $destinationPath -Force | Out-Null
-                    } else {
-                        Copy-Item -Path $_.FullName -Destination $destinationPath -Force
-                    }
-                }
+                Copy-Item -Path "..\config\powertoys\folder_blue.png" -Destination "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins\Everything\Images\folder.png" -Force
+                Copy-Item -Path "..\config\powertoys\folder_blue.png" -Destination "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins\EdgeFavorite\Images\folder.png" -Force
             }
-
             Move-Item -Path "$Env:USERPROFILE\Desktop\QuickLook.lnk" -Destination $programsDir -Force
             New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "QuickLook" -Value "$Env:LOCALAPPDATA\Programs\QuickLook\QuickLook.exe" | Out-Null
             Expand-Archive -Path "..\config\quicklook\QuickLook.Plugin.zip" -DestinationPath "$Env:APPDATA\pooi.moe\QuickLook\QuickLook.Plugin\" -Force
