@@ -1417,13 +1417,16 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             } else { 
                 $theme = "C:\Windows\Resources\Themes\light_winmac.theme"
             }
-            Set-ItemProperty `
-            -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes" `
-            -Name CurrentTheme `
-            -Value $theme
-            rundll32.exe user32.dll, UpdatePerUserSystemParameters
-            Start-Sleep -Seconds 2
-            Stop-Process -Name explorer -Force
+            Get-Process SystemSettings -ErrorAction SilentlyContinue | Stop-Process -Force
+            taskkill /f /im explorer.exe > $null 2>&1
+            taskkill /f /im shellexperiencehost.exe > $null 2>&1
+            taskkill /f /im searchhost.exe > $null 2>&1
+            taskkill /f /im startmenuexperiencehost.exe > $null 2>&1
+            Start-Sleep 2
+            start explorer.exe
+            rundll32.exe user32.dll,UpdatePerUserSystemParameters
+            Start-Sleep 1
+            Start-Process -FilePath $theme
             # $registryPath1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon"
             # $registryPath2 = "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\empty"
             # if (-not (Test-Path -Path $registryPath2)) {New-Item -Path $registryPath2 -Force | Out-Null }
