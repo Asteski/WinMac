@@ -1009,7 +1009,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Write-Host "Installing Windhawk..." -ForegroundColor Yellow
             $windhawkInstalled = Get-WinGetPackage -Id "RamenSoftware.Windhawk"
             if ($null -eq $windhawkInstalled) {
-                winget install --id "RamenSoftware.Windhawk" --source winget --silent
+                winget install --id "RamenSoftware.Windhawk" --source winget --silent | Out-Null
             }
             $sw = [Diagnostics.Stopwatch]::StartNew()
             while (-not (Get-Process -Name "Windhawk" -ErrorAction SilentlyContinue)) {
