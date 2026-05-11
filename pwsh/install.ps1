@@ -1028,14 +1028,13 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             }
             $backupFile = Get-ChildItem -Path (Join-Path $PWD '..\config') -Filter $windhawkBackup -Recurse | Select-Object -First 1
             $timeStamp = (Get-Date -Format 'yyyyMMddHHmmss')
-            $extractFolder = Join-Path $env:TEMP ("WindhawkRestore_$timeStamp")W
+            $extractFolder = Join-Path $env:TEMP ("WindhawkRestore_$timeStamp")
             Copy-Item -Path '..\bin\ModernShutDownWindows.exe' -Destination "$env:WINDIR\System32\" -Recurse -Force
             New-Item -ItemType Directory -Path $extractFolder -Force | Out-Null
             Expand-Archive -Path $backupFile.FullName -DestinationPath $extractFolder -Force
             $modsSourceBackup = Join-Path $extractFolder "ModsSource"
             $modsBackup = Join-Path $extractFolder "Engine\Mods"
             $regBackup = Join-Path $extractFolder "Windhawk.reg"
-            # New-Item -ItemType Directory -Path "$winMacDirectory\resource-redirect\" -Force | Out-Null
             Copy-Item -Path $modsSourceBackup -Destination $windhawkRoot -Recurse -Force
             Expand-Archive -Path '..\bin\windhawk-mods-windows.zip' -DestinationPath "$windhawkRoot\Mods" -Force | Out-Null
             Expand-Archive -Path '..\config\windhawk\resource-redirect.zip' -DestinationPath "$winMacDirectory\resource-redirect" -Force | Out-Null
@@ -1425,21 +1424,26 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             $shortcut.Save()
             $file = Get-Item $shortcutPath
             $file.Attributes = $file.Attributes -bor [System.IO.FileAttributes]::Hidden
-        #? Recycle Bin Icons
-            $registryPath1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon"
-            $registryPath2 = "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\empty"
-            if (-not (Test-Path -Path $registryPath2)) {New-Item -Path $registryPath2 -Force | Out-Null }
-            if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
-                Set-ItemProperty -Path $registryPath1 -Name "(default)" -Value "%SystemRoot%\System32\imageres.dll,-1015"
-                Set-ItemProperty -Path $registryPath1 -Name "empty" -Value "%SystemRoot%\System32\imageres.dll,-1015"
-                Set-ItemProperty -Path $registryPath1 -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-1017"
-                Set-ItemProperty -Path $registryPath2 -Name "Icon" -Value "%SystemRoot%\System32\imageres.dll,-1015"
-            } elseif ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
-                Set-ItemProperty -Path $registryPath1 -Name "(default)" -Value "%SystemRoot%\System32\imageres.dll,-55"
-                Set-ItemProperty -Path $registryPath1 -Name "empty" -Value "%SystemRoot%\System32\imageres.dll,-55"
-                Set-ItemProperty -Path $registryPath1 -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-54"
-                Set-ItemProperty -Path $registryPath2 -Name "Icon" -Value "%SystemRoot%\System32\imageres.dll,-55"
+        #? Custom Theme
+            if ($windowsTheme -eq "Dark") { 
+                & "$env:WINDIR\Resources\Themes\dark_winmac.theme"
+            } else { 
+                & "$env:WINDIR\Resources\Themes\light_winmac.theme"
             }
+            # $registryPath1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon"
+            # $registryPath2 = "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\empty"
+            # if (-not (Test-Path -Path $registryPath2)) {New-Item -Path $registryPath2 -Force | Out-Null }
+            # if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
+            #     Set-ItemProperty -Path $registryPath1 -Name "(default)" -Value "%SystemRoot%\System32\imageres.dll,-1015"
+            #     Set-ItemProperty -Path $registryPath1 -Name "empty" -Value "%SystemRoot%\System32\imageres.dll,-1015"
+            #     Set-ItemProperty -Path $registryPath1 -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-1017"
+            #     Set-ItemProperty -Path $registryPath2 -Name "Icon" -Value "%SystemRoot%\System32\imageres.dll,-1015"
+            # } elseif ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
+            #     Set-ItemProperty -Path $registryPath1 -Name "(default)" -Value "%SystemRoot%\System32\imageres.dll,-55"
+            #     Set-ItemProperty -Path $registryPath1 -Name "empty" -Value "%SystemRoot%\System32\imageres.dll,-55"
+            #     Set-ItemProperty -Path $registryPath1 -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-54"
+            #     Set-ItemProperty -Path $registryPath2 -Name "Icon" -Value "%SystemRoot%\System32\imageres.dll,-55"
+            # }
         #? Send To Programs (create shortcut)
             Expand-Archive -Path '..\bin\ProgramsShortcut.zip' -DestinationPath $winMacDirectory -Force
             $sendToPath = Join-Path $env:APPDATA 'Microsoft\Windows\SendTo\Programs (create shortcut).lnk'

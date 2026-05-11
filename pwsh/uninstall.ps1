@@ -593,6 +593,11 @@ foreach ($app in $selectedApps) {
             Write-Host "Uninstalling Other Settings..." -ForegroundColor Yellow
             $regPath = "HKCU:\SOFTWARE\WinMac"
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
+            if ($windowsTheme -eq "Dark") { 
+                & "$env:WINDIR\Resources\Themes\Dark.theme"
+            } else { 
+                & "$env:WINDIR\Resources\Themes\Aero.theme"
+            }
             Set-ItemProperty -Path $regPath -Name "QuickAccess" -Value 0
             Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 0
             $homeDir = "C:\Users\$env:USERNAME"
@@ -648,27 +653,33 @@ uint fWinIni);
             $oShell = New-Object -ComObject Shell.Application
             $recycleBin = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
             $recycleBin.Self.InvokeVerb("PinToHome") | Out-Null
-            Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse | Out-Null
-            Remove-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
-            Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings" -Recurse | Out-Null
-            Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarSmallIcons" | Out-Null
             Get-ChildItem ..\config\registry\add\* -e *theme* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
             reg import '..\config\registry\remove\Remove_Theme_Mode_in_Context_Menu.reg' > $null 2>&1
             reg import '..\config\registry\remove\Remove_Hidden_items_from_context_menu.reg' > $null 2>&1
             reg import '..\config\registry\remove\Remove_Navigation_pane_from_context_menu.reg' > $null 2>&1
+            Remove-Item -Path "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}" -Recurse | Out-Null
+            Remove-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
+            Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings" -Recurse | Out-Null
+            Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarSmallIcons" | Out-Null
             Get-ChildItem "$env:LocalAppData\Microsoft\Windows\Explorer\" -Filter "thumbcache_*.db" | Remove-Item -Force
+            Remove-Item -Path "$env:WINDIR\Web\Wallpaper\macOS" -Recurse -Force
+            Remove-Item -Path "$env:WINDIR\Web\Wallpaper\Server" -Recurse -Force
+            Remove-Item -Path "$env:WINDIR\Resources\Icons" -Recurse -Force
+            Get-ChildItem "$env:WINDIR\Resources\Themes" -Filter "WinMac*" | Remove-Item -Force -Recurse
+            Remove-Item -Path "$env:WINDIR\System32\duires.dll" -Force
+            Remove-Item -Path "$env:WINDIR\System32\ImmersiveFontHandler.dll" -Force
+            Remove-Item -Path "$env:WINDIR\System32\twinuifonts.dll" -Force
             Remove-ItemProperty -Path "HKCU:\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags\AllFolders\Shell" -Name "Logo"
             Remove-Item -Path "$winMacDirectory\ThemeSwitcher.ps1"
-            Get-ChildItem "$env:WINDIR\Resources\Themes" -Filter "WinMac*" | Remove-Item -Force -Recurse
-            Get-ChildItem "$env:WINDIR\Web\Wallpaper" -Filter "WinMac*" | Remove-Item -Force -Recurse
-            Remove-Item -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Hide Desktop Icons.lnk" -Force
             Remove-Item -Path "$winMacDirectory\HideDesktopIcons.exe" -Force
-            $registryPath1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon"
-            $registryPath2 = "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}"
-            Set-ItemProperty -Path $registryPath1 -Name "(default)" -Value "%SystemRoot%\System32\imageres.dll,-54"
-            Set-ItemProperty -Path $registryPath1 -Name "empty" -Value "%SystemRoot%\System32\imageres.dll,-55"
-            Set-ItemProperty -Path $registryPath1 -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-54"
-            Remove-Item -Path $registryPath2 -Recurse -Force | Out-Null
+            Remove-Item -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Hide Desktop Icons.lnk" -Force
+            # $registryPath1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon"
+            # $registryPath2 = "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\empty"
+            # Set-ItemProperty -Path $registryPath1 -Name "(default)" -Value "%SystemRoot%\System32\imageres.dll,-54"
+            # Set-ItemProperty -Path $registryPath1 -Name "empty" -Value "%SystemRoot%\System32\imageres.dll,-55"
+            # Set-ItemProperty -Path $registryPath1 -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-54"
+            # Set-ItemProperty -Path $registryPath1 -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-54"
+            # Set-ItemProperty -Path $registryPath2 -Name "Icon" -Value "%SystemRoot%\System32\imageres.dll,-55"
             Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name SettingsPageVisibility -Force | Out-Null
             Write-Host "Uninstalling Other Settings completed." -ForegroundColor Green
         }
