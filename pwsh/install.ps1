@@ -1427,20 +1427,21 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             rundll32.exe user32.dll,UpdatePerUserSystemParameters
             Start-Sleep 1
             Start-Process -FilePath $theme
-            # $registryPath1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon"
-            # $registryPath2 = "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\empty"
-            # if (-not (Test-Path -Path $registryPath2)) {New-Item -Path $registryPath2 -Force | Out-Null }
-            # if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
-            #     Set-ItemProperty -Path $registryPath1 -Name "(default)" -Value "%SystemRoot%\System32\imageres.dll,-1015"
-            #     Set-ItemProperty -Path $registryPath1 -Name "empty" -Value "%SystemRoot%\System32\imageres.dll,-1015"
-            #     Set-ItemProperty -Path $registryPath1 -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-1017"
-            #     Set-ItemProperty -Path $registryPath2 -Name "Icon" -Value "%SystemRoot%\System32\imageres.dll,-1015"
-            # } elseif ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
-            #     Set-ItemProperty -Path $registryPath1 -Name "(default)" -Value "%SystemRoot%\System32\imageres.dll,-55"
-            #     Set-ItemProperty -Path $registryPath1 -Name "empty" -Value "%SystemRoot%\System32\imageres.dll,-55"
-            #     Set-ItemProperty -Path $registryPath1 -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-54"
-            #     Set-ItemProperty -Path $registryPath2 -Name "Icon" -Value "%SystemRoot%\System32\imageres.dll,-55"
-            # }
+            Start-Sleep 1
+            $registryPath1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon"
+            $registryPath2 = "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\empty"
+            if (-not (Test-Path -Path $registryPath2)) {New-Item -Path $registryPath2 -Force | Out-Null }
+            if ($lightOrDark -eq "L" -or $lightOrDark -eq "l") {
+                Set-ItemProperty -Path $registryPath1 -Name "(default)" -Value "%SystemRoot%\Resources\Icons\macos_bin_light_empty.ico"
+                Set-ItemProperty -Path $registryPath1 -Name "empty" -Value "%SystemRoot%\Resources\Icons\macos_bin_light_empty.ico"
+                Set-ItemProperty -Path $registryPath1 -Name "full" -Value "%SystemRoot%\Resources\Icons\macos_bin_light_full.ico"
+                Set-ItemProperty -Path $registryPath2 -Name "Icon" -Value "%SystemRoot%\Resources\Icons\macos_bin_light_empty.ico"
+            } elseif ($lightOrDark -eq "D" -or $lightOrDark -eq "d") {
+              Set-ItemProperty -Path $registryPath1 -Name "(default)" -Value "%SystemRoot%\Resources\Icons\macos_bin_dark_empty.ico"
+                Set-ItemProperty -Path $registryPath1 -Name "empty" -Value "%SystemRoot%\Resources\Icons\macos_bin_dark_empty.ico"
+                Set-ItemProperty -Path $registryPath1 -Name "full" -Value "%SystemRoot%\Resources\Icons\macos_bin_dark_full.ico"
+                Set-ItemProperty -Path $registryPath2 -Name "Icon" -Value "%SystemRoot%\Resources\Icons\macos_bin_dark_empty.ico"
+            }
         #? Send To Programs (create shortcut)
             Expand-Archive -Path '..\bin\ProgramsShortcut.zip' -DestinationPath $winMacDirectory -Force
             $sendToPath = Join-Path $env:APPDATA 'Microsoft\Windows\SendTo\Programs (create shortcut).lnk'
