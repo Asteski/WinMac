@@ -44,6 +44,7 @@ properties:
           IgnoreHotkeysInFullscreen: false
           GenerateThumbnailsFromFiles: false
           TabSelectsContextButtons: true
+          FancyzonesDisableRoundCornersOnSnap: false
           Position: "Focus"
           Plugins:
             - Name: "Calculator"

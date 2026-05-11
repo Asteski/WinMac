@@ -608,7 +608,7 @@ do {
         Write-Host "`e[91mInvalid input! Please enter either (Y)es or (N)o.`e[0m`n"
         Start-Sleep 2
     }
-} while (!$valid)
+} while ([string]::IsNullOrWhiteSpace($installConfirmation ) -or !$valid)
 
 if ($installConfirmation -eq 'n' -or $installConfirmation -eq 'N') {
     Clear-Host
