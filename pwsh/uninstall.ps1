@@ -495,16 +495,13 @@ foreach ($app in $selectedApps) {
             Write-Host "Uninstalling WinMac Menu..." -ForegroundColor Yellow
             $sabRegPath = "HKCU:\Software\StartIsBack"
             Stop-Process -Name WinMacMenu -Force
-            Stop-Process -Name WinMac_Menu_RMB_Trigger -Force
-            winget uninstall --id "Open-Shell.Open-Shell-Menu" --source winget --force | Out-Null
             Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\winver.exe" -Force
             Uninstall-WinGetPackage -name "Winver UWP" | Out-Null
             Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 0
-            $tasks = Get-ScheduledTask -TaskPath "\WinMac\" | Where-Object { $_.TaskName -match 'WinMac Menu RMB Trigger' }
+            $tasks = Get-ScheduledTask -TaskPath "\WinMac\" | Where-Object { $_.TaskName -match 'WinMac Menu' }
             foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
             Remove-Item -Path "$winMacDirectory\WinMacMenu.exe" -Force
             Remove-Item -Path "$winMacDirectory\config.ini" -Force
-            Remove-Item -Path "$winMacDirectory\WinMacMenuRMBTrigger.exe" -Force
             $toolbarsValue = [byte[]](
                 0x0c,0x00,0x00,0x00,0x08,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
                 0xaa,0x4f,0x28,0x68,0x48,0x6a,0xd0,0x11,0x8c,0x78,0x00,0xc0,0x4f,0xd9,0x18,0xb4,
@@ -561,19 +558,19 @@ foreach ($app in $selectedApps) {
         "9" {
             Write-Host "Uninstalling Hot Corners..." -ForegroundColor Yellow
             $regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
-            Stop-Process -n WinXCorners -Force
+            Stop-Process -n WinXCornersPlus -Force
             Stop-Process -n WinLaunch -Force
             Stop-Process -n ssn -Force
             Uninstall-WinGetPackage -name "Simple Sticky Notes" | Out-Null
             Remove-ItemProperty -Path $regPath -Name "WinLaunch"
-            Remove-ItemProperty -Path $regPath -Name "WinXCorners"
+            Remove-ItemProperty -Path $regPath -Name "WinXCornersPlus"
             Remove-ItemProperty -Path $regPath -Name "Simple Sticky Notes"
             Remove-Item -Path "$env:LOCALAPPDATA\WinMac\hotcorners" -Recurse -Force
             Remove-Item -Path "$env:LOCALAPPDATA\WinLaunch" -Recurse -Force
-            Remove-Item -Path "$env:LOCALAPPDATA\WinXCorners" -Recurse -Force
+            Remove-Item -Path "$env:LOCALAPPDATA\WinXCornersPlus" -Recurse -Force
             Remove-Item -Path "$env:APPDATA\WinLaunch" -Recurse -Force
             Remove-Item -Path "$env:APPDATA\Simnet" -Recurse -Force
-            Remove-Item -Path "$programsDir\WinXCorners.lnk" -Recurse -Force
+            Remove-Item -Path "$programsDir\WinXCornersPlus.lnk" -Recurse -Force
             Remove-Item -Path "$programsDir\WinLaunch.lnk" -Recurse -Force
             Remove-Item -Path "$programsDir\Simple Sticky Notes.lnk" -Recurse -Force
             Write-Host "Uninstalling Hot Corners completed." -ForegroundColor Green
@@ -677,9 +674,24 @@ uint fWinIni);
         }
     }
 }
-if ((Get-ChildItem -Path "$env:LOCALAPPDATA\WinMac" -Recurse | Measure-Object).Count -eq 0) { Remove-Item -Path "$env:LOCALAPPDATA\WinMac" -Force }
+if ((Get-ChildItem -Path "$env:LOCALAPPDATA\WinMac" -Recurse | Measure-Object).Count -eq 0) { 
+    Remove-Item -Path "$env:LOCALAPPDATA\WinMac" -Force
+    [System.Environment]::SetEnvironmentVariable("WINMAC", $null, [System.EnvironmentVariableTarget]::User)
+    [System.Environment]::SetEnvironmentVariable("WINMAC", $null, [System.EnvironmentVariableTarget]::Machine)
+    $userPath = [System.Environment]::GetEnvironmentVariable("Path", [System.EnvironmentVariableTarget]::User)
+    if ($userPath -like "*$winMacDirectory*") {
+        $userPath = $userPath -replace ";?$([regex]::Escape($winMacDirectory))", ""
+        [System.Environment]::SetEnvironmentVariable("Path", $userPath, [System.EnvironmentVariableTarget]::User)
+    }
+    $machinePath = [System.Environment]::GetEnvironmentVariable("Path", [System.EnvironmentVariableTarget]::Machine)
+    if ($machinePath -like "*$winMacDirectory*") {
+        $machinePath = $machinePath -replace ";?$([regex]::Escape($winMacDirectory))", ""
+        [System.Environment]::SetEnvironmentVariable("Path", $machinePath, [System.EnvironmentVariableTarget]::Machine)
+    }
+}
 $tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\"
 if ($null -eq $tasksFolder) { schtasks /DELETE /TN \WinMac /F > $null 2>&1 }
+
 Start-Sleep 2
 Stop-Process -n explorer
 Start-Sleep 3

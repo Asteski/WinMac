@@ -972,9 +972,9 @@ foreach ($app in $selectedApps) {
                 if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
                 $trigger = New-ScheduledTaskTrigger -AtLogon
                 $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
-                $action = New-ScheduledTaskAction -Execute WinMacKeyShortcuts.exe -WorkingDirectory $winMacDirectory
+                $action = New-ScheduledTaskAction -Execute WinMacMenu.exe -WorkingDirectory $winMacDirectory
                 $principal = New-ScheduledTaskPrincipal -UserId "$env:USERNAME" -RunLevel Limited
-                Register-ScheduledTask -TaskName "Keyboard Shortcuts" -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -Description $description | Out-Null
+                Register-ScheduledTask -TaskName "WinMac Menu" -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -Description $description | Out-Null
                 Start-Process -FilePath "$winMacDirectory\WinMacMenu.exe" -WorkingDirectory $winMacDirectory
                 $WinverUWP = ((Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP).InstallLocation) + "\WinverUWP.exe"
                 New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\winver.exe" -Force | Out-Null
