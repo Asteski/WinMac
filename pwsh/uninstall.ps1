@@ -592,9 +592,9 @@ foreach ($app in $selectedApps) {
             $regPath = "HKCU:\SOFTWARE\WinMac"
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
             if ($windowsTheme -eq "Dark") { 
-                & "$env:WINDIR\Resources\Themes\Dark.theme"
+                & "C:\Windows\Resources\Themes\Dark.theme"
             } else { 
-                & "$env:WINDIR\Resources\Themes\Aero.theme"
+                & "C:\Windows\Resources\Themes\Aero.theme"
             }
             Set-ItemProperty -Path $regPath -Name "QuickAccess" -Value 0
             Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 0
