@@ -498,8 +498,6 @@ foreach ($app in $selectedApps) {
             Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\winver.exe" -Force
             Uninstall-WinGetPackage -name "Winver UWP" | Out-Null
             Set-ItemProperty -Path $sabRegPath -Name "WinkeyFunction" -Value 0
-            $tasks = Get-ScheduledTask -TaskPath "\WinMac\" | Where-Object { $_.TaskName -match 'WinMac Menu' }
-            foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
             Remove-Item -Path "$winMacDirectory\WinMacMenu.exe" -Force
             Remove-Item -Path "$winMacDirectory\config.ini" -Force
             $toolbarsValue = [byte[]](
@@ -600,6 +598,7 @@ foreach ($app in $selectedApps) {
             }
             Set-ItemProperty -Path $regPath -Name "QuickAccess" -Value 0
             Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 0
+            #? Unpin User folder, Programs and Recycle Bin from Quick Access
             $homeDir = "C:\Users\$env:USERNAME"
             $homeIniFilePath = "$($homeDir)\desktop.ini"
             Remove-Item -Path $homeIniFilePath -Force | Out-Null

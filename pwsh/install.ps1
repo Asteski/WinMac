@@ -962,20 +962,6 @@ foreach ($app in $selectedApps) {
                 } else {
                     Write-Host "WinverUWP is already installed." -ForegroundColor DarkGreen
                 }
-                $folderName = "WinMac"
-                $taskFolder = "\" + $folderName
-                $description = "WinMac Menu."
-                $taskService = New-Object -ComObject "Schedule.Service"
-                $taskService.Connect()
-                $rootFolder = $taskService.GetFolder("\") 
-                try { $existingFolder = $rootFolder.GetFolder($folderName) } catch { $existingFolder = $null }
-                if ($null -eq $existingFolder) { $rootFolder.CreateFolder($folderName) | Out-Null }
-                $trigger = New-ScheduledTaskTrigger -AtLogon
-                $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew
-                $action = New-ScheduledTaskAction -Execute WinMacMenu.exe -WorkingDirectory $winMacDirectory
-                $principal = New-ScheduledTaskPrincipal -UserId "$env:USERNAME" -RunLevel Limited
-                Register-ScheduledTask -TaskName "WinMac Menu" -Action $action -Trigger $trigger -Principal $principal -TaskPath $taskFolder -Settings $settings -Description $description | Out-Null
-                Start-Process -FilePath "$winMacDirectory\WinMacMenu.exe" -WorkingDirectory $winMacDirectory
                 $WinverUWP = ((Get-AppxPackage -Name 2505FireCubeStudios.WinverUWP).InstallLocation) + "\WinverUWP.exe"
                 New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\winver.exe" -Force | Out-Null
                 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\winver.exe" -Name "Debugger" -Value $WinverUWP -Type String
@@ -1050,15 +1036,15 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             reg import $regBackup > $null 2>&1
             Remove-Item "$env:LocalAppData\Microsoft\Windows\Explorer\thumbcache_*.db" -Force -Recurse
             Set-ItemProperty -Path "HKCU:\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags\AllFolders\Shell" -Name Logo -Value "imageres.dll,-3" -Type String
-            $secureUxThemeInstalled = Get-WmiObject -Class Win32_Product | Where-Object { $_.Name -like "SecureUxTheme*" }
-            if (-not $secureUxThemeInstalled) { 
-                if ($sysType -like "*ARM*") { 
-                    Start-Process -FilePath '..\bin\secureuxtheme\SecureUxTheme_ARM64.msi' -ArgumentList '/quiet /norestart' -Wait 
-                }
-                else {
-                    Start-Process -FilePath '..\bin\secureuxtheme\SecureUxTheme_x64.msi' -ArgumentList '/quiet /norestart' -Wait
-                }
-            }
+            # $secureUxThemeInstalled = Get-WmiObject -Class Win32_Product | Where-Object { $_.Name -like "SecureUxTheme*" }
+            # if (-not $secureUxThemeInstalled) { 
+            #     if ($sysType -like "*ARM*") { 
+            #         Start-Process -FilePath '..\bin\secureuxtheme\SecureUxTheme_ARM64.msi' -ArgumentList '/quiet /norestart' -Wait 
+            #     }
+            #     else {
+            #         Start-Process -FilePath '..\bin\secureuxtheme\SecureUxTheme_x64.msi' -ArgumentList '/quiet /norestart' -Wait
+            #     }
+            # }
             Stop-Process -Name explorer -Force
             Move-Item -Path "C:\Users\Public\Desktop\Windhawk.lnk" -Destination $programsDir -Force
             Start-Process "$Env:ProgramFiles\Windhawk\Windhawk.exe" -ArgumentList '-tray-only'
