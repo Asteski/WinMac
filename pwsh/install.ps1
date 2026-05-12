@@ -1261,8 +1261,8 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             $shortcut.IconLocation = $icon2Path
             $shortcut.Save()
             if (-not (Test-Path -Path "$winMacDirectory\hotcorners")) { New-Item -ItemType Directory -Path "$winMacDirectory\hotcorners" -Force | Out-Null }
-            New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "WinXCornersPlus" -Value "$destinationPath\WinXCornersPlus.exe" | Out-Null
-            Start-Process "$destinationPath\WinXCornersPlus.exe"
+            New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "WinXCornersPlus" -Value "$env:LOCALAPPDATA\WinXCornersPlus\WinXCornersPlus.exe" | Out-Null
+            Start-Process "$env:LOCALAPPDATA\WinXCornersPlus\WinXCornersPlus.exe"
             Start-Process "C:\Program Files (x86)\Simnet\Simple Sticky Notes\ssn.exe"
             Write-Host "Hot Corners installation completed." -ForegroundColor Green
             }
