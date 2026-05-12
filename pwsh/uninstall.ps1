@@ -553,7 +553,7 @@ foreach ($app in $selectedApps) {
         "8" {
             Write-Host "Uninstalling Nexus Dock..." -ForegroundColor Yellow
             # Uninstall-WinGetPackage -name Nexus | Out-Null
-            Start-Process "${env:ProgramFiles(x86)}\Winstep\unins000.exe" -ArgumentList "/VERYSILENT", "/SP-" -Wait
+            Start-Process "${env:ProgramFiles(x86)}\Winstep\unins000.exe" -ArgumentList "/VERYSILENT /SP- /SUPPRESSMSGBOXES" -Wait
             Remove-Item -Path "$programsDir\Nexus.lnk" -Force
             Remove-Item -Path "C:\Users\Public\Documents\Winstep" -Recurse -Force
             Write-Host "Uninstalling Nexus Dock completed." -ForegroundColor Green
@@ -565,7 +565,7 @@ foreach ($app in $selectedApps) {
             Stop-Process -n WinXCornersPlus -Force
             Stop-Process -n WinLaunch -Force
             Stop-Process -n ssn -Force
-            Start-Process "${env:ProgramFiles(x86)}\Simnet\Simple Sticky Notes\unins000.exe" -ArgumentList "/S" -Wait
+            Start-Process "${env:ProgramFiles(x86)}\Simnet\Simple Sticky Notes\unins000.exe" -ArgumentList "/VERYSILENT /SP-" -Wait
             Remove-ItemProperty -Path $regPath -Name "WinLaunch"
             Remove-ItemProperty -Path $regPath -Name "WinXCornersPlus"
             Remove-ItemProperty -Path $regPath -Name "Simple Sticky Notes"
@@ -584,7 +584,8 @@ foreach ($app in $selectedApps) {
             if (!($sysType -like "*ARM*")) {
                 Write-Host "Uninstalling MacType..." -ForegroundColor Yellow
                 # winget uninstall MacType --silent | Out-Null
-                Start-Process "$env:PROGRAMFILES\MacType\unins000.exe" -ArgumentList "/VERYSILENT", "/SP-" -Wait
+                Stop-Process -Name MacTray -Force
+                Start-Process "$env:PROGRAMFILES\MacType\unins000.exe" -ArgumentList "/VERYSILENT /SP- /NORESTART /SUPPRESSMSGBOXES" -Wait
                 Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name FontSmoothing -Value "2"
                 Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name FontSmoothingType -Type DWord -Value 2
                 RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters ,1 ,True
