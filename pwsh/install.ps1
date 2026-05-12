@@ -1217,7 +1217,6 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
 
             Write-Host "Installing WinLaunch..." -ForegroundColor DarkYellow
             $winLaunchUrl = "https://github.com/jensroth-git/WinLaunch/releases/download/v.0.7.3.0/WinLaunch.0.7.3.0.zip"
-            # $winLaunchConfigPath = '..\config\hotcorners\Settings.xml'
             $winLaunchOutputPath = '..\temp\WinLaunch.zip'
             $winLaunchDestinationPath = "$env:LOCALAPPDATA\WinLaunch"
             Invoke-WebRequest -Uri $winLaunchUrl -OutFile $winLaunchOutputPath
@@ -1225,7 +1224,6 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Copy-Item -Path ..\config\HotCorners\winlaunch.ico -Destination $winLaunchDestinationPath -Force
             Remove-Item $winLaunchOutputPath -Force
             Start-Process "$winLaunchDestinationPath\WinLaunch.exe"
-
             $process = Get-Process -Name WinLaunch
             if ($process) { Stop-Process -Name WinLaunch -Force }
             $userPath = [System.Environment]::GetEnvironmentVariable("Path", [System.EnvironmentVariableTarget]::User)
