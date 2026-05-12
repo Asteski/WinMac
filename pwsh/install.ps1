@@ -1199,7 +1199,6 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
     #* Hot Corners
         "9" {
             Write-Host "Installing Hot Corners..." -ForegroundColor Yellow
-            $destinationPath = "$env:LOCALAPPDATA\WinXCornersPlus"
             $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.10'
             if ($null -eq $dotNetRuntime) {
                 Install-WinGetPackage -id 'Microsoft.DotNet.DesktopRuntime.10' | Out-Null
@@ -1210,16 +1209,12 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             }
             Write-Host "Installing WinXCornersPlus..." -ForegroundColor DarkYellow
             if ($sysType -like "*ARM*") { 
-                $wxcpPath = "..\bin\hotcorners\arm\"
-            } 
-            else {
-                $wxcpPath = "..\bin\hotcorners\x64\"
+                Expand-Archive -Path "..\bin\hotcorners\WinXCornersPlus-arm64.zip"  -DestinationPath "$env:LOCALAPPDATA\WinXCornersPlus" -Force
+            } else {
+                Expand-Archive -Path "..\bin\hotcorners\WinXCornersPlus-x64.zip"  -DestinationPath "$env:LOCALAPPDATA\WinXCornersPlus" -Force
             }
-            Copy-Item -Path $wxcpPath -Destination $destinationPath -Recurse -Force
-            Copy-Item -Path '..\config\hotcorners\settings.json' -Destination $destinationPath -Force
-            $shortcut1Path = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\WinXCornersPlus.lnk"
-            $target1Path = "$destinationPath\WinXCornersPlus.exe"
-            
+            Copy-Item -Path '..\config\hotcorners\settings.json' -Destination "$env:LOCALAPPDATA\WinXCornersPlus" -Force
+
             Write-Host "Installing WinLaunch..." -ForegroundColor DarkYellow
             $winLaunchUrl = "https://github.com/jensroth-git/WinLaunch/releases/download/v.0.7.3.0/WinLaunch.0.7.3.0.zip"
             # $winLaunchConfigPath = '..\config\hotcorners\Settings.xml'
@@ -1251,7 +1246,8 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Install-WinGetPackage -id 'Simnet.SimpleStickyNotes' -Custom '/verysilent' | Out-Null
             Move-Item -Path "$env:USERPROFILE\Desktop\Simple Sticky Notes.lnk" -Destination "$env:APPDATA\Microsoft\Windows\Start Menu\Programs" -Force
 
-
+            $shortcut1Path = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\WinXCornersPlus.lnk"
+            $target1Path = "$destinationPath\WinXCornersPlus.exe"
             $shell = New-Object -ComObject WScript.Shell
             $shortcut = $shell.CreateShortcut($shortcut1Path)
             $shortcut.TargetPath = $target1Path
