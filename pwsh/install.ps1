@@ -1247,7 +1247,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Move-Item -Path "$env:USERPROFILE\Desktop\Simple Sticky Notes.lnk" -Destination "$env:APPDATA\Microsoft\Windows\Start Menu\Programs" -Force
 
             $shortcut1Path = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\WinXCornersPlus.lnk"
-            $target1Path = "$destinationPath\WinXCornersPlus.exe"
+            $target1Path = "$env:LOCALAPPDATA\WinXCornersPlus\WinXCornersPlus.exe"
             $shell = New-Object -ComObject WScript.Shell
             $shortcut = $shell.CreateShortcut($shortcut1Path)
             $shortcut.TargetPath = $target1Path
