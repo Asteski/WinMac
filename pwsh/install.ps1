@@ -18,13 +18,11 @@ if ($userPath -notlike "*$winMacDirectory*") {
     $userPath += ";$winMacDirectory"
     [System.Environment]::SetEnvironmentVariable("Path", $userPath, [System.EnvironmentVariableTarget]::User)
 }
-
 $machinePath = [System.Environment]::GetEnvironmentVariable("Path", [System.EnvironmentVariableTarget]::Machine)
 if ($machinePath -notlike "*$winMacDirectory*") {
     $machinePath += ";$winMacDirectory"
     [System.Environment]::SetEnvironmentVariable("Path", $machinePath, [System.EnvironmentVariableTarget]::Machine)
 }
-
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName PresentationFramework
 $user = [Security.Principal.WindowsIdentity]::GetCurrent()
@@ -1199,7 +1197,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Write-Host "Nexus Dock installation completed." -ForegroundColor Green
             }
     #* Hot Corners
-        "9"{
+        "9" {
             Write-Host "Installing Hot Corners..." -ForegroundColor Yellow
             $destinationPath = "$env:LOCALAPPDATA\WinXCornersPlus"
             $dotNetRuntime = Get-WinGetPackage -Id 'Microsoft.DotNet.DesktopRuntime.10'
@@ -1217,16 +1215,52 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             else {
                 $wxcpPath = "..\bin\hotcorners\x64\"
             }
+
+            Write-Host "Installing WinLaunch..." -ForegroundColor DarkYellow
+            $winLaunchUrl = "https://github.com/jensroth-git/WinLaunch/releases/download/v.0.7.3.0/WinLaunch.0.7.3.0.zip"
+            # $winLaunchConfigPath = '..\config\hotcorners\Settings.xml'
+            $winLaunchOutputPath = '..\temp\WinLaunch.zip'
+            $winLaunchDestinationPath = "$env:LOCALAPPDATA\WinLaunch"
+            Invoke-WebRequest -Uri $winLaunchUrl -OutFile $winLaunchOutputPath
+            Expand-Archive -Path $winLaunchOutputPath -DestinationPath $winLaunchDestinationPath -Force
+            Copy-Item -Path ..\config\HotCorners\winlaunch.ico -Destination $winLaunchDestinationPath -Force
+            Remove-Item $winLaunchOutputPath -Force
+            Start-Process "$winLaunchDestinationPath\WinLaunch.exe"
             Copy-Item -Path $wxcpPath -Destination $destinationPath -Recurse -Force
             Copy-Item -Path '..\config\hotcorners\settings.json' -Destination $destinationPath -Force
+            $process = Get-Process -Name WinLaunch
+            if ($process) { Stop-Process -Name WinLaunch -Force }
+            # New-Item -ItemType Directory -Path "$winLaunchDestinationPath\Data" -Force | Out-Null
+            # Copy-Item -Path $winLaunchConfigPath -Destination "$winLaunchDestinationPath\Data\Settings.xml" -Force
+            $userPath = [System.Environment]::GetEnvironmentVariable("Path", [System.EnvironmentVariableTarget]::User)
+            if ($userPath -notlike "*$winLaunchDestinationPath*") {
+                $userPath += ";$winLaunchDestinationPath"
+                [System.Environment]::SetEnvironmentVariable("Path", $userPath, [System.EnvironmentVariableTarget]::User)
+            }
+
+            $machinePath = [System.Environment]::GetEnvironmentVariable("Path", [System.EnvironmentVariableTarget]::Machine)
+            if ($machinePath -notlike "*$winLaunchDestinationPath*") {
+                $machinePath += ";$winLaunchDestinationPath"
+                [System.Environment]::SetEnvironmentVariable("Path", $machinePath, [System.EnvironmentVariableTarget]::Machine)
+            }
+
             Write-Host "Installing Simple Sticky Notes..." -ForegroundColor DarkYellow
             Install-WinGetPackage -id 'Simnet.SimpleStickyNotes' -Custom '/verysilent' | Out-Null
             Move-Item -Path "$env:USERPROFILE\Desktop\Simple Sticky Notes.lnk" -Destination "$env:APPDATA\Microsoft\Windows\Start Menu\Programs" -Force
+
             $shortcut1Path = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\WinXCornersPlus.lnk"
             $target1Path = "$destinationPath\WinXCornersPlus.exe"
             $shell = New-Object -ComObject WScript.Shell
             $shortcut = $shell.CreateShortcut($shortcut1Path)
             $shortcut.TargetPath = $target1Path
+            $shortcut.Save()
+            $shortcut2Path = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\WinLaunch.lnk"
+            $target2Path = "$winLaunchDestinationPath\WinLaunch.exe"
+            $icon2Path = "$winLaunchDestinationPath\winlaunch.ico"
+            $shell = New-Object -ComObject WScript.Shell
+            $shortcut = $shell.CreateShortcut($shortcut2Path)
+            $shortcut.TargetPath = $target2Path
+            $shortcut.IconLocation = $icon2Path
             $shortcut.Save()
             if (-not (Test-Path -Path "$winMacDirectory\hotcorners")) { New-Item -ItemType Directory -Path "$winMacDirectory\hotcorners" -Force | Out-Null }
             New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "WinXCornersPlus" -Value "$destinationPath\WinXCornersPlus.exe" | Out-Null

@@ -1,9 +1,9 @@
 {
   "HotCornersEnabled": true,
-  "TopLeftActionId": "custom-3",
+  "TopLeftActionId": "custom-4",
   "TopRightActionId": "action-center",
   "BottomLeftActionId": "all-windows",
-  "BottomRightActionId": "custom-2",
+  "BottomRightActionId": "custom-1",
   "StartWithWindows": true,
   "IgnoreFullScreen": true,
   "AlwaysRunAsAdministrator": false,
@@ -23,6 +23,12 @@
   "EnableCustomCommands": true,
   "CustomCommands": [
     {
+      "Name": "App Launcher",
+      "Command": "winlaunch.exe",
+      "Parameters": "",
+      "LaunchHidden": false
+    },
+    {
       "Name": "New Note",
       "Command": "!_alt\u002Bn",
       "Parameters": "",
@@ -37,12 +43,6 @@
     {
       "Name": "Show WinMac Menu",
       "Command": "winmacmenu.exe",
-      "Parameters": "",
-      "LaunchHidden": false
-    },
-    {
-      "Name": "Run Notepad",
-      "Command": "notepad.exe",
       "Parameters": "",
       "LaunchHidden": false
     }
