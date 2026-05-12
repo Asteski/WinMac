@@ -432,6 +432,7 @@ foreach ($app in $selectedApps) {
             Uninstall-WinGetPackage -id ThioJoe.SvgThumbnailExtension | Out-Null
             Remove-Item $env:LOCALAPPDATA\Microsoft\PowerToys -Recurse -Force
             Remove-Item $env:LOCALAPPDATA\PowerToys -Recurse -Force
+            Remove-Item $env:APPDATA\pooi.moe -Recurse -Force
             Remove-Item $programsDir\QuickLook.lnk -Force
             Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "QuickLook" | Out-Null
             Write-Host "Uninstalling PowerToys completed." -ForegroundColor Green
