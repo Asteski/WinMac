@@ -535,6 +535,7 @@ foreach ($app in $selectedApps) {
             Remove-Item -Path "$programsDir\Windhawk.lnk"
             Remove-Item -Path "$env:WINDIR\System32\ModernShutDownWindows.exe" -Force
             Remove-Item -Path "$env:LOCALAPPDATA\IconCache.db" -Force
+            Remove-Item -Path "$winMacDirectory\resource-redirect" -Recurse -Force
             Get-ChildItem "$env:LocalAppData\Microsoft\Windows\Explorer\" -Filter "thumbcache_*.db" | Remove-Item -Force
             Remove-ItemProperty -Path "HKCU:\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags\AllFolders\Shell" -Name "Logo" -ErrorAction SilentlyContinue
             Start-Process explorer
@@ -565,7 +566,7 @@ foreach ($app in $selectedApps) {
             Stop-Process -n WinXCornersPlus -Force
             Stop-Process -n WinLaunch -Force
             Stop-Process -n ssn -Force
-            Start-Process "${env:ProgramFiles(x86)}\Simnet\Simple Sticky Notes\unins000.exe" -ArgumentList "/VERYSILENT /SP-" -Wait
+            Start-Process "${env:ProgramFiles(x86)}\Simnet\Simple Sticky Notes\unins000.exe" -ArgumentList "/VERYSILENT /SP-" -WindowStyle Hidden -Wait
             Remove-ItemProperty -Path $regPath -Name "WinLaunch"
             Remove-ItemProperty -Path $regPath -Name "WinXCornersPlus"
             Remove-ItemProperty -Path $regPath -Name "Simple Sticky Notes"
@@ -590,7 +591,8 @@ foreach ($app in $selectedApps) {
                 Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name FontSmoothingType -Type DWord -Value 2
                 RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters ,1 ,True
                 Stop-Process -Name Explorer -Force
-                Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "MacType" | Out-Null
+                $tasks = Get-ScheduledTask -TaskPath "\WinMac\" | Where-Object { $_.TaskName -match 'MacType' }
+                foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
                 Write-Host "Uninstalling MacType completed." -ForegroundColor Green
             }
         }
