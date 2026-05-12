@@ -459,7 +459,7 @@ foreach ($app in $selectedApps) {
             Uninstall-WinGetPackage gsass1.NTop | Out-Null
             Uninstall-Module PSTree -Force | Out-Null
             $vimPath = (Get-ChildItem "$env:PROGRAMFILES\Vim" -Directory -ErrorAction SilentlyContinue | Select-Object -First 1).FullName
-            Start-Process "$vimPath\uninstall-gui.exe" -ArgumentList "/S" -Wait -ErrorAction SilentlyContinue
+            Start-Process "$vimPath\uninstall-gui.exe" -ArgumentList "/S" -Wait
             if ((Test-Path "$profilePath\PowerShell\$profileFile")) { Remove-Item -Path "$profilePath\PowerShell\$profileFile" }
             if ((Test-Path "$profilePath\WindowsPowerShell\$profileFile")) { Remove-Item -Path "$profilePath\WindowsPowerShell\$profileFile" }
             Remove-Item -Path "$programsDir\gVim*" -Force
@@ -531,7 +531,6 @@ foreach ($app in $selectedApps) {
             Write-Host "Uninstalling Windhawk..." -ForegroundColor Yellow
             taskkill /IM explorer.exe /F > $null 2>&1
             Stop-Process -Name windhawk -Force
-            # Uninstall-WinGetPackage -name Windhawk | Out-Null
             Start-Process "$env:PROGRAMFILES\Windhawk\uninstall.exe" -ArgumentList "/S" -Wait
             Remove-Item -Path "$programsDir\Windhawk.lnk"
             Remove-Item -Path "$env:WINDIR\System32\ModernShutDownWindows.exe" -Force
@@ -554,7 +553,7 @@ foreach ($app in $selectedApps) {
         "8" {
             Write-Host "Uninstalling Nexus Dock..." -ForegroundColor Yellow
             # Uninstall-WinGetPackage -name Nexus | Out-Null
-            Start-Process "${env:ProgramFiles(x86)}\Winstep\unins000.exe" -ArgumentList "/SILENT" -Wait
+            Start-Process "${env:ProgramFiles(x86)}\Winstep\unins000.exe" -ArgumentList "/VERYSILENT", "/SP-" -Wait
             Remove-Item -Path "$programsDir\Nexus.lnk" -Force
             Remove-Item -Path "C:\Users\Public\Documents\Winstep" -Recurse -Force
             Write-Host "Uninstalling Nexus Dock completed." -ForegroundColor Green
@@ -566,7 +565,7 @@ foreach ($app in $selectedApps) {
             Stop-Process -n WinXCornersPlus -Force
             Stop-Process -n WinLaunch -Force
             Stop-Process -n ssn -Force
-            Uninstall-WinGetPackage -name "Simple Sticky Notes" | Out-Null
+            Start-Process "${env:ProgramFiles(x86)}\Simnet\Simple Sticky Notes\unins000.exe" -ArgumentList "/S" -Wait
             Remove-ItemProperty -Path $regPath -Name "WinLaunch"
             Remove-ItemProperty -Path $regPath -Name "WinXCornersPlus"
             Remove-ItemProperty -Path $regPath -Name "Simple Sticky Notes"
@@ -584,7 +583,8 @@ foreach ($app in $selectedApps) {
         "10" {
             if (!($sysType -like "*ARM*")) {
                 Write-Host "Uninstalling MacType..." -ForegroundColor Yellow
-                winget uninstall MacType --silent | Out-Null
+                # winget uninstall MacType --silent | Out-Null
+                Start-Process "$env:PROGRAMFILES\MacType\unins000.exe" -ArgumentList "/VERYSILENT", "/SP-" -Wait
                 Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name FontSmoothing -Value "2"
                 Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name FontSmoothingType -Type DWord -Value 2
                 RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters ,1 ,True
