@@ -690,7 +690,7 @@ foreach ($app in $selectedApps) {
         "1" {
             Write-Host "Installing PowerToys..." -ForegroundColor Yellow
             winget configure --enable | Out-Null
-            winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
+            pwsh -NoProfile -Command "winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements" | Out-Null
             $envPath = [System.Environment]::GetEnvironmentVariable("Path", [System.EnvironmentVariableTarget]::User)
             $envPath += ";$env:LOCALAPPDATA\PowerToys"
             [System.Environment]::SetEnvironmentVariable("Path", $envPath, [System.EnvironmentVariableTarget]::User)
