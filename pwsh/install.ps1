@@ -691,7 +691,6 @@ foreach ($app in $selectedApps) {
             Write-Host "Installing PowerToys..." -ForegroundColor Yellow
             winget configure --enable | Out-Null
             winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements | Out-Null
-            # pwsh -NoProfile -Command "winget configure ..\config\powertoys\powertoys.dsc.yaml --accept-configuration-agreements" | Out-Null
             $envPath = [System.Environment]::GetEnvironmentVariable("Path", [System.EnvironmentVariableTarget]::User)
             $envPath += ";$env:LOCALAPPDATA\PowerToys"
             [System.Environment]::SetEnvironmentVariable("Path", $envPath, [System.EnvironmentVariableTarget]::User)
@@ -716,7 +715,7 @@ foreach ($app in $selectedApps) {
             New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "QuickLook" -Value "$Env:LOCALAPPDATA\Programs\QuickLook\QuickLook.exe" | Out-Null
             Expand-Archive -Path "..\config\quicklook\QuickLook.Plugin.zip" -DestinationPath "$Env:APPDATA\pooi.moe\QuickLook\QuickLook.Plugin\" -Force
             Start-Process -FilePath "QuickLook.exe" -ArgumentList "/silent" -WorkingDirectory "$Env:LOCALAPPDATA\Programs\QuickLook" -WindowStyle Hidden
-            (Get-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json") -replace '"CmdPal":true', '"CmdPal":false' -replace '"show_theme_adaptive_tray_icon": false', '"show_theme_adaptive_tray_icon": true' | Set-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json" -Force
+            (Get-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json") -replace '"CmdPal":true', '"CmdPal":false' -replace '"show_theme_adaptive_tray_icon":false', '"show_theme_adaptive_tray_icon":true' | Set-Content -Path "$env:LOCALAPPDATA\Microsoft\PowerToys\settings.json" -Force
             Start-Process "$env:LOCALAPPDATA\PowerToys\PowerToys.exe" -ArgumentList "--start-minimized" -WorkingDirectory "$env:LOCALAPPDATA\PowerToys" -WindowStyle Hidden
             Write-Host "PowerToys installation completed." -ForegroundColor Green
         }
@@ -1410,7 +1409,6 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
 Stop-Process -n explorer
 Start-Sleep 2
 Remove-Item "..\temp" -Recurse -Force
-Start-Sleep 3
 if (-not (Get-Process -Name explorer)) { Start-Process explorer }
 Write-Host "`n------------------------ WinMac Deployment completed ------------------------" -ForegroundColor Cyan
 Write-Host @"

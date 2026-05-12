@@ -427,8 +427,6 @@ foreach ($app in $selectedApps) {
             Write-Host "Uninstalling PowerToys..."  -ForegroundColor Yellow
             Get-Process | Where-Object { $_.ProcessName -eq 'PowerToys' } | Stop-Process -Force
             Uninstall-WinGetPackage -id Microsoft.PowerToys | Out-Null
-            # $everythingPT = Get-WingetPackage -name EverythingPT
-            # Uninstall-WinGetPackage -name $everythingPT.name | Out-Null
             Start-Process "$env:LOCALAPPDATA\Microsoft\PowerToys\PowerToys Run\Plugins\Everything\uninstall.exe" -ArgumentList "/S" -Wait
             Uninstall-WinGetPackage -id QL-Win.QuickLook | Out-Null
             Uninstall-WinGetPackage -id ThioJoe.SvgThumbnailExtension | Out-Null
@@ -566,7 +564,7 @@ foreach ($app in $selectedApps) {
             Stop-Process -n WinXCornersPlus -Force
             Stop-Process -n WinLaunch -Force
             Stop-Process -n ssn -Force
-            Start-Process "${env:ProgramFiles(x86)}\Simnet\Simple Sticky Notes\unins000.exe" -ArgumentList "/VERYSILENT /SP-" -WindowStyle Hidden -Wait
+            Start-Process "${env:ProgramFiles(x86)}\Simnet\Simple Sticky Notes\unins000.exe" -ArgumentList "/VERYSILENT /SP- /SUPPRESSMSGBOXES" -WindowStyle Hidden -Wait
             Remove-ItemProperty -Path $regPath -Name "WinLaunch"
             Remove-ItemProperty -Path $regPath -Name "WinXCornersPlus"
             Remove-ItemProperty -Path $regPath -Name "Simple Sticky Notes"
@@ -584,7 +582,6 @@ foreach ($app in $selectedApps) {
         "10" {
             if (!($sysType -like "*ARM*")) {
                 Write-Host "Uninstalling MacType..." -ForegroundColor Yellow
-                # winget uninstall MacType --silent | Out-Null
                 Stop-Process -Name MacTray -Force
                 Start-Process "$env:PROGRAMFILES\MacType\unins000.exe" -ArgumentList "/VERYSILENT /SP- /NORESTART /SUPPRESSMSGBOXES" -Wait
                 Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name FontSmoothing -Value "2"
@@ -660,13 +657,6 @@ foreach ($app in $selectedApps) {
             $sendToPath = Join-Path $env:APPDATA 'Microsoft\Windows\SendTo\Programs (create shortcut).lnk'
             Remove-Item -Path $sendToPath -Force
             Remove-Item -Path "$winMacDirectory\ProgramsShortcut.exe" -Force
-            # $registryPath1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon"
-            # $registryPath2 = "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\empty"
-            # Set-ItemProperty -Path $registryPath1 -Name "(default)" -Value "%SystemRoot%\System32\imageres.dll,-54"
-            # Set-ItemProperty -Path $registryPath1 -Name "empty" -Value "%SystemRoot%\System32\imageres.dll,-55"
-            # Set-ItemProperty -Path $registryPath1 -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-54"
-            # Set-ItemProperty -Path $registryPath1 -Name "full" -Value "%SystemRoot%\System32\imageres.dll,-54"
-            # Set-ItemProperty -Path $registryPath2 -Name "Icon" -Value "%SystemRoot%\System32\imageres.dll,-55"
             #? Restore Home settings page visibility
             Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name SettingsPageVisibility -Force | Out-Null
             Write-Host "Uninstalling Other Settings completed." -ForegroundColor Green
@@ -675,8 +665,8 @@ foreach ($app in $selectedApps) {
 }
 if ((Get-ChildItem -Path "$env:LOCALAPPDATA\WinMac" -Recurse | Measure-Object).Count -eq 0) { 
     Remove-Item -Path "$env:LOCALAPPDATA\WinMac" -Force
-    [System.Environment]::SetEnvironmentVariable("WINMAC", $null, [System.EnvironmentVariableTarget]::User)
-    [System.Environment]::SetEnvironmentVariable("WINMAC", $null, [System.EnvironmentVariableTarget]::Machine)
+    Remove-ItemProperty -Path "HKCU:\Environment" -Name "WINMAC" -Force -ErrorAction SilentlyContinue
+    Remove-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" -Name "WINMAC" -Force -ErrorAction SilentlyContinue
     $userPath = [System.Environment]::GetEnvironmentVariable("Path", [System.EnvironmentVariableTarget]::User)
     if ($userPath -like "*$winMacDirectory*") {
         $userPath = $userPath -replace ";?$([regex]::Escape($winMacDirectory))", ""
@@ -688,8 +678,8 @@ if ((Get-ChildItem -Path "$env:LOCALAPPDATA\WinMac" -Recurse | Measure-Object).C
         [System.Environment]::SetEnvironmentVariable("Path", $machinePath, [System.EnvironmentVariableTarget]::Machine)
     }
 }
-$tasksFolder = Get-ScheduledTask -TaskPath "\WinMac\"
-if ($null -eq $tasksFolder) { schtasks /DELETE /TN \WinMac /F > $null 2>&1 }
+$tasksFolder = Get-ScheduledTask -TaskPath "\WinMac" -ErrorAction SilentlyContinue
+if ($null -eq $tasksFolder) { Unregister-ScheduledTask -TaskPath "\WinMac" -Confirm:$false -ErrorAction SilentlyContinue }
 
 Start-Sleep 2
 Stop-Process -n explorer
