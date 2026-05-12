@@ -1,7 +1,7 @@
 {
   "HotCornersEnabled": true,
   "TopLeftActionId": "custom-4",
-  "TopRightActionId": "action-center",
+  "TopRightActionId": "custom-3",
   "BottomLeftActionId": "all-windows",
   "BottomRightActionId": "custom-1",
   "StartWithWindows": true,
@@ -41,7 +41,7 @@
       "LaunchHidden": false
     },
     {
-      "Name": "Show WinMac Menu",
+      "Name": "WinMac Menu",
       "Command": "winmacmenu.exe",
       "Parameters": "",
       "LaunchHidden": false

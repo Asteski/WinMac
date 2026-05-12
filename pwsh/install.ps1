@@ -1228,8 +1228,6 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
 
             $process = Get-Process -Name WinLaunch
             if ($process) { Stop-Process -Name WinLaunch -Force }
-            # New-Item -ItemType Directory -Path "$winLaunchDestinationPath\Data" -Force | Out-Null
-            # Copy-Item -Path $winLaunchConfigPath -Destination "$winLaunchDestinationPath\Data\Settings.xml" -Force
             $userPath = [System.Environment]::GetEnvironmentVariable("Path", [System.EnvironmentVariableTarget]::User)
             if ($userPath -notlike "*$winLaunchDestinationPath*") {
                 $userPath += ";$winLaunchDestinationPath"
