@@ -1215,7 +1215,11 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             else {
                 $wxcpPath = "..\bin\hotcorners\x64\"
             }
-
+            Copy-Item -Path $wxcpPath -Destination $destinationPath -Recurse -Force
+            Copy-Item -Path '..\config\hotcorners\settings.json' -Destination $destinationPath -Force
+            $shortcut1Path = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\WinXCornersPlus.lnk"
+            $target1Path = "$destinationPath\WinXCornersPlus.exe"
+            
             Write-Host "Installing WinLaunch..." -ForegroundColor DarkYellow
             $winLaunchUrl = "https://github.com/jensroth-git/WinLaunch/releases/download/v.0.7.3.0/WinLaunch.0.7.3.0.zip"
             # $winLaunchConfigPath = '..\config\hotcorners\Settings.xml'
@@ -1226,8 +1230,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Copy-Item -Path ..\config\HotCorners\winlaunch.ico -Destination $winLaunchDestinationPath -Force
             Remove-Item $winLaunchOutputPath -Force
             Start-Process "$winLaunchDestinationPath\WinLaunch.exe"
-            Copy-Item -Path $wxcpPath -Destination $destinationPath -Recurse -Force
-            Copy-Item -Path '..\config\hotcorners\settings.json' -Destination $destinationPath -Force
+
             $process = Get-Process -Name WinLaunch
             if ($process) { Stop-Process -Name WinLaunch -Force }
             # New-Item -ItemType Directory -Path "$winLaunchDestinationPath\Data" -Force | Out-Null
@@ -1248,8 +1251,7 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Install-WinGetPackage -id 'Simnet.SimpleStickyNotes' -Custom '/verysilent' | Out-Null
             Move-Item -Path "$env:USERPROFILE\Desktop\Simple Sticky Notes.lnk" -Destination "$env:APPDATA\Microsoft\Windows\Start Menu\Programs" -Force
 
-            $shortcut1Path = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\WinXCornersPlus.lnk"
-            $target1Path = "$destinationPath\WinXCornersPlus.exe"
+
             $shell = New-Object -ComObject WScript.Shell
             $shortcut = $shell.CreateShortcut($shortcut1Path)
             $shortcut.TargetPath = $target1Path
