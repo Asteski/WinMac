@@ -1403,11 +1403,21 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             taskkill /f /im searchhost.exe > $null 2>&1
             taskkill /f /im startmenuexperiencehost.exe > $null 2>&1
             Start-Sleep 2
-            start explorer.exe
+            Start-Process explorer.exe
             rundll32.exe user32.dll,UpdatePerUserSystemParameters
             Start-Sleep 1
             Start-Process -FilePath $theme
-            Start-Sleep 1
+            Start-Sleep 3
+            $stopTime = (Get-Date).AddSeconds(5)
+            while ((Get-Date) -lt $stopTime) {
+                $systemSettings = Get-Process SystemSettings -ErrorAction SilentlyContinue
+                if ($systemSettings) {
+                    Stop-Process -InputObject $systemSettings -Force
+                    break
+                }
+                Start-Sleep -Milliseconds 100
+            }
+            Get-Process SystemSettings -ErrorAction SilentlyContinue | Stop-Process -Force
             $registryPath1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon"
             $registryPath2 = "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\empty"
             if (-not (Test-Path -Path $registryPath2)) {New-Item -Path $registryPath2 -Force | Out-Null }

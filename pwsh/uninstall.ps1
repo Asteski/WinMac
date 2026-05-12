@@ -640,7 +640,8 @@ foreach ($app in $selectedApps) {
             Remove-Item -Path "$env:WINDIR\Web\Wallpaper\macOS" -Recurse -Force
             Remove-Item -Path "$env:WINDIR\Web\Wallpaper\Server" -Recurse -Force
             Remove-Item -Path "$env:WINDIR\Resources\Icons" -Recurse -Force
-            Get-ChildItem "$env:WINDIR\Resources\Themes" -Filter "WinMac*" | Remove-Item -Force -Recurse
+            Get-ChildItem "$env:WINDIR\Resources\Themes" -Filter "Rectified" | Remove-Item -Force -Recurse
+            Get-ChildItem "$env:WINDIR\Resources\Themes" -Filter "*WinMac*" | Remove-Item -Force -Recurse
             Remove-Item -Path "$env:WINDIR\System32\duires.dll" -Force
             Remove-Item -Path "$env:WINDIR\System32\ImmersiveFontHandler.dll" -Force
             Remove-Item -Path "$env:WINDIR\System32\twinuifonts.dll" -Force
