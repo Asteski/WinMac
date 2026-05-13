@@ -1,0 +1,51 @@
+{
+  "HotCornersEnabled": true,
+  "TopLeftActionId": "custom-4",
+  "TopRightActionId": "custom-3",
+  "BottomLeftActionId": "all-windows",
+  "BottomRightActionId": "custom-1",
+  "StartWithWindows": true,
+  "IgnoreFullScreen": true,
+  "AlwaysRunAsAdministrator": false,
+  "AlwaysHideTrayIcon": false,
+  "FlyoutAnimationDirection": 0,
+  "GlobalDelayEnabled": false,
+  "GlobalDelayIndex": 3,
+  "TopLeftDelayEnabled": false,
+  "TopLeftDelayIndex": 3,
+  "TopRightDelayEnabled": false,
+  "TopRightDelayIndex": 3,
+  "BottomLeftDelayEnabled": false,
+  "BottomLeftDelayIndex": 3,
+  "BottomRightDelayEnabled": false,
+  "BottomRightDelayIndex": 3,
+  "ShowCountdown": false,
+  "EnableCustomCommands": true,
+  "CustomCommands": [
+    {
+      "Name": "Launchpad",
+      "Command": "winlaunch.exe",
+      "Parameters": "",
+      "LaunchHidden": false
+    },
+    {
+      "Name": "New Note",
+      "Command": "!_alt\u002Bn",
+      "Parameters": "",
+      "LaunchHidden": false
+    },
+    {
+      "Name": "Show/Hide Notes",
+      "Command": "#[UINoteWindow]:(_alt\u002Bh\u002Balt_)?(_alt\u002Bs\u002Balt_)",
+      "Parameters": "",
+      "LaunchHidden": false
+    },
+    {
+      "Name": "WinMac Menu",
+      "Command": "winmacmenu.exe",
+      "Parameters": "",
+      "LaunchHidden": false
+    }
+  ],
+  "HotCornerModifierKey": 0
+}

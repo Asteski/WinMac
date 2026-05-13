@@ -24,6 +24,7 @@ properties:
           FancyzonesShowZoneNumber: false
           FancyzonesAppLastZoneMoveWindows: false
           FancyZonesEditorHotkey: "Win+Shift+F"
+          FancyzonesDisableRoundCornersOnSnap: false
         FindMyMouse:
           Enabled: true
           ActivationMethod: 2
@@ -48,24 +49,30 @@ properties:
           Plugins:
             - Name: "Calculator"
               Disabled: false
+              IsGlobal: true
             - Name: "Folder"
               Disabled: false
+              IsGlobal: true
             - Name: "Program"
               Disabled: false
               IsGlobal: true
             - Name: "Registry Plugin"
               Disabled: true
+              ActionKeyword: ":"
             - Name: "Service"
-              Disabled: false
+              Disabled: true
             - Name: "Shell"
               Disabled: false
+              ActionKeyword: ">"
+              IsGlobal: false
             - Name: "Windows System Commands"
               Disabled: false
+              IsGlobal: true
             - Name: "URI Handler"
               Disabled: false
+              ActionKeyword: "/"
             - Name: "Web Search"
               Disabled: false
-              ActionKeyword: ""
               IsGlobal: true
             - Name: "Windows settings"
               Disabled: false
