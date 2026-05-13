@@ -1402,7 +1402,6 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             } else { 
                 $theme = "C:\Windows\Resources\Themes\light_winmac.theme"
             }
-            Get-Process SystemSettings.exe -ErrorAction SilentlyContinue | Stop-Process -Force
             taskkill /f /im explorer.exe > $null 2>&1
             taskkill /f /im shellexperiencehost.exe > $null 2>&1
             taskkill /f /im searchhost.exe > $null 2>&1
