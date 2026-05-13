@@ -607,14 +607,14 @@ foreach ($app in $selectedApps) {
             Start-Sleep -Seconds 3
             $stopTime = (Get-Date).AddSeconds(5)
             while ((Get-Date) -lt $stopTime) {
-                $systemSettings = Get-Process SystemSettings.exe -ErrorAction SilentlyContinue
+                $systemSettings = Get-Process SystemSettings -ErrorAction SilentlyContinue
                 if ($systemSettings) {
                     Stop-Process -InputObject $systemSettings -Force
                     break
                 }
                 Start-Sleep -Milliseconds 100
             }
-            Get-Process SystemSettings.exe -ErrorAction SilentlyContinue | Stop-Process -Force
+            Get-Process SystemSettings -ErrorAction SilentlyContinue | Stop-Process -Force
         #? Unpin User folder, Programs and Recycle Bin from Quick Access
             Set-ItemProperty -Path $regPath -Name "QuickAccess" -Value 0
             Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 0

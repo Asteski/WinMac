@@ -1402,7 +1402,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             } else { 
                 $theme = "C:\Windows\Resources\Themes\light_winmac.theme"
             }
-            Get-Process SystemSettings.exe -ErrorAction SilentlyContinue | Stop-Process -Force
+            Get-Process SystemSettings -ErrorAction SilentlyContinue | Stop-Process -Force
             taskkill /f /im explorer.exe > $null 2>&1
             taskkill /f /im shellexperiencehost.exe > $null 2>&1
             taskkill /f /im searchhost.exe > $null 2>&1
@@ -1415,14 +1415,14 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             Start-Sleep 3
             $stopTime = (Get-Date).AddSeconds(5)
             while ((Get-Date) -lt $stopTime) {
-                $systemSettings = Get-Process SystemSettings.exe -ErrorAction SilentlyContinue
+                $systemSettings = Get-Process SystemSettings -ErrorAction SilentlyContinue
                 if ($systemSettings) {
                     Stop-Process -InputObject $systemSettings -Force
                     break
                 }
                 Start-Sleep -Milliseconds 100
             }
-            Get-Process SystemSettings.exe -ErrorAction SilentlyContinue | Stop-Process -Force
+            Get-Process SystemSettings -ErrorAction SilentlyContinue | Stop-Process -Force
             $registryPath1 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\DefaultIcon"
             $registryPath2 = "HKCU:\Software\Classes\CLSID\{645FF040-5081-101B-9F08-00AA002F954E}\shell\empty"
             if (-not (Test-Path -Path $registryPath2)) {New-Item -Path $registryPath2 -Force | Out-Null }
