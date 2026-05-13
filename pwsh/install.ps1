@@ -1223,11 +1223,11 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
                 Expand-Archive -Path "..\bin\hotcorners\WinXCornersPlus-x64.zip"  -DestinationPath "$env:LOCALAPPDATA\WinXCornersPlus" -Force
             }
             Copy-Item -Path '..\config\hotcorners\settings.json' -Destination "$env:LOCALAPPDATA\WinXCornersPlus" -Force
-            $shortcut1Path = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\WinXCornersPlus.lnk"
-            $target1Path = "$env:LOCALAPPDATA\WinXCornersPlus\WinXCornersPlus.exe"
+            $shortcutPath = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\WinXCornersPlus.lnk"
+            $targetPath = "$env:LOCALAPPDATA\WinXCornersPlus\WinXCornersPlus.exe"
             $shell = New-Object -ComObject WScript.Shell
-            $shortcut = $shell.CreateShortcut($shortcut1Path)
-            $shortcut.TargetPath = $target1Path
+            $shortcut = $shell.CreateShortcut($shortcutPath)
+            $shortcut.TargetPath = $targetPath
             $shortcut.Save()
 
             Write-Host "Installing WinLaunch..." -ForegroundColor DarkYellow
@@ -1236,15 +1236,6 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             } else {
                 Expand-Archive -Path "..\bin\hotcorners\WinLaunch-x64.zip"  -DestinationPath "$env:LOCALAPPDATA\WinLaunch" -Force
             }
-            # Copy-Item -Path '..\config\HotCorners\winlaunch.ico' -Destination $env:LOCALAPPDATA\WinLaunch -Force
-            # $shortcut2Path = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\WinLaunch.lnk"
-            # $target2Path = "$env:LOCALAPPDATA\WinLaunch\WinLaunch.exe"
-            # $icon2Path = "$env:LOCALAPPDATA\WinLaunch\winlaunch.ico"
-            # $shell = New-Object -ComObject WScript.Shell
-            # $shortcut = $shell.CreateShortcut($shortcut2Path)
-            # $shortcut.TargetPath = $target2Path
-            # $shortcut.IconLocation = $icon2Path
-            # $shortcut.Save()
             $userPath = [System.Environment]::GetEnvironmentVariable("Path", [System.EnvironmentVariableTarget]::User)
             if ($userPath -notlike "*$env:LOCALAPPDATA\WinLaunch*") {
                 $userPath += ";$env:LOCALAPPDATA\WinLaunch"
@@ -1259,8 +1250,6 @@ WshShell.Run chr(34) & "$tempBatch" & chr(34), 0
             Write-Host "Installing Simple Sticky Notes..." -ForegroundColor DarkYellow
             Install-WinGetPackage -id 'Simnet.SimpleStickyNotes' -Custom '/verysilent' | Out-Null
             Move-Item -Path "$env:USERPROFILE\Desktop\Simple Sticky Notes.lnk" -Destination "$env:APPDATA\Microsoft\Windows\Start Menu\Programs" -Force
-
-
 
             if (-not (Test-Path -Path "$winMacDirectory\hotcorners")) { New-Item -ItemType Directory -Path "$winMacDirectory\hotcorners" -Force | Out-Null }
             New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "WinXCornersPlus" -Value "$env:LOCALAPPDATA\WinXCornersPlus\WinXCornersPlus.exe" | Out-Null
@@ -1387,7 +1376,7 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
                 "C:\ProgramData\Microsoft\Windows\Start Menu\Programs"
             )
             foreach ($path in $edgePaths) {
-                Get-ChildItem -Path $path -Filter "*Edge*.lnk" -ErrorAction SilentlyContinue | ForEach-Object {
+                Get-ChildItem -Path $path -Filter "Microsoft Edge.lnk" -ErrorAction SilentlyContinue | ForEach-Object {
                     Rename-Item -Path $_.FullName -NewName "Edge.lnk" -Force -ErrorAction SilentlyContinue
                 }
             }
@@ -1419,8 +1408,8 @@ IconResource=C:\WINDOWS\System32\imageres.dll,-87
             taskkill /f /im searchhost.exe > $null 2>&1
             taskkill /f /im startmenuexperiencehost.exe > $null 2>&1
             Start-Sleep 2
-            Start-Process explorer.exe
             rundll32.exe user32.dll,UpdatePerUserSystemParameters
+            Start-Process explorer.exe
             Start-Sleep 1
             Start-Process -FilePath $theme
             Start-Sleep 3
