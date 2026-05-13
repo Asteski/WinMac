@@ -23,7 +23,7 @@
   "EnableCustomCommands": true,
   "CustomCommands": [
     {
-      "Name": "App Launcher",
+      "Name": "Launchpad",
       "Command": "winlaunch.exe",
       "Parameters": "",
       "LaunchHidden": false
