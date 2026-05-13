@@ -599,13 +599,24 @@ foreach ($app in $selectedApps) {
             Write-Host "Uninstalling Other Settings..." -ForegroundColor Yellow
             $regPath = "HKCU:\SOFTWARE\WinMac"
             $exRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer"
-            #? Restore default Windows theme
+        #? Restore default Windows theme
             if ($windowsTheme -eq "Dark") { 
                 Start-Process "C:\Windows\Resources\Themes\Dark.theme"
             } else { 
                 Start-Process "C:\Windows\Resources\Themes\Aero.theme"
             }
-            #? Unpin User folder, Programs and Recycle Bin from Quick Access
+            Start-Sleep -Seconds 2
+            $stopTime = (Get-Date).AddSeconds(5)
+            while ((Get-Date) -lt $stopTime) {
+                $systemSettings = Get-Process SystemSettings -ErrorAction SilentlyContinue
+                if ($systemSettings) {
+                    Stop-Process -InputObject $systemSettings -Force
+                    break
+                }
+                Start-Sleep -Milliseconds 100
+            }
+            Get-Process SystemSettings -ErrorAction SilentlyContinue | Stop-Process -Force | Out-Null
+        #? Unpin User folder, Programs and Recycle Bin from Quick Access
             Set-ItemProperty -Path $regPath -Name "QuickAccess" -Value 0
             Set-ItemProperty -Path $exRegPath\HideDesktopIcons\NewStartPanel -Name "{645FF040-5081-101B-9F08-00AA002F954E}" -Value 0
             $homeDir = "C:\Users\$env:USERNAME"
@@ -628,7 +639,7 @@ foreach ($app in $selectedApps) {
             $oShell = New-Object -ComObject Shell.Application
             $recycleBin = $oShell.Namespace("shell:::{645FF040-5081-101B-9F08-00AA002F954E}")
             $recycleBin.Self.InvokeVerb("PinToHome") | Out-Null
-            #? Restoring file explorer and context menus settings
+        #? Restoring file explorer and context menus settings
             Get-ChildItem ..\config\registry\add\* -e *theme* | ForEach-Object { reg import $_.FullName > $null 2>&1 }
             reg import '..\config\registry\remove\Remove_Theme_Mode_in_Context_Menu.reg' > $null 2>&1
             reg import '..\config\registry\remove\Remove_Hidden_items_from_context_menu.reg' > $null 2>&1
@@ -637,7 +648,7 @@ foreach ($app in $selectedApps) {
             Remove-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons" | Out-Null
             Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings" -Recurse | Out-Null
             Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarSmallIcons" | Out-Null
-            #? Removal of Themes related resources
+        #? Removal of Themes related resources
             Remove-Item -Path "$env:WINDIR\Web\Wallpaper\macOS" -Recurse -Force
             Remove-Item -Path "$env:WINDIR\Web\Wallpaper\Server" -Recurse -Force
             Remove-Item -Path "$env:WINDIR\Resources\Icons" -Recurse -Force
@@ -647,10 +658,10 @@ foreach ($app in $selectedApps) {
             Remove-Item -Path "$env:WINDIR\System32\ImmersiveFontHandler.dll" -Force
             Remove-Item -Path "$env:WINDIR\System32\twinuifonts.dll" -Force
             Remove-Item -Path "$winMacDirectory\ThemeSwitcher.ps1"
-            #? Remove Hide Desktop Icons
+        #? Remove Hide Desktop Icons
             Remove-Item -Path "$winMacDirectory\HideDesktopIcons.exe" -Force
             Remove-Item -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Hide Desktop Icons.lnk" -Force
-            #? Remove Window Switcher
+        #? Remove Window Switcher
             Stop-Process -Name window-switcher -Force
             $tasks = Get-ScheduledTask -TaskPath "\WinMac\" | Where-Object { $_.TaskName -match 'Window Switcher' }
             foreach ($task in $tasks) { Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false }
@@ -659,9 +670,19 @@ foreach ($app in $selectedApps) {
             $sendToPath = Join-Path $env:APPDATA 'Microsoft\Windows\SendTo\Programs (create shortcut).lnk'
             Remove-Item -Path $sendToPath -Force
             Remove-Item -Path "$winMacDirectory\ProgramsShortcut.exe" -Force
-            #? Restore Home settings page visibility
+        #? Restore Home settings page visibility
             Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name SettingsPageVisibility -Force | Out-Null
             Write-Host "Uninstalling Other Settings completed." -ForegroundColor Green
+        #? Rename Microsoft Edge shortcuts
+            $edgePaths = @(
+                "$env:LOCALAPPDATA\Microsoft\Windows\Start Menu\Programs",
+                "C:\ProgramData\Microsoft\Windows\Start Menu\Programs"
+            )
+            foreach ($path in $edgePaths) {
+                Get-ChildItem -Path $path -Filter "Edge.lnk" -ErrorAction SilentlyContinue | ForEach-Object {
+                    Rename-Item -Path $_.FullName -NewName "Microsoft Edge.lnk" -Force -ErrorAction SilentlyContinue
+                }
+            }
         }
     }
 }
