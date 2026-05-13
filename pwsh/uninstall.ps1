@@ -575,7 +575,6 @@ foreach ($app in $selectedApps) {
             Remove-Item -Path "$env:APPDATA\WinLaunch" -Recurse -Force
             Remove-Item -Path "$env:APPDATA\Simnet" -Recurse -Force
             Remove-Item -Path "$programsDir\WinXCornersPlus.lnk" -Recurse -Force
-            Remove-Item -Path "$programsDir\WinLaunch.lnk" -Recurse -Force
             Remove-Item -Path "$programsDir\Simple Sticky Notes.lnk" -Recurse -Force
             Write-Host "Uninstalling Hot Corners completed." -ForegroundColor Green
         }
