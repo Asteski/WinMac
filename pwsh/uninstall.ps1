@@ -517,6 +517,7 @@ foreach ($app in $selectedApps) {
             }
             Stop-Process -Name explorer -Force
             Remove-Item -Path "$winMacDirectory\WinMacMenu.exe" -Force
+            Remove-Item -Path "$winMacDirectory\WinMacMenu.dll" -Force
             Remove-Item -Path "$winMacDirectory\config.ini" -Force
             Remove-Item -Path "$env:USERPROFILE\Links\Explorer.lnk" -Force -ErrorAction SilentlyContinue
             Remove-Item -Path "$env:USERPROFILE\Links\Favourites.lnk" -Force -ErrorAction SilentlyContinue
