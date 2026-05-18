@@ -4,7 +4,7 @@ param (
 $ErrorActionPreference = "SilentlyContinue"
 $WarningPreference = "SilentlyContinue"
 $ProgressPreference = "SilentlyContinue"
-$version = "1.4.1"
+$version = "1.4.2"
 $programsDir = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs"
 $winMacDirectory = "$env:LOCALAPPDATA\WinMac"
 if ([System.Environment]::GetEnvironmentVariable("WINMAC", [System.EnvironmentVariableTarget]::User) -ne $winMacDirectory) {
