@@ -92,7 +92,6 @@ WinMac is supported by Windows 11 Home, Pro, LTSC, IoT LTSC, on both x86 and ARM
 - [StartAllBack](https://www.startallback.com/) by Tihiy
 - [Windhawk](https://github.com/ramensoftware/windhawk) by Ramen Software
 - [Nexus](https://www.winstep.net/nexus.asp) by Winstep
-- [Open-Shell](https://open-shell.github.io/Open-Shell-Menu/) by Open-Shell
 - [AutoHotkey](https://www.autohotkey.com/) by AutoHotkey Foundation
 - [NewModernWinver](https://github.com/torchgm/NewModernWinver) by torchgm
 - [WinXCorners](https://github.com/vhanla/winxcorners) by vhanla
