@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 256 256">
+  <title>WinMacMenu microsoft-rainbow Start2 gradient</title>
+  <defs>
+    <clipPath id="corner" xmlns="http://www.w3.org/2000/svg">
+      <path d="M 0 0 H 170.16 C 217.37 0 256 38.63 256 85.82 V 256 H 0 Z" />
+    </clipPath>
+    <mask id="dividers" maskUnits="userSpaceOnUse" x="0" y="0" width="256" height="256" xmlns="http://www.w3.org/2000/svg">
+      <rect width="256" height="256" fill="white" />
+      <path d="M 11 128 H 256" fill="none" stroke="black" stroke-width="8" stroke-linecap="round" />
+      <path d="M 128 0 V 245" fill="none" stroke="black" stroke-width="8" stroke-linecap="round" />
+    </mask>
+    <clipPath id="silhouette">
+      <path d="M -1.3489658812204652e-7 109.07944308224651 c 0.00000 -5.03660 0.00000 -10.05838 0.00000 -15.09498 c 1.44781 -36.76717 18.07691 -66.66087 40.18011 -81.14850 c 11.66519 -7.70303 27.70139 -14.26543 45.55769 -11.33235 c 7.65270 1.27396 15.47086 4.08853 22.32382 6.87348 c 6.49445 2.68125 14.61596 7.43639 22.31003 7.18456 c 5.21211 -0.16295 10.39664 -3.08121 15.65011 -5.14029 c 15.38813 -5.96985 30.47291 -12.81370 50.35613 -9.59917 c 23.89572 3.88114 40.85576 15.28756 51.33513 32.88603 c -20.21415 13.82102 -36.19520 34.64884 -33.46504 70.21612 c 2.42680 32.30830 19.91080 51.21036 41.75202 62.35014 C 253 190 236 217 217 239 C 208 251 194 256 180 256 H 79 C 68 256 62 251 53 240 C 24 207 3 158 0 109.08 Z" />
+    </clipPath>
+    <linearGradient id="start2-0" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="256" y2="256">
+      <stop offset="0" stop-color="#a8d153" />
+      <stop offset=".48" stop-color="#8dc31e" />
+      <stop offset="1" stop-color="#6b9c05" />
+    </linearGradient>
+    <linearGradient id="start2-1" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="256" y2="256">
+      <stop offset="0" stop-color="#ffcf55" />
+      <stop offset=".48" stop-color="#ffc120" />
+      <stop offset="1" stop-color="#d49a07" />
+    </linearGradient>
+    <linearGradient id="start2-2" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="256" y2="256">
+      <stop offset="0" stop-color="#ffb061" />
+      <stop offset=".48" stop-color="#ff9730" />
+      <stop offset="1" stop-color="#d47416" />
+    </linearGradient>
+    <linearGradient id="start2-3" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="256" y2="256">
+      <stop offset="0" stop-color="#f78869" />
+      <stop offset=".48" stop-color="#f4643a" />
+      <stop offset="1" stop-color="#ca451f" />
+    </linearGradient>
+    <linearGradient id="start2-4" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="256" y2="256">
+      <stop offset="0" stop-color="#b589da" />
+      <stop offset=".48" stop-color="#9e65ce" />
+      <stop offset="1" stop-color="#7b46a7" />
+    </linearGradient>
+    <linearGradient id="start2-5" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="256" y2="256">
+      <stop offset="0" stop-color="#52c2f5" />
+      <stop offset=".48" stop-color="#1eaff1" />
+      <stop offset="1" stop-color="#048ac7" />
+    </linearGradient>
+  </defs>
+  <g clip-path="url(#corner)">
+    <g clip-path="url(#silhouette)" mask="url(#dividers)">
+      <rect width="256" height="45" fill="url(#start2-0)" />
+      <rect y="45" width="256" height="42" fill="url(#start2-1)" />
+      <rect y="87" width="256" height="42" fill="url(#start2-2)" />
+      <rect y="129" width="256" height="42" fill="url(#start2-3)" />
+      <rect y="171" width="256" height="42" fill="url(#start2-4)" />
+      <rect y="213" width="256" height="43" fill="url(#start2-5)" />
+    </g>
+  </g>
+</svg>
