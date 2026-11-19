@@ -43,14 +43,14 @@
       <stop offset="1" stop-color="#048ac7" />
     </linearGradient>
     <filter xmlns="http://www.w3.org/2000/svg" id="bevel" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
-      <feGaussianBlur in="SourceAlpha" stdDeviation="0.55" result="soft" />
-      <feOffset in="soft" dx="-1.1" dy="-1.1" result="shiftDark" />
+      <feGaussianBlur in="SourceAlpha" stdDeviation="0.4" result="soft" />
+      <feOffset in="soft" dx="-0.65" dy="-0.65" result="shiftDark" />
       <feComposite in="SourceAlpha" in2="shiftDark" operator="out" result="darkEdge" />
-      <feFlood flood-color="#173b68" flood-opacity="0.6" />
+      <feFlood flood-color="#000000" flood-opacity="0.25" />
       <feComposite in2="darkEdge" operator="in" result="dark" />
-      <feOffset in="soft" dx="1.1" dy="1.1" result="shiftLight" />
+      <feOffset in="soft" dx="0.65" dy="0.65" result="shiftLight" />
       <feComposite in="SourceAlpha" in2="shiftLight" operator="out" result="lightEdge" />
-      <feFlood flood-color="#e7f5ff" flood-opacity="0.9" />
+      <feFlood flood-color="#ffffff" flood-opacity="0" />
       <feComposite in2="lightEdge" operator="in" result="light" />
       <feMerge>
         <feMergeNode in="SourceGraphic" />
@@ -59,16 +59,25 @@
       </feMerge>
       <feComposite in2="SourceAlpha" operator="in" />
     </filter>
+    <linearGradient id="rainbow" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="0" y2="256">
+      <stop offset="0" stop-color="#8dc31e" />
+      <stop offset="0.17578125" stop-color="#8dc31e" />
+      <stop offset="0.17578125" stop-color="#ffc120" />
+      <stop offset="0.33984375" stop-color="#ffc120" />
+      <stop offset="0.33984375" stop-color="#ff9730" />
+      <stop offset="0.50390625" stop-color="#ff9730" />
+      <stop offset="0.50390625" stop-color="#f4643a" />
+      <stop offset="0.66796875" stop-color="#f4643a" />
+      <stop offset="0.66796875" stop-color="#9e65ce" />
+      <stop offset="0.83203125" stop-color="#9e65ce" />
+      <stop offset="0.83203125" stop-color="#1eaff1" />
+      <stop offset="1" stop-color="#1eaff1" />
+    </linearGradient>
   </defs>
   <g xmlns="http://www.w3.org/2000/svg" filter="url(#bevel)">
     <g clip-path="url(#corner)">
       <g clip-path="url(#silhouette)" mask="url(#dividers)">
-        <rect width="256" height="45" fill="url(#start2-0)" />
-        <rect y="45" width="256" height="42" fill="url(#start2-1)" />
-        <rect y="87" width="256" height="42" fill="url(#start2-2)" />
-        <rect y="129" width="256" height="42" fill="url(#start2-3)" />
-        <rect y="171" width="256" height="42" fill="url(#start2-4)" />
-        <rect y="213" width="256" height="43" fill="url(#start2-5)" />
+        <rect width="256" height="256" fill="url(#rainbow)" />
       </g>
     </g>
   </g>
